@@ -1,0 +1,51 @@
+package com.yulin.pm;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
+public class DateDemo {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Date date = new Date();
+
+		System.out.println(date);
+		// 时间的格式化标准
+		// yyyy标示年
+		/*
+		 * MM标示月 dd；日 day；星期
+		 * hh;时
+		 * mm；分
+		 * ss；秒
+		 */
+		String timeFormat = "yyyy-MM-dd 星期：：day hh:mm:ss";//4-11-3 下午5:16
+		SimpleDateFormat sdf = new SimpleDateFormat(timeFormat);//14-11-03 星期：：3下午14 05:15:29
+		String time=sdf.format(date);
+		System.out.println(time);
+		
+		
+		String timeFomat1="yyyy-星期 day hh:mm:ss";
+		SimpleDateFormat ss=new SimpleDateFormat(timeFomat1);
+		String time1=ss.format(date);
+		System.out.println(time1);
+		
+		Scanner sc=new Scanner(System.in);
+		System.out.println("请输入员工姓名");
+		String name=sc.next();
+		
+		String[]k=new String[1];
+
+	k[1]=name;
+		System.out.println(name);
+	}
+
+	private static String matches(String string) {
+		// TODO Auto-generated method stub
+		return string;
+	}
+
+}

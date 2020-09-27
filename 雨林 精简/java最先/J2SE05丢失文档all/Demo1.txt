@@ -1,0 +1,28 @@
+package com.yulin.am;
+
+import java.util.*;
+
+public class Demo1 {
+	public static void main(String[] args) {
+
+		/* int[] arr={8,52,6,17,49,18}; */
+		//Random rd = new Random();
+		int[] arr = new int[6];
+		System.out.println("排序前;" + Arrays.toString(arr));
+		for (int i = 0; i < arr.length - 1; i++) {// 排序的轮数
+			for (int a = 0; a < arr.length - i - 1; a++) {// 没一轮比较的次数
+				if (arr[a] > arr[a + 1]) {// 如果前一个数比后一个元素大，则交换他们的位置
+					int temp;
+					temp = arr[a];
+					arr[a] = arr[a + 1];
+					arr[a + 1] = temp;
+
+				}
+				System.out.println("第" + (i + 1) + "轮，第" + (a + 1) + "次排序"
+						+ Arrays.toString(arr));
+			}// System.out.print(arr[i]);
+		}
+	}
+
+}
+// //////////////////////////////////////////////////

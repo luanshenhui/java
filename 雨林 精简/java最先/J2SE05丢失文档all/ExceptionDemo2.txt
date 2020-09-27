@@ -1,0 +1,42 @@
+package com.yulin.am;
+
+public class ExceptionDemo2 {
+	public static void main(String[] args){
+		GuKe gk=new GuKe();
+		gk.dianCai();
+	}
+
+}
+class ChuShi{
+	public void chaoTDS(TuDou td)throws Exception{
+		if(td.c>0){
+			System.out.println("土豆号了");
+		}else{
+			throw new RuntimeException("土豆每了");
+		}
+	}
+}
+class TuDou{
+	static int c=0;
+}
+class FuWuyuan{
+	public void zuoCai()throws Exception{
+		ChuShi cs=new ChuShi();
+		cs.chaoTDS(new TuDou());
+	}
+}
+class GuKe{
+	public void dianCai(){
+		FuWuyuan fwy=new FuWuyuan();
+		try {
+			fwy.zuoCai();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("换个菜");
+		}finally{
+			System.out.println("我是finally");
+		}
+		System.out.println("吧唧吧唧吃");
+	}
+}

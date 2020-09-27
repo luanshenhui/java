@@ -1,0 +1,35 @@
+1方法调用中的值和引用.
+2java中只有值传递，但是要区分是地址还是常量
+3什么是值传递
+4什么是引用传递
+
+练习；模拟考试系统 
+         a定义一个父类；考题，属性；题干，选项，分数
+                                               方法；显示
+                                               
+         b定义一个子类；
+                                                       单选题，属性；正确答案，
+                                                                            方法；判断正确
+                                                        多选题 ，属性；正确答案，
+                                                                            方法；判断正确    
+         c定义一个类；
+                                               
+                                               试卷
+                                               属性；选择题【5】 用户答案【5】
+                                               方法；显示，答题，交卷，显示得分        
+                       生成一个包含单选和多选的10道题   
+                       String str =”abc“；
+                       str.toUpperCase()；//”abc“----》”ABC“
+                        str.toLowerCase()；//”ABC“----》”abc“
+                       
+
+
+CBA==ABC
+
+String str=”CBA”；
+char【】cs=new char【str.length()】；
+for(int i=0；i<str.length()；i++){
+cs【i】=str.charAt(i)；
+}
+Arrays.sort(cs)；
+str=new String(cs)；                                                                                                                             

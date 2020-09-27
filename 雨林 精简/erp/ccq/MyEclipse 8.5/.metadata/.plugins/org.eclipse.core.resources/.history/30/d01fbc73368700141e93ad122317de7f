@@ -1,0 +1,23 @@
+package com.a;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class D {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String s="20150218";
+		SimpleDateFormat a=new SimpleDateFormat();
+		Date date=new Date("yyyyMMdd");
+		try {
+			System.out.println (a.parse(s));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+        <struts>
+    	<package name="account" namespace="/account" extends="netctoss">
+    		<action name="findAccount" class="com.netctoss.account.action.FindAccountAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/account/account_list.jsp
+    			</result>
+    		</action>
+    		<action name="loadAccount" class="com.netctoss.account.action.LoadAccountAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/account/account_detail.jsp
+    			</result>
+    		<!-- 开通的Action -->
+    		</action>
+    		<action name="startAccount" class="com.netctoss.account.action.StartAction">
+    			<result name="success" type="json">
+    				<param name="root">ok</param>
+    			</result>
+    		</action>
+    		<!-- 暂停的Action -->
+    		<action name="pauseAccount" class="com.netctoss.account.action.PauseAccountAction">
+    			<result name="success" type="json">
+    				<param name="root">ok</param>
+    			</result>
+    		</action>
+    		<!-- 删除的Action -->
+    		<action name="deleteAccount" class="com.netctoss.account.action.DeleteAccountAction">
+    			<result name="success" type="json">
+    				<param name="root">ok</param>
+    			</result>
+    		</action>
+    		<!-- 跳转到增加页面 -->
+    		<action name="toAdd">
+    			<result>
+    				/WEB-INF/NETCTOSS/account/account_add.jsp
+    			</result>
+    		</action>
+    		<!-- 新增帐务帐号 -->
+    		<action name="addAccount" class="com.netctoss.account.action.AddAccountAction">
+    			<result name="success" type="redirectAction">
+    				findAccount
+    			</result>
+    		</action>
+    		<!-- 查询推荐人的Action -->
+    		<action name="searchRec" class="com.netctoss.account.action.SearchRecAction">
+    			<result name="success" type="json">
+    				<param name="root">account</param>
+    			</result>
+    		</action>
+    		<!-- 跳转到修改页面 -->
+    		<action name="toModify" class="com.netctoss.account.action.ToModifyAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/account/account_modi.jsp
+    			</result>
+    		</action>
+    		<!-- 验证旧密码是否正确 -->
+    		<action name="validPwd" class="com.netctoss.account.action.ValidPwdAction">
+    			<result name="success" type="json">
+					<param name="root">ok</param>
+    			</result>
+    		</action>
+    		<!-- 修改的Action -->
+    		<action name="modifyAccount" class="com.netctoss.account.action.UpdateAccountAction">
+    			<result name="success" type="redirectAction">
+    				findAccount
+    			</result>
+    		</action>
+    	</package>
+    </struts>

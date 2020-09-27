@@ -1,0 +1,10 @@
+package User;
+
+public class Client {
+	Sys s=new Sys();
+	s.regist();
+	
+	System.out.println(s.getUserList([0].getUserName()));
+	System.out.println(s.getUserList([0].getPassword()));
+
+}

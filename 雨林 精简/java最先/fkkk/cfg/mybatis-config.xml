@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+    "mybatis-3-config.dtd">
+<configuration>
+
+	<properties resource="jdbc.properties" />               <!--  -->
+	<!-- 配置类型的别名  ，给文件定格别名-->
+	<typeAliases>
+
+		<typeAlias alias="Company" type="cc.mm.ll.Company" />
+		<typeAlias alias="Member" type="cc.mm.ll.Member" />
+	</typeAliases>
+
+
+	<!-- 下面是一个环境 -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+
+
+	</environments>
+
+
+
+
+
+	<!-- 配置sql的映射文件，sql就写在这里 -->
+	<mappers>
+		<mapper resource="cc/mm/ll/Company.xml" />
+		<mapper resource="cc/mm/ll/Member.xml" />
+	</mappers>
+
+</configuration>

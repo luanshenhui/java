@@ -1,0 +1,22 @@
+package com.yulin.linxizuoye;
+
+public class kaoshijuan {
+	private int 题号;
+	private String 题干;
+	private String[]选项=new String[4];
+	private int 分数;
+	
+	public void 显示(){
+		
+	}
+	public boolean 判断(){
+		return false;
+	}
+
+	public kaoshijuan(int 题号,String 题干,String[]选项,int 分数){
+		this.题号=题号;
+		this.题干=题干;
+		this.选项=选项;
+	    this.分数=分数;
+	}
+}

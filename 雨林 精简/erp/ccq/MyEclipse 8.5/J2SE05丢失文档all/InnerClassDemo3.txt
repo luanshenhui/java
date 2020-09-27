@@ -1,0 +1,28 @@
+package com.yulin.am;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class InnerClassDemo3 {
+	public static void main(String[] args) {
+		final Timer tt = new Timer();
+		tt.schedule(new TimerTask() {
+			int index = 10;
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				System.out.println(" " + index--);
+			}
+
+		},0,1000);//延迟0毫秒之后，每隔1秒运行一次
+		tt.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				System.out.print("preng");
+				tt.cancel();// 关闭Time的线程(关闭时间),取消之后不能在使用
+			}
+		}, 11000);
+
+	}
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsh.domain.Repertory">
+
+	<resultMap type="Repertory" id="map0">
+			<id property="id" column="sid"/>
+			<result property="selldate" column="sselldate"/>
+			<result property="sellmount" column="ssellmount"/>
+			<result property="moneysum" column="smoneysum"/>
+			<association property="person" javaType="Person">
+			<result property="username" column="pusername"/>
+			<result property="salary" column="psalary"/>
+			<result property="phone" column="pphone"/>
+			</association> 
+				<association property="product" javaType="Product">
+					<result property="name" column="pdname"/>
+					<result property="price" column="pdprice"/>
+					<result property="info" column="pdinfo"/>
+				</association>
+	</resultMap> 
+	
+<!--��ѯ����	-->
+	<select id="all" resultMap="map0">
+	 select s.id sid,s.selldate sselldate,s.sellmount ssellmount,s.moneysum smoneysum,p.username pusername,p.salary psalary,p.phone pphone,pd.name pdname,pd.price pdprice,pd.info pdinfo
+			from product p,repertory r
+			where p.id=s.personid and pd.code=s.productcode
+		
+	</select>
+<!--��ѯһ��	-->
+<select id="getID" parameterType="_long" resultMap="map0">
+		  select s.id sid,s.personid spersonid,s.selldate sselldate,s.sellmount ssellmount,s.moneysum smoneysum,
+         p.id pid,p.username pusername,p.salary psalary,p.phone pphone,pd.name pdname,pd.price pdprice,pd.info pdinfo
+		from sell s,person p,product pd
+		where p.id=s.personid and pd.code=s.productcode
+		where s.id=#{id}
+</select>
+
+<!--����һ��	-->
+<insert id="add">
+	insert into sell
+	values (#{id},#{personid},#{productcode},#{selldate},#{sellmount},#{moneysum})
+</insert>
+	
+
+
+<!-- �޸�-->
+<update id="update" parameterType="sell">
+	update sell
+	set personid=#{personid},productcode=#{productcode},selldate=#{selldate},sellmount=#{sellmount},moneysum=#{moneysum}
+	where id=#{id}
+</update>
+
+
+<delete id="delete" parameterType="_long">
+	delete from sell where id=#{id}
+</delete>
+</mapper>
+<!--			<result property="person.id" column="spersonid"/>-->
+
+

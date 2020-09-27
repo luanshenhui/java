@@ -1,0 +1,143 @@
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Scanner;
+
+import com.yulin.emp.Emp;
+
+public class EmpSys {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("欢迎使用员工管理系统");
+		Scanner sc = new Scanner(System.in);
+		while (2 > 1) {
+			System.out.println("请选择操作");
+			System.out.print("1添加员工信息");
+			System.out.print("2删除员工信息");
+			System.out.print("3查询员工信息");
+			System.out.print("4修改员工信息");
+			int in = sc.nextInt();
+			switch (in) {
+			case 1:
+				add();
+				break;
+			case 2:
+				del();
+				break;
+			case 3:
+				que();
+				break;
+			case 4:
+				upd();
+				break;
+			default:
+				System.out.println("操作有误");
+			}
+		}
+
+	}
+
+	static Date date = new Date();// 1编号自动生成薪水基本的，如值时间自动生成，姓名和年龄手动，生成Emp对象添加集合
+	Scanner sc = new Scanner(System.in);
+
+	public static void add() {
+
+		int empID = 1000 + list.size() + 1;
+		int salary = 2500;
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		// int in=sc.nextInt();
+		// if (in==1)
+		System.out.println("请输入姓名");
+
+		String timeFomat1 = "yyyy-星期 day hh:mm:ss";
+		SimpleDateFormat sos = new SimpleDateFormat(timeFomat1);// SimpleDateFormat
+																// sdf =new
+																// SimpleDateFormat(“yyyy年MM月dd日”)；
+		String hireDate = sos.format(date); // String hireDate=sdf.format(new
+											// Date())；
+		String name = sc.next();
+		int age = sc.nextInt();
+		Emp e = new Emp(empID, name, salary, age, hireDate);
+		list.add(e);
+		//		
+		// String ii=sc.next();
+		// String list=ii+time;
+		// System.out.println(list.get(indexOf));
+
+	}
+
+	private static void que() {// 输入员工的id和姓名进行擦训，显示信息
+		// TODO Auto-generated method stub
+		Scanner sc=new Scanner(System.in);
+		System.out.println("请输入cxun员工姓名");
+		String name=sc.next();
+		System.out.println("请输入xaxun员工id");
+		int id=sc.nextInt();
+		Emp e = new Emp();
+		e.setempID(id);
+		e.setName(name);
+		int index = list.indexOf(e);
+		e=list.get(index);
+		System.out.println("员工姓名"+e.getName());
+		System.out.println("员工编号"+e.getEmpID());
+		System.out.println("员工年龄"+e.getAge());
+		System.out.println("员工时间"+e.getHireDate());
+		
+		
+
+		// String[]str=spilt("@");
+
+	}
+
+	private static void del() {// 输入员工id和姓名删除，需要考虑道后续员工的id编号
+		// TODO Auto-generated method stub
+
+		System.out.println("请选中删除的员工id");
+		Scanner sc = new Scanner(System.in);
+		int id = sc.nextInt();
+		System.out.println("请输入删除员工的姓名");
+		String name = sc.next();
+
+		Emp e = new Emp();
+		e.setempID(id);
+		e.setName(name);
+		int index = list.indexOf(e);// 获得list的下标
+		System.out.println("删除前" + list.get(index));
+		list.set(index, null);
+
+		System.out.println("删除后" + list.get(index));
+
+	}
+
+	private static void upd() {// 先删除在插入，通过圆工的id和姓名找到员工，选择更改期薪资和部门，更改之后删除原来的信息再讲之后的点对象插入道原来的位置
+		// TODO Auto-generated method stub
+		System.out.println("请选中修改的员工id");
+		Scanner sc = new Scanner(System.in);
+		int id = sc.nextInt();
+		System.out.println("请输入修改员工的姓名");
+		String name = sc.next();
+		Emp e = new Emp();
+	
+		e.setempID(id);
+		e.setName(name);
+		int index = list.indexOf(e);
+		e=list.get(index);
+		System.out.println("修改工资");
+		list.get(index).setSalary(sc.nextInt());
+		//e.setSalary(sc.nextInt());
+		System.out.println("修改bumen");
+		list.get(index).setDeptId(sc.nextInt());
+		//e.setDeptId(sc.nextInt());
+		//list.set(index, e);
+		System.out.println("修改over");
+	}
+
+	private static ArrayList<Emp> list = new ArrayList<Emp>();
+
+}

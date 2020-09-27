@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="aa.ll.ss.Client">
+	<insert id="add" parameterType="Client">
+		insert into client values(#{id},#{name},#{address},#{linkman},#{phone},#{bank},#{account})
+<!--		insert into client value(#{name},#{phone})-->
+	</insert>
+	
+	<select id="all" resultType="Client">
+		select * from client
+	</select>
+	
+<!--	<update id="getID" parameterType="Client">-->
+<!--		update client-->
+<!--		set name=#{name},address=#{address},linkman=#{linkman},phone=#{phone},bank=#{bank},account=#{account}-->
+<!--		where id=#{id}-->
+<!--	</update>-->
+	
+</mapper>

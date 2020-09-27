@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsh.domain.Product">
+<resultMap type="Product" id="map">
+	<id property="id" column="pid"/>
+	<result property="code" column="pcode"/>
+	<result property="name" column="pname"/>
+	<result property="price" column="pprice"/>
+	<result property="info" column="pinfo"/>
+	<association property="category" javaType="Category">
+	<result property="id" column="cid"/>
+	<result property="name" column="cname"/>
+	<result property="code" column="ccode"/>
+	<result property="info" column="cinfo"/>
+	</association>
+</resultMap>
+
+<!--查询所有-->
+	<select id="all" resultMap="map">
+		
+		select p.id pid,p.code pcode,p.name pname,p.price pprice,p.info pinfo,c.id cid,c.name cname,c.code ccode,c.info cinfo
+		from category c,product p
+		where p.cid=c.id
+		
+	</select>
+
+<!--查询单个	-->
+	<select id="getID" parameterType="_long" resultMap="map">
+		select p.id pid,p.code pcode,p.name pname,p.price pprice,p.info pinfo,c.id cid,c.name cname,c.code ccode,c.info cinfo
+		from category c,product p
+		where p.cid=c.id and p.id=#{id}
+	</select>
+	
+<!--增加一个	-->
+	<insert id="add">
+		insert into Product
+		values (#{id},#{category.id},#{code},#{name},#{price},#{info})		
+	</insert>
+<!--删除一个	-->
+	<delete id="del">
+		delete from product where id=#{id}
+	</delete>
+
+<!--修改一个-->
+	<update id="update">
+		update from product 
+		set code=#{code},name=#{name},price=#{price},info=#{info}
+		where id=#{id}
+	</update>
+</mapper>

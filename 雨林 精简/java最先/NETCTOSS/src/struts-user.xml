@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+        <struts>
+    	<!-- 个人信息 -->
+    	<package name="user" namespace="/user" extends="netctoss">
+    		<action name="modiPwd" class="com.netctoss.login.action.ModiPwdAction">
+    			<interceptor-ref name="loginStack"/>
+    			<result name="success" type="json">
+					<param name="root">ok</param>
+    			</result>
+    		</action>
+    	</package>
+    </struts>

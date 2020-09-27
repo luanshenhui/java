@@ -1,0 +1,37 @@
+package com.yulin.am;
+
+import java.util.ArrayList;
+
+public class ListDemo {
+	public static void main(String[] args) {
+		ArrayList list=new ArrayList();
+		list.add(100);
+		list.add(true);
+		list.add(3.3);
+		list.add("hello");
+		list.add(new ListDemo());
+		
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i));
+			
+		}
+		for(Object o:list){
+			System.out.println(o);
+		}
+		
+		
+		ArrayList<String>list1=new ArrayList<String>();
+		list1.add("hello");
+		list1.add("你好");
+		list1.add("你好");
+		list1.add("你好");
+		list1.add("你好");
+		
+		
+		
+		for(String s:list1){
+			System.out.println(s);
+		}
+
+	}
+}

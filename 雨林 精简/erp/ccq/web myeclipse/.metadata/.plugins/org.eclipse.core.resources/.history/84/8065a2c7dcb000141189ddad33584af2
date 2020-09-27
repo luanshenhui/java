@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsh.domain.Person">
+
+	<resultMap type="Person" id="map">
+			<id property="id" column="id"/>
+			<result property="username" column="username"/>
+			<result property="age" column="age"/>
+			<result property="email" column="email"/>
+			<result property="phone" column="phone"/>
+			<result property="password" column="password"/>
+			<result property="salary" column="salary"/>
+			<result property="sex" column="sex"/>
+			<association property="roleaction" javaType="Roleaction">
+			<result property="rolename" column="rname"/>
+			</association>
+	</resultMap>
+	
+<!--	<select id="all" resultType="Person">-->
+<!--	select * from person-->
+<!--	</select>-->
+	
+<!--查询所有	-->
+	<select id="all" resultType="Person">
+<!--	resultMap="map">-->
+<!--		select * from person Person-->
+<!--		select p.id pid,p.*, r.rolename rname,r.id rid-->
+<!--		from person p,Roleaction r-->
+<!--		where p.id=r.personid(+)-->
+			select * from person
+	</select>
+<!--查询一个	-->
+<select id="getID" parameterType="_long" >
+<!--resultMap="map">-->
+<!--	select p.*,r.id rid, r.rolename-->
+<!--		from person p,roleaction r-->
+<!--		where p.id=r.personid and p.id=#{id}-->
+select * from person where id=#{id}
+</select>
+	
+<!--添加一个	-->
+<insert id="add">
+	insert into person
+	values(#{id},#{username},#{password},#{sex},#{age},#{email},#{phone},#{salary})
+</insert>
+
+<!-- 修改-->
+<update id="update" parameterType="person">
+	update person
+	set username=#{username},password=#{password},sex=#{sex},age=#{age},email=#{email},phone=#{phone},salary=#{salary}
+	where id=#{id}
+</update>
+
+<!--delete-->
+<delete id="delete" parameterType="_long">
+	delete from person where id=#{id}
+</delete>
+</mapper>

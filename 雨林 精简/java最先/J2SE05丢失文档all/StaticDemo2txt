@@ -1,0 +1,36 @@
+package com.yulin.am;
+
+public class StaticDemo2 {
+	public static void main(String[] args) {
+		new Soo();
+	}
+
+}
+
+class Foo {
+	{
+		System.out.println("Foo.non-static1...");
+	}
+
+	static {
+		System.out.println("Foo.static1...");
+	}
+
+	public Foo() {
+		System.out.println("Foo1...");
+	}
+}
+
+class Soo extends Foo {
+	{
+		System.out.println("Soo.non-static....");
+	}
+	static {
+		System.out.println("Soo.static...");
+	}
+
+	public Soo() {
+
+		System.out.println("Soo...");
+	}
+}

@@ -1,0 +1,25 @@
+package com.yulin.pm;
+
+import java.util.*;
+
+public class ArrDemo3 {
+	public static void main(String[] args) {
+		Random rd = new Random();
+		int[] ins = new int[5];
+		boolean[] flag = new boolean[11];//±ê¼Ç
+		for (int i = 0; i < ins.length; i++) {
+			int in = rd.nextInt(10) + 1;
+			if (flag[in] == false) {
+				ins[i] = in;
+				flag[in] = true;
+			} else {
+				i--;
+			}
+		}
+		for (int i = 0; i < ins.length; i++) {
+			System.out.print(ins[i] + " ");
+		}
+
+	}
+
+}

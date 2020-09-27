@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+        <struts>
+    	<!-- 资费管理模块 -->
+    	<package name="cost" namespace="/cost" extends="netctoss">
+    		<!-- 查询的Action -->
+    		<action name="findCost" class="com.netctoss.cost.action.FindCostAction">
+    			<param name="pageSize">4</param>
+    			<result name="success">
+    					/WEB-INF/NETCTOSS/fee/fee_list.jsp
+    			</result>
+    		</action> 
+    		<action name="toAdd">
+    			<result>
+    			/WEB-INF/NETCTOSS/fee/fee_add.jsp
+    			</result>
+    		</action>
+    		<!-- 删除的Action -->
+    		<action name="deleteCost" class="com.netctoss.cost.action.DeleteCostAction">
+    			<interceptor-ref name="loginStack"/>
+    		<result name="success" type="redirectAction">findCost</result>
+    		</action>
+    		<!-- LoadAction -->
+    		<action name="loadCost" class="com.netctoss.cost.action.LoadCostAction">
+    			<interceptor-ref name="loginStack"/>
+	    		<result name="success">
+	    			/WEB-INF/NETCTOSS/fee/fee_detail.jsp
+	    		</result>
+    		<!-- 添加的Action -->
+    		</action>
+    		<action name="addCost" class="com.netctoss.cost.action.AddCostAction">
+    			<result name="success" type="redirectAction">
+    				findCost
+    			</result>
+    		</action>
+    		<!-- 校验资费名称是否重复 -->
+    		<action name="validName" class="com.netctoss.cost.action.VildNameAction">
+    			<result name="success" type="json">
+    				<param name="root">ok</param>
+    			</result>
+    		</action>
+    		<!-- 修改的Action -->
+ 			<action name="*_cost" method="{1}"
+ 			 class="com.netctoss.cost.action.ModifyCostAction">
+ 			 	<interceptor-ref name="loginStack"/>
+ 			 <result name="load">
+ 			 	/WEB-INF/NETCTOSS/fee/fee_modi.jsp
+ 			 </result>
+ 			 <result name="modify" type="redirectAction">
+ 			 	findCost
+ 			 </result>
+ 			 </action>
+ 			 <action name="validModiName" class="com.netctoss.cost.action.VildNameModiAction">
+ 			 	<result name="success" type="json">
+ 			 		<param name="root">flag</param>
+ 			 	</result>
+ 			 </action>
+    	</package>
+    	
+    </struts>

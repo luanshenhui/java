@@ -1,0 +1,25 @@
+package com.yulin.pm;
+
+import java.util.*;
+
+public class shuzushengji {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int[] ins = new int[5];
+		for (int i = 0; i < ins.length; i++) {
+			int in = sc.nextInt();
+			ins[i] = in;//当int i=0时ins[0]代表in的第一个数
+			for (int a = 0; a <i; a++) {
+				if (in ==ins[a] ) {
+				
+					System.out.println("请在此输 入   ");
+					 i--;
+				}
+			}
+		}
+		for (int i = 0; i < ins.length; i++) {
+			System.out.print(ins[i] + ", ");
+		}
+	}
+
+}

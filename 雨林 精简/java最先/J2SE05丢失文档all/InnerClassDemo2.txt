@@ -1,0 +1,38 @@
+package com.yulin.am;
+
+public class InnerClassDemo2 {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Woo woo = new Woo() {
+			// 匿名内部类实际上是创建了一个类的匿名子类
+			@Override
+			public void woo() {
+				System.out.println("我是匿名子类");
+			}
+		};j
+		woo.woo();
+		aaa a=new aaa(){
+			//@Override
+			public void aaa(){
+				System.out.println("我是匿名子类2");
+			}
+		};
+		a.aaa();
+	}
+
+}
+
+class Woo {
+	public void woo() {
+		System.out.println("我是woo");
+	}
+	
+}
+class aaa{
+	public void aaa(){
+	System.out.println("我是woo");
+}}

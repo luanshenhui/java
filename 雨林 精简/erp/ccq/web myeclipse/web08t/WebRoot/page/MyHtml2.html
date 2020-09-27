@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>表单的验证.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script type="text/javascript">
+	function m(){
+	var v1=document.getElementById("username");
+	var v11=document.getElementById("err01");
+	var a=true;
+
+	if(v1.value.length == 0){
+	v11.innerHTML = "<font color='red'>用户不能为空</font>";
+	//获得焦点
+	v1.focus();
+		a=false;
+
+	}else{
+		v11.innerHTML="";
+	}
+	
+	
+	var v2=document.getElementById("password");
+	var v22=document.getElementById("err02");
+	var b=true;
+	if(v2.value.length == 0){
+	v22.innerHTML = "密码不能为空";
+	//获得焦点
+	v2.focus();
+		b=false;
+		
+	}else{
+		v11.innerHTML="";
+	}
+	
+ 
+		return (a && b);
+	} 
+	
+	</script>
+  </head>
+  
+  <body>
+    This is my HTML page. <br>
+    <h1>表单的验证</h1>
+<!--    表单的action属性:表示跳转路径,浏览器将表单发送给action所指的路径-->
+<!-- 表单的onsubmit事件；当点击提交按钮的时候触发,如果返回true，则执行action，false则不执行-->
+<!--    <form action="/web08t/page/w01.html" onsubmit="return false;">-->
+  	  <form action="/web08t/page/w01.html" onsubmit="return m();">
+    	用户<input id="username" type="text" /><span id="err01"></span> <p/>
+    	密码<input id="password" type="password" /><span id="err02"></span><p/> 
+    	<input type="submit" value="登陆"/>
+    	<input type="reset" value="重置"/>
+    </form>
+  </body> 
+</html>

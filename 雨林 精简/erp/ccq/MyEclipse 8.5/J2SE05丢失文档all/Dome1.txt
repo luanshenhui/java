@@ -1,0 +1,34 @@
+package com.yuin.am;
+
+import java.util.*;
+
+public class Dome1 {
+	public static void main(String[] args) {
+		String[][] star = { { "日", "照", "香", "炉", "生", "紫", "烟" },
+				{ "遥", "看", "瀑", "布", "挂", "前", "川" },
+				{ "飞", "流", "直", "下", "三", "千", "尺" },
+				{ "疑", "是", "银", "河", "落", "九", "天" },
+
+		};
+		for (int i = 0; i < 7; i++) {
+			for (int j = 3; j >=0; j--) {// arr1[0]第一个小数组
+				System.out.print(star[j][i]);
+			}
+			System.out.println();
+		}
+
+//		String[][] star1 = { { "轻", "两", "千", "朝" }, { "舟", "岸", "里", "辞" },
+//				{ "已", "猿", "江", "白", }, { "过", "声", "陵", "帝", },
+//				{ "万", "相", "一", "彩" }, { "重", "对", "日", "云", },
+//				{ "山", "出", "还", "间", },
+//
+//		};
+//		for (int i = 0; i < star.length; i++) {
+//			for (int j = 0; j < star[0].length; j++) {// arr1[0]第一个小数组
+//				System.out.print(star1[i][j]);
+//			}
+//			System.out.println();
+//		}
+	}
+
+}

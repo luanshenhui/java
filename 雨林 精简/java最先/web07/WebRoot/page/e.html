@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>DOM中的innerHTML属性.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<script type="text/javascript">
+		function m(){
+			alert("测试");
+		var	v=document.getElementById("abc");
+		alert(v.innerHTML);
+		v.innerHTML="修改后的内容!!";
+		}
+	</script>
+  </head>
+  
+  <body>
+    This is my HTML page. <br>
+    <h1>DOM中的innerHTML属性</h1>
+    <input type="button" value="btn1" onclick="m();"/>
+    <div id="abc" ><span>内容</span></div>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+package User;
+
+import java.util.Arrays;
+
+public class UserService {
+//×¢²á
+//µÇÂ½
+	public void regist(User u,Sys s){
+		User[]us=s.getUserlist();
+		u=Arrays.copyOf(us, us.length+1);
+		us[us.length-1]=u;
+		
+		s.getUserList(us);
+	}
+	public User login(){
+		return null;
+	}
+}

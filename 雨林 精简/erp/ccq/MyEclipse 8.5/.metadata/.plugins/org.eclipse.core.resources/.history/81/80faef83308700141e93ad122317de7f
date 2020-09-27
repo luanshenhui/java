@@ -1,0 +1,12 @@
+package com.a;
+
+import java.util.Date;
+
+public class C {
+	public static void main(String[] args) {
+		//Date的本质；存储的是距离一个历史(1970.0.0.0.0的毫秒数)
+		Date date=new Date();
+		long time =date.getTime();
+		System.out.println("Date存储是是毫秒数"+time);
+	}
+}

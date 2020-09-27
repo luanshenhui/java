@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dongxianglong.domain.Person">
+
+<!--     -->
+<!--      <resultMap type="Roleaction" id="map02">-->
+<!-- <id property="id" column="rid"/>-->
+<!-- <result property="rolename" column="rrolename"/>-->
+<!-- <result property="personid" column="rpersonid"/>-->
+<!-- </resultMap>-->
+<!--      -->
+<!--       <resultMap type="Person" id="map01">-->
+<!--     <id property="id" column="pid"/>-->
+<!--     <result property="username" column="pname"/>-->
+<!--     <result property="password" column="ppassword"/>-->
+<!--     <result property="sex" column="psex"/>-->
+<!--     <result property="age" column="page"/>-->
+<!--     <result property="email" column="pemail"/>-->
+<!--     <result property="phone" column="pphone"/>-->
+<!--     <result property="salary" column="psalary"/>-->
+<!--     <association property="roleaction" resultMap="map02"></association>-->
+<!--    </resultMap>-->
+        
+    <select id="all" resultType="Person">
+<!--         select p.id pid, p.username pname,p.password ppassword,p.sex psex,p.age page,p.email pemail,-->
+<!--         p.phone pphone,p.salary psalary,r.id rid,r.rolename rrolename -->
+<!--         from person p,roleaction r-->
+			select *
+			from person 
+	
+    </select>
+    
+   <!-- 查询一个用户 -->
+   <select id="getID" parameterType="_long" resultType="Person">
+        <!--  select p.id pid, p.username pname,p.password ppassword,p.sex psex,p.age page,p.email pemail,
+         p.phone pphone,p.salary psalary,r.id rid,r.rolename rrolename 
+         from person p,roleaction r
+         where p.id=#{id} -->
+         select *
+         from person
+         where id=#{id}
+    </select>
+    <!-- 添加 -->
+    <insert id="add" parameterType="Person">
+    insert into person values(#{id},#{username},#{password},#{sex},#{age},#{email},#{phone},#{salary})
+    </insert>
+    <!-- 修改 -->
+    <update id="update" parameterType="Person">
+    update person
+    set username=#{username},password=#{password},sex=#{sex},age=#{age},email=#{email},phone=#{phone},salary=#{salary}
+    where id=#{id}
+    </update>
+    <!-- 删除 -->
+    <delete id="delete" parameterType="_long">
+    delete from person where id=#{id}
+    </delete>
+   
+
+</mapper>

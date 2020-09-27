@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+        <struts>
+    	<package name="role" namespace="/role" extends="netctoss">
+    		<action name="findRole" class="com.netctoss.role.action.FindRoleAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/role/role_list.jsp
+    			</result>
+    		</action>
+    		<action name="toAddRole" class="com.netctoss.role.action.ToAddRoleAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/role/role_add.jsp
+    			</result>
+    		</action>
+    		<action name="addRole" class="com.netctoss.role.action.AddRoleAction">
+    			<result name="success" type="redirectAction">
+    				findRole
+    			</result>
+    		</action>
+    		<action name="toUpdateRole" class="com.netctoss.role.action.ToUpdateRoleAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/role/role_modi.jsp
+    			</result>
+    		</action>
+    		<action name="updateRole" class="com.netctoss.role.action.UpdateRoleAction">
+    			<result name="success" type="redirectAction">
+    				findRole
+    			</result>
+    		</action>
+    		<action name="deleteRole" class="com.netctoss.role.action.DeleteRoleAction">
+				<result name="success" type="redirectAction">
+					findRole
+				</result>
+    		</action>
+    	</package>
+    </struts>

@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>w03.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<script type="text/javascript">
+		function m(tu){
+		var	v=document.getElementById("abc");
+		v.setAttribute("src", "/web08t/img/"+tu);
+		}
+	</script>
+  </head>
+  
+  <body>
+    This is my HTML page. <br>
+    
+    <img id="abc" alt="????" src="/web08t/img/1.bmp"/>
+    <p/>
+    <input type="button" value="图1" onclick="m('1.bmp');"/>
+    <input type="button" value="图2" onclick="m('qq.PNG');"/>
+    <input type="button" value="图3" onclick="m('welcome.jpg');"/>
+    
+    <a href="#" onclick="m('1.bmp');">图1</a>
+    <a href="#" onclick="m('qq.PNG');">图2</a>
+    <a href="#" onclick="m('welcome.jpg');">图3</a>
+<!--    //伪协议-->
+    <a href="javascript:m('1.bmp');">图一</a>
+    <a href="javascript:m('qq.PNG');">图二</a>
+    <a href="javascript:m('welcome.jpg');">图三</a>
+  </body>
+</html>

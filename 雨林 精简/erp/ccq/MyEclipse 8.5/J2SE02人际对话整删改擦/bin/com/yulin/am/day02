@@ -1,0 +1,19 @@
+Collection
+ 数据的容器，数组
+ 缺点1，长度无法改变
+    2，元素的位置时固定的
+    
+    ArrayList集合，线性集合，底层是数组。弥补了数组的缺点。
+    ArrayList list=new ArrayList()；
+    list。add(数据)；
+    
+ Collections 工具类，跟Arrats类是，给我们提供了操作集合的工具方法   
+ 
+ map接口，实现HashMap<key，Value>，映射。
+   用建值对儿的方式保存数据，每个数据都会有一个key值，我们可以通过key值来找到这个元素。
+   
+   酒店客房管理系统
+   1入住客房。输入名字，输入房间号
+   2退房。输入房间号
+   3查房
+  4 退出系统

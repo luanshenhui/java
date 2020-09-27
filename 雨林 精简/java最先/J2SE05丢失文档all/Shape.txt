@@ -1,0 +1,57 @@
+package com.yulin.pm;
+
+public class Shape {
+
+	/**
+	 * @param args
+	 */
+	private int r;
+	private int w;
+	private int h;
+
+	public Shape(int r) {
+		this.r = r;
+	}
+
+	public Shape(int w, int h) {
+		this.w = w;
+		this.h = h;
+	}
+
+	public double zhouchang() {
+		return 0;
+	}
+
+	public double mianji() {
+		return 0;
+	}
+
+	public int getR() {
+		return this.r;
+	}
+
+	public int getW() {
+		return this.w;
+	}
+
+	public int getH() {
+		return this.h;
+	}
+
+//	public double jxmj() {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
+
+//	public Shape(int w, int h, int r) {
+//		this.w = w;
+//		this.h = h;
+//		this.r = r;
+//
+//	}
+//
+//	public double jxmj() {
+//		return w*h;
+//
+//	}
+}

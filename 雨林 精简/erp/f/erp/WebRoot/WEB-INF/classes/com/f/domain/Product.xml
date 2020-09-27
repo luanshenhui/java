@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.f.domain.Product">
+	<resultMap type="Product" id="Map01">
+		<id property="id" column="id"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>	
+		<result property="price" column="price"/>
+		<result property="info" column="info"/>
+			<association property="category" javaType="Category">
+				<result property="id" column="cid"/>
+				<result property="name" column="cname"/>
+				<result property="code" column="ccode"/>
+				<result property="info" column="cinfo"/>
+			</association>
+	</resultMap>
+	<!-- 添加数据 -->
+	<select id="add">
+		insert into product values(#{id},#{category.id},#{code},#{name},#{price},#{info})
+	</select>
+	<!-- 删除数据 -->
+	<select id="delete" parameterType="_int">
+		delete from product where id=#{id}
+	</select>
+	<!-- 修改数据 -->
+	<select id="update" parameterType="Product">
+		update product 
+		set cid=#{category.id},code=#{code},name=#{name},price=#{price},info=#{info}
+		where id=#{id}
+	</select>
+	<!-- 查询所有 -->
+	<select id="getAll" resultMap="Map01">
+		select p.id id,p.code code,p.name name,p.price price,p.info info,c.id cid,c.name cname,c.code ccode,c.info cinfo
+		from product p,category  c 
+		where p.cid=c.id(+)
+	</select>
+	<!-- 查询单个数据 -->
+	<select id="getByID" parameterType="_long" resultMap="Map01">
+		select p.id id,p.code code,p.name name,p.price price,p.info info,c.id cid,c.name cname,c.code ccode,c.info cinfo
+		from product p,category c 
+		where p.cid=c.id(+) and p.id=#{id}
+	</select>
+
+
+</mapper>

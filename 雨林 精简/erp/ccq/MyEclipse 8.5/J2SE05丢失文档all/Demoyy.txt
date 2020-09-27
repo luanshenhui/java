@@ -1,0 +1,31 @@
+import java.io.File;
+
+
+public class Demoyy {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		File file=new File("C:/Documents and Settings/Administrator/Workspaces");
+		look(file);
+		
+
+	}
+	public static void look(File file){
+		if(file.isDirectory()){
+			//??
+			for(File f:file.listFiles()){
+				look(f);
+			}
+		}else{
+			if(file.getName().endsWith(".java")){
+				String name=file.getName();
+				name=name.replace(".java", "txt");
+				file.renameTo(new File(name));
+			}
+		}
+	}
+
+}

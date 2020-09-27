@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>DOM获取元素节点.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+  <script type="text/javascript">
+  	function m(){
+  		alert("测试");
+  		//根据id来获取      元素节点     对象    存入a中
+  		//根据id来获取元素节点对象
+  		var a=document.getElementById("username");
+  		alert(a);
+  		alert(a.value);
+  		var aa=document.getElementById("password");
+  		alert(aa.value);
+  	}
+  		function m2(){		
+  		//获取所有input标签
+  		var arr=document.getElementsByTagName("input");
+  		alert(arr.length)
+  		alert(arr[0].value);  		
+  		alert(arr[1].value);  		
+  	}
+  	
+  	function m3(){
+  		var a=document.getElementById("lan");
+  		alert(a.value);
+  	} 
+  	
+  </script>
+  
+<form action="">
+	用户<input id="username" name="username" type="text"><p/>
+	密码<input id="password" name="password" type="password"/><p/>
+	爱好<input id="lan" name="like"  value="1" type="checkbox"/>蓝球
+		<input id="pai" name="like"  value="2" type="checkbox"/>排球<p/>
+		
+	<input type="button" value="按钮1" onclick="m();"/>
+	<input type="button" value="按钮2" onclick="m2();"/>
+	<input type="button" value="3" onclick="m3();"/>
+	
+	
+	
+</form>
+  </body>
+</html>

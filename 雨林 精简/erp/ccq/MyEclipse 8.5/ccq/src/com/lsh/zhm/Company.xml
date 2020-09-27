@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsh.zhm.Company">
+
+	<resultMap type="Company" id="map011">
+		<id property="id" column="cid"/>
+		<result property="name" column="cname"/>
+		<collection property="list" javaType="Member">
+			<result property="id" column="mid"/>
+			<result property="name" column="mname"/>
+			<result property="age" column="mage"/>
+		</collection>
+	</resultMap>
+
+<!--	 <insert id="add" parameterType="Company">-->
+<!--		 #{}中的变量必须和类中成员变量完全一致，因为使用的反射机制，使用相应的get方法调用 -->
+<!--		insert into Company values(#{id},#{name})-->
+<!--	</insert>-->
+<!--	-->
+<!--	<update id="upde" parameterType="Company">-->
+<!--		update company name=#{name} where id=#{id}-->
+<!--	</update>-->
+<!--	-->
+<!--	<select id="getAll" resultMap="map01">-->
+<!--		 select * from company   Company-->
+<!--		select c.id cid,c.name cname,m.id mid,m.name mname,m.age mage-->
+<!--		from company c,member m-->
+<!--		where c.id=m.comid(+) -->
+<!--		-->
+<!--	</select>-->
+<!--	<delete id="del" parameterType="_int">-->
+<!--		delete from company where id = #{id}-->
+<!--	</delete>-->
+	
+	
+	<select id ="getOne"  parameterType = "Company"  resultMap ="map011">	
+		select c.id cid,c.name cname,m.id mid,m.name mname,m.age mage
+		from company c,member m
+		where c.id=m.comid and c.id=#{id}
+	</select>
+	
+	
+
+</mapper>

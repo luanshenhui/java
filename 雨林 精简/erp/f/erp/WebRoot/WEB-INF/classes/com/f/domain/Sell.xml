@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.f.domain.Sell">
+	<resultMap type="Sell" id="Map01">
+		<id property="id" column="id"/>
+		<result property="selldate" column="sdate"/>
+		<result property="sellmount" column="mount"/>
+		<result property="moneysum" column="money"/>
+			<association property="person" javaType="Person">
+				<result property="username" column="name"/>
+			</association>
+			<association property="product" javaType="Product">
+				<result property="name" column="cname"/>
+				<result property="code" column="pcode"/>
+			</association>
+	</resultMap>
+	<!-- 添加数据 -->
+	<select id="add" parameterType="Sell">
+		insert into sell values(#{id},#{person.id},#{product.code},to_char(sysdate,'yyyy-mm-dd-HH:MI:SS'),#{sellmount},#{moneysum})
+	
+	</select>
+	<!-- 删除数据 -->
+	<select id="delete" parameterType="_long">
+	delete from sell where id=#{id}
+	</select>
+	
+	<!-- 修改数据 -->
+	
+	<!-- 查询所有 -->
+	<select id="getAll" resultMap="Map01">
+	select s.id id,s.selldate sdate,s.sellmount mount,s.moneysum money,ps.username name ,pd.name cname,pd.code pcode
+	from sell s,person ps,product pd
+	where s.personid=ps.id and s.productcode=pd.code
+	</select>
+	<!-- 查询单个数据 -->
+	<select id="getByID" parameterType="_long" resultMap="Map01">
+	select s.id id,s.selldate sdate,s.sellmount mount,s.moneysum money,ps.username name ,pd.name cname,pd.code pcode
+	from sell s,person ps,product pd
+	where s.personid=ps.id and s.productcode=pd.code and s.id=#{id}
+	</select>
+</mapper>

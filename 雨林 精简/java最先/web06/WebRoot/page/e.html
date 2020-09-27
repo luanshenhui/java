@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>(5)JavaScript中的函数.和事件html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+    This is my HTML page. <br>
+    <script type="text/javascript">
+    	//(没有返回值的函数定义语法格式)
+    	//function 函数名字(参数列表){函数体}
+    	function m1(a,b){
+    		var s= a+ b;
+    		var s= m2(5,5);
+    		document.write("两个数的值是"+s);
+    	}
+    	
+    	//有返回值的函数定义的语法格式
+    	//function 函数名(参数列表){函数体 return 返回值}
+    	function m2(a,b) {
+			var s=a+b;
+			return s;
+		} 
+		
+		//事件源，事件的源头，比如点击按钮，按钮就是事件源。
+		function m3(a) {
+			alert(a);
+		}
+    </script>
+    
+    <input type="button" value="按钮1" onclick="m1(2,3);"/>
+    <input type="button" value="按钮2" onclick="alert(m2(1,2));"/>
+    <input type="button" value="按钮3" onclick="m3('你好');"/>
+    
+  </body>
+</html>

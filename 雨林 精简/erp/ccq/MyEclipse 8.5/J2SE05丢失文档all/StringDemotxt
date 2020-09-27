@@ -1,0 +1,38 @@
+package com.yulin.am;
+
+public class StringDemo {
+	public static void main(String[] args) {
+		/*
+		 * trim();除去两端的空格 split()；按照某个规则切割字符***** indexOf()；返回字符串中的某个字符的位置
+		 * startsWith()；是否以某一个字符为开头 endsWith()；是否以某一个字符为结尾 substring(int
+		 * start,int ends)；截取字符串 toCharArrays()；返回字符串中的字符数组
+		 * matches();按照正则表达式进行匹配*****
+		 * http://www.taobao.com/user/userLongin.action 练习取出userLongin
+		 * 提示;最后一个'/'
+		 */
+		String str = "http://www.taobao.com/user/userLongin.action";
+		String uri = str.substring(str.lastIndexOf("/") + 1, str
+				.lastIndexOf(".action"));
+		System.out.println(uri);
+		// 判断一个字符串是否是数字
+		// 判断一个字符串是否以字母为开头
+		// 判断一个字符串是否只包含数字或字母
+		// 判断一个字符串是否只是ip地址“0~255.0~255.0~255”
+		// 判断一个字符串是否只是邮箱abcdef@sina.com.cn
+		//
+		String str1 = "12345";
+		System.out.println(str1.matches("[0-9]+"));
+		System.out.println(str1.matches("\\d+"));
+		String str2 = "A123a123";
+		System.out.println(str2.matches("[a-zA-Z]+.*"));
+		String str3 = "ABC123";
+		System.out.println(str3.matches("[A-Z]{3}[0-9]*"));
+		String str4 = "3";
+		// System.out.println(str4.matches("[a-zA-Z]{1}.{5}"));
+		System.out.println(str4.matches("[a-z0-9]+"));
+		String str5 = "_hdgj@hfgh.com";
+		//System.out.println(str5.matches("[a-z_]{1}.[@][.][c][o][m]"));
+		System.out.println(str5.matches("[_a-zA-Z][a-zA-Z0-9$_]+[@].+([.][c][o][m])||([.][c][n])"));
+
+	}
+}

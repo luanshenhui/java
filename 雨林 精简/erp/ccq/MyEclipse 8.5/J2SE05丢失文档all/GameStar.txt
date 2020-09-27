@@ -1,0 +1,16 @@
+package com.yulin.snake;
+import java.util.*;
+public class GameStar {
+public static void main(String[] args){
+	Snake snake=new Snake();
+	snake.createFood();
+	snake.show();
+	while(true){
+		snake.change();
+		snake.move();
+		snake.show();
+//		if("q".equals(str))
+//			break;
+	}
+}
+}

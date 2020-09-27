@@ -1,0 +1,78 @@
+package com.yulin.pm;
+
+import java.util.*;
+import java.util.Random;
+import java.util.Scanner;
+
+public class GuassNumber{
+	public int check1(int[] rand, int[] input) {// 方法1用来校验位置不对的个数private
+		int count = 0;
+		for (int i = 0; i < rand.length; i++) {
+			for (int j = 0; j < input.length; j++) {
+				if (rand[i] == input[j]) {//i和j互换xxx
+					count++;
+					break;//
+				}
+
+			}
+		}	
+		return count;
+		
+	}
+
+	public int check2(int[] rand, int[] input) {// 方法2用来校验数和位置都对的个数private
+		int count = 0;
+		for (int i = 0; i < rand.length; i++) {
+			if (rand[i] == input[i]) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public int[] creat1() {//private
+		Random rd = new Random();
+		int[] rand = new int[4];//{1113}
+		for (int i = 0; i < 4; i++) {
+			rand[i] = rd.nextInt(10);
+		}
+		return rand;
+	}
+
+	public int[] input1() {//private
+		int[] input = new int[4];
+		Scanner sc = new Scanner(System.in);
+		System.out.println("输入1000~9999的一个数");
+		int in = sc.nextInt();
+		for (int i = 3; i >=0; i--) {//出来的数先给给个位
+			input[i] = in % 10;
+			in /= 10;
+		}
+		return input;
+	}
+
+	public void start() {
+		System.out.println("游戏开始");
+		int[] rand2 = creat1();// 通过create创建一个数组
+		int[] input2 = input1();// 通过input方法获得一个数组
+		int count = 1;
+		while (true) {
+			int a = check1(rand2, input2);
+			int b = check2(rand2, input2);
+			System.out.println(a + "," + b);
+			if (b == 4) {
+				System.out.println("游戏胜利");
+				System.out.println("你一共猜了" + count + "次");
+				break;// 游戏结束则跳出循环
+			} else {
+				count++;
+				input2= input1();// 如果没有输入则继续输入
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		GuassNumber gn = new GuassNumber();
+		gn.start();
+	}
+}

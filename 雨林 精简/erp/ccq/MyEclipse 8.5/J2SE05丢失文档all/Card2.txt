@@ -1,0 +1,42 @@
+package com.yulin.Card;
+
+import java.util.*;
+
+public class Card2 {
+	public static void main(String[] args) {
+		Card2 game = new Card2();
+
+		Random rd = new Random();
+		// int[]s=Random(49)+1;
+
+		Card[] cards = game.creatCards();
+		System.out.println(Arrays.toString(cards));
+//		Card []c1=new Card[18];
+//		Card []c2=new Card[18];
+//		Card []c3=new Card[18];
+//		for (int i=0;i<54;i++){
+//			c1[index]=new Card(i++);
+//			c2[index]=new Card(i++);
+//			c3[index]=new Card(i++);
+//			index++;
+//		}
+
+	}
+
+	public Card[] creatCards() {
+		Card[] cards = new Card[54];
+		int index = 0;// µÚ¼¸ÕÅÅÆ
+		for (int i = Card.three; i <= Card.two; i++) {
+			cards[index++] = new Card(i, Card.fangpian);
+			cards[index++] = new Card(i, Card.meihua);// p,h
+			cards[index++] = new Card(i, Card.hongtao);
+			cards[index++] = new Card(i, Card.heitao);
+		}
+		cards[index++] = new Card(Card.ghost, Card.small);
+		cards[index++] = new Card(Card.ghost, Card.large);
+
+		return cards;
+	}
+
+}
+

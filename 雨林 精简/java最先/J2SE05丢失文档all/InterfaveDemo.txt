@@ -1,0 +1,38 @@
+package com.yulin.am;
+
+public class InterfaveDemo {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+//Click c =new Click();    接口无法被实例化
+		
+		Click c = new ClickImpl();//接口的实现类
+	
+	}
+
+}
+class ClickImpl implements Click{
+
+	@Override
+	public void longer() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int pressed() {
+		return 0;
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void songKai() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

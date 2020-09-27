@@ -1,0 +1,17 @@
+package com.yulin.pm;
+
+public class fdemo {
+	public static void main(String[] args){
+		DEMO d= new DEMO();
+		d.f1();
+		d.f2();
+		//d.f3();//f3私有的只能在自己的类中使用
+		int i =d.f4();
+		System.out.println(i);
+		
+		int a =d.f5(7,4);
+		System.out.print(a);
+		
+	}
+
+}

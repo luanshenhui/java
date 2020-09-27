@@ -1,0 +1,62 @@
+package com.yulin.pm;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class MyPanel extends Panel {
+	int x,y ;
+	int dir=1;//1,-1,10,-10→ ←下上
+	@Override
+	public void paint(Graphics g){
+		g.fillRect(x,y,100,100);
+	}
+	
+	public void move(){
+		int xc=(dir%10)*5;//x方向坐标差值5倍速度
+		int yc=(dir/10)*5;//y方向坐标差值
+		
+		if(x>0&&x+100<800){//不能出界
+			x+=xc;
+		}else{
+			NPCChanged();
+			dir=0-dir;
+			x+=xc;
+		}
+		if(y>0&&y+100<600){
+			y+=yc;
+		}else{
+			NPCChanged();
+			y+=yc;
+		}
+		Random rd =new Random();
+		int r =rd.nextInt(30);
+		if(r==8){
+			NPCChanged();
+		}
+	}
+	private void NPCChanged(){
+		//改变电脑的方向，随机出1，-1，10，-10
+		int[]ds={1,-1,10,-10};
+		Random rd=new Random();
+		dir=ds[rd.nextInt(4)];//随机一个方向
+	}
+	private void start(){
+		Timer timer =new Timer();
+		TimerTask tt=new TimerTask(){//抽象类，实现Runnable
+			@Override
+			public void run(){
+				move();//
+				repaint();
+			}
+			
+		};
+		timer.schedule(tt, 0,1000/24);//一秒24 张图片
+	}
+	public MyPanel(){
+//		start();
+	}
+
+}

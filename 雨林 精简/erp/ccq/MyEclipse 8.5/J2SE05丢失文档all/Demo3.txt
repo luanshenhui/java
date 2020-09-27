@@ -1,0 +1,20 @@
+package com.yulin.am;
+
+import java.util.Arrays;
+
+public class Demo3 {
+	public static void main(String[] args){
+		int[] ins={78,65,63,98,3};
+		long now =System.nanoTime();
+		Demo1.main(null);
+		long time1=System.nanoTime();
+		Demo2.main(null);
+		long time2=System.nanoTime();
+		Arrays.sort(ins);
+		long time3=System.nanoTime();
+		System.out.println(time1-now);
+		System.out.println(time2-time1);
+		System.out.println(time3-time2);
+	}
+
+}

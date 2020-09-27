@@ -1,0 +1,48 @@
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.*;
+import java.util.Set;
+import java.util.Map.Entry;
+
+
+public class MapDemo2 {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Map<String,String>map=new HashMap<String,String>();
+		map.put("001","Jack");
+		map.put("002","rose");
+		map.put("003","bond");
+		map.put("004","bruce");
+		map.put("005","tom");
+		map.put("006","jim");//验证无序型，后一个辉覆盖前一个
+		/*迭代Map集合步骤
+		 * 1取出Entry的Set集合
+		 * 2迭代这个Set集合
+		 * 3从Entry中分别取出Key和Value
+		 * 
+		 * 
+		 */
+	Set<Entry<String,String>>set = map.entrySet();
+//		for(Entry<String,String> s:set){
+//			//System.out.println(s);
+//		//	System.out.println();
+////			System.out.println("key"+s.getKey());
+////			System.out.println("value"+s.getValue());
+//	}
+		
+		Iterator<Entry<String,String>>it=set.iterator();
+		while(it.hasNext()){
+			Entry<String,String> so=it.next();
+			System.out.println("key"+so.getKey());
+			System.out.println("value"+so.getValue());
+		}
+	
+		
+
+	}
+
+}

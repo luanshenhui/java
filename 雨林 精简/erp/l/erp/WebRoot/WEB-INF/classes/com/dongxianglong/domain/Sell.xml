@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dongxianglong.domain.Sell">
+
+<resultMap type="Sell" id="map01">
+<id  property="id" column="sid"/>
+<result property="selldate" column="sdt"/>
+<result property="sellmount" column="smt"/>
+<result property="moneysum" column="sum"/>
+<association property="person" javaType="Person">
+<result property="id" column="pid"/>
+<result property="username" column="pusername"/>
+<result property="password" column="ppassword"/>
+<result property="sex" column="psex"/>
+<result property="age" column="page"/>
+<result property="email" column="pemail"/>
+<result property="phone" column="pphone"/>
+<result property="salary" column="psalary"/>
+</association>
+<association property="product" javaType="Product">
+<result property="id" column="ptid"/>
+<result property="code" column="ptcode"/>
+<result property="name" column="ptname"/>
+<result property="price" column="ptprice"/>
+<result property="info" column="ptinfo"/>
+</association>
+</resultMap>
+<!-- 查所有 -->
+<select id="all" resultMap="map01">
+ select s.id sid,s.selldate sdt,s.sellmount smt,s.moneysum sms,
+ p.id pid,p.username pusername,p.password ppassword,p.sex psex,p.age page,p.email pemail,p.phone pphone,p.salary psalary,
+ pt.id ptid,pt.code ptcode,pt.name ptname,pt.price ptprice,pt.info ptinfo
+ from sell s,person p,product pt
+ where s.personid=p.id and s.productcode=pt.code
+ </select>
+<!-- 添加 -->
+<insert id="add" parameterType="Sell">
+ insert into sell values (#{id},#{person.id},#{product.code},to_char(sysdate,'yyyy-mm--dd HH24:MI:SS'),#{sellmount},#{moneysum})
+ </insert>
+</mapper>

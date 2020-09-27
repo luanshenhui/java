@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.f.domain.Person">
+	<resultMap type="Person" id="Map01">
+		<id property="id" column="id"/>
+		<result property="username" column="username"/>
+		<result property="password" column="password"/>
+		<result property="sex" column="sex"/>
+		<result property="age" column="age"/>
+		<result property="email" column="email"/>
+		<result property="phone" column="phone"/>
+		<result property="salary" column="salary"/>
+		<association property="roleaction" javaType="Roleaction">
+			<id property="id" column="rid"/>
+			<result property="rolename" column="rolename"/>
+		</association>
+	</resultMap>
+
+
+	<!-- 添加数据 -->
+	<select id="add" parameterType="Person">
+	insert into person values(#{id},#{username},#{password},#{sex},#{age},#{email},#{phone},#{salary})
+	</select>
+	<!-- 删除数据 -->
+	<select id="delete" parameterType="_int">
+	delete from person where id=#{id}
+	</select>
+	<!-- 修改数据 -->
+	<select id="update" parameterType="Person">
+	update person
+	set username=#{username},password=#{password},
+	sex=#{sex},age=#{age},email=#{email},
+	phone=#{phone},salary=#{salary}
+	where id=#{id}
+	</select>
+	<!-- 查询所有 -->
+	<select id="getAll" resultMap="Map01">
+		select p.id id,p.username username,p.password password,p.sex sex,p.age age,p.email email,p.phone phone,p.salary salary,r.id rid,r.rolename rolename
+		from person p,roleaction r 
+		where p.id=r.personid
+	</select>
+	<!-- 查询单个数据 -->
+	<select id="getByID" parameterType="_int" resultMap="Map01">
+		select p.id id,p.username username,p.password password,p.sex sex,p.age age,p.email email,p.phone phone,p.salary salary,r.id rid,r.rolename rolename
+		from person p,roleaction r 
+		where p.id=r.personid and p.id=#{id}
+	</select>
+</mapper>

@@ -1,0 +1,62 @@
+package com.yulin.am;
+
+import java.util.Scanner;
+
+public class kadaomao {
+	private int w=30;
+	private int h=15;
+	private int[][] snake = { 
+			{ 10, 5 },
+			{ 9, 5 },
+			{ 8, 5 },
+			{ 7, 5 },
+			{ 6, 5 },
+			{ 6, 4 },
+			{ 6, 3 },
+			{ 5, 3 },
+			{ 4, 3 },
+			{ 3, 3 }, };
+	private  int dir =1;
+	int [][]food=new int[2][2];
+	
+	public void show(){
+		for(int y=0;y<h;y++){
+			for(int x=0;x<w;x++){
+				if(y==0||x==0||y==h-1||x==w-1){
+					System.out.print("+");
+				}
+			}
+			System.out.println();
+		}
+		
+	}
+	
+	public void move(){
+		for(int i=snake.length;i>0;i--){
+			snake[i][0]=snake[i-1][0];
+			snake[i][1]=snake[i-1][1];
+		}
+		int x=dir%10;
+		int y=dir/10;
+		snake[0][0]+=x;
+		snake[0][1]+=y;
+		
+	}
+	 
+	public void change(){
+		Scanner sc=new Scanner(System.in);
+		String str =sc.nextLine();
+		if("w")
+		
+	}
+	
+	public void createFood(){
+		
+	}
+	
+	private boolean isEat(){
+		
+		return false;
+	}
+
+}

@@ -1,0 +1,30 @@
+package com.yulin.pm;
+
+public class ForDemo2 {
+	public static void main(String[] args) {
+		int[] arr;
+		// System.out.println(arr);//数组只有初始化化之后才能使用
+		// arr[]=5;//赋值前要先声明长度
+		// 数组只有初始化化之后才能使用
+		int[] arry = new int[5];
+		for (int i = 0; i < arry.length; i++) {
+			System.out.println(arry[i]);
+		}
+		char[] chs = new char[5];//'  '
+		for (int i = 0; i < chs.length; i++) {
+			System.out.println(chs[i]);
+		}
+
+		boolean[] bs = new boolean[5];//false
+		for (int i = 0; i < bs.length; i++) {
+			System.out.println(bs[i]);
+		}
+
+		String[] strs = new String[5];//null
+
+		for (int i = 0; i < strs.length; i++) {
+			System.out.println(strs[i]);
+		}
+	}
+
+}

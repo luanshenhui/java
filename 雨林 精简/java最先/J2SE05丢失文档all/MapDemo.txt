@@ -1,0 +1,26 @@
+package com.yulin.pm;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MapDemo {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		//Map map=new HashMap(){
+			Map<String,String>map=new HashMap<String,String>();
+			map.put("monty", "明哥");//二维数组只能用put取
+			map.put("熊大", "飘鲜明");
+			map.put("熊二", "胖保洁");
+			
+			System.out.println(map.get("Monty"));//取key
+			
+			
+		
+
+	}
+
+}

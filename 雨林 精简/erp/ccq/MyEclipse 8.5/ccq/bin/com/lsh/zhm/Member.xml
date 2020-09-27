@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsh.zhm.Member">
+
+	
+	<!-- #{}中的变量必须和类中成员变量完全一致，因为使用的反射机制，使用相应的get方法调用 -->
+	<!-- 配置映射关系 -->
+	<resultMap id="map01" type="Member">
+		<id property="id" column="mid"/> <!--property是类里的，column是表里的  -->
+		<result property="name" column="mname"/>
+		<result property="age" column="mage"/>
+		<result property="company.id" column="cid"/> <!--company 是对象在点它的属性id-->
+		<result property="company.name" column="cname"/>
+	</resultMap>
+	
+	
+	<!--2通过嵌套实现-->
+	<resultMap type="Company" id="map03">
+		<id property="id" column="cid"/>
+		<result property="name" column="cname"/>
+	</resultMap>
+	<resultMap id="map02" type="Member">
+		<id property="id" column="mid"/> <!--property是类里的，column是表里的  -->
+		<result property="name" column="mname"/>
+		<result property="age" column="mage"/>
+		<association property="company" resultMap="map03"></association>
+	</resultMap>
+	
+	
+	<!-- 内联 -->
+	<resultMap type="Member" id="map04">
+		<id property="id" column="mid"/> <!--property是类里的，column是表里的  -->
+		<result property="name" column="mname"/>
+		<result property="age" column="mage"/>
+		<association property="company" javaType="Company">
+			<result property="id" column="cid"/>
+			<result property="name" column="cname"/>
+		</association>	
+	</resultMap>	
+	
+	<select id="getOne" parameterType="_int" resultMap="map04">
+		select c.id cid,c.name cname,m.id mid,m.name mname,m.age mage from company c,member m where c.id=m.comid and m.id=#{id}
+	</select>
+	
+</mapper>

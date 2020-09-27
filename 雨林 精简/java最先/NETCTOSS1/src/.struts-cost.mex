@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Struts2Diagram version="2.0">
+  <package name="cost" location="10,10" size="1260,595">
+    <action name="toList" location="0,0" size="0,0">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="fee_list.jsp" />
+      </result>
+    </action>
+    <action name="findCost" location="1045,57" size="150,41">
+      <result name="success" />
+    </action>
+    <action name="toAdd" location="1045,232" size="150,41">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="fee_add.jsp" />
+      </result>
+    </action>
+    <action name="deleteCost" location="800,232" size="150,41">
+      <result name="success" />
+    </action>
+    <action name="loadCost" location="800,407" size="150,41">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="fee_detail.jsp" />
+      </result>
+    </action>
+    <action name="addCost" location="555,407" size="150,41">
+      <result name="success" />
+    </action>
+    <action name="validName" location="310,407" size="150,41">
+      <result name="success" />
+    </action>
+    <action name="*_cost" location="310,502" size="150,62">
+      <result name="load">
+        <resourceEdge source="load" routing="0" target="fee_modi.jsp" />
+      </result>
+      <result name="modify" />
+    </action>
+    <action name="validModiName" location="65,512" size="150,41">
+      <result name="success" />
+    </action>
+  </package>
+  <webResource name="fee_list.jsp" path="/WEB-INF/NETCTOSS/fee/fee_list.jsp" location="1319,30" size="150,55" />
+  <webResource name="fee_add.jsp" path="/WEB-INF/NETCTOSS/fee/fee_add.jsp" location="1314,205" size="150,55" />
+  <webResource name="fee_detail.jsp" path="/WEB-INF/NETCTOSS/fee/fee_detail.jsp" location="1310,380" size="150,55" />
+  <webResource name="fee_modi.jsp" path="/WEB-INF/NETCTOSS/fee/fee_modi.jsp" location="262,660" size="150,55" />
+</Struts2Diagram>
+

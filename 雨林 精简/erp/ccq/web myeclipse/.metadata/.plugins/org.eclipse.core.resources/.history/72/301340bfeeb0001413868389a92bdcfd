@@ -1,0 +1,28 @@
+/**
+ * 
+ */
+package com.lsh.action;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * @author èïÉ÷»Ô
+ *
+ * 2015-2-10ÏÂÎç02:30:51
+ */
+public class Cation extends HttpServlet {
+
+	@Override
+	protected void service(HttpServletRequest arg0, HttpServletResponse arg1)
+			throws ServletException, IOException {
+	System.out.println("Ö´ÐÐ");
+	}
+	
+	
+
+}

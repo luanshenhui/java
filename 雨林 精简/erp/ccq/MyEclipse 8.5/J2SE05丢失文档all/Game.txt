@@ -1,0 +1,99 @@
+package com.yulin.Card;
+
+import java.util.Arrays;
+import java.util.Random;
+
+public class Game {
+	public static void main(String[] args) {
+		Game game = new Game();
+		//Card[] cards = game.creatCards();
+	//	System.out.println(Arrays.toString(cards));
+		//System.out.println();		
+		game.showCards(/*cards*/);
+		//System.out.println();
+		game.xiCards(/*cards*/);
+		//System.out.println();
+		game.showCards();
+		game.faPai();
+		game.maPai();
+		game.show();
+
+	}
+	public Game(){
+		cards = createCards();
+			
+	}
+
+	public Card[] createCards() {//创建54张牌
+		Card[] cards = new Card[54];
+		int index = 0;// 第几张牌
+		for (int h = Card.fangpian; h <= Card.heitao; h++) {
+			for(int p=Card.three;p<=Card.two;p++){
+				cards[index++]=new Card(p,h);
+			}
+			
+		}
+		cards[index++] = new Card(Card.ghost, Card.small);
+		cards[index++] = new Card(Card.ghost, Card.large);
+		// System.out.println(Arrays.toString(cards));
+		return cards;
+	}
+public void showCards(/*Card[]cards*/){//只能输出54张牌
+	int index=0;
+	for(int i=0;i<4;i++){
+		for (int j=0;j<13;j++){
+			System.out.print(cards[index++]);
+		}
+		System.out.println();
+	}
+	System.out.println(cards[index++]);
+	System.out.println(cards[index++]);
+	
+}
+
+public void xiCards(/*Card[] cards*/){
+	Random rd =new Random();
+	for(int i=0;i<cards.length;i++){
+		int a=rd.nextInt(54);
+		int b=rd.nextInt(54);
+		
+		Card card=cards[a];
+		cards[a]=cards[b];
+		cards[b]=card;
+	}}
+Card[] cards = new Card[54];
+Card[] p1=new Card[18];
+Card[] p2=new Card[18];
+Card[] p3=new Card[18];
+public void faPai(){
+	int index=0;
+
+	for(int i=0;i<54;){
+		p1[index]=cards[i++];
+		p2[index]=cards[i++];
+		p3[index]=cards[i++];
+		index++;
+	}
+}
+	public void maPai(){
+		//对玩家手中的牌进行排序
+		Arrays.sort(p1);
+		Arrays.sort(p2);
+		Arrays.sort(p3);
+	}
+	
+	public void show(){
+		System.out.println(Arrays.toString(p1));
+		System.out.println(Arrays.toString(p2));
+		System.out.println(Arrays.toString(p3));
+	}
+}
+
+
+
+
+
+
+// Card c = new Card(Card.a, Card.heitao);// 黑桃a
+ //System.out.println(c);
+

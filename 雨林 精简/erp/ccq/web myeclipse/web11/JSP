@@ -1,0 +1,32 @@
+JSP的知识点
+我们使用java做项目,视图层的技术就是JSP.
+JSP=HTML+Java
+ASP=HTML+VB
+.NET=HTML+C#
+	
+
+(一)基础语法
+(二)常用的指令和标签
+(三)9个内置对象
+
+page：页面对象，当前页面的范围
+request：请求对象，一次请求的范围
+session：会话对象，一次会话的范围
+application：应用对象,整个应用的范围
+以上四个存储范围都是通过pageContext展开的,(以上4个范围pageContext都能做).
+
+pageContext
+page
+request请求对象,response回应对象
+session
+application
+
+out:输出对象，开发中几乎全用<%=%>取代，用来向浏览器输出信息。
+config：配置对象。用来获取web.xml文件中的信息，开发中使用servlet有参的初始化方法取代。
+exception：异常对象。用来显示异常信息。开发中我们使用servlet控制器来控制异常，几乎部用。
+
+(1)路径问题
+相对路径:相对于地址栏 的路径,所以会导致最终拼写之后的路径404错误(多个入口找一个资源)
+绝对路径:每次书写路径都要写一个应用的访问路径
+最终方案:使用标签<base href="">标签，该标签的含义是相对路径的基准路径。如果不写它，则相对路径是相对地址栏的。
+		如果不写它，则相对路径是相对base的href往后写的

@@ -1,0 +1,49 @@
+package com.yulin.pm;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+
+import com.yulin.am.*;
+import java.util.*;
+
+import com.yulin.am.MyFrame;
+
+public class beidou extends Panel implements MouseMotionListener{
+	int x=50, y=30;
+	
+	public static void main(String[] args){
+		MyFrame mf =new MyFrame();
+		beidou bd =new beidou();
+		mf.add(bd);
+		mf.show();
+		bd.addMouseMotionListener(bd);
+		mf.addMouseMotionListener(bd);
+	}
+    @Override
+    public void paint(Graphics g){
+    	g.fillOval(10, 10,x+5,y+20);
+    	
+    
+		
+		
+		//MyFrame mf =new MyFrame();
+		//StarPanel sp =new StarPanel();
+		//mf.add(sp);
+		//mf.show();
+}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		x =e.getX();
+		y =e.getY();
+		repaint();
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+		}
+	
+}

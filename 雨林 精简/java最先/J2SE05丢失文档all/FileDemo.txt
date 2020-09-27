@@ -1,0 +1,18 @@
+package com.yulin.com;
+
+import java.io.File;
+import java.io.IOException;
+
+public class FileDemo {
+	public static  void main(String[] args){
+		String path ="src/demo.txt";
+		File file=new File(path);
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

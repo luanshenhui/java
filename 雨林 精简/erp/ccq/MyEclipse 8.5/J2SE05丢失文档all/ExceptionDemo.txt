@@ -1,0 +1,26 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+
+public class ExceptionDemo {
+	static String[]is=new String[5];
+	public static void main(String[] args){//抛出的话这个位置要签名
+		while (true){
+			try{
+				Scanner sc =new Scanner(System.in);
+				int i= sc.nextInt();
+				System.out.println("你输入的是"+i);
+				break;
+			}catch(InputMismatchException ime){
+				//throw new Exception("输入信息有误");
+				ime.printStackTrace();
+				continue;
+			}
+				
+			}
+			System.out.println("程序结束");
+		}
+	}
+	
+
+

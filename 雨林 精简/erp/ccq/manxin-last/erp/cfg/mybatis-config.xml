@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+    "mybatis-3-config.dtd">
+<configuration>
+
+	<properties resource="jdbc.properties" />               <!--  -->
+	<!-- 配置类型的别名  ，给文件定格别名-->
+	<typeAliases>
+
+		<typeAlias alias="Person" type="com.lsh.domain.Person" />
+		<typeAlias alias="Product" type="com.lsh.domain.Product" />
+		<typeAlias alias="Roleaction" type="com.lsh.domain.Roleaction" />
+		<typeAlias alias="Category" type="com.lsh.domain.Category" />
+		<typeAlias alias="Stock" type="com.lsh.domain.Stock" />
+		<typeAlias alias="Sell" type="com.lsh.domain.Sell" />
+		<typeAlias alias="Repertory" type="com.lsh.domain.Repertory" />
+	
+		
+	</typeAliases>
+
+
+	<!-- 下面是一个环境 -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+
+
+	</environments>
+
+
+
+
+
+	<!-- 配置sql的映射文件，sql就写在这里 -->
+	<mappers>
+		<mapper resource="com/lsh/domain/Person.xml" />
+		<mapper resource="com/lsh/domain/Product.xml" />
+		<mapper resource="com/lsh/domain/Roleaction.xml" />
+		<mapper resource="com/lsh/domain/Category.xml" />
+		<mapper resource="com/lsh/domain/Stock.xml" />
+		<mapper resource="com/lsh/domain/Sell.xml" />
+		<mapper resource="com/lsh/domain/Repertory.xml" />
+		
+	
+	
+	</mappers>
+
+</configuration>

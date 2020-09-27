@@ -1,0 +1,27 @@
+import java.io.File;
+
+public class FileDemo2 {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub\
+		File file = new File("c:/");
+		look(file);
+
+	}
+
+	public static void look(File file) {
+		if (file.isDirectory()) {
+			System.out.println("д©б╪" + file);
+
+			for (File f : file.listFiles()) {
+				look(f);
+			}
+		} else {
+			System.out.println("нд╪Ч" + file);
+		}
+	}
+
+}

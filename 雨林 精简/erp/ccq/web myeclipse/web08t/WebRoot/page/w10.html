@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>案例10.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<script type="text/javascript">
+		function m(){
+<!--		var a=document.getElementById("s1").value;-->
+<!--		var v=document.createElement("option");-->
+<!--		var t=document.createTextNode(a);-->
+<!--		v.appendChild(t);-->
+<!--		var aa=document.getElementById("s2");-->
+<!--		aa.appendChild(v);-->
+		
+		var s1=document.getElementById("s1");
+		var arr=document.getElementsByTagName("option");
+		var s2=document.getElementById("s2");
+		s2.appendChild(arr[s1.selectedIndex]);
+		}
+		
+	</script>
+  </head>
+  
+  <body>
+    案例10 <br>
+    <select id="s1" size="3">
+    	<option id="1" value="北京">北京</option>
+    	<option value="大连">大连</option>
+    	<option value="上海">上海</option>
+    </select>
+    <input id="10" type="button" value="添加" onclick="m();"/>
+    <select id="s2" size="3"></select>
+  </body>
+</html>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <!-- 配置过滤器 -->
+  <filter>
+  	<filter-name>filter</filter-name>
+  	<filter-class>com.f.filter.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>filter</filter-name>
+  	<url-pattern>/web/page/*</url-pattern>
+  </filter-mapping>
+  
+  <!-- 配置用户登录检查控制器 -->
+  <servlet>
+  <servlet-name>ajax</servlet-name>
+  <servlet-class>com.f.action.AJAXAciton</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>ajax</servlet-name>
+  <url-pattern>/ajax</url-pattern>
+ </servlet-mapping>
+  
+  <!-- 配置用户登录控制器 -->
+  <servlet>
+  <servlet-name>Login</servlet-name>
+  <servlet-class>com.f.action.LoginAction</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>Login</servlet-name>
+  <url-pattern>/login</url-pattern>
+ </servlet-mapping>
+ <!-- 配置用户注册控制器 -->
+ <servlet>
+	  <servlet-name>Register</servlet-name>
+	  <servlet-class>com.f.action.RegisterAction</servlet-class>
+ </servlet>
+ <servlet-mapping>
+	  <servlet-name>Register</servlet-name>
+	  <url-pattern>/register</url-pattern>
+ </servlet-mapping>
+ 
+ <!-- 配置用户修改控制器 -->
+ <servlet>
+  <servlet-name>EditPerson</servlet-name>
+  <servlet-class>com.f.action.PersonEdit</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>EditPerson</servlet-name>
+  <url-pattern>/PersonEdit</url-pattern>
+ </servlet-mapping>
+ <!-- 配置密码修改控制器 -->
+ <servlet>
+  <servlet-name>EditPassword</servlet-name>
+  <servlet-class>com.f.action.PasswordEdit</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>EditPassword</servlet-name>
+  <url-pattern>/PasswordEdit</url-pattern>
+ </servlet-mapping>
+ 
+  <!-- 配置注销控制器 -->
+ <servlet>
+  <servlet-name>ValidateAction</servlet-name>
+  <servlet-class>com.f.action.ValidateAction</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>ValidateAction</servlet-name>
+  <url-pattern>/ValidateAction</url-pattern>
+ </servlet-mapping>
+
+  <!-- 配置添加类别 -->
+ <servlet>
+  <servlet-name>CategoryAdd</servlet-name>
+  <servlet-class>com.f.action.CategoryAdd</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ 	<servlet-name>CategoryAdd</servlet-name>
+ 	<url-pattern>/CategoryAdd</url-pattern>
+ </servlet-mapping>
+  <!-- 配置查看所有类别 -->
+ <servlet>
+  <servlet-name>CategoryList</servlet-name>
+  <servlet-class>com.f.action.CategoryList</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ 	<servlet-name>CategoryList</servlet-name>
+ 	<url-pattern>/CategoryList</url-pattern>
+ </servlet-mapping>
+   <!-- 配置编辑类别跳转 -->
+ <servlet>
+  <servlet-name>CategoryToEdit</servlet-name>
+  <servlet-class>com.f.action.CategoryToEdit</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ 	<servlet-name>CategoryToEdit</servlet-name>
+ 	<url-pattern>/CategoryToEdit</url-pattern>
+ </servlet-mapping>
+
+
+  <!-- 配置类别操作-->
+  <servlet>
+  <servlet-name>CategoryOperate</servlet-name>
+  <servlet-class>com.f.action.CategoryOperate</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>CategoryOperate</servlet-name>
+  <url-pattern>/CategoryOperate</url-pattern>
+ </servlet-mapping>
+ <!-- 配置查看全部商品 -->
+  <servlet>
+  <servlet-name>ProductList</servlet-name>
+  <servlet-class>com.f.action.ProductList</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>ProductList</servlet-name>
+  <url-pattern>/ProductList</url-pattern>
+ </servlet-mapping>
+  <!-- 配置添加商品 -->
+  <servlet>
+  <servlet-name>ProductAdd</servlet-name>
+  <servlet-class>com.f.action.ProductAdd</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>ProductAdd</servlet-name>
+  <url-pattern>/ProductAdd</url-pattern>
+ </servlet-mapping>
+  <!-- 配置添加商品 跳转-->
+  <servlet>
+  <servlet-name>ProductToAdd</servlet-name>
+  <servlet-class>com.f.action.ProductToAdd</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>ProductToAdd</servlet-name>
+  <url-pattern>/ProductToAdd</url-pattern>
+ </servlet-mapping>
+   <!-- 配置修改商品 跳转-->
+  <servlet>
+  <servlet-name>ProductToEdit</servlet-name>
+  <servlet-class>com.f.action.ProductToEdit</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>ProductToEdit</servlet-name>
+  <url-pattern>/ProductToEdit</url-pattern>
+ </servlet-mapping>
+ 
+  <!-- 配置商品操作-->
+  <servlet>
+  <servlet-name>ProductOperate</servlet-name>
+  <servlet-class>com.f.action.ProductOperate</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>ProductOperate</servlet-name>
+  <url-pattern>/ProductOperate</url-pattern>
+ </servlet-mapping>
+  <!-- 配置查看销售-->
+  <servlet>
+  <servlet-name>StockList</servlet-name>
+  <servlet-class>com.f.action.StockList</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>StockList</servlet-name>
+  <url-pattern>/StockList</url-pattern>
+ </servlet-mapping>
+ <!-- 配置添加进货跳转-->
+  <servlet>
+  <servlet-name>StockToAdd</servlet-name>
+  <servlet-class>com.f.action.StockToAdd</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>StockToAdd</servlet-name>
+  <url-pattern>/StockToAdd</url-pattern>
+ </servlet-mapping>
+
+ <!-- 配置添加进货-->
+  <servlet>
+  <servlet-name>StockAdd</servlet-name>
+  <servlet-class>com.f.action.StockAdd</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>StockAdd</servlet-name>
+  <url-pattern>/StockAdd</url-pattern>
+ </servlet-mapping>
+</web-app>

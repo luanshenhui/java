@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Struts2Diagram version="2.0">
+  <package name="role" location="10,10" size="280,140">
+    <action name="findRole" location="65,57" size="150,41">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="role_list.jsp" />
+      </result>
+    </action>
+    <action name="toAddRole" location="0,0" size="0,0">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="role_add.jsp" />
+      </result>
+    </action>
+    <action name="addRole" location="0,0" size="0,0">
+      <result name="success" />
+    </action>
+    <action name="toUpdateRole" location="0,0" size="0,0">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="role_modi.jsp" />
+      </result>
+    </action>
+    <action name="updateRole" location="0,0" size="0,0">
+      <result name="success" />
+    </action>
+  </package>
+  <webResource name="role_list.jsp" path="/WEB-INF/NETCTOSS/role/role_list.jsp" location="21,205" size="150,55" />
+  <webResource name="role_add.jsp" path="/WEB-INF/NETCTOSS/role/role_add.jsp" location="0,0" size="0,0" />
+  <webResource name="role_modi.jsp" path="/WEB-INF/NETCTOSS/role/role_modi.jsp" location="0,0" size="0,0" />
+</Struts2Diagram>
+

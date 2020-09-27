@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>MyHtml.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+    	<script type="text/javascript">
+		function ms(){
+<!--		var a=document.getElementById("s1").value;-->
+<!--		var v=document.createElement("option");-->
+<!--		var t=document.createTextNode(a);-->
+<!--		v.appendChild(t);-->
+<!--		var aa=document.getElementById("s2");-->
+<!--		aa.appendChild(v);-->
+		
+		var s1=document.getElementById("s1");
+		var arr=document.getElementsByTagName("option");
+		var s2=document.getElementById("s2");
+		s2.appendChild(arr[s1.selectedIndex]);
+		}
+		
+	</script>
+    
+    <script type="text/javascript">
+	function mp(){
+	var v1=document.getElementById("username");
+	var v11=document.getElementById("err01");
+	var b1=true;
+	if(v1.value.length == 0){
+	v11.innerHTML="<font color='red'>用户不能为空</font>";
+<!--	//获得焦点-->
+	v1.focus();
+		//return false;
+		b1 = false;
+		}else{
+		v11.innerHTML="";
+	}	
+	var b2=true;
+	var v2=document.getElementById("password");
+	var v22=document.getElementById("err02");
+	if(v2.value.length == 0){
+	v22.innerHTML = "密码不能为空";
+	//获得焦点
+	v2.focus();
+		//return false;
+		b2=false;
+	}else{
+		v22.innerHTML="";
+	}
+		//return true;
+		return (b1 && b2);
+	} 
+	
+	</script>
+    
+    <script type="text/javascript">
+	function m2(){
+	//	alert("确定返回true,取消返回false",confirm返回的是boolean值);
+		if(window.confirm("是否确认退出")){
+		window.close();		
+		}
+	}
+</script>
+    
+    <script type="text/javascript">
+		function m1(){
+<!--		alert("测试");-->
+		var v=document.getElementById("all");
+		var arr=document.getElementsByTagName("input");
+		for(var i=0;i<arr.length;i++){
+			arr[i].checked=v.checked;
+			}
+		}
+	</script>
+    
+<style type="text/css">
+		span.a{
+			font-size:20px;
+			border:1px solid;	
+		}
+		span.b{
+			font-size:40px;
+			border:1px solid;
+		}
+		</style>
+		
+		<script type="text/javascript">
+		function mu(tu){
+		var	v=document.getElementById("abc");
+		v.setAttribute("src", "/Aa/img/"+tu);
+		}
+	</script>
+		
+  </head>
+  
+  <body><table>
+   <tr onmouseover="this.style.backgroundColor='#0000ff'"  onmouseout="this.style.backgroundColor='#ffffff'"><th>姓名</th><th>性别</th><th>年龄</th><th>城市</th></tr>
+    	<tr onmouseover="this.style.backgroundColor='#0000ff'"  onmouseout="this.style.backgroundColor='#ffffff'"><td>张三</td><td>男</td><td>56</td><td>大连</td></tr>
+    	<tr onmouseover="this.style.backgroundColor='#0000ff'"  onmouseout="this.style.backgroundColor='#ffffff'"><td>李四</td><td>女</td><td>12</td><td>现将</td></tr>
+    	<tr onmouseover="this.style.backgroundColor='#0000ff'"  onmouseout="this.style.backgroundColor='#ffffff'"><td>王五</td><td>女</td><td>45</td><td>上哈</td></tr>
+    	<tr onmouseover="this.style.backgroundColor='#0000ff'"  onmouseout="this.style.backgroundColor='#ffffff'"><td>赵丽</td><td>女</td><td>44</td><td>刚在</td></tr>
+    	<tr onmouseover="this.style.backgroundColor='#0000ff'"  onmouseout="this.style.backgroundColor='#ffffff'"><td>刘淇</td><td>女</td><td>55</td><td>的的</td></tr>
+    	<tr onmouseover="this.style.backgroundColor='#0000ff'"  onmouseout="this.style.backgroundColor='#ffffff'"><td>王吧</td><td>男</td><td>15</td><td>父类</td></tr>
+  </table>
+   <div>
+    	<span class="a" onmouseover="this.className='b'" onmouseout="this.className='a'">第一页</span>
+    	<span class="a" onmouseover="this.className='b'" onmouseout="this.className='a'">第二页</span>
+    	<span class="a" onmouseover="this.className='b'" onmouseout="this.className='a'">第三页</span>
+    	<span class="a" onmouseover="this.className='b'" onmouseout="this.className='a'">第四页</span>
+    	<span class="a" onmouseover="this.className='b'" onmouseout="this.className='a'">第五页</span>
+    </div>
+    
+    <img id="abc" alt="????" src="/Aa/img/1.bmp"/>
+    <p/>
+    <input type="button" value="图1" onclick="mu('1.bmp');"/>
+    <input type="button" value="图2" onclick="mu('qq.PNG');"/>
+    <input type="button" value="图3" onclick="mu('welcome.jpg');"/>
+    
+    <a href="#" onclick="mu('1.bmp');">图1</a>
+    <a href="#" onclick="mu('qq.PNG');">图2</a>
+    <a href="#" onclick="mu('welcome.jpg');">图3</a>
+<!--    //伪协议-->
+    <a href="javascript:mu('1.bmp');">图一</a>
+    <a href="javascript:mu('qq.PNG');">图二</a>
+    <a href="javascript:mu('welcome.jpg');">图三</a>
+    
+    <form action="">
+    	用户<input id="username" name="username" type="text" onfocus="this.select()";/><p/>
+    	密码<input id="password" name="password" type="password" onfocus="this.select();"/><p/>
+  
+    	用户<input id="username" name="username" type="text" onfocus="this.style.backgroundColor='#00ff00'" onblur="this.style.backgroundColor='#ffffff'";/><p/>
+    	密码<input id="password" name="password" type="password" onfocus="this.style.backgroundColor='#112211'" onblur="this.style.backgroundColor='#0000ff'"/> <p/>
+  
+  		姓名<input type="text"/> <p/>
+  		简介<textarea rows="5" cols="20" onfocus="if(value=='请输入个人信息'){value='';}" onblur="if(value==''){value='请输入个人信息';}">请输入个人信息</textarea>
+
+
+    	全选<input id="all" type="checkbox" onclick="m1();"/>
+    	<p/> 
+    	<input type="checkbox"/> 足球
+    	<input type="checkbox"/> 篮球
+    	<input type="checkbox"/> 排球
+    	
+    </form>
+    <p/>
+    <form action="/web08t/page/w01.html" onsubmit="return mp();">
+    	用户<input id="username" type="text" /><span id="err01"></span> <p/>
+    	密码<input id="password" type="password" /><span id="err02"></span><br/>
+    	<input type="submit" value="登陆"/>
+    	<input type="reset" value="重置"/>
+    </form>
+    
+    <a href="#" onclick="m2();">关闭当前页面</a>
+    <a href="javascript:window.open('/web08t/page/w01.html','');" >打开当前页面</a>
+    
+     <select id="s1" size="3">
+    	<option id="1" value="北京">北京</option>
+    	<option value="大连">大连</option>
+    	<option value="上海">上海</option>
+    </select>
+    <input id="10" type="button" value="添加" onclick="ms();"/>
+    <select id="s2" size="3"></select>
+  </body>
+</html>

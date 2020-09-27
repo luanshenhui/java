@@ -1,0 +1,26 @@
+package com.yulin.am;
+
+import java.util.Arrays;
+
+public class Demo2 {
+	public static void main(String[] args) {
+		int[] ins = {123,34,36,39,9,78};
+		
+		for(int i=0;i<ins.length-1;i++){
+			int max=0;//记录最大元素的下标
+			for(int j=1;j<ins.length-i;j++){//length-i是最后一个数,//j=1直接不和自己比较
+				if(ins[max]<ins[j]){
+					max=j;
+				}
+			}
+			if(max!=ins.length-i-1){
+				int temp;
+				temp=ins[max];
+				ins[max]=ins[ins.length-i-1];
+				ins[ins.length-i-1]=temp;
+			}
+		}
+		System.out.println(Arrays.toString(ins));
+	}
+
+}

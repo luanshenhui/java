@@ -1,0 +1,36 @@
+package com.yulin.am;
+
+public class SibianXing {
+	private int l;
+	private int w;
+	private int h;
+
+	public SibianXing(){//如果没定意，系统给一个，前提没有构建方法
+		System.out.println("我是父类，四边形");
+		
+	}
+	public SibianXing(int l){
+		System.out.println("我是父类有参数");
+		this.l=l;
+	}
+	public SibianXing(int w,int h){
+		this.w=w;
+		this.h=h;//以上3个同名不同法
+		System.out.println("我是父类2参数");
+	}
+	
+	public void setW(int w) {
+		this.w = w;
+	}
+
+	public int getW() {
+		return this.w;
+	}
+	public int mj(int l){
+		return l*l;
+		
+	}
+	public int mj(int w,int h){
+		return w*h;
+	}
+}

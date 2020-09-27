@@ -1,0 +1,16 @@
+package com.yulin.pm;
+import java.util.*;
+public class shuzu {
+	public static void main(String[] args){
+		Scanner sc =new Scanner(System.in);
+		int[] ins =new int[5];
+		for(int i=0;i<ins.length;i++){
+			int in =sc.nextInt();
+			ins[i] =in;
+		}
+		for(int i=0;i<ins.length;i++){
+			System.out.println(ins[i]+", ");
+		}
+	}
+
+}

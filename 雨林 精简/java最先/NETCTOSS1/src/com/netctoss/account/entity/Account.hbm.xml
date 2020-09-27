@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.netctoss.account.entity.Account" table="ACCOUNT">
+		
+		<id name="id" type="integer">
+			<column name="ID" precision="9" scale="0"></column>
+			<generator class="sequence">
+				<param name="sequence">account_seq</param>
+			</generator>
+		</id>
+		
+		<property name="recommenderId" type="integer">
+			<column name="RECOMMENDER_ID"></column>
+		</property>
+		<property name="loginName" type="string">
+			<column name="LOGIN_NAME"></column>
+		</property>
+		<property name="loginPassword" type="string">
+			<column name="LOGIN_PASSWD"></column>
+		</property>
+		<property name="status" type="string">
+			<column name="STATUS"></column>
+		</property>
+		<property name="createDate" type="date">
+			<column name="CREATE_DATE"></column>
+		</property>
+		<property name="pauseDate" type="date">
+			<column name="PAUSE_DATE"></column>
+		</property>
+		<property name="closeDate" type="date">
+			<column name="CLOSE_DATE"></column>
+		</property>
+		<property name="realName" type="string">
+			<column name="REAL_NAME"></column>
+		</property>
+		<property name="idcardNo" type="string">
+			<column name="IDCARD_NO"></column>
+		</property>
+		<property name="birthDate" type="date">
+			<column name="BIRTHDATE"></column>
+		</property>
+		<property name="gendar" type="string">
+			<column name="GENDER" length="1"></column>
+		</property>
+		<property name="occupation" type="string">
+			<column name="OCCUPATION"></column>
+		</property>
+		<property name="telephone" type="string">
+			<column name="TELEPHONE"></column>
+		</property>
+		<property name="email" type="string">
+			<column name="EMAIL"></column>
+		</property>
+		<property name="mailaddress" type="string">
+			<column name="MAILADDRESS"></column>
+		</property>
+		<property name="zipcode" type="string">
+			<column name="ZIPCODE"></column>
+		</property>
+		<property name="qq" type="string">
+			<column name="QQ"></column>
+		</property>
+		<property name="lastLoginTime" type="date">
+			<column name="LAST_LOGIN_TIME"></column>
+		</property>
+		<property name="lastLoginIp" type="string">
+			<column name="LAST_LOGIN_IP"></column>
+		</property>
+		
+		
+<!--	<set name="services" cascade="all" inverse="true">-->
+<!--		<key column="ACCOUNT_ID"></key>-->
+<!--		<one-to-many class="com.netctoss.service.entity.Service"/>-->
+<!--	</set>-->
+		
+	</class>
+</hibernate-mapping>

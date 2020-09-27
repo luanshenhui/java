@@ -1,0 +1,37 @@
+package com.yulin.exam;
+
+public class Choice {
+	private int 题号;
+	private String 题干;
+	private String[] 选项 = new String[4];
+	private int 得分;
+
+	public void 显示() {
+		System.out.println(题号 + "." + 题干);
+		System.out.println("A." + 选项[0]);
+		System.out.println("B." + 选项[1]);
+		System.out.println("C." + 选项[2]);
+		System.out.println("D." + 选项[3]);
+	}
+
+	//public Choice() {}
+
+	public Choice(int 题号, String 题干, String[]选项, int 得分) {
+		this.题号 = 题号;
+		this.题干 = 题干;
+		this.选项 = 选项;
+		this.得分 = 得分;
+	}
+
+	public int get得分() {
+		return this.得分;
+	}
+
+	public boolean 判断正确(String string) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+
+}

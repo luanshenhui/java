@@ -1,0 +1,39 @@
+/*2008.11.18*/
+
+#menubar ul{
+	margin:0;
+	padding:0;
+	list-style-type:none;
+}
+
+#menubar li{
+	float:left;
+	dispaly:block;
+	height:10px;
+}
+
+#menubar li a{
+	width:180px;
+	font-size:16px; 
+	border-left:0px solid #ffffff;  
+	border-right:1px solid #ffffff;  
+	border-top:0px solid #ffffff;  
+	border-bottom:0px solid #ffffff;  
+	   
+	padding-left:6px;
+	padding-right:6px;	
+	padding-top:3px;
+	padding-bottom:3px;
+	
+	color:#ffffff;
+    text-decoration:none;
+    text-align:center;
+    font-weight:bold;
+}
+
+#menubar li a:hover{
+	color:#ffffff;
+	background-color:#336699;
+    text-decoration:underline;
+}
+

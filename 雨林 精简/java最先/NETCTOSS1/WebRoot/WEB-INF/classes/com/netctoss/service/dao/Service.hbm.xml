@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    
+    <hibernate-mapping>
+    	<class name="org.entity.Service" table="SERVICE">
+    		<id name="id" type="integer">
+    			<column name="ID"></column>
+    			<generator class="sequence">
+    				<param name="sequence">service_seq</param>
+    			</generator>
+    		</id>
+    		
+<!--    		<property name="accountId" type="integer">-->
+<!--    			<column name="ACCOUNT_ID"></column>-->
+<!--    		</property>-->
+    		<property name="unixHost" type="string">
+    			<column name="UNIX_HOST" length="7"></column>
+    		</property>
+    		<property name="osUsername" type="string">
+    			<column name="OS_USERNAME" length="8" not-null="true"></column>
+    		</property>
+    		<property name="loginPasswd" type="string">
+    			<column name="LOGIN_PASSWD" length="8" not-null="true"></column>
+    		</property>
+    		<property name="status" type="string">
+    			<column name="STATUS" length="7"></column>
+    		</property>
+    		<property name="createDate" type="date">
+    			<column name="CREATE_DATE"></column>
+    		</property>
+    		<property name="pauseDate" type="date">
+    			<column name="PAUSE_DATE"></column>
+    		</property>
+    		<property name="closeDate" type="date">
+    			<column name="CLOSE_DATE"></column>
+    		</property>
+    		<property name="costId" type="integer">
+    			<column name="COST_ID"></column>
+    		</property>
+    		
+    		<many-to-one name="account" class="org.entity.Account" column="ACCOUNT_ID"></many-to-one>
+    	</class>
+    </hibernate-mapping>

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>案例7.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<script type="text/javascript">
+		function m(){
+<!--		alert("测试");-->
+		var v=document.getElementById("all");
+		var arr=document.getElementsByTagName("input");
+		for(var i=0;i<arr.length;i++){
+			arr[i].checked=v.checked;
+			}
+		}
+	</script>
+  </head>
+  
+  <body>
+    This is my HTML page. <br>
+    <form action="">
+    	全选<input id="all" type="checkbox" onclick="m();"/><p/> 
+    	<input type="checkbox"/> 足球
+    	<input type="checkbox"/> 篮球
+    	<input type="checkbox"/> 排球
+    	
+    </form>
+  </body>
+</html>

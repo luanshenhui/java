@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+        <struts>
+    	<package name="admin" namespace="/admin" extends="netctoss">
+    		<action name="findAdmin" class="com.netctoss.admin.action.FindAdminAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/admin/admin_list.jsp
+    			</result>
+    		</action>
+    		<action name="resetPassword" class="com.netctoss.admin.action.ResertPasswordAction">
+    			<result name="success" type="json">
+    				<param name="root">ok</param>
+    			</result>
+    		</action>
+    		<action name="toAddAdmin" class="com.netctoss.admin.action.ToAddAdminAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/admin/admin_add.jsp
+    			</result>
+    		</action>
+    		<action name="addAdmin" class="com.netctoss.admin.action.AddAdminAction">
+    			<result name="success" type="redirectAction">
+    			findAdmin
+    			</result>
+    		</action>
+    		<action name="toUpdateAdmin" class="com.netctoss.admin.action.ToUpdateAdmin">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/admin/admin_modi.jsp
+    			</result>
+    		</action>
+    		<action name="updateAdmin" class="com.netctoss.admin.action.UpdateAdminAction">
+    			<result name="success" type="redirectAction">
+    				findAdmin
+    			</result>
+    		</action>
+    		<action name="deleteAdmin" class="com.netctoss.admin.action.DeleteAdminAction">
+    			<result name="success" type="redirectAction">
+    				findAdmin
+    			</result>
+    		</action>
+    	</package>
+    </struts>

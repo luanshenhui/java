@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+        <struts>
+      
+    	<!-- 登录模块 -->
+    	<package name="welcome" namespace="/welcome" extends="struts-default">
+    		<action name="toLogin">
+    			<result>/WEB-INF/NETCTOSS/main/login.jsp</result>
+    		</action>
+    		<action name="login" class="com.netctoss.login.action.LoginAction">
+    			<result name="success">/WEB-INF/NETCTOSS/main/index.jsp</result>
+    			<result name="fail">/WEB-INF/NETCTOSS/main/login.jsp</result>
+    		</action>	
+    		<action name="imageCode" class="com.netctoss.login.action.ImageAction">
+    			<result name="success" type="stream">
+    				<param name="inputName">imageStream</param>
+    			</result>
+    		</action>
+    	</package>
+    	
+    </struts>                                                          

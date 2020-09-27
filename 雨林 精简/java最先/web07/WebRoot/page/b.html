@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>(2)DOM获取属性节点.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+  <script type="text/javascript">
+  	function m(){
+  		var v=document.getElementById("tu");
+  		//获取=src的值(=右边)
+  		alert(v.getAttribute("src"));
+  		//设置属性节点的值
+  		v.setAttribute("src","/web07/img/welcome.jpg")
+  		
+  	}
+  </script>
+  
+    This is my HTML page. <br>
+    <img id="tu" alt="提示信息" src="/web07/img/rihiow.PNG">
+    <img alt="提示信息" src="/web07/img/welcome.jpg">
+    <input type="button" value="按钮" onclick="m();"/>
+  </body>
+</html>

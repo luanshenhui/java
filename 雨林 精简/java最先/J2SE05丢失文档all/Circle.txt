@@ -1,0 +1,26 @@
+package com.yulin.pm;
+
+public class Circle extends Shape {
+
+	public Circle(int r) {
+		super(r);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public double zhouchang() {
+		double zc = Math.PI * getR();
+		return zc;
+	}
+
+	@Override
+	public double mianji() {
+		double mj = Math.PI * getR() * getR();
+		return mj;
+	}
+
+	
+	
+	
+
+}

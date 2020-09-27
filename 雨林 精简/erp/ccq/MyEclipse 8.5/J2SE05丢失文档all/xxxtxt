@@ -1,0 +1,60 @@
+package com.yulin.am;
+
+import java.util.*;
+
+public class xxx {
+	public static void main(String[] args) {
+		/*int[] ins = { 78, 45, 96, 54, 3, 2 };
+		System.out.println("排序前" + Arrays.toString(ins));
+		for (int i = 0; i < ins.length - 1; i++) {
+			for (int j = 0; j < ins.length - i - 1; j++) {
+				if (ins[j] > ins[(j + 1)]) {
+					;
+					int temp;
+					temp = ins[j];
+					ins[j] = ins[j + 1];
+					ins[j + 1] = temp;
+				}
+				System.out.println("第" + i + "轮，第" + j + "次排序"
+						+ Arrays.toString(ins));
+			}
+		}*/
+		
+		
+		
+		
+		
+		int[]ins={78,75,2};
+		int[]arr={75,78,2,45,6,78,55};
+		
+		Arrays.equals(ins,arr);
+		//boolean res =Arrays.equals(ins, arr);
+		System.out.println(Arrays.equals(ins,arr));
+		
+		Arrays.sort(arr);
+		System.out.println(Arrays.binarySearch(arr, 75));
+		
+		
+		Arrays.sort(ins);//bu neng shu chu
+		String str =Arrays.toString(ins);
+		System.out.println(str);
+		System.out.println(ins);//不能直接输入一个数组
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+}

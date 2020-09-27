@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>(3)DOM获取文本节点.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+    This is my HTML page. <br>
+    <script type="text/javascript">
+    	function m(){
+    		alert("测试")
+    		var v = document.getElementById("dalian");
+    		//子节点，获取v元素里所有的各种节点
+    		alert(v.childNodes[1].nodeValue);
+    	}
+    </script>
+    
+    <ul>
+    	<li id="dalian">辽宁<del>湖南</del>辽阳</li>
+    	<li>北京</li>
+    </ul>
+    <select>
+    	<option id="ss">日本</option>
+    	<option>韩国</option>
+    	<option>中国</option>
+    </select>
+    
+    <input type="button" value="按钮" onclick="m();"/>
+    
+  </body>
+</html>

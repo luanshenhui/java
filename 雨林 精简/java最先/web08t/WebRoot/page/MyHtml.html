@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+  <head>
+    <title>MyHtml.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	
+	<script type="text/javascript">
+		function m(){
+		var o=true;
+		var a1=document.getElementById("username");
+		var a11=document.getElementById("err01");
+		if(a1.value.length==0){
+			a11.innerHTML="用户不能为空";
+			return false;
+			//o=false;
+		}else{
+			a11.innerHTML="";		
+		}
+		var p=true;
+		var a2=document.getElementById("password");
+		var a22=document.getElementById("err02");
+		if(a2.value.length==0){
+			a22.innerHTML="密码不能为空";
+			//p=false;
+			return false;
+		}else{
+			a22.innerHTML="";		
+		}
+		
+		return (p&&o);
+		
+		}
+	</script>
+  </head>
+  
+  <body>
+     <form action="/web08t/page/w01.html" onsubmit="return m();">
+    	用户<input id="username" type="text" /><span id="err01"></span> <p/>
+    	密码<input id="password" type="password" /><span id="err02"></span><br/>
+    	<input type="submit" value="登陆"/>
+    	<input type="reset" value="重置"/>
+    </form>
+  </body>
+</html>

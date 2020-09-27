@@ -1,0 +1,48 @@
+package com.yulin.com;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+public class FeleDemo1 {
+	public static void main(String[] args) {
+		String path = "demo/text2.txt";
+
+		File file = new File(path);
+		if (!file.exists()) {
+			file.mkdir();
+
+		}
+
+		String path1 = "demo/text1.txt";
+		String path2 = "demo/text2.txt";
+		File file1 = new File(path1);
+		File file2 = new File(path2);
+		try {
+			file1.createNewFile();
+			file2.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(file1.listFiles());
+		System.out.println(file1.list());
+		System.out.println(file1.toString());
+		try {
+			System.out.println(file1.toURL());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(file2.delete());
+
+		String path4 = "demo/text.txt";
+
+		File file4 = new File(path4);
+		file1.renameTo(file4);
+		
+		
+
+	}
+
+}

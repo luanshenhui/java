@@ -1,0 +1,18 @@
+package com.yulin.exam;
+
+public class SingleChoice extends Choice{
+ private String 正确答案;
+ public SingleChoice(int 题号,String 题干,String[]选项,int 得分,String 正确答案){
+	 super(题号,题干,选项,得分);
+	 this.正确答案=正确答案;
+ }
+ @Override
+ public boolean 判断正确(String 用户答案){
+	 if(正确答案.equals(用户答案)){//判断字符串相等
+		 return true;
+	 }else{
+		 return false;
+	 }
+	 
+ }
+}

@@ -1,0 +1,43 @@
+
+package lianxi;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class abc {
+public static void main(String[] args){
+	Scanner sc=new Scanner(System.in);
+	String in=sc.next();
+	int[]count=new int[0];
+	char[]ch=new char[0];
+	
+	for(int i=0;i<in.length();i++){
+		char c=in.charAt(i);
+		int index=check(ch,c);
+		if(index!=-1){
+			count[index]++;
+		}else{
+			ch=Arrays.copyOf(ch, ch.length+1);
+			ch[ch.length-1]=c;
+			count=Arrays.copyOf(count, count.length+1);
+			count[count.length-1]=1;
+		}
+			
+		
+		
+	}
+	for(int i=0;i<ch.length;i++){
+		System.out.println(ch[i]+"³öÏÖÁË"+count[i]);
+	}
+}
+
+private static int check(char[] ch, char c) {
+	// TODO Auto-generated method stub
+	for(int i=0;i<ch.length;i++){
+		if(c==ch[i]){
+			return i;
+		}
+	}
+	return -1;
+}
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsh.domain.Repertory">
+
+	<resultMap type="Repertory" id="map0">
+			<id property="id" column="rid"/>
+<!--			<result property="productcode" column="productcode"/>-->
+			<result property="storage" column="storage"/>
+			<association property="product" javaType="Product">
+<!--			<result property="cid" column="cid"/>-->
+			<result property="code" column="code"/>
+			<result property="name" column="name"/>
+			<result property="price" column="price"/>
+			<result property="info" column="info"/>
+			</association> 	
+	</resultMap> 
+	
+<!--查询所有	-->
+	<select id="all" resultMap="map0">
+	select r.id rid,cid,code,name,price,info,p.id,productcode,storage
+  		from product p,repertory r
+  		where r.productcode=p.code
+		
+	</select>
+<!--查询一个	-->
+<select id="getID" parameterType="_long" resultMap="map0">
+	select p.id pid,p.*,r.id rid,r.*
+  		from product p,repertory r
+  		where r.productcode=p.code and r.id=#{id}
+</select>
+
+<!--增加一个	-->
+<insert id="add">
+	insert into repertory
+	values (#{id},#{product.code},#{storage})
+</insert>
+	
+
+
+<!-- 修改-->
+<update id="update" parameterType="sell">
+	update sell
+	set productcode=#{productcode},storage=#{storage}
+	where id=#{id}
+</update>
+
+
+<delete id="delete" parameterType="_long">
+	delete from repertory where id=#{id}
+</delete>
+</mapper>
+<!--			<result property="person.id" column="spersonid"/>-->

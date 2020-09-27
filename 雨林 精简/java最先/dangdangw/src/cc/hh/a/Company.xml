@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.hh.a.Company">
+
+	<resultMap type="Company" id="map1">
+		<id property="id" column="cid"/>
+		<result property="name" column="cname"/>
+		<collection property="list" javaType="Member01">
+			<result property="id" column="mid"/>
+			<result property="name" column="mname"/>
+			<result property="age" column="mage"/>
+		</collection>	
+	</resultMap>
+	
+	<resultMap type="Company" id="map2">
+		<result property="name" column="cname"/>
+		<collection property="list" javaType="Member01">
+			<result property="name" column="mname"/>
+			<result property="age" column="mage"/>
+		</collection>
+	</resultMap>
+	
+	<select id="getOne" parameterType="Company" resultMap="map1">
+		select c.id cid,c.name cname,m.id mid,m.name mname,m.age mage
+		from company c,member m
+		where c.id=m.comid and c.id=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="map2">
+		select c.id cid,c.name cname,m.id mid,m.name mname,m.age mage
+		from company c,member m 
+		where m.comid=c.id
+	</select>
+	
+	
+
+</mapper>

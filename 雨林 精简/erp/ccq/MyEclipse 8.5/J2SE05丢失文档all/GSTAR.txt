@@ -1,0 +1,18 @@
+package com.yulin.snake;
+import java.util.*;
+public class GSTAR {
+public static void main(String[] args){
+	Scanner sc=new Scanner(System.in);
+	Snake1 snake=new Snake1();
+	snake.show();
+	while(true){
+		String str=sc.next();
+		snake.change();
+		snake.move();
+		snake.creat();
+		snake.show();
+//		if("q".equals(str))
+//			break;
+	}
+}
+}

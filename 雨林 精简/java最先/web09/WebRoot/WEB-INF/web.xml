@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<!-- 配置Servlet组件Action01 -->
+<servlet>
+	<servlet-name>action01</servlet-name>
+	<servlet-class>com.servlet.action.Action01</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>action01</servlet-name>
+<!--servlet访问路径，就是访问Servlet的入口，无论谁想访问Servlet都通过此方式	-->
+	<url-pattern>/abc</url-pattern>
+</servlet-mapping>
+
+<!--2陪置servlet组件Action02-->
+<servlet>
+	<servlet-name>s</servlet-name>
+	<servlet-class>com.servlet.action.Action02</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>s</servlet-name>
+	<url-pattern>/w</url-pattern>
+</servlet-mapping>
+
+<!--配置servlet组件Action04-->
+<servlet>
+	<servlet-name>action04</servlet-name>
+	<servlet-class>com.servlet.action.Action04</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>action04</servlet-name>
+	<url-pattern>/lsh</url-pattern>
+</servlet-mapping>
+</web-app>

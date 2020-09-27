@@ -1,0 +1,76 @@
+package com.yulin.pm;
+
+import java.util.*;
+
+public class GuessNumber2 {
+	public int c1(int[] rand, int[] input) {
+		int count = 0;
+		for (int i = 0; i < rand.length; i++) {
+			for (int j = 0; j < input.length; j++) {
+				if (rand[i] == input[j]) {
+					;
+					count++;
+					break;
+				}
+			}
+		}
+		return count;
+	}
+
+	public int c2(int[] rand, int[] input) {
+		int count = 0;
+		for (int i = 0; i < rand.length; i++) {
+			if (rand[i] == input[i]) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public int[] create() {
+		Random rd = new Random();
+		int[] rand = new int[4];
+		for (int i = 0; i < 4; i++) {
+			rand[i] = rd.nextInt(10);
+
+		}
+		return rand;
+	}
+
+	public int[] input() {
+		int[] input = new int[4];
+		Scanner sc = new Scanner(System.in);
+		System.out.println("ÇëÊäÈë");
+		int in = sc.nextInt();
+		for (int i = 3; i > 0; i--) {
+			input[i] = in % 10;
+			in /= 10;
+		}
+		return input;
+	}
+
+	public void star() {
+		int[] rand = create();
+		int[] input = input();
+		int count = 1;
+		while (2 > 1) {
+			int a = c1(rand, input);
+			int b = c2(rand, input);
+			System.out.println(a + "," + b);
+			if (b == 4) {
+				System.out.println("game over");
+				System.out.println("Äã²ÂÁË" + count + "´Î");
+				break;
+			} else {
+				count++;
+				input = input();
+			}
+		}
+
+	}
+
+	public static void main(String[] args) {
+		GuessNumber2 g = new GuessNumber2();
+		g.star();
+	}
+}

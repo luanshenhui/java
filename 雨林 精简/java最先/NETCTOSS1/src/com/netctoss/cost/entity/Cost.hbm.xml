@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+<!--name指定实体类，table指定表明-->
+<class name="com.netctoss.cost.entity.Cost" table="COST">
+<!--id仅用于映射主键-->
+
+<id name="id" type="integer">
+<column name="ID"></column>
+<generator class="sequence">
+<param name="sequence">
+	cost_seq
+</param>
+</generator>
+</id>
+
+<!--property用于非主键字段映射
+name指定实体类属性名
+type指定属性类型-->
+<property name="name" type="string">
+<!--column指定对应的字段名-->
+<column name="NAME"></column>
+</property>
+
+<property name="baseDuration" type="integer">
+	<column name="BASE_DURATION"></column>
+</property>
+
+	<property name="baseCost"
+	type="double">
+	<column name="BASE_COST"></column>
+	</property>
+	
+	<property name="unitCost" type="double">
+	<column name="UNIT_COST"></column>
+	</property>
+	
+	<property name="status" type="string">
+	<column name="STATUS"></column>
+	</property>
+	
+	<property name="descr"
+	type="string">
+	<column name="DESCR"></column>
+	</property>
+	
+	<property name="createTime"
+	type="date">
+	<column name="CREATIME"></column>
+	</property>
+	
+	<property name="startTime"
+	type="date">
+	<column name="STARTIME"></column>
+	</property>
+	
+	<property name="costType"
+	type="string">
+	<column name="COST_TYPE"></column>
+	</property>	
+</class>
+</hibernate-mapping>

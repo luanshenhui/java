@@ -1,0 +1,29 @@
+package com.yulin.am;
+
+public class Zfx extends SibianXing{
+//创建正方形对象
+	//看看父类哪些可以使用
+	//在继成一下矩形看有声明区别
+	private int a;
+	
+	public void Set(int a){
+		this.a=a;
+		
+	}
+	public int mj(int a){
+		return a*a;
+		
+	}
+	public Zfx(){
+			System.out.println("我是子类正方形");
+	}
+	public Zfx(int i){
+		super(i);//指向父类的同名方法获构造方法
+		System.out.println("我是子类参数i");
+	}
+	
+	public Zfx(int a,int b){
+		super(a,b);//指向父类的同名方法获构造方法
+		System.out.println("我是子类2参数a,b");
+	}
+	}

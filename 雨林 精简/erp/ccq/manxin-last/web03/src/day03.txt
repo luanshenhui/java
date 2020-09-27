@@ -1,0 +1,47 @@
+什么是JSP？
+		JSP：java server page。基于servlet的一种页面技术，在html页面中利用
+	标签<% java代码 %> 嵌入java代码，Jsp页面只能通过服务器进行解析，在Servlet中
+	对Jsp中的java代码和html文本进行分离。jsp和servlet可以相互取代。
+	
+JSP的9个内置对象：
+	out:输出页面
+	request:请求对象
+	response:响应对象
+	session:会话
+	application:
+	page:
+	pageContext:
+	error:
+	exception:
+	
+五个页面
+	regist.html : 注册成功之后跳转到登录页面，并把注册成功的用户名和密码添加到登录页面上。
+	login.html : 登录成功之后，跳转到emplist.html，并将个人信息显示在页面上。welcome XXX。
+	emplist.html : 登录之后，查询出所有人的信息，显示在页面中。只有1001用户可以在list页面中
+		对人员信息进行修改和添加，**每个人可以修改自己的信息**。
+	addEmp.html : 1001用户可以添加新员工，默认密码是1234
+	updateEmp.html : 1001用户可以修改员工信息，**普通用户可以修改自己的信息**
+	
+转发和重定向：
+	转发：当一个请求未处理完成还没有做出响应时，把这个请求交给另外一个请求进行处理，同时把
+		request和response对象也一同转发过去，动作的执行者是request对象,当使用转发机制
+		跳转页面时，浏览器地址栏中的地址不会发生改变。
+	重定向：当一个请求处理完成之后，跳转到另一个页面或者是请求，动作的执行者是response，当用
+		重定向机制跳转页面时，地址栏中的地址发生了改变。
+	
+El表达式(一)：
+		在jsp/xml页面中用  ${key} 的方式可以获得page/request/session/application对象中
+	保存的数据。
+		我们可以通过上诉对象调用 .setAttribute(key, value)方法，保存数据。
+	
+	
+session(一)：
+	会话，浏览器和服务器进行交互的桥梁。
+	
+	
+	
+	
+	
+	
+	
+	

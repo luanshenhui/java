@@ -1,0 +1,37 @@
+package com.yuin.am;
+
+public class lianxi2 {
+	int h=10;
+	int k=8;
+	int[][]po={
+			{7,6},
+	};
+	public void show(){
+		for(int i=0;i<10;i++){
+			for(int j=0;j<k;j++){
+				if(i==0||j==0||i==9||j==7){
+					System.out.print("#");
+				}else if(cc(i,j)){
+					System.out.print("B");
+				}else{
+					System.out.print(" ");
+				}
+			}
+			System.out.println();
+		}
+	}
+private boolean cc(int x,int y){
+	for(int i=0;i<po.length;i++){
+		if(po[i][0]==x&&po[i][1]==y){
+			return true;
+		}
+	}
+	return false;
+}
+	
+	
+public static void main(String[]args){
+	lianxi2 p=new lianxi2();
+	p.show();
+}
+}

@@ -1,0 +1,35 @@
+package com.yulin.pm;
+
+import java.util.Scanner;
+
+public class ShapeDemo {
+	public static void main(String[] args) {
+		System.out.println("请问你要什么图形");
+		System.out.println("1圆形2矩形3三角形");
+		Scanner sc = new Scanner(System.in);
+
+		int in = sc.nextInt();
+		Shape s = null;
+		if (in == 1) {
+			System.out.println("请输入半径");
+			int r = sc.nextInt();
+			s = new Circle(r);
+		} else if (in == 2) {
+			System.out.println("请输入长");
+			int w = sc.nextInt();
+			System.out.println("请输入高");
+			int h = sc.nextInt();
+
+			s = new Juxing(w, h);
+		}
+		System.out.println("请选择要擦看的信息1周长2面积");
+		in = sc.nextInt();
+		if (in == 1) {
+			System.out.println(s.zhouchang());
+		} else if (in == 2) {
+			System.out.println(s.mianji());// 练习，自定义矩形，三角形
+		}
+
+	}
+
+}

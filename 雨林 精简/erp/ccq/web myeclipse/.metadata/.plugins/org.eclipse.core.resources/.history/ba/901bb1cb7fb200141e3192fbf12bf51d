@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <welcome-file-list>
+    <welcome-file>/web/login.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>lsh</servlet-name>
+ 	<servlet-class>com.lsh.action.LoginAction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>lsh</servlet-name>
+  	<url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>lshd</servlet-name>
+ 	<servlet-class>com.lsh.action.RegisterAction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>lshd</servlet-name>
+  	<url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>edit</servlet-name>
+ 	<servlet-class>com.lsh.action.EditAction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>edit</servlet-name>
+  	<url-pattern>/edit</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+  	<servlet-name>editpasd</servlet-name>
+ 	<servlet-class>com.lsh.action.EditPasd</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>editpasd</servlet-name>
+  	<url-pattern>/editpasd</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+  	<servlet-name>cation</servlet-name>
+ 	<servlet-class>com.lsh.action.Cation</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>cation</servlet-name>
+  	<url-pattern>/cation</url-pattern>
+  </servlet-mapping>
+  
+      <servlet>
+  	<servlet-name>productaction</servlet-name>
+ 	<servlet-class>com.lsh.action.ProductAction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>productaction</servlet-name>
+  	<url-pattern>/productaction</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>productadd</servlet-name>
+ 	<servlet-class>com.lsh.action.ProductAdd</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>productadd</servlet-name>
+  	<url-pattern>/productadd</url-pattern>
+  </servlet-mapping>
+  
+  
+    <servlet>
+  	<servlet-name>categoryadd</servlet-name>
+ 	<servlet-class>com.lsh.action.CategoryAdd</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>categoryadd</servlet-name>
+  	<url-pattern>/categoryadd</url-pattern>
+  </servlet-mapping>
+  
+  
+    <servlet>
+  	<servlet-name>categoryview</servlet-name>
+ 	<servlet-class>com.lsh.action.CategoryView</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>categoryview</servlet-name>
+  	<url-pattern>/categoryview</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>categorydel</servlet-name>
+ 	<servlet-class>com.lsh.action.CategoryDel</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>categorydel</servlet-name>
+  	<url-pattern>/categorydel</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>categoryedit</servlet-name>
+ 	<servlet-class>com.lsh.action.CategoryEdit</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>categoryedit</servlet-name>
+  	<url-pattern>/categoryedit</url-pattern>
+  </servlet-mapping>
+
+
+<servlet>
+  	<servlet-name>categoryeditchange</servlet-name>
+ 	<servlet-class>com.lsh.action.CategoryEditChange</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>categoryeditchange</servlet-name>
+  	<url-pattern>/categoryeditchange</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet>
+  	<servlet-name>ajax</servlet-name>
+ 	<servlet-class>com.lsh.action.AJAXAction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ajax</servlet-name>
+  	<url-pattern>/ajax</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet>
+  	<servlet-name>zhuxiao</servlet-name>
+ 	<servlet-class>com.lsh.action.Zhuxiaotuichu</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>zhuxiao</servlet-name>
+  	<url-pattern>/zhuxiaotuichu</url-pattern>
+  </servlet-mapping>
+  
+<!-- 配置过滤器 -->
+<filter>
+	<filter-name>filter</filter-name>
+	<filter-class>com.lsh.filter.LoginFilter</filter-class>
+</filter>
+<filter-mapping>
+	<filter-name>filter</filter-name>
+	<url-pattern>/web/page/*</url-pattern>
+</filter-mapping>
+  
+</web-app>

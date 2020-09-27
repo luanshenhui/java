@@ -1,0 +1,36 @@
+package com.yulin.am;
+
+import java.util.*;
+
+public class Demo4 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("请输入一个整数");
+		int i = sc.nextInt();
+
+		
+		int a = 0;
+		for(int j=0;j<i;j++){
+		a = a * 10 + i % 10;// 5
+		i = i / 10;}
+
+	
+		/*  a=a*10+i%10;//54 
+		  i = i/10; 
+		  a=a*10+i%10;//543; 
+		  i = i/10;
+		  a=a*10+i%10;//5432 
+		  i = i/10;
+		  a=a*10+i%10;
+		  i = i/10;
+		  a=a*10+i%10;*/
+		 
+
+		System.out.println(a);
+		
+		
+		
+	}
+
+}

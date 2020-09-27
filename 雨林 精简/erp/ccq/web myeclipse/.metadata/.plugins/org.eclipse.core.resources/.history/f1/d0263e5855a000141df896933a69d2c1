@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsh.am.Company">
+
+	<resultMap type="Company" id="map011">
+		<id property="id" column="cid"/>
+		<result property="name" column="cname"/>
+		<collection property="list" javaType="Member">
+			<result property="id" column="mid"/>
+			<result property="name" column="mname"/>
+			<result property="age" column="mage"/>
+		</collection>
+	</resultMap>
+
+	
+	
+	
+	
+	<select id ="getOne"  parameterType = "Company"  resultMap ="map011">
+		<!-- select * from company where id = #{id} -->		
+		select c.id cid,c.name cname,m.id mid,m.name mname,m.age mage
+		from company c,member m
+		where c.id=m.comid and c.id=#{id}
+	</select>
+	
+	
+	
+
+</mapper>

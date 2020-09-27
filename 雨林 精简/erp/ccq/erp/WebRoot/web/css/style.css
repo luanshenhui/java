@@ -1,0 +1,156 @@
+@import url(menubarCss.css);
+@import url(sidebarBlockCss.css);
+@import url(progressbarCss.css);
+@import url(conceptBlockCss.css);
+@import url(todolistTable.css);
+@import url(headerLinkCss.css);
+@import url(tipUlCss.css);
+
+body{
+	margin:0,0,0,0;
+	height:100%;
+	text-align:center;
+	min-width:760px;
+	background:#ffffff url(../img/bg.gif);
+}
+
+#bodyDiv{
+	margin-left:20px;
+	margin-right:20px;
+	margin-top:0px;
+	margin-bottom:0px;
+		
+	width:100%;
+	text-align:left;
+	border:0px solid #000000;
+}
+
+#headerLink{
+	border-left:0px solid #cecece;
+	border-right:0px solid #cecece;
+	border-top:0px solid #cecece;
+	border-bottom:0px solid #cecece;
+	
+	font-size: 12px; 
+	color:#c9c9c9;
+	text-align:right;
+	width:100%;
+	height:20px;
+}
+
+#header{
+	padding:10px;
+	border-left:1px solid #cecece;
+	border-right:1px solid #cecece;
+	border-top:0px solid #cecece;
+	border-bottom:0px solid #cecece;
+	width:100%;
+	height:80px;
+	background-image:url(../img/headerBg.gif);
+	BACKGROUND-POSITION: right 50%;
+}
+
+h1 {
+	margin:0px;
+	padding:0px;
+	font-size: 27px; 
+	color: #ffffff; 
+	text-align: left;
+	text-decoration: underline;
+}
+
+h2{
+	margin:0px;
+	padding:5px;
+	font-size: 16px; 
+	color: #666666; 
+	text-align: left;
+	
+	height:25px;
+    
+    background-image:url(../img/graybar.gif);
+}
+h3 {
+	margin:0px;
+	padding:0px;
+	font-size: 12px; 
+	color: #1a5e9b; 
+	text-align: left;
+}
+
+#menubar{
+	border-left:1px solid #cecece;
+	border-right:1px solid #cecece;
+	border-top:1px solid #ffffff;
+	border-bottom:1px solid #ffffff;
+	
+	margin:0px;
+	width:100%;
+	height:20px;
+	background-image:url(../img/menubarBg.gif);
+}
+
+#menubarBlank{
+	border-left:1px solid #cecece;
+	border-right:1px solid #cecece;
+	border-top:0px solid #ffffff;
+	border-bottom:1px solid #cecece;
+	
+	padding-left:6px;
+	padding-top:3px;
+	padding-bottom:3px;
+	
+	font-size:14px;
+	
+	margin:0px;
+	width:100%;
+	height:20px;
+	background-color:#ffe5d4;
+}
+
+#sidebarDiv{
+	margin-top:10px;
+	margin-right:10px;
+	border:0px solid #cecece;
+	padding:0px;
+	
+	width:100%;
+	height:20px;
+}
+
+#conceptDiv{
+	margin-top:10px;
+	/*margin-left:10px;*/
+	border:0px solid #cecece;
+	padding:0px;
+	
+	width:100%;
+	height:20px;
+}
+
+#footer{
+	border-top:1px solid #cecece;
+	font-size:8px; 
+	width:100%;
+}
+
+.feedbackShow{
+	visibility: visible;
+}
+
+.feedbackHide{
+	visibility: hidden;
+}
+img{
+	border:0px;	
+}
+
+input{
+	border:1 solid #336699;
+	font-size: 10pt; 
+	font-style: normal; 
+	font-variant: normal; 
+	font-weight: normal; 
+	height: 20px; 
+	line-height: normal
+}

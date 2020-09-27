@@ -1,0 +1,20 @@
+package com.yulin.am;
+import java.util.*;
+public class WhileDemo1 {
+	public static void main(String[] args){
+			Scanner sc =new Scanner(System.in);//创建输入工具
+			int in= 1;
+			int max =0;//假设0最大值
+			while(in!=0){//当in不等于0，才执行循环
+		      in =sc.nextInt();//从控制台读取一个整数，保存之in
+		      if(in >max){//如果输入的值比max大则让她等于max
+		    	  max=in;
+		    	  
+		      }
+				System.out.println(in);
+				
+			}
+			System.out.println(max);
+	}
+
+}

@@ -1,0 +1,13 @@
+package com.yulin.pm;
+
+public class AwtDemo {
+	public static void main(String[] args){
+		MyFrame mf =new MyFrame();
+		MyPanel mp =new MyPanel();
+		mf.add(mp);
+		mf.show();
+		mp.addKeyListener(mp);
+		mf.addKeyListener(mp);
+	}
+
+}

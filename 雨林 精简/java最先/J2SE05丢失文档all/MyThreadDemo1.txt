@@ -1,0 +1,21 @@
+package com.yulin.am;
+
+public class MyThreadDemo1 {
+	public static void main(String[] args) {
+		MyThread mt = new MyThread();// 实现接口用这个方法启动线程
+		Thread thr = new Thread(mt);// 创建一个线程对象Thread是系统的，(只有她能运行?)
+		thr.start();// 启动线程
+		System.out.println("秀水管的");
+
+		MyThread2 mt2 = new MyThread2();// 实现继成用这个方法启动线程
+		mt2.start();
+
+		Thread thr2 = new Thread(new Runnable() {//匿名内部类
+			@Override
+			public void run() {
+				System.out.println("匿名内部类");
+			}
+		});
+		thr2.start();
+	}
+}

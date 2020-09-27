@@ -1,0 +1,42 @@
+package com.yulin.am;
+
+public class 圆 {
+
+	int r, x, y;
+
+	public boolean isIn(p pp) {//可以删除只留if(点 p<=r)
+
+		int dis = (pp.x - this.x) * (pp.x - this.x) + (pp.y - this.y)
+				* (pp.y - this.y);
+
+		// 两点间距离的平方
+		if (dis <= r * r) {
+			return true;
+
+		} else
+			return false;
+	}
+
+	public double distance(p pp) {
+		// 返回一个点到圆心的距离。Math.sqrt(a)；返回a的开方值
+		int dis = (pp.x - this.x) * (pp.x - this.x) + (pp.y - this.y)
+				* (pp.y - this.y);
+		return Math.sqrt(dis);
+
+	}
+
+	public boolean isIn(int x, int y) {
+		p pp = new p();
+		pp.x = x;
+		pp.y = y;
+		return isIn(pp);
+	}
+
+	public double distance(int x, int y) {
+		p pp = new p();
+		pp.x = x;
+		pp.y = y;
+		return distance(pp);
+	}
+
+}

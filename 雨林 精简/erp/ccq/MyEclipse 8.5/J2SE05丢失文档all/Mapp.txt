@@ -1,0 +1,68 @@
+import java.util.*;
+
+public class Mapp<K, V> {
+	class Entry {
+		private K key;
+		private V value;
+
+		public K getKey() {
+			return key;
+		}
+
+		public void setKey(K key) {
+			this.key = key;
+		}
+
+		public V getValue() {
+			return value;
+		}
+
+		public void setValue(V value) {
+			this.value = value;
+		}
+
+		@Override
+		public int hashCode() {
+
+			return 0;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+
+			return true;
+		}
+
+		private Mapp getOuterType() {
+			return Mapp.this;
+		}
+
+	
+	}
+
+	public Set<Entry> entrys = new HashSet<Entry>();
+	private Set<K> keys = new HashSet<K>();
+
+	public void add(K key, V value) {
+		keys.add(key);
+		Entry eo=new Entry();
+		eo.setKey(key);
+		eo.setValue(value);
+		entrys.add(eo);
+
+	}
+
+	public V get(K key) {
+		for(Entry e:entrys){
+			if(e.getKey().equals(key)){
+				
+			}
+		}
+		return null;
+	}
+
+	public void remove(K key) {
+
+	}
+
+}

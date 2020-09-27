@@ -1,0 +1,11 @@
+package com.yulin.am;
+
+public class Man extends Person{
+
+	@Override
+	public void speak() {//生成父类中的speak必须被覆盖
+		// TODO Auto-generated method stub
+		System.out.println("hello");
+	}
+//测试抽象类中的static属性和方法是否可以使用。
+}

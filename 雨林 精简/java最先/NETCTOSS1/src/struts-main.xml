@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+        <struts>
+        <!-- 定义公用的包，将可复用的配置都放到这个包下面 -->
+        <package name="netctoss" extends="json-default">
+        	<interceptors>
+        		<interceptor name="loginInter" class="com.netctoss.interceptor.LoginInterceptor"></interceptor>
+        		<interceptor-stack name="loginStack">
+        			<!-- 注册登录拦截器栈，包含默认的拦截器栈和登录拦截器 -->
+        			<interceptor-ref name="loginInter"></interceptor-ref>
+        			<interceptor-ref name="defaultStack"></interceptor-ref>
+        		</interceptor-stack>
+        	</interceptors>
+        	<global-results>
+        		<result name="login" type="redirectAction">
+        			<param name="namespace">/welcome</param>
+        			<param name="actionName">toLogin</param>
+        		</result>
+        		<result name="error">
+        			/WEB-INF/NETCTOSS/main/error.jsp
+        		</result>
+        	</global-results>
+        </package>
+    	
+    </struts>

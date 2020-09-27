@@ -1,0 +1,19 @@
+package com.yulin.am;
+
+import java.util.*;
+
+public class forr {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int in;
+
+		for (System.out.println("请输入一个整数"),in=1; in % 2 != 0; System.out
+				.println("请再输入一个整数")) {
+
+			in = sc.nextInt();
+			System.out.println(in);
+
+		}
+	}
+
+}

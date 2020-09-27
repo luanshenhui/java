@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.f.domain.Repertory">
+	<resultMap type="Repertory" id="Map01">
+		<id property="id" column="id"/>
+		<result property="storage" column="storage"/>
+		<association property="product" javaType="Product">
+			<result property="price" column="price"/>
+			<result property="name" column="name"/>
+			<result property="code" column="code"/>
+		</association>
+	
+	</resultMap>
+	
+	<!-- 添加数据 -->
+	<select id="add" parameterType="Repertory">
+		insert into repertory values(#{id},#{product.code},#{storage})
+	
+	</select>
+	<!-- 删除数据 -->
+	<select id="delete" parameterType="_long">
+		delete from repertory where id=#{id}
+	</select>
+	
+	<!-- 修改数据 -->
+	<select id="update" parameterType="_long">
+		update repertory 
+ 		set productcode=#{product.code},storage=#{storage}
+		where id =#{id}
+  
+	</select>
+	<!-- 查询所有 -->
+	<select id="getAll" resultMap="Map01">
+		select r.id id,r.storage storage,p.code code,p.name name,p.price price
+		from repertory r,product p
+		where r.productcode=p.code 
+	</select>
+	<!-- 查询单个数据 -->
+	<select id="getByID" resultMap="Map01" parameterType="_long">
+			select r.id id,r.storage storage,p.code code,p.name name,p.price price
+			from repertory r,product p
+			where r.productcode=p.code and r.id=#{id}
+	</select>
+
+</mapper>

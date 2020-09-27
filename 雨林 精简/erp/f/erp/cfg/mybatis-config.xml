@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+    "mybatis-3-config.dtd">
+<configuration>
+
+	<properties resource="jdbc.properties" />
+	<typeAliases>
+		<typeAlias alias="Person" type="com.f.domain.Person"></typeAlias>
+		<typeAlias alias="Roleaction" type="com.f.domain.Roleaction"></typeAlias>
+		<typeAlias alias="Product" type="com.f.domain.Product"></typeAlias>
+		<typeAlias alias="Category" type="com.f.domain.Category"></typeAlias>
+		<typeAlias alias="Sell" type="com.f.domain.Sell"></typeAlias>
+		<typeAlias alias="Stock" type="com.f.domain.Stock"></typeAlias>
+		<typeAlias alias="Repertory" type="com.f.domain.Repertory"></typeAlias>
+	</typeAliases>
+	
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/f/domain/Person.xml"/>
+		<mapper resource="com/f/domain/Product.xml"/>
+		<mapper resource="com/f/domain/Category.xml"/>
+		<mapper resource="com/f/domain/Sell.xml"/>
+		<mapper resource="com/f/domain/Stock.xml"/>
+		<mapper resource="com/f/domain/Repertory.xml"/>
+	</mappers>
+</configuration>

@@ -1,0 +1,30 @@
+package com.yulin.snake;
+
+import java.util.Scanner;
+
+public class GameStart {
+	public static void main(String[] args) {
+		Snake snake = new Snake();
+		snake.createFood();
+		snake.show();
+		
+		
+		while(true){
+			MyThread mt=new MyThread(snake);//将蛇的对象共享至另一条线程
+			mt.start();
+			
+		//	snake.change();
+			snake.move();
+			snake.show();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		/** 添加死亡的判断：1.蛇头撞向自己会死；2.撞墙会死；
+		 *  添加食物：1.食物随机生成；2.吃完以后会再次增加；
+		 */
+	}
+}

@@ -1,0 +1,44 @@
+/**
+ * 
+ */
+package com.lsh.action;
+
+import java.io.IOException;
+import java.net.URLDecoder;
+
+import javax.activation.URLDataSource;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * @author 栾慎辉
+ *
+ * 2015-2-12上午10:35:21
+ * 
+ * 用户唯一性检查的控制器
+ * 使用ajax和jqrey框架
+ */
+public class AJAXAction extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		super.doGet(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		
+		
+		req.setCharacterEncoding("UTF-8");
+		String username=req.getParameter("username");
+		username=URLDecoder.decode(username,"UTF-8");
+	}
+	
+	
+
+}

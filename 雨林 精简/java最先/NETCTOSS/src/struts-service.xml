@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+        <struts>
+    	<!-- 个人信息 -->
+    	<package name="service" namespace="/service" extends="netctoss">
+    		<action name="findService" class="com.netctoss.service.action.FindServiceAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/service/service_list.jsp
+    			</result>
+    		</action>
+    		<!-- 状态管理 -->
+    		<action name="startService" class="com.netctoss.service.action.SetStartAction">
+    			<result name="success" type="json">
+    				<param name="root">message</param>
+    			</result>
+    		</action>
+    		<action name="pauseService" class="com.netctoss.service.action.SetPauseAction">
+    			<result name="success" type="json">
+    				<param name="root">ok</param>
+    			</result>
+    		</action>
+    		<action name="deleteService" class="com.netctoss.service.action.SetDeleteAction">
+    			<result name="success" type="json">
+    				<param name="root">ok</param>
+    			</result>
+    		</action>
+    		
+    		<action name="toAddService" class="com.netctoss.service.action.ToAddServiceAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/service/service_add.jsp
+    			</result>
+    		</action>
+    		<!-- 新增 -->
+    		<action name="saveService" class="com.netctoss.service.action.AddServiceAction">
+    			<result name="success" type="redirectAction">
+    				findService
+    			</result>
+    		</action>
+    		<!-- 查看明细 -->
+    		<action name="loadService" class="com.netctoss.service.action.LoadServiceAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/service/service_detail.jsp
+    			</result>
+    		</action>
+    		<!-- 修改模块 -->
+    		<action name="toUpdateService" class="com.netctoss.service.action.ToUpdateServiceAction">
+    			<result name="success">
+    				/WEB-INF/NETCTOSS/service/service_modi.jsp
+    			</result>
+    		</action>
+    		<action name="updateService" class="com.netctoss.service.action.UpdateServiceAction">
+    			<result name="success" type="redirectAction">
+					findService
+    			</result>
+    		</action>
+    	</package>
+    </struts>

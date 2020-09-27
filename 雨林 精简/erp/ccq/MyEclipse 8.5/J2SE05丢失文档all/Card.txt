@@ -1,0 +1,91 @@
+package com.yulin.Card;
+
+public class Card implements Comparable<Card>{
+
+	public static final int three = 0;
+	public static final int four = 1;
+	public static final int five = 2;
+	public static final int six = 3;
+	public static final int seven = 4;
+	public static final int eight = 5;
+	public static final int nine = 6;
+	public static final int ten = 7;
+	public static final int j = 8;
+	public static final int q = 9;
+	public static final int k = 10;
+	public static final int a = 11;
+	public static final int two = 12;
+	public static final int ghost = 13;
+
+	public static final int fangpian = 0;
+	public static final int meihua = 1;
+	public static final int hongtao = 2;
+	public static final int heitao = 3;
+	public static final int small = 4;
+	public static final int large = 5;
+
+	public static final String[] ps = { "3", "4", "5", "6", "7", "8", "9",
+			"10", "J", "Q", "K", "A", "2", "王" };
+
+	public static final String[] hs = { "方片", "梅花", "红桃", "黑桃", "小", "大" };
+
+	private int p;
+	private int h;
+
+	public Card() {
+	}
+
+	public Card(int p, int h) {
+		this.p = p;
+		this.h = h;
+	}
+
+	public void setP(int p) {// 规范给私有属性赋值
+		this.p = p;
+	}
+
+	public int getP() {// 规范获得私有属性的值
+		return this.p;
+	}
+
+	public void setH(int H) {
+		this.h = h;
+	}
+
+	public int getH() {
+		return this.h;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + hs[h] + ps[p] + "]";
+	}
+	@Override
+	public boolean equals(Object o){
+		//1验证比较对象是否为null
+		//2验证比较对象的类型是否匹配
+		//3自定义比较方式
+		if(o==null){
+			return false;
+		}
+		if(o instanceof Card){//检验o指向的类型时否是Card
+			Card c=(Card)o;//强制类型转换
+			if(c.p==this.p&&c.h==this.h){//=return c.p==this.p&&c.h==this.h;
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	
+	@Override
+	public int hashCode(){
+		return p*1234+h*4321;
+	}
+
+	@Override
+	public int compareTo(Card o) {//比较。1标示大于；-1标示小于；0标示等于
+		// TODO Auto-generated method stub
+		return (this.p*1000+this.h)-(o.p*1000+o.h);
+	}
+}
