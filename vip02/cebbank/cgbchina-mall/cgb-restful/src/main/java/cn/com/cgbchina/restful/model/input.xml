@@ -1,0 +1,25 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gateway="http://www.agree.com.cn/GDBGateway">
+    <soapenv:Header>
+        <gateway:HeadType>
+            <gateway:versionNo>1</gateway:versionNo>
+            <gateway:toEncrypt>0</gateway:toEncrypt>
+            <gateway:commCode>500001</gateway:commCode>
+            <gateway:commType>0</gateway:commType>
+            <gateway:receiverId>IPBS</gateway:receiverId>
+            <gateway:senderId>SHOP</gateway:senderId>
+            <gateway:senderSN>2016060315021262923175</gateway:senderSN>
+            <gateway:senderDate>20160603</gateway:senderDate>
+            <gateway:senderTime>150212</gateway:senderTime>
+            <gateway:tradeCode>NSCT004</gateway:tradeCode>
+            <gateway:gwErrorCode/>
+            <gateway:gwErrorMessage/>
+        </gateway:HeadType>
+    </soapenv:Header>
+    <soapenv:Body>
+        <gateway:NoAS400>
+            <gateway:field name="ORDERID">22222233333333343212
+            </gateway:field>
+        </gateway:NoAS400>
+    </soapenv:Body>
+</soapenv:Envelope>

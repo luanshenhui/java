@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- 方言：用于指定数据库类型，生成相应数据的SQL语句 -->
+		<property name="dialect">
+			org.hibernate.dialect.OracleDialect
+		</property>
+		<property name="connection.url">
+			jdbc:oracle:thin:@localhost:1521:XE
+		</property>
+		<property name="connection.username">system</property>
+		<property name="connection.password">1234</property>
+		<property name="connection.driver_class">
+			oracle.jdbc.OracleDriver
+		</property>
+		<!-- 显示hibernate自动生成SQL -->
+		<property name="show_sql">
+			true
+		</property>
+		<property name="format_sql">true</property>
+		<!-- 指定映射描述文件，可以添加多个mapping定义 -->
+		<mapping resource="org\entity\Cost.hbm.xml"/> 
+
+	</session-factory>
+</hibernate-configuration>

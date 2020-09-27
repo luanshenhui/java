@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MakePrivilegeFile">
+
+  <select id="findTblOrderCheckList" resultType="cn.com.cgbchina.batch.model.MakePrivilegeFileModel">
+    select
+    o.voucher_no as voucherNo,
+    o.create_time as createTime,
+    om.cont_idcard as contIdcard,
+    oc.cur_status_id as curStatusId,
+    oc.do_date as doDate,
+    oc.do_time as doTime
+    from
+    tbl_order_check oc,
+    tbl_order o,
+    tbl_order_main om
+    where
+    oc.order_id=o.order_id and
+    om.ordermain_id=o.ordermain_id and
+    oc.ischeck='0' and
+    <![CDATA[oc.do_date < date_format(now(),'%Y%m%d')]]>
+  </select>
+
+  <update id="updateTblOrderCheck" >
+    UPDATE
+    tbl_order_check
+    SET
+    ischeck='1',
+    modify_time = now()
+    WHERE
+    ischeck='0'
+    and
+    <![CDATA[do_date < date_format(now(),'%Y%m%d')]]>
+  </update>
+
+  <insert id="insertTblMkfileInf" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    INSERT INTO tbl_mkfile_inf (task_id,  do_time) VALUES (1, now())
+  </insert>
+
+  <select id="countTblMkFileInfo" parameterType="String" resultType="Integer">
+    select count(1)
+    from tbl_mkfile_inf
+    where date_format(do_time,'%Y%m%d') = #{date}
+  </select>
+
+</mapper>

@@ -1,0 +1,358 @@
+@charset "UTF-8";
+/* line 2, src/components/eevee/item-template/config.scss */
+.eve-editable .eve-item-template {
+  position: relative;
+  min-height: 15px;
+  background-color: rgba(0, 0, 255, 0.1);
+}
+/* line 7, src/components/eevee/item-template/config.scss */
+.eve-editable .eve-item-template:before {
+  position: absolute;
+  display: block;
+  content: "商品详情模板";
+  color: white;
+  text-shadow: 0 0 1px black;
+  width: 100%;
+  height: 15px;
+  font-size: 12px;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  text-align: center;
+}
+@charset "UTF-8";
+/* line 2, src/components/eevee/placeholder/config.scss */
+.eve-editable .eve-placeholder {
+  position: relative;
+  padding-top: 15px !important;
+  background: linear-gradient(45deg, rgba(238, 238, 238, 0.5) 45%, rgba(153, 153, 153, 0.5) 46%, rgba(153, 153, 153, 0.5) 54%, rgba(238, 238, 238, 0.5) 55%) 0 0/10px 10px repeat;
+}
+/* line 7, src/components/eevee/placeholder/config.scss */
+.eve-editable .eve-placeholder:before {
+  position: absolute;
+  display: block;
+  content: "占位块";
+  color: white;
+  text-shadow: 0 0 1px black;
+  width: 100%;
+  height: 15px;
+  font-size: 12px;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  text-align: center;
+}
+/* line 2, src/components/eevee/video/config.scss */
+.eve-editable .eve-video {
+  position: relative;
+}
+/* line 5, src/components/eevee/video/config.scss */
+.eve-editable .eve-video:after {
+  position: absolute;
+  display: block;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+/* line 3, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner {
+  position: absolute;
+  z-index: 10010;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: white;
+  opacity: 0.9;
+}
+/* line 13, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner > .spinner {
+  position: absolute;
+  margin: auto;
+  width: 45px;
+  height: 20px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  -webkit-perspective: 1000px;
+  -moz-perspective: 1000px;
+  -ms-perspective: 1000px;
+  -o-perspective: 1000px;
+  perspective: 1000px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+/* line 25, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner > .spinner > div {
+  float: left;
+  width: 7px;
+  height: 20px;
+  margin: 0 1px;
+  background-color: #148f77;
+  -webkit-animation-name: anim-cube;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+}
+/* line 36, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner > .spinner > div:nth-child(1) {
+  -webkit-animation-delay: 0.1s;
+}
+/* line 36, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner > .spinner > div:nth-child(2) {
+  -webkit-animation-delay: 0.2s;
+}
+/* line 36, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner > .spinner > div:nth-child(3) {
+  -webkit-animation-delay: 0.3s;
+}
+/* line 36, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner > .spinner > div:nth-child(4) {
+  -webkit-animation-delay: 0.4s;
+}
+/* line 36, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner > .spinner > div:nth-child(5) {
+  -webkit-animation-delay: 0.5s;
+}
+/* line 43, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner > .message {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  margin: auto;
+  font-size: 12px;
+  height: 12px;
+  line-height: 82px;
+  top: 0;
+  bottom: 0;
+  color: #1abc9c;
+}
+/* line 56, src/styles/eevee/extras/spinner.scss */
+.eevee-spinner.full-window {
+  position: fixed;
+}
+
+@-webkit-keyframes anim-cube {
+  /* line 62, src/styles/eevee/extras/spinner.scss */
+  30% {
+    -webkit-transform: translateZ(200px);
+    -moz-transform: translateZ(200px);
+    -ms-transform: translateZ(200px);
+    -o-transform: translateZ(200px);
+    transform: translateZ(200px);
+    background-color: #28e1bd;
+  }
+
+  /* line 66, src/styles/eevee/extras/spinner.scss */
+  100% {
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    background-color: #148f77;
+  }
+}
+/* line 6, src/styles/layout-editable.scss */
+.eve-editor-area-inner {
+  padding-top: 40px;
+}
+
+/* line 10, src/styles/layout-editable.scss */
+.eve-editor-drop-cursor {
+  position: absolute;
+  z-index: 1002;
+  border-top: 2px solid #0086b3;
+  pointer-events: none;
+}
+/* line 16, src/styles/layout-editable.scss */
+.eve-editor-drop-cursor:before, .eve-editor-drop-cursor:after {
+  position: absolute;
+  display: block;
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0086b3;
+}
+/* line 26, src/styles/layout-editable.scss */
+.eve-editor-drop-cursor:before {
+  top: -5px;
+  left: -8px;
+}
+/* line 30, src/styles/layout-editable.scss */
+.eve-editor-drop-cursor:after {
+  top: -5px;
+  right: -8px;
+}
+/* line 35, src/styles/layout-editable.scss */
+.eve-editor-drop-cursor.eve-editor-drop-cursor-vertical {
+  border-top: none;
+  border-left: 2px solid #0086b3;
+}
+/* line 39, src/styles/layout-editable.scss */
+.eve-editor-drop-cursor.eve-editor-drop-cursor-vertical:before {
+  left: -5px;
+  top: -8px;
+}
+/* line 43, src/styles/layout-editable.scss */
+.eve-editor-drop-cursor.eve-editor-drop-cursor-vertical:after {
+  left: -5px;
+  right: auto;
+  top: auto;
+  bottom: -8px;
+}
+
+/* line 52, src/styles/layout-editable.scss */
+.eve-editor-hover-mask {
+  pointer-events: none;
+}
+
+/* line 55, src/styles/layout-editable.scss */
+.eve-editor-mask-margin-area {
+  position: absolute;
+  z-index: 1000;
+  background-color: rgba(246, 194, 136, 0.2);
+}
+
+/* line 60, src/styles/layout-editable.scss */
+.eve-editor-mask-real-area {
+  position: absolute;
+  z-index: 1000;
+  background-color: rgba(0, 134, 179, 0.2);
+}
+/* line 65, src/styles/layout-editable.scss */
+.eve-editor-mask-real-area > span {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-size: 10px;
+  color: white;
+  text-shadow: 1px 1px 0 black;
+}
+
+/* line 75, src/styles/layout-editable.scss */
+.eve-editor-selected-mask {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1001;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px #0086b3;
+}
+/* line 82, src/styles/layout-editable.scss */
+.eve-editor-selected-mask > span {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-size: 10px;
+  color: white;
+  text-shadow: 1px 1px 0 black;
+}
+/* line 92, src/styles/layout-editable.scss */
+.eve-editor-selected-mask.eve-editor-selected-mask-tip-t > span, .eve-editor-selected-mask.eve-editor-selected-mask-tip-b > span {
+  position: fixed;
+  padding: 2px 5px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 3px;
+}
+/* line 97, src/styles/layout-editable.scss */
+.eve-editor-selected-mask.eve-editor-selected-mask-tip-t > span:before, .eve-editor-selected-mask.eve-editor-selected-mask-tip-b > span:before {
+  position: absolute;
+  content: "";
+  display: block;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  left: 5px;
+}
+/* line 107, src/styles/layout-editable.scss */
+.eve-editor-selected-mask.eve-editor-selected-mask-tip-t > span {
+  top: 50px;
+}
+/* line 109, src/styles/layout-editable.scss */
+.eve-editor-selected-mask.eve-editor-selected-mask-tip-t > span:before {
+  border-bottom: 4px solid rgba(0, 0, 0, 0.7);
+  top: -4px;
+}
+/* line 114, src/styles/layout-editable.scss */
+.eve-editor-selected-mask.eve-editor-selected-mask-tip-b > span {
+  top: auto;
+  bottom: 10px;
+}
+/* line 117, src/styles/layout-editable.scss */
+.eve-editor-selected-mask.eve-editor-selected-mask-tip-b > span:before {
+  border-top: 4px solid rgba(0, 0, 0, 0.7);
+  bottom: -4px;
+}
+
+/* line 125, src/styles/layout-editable.scss */
+.eve-overview .eve-editor-area-inner {
+  padding-top: 80px;
+}
+/* line 130, src/styles/layout-editable.scss */
+.eve-overview .eve-editor-selected-mask.eve-editor-selected-mask-tip-t > span {
+  top: 90px;
+}
+/* line 133, src/styles/layout-editable.scss */
+.eve-overview .eve-editor-selected-mask.eve-editor-selected-mask-tip-b > span {
+  bottom: 10px;
+}
+
+/* line 140, src/styles/layout-editable.scss */
+.eve-editable.eve-layout-comp, .eve-editable .eve-layout-comp {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  box-shadow: inset 0 0 0 1px #eee;
+}
+/* line 146, src/styles/layout-editable.scss */
+.eve-editable.eve-layout-comp.eve-part, .eve-editable .eve-layout-comp.eve-part {
+  box-shadow: inset 0 0 0 2px rgba(0, 128, 0, 0.5);
+}
+/* line 151, src/styles/layout-editable.scss */
+.eve-editable .eve-layout-comp {
+  -webkit-user-drag: element;
+}
+/* line 154, src/styles/layout-editable.scss */
+.eve-editable .eve-layout-comp.eve-component {
+  padding-top: 0;
+  padding-bottom: 0;
+  box-shadow: none;
+}
+/* line 159, src/styles/layout-editable.scss */
+.eve-editable .eve-layout-comp.eve-component > * {
+  pointer-events: none;
+}
+/* line 164, src/styles/layout-editable.scss */
+.eve-editable .eve-layout-comp.eve-component.eve-editing > * {
+  pointer-events: auto;
+}
+/* line 171, src/styles/layout-editable.scss */
+.eve-editable .eve-animation {
+  -webkit-animation: new-comp 0.5s ease-out;
+}
+
+@-webkit-keyframes new-comp {
+  /* line 177, src/styles/layout-editable.scss */
+  0% {
+    opacity: 0.4;
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+
+  /* line 181, src/styles/layout-editable.scss */
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+  }
+}

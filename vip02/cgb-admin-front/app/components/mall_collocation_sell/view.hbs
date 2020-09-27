@@ -1,0 +1,75 @@
+{{#component "collocationSell js-component"}}
+  <p class="components-title"><strong>搭销管理</strong>
+  <div class="push-collocation">
+    <button class="btn btn-success js-collocation-push">导出
+    </button>
+  </div>
+  <div>
+      <form class="collocation-form-search form-inline">
+          <fieldset>
+              <span class="span3">
+                  <label for="id">订单编号:</label>
+                  <input name="id" value="{{id}}" class="form-control" required/>
+              </span>
+             <span class="span3">
+                  <label for="itemId">商品编码:</label>
+                  <input class="form-control" id="itemId" required>
+              </span>
+             <span class="span1">
+                  <label>&nbsp;;</label>
+                  <input class="btn btn-success btn-sm" type="submit" value="查询"/>
+              </span>
+             <span class="span1">
+                  <label>&nbsp;;</label>
+                  <input class="btn btn-success btn-sm" type="button" value="重置"/>
+              </span>
+          </fieldset>
+      </form>
+  </div>
+  <table class="collocation-template-table table table-horizontal center-text">
+      <thead>
+        <tr>
+          <th width="25%">商品名称</th>
+          <th width="15%">单价</th>
+          <th width="5%">数量</th>
+          <th width="15%">售后</th>
+          <th width="15%">订单实付（元）</th>
+          <th width="10%">审核状态</th>
+          <th width="15%">操作</th>
+        </tr>
+      </thead>
+      <tbody data-data="{{_DATA_}}">
+              {{#each _DATA_.data}}
+                  <!--<tr data-component="">-->
+                      <!--<span class="span3">订单编号：{{orderCode}}</span>-->
+                      <!--<span class="span3">下单时间：{{orderTime}}</span>-->
+                  <!--</tr>-->
+                  <tr data-component="">
+
+                  </tr>
+                  <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                      <td class="order-code">{{orderCode}}</td>
+                      <td class="item-name">{{itemName}}</td>
+                      <td class="item-price">{{itemPrice}}</td>
+                      <td class="count">{{count}}</td>
+                      <td class="after-sale">{{afterSale}}</td>
+                      <td class="audit-type">{{auditType}}</td>
+                      <td class="edit-button">
+                          <button class="btn btn-sm js-item-edit">修改</button>
+                             <button class="btn btn-sm js-item-examine">审核</button>
+                        {{#if auditType}}
+                            {{#equals auditType "1"}}
+                                <button id="{{id}}" class="btn btn-sm js-item-delete" data-toggle="confirm"
+                                            data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？" data-event="confirm:delete-item">
+                                        删除
+                                </button>
+                            {{/equals}}
+                        {{/if}}
+                      </td>
+                  </tr>
+              {{/each}}
+              </tbody>
+    </table>
+  <div class="collocation-pagination"></div>
+</div>
+{{/component}}

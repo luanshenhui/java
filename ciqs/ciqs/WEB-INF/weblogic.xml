@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Weblogic config。
+
+@author zhanglin@dpn.com.cn
+@since 1.0.0 zhanglin@dpn.com.cn
+@version 1.0.0 zhanglin@dpn.com.cn
+-->
+<!-- ***************************************************************************
+备忘记录
+-> Weblogic配置。
+********************************************************************************
+变更履历
+-> 1.0.0 2016-07-07 zhanglin@dpn.com.cn : 初建。
+**************************************************************************** -->
+<weblogic-web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.bea.com/ns/weblogic/90"
+    xsi:schemaLocation="http://www.bea.com/ns/weblogic/90 http://www.bea.com/ns/weblogic/90/weblogic-web-app.xsd">
+
+    <!-- **** jsp setting ************************************************** -->
+    <jsp-descriptor>
+        <precompile>true</precompile>
+        <precompile-continue>true</precompile-continue>
+    </jsp-descriptor>
+
+    <!-- **** container setting ******************************************** -->
+    <container-descriptor>
+        <prefer-web-inf-classes>false</prefer-web-inf-classes>
+    </container-descriptor>
+
+    <!-- **** root contex setting ****************************************** -->
+    <context-root>ciqs</context-root>
+
+</weblogic-web-app>

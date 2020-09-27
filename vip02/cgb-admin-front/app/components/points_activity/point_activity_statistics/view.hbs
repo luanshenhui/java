@@ -1,0 +1,64 @@
+{{#component "activitys-statistics js-component"}}
+    <div>
+        <form class="coupon-form-search form-inline">
+            <fieldset>
+                <div class="control-group">
+                    <label for="id">活动编号:</label>
+                    <input name="id" id="aId" type="text" class="form-control"/>
+                </div>
+                <div class="control-group">
+                    <label for="id">活动简称:</label>
+                    <input name="aName" id="aName" type="text" class="form-control"/>
+                </div>
+                <div class="control-group">
+                    <label for="id">开始时间:</label>
+                    <input class="form-control js-date-start" id="beginTime"/>
+                </div>
+                <div class="control-group">
+                    <label for="id">结束时间:</label>
+                    <input class="form-control js-date-end" id="endTime"/>
+                </div>
+                <div class="control-group">
+                    <label for="id">商品名称:</label>
+                    <input name="goodsName" id="goodsName" type="text" class="form-control"/>
+                </div>
+                <div class="control-group">
+                    <label for="id">供应商名称:</label>
+                    <input name="sName" id="sName" type="text" class="form-control"/>
+                </div>
+                <div class="control-group" >
+                    <input class="btn btn-success btn-sm"type="submit" value="搜索"/>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="10%">活动编号</th>
+            <th width="10%">活动简称</th>
+            <th width="10%">商品名称</th>
+            <th width="10%">供应商名称</th>
+            <th width="10%">开始时间</th>
+            <th width="10%">结束时间</th>
+            <th width="10%">销量</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                <td class="activity-id">{{id}}</td>
+                <td class="activity-name">{{activityName}}</td>
+                <td class="goods-name">{{goodsName}}</td>
+                <td class="supplier-name">{{supplierName}}</td>
+                <td class="activity-beginTime">{{beginTime}}</td>
+                <td class="activity-endTime">{{endTime}}</td>
+                <td class="activity-sale">{{sale}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="pagination" data-total="{{_DATA_.total}}">
+    </div>
+{{/component}}

@@ -1,0 +1,340 @@
+package com.yulin.dangdang.controller;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.yulin.dangdang.bean.Address;
+import com.yulin.dangdang.bean.Category;
+import com.yulin.dangdang.bean.Item;
+import com.yulin.dangdang.bean.Order;
+import com.yulin.dangdang.bean.Product;
+import com.yulin.dangdang.bean.SearchKey;
+import com.yulin.dangdang.bean.User;
+import com.yulin.dangdang.bean.Category.Count;
+import com.yulin.dangdang.service.BookService;
+import com.yulin.dangdang.service.CategoryService;
+import com.yulin.dangdang.service.ByService;
+import com.yulin.dangdang.service.ItemService;
+import com.yulin.dangdang.service.OrderService;
+import com.yulin.dangdang.service.ProductService;
+import com.yulin.dangdang.service.SearchService;
+import com.yulin.dangdang.service.UserService;
+
+public class DangdangServlet extends HttpServlet{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private UserService us = new UserService();
+	private CategoryService cs = new CategoryService();
+	private ProductService ps = new ProductService();
+	private BookService bs = new BookService();
+	private ByService bys = new ByService();
+	private ItemService is = new ItemService();
+	private SearchService ss = new SearchService();
+	private OrderService os = new OrderService();
+	
+	@Override
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
+		
+		HttpSession session = request.getSession();
+		
+		String path = request.getRequestURI();
+		path = path.substring(path.lastIndexOf("/"), path.lastIndexOf("."));
+		
+		if("/regist".equals(path)){
+			String email = request.getParameter("email");
+			String nickname = request.getParameter("nickname");
+			
+			String pwd = request.getParameter("pwd");
+			session.setAttribute("email", email);
+			String checkCode = session.getAttribute("checkCode").toString();
+			String number = request.getParameter("number");
+			if(number.equals(checkCode)){
+				if(us.checkRegist(email, nickname, pwd)){
+					User u = us.regist(email, nickname, pwd);
+					session.setAttribute("email_verify_Code", u.getEmail_verify_code());
+					System.out.println("注册成功");
+					session.setAttribute("user", u);
+					response.sendRedirect("verify_form.jsp");
+				}else{
+					System.out.println("注册失败");
+					response.sendRedirect("register_form.jsp");
+				}
+			}
+		}else if("/login".equals(path)){
+			session.removeAttribute("msg_login");
+			String email = request.getParameter("email");
+			String pwd = request.getParameter("pwd");
+			User u = us.login(email, pwd);
+			if(u != null){
+				session.setAttribute("user", u);
+				System.out.println("登录成功！");
+				response.sendRedirect("../main/main.do");
+			}else{
+				session.setAttribute("msg_login", "邮箱或密码错误");
+				response.sendRedirect("login_form.jsp");
+			}
+		}else if("/image".equals(path)){
+			int checkCode = new Random().nextInt(89999) + 10001;
+			session.setAttribute("checkCode", checkCode);
+			BufferedImage image = new BufferedImage(50, 20, BufferedImage.TYPE_INT_RGB);
+			Graphics g = image.getGraphics();
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, 50, 20);
+			g.setColor(Color.BLACK);
+			g.drawString(""+checkCode, 10, 15);
+			response.setContentType("image/jpeg");
+			OutputStream os = response.getOutputStream();
+			JPEGImageEncoder je = JPEGCodec.createJPEGEncoder(os);
+			je.encode(image);
+		}else if("/index".equals(path)){
+			response.sendRedirect("user/login_form.jsp");
+		}else if("/verify".equals(path)){
+			String code = request.getParameter("code");
+			System.out.println(code);
+			if(code.equals(session.getAttribute("email_verify_Code"))){
+				String email = session.getAttribute("email").toString();
+				System.out.println(us.updateCode(email));
+				response.sendRedirect("register_ok.jsp");
+			}else{
+				System.out.println("验证码错误");
+			}
+		}else if("/main".equals(path)){
+			List<Category> list = cs.findByParentId(1);//取出所有的一级菜单
+			session.setAttribute("cateList", list);
+			for(Category cate : list){
+				//获得每个一级菜单下的二级菜单
+				session.setAttribute("cateList" + cate.getId(), cs.findByParentId(cate.getId()));
+			}
+			List<Product> listNew = ps.findProductByTime();
+			session.setAttribute("listNew", listNew);
+			List<Product> listRecommend = ps.findProductAll();
+			session.setAttribute("listRecommend", listRecommend);
+			response.sendRedirect("main.jsp");
+			
+		}else if("/exit".equals(path)){
+			session.removeAttribute("user");
+			response.sendRedirect("main.jsp");
+		}else if("/book".equals(path)){
+			int id = Integer.parseInt(request.getParameter("id"));
+			List<Product> listNew = ps.findProductById(id, 0);
+			
+			/* 获得所有分类书籍的数量 开始 */
+			List<Count> listCount = ps.getProCount(id, cs);
+			int all = ps.findById(id).size();
+			String countName = cs.findById(id).getName();
+			String Parname = cs.findParentId(id).getName();
+			
+			session.setAttribute("all", all);
+			session.setAttribute("listCount", listCount);
+			session.setAttribute("countName", countName);
+			
+			session.setAttribute("Parname", Parname);
+			/* 获得所有分类书籍的数量  结束 */
+			
+			/* 通过总数获得总页数 */
+			int pages = all/5;
+			session.setAttribute("pages", all%5 == 0 ? pages : pages + 1);
+			session.setAttribute("page", 0);
+			request.setAttribute("listNew", listNew);
+			request.getRequestDispatcher("book_list.jsp").forward(request, response);
+			
+			//第一种方法 book_list2.jsp
+//			session.setAttribute("productList", ps.findProductById(id));
+//			session.setAttribute("bookList", bs.findBookById(id));
+		}else if("/toPage".equals(path)){
+			int page = Integer.parseInt(request.getParameter("page"));
+			session.setAttribute("page", page);
+			int id = Integer.parseInt(request.getParameter("id"));
+			List<Product> list = ps.findProductById(id, page);
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("book_list.jsp").forward(request, response);
+		}else if("/new".equals(path)){
+			String newId = request.getParameter("returnId");
+			System.out.println(newId);
+			List<Product> listNew = ps.findProductByTimeAll();
+			request.setAttribute("listNew", listNew);
+			session.setAttribute("newId", newId);
+			request.getRequestDispatcher("book_list.jsp").forward(request, response);
+		}else if("/by".equals(path)){
+			int bid = Integer.parseInt(request.getParameter("bid"));
+			System.out.println(bid);
+			List<Item> item = is.itemExist(bid);
+			System.out.println(item);
+			session.setAttribute("item", item);
+			response.sendRedirect("../cart/cart_list.jsp");
+		}else if("/xiangxi".equals(path)){
+			System.out.println("hehe");
+			int id = Integer.parseInt(request.getParameter("id"));
+			System.out.println(id);
+			
+			List<Product> list = is.findXiangxi(id);
+			session.setAttribute("list", list);
+			response.sendRedirect("../cart/by.jsp");
+		}else if("/serach".equals(path)){
+			System.out.println("hehe");
+			String key = request.getParameter("key");
+			String priceMin = request.getParameter("min");
+			String priceMax = request.getParameter("max");
+			
+			SearchKey search = new SearchKey();
+			search.setAuthor(key.equals("请输入关键字") ? null : "%" + key + "%");
+			search.setCatalogue(key.equals("请输入关键字") ? null : "%" + key + "%");
+			search.setDescription(key.equals("请输入关键字") ? null : "%"+ key +"%");
+			search.setIsbn(key.equals("请输入关键字") ? null : "%"+ key +"%");
+			search.setPrint_number(key.equals("请输入关键字") ? null : "%"+ key +"%");
+			search.setProduct_name(key.equals("请输入关键字") ? null : "%"+ key +"%");
+			search.setPublishing(key.equals("请输入关键字") ? null : "%"+ key +"%");
+			search.setWhich_edtion(key.equals("请输入关键字") ? null : "%"+ key +"%");
+			search.setMin(priceMin.equals("最低价格") ? 0 : Integer.parseInt(priceMin));
+			search.setMax(priceMax.equals("最高价格") ? 0 : Integer.parseInt(priceMax));
+			
+//			System.out.println(key);
+			
+			List<Product> list = ss.keyWord(search);
+			System.out.println(list);
+			session.setAttribute("list", list);
+			response.sendRedirect("../main/book_listSearch.jsp");
+			
+		}else if("/to_order".equals(path)){//点击结算
+			/* 结算
+			 * 1.取出User中的id
+			 * 2.生成order对象
+			 * 3.获得List<Item>中的总价 
+			 * 4.判断：
+			 * 		User是否登录
+			 * 		订单列表List<Item>中是否有东西，没东西结算按钮是灰色的<c:if>
+			 **/
+			User user = (User)session.getAttribute("user");
+			if(user == null){
+				response.sendRedirect("../main/book_listSearch.jsp");
+			}else{
+				List<Item> ListItem = (List<Item>)session.getAttribute("item");
+//				System.out.println("user:" + user);
+//				System.out.println("ListItem" + ListItem);
+				Order order = os.createOrder(user, ListItem);
+				session.setAttribute("order", order);
+			}
+			response.sendRedirect("../order/order_info.jsp");
+			
+//			request.setAttribute("order", order);
+//			request.getRequestDispatcher("order_info.jsp").forward(request, response);
+		}else if("/order_ok".equals(path)){//结算后点击下一步
+			/* 点击下一步
+			 * 保存订单Order 取出Order中的id
+			 * 修改Item中的Order_id属性，保存item
+			 * 删除itemList
+			 * 跳到地址页面
+			 **/
+			Order order = (Order)session.getAttribute("order");
+			int user_id = order.getUser_id();
+			int status = order.getStatus();
+			long order_time = order.getOrder_time();
+			String order_desc = order.getOrder_desc();
+			double total_price = order.getTotal_price();
+			String receive_name = order.getReceive_name();
+			String full_address = order.getFull_address();
+			String postal_code = order.getPostal_code();
+			String mobile = order.getMobile();
+			String phone = order.getPhone();
+			
+			order = new Order(0, user_id, status, order_time, order_desc, total_price, receive_name,
+					full_address, postal_code, mobile, phone);
+			System.out.println(order);
+			boolean bo = os.insertOrder(order);
+//			System.out.println(bo);
+			int orderId = order.getId();
+			session.setAttribute("order", order);
+			List<Item> listItem = (List<Item>)session.getAttribute("item");
+			boolean boItem = os.insertItem(listItem, orderId);
+			session.removeAttribute("item");
+			
+			response.sendRedirect("address_form.jsp");
+			
+		}else if("/order_canel".equals(path)){//结算后点击取消
+			/* 点击取消
+			 * 回到购物车
+			 * 从session中删除order
+			 **/
+			session.removeAttribute("order");
+			response.sendRedirect("../cart/cart_list.jsp");
+			
+		}else if("/address_ok".equals(path)){
+			/* 把地址信息保存至数据库
+			 * 修改order表中的地址数据
+			 */
+			String name = request.getParameter("name");
+			String fuladdress = request.getParameter("address");
+			String postalCode = request.getParameter("postalCode");
+			String phone = request.getParameter("phone");
+			String mobile = request.getParameter("mobile");
+			User user = (User)session.getAttribute("user");
+			int user_id = user.getId();
+			Address address = new Address(0, user_id, name, fuladdress, postalCode, mobile, phone);
+			
+			boolean bo = os.insertAddress(address);
+			Order order = (Order)session.getAttribute("order");
+			int id = order.getId();
+			order.setFull_address(fuladdress);
+			order.setId(id);
+			System.out.println(order);
+			os.updateAddress(order);
+			response.sendRedirect("order_ok.jsp");
+		}else if("/address_canel".equals(path)){
+			/*
+			 * 直接结束订单
+			 * 跳到主页
+			 * 将order表中的地址数据改为Null
+			 */
+			response.sendRedirect("../main/main.jsp");
+		}else if("/update".equals(path)){
+			int itemId = Integer.parseInt(request.getParameter("itemId"));
+			int num = Integer.parseInt(request.getParameter("updateNum"));
+			if(num <= 0){
+				num = 1;
+			}
+			List<Item> itemList = (List<Item>)session.getAttribute("item");
+			itemList = is.changeItemNum(itemList, itemId, num);
+			session.setAttribute("item", itemList);
+			response.sendRedirect("../cart/cart_list.jsp");
+		}else if("/delete".equals(path)){
+			System.out.println("del");
+			int itemId = Integer.parseInt(request.getParameter("itemId"));
+			List<Item> itemList = (List<Item>)session.getAttribute("item");
+			List<Item> delItem = is.delete(itemList, itemId);
+			
+			session.setAttribute("delItem", delItem);
+			response.sendRedirect("../cart/cart_list.jsp");
+		}else{
+			response.sendRedirect("index.jsp");
+		}
+		
+	}
+	public static void main(String[] args) {
+		ProductService ps = new ProductService();
+		ByService is = new ByService();
+		List<Product> list = is.findAll(3);
+		System.out.println(list);
+
+	}
+	
+}

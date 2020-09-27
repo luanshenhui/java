@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.messageDefine.dao.MessageDefineDaoImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.messageDefine.vo.MessageDefineVo">
+		<id column="msg_id" jdbcType="VARCHAR" property="msgId" />
+		<result column="msg_code" jdbcType="VARCHAR" property="msgCode" />
+		<result column="msg_name" jdbcType="VARCHAR" property="msgName" />
+		<result column="send_way" jdbcType="VARCHAR" property="sendWay" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="retries" jdbcType="INTEGER" property="retries" />
+		<result column="retry_interval" jdbcType="VARCHAR" property="retryInterval" />
+		<result column="template" jdbcType="VARCHAR" property="template" />
+        <result column="enabled" jdbcType="VARCHAR" property="enabled" />
+        <result column="deleted" jdbcType="VARCHAR" property="deleted" />
+        <result column="operation" property="operation" />
+	</resultMap>
+
+	<select id="getMessageList" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.messageDefine.vo.MessageDefineVo" >
+    select  msg_id, msg_code,msg_name, send_way, title, retries , retry_interval, template,(case
+         when enabled = '1' then
+          '是'
+         else
+          '否'
+       end) as enabled ,deleted , '' as operation  
+    from OMS_MESSAGE 
+	where 1=1
+		<if test="msgId != null">
+			and msg_id = #{msgId}
+		</if>
+		
+		<choose> 
+			<when test="deleted !=null ">
+			</when>
+			<otherwise>
+				and deleted = 'n'
+			</otherwise>  
+		</choose>
+		
+		<if test="msgCode != null">
+			and  msg_code = #{msgCode} 
+		</if>
+		
+		<if test="msgName != null">
+			and msg_name = #{msgName} 
+		</if>
+  		<if test="searchCondition != null"> 
+			and msg_code like CONCAT('%',#{searchCondition},'%')  or msg_name like CONCAT('%',#{searchCondition},'%') 
+		</if> 
+		
+		<if test="sendWay != null">
+			and send_way = #{sendWay} 
+		</if>
+		
+		<if test="title != null">
+			and title = #{title}  
+		</if>
+		
+		<if test="retries != null">
+			and retries = #{retries}  
+		</if> 
+		
+		<if test="retryInterval != null">
+			and retry_interval = #{retryInterval} 
+		</if> 
+		
+		<if test="template != null">
+			and template = #{template} 
+		</if> 
+		
+		<if test="enabled != null">
+			and enabled = #{enabled} 
+		</if> 
+		
+		<if test="orderBy != null">
+			ORDER BY ${orderBy} 
+		</if>
+  </select>
+	
+	<insert id="saveMessage_insert" parameterType="cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE">
+	insert into OMS_MESSAGE
+	  (msg_id, msg_code,msg_name,send_way,title,retries,retry_interval,template,enabled,deleted)
+	values
+	  (#{msgId}, #{msgCode}, #{msgName}, #{sendWay}, #{title}, #{retries}, #{retryInterval}, #{template}, #{enabled}, #{deleted})
+	</insert>
+	<insert id="insertMessageShop" parameterType="cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE_SHOP">
+	insert into oms_message_shop
+	  (ms_id, msg_id,shop_id,template)
+	values
+	  (#{msId},#{msgId}, #{shopId}, #{template})
+	</insert>
+	
+	<update id="deleteMsg" parameterType="cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE" >
+    update OMS_MESSAGE
+    set deleted = 'y' 
+    WHERE msg_id = #{msgId}
+  </update>
+  
+  <update id="updateUnenable" parameterType="cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE" >
+    update OMS_MESSAGE
+    set enabled = '0' 
+    WHERE msg_id = #{msgId}
+  </update>
+  <update id="updateEnable" parameterType="cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE" >
+    update OMS_MESSAGE
+    set enabled = '1' 
+    WHERE msg_id = #{msgId}
+  </update>
+	
+	<select id="getMessageInfo" parameterType="cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE" resultType="cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE">
+		SELECT
+			msg_id AS msgId,
+			msg_code AS msgCode,
+			msg_name AS msgName,
+			send_way AS sendWay,
+			title,
+			retries,
+			retry_interval AS retryInterval,
+			template
+		FROM oms_message 
+		where msg_id= #{msgId}
+	</select>
+	<select id="getMessageShopList" parameterType="java.util.List" resultType="cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE_SHOP">
+		select
+        shop_id,
+        prj_name
+        from oms_project 
+		where  
+    	  deleted = 'n' 
+          and enable = 'y' 
+          <if test="list != null">
+			AND prj_id in
+				<foreach collection="list" item="idList" index="index" close=")" open="(" separator=","> 
+				  #{idList}
+				</foreach>
+		</if>
+	</select>
+	
+	
+	<select id="getMessageList" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.messageDefine.vo.MessageShopVo" >
+    select  msg_id, msg_code,msg_name, send_way, title, retries , retry_interval, template,(case
+         when enabled = '1' then
+          '是'
+         else
+          '否'
+       end) as enabled ,deleted , '' as operation  
+    from OMS_MESSAGE 
+	where 1=1
+		<if test="msgId != null">
+			and msg_id = #{msgId}
+		</if>
+		
+		<choose> 
+			<when test="deleted !=null ">
+			</when>
+			<otherwise>
+				and deleted = 'n'
+			</otherwise>  
+		</choose>
+		
+		<if test="msgCode != null">
+			and  msg_code = #{msgCode} 
+		</if>
+		
+		<if test="msgName != null">
+			and msg_name = #{msgName} 
+		</if>
+  		<if test="searchCondition != null"> 
+			and msg_code like CONCAT('%',#{searchCondition},'%')  or msg_name like CONCAT('%',#{searchCondition},'%') 
+		</if> 
+		
+		<if test="sendWay != null">
+			and send_way = #{sendWay} 
+		</if>
+		
+		<if test="title != null">
+			and title = #{title}  
+		</if>
+		
+		<if test="retries != null">
+			and retries = #{retries}  
+		</if> 
+		
+		<if test="retryInterval != null">
+			and retry_interval = #{retryInterval} 
+		</if> 
+		
+		<if test="template != null">
+			and template = #{template} 
+		</if> 
+		
+		<if test="enabled != null">
+			and enabled = #{enabled} 
+		</if> 
+		
+		<if test="orderBy != null">
+			ORDER BY ${orderBy} 
+		</if>
+  </select>
+</mapper>

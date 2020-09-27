@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="chinsoft.entity.EcodeRedirect" table="EcodeRedirect">
+		<id name="ID">
+			<column name="ID" />
+			<generator class="assigned" />
+		</id>
+		<property name="Splits" type="string" column="Splits" />
+		<property name="Ecode" type="string" column="Ecode" />
+		<property name="Memo" type="string" column="Memo" />
+		<property name="Count" type="integer" column="Count" />
+	</class>
+</hibernate-mapping>

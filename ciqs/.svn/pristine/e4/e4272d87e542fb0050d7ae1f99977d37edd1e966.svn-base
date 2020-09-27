@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for AFFIRM.
+
+@author zhuqb
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 进出境运输工具检疫（货轮）
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.AFFIRM">
+
+<!-- **** select ******************************************************* -->
+  <!-- 根据传入的搜索条件 查询进出境运输工具检疫（货轮）列表页 -->
+  <select id="findTransports" resultType="com.dpn.ciqqlc.standard.model.VisualDeclareDTO" >
+   select * from (
+   select a.*,rownum rid from (   
+
+	    SELECT 
+		            ID,
+		            VSL_DEC_ID,
+		            VSL_CN_NAME,
+		            VSL_EN_NAME,
+		            CALL_SIGN,
+		            COUNTRY_CN_NAME,
+		            THIRD.NAME AS CHECK_TYPE_APRV,
+		            SHIPPER_PSN_NUM,
+		            DEC_DATE,
+		            SHIP_SANIT_CERT,
+		            TRAF_CERT,
+		            FIRST.NAME AS PORT_ORG,
+		            SECOND.NAME AS PORT_ORG_UNDER,
+		            FOUR.CERT_COUNT,
+		            APRV_DATE
+		FROM 
+		            QLC_VSL_DEC
+	    LEFT JOIN   
+	                (SELECT 
+	                          NAME,CODE
+	                 FROM         
+	                          QLC_CODE_LIBRARY
+	                 WHERE
+	                          QLC_CODE_LIBRARY.TYPE='QLC_ORGANIZES'
+	                 ) FIRST
+	    ON
+	                QLC_VSL_DEC.PORT_ORG=FIRST.CODE
+	    LEFT JOIN   
+	                (SELECT 
+	                          NAME,CODE
+	                 FROM         
+	                          QLC_CODE_LIBRARY
+	                 WHERE
+	                          QLC_CODE_LIBRARY.TYPE='QLC_DEPTMENTS'
+	                 ) SECOND
+	    ON
+	                QLC_VSL_DEC.PORT_ORG_UNDER=SECOND.CODE 
+	    LEFT JOIN
+	                (SELECT 
+	                          NAME,CODE
+	                 FROM         
+	                          QLC_CODE_LIBRARY
+	                 WHERE
+	                          QLC_CODE_LIBRARY.TYPE='QLC_VSL_DEC_CHECK_TYPE_APRV'
+	                 ) THIRD
+	    ON
+	                QLC_VSL_DEC.CHECK_TYPE_APRV=THIRD.CODE        
+	    LEFT JOIN  	(SELECT PROC_MAIN_ID, COUNT(PROC_MAIN_ID) AS CERT_COUNT FROM QLC_VIDEO_FILE_EVENT WHERE PROC_TYPE = 'V_JC_T_T_21' GROUP BY PROC_MAIN_ID) FOUR
+	    ON
+	    			QLC_VSL_DEC.VSL_DEC_ID = FOUR.PROC_MAIN_ID
+	    WHERE 
+		            1=1
+		            <if test = "vsl_cn_name != null and vsl_cn_name != ''">
+		AND         
+		            QLC_VSL_DEC.VSL_CN_NAME = #{vsl_cn_name}
+					</if>
+					<if test = "vsl_en_name != null and vsl_en_name != ''">
+		AND 
+		            QLC_VSL_DEC.VSL_EN_NAME = #{vsl_en_name}
+					</if>
+					<if test = "start_time != null and start_time != ''">
+					<![CDATA[ 
+		AND  
+		            QLC_VSL_DEC.APRV_DATE >= to_date(#{start_time}, 'yyyy-mm-dd')
+		            ]]>
+					</if>
+					<if test = "end_time != null and end_time != ''">
+					<![CDATA[
+		AND  
+		            QLC_VSL_DEC.APRV_DATE <=to_date(#{end_time}, 'yyyy-mm-dd')
+		            ]]>
+					</if>
+					<if test = "check_type_aprv != null and check_type_aprv != ''">
+	    AND
+	                QLC_VSL_DEC.CHECK_TYPE_APRV = #{check_type_aprv}
+		            </if>
+		            <if test = "port_org != null and port_org != ''">
+	    AND
+	                QLC_VSL_DEC.PORT_ORG = #{port_org}
+		            </if>
+		            <if test = "port_org_under != null and port_org_under != ''">
+	    AND
+	                QLC_VSL_DEC.PORT_ORG_UNDER= #{port_org_under}
+		            </if>
+		ORDER BY 
+		            QLC_VSL_DEC.APRV_DATE desc 
+    ) a 
+    where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	 <!-- 根据传入的条件 查询符合条件的总条数-->
+	<select id="findTransportsCount" resultType="java.lang.Integer">
+	    SELECT 
+	                count(ID) as TOTALPAGES  
+	    FROM 
+	                QLC_VSL_DEC
+	    WHERE 
+		            1=1
+		            <if test = "vsl_cn_name != null and vsl_cn_name != ''">
+		AND         
+		            QLC_VSL_DEC.VSL_CN_NAME = #{vsl_cn_name}
+					</if>
+					<if test = "vsl_en_name != null and vsl_en_name != ''">
+		AND 
+		            QLC_VSL_DEC.VSL_EN_NAME = #{vsl_en_name}
+					</if>
+					<if test = "start_time != null and start_time != ''">
+					<![CDATA[ 
+		AND  
+		            QLC_VSL_DEC.CREATE_DATE >= to_date(#{start_time}, 'yyyy-mm-dd')
+		            ]]>
+					</if>
+					<if test = "end_time != null and end_time != ''">
+					<![CDATA[
+		AND  
+		            QLC_VSL_DEC.CREATE_DATE <=to_date(#{end_time}, 'yyyy-mm-dd')
+		            ]]>
+					</if>
+					<if test = "check_type_aprv != null and check_type_aprv != ''">
+	    AND
+	                QLC_VSL_DEC.CHECK_TYPE_APRV = #{check_type_aprv}
+		            </if>
+		            <if test = "port_org != null and port_org != ''">
+	    AND
+	                QLC_VSL_DEC.PORT_ORG = #{port_org}
+		            </if>
+		            <if test = "port_org_under != null and port_org_under != ''">
+	    AND
+	                QLC_VSL_DEC.PORT_ORG_UNDER= #{port_org_under}
+		            </if>
+	</select>
+	
+  <!-- 根据传入的ID条件 查询进出境运输工具检疫（货轮）单条详细记录-->
+  <select id="findTransportOne" resultType="com.dpn.ciqqlc.standard.model.VisualDeclareDTO" parameterType="java.lang.String">
+
+	     select 
+				id,       
+				vsl_dec_id,
+				vsl_cn_name,     
+				vsl_en_name, 
+				country_cn_name, 
+				country_en_name,
+				call_sign, 
+				total_ton,      
+				net_ton, 
+				cur_cargo_sit,   
+				his_cargo_sit, 
+				shipper_psn_num, 
+				visitor_psn_num,
+				start_ship_sit,
+				est_arriv_date,
+				last_four_port,
+				ship_sanit_cert, 
+				traf_cert,
+				having_patient,  
+				having_corpse, 
+				having_mdk_mdi_cps,
+				dec_date,
+				dec_user,  
+				check_type_dec,  
+				aprv_date, 
+				aprv_user, 
+				check_type_aprv, 
+				create_date,
+				port_org,
+				port_org_under,
+				t2.NAME AS CHECK_TYPE_DEC_CN, t3.NAME AS CHECK_TYPE_APRV_CN
+		 from 
+		            QLC_VSL_DEC t1
+		 LEFT JOIN
+	                (SELECT 
+	                          NAME,CODE
+	                 FROM         
+	                          QLC_CODE_LIBRARY
+	                 WHERE
+	                          QLC_CODE_LIBRARY.TYPE='QLC_VSL_DEC_CHECK_TYPE_DEC'
+	                 ) t2
+	    ON
+	                t1.CHECK_TYPE_DEC=t2.CODE
+	     LEFT JOIN
+	                (SELECT 
+	                          NAME,CODE
+	                 FROM         
+	                          QLC_CODE_LIBRARY
+	                 WHERE
+	                          QLC_CODE_LIBRARY.TYPE='QLC_VSL_DEC_CHECK_TYPE_APRV'
+	                 ) t3
+	    ON
+	                t1.CHECK_TYPE_APRV=t3.CODE
+	     where 
+		            t1.VSL_DEC_ID=#{transportid}
+   
+	</select>
+	
+	<!-- 根据进出境运输工具检疫（货轮）的业务主键查询该详情页面所涉及的所有照片和视频 -->
+	<select id="queryTransportFiles" resultType="com.dpn.ciqqlc.standard.model.VideoDTO" >
+	select 
+	             t1.id, t1.proc_main_id, t1.proc_type, t1.file_type, t1.file_name, t1.port_dept_code, t1.port_org_code, t3.name as create_user, to_char(t1.create_date, 'yyyy-mm-dd hh24:mi:ss') as create_date_str
+    from  
+                 QLC_VIDEO_FILE_EVENT t1
+    LEFT JOIN 
+                 QLC_C_VIDEO_PROC_TYPE t2 
+    ON         
+                 t1.PROC_TYPE= t2.PROC_TYPE
+    LEFT JOIN 	 
+    			 USERS_CIQ t3 
+    ON			 t3.ID = t1.CREATE_USER           
+    WHERE 
+                 t1.PROC_MAIN_ID=#{proc_main_id}
+                 <if test = "port_org_code!= null and port_org_code != ''">
+    AND          
+                 t1.PORT_ORG_CODE=#{port_org_code}    
+                 </if>
+                 <if test = "port_dept_code != null and port_dept_code != ''">
+    AND           
+                 t1.PORT_DEPT_CODE=#{port_dept_code}   
+                 </if> 
+    AND EXISTS (
+	              SELECT 
+	                        PROC_TYPE
+	              FROM 
+	                        QLC_C_VIDEO_PROC_TYPE
+	              WHERE   
+	                        PROJ_CODE=#{proj_code}
+	              AND 
+	                        PROC_TYPE=t1.PROC_TYPE
+    )                           
+    ORDER BY  
+                 t1.CREATE_DATE DESC
+    </select>
+    
+    <!-- 根据进出境运输工具检疫（货轮）的业务主键查询该详情页面所涉及的所有doc -->
+	<select id="queryTransportTemplates" resultType="com.dpn.ciqqlc.standard.model.DocTypeDTO" >
+	select    
+                 QLC_CHECK_DOCS_RCD.DOC_ID,
+                 QLC_CHECK_DOCS_RCD.DOC_TYPE,
+                 t3.name as DEC_USER,
+                 to_char(QLC_CHECK_DOCS_RCD.DEC_DATE, 'yyyy-mm-dd hh24:mi:ss') as dec_date_str,
+                 QLC_CHECK_DOCS_RCD.GROUP_ID,
+                 QLC_C_CHECK_DOCS_RCD_TYPE_CODE.NAME
+	from 
+	             QLC_CHECK_DOCS_RCD
+	left join    
+	             QLC_C_CHECK_DOCS_RCD_TYPE_CODE
+	on
+	             QLC_C_CHECK_DOCS_RCD_TYPE_CODE.CODE=QLC_CHECK_DOCS_RCD.DOC_TYPE      
+	LEFT JOIN 	 
+    			 USERS_CIQ t3 
+    ON			 t3.ID = QLC_CHECK_DOCS_RCD.DEC_USER                       
+    WHERE 
+                 QLC_CHECK_DOCS_RCD.PROC_MAIN_ID=#{proc_main_id}
+    AND EXISTS (
+                  SELECT 
+	                        CODE
+	              FROM 
+	                        QLC_C_CHECK_DOCS_RCD_TYPE_CODE
+	              WHERE   
+	                        PROJ_CODE=#{proj_code}
+	              AND 
+	                        CODE=QLC_CHECK_DOCS_RCD.DOC_TYPE
+    )             
+    ORDER BY     
+                 QLC_CHECK_DOCS_RCD.GROUP_ID DESC,
+                 QLC_CHECK_DOCS_RCD.DOC_TYPE,
+                 QLC_CHECK_DOCS_RCD.DEC_DATE DESC
+    </select>
+    
+    <!-- 根据传入的搜索条件 查询进出境运输工具检疫（货轮）列表页 -->
+    <select id="transportsTemplate" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO" >
+    select 
+                *
+    from        
+                QLC_CHECK_DOCS_RCD
+    where 
+	           
+			    QLC_CHECK_DOCS_RCD.DOC_ID = #{doc_id}
+	 </select>        
+    
+    <!-- 根据传入的搜索条件 查询进出境运输工具检疫（货轮）列表页 -->
+    <select id="showTransportsApp" resultType="java.util.Map" >
+     select 
+	            t.ID, t.VSL_DEC_ID, t.VSL_CN_NAME, t.VSL_EN_NAME, t.COUNTRY_CN_NAME, t.COUNTRY_EN_NAME, t.CALL_SIGN, t.TOTAL_TON, t.NET_TON, t.CUR_CARGO_SIT, t.HIS_CARGO_SIT, t.SHIPPER_PSN_NUM,
+	            t.VISITOR_PSN_NUM, t.START_SHIP_SIT, 
+	            to_date(t.EST_ARRIV_DATE,'yyyy-MM-dd HH24:mi:ss') as EST_ARRIV_DATE, t.LAST_FOUR_PORT, t.SHIP_SANIT_CERT, t.TRAF_CERT, t.HAVING_PATIENT, t.HAVING_CORPSE, t.HAVING_MDK_MDI_CPS, t.DEC_DATE,
+	            t. DEC_USER, CHECK_TYPE_DEC, t.APRV_DATE, APRV_USER, 
+	            c.name as CHECK_TYPE_APRV, 
+	            t.CREATE_DATE, t.PORT_ORG, t.PORT_ORG_UNDER
+	 from 
+	            QLC_VSL_DEC t
+	 left join  (select code, name from QLC_CODE_LIBRARY where type = 'QLC_VSL_DEC_CHECK_TYPE_APRV') c
+	        on  t.CHECK_TYPE_APRV = c.code
+     where 
+	            1=1
+	            <if test = "vsl_cn_name != null and vsl_cn_name != ''">
+	AND         t.VSL_CN_NAME = #{vsl_cn_name}
+				</if>
+				<if test = "vsl_en_name != null and vsl_en_name != ''">
+	AND         t.VSL_EN_NAME = #{vsl_en_name}
+				</if>
+	AND        not exists(
+			                 SELECT 
+			                           PROC_MAIN_ID 
+			                 FROM      
+			                           QLC_CHK_RCD 
+			                 WHERE 
+			                           QLC_CHK_RCD.PROJ_CODE=#{proj_code}
+			                 AND          
+			                           PROC_MAIN_ID=t.VSL_DEC_ID
+			                )			
+	order by 
+	           t.APRV_DATE desc 
+	 </select>      
+	 
+	 <!-- 查询 1.文档类型 2.业务主键 查询doc -->
+	<select id="findDocByTypeNMainId" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO">
+		select 
+		    *
+		 from QLC_CHECK_DOCS_RCD t
+		 where t.doc_type = #{doc_type} and t.proc_main_id = #{proc_main_id}
+	</select>    
+    
+    <select id="findVsvByVslDecId" parameterType="com.dpn.ciqqlc.standard.model.VisualDeclareDTO" resultType="com.dpn.ciqqlc.standard.model.VisualDeclareDTO">
+    	select
+		   id,
+		   vsl_dec_id,
+		   vsl_cn_name,
+		   vsl_en_name,
+		   country_cn_name,
+		   country_en_name,
+		   call_sign,
+		   total_ton,
+		   net_ton,
+		   cur_cargo_sit,
+		   his_cargo_sit,
+		   shipper_psn_num,
+		   visitor_psn_num,
+		   start_ship_sit,
+		   est_arriv_date,
+		   last_four_port,
+		   ship_sanit_cert,
+		   traf_cert,
+		   having_patient,
+		   having_corpse,
+		   having_mdk_mdi_cps,
+		   dec_date,
+		   dec_user,
+		   check_type_dec,
+		   aprv_date,
+		   aprv_user,
+		   check_type_aprv,
+		   create_date,
+		   port_org,
+		   port_org_under
+		from
+			QLC_VSL_DEC
+		where 
+			VSL_DEC_ID = #{vsl_dec_id}
+    </select>
+    <insert id="insertVSL" parameterType="com.dpn.ciqqlc.standard.model.VisualDeclareDTO">
+		insert into QLC_VSL_DEC
+		  (
+		   ID,
+		   VSL_DEC_ID,
+		   VSL_CN_NAME,
+		   VSL_EN_NAME,
+		   COUNTRY_CN_NAME,
+		   COUNTRY_EN_NAME,
+		   CALL_SIGN,
+		   TOTAL_TON,
+		   NET_TON,
+		   CUR_CARGO_SIT,
+		   HIS_CARGO_SIT,
+		   SHIPPER_PSN_NUM,
+		   VISITOR_PSN_NUM,
+		   START_SHIP_SIT,
+		   EST_ARRIV_DATE,
+		   LAST_FOUR_PORT,
+		   SHIP_SANIT_CERT,
+		   TRAF_CERT,
+		   HAVING_PATIENT,
+		   HAVING_CORPSE,
+		   HAVING_MDK_MDI_CPS,
+		   DEC_DATE,
+		   DEC_USER,
+		   CHECK_TYPE_DEC,
+		   APRV_DATE,
+		   APRV_USER,
+		   CHECK_TYPE_APRV,
+		   CREATE_DATE,
+		   PORT_ORG,
+		   PORT_ORG_UNDER,
+		   VOYAGE_NO,             
+		   LOAD_PORT,            
+	       SHIP_TYPE,           
+	       HAVE_CORPSE,       
+	       HAVE_BIER,         
+	       DEC_ORG,             
+	       CHECK_RST,     
+	       INSP_ORG_CODE,      
+	       INSP_ORG_NAME,
+	       ARRV_RST  
+		   )
+		values
+		  (
+			CreateGUID()
+		   ,#{vsl_dec_id}    
+		   ,#{vsl_cn_name}
+		   ,#{vsl_en_name}
+		   ,#{country_cn_name}
+		   ,#{country_en_name}
+		   ,#{call_sign}
+		   ,#{total_ton}
+		   ,#{net_ton}
+		   ,#{cur_cargo_sit}
+		   ,#{his_cargo_sit}
+		   ,#{shipper_psn_num}
+		   ,#{visitor_psn_num}
+		   ,#{start_ship_sit}
+		   ,#{est_arriv_date}
+		   ,#{last_four_port}
+		   ,#{ship_sanit_cert}
+		   ,#{traf_cert}
+		   ,#{having_patient}
+		   ,#{having_corpse}
+		   ,#{having_mdk_mdi_cps}
+		   ,#{dec_date}
+		   ,#{dec_user,jdbcType=VARCHAR}
+		   ,#{check_type_dec,jdbcType=VARCHAR}
+		   ,#{aprv_date,jdbcType=DATE}
+		   ,#{aprv_user,jdbcType=VARCHAR}
+		   ,#{check_type_aprv,jdbcType=VARCHAR}
+		   ,#{create_date}
+		   ,#{port_org,jdbcType=VARCHAR}
+		   ,#{port_org_under,jdbcType=VARCHAR}
+		   ,#{voyage_no}             
+		   ,#{load_port}           
+	       ,#{ship_type}         
+	       ,#{have_corpse}      
+	       ,#{have_bier}     
+	       ,#{dec_org}      
+	       ,#{check_rst,jdbcType=VARCHAR}
+	       ,#{insp_org_code}    
+	       ,#{insp_org_name}
+	       ,#{arrv_rst,jdbcType=VARCHAR}
+		   )
+    </insert>
+    <update id="updateVSL" parameterType="com.dpn.ciqqlc.standard.model.VisualDeclareDTO">
+    	update 
+    		QLC_VSL_DEC
+    	set
+		   VSL_DEC_ID = #{vsl_dec_id}
+		  <if test="vsl_cn_name != null and vsl_cn_name != ''">,VSL_CN_NAME = #{vsl_cn_name}</if>
+		   <if test="vsl_en_name != null and vsl_en_name != ''">,VSL_EN_NAME = #{vsl_en_name}</if>
+		   <if test="country_cn_name != null and country_cn_name != ''">,COUNTRY_CN_NAME = #{country_cn_name}</if>
+		   <if test="country_en_name != null and country_en_name != ''">,COUNTRY_EN_NAME = #{country_en_name}</if>
+		   <if test="call_sign != null and call_sign != ''">,CALL_SIGN = #{call_sign}</if>
+		   <if test="total_ton != null and total_ton != ''">,TOTAL_TON = #{total_ton}</if>
+		   <if test="net_ton != null and net_ton != ''">,NET_TON = #{net_ton}</if>
+		   <if test="cur_cargo_sit != null and cur_cargo_sit != ''">,CUR_CARGO_SIT = #{cur_cargo_sit}</if>
+		   <if test="his_cargo_sit != null and his_cargo_sit != ''">,HIS_CARGO_SIT = #{his_cargo_sit}</if>
+		   <if test="shipper_psn_num != null and shipper_psn_num != ''">,SHIPPER_PSN_NUM = #{shipper_psn_num}</if>
+		   <if test="visitor_psn_num != null and visitor_psn_num != ''">,VISITOR_PSN_NUM = #{visitor_psn_num}</if>
+		   <if test="start_ship_sit != null and start_ship_sit != ''">,START_SHIP_SIT = #{start_ship_sit}</if>
+		   <if test="est_arriv_date != null and est_arriv_date != ''">,EST_ARRIV_DATE = #{est_arriv_date}</if>
+		   <if test="last_four_port != null and last_four_port != ''">,LAST_FOUR_PORT = #{last_four_port}</if>
+		   <if test="ship_sanit_cert != null and ship_sanit_cert != ''">,SHIP_SANIT_CERT = #{ship_sanit_cert}</if>
+		   <if test="traf_cert != null and traf_cert != ''">,TRAF_CERT = #{traf_cert}</if>
+		   <if test="having_patient != null and having_patient != ''">,HAVING_PATIENT = #{having_patient}</if>
+		   <if test="having_corpse != null and having_corpse != ''">,HAVING_CORPSE = #{having_corpse}</if>
+		   <if test="having_mdk_mdi_cps != null and having_mdk_mdi_cps != ''">,HAVING_MDK_MDI_CPS = #{having_mdk_mdi_cps}</if>
+		   <if test="dec_date != null and dec_date != ''">,DEC_DATE = #{dec_date}</if>
+		   <if test="dec_user != null and dec_user != ''">,DEC_USER = #{dec_user,jdbcType=VARCHAR}</if>
+		   <if test="check_type_dec != null and check_type_dec != ''">,CHECK_TYPE_DEC = #{check_type_dec,jdbcType=VARCHAR}</if>
+		   <if test="aprv_date != null and aprv_date != ''">,APRV_DATE = #{aprv_date}</if>
+		   <if test="aprv_user != null and aprv_user != ''">,APRV_USER = #{aprv_user,jdbcType=VARCHAR}</if>
+		   <if test="check_type_aprv != null and check_type_aprv != ''">,CHECK_TYPE_APRV = #{check_type_aprv,jdbcType=VARCHAR}</if>
+		   <if test="create_date != null and create_date != ''">,CREATE_DATE = #{create_date}</if>
+		   <if test="port_org != null and port_org != ''">,PORT_ORG = #{port_org,jdbcType=VARCHAR}</if>
+		   <if test="port_org_under != null and port_org_under != ''">,PORT_ORG_UNDER = #{port_org_under,jdbcType=VARCHAR}</if>
+		   <if test="voyage_no != null and voyage_no != ''">,VOYAGE_NO = #{voyage_no}</if>
+		   <if test="load_port != null and load_port != ''">,LOAD_PORT = #{load_port}</if>
+	       <if test="ship_type != null and ship_type != ''">,SHIP_TYPE = #{ship_type}</if>
+	       <if test="have_corpse != null and have_corpse != ''">,HAVE_CORPSE = #{have_corpse}</if>
+	       <if test="have_bier != null and have_bier != ''">,HAVE_BIER = #{have_bier}</if>   
+	       <if test="dec_org != null and dec_org != ''">,DEC_ORG = #{dec_org}</if>     
+	       <if test="check_rst != null and check_rst != ''">,CHECK_RST = #{check_rst,jdbcType=VARCHAR}</if>
+	       <if test="insp_org_code != null and insp_org_code != ''">,INSP_ORG_CODE = #{insp_org_code}</if>
+	       <if test="insp_org_name != null and insp_org_name != ''">,INSP_ORG_NAME = #{insp_org_name}</if>
+	       <if test="check_rst != null and check_rst != ''">,ARRV_RST = #{arrv_rst,jdbcType=VARCHAR}</if>
+	       where 
+	       VSL_DEC_ID = #{vsl_dec_id}
+    	
+    </update>
+    <!-- **** insert ******************************************************* -->
+
+    <!-- **** update ******************************************************* -->
+
+    <!-- **** delete ******************************************************* -->
+
+</mapper>

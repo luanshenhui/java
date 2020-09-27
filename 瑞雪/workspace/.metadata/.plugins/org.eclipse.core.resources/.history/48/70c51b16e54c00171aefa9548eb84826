@@ -1,0 +1,168 @@
+package cn.rkylin.oms.system.enterprise.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import cn.rkylin.core.controller.ApolloController;
+import cn.rkylin.oms.common.context.CurrentUser;
+import cn.rkylin.oms.common.context.WebContextFactory;
+import cn.rkylin.oms.system.enterprise.domain.Enterprise;
+import cn.rkylin.oms.system.enterprise.service.IEnterpriseService;
+import cn.rkylin.oms.system.enterprise.vo.EnterpriseVO;
+
+/**
+ * 项目控制器
+ * @author wangxiaoyi
+ * @version 1.0
+ * @created 13-1月-2017 09:11:12
+ */
+@Controller
+@RequestMapping("/enterprise")
+public class EnterpriseController extends ApolloController {
+	private static final Log logger = LogFactory.getLog(EnterpriseController.class);
+	@Autowired
+	private IEnterpriseService enterpriseService;
+
+	/**
+	 * 转到企业列表页
+	 */
+	private static String GOTO_ENTERPRISE_LIST = "/system/enterprise/enterpriseList";
+
+
+
+	public void finalize() throws Throwable {
+		super.finalize();
+	}
+
+	/**
+	 * 构造函数
+	 */
+	public EnterpriseController(){
+
+	}
+
+	/**
+	 * 跳转到企业列表
+	 */
+	public String gotoProjectList(){
+		return "";
+	}
+
+	/**
+	 * 创建企业
+	 * 
+	 * @param enterpriseVO
+	 */
+	public void addEnterprise(EnterpriseVO enterpriseVO){
+
+	}
+
+	/**
+	 * 修改企业
+	 * 
+	 * @param enterpriseVO
+	 */
+	public void updateEnterprise(EnterpriseVO enterpriseVO){
+
+	}
+
+	/**
+	 * 删除企业
+	 * 
+	 * @param shopId
+	 */
+	public int deleteEnterprise(String shopId){
+		return 0;
+	}
+
+	/**
+	 * 启用企业
+	 * 
+	 * @param shopId
+	 */
+	public int setEnable(String shopId){
+		return 0;
+	}
+
+	/**
+	 * 禁用企业
+	 * 
+	 * @param shopId
+	 */
+	public int setDisable(String shopId){
+		return 0;
+	}
+
+//	/**
+//	 * 获取所有企业
+//	 */
+//	public String getAllEnterprises(){
+//		return "";
+//	}
+	
+	/**
+	 * 获取所有企业
+	 * 
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getEnterpriseList", method = RequestMethod.GET)
+	public Map<String, Object> getEnterpriseList(String enterppriseId) throws Exception {
+		/// 用于返回值的json对象
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		try {
+			Enterprise param = new Enterprise();
+			param.setEntId(enterppriseId);
+			List list = enterpriseService.getEnterpriseName(param);
+			returnMap.put("entName", list);
+			return returnMap;
+		} catch (Exception ex) {
+			logger.error(ex);
+			returnMap.put(JSON_RESULT, FAILED);
+			returnMap.put(JSON_MSG, ex.getMessage());
+		}
+		// 生成返回结果json串，null内容也需要返回
+		return returnMap;
+	}
+	/**
+	 * 获取个人所有企业
+	 * 
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getOneEnterpriseList", method = RequestMethod.GET)
+	public Map<String, Object> getOneEnterpriseList(String enterppriseId) throws Exception {
+		/// 用于返回值的json对象
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		try {
+			CurrentUser currentUser = WebContextFactory.getWebContext().getCurrentUser();
+            List list=currentUser.getUnitList();
+            EnterpriseVO param=new EnterpriseVO();
+            param.setUnitList(list);
+			List lst = enterpriseService.getOneEnterpriseList(param);
+			returnMap.put("entName", lst);
+			return returnMap;
+		} catch (Exception ex) {
+			logger.error(ex);
+			returnMap.put(JSON_RESULT, FAILED);
+			returnMap.put(JSON_MSG, ex.getMessage());
+		}
+		// 生成返回结果json串，null内容也需要返回
+		return returnMap;
+	}
+
+
+}

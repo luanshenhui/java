@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MailStages">
+    <resultMap id="MailStagesMap" type="MailStages">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,code,name,vendor_id,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="MailStages" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_mail_stages
+        (code
+        ,name
+        ,vendor_id
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{code}
+        ,#{name}
+        ,#{vendorId}
+        ,'0'
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="MailStages">
+        update tbl_mail_stages set
+        code
+        = #{code},name
+        = #{name},vendor_id
+        = #{vendorId},modify_oper
+        = #{modifyOper},modify_time
+        = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="code !=null">and code = #{code}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and createOper = #{createOper}</if>
+            <if test="createTime !=null">and createTime = #{createTime}</if>
+            <if test="modifyOper !=null">and modifyOper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modifyTime = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="MailStagesMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_mail_stages
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="MailStagesMap">
+        select
+        <include refid="columns"/>
+        from tbl_mail_stages
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="MailStagesMap">
+        select
+        <include refid="columns"/>
+        from tbl_mail_stages
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <!--根据供应商id查询邮购分期类别码list-->
+    <select id="findMailStagesListByVendorId" parameterType="String" resultMap="MailStagesMap">
+        select
+        <include refid="columns"/>
+        from tbl_mail_stages
+        where vendor_id=#{vendorId} and del_flag='0'
+    </select>
+
+    <!--逻辑删除-->
+    <update id="updateForDelete" parameterType="java.lang.Long">
+        update tbl_mail_stages set
+        del_flag
+        = '1'
+        where id = #{id}
+    </update>
+
+    <select id="findMailStageByCode" parameterType="Map" resultMap="MailStagesMap">
+        SELECT <include refid="columns"/>
+        from tbl_mail_stages
+        WHERE del_flag = '0'
+        <if test="code !=null">and code = #{code}</if>
+        <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+    </select>
+</mapper>
+
+

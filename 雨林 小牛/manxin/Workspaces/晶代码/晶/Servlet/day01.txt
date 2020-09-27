@@ -1,0 +1,131 @@
+企业级应用的三种架构(了解)
+	主机/终端:
+		特点:
+			主机负责所有的业务运算和数据的管理，终端
+		只提供操作界面。
+		优点：
+			可靠
+		缺点：
+			昂贵，另外，维护困难。
+	c/s(client/server)
+		两层的c/s:
+			特点：
+				数据库充当服务器，负责数据的管理以及大部分
+			业务逻辑处理(使用数据库特定的编程语言来写)，
+			客户端负责界面以及少量的业务逻辑处理。
+			优点：
+				开发方便
+			缺点：
+				可移值性差(比如，要换数据库，业务逻辑要重新写)。
+				不适合开发大型的应用(客户端需要和数据库服务器
+				保持一个连接)。
+		三层的c/s：
+			特点：
+				数据库只负责数据的管理，所有的业务逻辑都
+			集中写在应用服务器上，客户端只负责操作的界面。
+			优点：
+				可移值好
+				适合开发大型的应用
+			缺点：
+				客户端需要单独安装
+				开发相对复杂(自定义协议)
+	browser/server
+		特点：
+			客户端不再需要单独开发了，使用浏览器即可；
+			应用服务器也不用再去开发了，直接使用web
+			服务器即可；
+			浏览器使用标准的通信协议(http)与web服务器
+			之间进行通信。
+		优点：
+			开发相对简单
+			客户端不再需要单独安装
+1、servlet是什么?
+	sun公司|制订的一种|用来|扩展web服务器功能|的组件规范。
+	(1)扩展web服务器功能
+			早期的web服务器(比如apache web server,
+		iis)只能够处理静态资源的请求(也就是说，
+		需要事先将html文件写好，放在web服务器指定
+		的文件夹下面),不能够处理动态资源的请求(
+		也就是说，需要依据用户的请求参数来进行计算，
+		然后生成相应的html内容)。
+			可以使用cgi程序来扩展web服务器：
+		cgi(common gateway interface)程序一般使用perl,
+		c等语言来编写，web服务器会调用cgi程序来进行
+		计算。cgi程序编写复杂，而且可移值性也不好，现在
+		用得不多了。
+			servlet可以用来扩展web服务器功能。
+	(2)组件规范
+		1)组件:
+			符合一定的规范，实现了部分功能的，并且可
+		以部署到相应的容器上运行的软件模块。
+		2)容器:
+			符合一定的规范，提供组件的运行环境，并且管理
+		组件的生命周期的程序。
+		servlet就是一个组件，主要负责业务逻辑的处理，
+		servlet容器(比如,tomcat)会提供servlet的运行环境。
+2、如何开发一个servlet?
+		step1, 先写一个java类，这个类要求实现
+		Servlet接口或者继承HttpServlet抽象类。
+		step2,编译
+		step3,打包
+			就是要建一个具有如下结构的文件夹
+			appname (应用名)
+				WEB-INF
+					classes(放.class文件)
+					lib(可选的，放.jar文件)
+					web.xml(部署描述文件,有servlet-url)
+		step4,部署
+			将step3生成的整个文件夹拷贝到servlet容器
+		特定的文件夹下面，比如,如果是tomcat,对应的
+		文件夹是"webapps"。
+			也可以将整个文件夹使用jar命令压缩成一个
+		".war"为后缀的文件。
+		step5,启动servlet容器，访问
+			http://ip:port/appname/servlet-url
+			http://localhost:8080/firstweb/hello
+3、tomcat的安装(www.apache.org)
+	a,tomcat简介：
+		是一个开源的servlet容器。一般的servlet容器
+	同时也是一个简单的web服务器。
+	b, 安装
+		step1,解压tomcat到/home/soft01
+		/opt/apache-tomcat5.5.23.tar.gz
+		step2,配置环境变量(主要是要配置好JAVA_HOME,
+		即jdk的安装路径)
+		JAVA_HOME: /opt/jdk5
+		step3,启动tomcat
+		cd    /home/soft01/apache-tomcat5/bin
+		sh    startup.sh (或者sh  catalina.sh  run)
+		接下来，打开浏览器，在浏览器地址栏输入
+		http://localhost:8080
+		
+4、使用myeclipse来开发一个servlet
+	step1,让myeclipse管理tomcat。
+		需要在myeclipse中配置tomcat的主目录(
+		即解压tomcat时的目录，比如"/home/soft01/
+		apache-tomcat5"),另外，tomcat的jdk要配置好
+		(默认会自动配置)，launch配置成run模式。
+	step2,创建一个web工程
+	
+练习：
+			创建一个web工程(web01_lab),编写一个
+		DateServlet, 当在浏览器地址栏输入
+		http://localhost:8080/web01_lab/date
+		之后，会显示当前的系统日期，比如
+		输出" 2015-1-12
+
+如何修改tomcat默认的端口(比如，改为8088)
+	step1, tomcat_home/conf/server.xml
+	修改:
+		<Connector port="8088" ..
+	step2,重新启动tomcat
+		
+		
+	
+		
+		
+			
+		
+	
+
+	

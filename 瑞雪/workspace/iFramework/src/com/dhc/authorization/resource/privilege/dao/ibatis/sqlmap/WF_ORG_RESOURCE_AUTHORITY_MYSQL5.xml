@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="WF_ORG_RESOURCE_AUTHORITY" >
+  <resultMap id="WF_ORG_RESOURCE_AUTHORITYResultMap" class="com.dhc.authorization.resource.privilege.domain.WF_ORG_RESOURCE_AUTHORITY" >
+    <result column="RESOURCE_AUTHORITY_ID" property="resourceAuthorityId" jdbcType="VARCHAR" />
+    <result column="AUTHORITY_DESC" property="authorityDesc" jdbcType="VARCHAR" />
+    <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+    <result column="ROLE_TYPE" property="roleType" jdbcType="VARCHAR" />
+    <result column="RESOURCE_ID" property="resourceId" jdbcType="VARCHAR" />
+    <result column="AUTHORITY_TYPE" property="authorityType" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="select" resultMap="WF_ORG_RESOURCE_AUTHORITYResultMap" parameterClass="com.dhc.authorization.resource.privilege.domain.WF_ORG_RESOURCE_AUTHORITY" >
+    select RESOURCE_AUTHORITY_ID, AUTHORITY_DESC, ROLE_ID, ROLE_TYPE, RESOURCE_ID, AUTHORITY_TYPE
+    from WF_ORG_RESOURCE_AUTHORITY RA
+    <dynamic prepend="WHERE">
+    	<isNotNull prepend="AND" property="roleId">
+			RA.ROLE_ID = #roleId#
+		</isNotNull>
+	 	<isNotNull prepend="AND" property="resourceId">
+			RA.RESOURCE_ID = #resourceId#
+		</isNotNull>
+	</dynamic>
+  </select>
+  
+  <select id="getAvailableResource" resultClass="java.util.HashMap" parameterClass="com.dhc.authorization.resource.privilege.domain.WF_ORG_RESOURCE_AUTHORITY" >
+	SELECT CONCAT(RESOURCE_ID , '@' , MENU.MENU_TYPE) AS RESOURCE_ID, MENU.MENU_NAME AS RESOURCE_NAME
+	  FROM WF_ORG_RESOURCE_AUTHORITY AUTH, WF_ORG_MENU MENU
+	 WHERE MENU.MENU_CODE = AUTH.RESOURCE_ID
+	   AND ROLE_ID = #roleId#
+		<isNotNull prepend="AND" property="parentMenuCode">
+			MENU.PARENT_MENU_CODE = #parentMenuCode#
+		</isNotNull>
+	   AND AUTH.AUTHORITY_TYPE = #authorityType#
+  </select>
+  
+  <select id="getUserAvailableResource" resultClass="java.util.HashMap" parameterClass="com.dhc.authorization.resource.privilege.domain.WF_ORG_RESOURCE_AUTHORITY" >
+	SELECT CONCAT(MENU_CODE , '@' , MENU.MENU_TYPE) AS RESOURCE_ID,
+	       MENU.MENU_NAME AS RESOURCE_NAME
+	  FROM WF_ORG_MENU MENU
+	 WHERE MENU.MENU_CODE IN
+	       (SELECT RESOURCE_ID
+	          FROM WF_ORG_RESOURCE_AUTHORITY AUTH
+	         WHERE MENU.MENU_CODE = AUTH.RESOURCE_ID
+	           AND ROLE_ID IN
+	               (SELECT #roleId#
+	                  FROM DUAL
+	                UNION ALL
+	                SELECT DISTINCT (R.ROLE_ID) ROLE_ID
+	                  FROM WF_ORG_USER_ROLE R
+	                 WHERE R.USER_ID = #roleId#
+	                UNION ALL
+	                SELECT DISTINCT (U.UNIT_ID) ROLE_ID
+	                  FROM WF_ORG_USER_UNIT U
+	                 WHERE U.USER_ID = #roleId#
+	                UNION ALL
+	                SELECT DISTINCT (S.STATION_ID) ROLE_ID
+	                  FROM WF_ORG_USER_STATION S
+	                 WHERE S.USER_ID = #roleId#)
+	           AND AUTH.AUTHORITY_TYPE = 'available')
+	    <isNotNull prepend="AND" property="parentMenuCode">
+			MENU.PARENT_MENU_CODE = #parentMenuCode#
+		</isNotNull>
+	AND MENU.MENU_CODE NOT IN
+       (SELECT UE.RESOURCE_ID
+          FROM WF_ORG_USER_EXCLUDE UE
+         WHERE UE.USER_ID = #roleId#)
+  </select>
+  
+  <select id="getUnitStationRoleAvailableResourceCount" resultClass="string" parameterClass="java.util.HashMap" >
+	SELECT count(*)
+	  FROM WF_ORG_MENU MENU
+	 WHERE MENU.MENU_CODE IN
+	       (SELECT RESOURCE_ID
+	          FROM WF_ORG_RESOURCE_AUTHORITY AUTH
+	         WHERE MENU.MENU_CODE = AUTH.RESOURCE_ID
+	           AND ROLE_ID IN
+	               (SELECT DISTINCT (R.ROLE_ID) ROLE_ID
+	                  FROM WF_ORG_USER_ROLE R
+	                 WHERE R.USER_ID = #userId#
+	                UNION ALL
+	                SELECT DISTINCT (U.UNIT_ID) ROLE_ID
+	                  FROM WF_ORG_USER_UNIT U
+	                 WHERE U.USER_ID = #userId#
+	                UNION ALL
+	                SELECT DISTINCT (S.STATION_ID) ROLE_ID
+	                  FROM WF_ORG_USER_STATION S
+	                 WHERE S.USER_ID = #userId#)
+	           AND AUTH.AUTHORITY_TYPE = 'available')
+	   AND MENU.MENU_CODE = #resourceId#
+  </select>
+  
+  <select id="getUserResourcePrivilege" resultClass="string" parameterClass="java.util.HashMap" >
+  	SELECT count(*)
+  FROM WF_ORG_MENU MENU
+ WHERE MENU.MENU_CODE IN
+       (SELECT RESOURCE_ID
+          FROM WF_ORG_RESOURCE_AUTHORITY AUTH
+         WHERE ROLE_ID IN (SELECT #userID#
+                             FROM DUAL
+                           UNION ALL
+                           SELECT DISTINCT (R.ROLE_ID) ROLE_ID
+                             FROM WF_ORG_USER_ROLE R
+                            WHERE R.USER_ID = #userID#
+                           UNION ALL
+                           SELECT DISTINCT (U.UNIT_ID) ROLE_ID
+                             FROM WF_ORG_USER_UNIT U
+                            WHERE U.USER_ID = #userID#
+                           UNION ALL
+                           SELECT DISTINCT (S.STATION_ID) ROLE_ID
+                             FROM WF_ORG_USER_STATION S
+                            WHERE S.USER_ID = #userID#)
+           AND AUTH.AUTHORITY_TYPE = 'available')
+	<isNotNull prepend="AND" property="menuID">
+	  MENU.MENU_CODE = #menuID#
+	</isNotNull>
+	<isNotNull prepend="AND" property="strURL">
+	  MENU.MENU_LOCATION = #strURL#
+	</isNotNull>
+	  AND MENU.MENU_CODE NOT IN
+	      (SELECT UE.RESOURCE_ID
+	         FROM WF_ORG_USER_EXCLUDE UE
+	        WHERE UE.USER_ID = #userID#)
+  </select>
+  
+  <delete id="delete" parameterClass="com.dhc.authorization.resource.privilege.domain.WF_ORG_RESOURCE_AUTHORITY" >
+    DELETE FROM WF_ORG_RESOURCE_AUTHORITY
+    <dynamic prepend="WHERE">
+    	<isNotNull prepend="AND" property="roleId">
+			ROLE_ID = #roleId#
+		</isNotNull>
+	 	<isNotNull prepend="AND" property="resourceId">
+			RESOURCE_ID = #resourceId#
+		</isNotNull>
+	 	<isNotNull prepend="AND" property="authorityType">
+			AUTHORITY_TYPE = #authorityType#
+		</isNotNull>
+	</dynamic>
+  </delete>
+  
+  <delete id="deleteUserExclude" parameterClass="java.util.HashMap" >
+	delete from wf_org_user_exclude
+    <dynamic prepend="WHERE">
+    	<isNotNull prepend="AND" property="userId">
+			user_id = #userId#
+		</isNotNull>
+	 	<isNotNull prepend="AND" property="resourceId">
+			resource_id = #resourceId#
+		</isNotNull>
+	</dynamic>
+  </delete>
+  
+  <insert id="insert" parameterClass="com.dhc.authorization.resource.privilege.domain.WF_ORG_RESOURCE_AUTHORITY" >
+    insert into WF_ORG_RESOURCE_AUTHORITY (RESOURCE_AUTHORITY_ID, ROLE_ID,
+      ROLE_TYPE, RESOURCE_ID, AUTHORITY_TYPE)
+    values (#resourceAuthorityId#, #roleId#, #roleType#, #resourceId#, #authorityType#)
+  </insert>
+  
+  <insert id="insertUserExclude" parameterClass="java.util.HashMap" >
+	insert into wf_org_user_exclude
+	  (user_id, resource_id)
+	values
+	  (#userId#, #resourceId#)
+  </insert>
+  
+  <update id="update" parameterClass="com.dhc.authorization.resource.privilege.domain.WF_ORG_RESOURCE_AUTHORITY" >
+    update WF_ORG_RESOURCE_AUTHORITY
+    set RESOURCE_AUTHORITY_ID = #resourceAuthorityId#,
+      AUTHORITY_DESC = #authorityDesc#,
+      ROLE_ID = #roleId#,
+      ROLE_TYPE = #roleType#,
+      RESOURCE_ID = #resourceId#,
+      AUTHORITY_TYPE = #authorityType#
+  </update>
+</sqlMap>

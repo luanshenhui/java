@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>iFramework</display-name>
+	<description>iFramework sample application</description>
+
+	<servlet>
+		<servlet-name>Admin</servlet-name>
+		<servlet-class>org.logicalcobwebs.proxool.admin.servlet.AdminServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Admin</servlet-name>
+		<url-pattern>/admin</url-pattern>
+	</servlet-mapping>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>WEB-INF/classes/log4j.properties</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>log4jRefreshInterval</param-name>
+		<param-value>60000</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>
+			org.springframework.web.util.IntrospectorCleanupListener
+		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<filter>
+		<filter-name>CharactorFilter</filter-name>
+		<filter-class>com.dhc.base.common.util.CharactorFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharactorFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- ecside 过滤器 start -->
+	<filter>
+		<filter-name>ecsideExport</filter-name>
+		<filter-class>org.ecside.filter.ECSideFilter</filter-class>
+		<init-param>
+			<param-name>useEasyDataAccess</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>useEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>ecsideExport</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- ecside 过滤器 end -->
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext.xml,
+		/WEB-INF/dataAccessContext.xml,
+		/WEB-INF/applicationContext-security.xml,
+		/WEB-INF/conf/base/spring/applicationContext-base.xml,
+		/WEB-INF/conf/base/spring/dataAccessContext-base.xml,
+		/WEB-INF/conf/organization/spring/applicationContext-organization.xml,
+		/WEB-INF/conf/organization/spring/dataAccessContext-organization-MySQL.xml,
+		/WEB-INF/conf/authorization/spring/dataAccessContext-authorization-MySQL.xml,
+		/WEB-INF/conf/authorization/spring/applicationContext-authorization.xml
+		</param-value>
+	</context-param>
+	
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>
+			org.springframework.security.ui.session.HttpSessionEventPublisher
+		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>com.dhc.base.security.ServletContextLoaderListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>/WEB-INF/struts-config.xml,
+			/WEB-INF/conf/base/struts/struts-config-base.xml,
+			/WEB-INF/conf/organization/struts/struts-config-organization.xml,
+			/WEB-INF/conf/authorization/struts/struts-config-authorization.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	
+
+
+	<welcome-file-list>
+		<welcome-file>/index.jsp</welcome-file>
+	</welcome-file-list>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/accessDenied.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/view/base/error/Error404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/view/base/error/Error500.jsp</location>
+	</error-page>
+	<error-page>
+		<exception-type>com.dhc.base.exception.SecurityException</exception-type>
+		<location>/view/base/error/SecurityError.jsp</location>
+	</error-page>
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	<jsp-config>
+		<taglib>
+			<taglib-uri>/WEB-INF/taglib/ecside.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/ecside.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/taglig/struts-bean.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/struts-bean.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
+</web-app>

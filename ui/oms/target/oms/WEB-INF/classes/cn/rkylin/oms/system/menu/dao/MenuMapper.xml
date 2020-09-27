@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.menu.dao.MenuDAOImpl">
+	<resultMap id="WF_ORG_MENUResultMap" type="cn.rkylin.oms.system.menu.domain.WF_ORG_MENU" >
+	    <id column="MENU_CODE" property="menuCode" jdbcType="VARCHAR" />
+	    <result column="PARENT_MENU_CODE" property="parentMenuCode" jdbcType="VARCHAR" />
+	    <result column="MENU_NAME" property="menuName" jdbcType="VARCHAR" />
+	    <result column="MENU_AREA" property="menuArea" jdbcType="VARCHAR" />
+	    <result column="MENU_LOCATION" property="menuLocation" jdbcType="VARCHAR" />
+	    <result column="MENU_IMG_LOCATION" property="menuImgLocation" jdbcType="VARCHAR" />
+	    <result column="MENU_DESC" property="menuDesc" jdbcType="VARCHAR" />
+	    <result column="MENU_ORDER" property="menuOrder" jdbcType="INTEGER" />
+	    <result column="MENU_ELEMENT_ID" property="menuElementId" jdbcType="VARCHAR" />
+	    <result column="MENU_ELEMENT_TYPE" property="menuElementType" jdbcType="VARCHAR" />
+	    <result column="MENU_TYPE" property="menuType" jdbcType="VARCHAR" />
+	    <result column="MENU_IS_DEFAULT" property="menuIsDefault" jdbcType="VARCHAR" />
+	    <result column="MENU_LEVEL" property="menuLevel" jdbcType="INTEGER" />
+  	</resultMap>
+  	
+  	 <select id="select" resultMap="WF_ORG_MENUResultMap" parameterType="cn.rkylin.oms.system.menu.domain.WF_ORG_MENU" >
+	    select MENU_CODE, PARENT_MENU_CODE, MENU_NAME, MENU_AREA, MENU_LOCATION, MENU_IMG_LOCATION,
+	      MENU_DESC, MENU_ORDER, MENU_ELEMENT_ID, MENU_TYPE,MENU_IS_DEFAULT
+	    from WF_ORG_MENU
+	  </select>
+ 
+ 
+   <resultMap id="WF_ORG_MENU_TreeResultMap" type="cn.rkylin.oms.system.menu.domain.WF_ORG_MENU" >
+    <id column="MENU_CODE" property="menuCode" jdbcType="VARCHAR" />
+    <result column="PARENT_MENU_CODE" property="parentMenuCode" jdbcType="VARCHAR" />
+    <result column="MENU_NAME" property="menuName" jdbcType="VARCHAR" />
+    <result column="MENU_AREA" property="menuArea" jdbcType="VARCHAR" />
+    <result column="MENU_LOCATION" property="menuLocation" jdbcType="VARCHAR" />
+    <result column="MENU_IMG_LOCATION" property="menuImgLocation" jdbcType="VARCHAR" />
+    <result column="MENU_DESC" property="menuDesc" jdbcType="VARCHAR" />
+    <result column="MENU_ELEMENT_ID" property="menuElementId" jdbcType="VARCHAR" />
+    <result column="MENU_ELEMENT_TYPE" property="menuElementType" jdbcType="VARCHAR" />
+    <result column="MENU_TYPE" property="menuType" jdbcType="VARCHAR" />
+    <result column="MENU_IS_DEFAULT" property="menuIsDefault" jdbcType="VARCHAR" />
+  </resultMap>
+	 <update id="updateMenu" parameterType="cn.rkylin.oms.system.menu.domain.WF_ORG_MENU" >
+    update WF_ORG_MENU
+    set 
+      MENU_NAME = #{menuName},
+      MENU_AREA = #{menuArea},
+      MENU_LOCATION = #{menuLocation},
+      MENU_IMG_LOCATION = #{menuImgLocation},
+      MENU_DESC = #{menuDesc},
+      MENU_ELEMENT_ID = #{menuElementId},
+      MENU_IS_DEFAULT = #{menuIsDefault}
+     where MENU_CODE = #{menuCode}
+  </update>
+  <update id="updateEle" parameterType="cn.rkylin.oms.system.menu.domain.WF_ORG_MENU" >
+    update WF_ORG_MENU
+    set 
+      MENU_NAME = #{menuName},
+      MENU_LOCATION = #{menuLocation},
+      MENU_IMG_LOCATION = #{menuImgLocation},
+      MENU_DESC = #{menuDesc},
+      MENU_ELEMENT_ID = #{menuElementId},
+      MENU_ELEMENT_TYPE = #{menuElementType}
+     where MENU_CODE = #{menuCode}
+  </update>
+  
+  
+   <insert id="inserttMenuItem" parameterType="cn.rkylin.oms.system.menu.domain.WF_ORG_MENU" >
+    insert into WF_ORG_MENU (MENU_CODE, PARENT_MENU_CODE, MENU_NAME, MENU_AREA, MENU_LOCATION,
+      MENU_IMG_LOCATION, MENU_DESC, MENU_ORDER, MENU_ELEMENT_ID,MENU_ELEMENT_TYPE, MENU_TYPE,
+      MENU_IS_DEFAULT,MENU_LEVEL,MENU_CATEGORY)
+    values (#{menuCode}, #{parentMenuCode}, #{menuName}, #{menuArea}, 
+    		#{menuLocation}, #menuImgLocation}, #{menuDesc}, 
+	    	nvl((select Max(nvl(menu_order,0)) + 1
+				     from wf_org_menu b
+				    where b.parent_menu_code 
+	    <if test="parentMenuCode != null"> 
+	    #{parentMenuCode}
+	    </if>
+	    <if test="parentMenuCode = null">
+	    null</if>),0), 
+    	#{menuElementId},#{menuElementType}, #{menuType},
+    	#{menuLevel}, #{menuCategory})
+  </insert>
+  
+
+  
+  
+  
+	 <select id="selectMenuPart1" resultType="java.util.HashMap" parameterType="cn.rkylin.oms.system.menu.domain.WF_ORG_MENU">
+   SELECT #{userID} ROLE_ID
+	 FROM DUAL
+	  UNION ALL
+	  SELECT DISTINCT (R.ROLE_ID) ROLE_ID
+	    FROM WF_ORG_USER_ROLE R
+	   WHERE R.USER_ID = #{userID}
+		<if test="roleType = 'bizRole'">
+        and R.ROLE_ID NOT IN (SELECT T3.ROLE_ID
+                                FROM WF_ORG_ROLE T3
+                               WHERE T3.IS_ADMINROLE = '是')
+		</if>
+	  UNION ALL
+	  SELECT DISTINCT (U.UNIT_ID) ROLE_ID
+	    FROM WF_ORG_USER_UNIT U
+	   WHERE U.USER_ID = #{userID}
+	  UNION ALL
+	  SELECT DISTINCT (S.STATION_ID) ROLE_ID
+	    FROM WF_ORG_USER_STATION S
+    WHERE S.USER_ID = #{userID}
+  </select>
+  
+  
+  <resultMap type="cn.rkylin.oms.system.delegate.domain.WF_ORG_DELEGATE" id="WF_ORG_DELEGATEResultMap">
+    <id column="DELE_ID" jdbcType="VARCHAR" property="deleId" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="TRUSTOR_ID" jdbcType="VARCHAR" property="trustorId" />
+    <result column="DELE_NAME" jdbcType="VARCHAR" property="deleName" />
+    <result column="DELE_DESCRIPTION" jdbcType="VARCHAR" property="deleDescription" />
+    <result column="DELE_TIME_BEGIN" jdbcType="VARCHAR" property="deleTimeBegin" />
+    <result column="DELE_TIME_END" jdbcType="VARCHAR" property="deleTimeEnd" />
+    <result column="DELE_ALL_PRIVIL" jdbcType="CHAR" property="deleAllPrivil" />
+    <result column="TRUSTOR_NAME" jdbcType="VARCHAR" property="trustor_name" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+   <select id="getUserAvailableDelegate" resultMap="WF_ORG_DELEGATEResultMap" parameterType="java.lang.String" >
+  	<![CDATA[
+        SELECT
+		    DELE_ID,
+		    USER_ID,
+		    TRUSTOR_ID,
+		    DELE_NAME,
+		    DELE_DESCRIPTION,
+		    DELE_TIME_BEGIN,
+		    DELE_TIME_END,
+		    DELE_ALL_PRIVIL,
+		    '' TRUSTOR_NAME,
+		    '' USER_NAME
+        FROM
+            WF_ORG_DELEGATE
+        WHERE
+            TRUSTOR_ID = #{value}
+        AND
+            ((
+                WF_ORG_DELEGATE.DELE_TIME_BEGIN <= sysdate()
+            AND WF_ORG_DELEGATE.DELE_TIME_END >= sysdate()
+            )
+         OR
+            (
+                WF_ORG_DELEGATE.DELE_TIME_BEGIN IS NULL
+            AND WF_ORG_DELEGATE.DELE_TIME_END >= sysdate()
+            )
+         OR
+            (
+                WF_ORG_DELEGATE.DELE_TIME_BEGIN <= sysdate()
+            AND WF_ORG_DELEGATE.DELE_TIME_END IS NULL
+            )
+         OR
+            (
+                WF_ORG_DELEGATE.DELE_TIME_BEGIN IS NULL
+            AND WF_ORG_DELEGATE.DELE_TIME_END IS NULL
+            ))
+  	]]>
+  </select>
+  
+  <select id="getUserDelegatedRoles" resultType="java.util.HashMap" parameterType="java.lang.String" >
+	<![CDATA[
+	SELECT
+	    DI_PRIV_ID ROLE_ID
+	FROM
+	    WF_ORG_DELEITEM T1
+	LEFT JOIN WF_ORG_DELEGATE T2
+	ON
+	    T2.DELE_ID = T1.DELE_ID
+	WHERE
+	    T2.TRUSTOR_ID = #{value}
+	AND T2.DELE_ID IN
+	    (
+	        SELECT
+	            DELE_ID
+	        FROM
+	            WF_ORG_DELEGATE
+	        WHERE
+	            TRUSTOR_ID = #{value}
+	        AND
+	            ((
+	                WF_ORG_DELEGATE.DELE_TIME_BEGIN <= GETDATE()
+	            AND WF_ORG_DELEGATE.DELE_TIME_END >= GETDATE()
+	            )
+	         OR
+	            (
+	                WF_ORG_DELEGATE.DELE_TIME_BEGIN IS NULL
+	            AND WF_ORG_DELEGATE.DELE_TIME_END >= GETDATE()
+	            )
+	         OR
+	            (
+	                WF_ORG_DELEGATE.DELE_TIME_BEGIN <= GETDATE()
+	            AND WF_ORG_DELEGATE.DELE_TIME_END IS NULL
+	            )
+	         OR
+	            (
+	                WF_ORG_DELEGATE.DELE_TIME_BEGIN IS NULL
+	            AND WF_ORG_DELEGATE.DELE_TIME_END IS NULL
+	            ))
+	    )
+	]]>
+  </select>
+  
+  <select id="selectMenu" resultMap="WF_ORG_MENU_TreeResultMap" parameterType="cn.rkylin.oms.system.menu.domain.WF_ORG_MENU" >
+	select concat(IFNULL(t.menu_code,'') , '@' , IFNULL(t.menu_type,'')) as menu_code,
+	       ((case
+	         when t.parent_menu_code = 'RootMenu' then
+	          null
+	         else
+	          concat(IFNULL(parent_menu_code,'') , '@' ,
+	          (SELECT T2.MENU_TYPE
+	             FROM WF_ORG_MENU T2
+	            WHERE T2.MENU_CODE = T.PARENT_MENU_CODE))
+	       end)) as parent_menu_code,
+	       t.menu_name,
+	       t.menu_img_location,
+         t.menu_desc,
+         t.menu_location,
+         t.menu_area,
+         t.menu_is_default,
+         t.menu_element_id,
+         t.menu_element_type,
+         t.menu_type
+	  from wf_org_menu t
+	where 1=1 
+		<if test="menuCode != null">
+			AND t.menu_code = #{menuCode}
+		</if>
+		<if test="userID != 'adminUser'">
+			AND t.menu_code in
+			 (SELECT RESOURCE_ID
+			    FROM WF_ORG_RESOURCE_AUTHORITY AUTH
+			   WHERE ROLE_ID IN 
+					<foreach collection="list" item="userIdTemp" index="index" close=")" open="(" separator=","> 
+					  #{userIdTemp} 
+					</foreach>
+			<if test="authorityType = null">
+		    AND AUTH.AUTHORITY_TYPE = 'available')
+		    </if>
+			<if test="authorityType != null">
+		     AND  AUTH.AUTHORITY_TYPE = #{authorityType})
+		    </if>
+		 	 AND T.MENU_CODE NOT IN
+		        (SELECT UE.RESOURCE_ID
+		           FROM WF_ORG_USER_EXCLUDE UE
+		          WHERE UE.USER_ID = #{userID})
+		</if>
+		<if test="menuType != null">
+			AND T.MENU_TYPE = #{menuType}
+		</if>
+		<if test="menuCategory != null">
+			AND (T.MENU_CATEGORY = #{menuCategory} or T.MENU_CATEGORY is NULL)
+		</if>
+	order by menu_level asc, menu_order asc
+  </select>
+  
+   <select id="selectRootorSubMenu" resultMap="WF_ORG_MENU_TreeResultMap" parameterType="cn.rkylin.oms.system.menu.domain.WF_ORG_MENU" >
+	select concat(t.menu_code , '@' , t.menu_type) as menu_code,
+	       ((case
+	         when t.parent_menu_code = 'RootMenu' then
+	          null
+	         else
+	          concat(parent_menu_code , '@MENU')
+	       end)) as parent_menu_code,
+	       t.menu_name,
+	       t.menu_img_location,
+         t.menu_desc,
+         t.menu_location,
+         t.menu_area,
+         t.menu_is_default,
+         t.menu_element_id,
+         t.menu_element_type,
+         t.menu_type
+	  from wf_org_menu t
+      where 1=1
+     	<if test="menuCode = null">
+	     	<if test="parentMenuCode = null">
+			and	t.parent_menu_code = 'RootMenu'
+			</if>
+		</if>
+		<if test="parentMenuCode != null">
+			and t.parent_menu_code = #{parentMenuCode}
+		</if>
+		<if test="menuCategory != null">
+			and (t.MENU_CATEGORY = #menuCategory# or t.MENU_CATEGORY is NULL)
+		</if>
+		<if test="menuCode != null">
+			and t.menu_code = #{menuCode}
+		</if>
+	<if test="userID != 'adminUser'">
+			 and t.menu_code in
+		 (SELECT RESOURCE_ID
+		    FROM WF_ORG_RESOURCE_AUTHORITY AUTH
+		   WHERE ROLE_ID IN 
+					<foreach collection="list" item="userIdTemp" index="index" close=")" open="(" separator=","> 
+					  #{userIdTemp} 
+					</foreach>
+		<if test="authorityType != null">
+	      and AUTH.AUTHORITY_TYPE = 'assignable')
+	    </if>
+		<if test="authorityType != null">
+	      and AUTH.AUTHORITY_TYPE = #{authorityType})
+	    </if>
+		 AND T.MENU_CODE NOT IN
+	        (SELECT UE.RESOURCE_ID
+	           FROM WF_ORG_USER_EXCLUDE UE
+	          WHERE UE.USER_ID = #{userID})
+	 </if>
+		 order by menu_level asc, menu_order asc
+  </select>
+  
+</mapper>

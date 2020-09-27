@@ -1,0 +1,9 @@
+package cn.rkylin.oms.system.unit.service;
+
+import java.util.List;
+
+public interface IUnitService {
+
+	List getRootUnit(String userId);
+
+}

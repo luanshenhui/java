@@ -1,0 +1,292 @@
+package cn.rkylin.oms.system.unit.dao;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_USER_UNIT;
+@Repository(value = "unitDAO")
+public class UnitDAOImpl implements IUnitDAO {
+	@Autowired
+	protected IDataBaseFactory dao;
+	@Autowired
+	private SqlSession sqlSession;
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getUnitByCondition(WF_ORG_UNIT unitParam) throws Exception {
+		return dao.getUnitByCondition(unitParam);
+	}
+
+//	@Override
+//	@SuppressWarnings({ "rawtypes", "unchecked" })
+//	public Map getExtInfo(String bizType, String idColumnValue) {
+//		// 扩展表的表名
+//		String extTableName = "";
+//		// 扩展表的主键字段名
+//		String idColumnName = "";
+//		Connection conn = null;
+//		Statement stmt = null;
+//		Map returnMap = new HashMap();
+//		Map temp = new HashMap();
+//		try {
+//			// 确定tableName和idColumnName
+//			BizTypeDefine bizTypeDefine = OrgnizationConfig.getBizTypeDefine(bizType);
+//			extTableName = bizTypeDefine.getTable();
+//			if (bizTypeDefine.getElementList() != null || bizTypeDefine.getElementList().size() > 0) {
+//				for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+//					ElementDefine ed = (ElementDefine) bizTypeDefine.getElementList().get(j);
+//					if (ed.getName().equalsIgnoreCase("id")) {
+//						idColumnName = ed.getColumn();
+//						break;
+//					}
+//				}
+//			} else {
+//				return new HashMap();
+//			}
+//
+//			String selectSQL = "SELECT * FROM " + extTableName + " WHERE " + idColumnName + " = '" + idColumnValue
+//					+ "'";
+//			conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+//			stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery(selectSQL);
+//			if (rs.next()) {
+//				for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+//					temp.put(rs.getMetaData().getColumnName(i), rs.getString(i));
+//				}
+//				if (bizTypeDefine.getElementList() != null || bizTypeDefine.getElementList().size() > 0) {
+//					for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+//						ElementDefine ed = (ElementDefine) bizTypeDefine.getElementList().get(j);
+//						if (ed.getName().equalsIgnoreCase("id")) {
+//							idColumnName = ed.getColumn();
+//							continue;
+//						}
+//						returnMap.put(ed.getName(), temp.get(ed.getColumn()) == null ? "" : temp.get(ed.getColumn()));
+//					}
+//				}
+//			}
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				if (stmt != null)
+//					stmt.close();
+//				if (conn != null)
+//					conn.close();
+//			} catch (Exception ex) {
+//			}
+//		}
+//		return returnMap;
+//	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getRootUnit(String userId) throws Exception {
+		return dao.findList("selectRootUnit", userId);
+	}
+
+	@SuppressWarnings({ "unused", "rawtypes", "unchecked" })
+	@Override
+	public List getSubUnit(String userId, String parentUnitID) throws Exception {
+		List subTree = new ArrayList();
+		HashMap paramMap = new HashMap();
+		paramMap.put("userID", userId);
+		paramMap.put("parentUnitID", parentUnitID);
+		return subTree = dao.findList("selectSubUnit", paramMap);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void createUnit(WF_ORG_UNIT unitVO, String extTableName, String idColName) throws Exception{
+		Connection conn = null;
+		Statement statement = null;
+		try {
+//			this.getSqlMapClient().insert("WF_ORG_UNIT.insert", unitVO);
+			dao.insert("WF_ORG_UNIT_insert", unitVO);
+			if (unitVO.getUnitUsersArray() != null) {
+				for (int i = 0; i < unitVO.getUnitUsersArray().length; i++) {
+					WF_ORG_USER_UNIT userUnitVO = new WF_ORG_USER_UNIT();
+					userUnitVO.setUnitId(unitVO.getUnitId());
+					userUnitVO.setUserId(unitVO.getUnitUsersArray()[i].toString());
+					// userUnitVO.setUnitUsersArray(unitVO.getUnitUsersArray());
+//					this.getSqlMapClient().insert("WF_ORG_UNIT.insertUserUnit", userUnitVO);
+					dao.insert("WF_ORG_UNIT_insertUserUnit", userUnitVO);
+				}
+			}
+//			if (unitVO.getExtInfoMap() != null) {
+//				Iterator columnIter = unitVO.getExtInfoMap().keySet().iterator();
+//				int columnTotal = unitVO.getExtInfoMap().size();
+//				String insertExtInfoString1 = "INSERT INTO " + extTableName + " (" + idColName + ',';
+//				String insertExtInfoString2 = " VALUES ('" + unitVO.getUnitId();
+//				if (!columnIter.hasNext()) {
+//					insertExtInfoString2 += "')";
+//				} else {
+//					insertExtInfoString2 += "','";
+//				}
+//				int j = 0;
+//				while (columnIter.hasNext()) {
+//					String columnName = columnIter.next().toString();
+//					j++;
+//					String columnValue = unitVO.getExtInfoMap().get(columnName) == null ? ""
+//							: unitVO.getExtInfoMap().get(columnName).toString();
+//					// if(!columnValue.equals(""))
+//					insertExtInfoString1 += columnName;
+//					insertExtInfoString2 += columnValue;
+//					if (columnTotal == j) {
+//						insertExtInfoString1 += ")";
+//						insertExtInfoString2 += "')";
+//					} else {
+//						insertExtInfoString1 += ",";
+//						insertExtInfoString2 += "','";
+//					}
+//				}
+//				System.out.println(insertExtInfoString1 + insertExtInfoString2);
+////				conn = this.getSqlMapClient().getDataSource().getConnection();
+//				conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+//				statement = conn.createStatement();
+//				statement.execute(insertExtInfoString1 + insertExtInfoString2);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (statement != null)
+					statement.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception ex) {
+			}
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void updateUnit(WF_ORG_UNIT unitVO, String extTableName, String idColName) throws Exception{
+
+		Connection conn = null;
+		Statement statement = null;
+		try {
+//			getSqlMapClient().update("WF_ORG_UNIT.updateUnit", unitVO);
+			dao.update("WF_ORG_UNIT_updateUnit", unitVO);
+//			getSqlMapClient().delete("WF_ORG_UNIT.deleteUserUnit", unitVO.getUnitId());
+			dao.delete("WF_ORG_UNIT_deleteUserUnit", unitVO.getUnitId());
+			if (unitVO.getUnitUsersArray() != null) {
+				for (int i = 0; i < unitVO.getUnitUsersArray().length; i++) {
+					WF_ORG_USER_UNIT userUnitVO = new WF_ORG_USER_UNIT();
+					userUnitVO.setUnitId(unitVO.getUnitId());
+					userUnitVO.setUserId(unitVO.getUnitUsersArray()[i].toString());
+//					this.getSqlMapClient().insert("WF_ORG_UNIT.insertUserUnit", userUnitVO);
+					dao.insert("WF_ORG_UNIT_insertUserUnit", userUnitVO);
+				}
+			}
+			if (unitVO.getExtInfoMap() != null) {
+				Iterator columnIter = unitVO.getExtInfoMap().keySet().iterator();
+				if (columnIter.hasNext()) {
+					int columnTotal = unitVO.getExtInfoMap().size();
+					String updateExtInfoString = "UPDATE " + extTableName + " SET ";
+					String whereClause = " WHERE " + idColName + " = '" + unitVO.getUnitId() + "'";
+					int j = 0;
+					while (columnIter.hasNext()) {
+						String columnName = columnIter.next().toString();
+						j++;
+						String columnValue = unitVO.getExtInfoMap().get(columnName) == null ? ""
+								: unitVO.getExtInfoMap().get(columnName).toString();
+						if (columnName.equalsIgnoreCase("id"))
+							continue;
+						updateExtInfoString += columnName + " = '" + columnValue + "'";
+						if (columnTotal > j) {
+							updateExtInfoString += ",";
+						}
+					}
+					System.out.println(updateExtInfoString + whereClause);
+//					conn = this.getSqlMapClient().getDataSource().getConnection();
+					conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+					statement = conn.createStatement();
+					statement.execute(updateExtInfoString + whereClause);
+				}
+			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (statement != null)
+					statement.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception ex) {
+			}
+		}
+	}
+
+	@Override
+	public void deleteUnit(String unitID, String extTableName, String idColumnName, boolean advanceDelete) throws Exception {
+		Connection conn = null;
+		Statement stmt = null;
+		WF_ORG_UNIT unitVO = new WF_ORG_UNIT();
+		unitVO.setUnitId(unitID);
+		try {
+			// 如果是高级删除，则先删除组织管理角色和组织下的用户
+			if (advanceDelete) {
+				dao.delete("WF_ORG_UNIT_deleteUnitRoles", unitVO);
+				dao.delete("WF_ORG_UNIT_deleteUnitUsers", unitVO);
+			}
+			// 再删除组织单元
+			dao.delete("WF_ORG_UNIT_delete", unitVO);
+//			String deleteSQL = "delete FROM " + extTableName + " WHERE " + idColumnName + " = '" + unitID + "'";
+//			conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+//			stmt = conn.createStatement();
+//			System.out.println(deleteSQL);
+//			stmt.execute(deleteSQL);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Exception("数据操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception("未知异常");
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception ex) {
+			}
+		}
+	
+		
+	}
+
+	@SuppressWarnings({ "rawtypes"})
+	@Override
+	public ArrayList getUnitType(String type) throws Exception{
+		List unitType = new ArrayList();
+		// String dictType = "unittype";
+		try {
+//			unitType = getSqlMapClient().queryForList("WF_ORG_DICTIONARY.selectUnitType", type);
+			unitType = dao.findList("WF_ORG_DICTIONARY_selectUnitType", type);
+			if (unitType == null) {
+				unitType = new ArrayList();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception("未知异常");
+		}
+		return (ArrayList) unitType;
+	}
+
+}

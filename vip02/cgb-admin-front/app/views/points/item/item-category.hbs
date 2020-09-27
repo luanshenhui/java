@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}发布礼品{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "mall_item/item_category" true}}
+            {
+            "type": -1,
+            "channel":"JF"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>平台商品管理 | Rkylin OMS</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT"/>
+
+    <!-- 加载 bootstrap 样式-->
+    <link type="text/css" rel="stylesheet"
+          href="/Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css"/>
+
+    <!-- 加载本页需要的三方插件样式 -->
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet"
+          href="/Apollo/madmin/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/dataTables.bootstrap.css">
+    <link type="text/css" rel="stylesheet"
+          href="/Apollo/madmin/vendors/jquery-tablesorter/themes/blue/style-custom.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-bootstrap-wizard/custom.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-steps/css/jquery.steps.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/animate.css/animate.css"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/iCheck/skins/all.css"/>
+
+    <!-- 加载主题风格样式 -->
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css"
+          class="default-style"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change"
+          class="style-change color-change"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/style-responsive.css"/>
+</head>
+<body class="">
+<!--BEGIN CONTENT-->
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8 col-xs-8 col-sm-8 col-md-8"></div>
+            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4" style="margin-bottom: 10px;">
+                <div class="input-group">
+                    <input id="quickSearch" type="text" placeholder="商品,规格模糊" class="form-control"/>
+                    <span class="input-group-btn">
+                        <button id="btnQuickSearch" type="button" class="btn btn-primary">
+                        	<i class="fa fa-search"></i>
+                        </button>
+	                    <button id="btnAdvSearch" type="button" class="btn btn-default btn-adv-search">
+	                    	<i class="fa fa-angle-double-down" style="font-size: 20px; color:white;"></i>
+	                    </button>
+	                </span>
+                </div>
+            </div>
+        </div>
+        <!-- 高级查询 -->
+        <row>
+            <div  class="panel panel-default" id="advSearchPanel" style="position:fixed;Z-index:9999;width:95%;"><!-- 窗体悬浮，百分比根据情况设置 -->
+                <div class="panel-body">
+                    <form id="frmAdvSearch" role="form" action="" class="form-horizontal advance-query"><!-- advance-query 必须要写的 -->
+                        <div class="row">
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="prjId" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">所属项目 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <select id="prjId" name="prjId" class="form-control forsubmiteq"
+                                                fieldname="item.prj_id" fieldtype="string" fieldoperator="and">
+                                            <option value="">请选择</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="shopId" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">所属店铺 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <select id="shopId" name="shopId" class="form-control forsubmiteq"
+                                                fieldname="item.shop_id" fieldtype="string" fieldoperator="and">
+                                            <option value="">请选择</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="shopType" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">所属平台 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <select id="shopType" name="shopType" class="form-control forsubmiteq"
+                                                fieldname="item.shop_type" fieldtype="string" fieldoperator="and">
+                                            <option value="">请选择</option>
+                                            <option value="淘宝">淘宝</option>
+                                            <option value="京东">京东</option>
+                                            <option value="买卖云">买卖云</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="status" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">平台状态 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <select id="status" name="status" class="form-control forsubmiteq"
+                                                fieldname="item.approve_status" fieldtype="string" fieldoperator="and">
+                                            <option value="">请选择</option>
+                                            <option value="上架">上架</option>
+                                            <option value="下架">下架</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="ecItemCode" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">平台商品编码
+                                    </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <input id="ecItemCode" name="ecItemCode" type="text" placeholder=""
+                                               minlength="1"
+                                               maxlength="100" class="form-control forsubmiteq"
+                                               fieldname="item.ec_item_code"
+                                               fieldtype="string" fieldoperator="and"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="ecItemName" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">平台商品名称
+                                    </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <input id="ecItemName" name="ecItemName" type="text" placeholder=""
+                                               minlength="1"
+                                               maxlength="200" class="form-control forsubmiteq"
+                                               fieldname="item.ec_item_name"
+                                               fieldtype="string" fieldoperator="and"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="ecSkuCode" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">平台规格编码
+                                    </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <input id="ecSkuCode" name="ecSkuCode" type="text" placeholder="" minlength="1"
+                                               maxlength="100" class="form-control forsubmiteq" fieldname="sku.ec_sku_code"
+                                               fieldtype="string" fieldoperator="and"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="ecSkuName" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">平台规格名称
+                                    </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <input id="ecSkuName" name="ecSkuName" type="text" placeholder="" minlength="1"
+                                               maxlength="200" class="form-control forsubmiteq" fieldname="sku.ec_sku_name"
+                                               fieldtype="string" fieldoperator="and"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12 col-xs-12 col-md-12 text-right">
+                                <button type="reset" id="advSearchReset" name="advSearchReset" class="btn btn-default">
+                                    重置
+                                </button>
+                                <button type="button" id="advSearchSubmit" name="advSearchSubmit"
+                                        class="btn btn-primary">查询
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </row>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="portlet box portlet-blue" style="margin-bottom: 15px;">
+                    <div class="portlet-header">
+                        <div class="caption">平台商品列表</div>
+                        <div class="actions">
+                            &nbsp;
+                            <!-- 增加导出功能  -->
+                            <a href="#" class="btn btn-xs btn-orange" data-toggle="" data-target=""
+                               onclick="exportItemList()">
+                                <i class="fa fa-save"></i>&nbsp;导出
+                            </a>&nbsp;
+
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <table id="itemTable"
+                               class="table table-hover table-striped table-bordered table-advanced tb-sticky-header"
+                               width="100%">
+                            <thead>
+                            <tr>
+                                <th width="1%"></th>
+                                <th style="width: 1%; padding: 10px;">
+                                    <input id="chkAll" name="chkAll" type="checkbox" colValue="chk" class="checkall"/>
+                                </th>
+                                <th width="10%" colValue="ecItemCode">平台商品编码</th>
+                                <th width="20%" colValue="ecItemName">平台商品名称</th>
+                                <th width="10%" colValue="outerCode">商家编码</th>
+                                <th width="8%" colValue="status">上下架状态</th>
+                                <th width="10%" colValue="prjName">所属项目</th>
+                                <th width="14%" colValue="shopName">所属店铺</th>
+                                <th width="8%" colValue="shopType">来源平台</th>
+                            </tr>
+                            <tbody>
+
+                            </tbody>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 导出文件 -->
+<div id="exportList" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" class="modal fade"
+     aria-labelledby="modal-header-primary-label">
+</div>
+
+<!--END CONTENT -->
+<!-- 加载 jquery js-->
+<script src="/Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+<script src="/Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/Apollo/madmin/js/jquery-ui.js"></script>
+
+<!-- 加载 bootstrap 和三方插件 js -->
+<script src="/Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+<script src="/Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+<script src="/Apollo/madmin/js/html5shiv.js"></script>
+<script src="/Apollo/madmin/js/respond.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script>
+<script src="/Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+<script src="/Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-pace/pace.min.js"></script>
+<script src="/Apollo/madmin/vendors/holder/holder.js"></script>
+<script src="/Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script>
+<script src="/Apollo/madmin/vendors/moment/moment.js"></script>
+<script src="/Apollo/madmin/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="/Apollo/madmin/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+<script src="/Apollo/madmin/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-tablesorter/jquery.tablesorter.js"></script>
+<script src="/Apollo/madmin/js/table-advanced.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-validate/jquery.validate.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-validate/message_zh.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+
+<!-- 加载本页面对应的js -->
+<script src="item.js"></script>
+<script src="/views/static/js/export.js"></script>
+<script src="/views/static/js/form.js"></script>
+<!--<script src="/Apollo/madmin/js/main.js"></script>-->
+
+
+
+</body>
+</html>

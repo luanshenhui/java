@@ -1,0 +1,21 @@
+package com.yulin.am;
+
+import java.util.*;
+public class Game {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("******开始游戏********");
+		System.out.println("请输入宠物的名字：");
+		
+		Scanner scan = new Scanner(System.in);//创建扫描仪
+		String name=scan.next();
+		Pet pet = new Pet(name);
+		//System.out.println("宠物已诞生~！");
+		pet.showM();
+	}
+
+}

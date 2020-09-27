@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="cn.com.cgbchina.item.model.AuditLoggingModel" alias="AuditLoggingModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.Bank" alias="Bank"/>
+        <typeAlias type="cn.com.cgbchina.item.model.BrandAuthorizeModel" alias="BrandAuthorizeModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.BrandRequest" alias="BrandRequest"/>
+        <typeAlias type="cn.com.cgbchina.item.model.BusinessConfig" alias="BusinessConfig"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsModel" alias="GoodsModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsBrandModel" alias="GoodsBrandModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsConsultModel" alias="GoodsConsultModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsRegion" alias="GoodsRegion"/>
+        <typeAlias type="cn.com.cgbchina.item.model.ItemModel" alias="ItemModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.ProductModel" alias="ProductModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.PointPoolModel" alias="PointPoolModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.CouponScaleModel" alias="CouponScaleModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.ServicePromiseModel" alias="ServicePromiseModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.SpecialPointScaleModel" alias="SpecialPointScaleModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.UserInfoModel" alias="UserInfoModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.AdminRoleModel" alias="AdminRoleModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.AdminRoleMenuModel" alias="AdminRoleMenuModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.RoleMenuModel" alias="RoleMenuModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.UserRoleModel" alias="UserRoleModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.VendorInfoModel" alias="VendorInfoModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.VendorMenuModel" alias="VendorMenuModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.VendorMessageModel" alias="VendorMessageModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.VendorPayNoModel" alias="VendorPayNoModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.VendorRoleModel" alias="VendorRoleModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.VendorRoleMenuModel" alias="VendorRoleMenuModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.VendorRoleRefModel" alias="VendorRoleRefModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.VendorTranscorpModel" alias="VendorTranscorpModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.VendorModel" alias="VendorModel"/>
+        <typeAlias alias="Address" type="cn.com.cgbchina.user.model.Address"/>
+        <typeAlias type="cn.com.cgbchina.user.model.MailStagesModel" alias="MailStages"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.DeadlineModel" alias="DeadlineModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderSubModel" alias="OrderSub"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderMainModel" alias="OrderMain"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderTransModel" alias="OrderTrans"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderGoodsDetailModel" alias="OrderGoodsDetail"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderDoDetailModel" alias="OrderDoDetail"/>
+        <typeAlias type="cn.com.cgbchina.user.model.LocalProcodeModel" alias="LocalProcodeModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.LocalCardRelateModel" alias="LocalCardRelateModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.CardPro" alias="CardPro"/>
+        <typeAlias type="cn.com.cgbchina.user.model.OrganiseModel" alias="OrganiseModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.ShopinfOutsystemModel" alias="ShopinfOutsystemModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.EspCustLoginModel" alias="EspCustLoginModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.EspCustNewModel" alias="EspCustNewModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.EspCustSignModel" alias="EspCustSignModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.FirstLoginCouponModel" alias="FirstLoginCouponModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.MemberAddressModel" alias="MemberAddressModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.MemberBrowseHistoryModel" alias="MemberBrowseHistoryModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.MemberLogonHistoryModel" alias="MemberLogonHistoryModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.MessageTemplateModel" alias="MessageTemplateModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.PersonalMessageModel" alias="PersonalMessageModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.ShopMemberModel" alias="ShopMemberModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.EspCustVoucherModel" alias="EspCustVoucherModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.MemberGoodsFavoriteModel" alias="MemberGoodsFavoriteModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.StageRateModel" alias="StageRateModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderPartBackModel" alias="OrderPartBackModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderPartBackModel" alias="OrderPartBackModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderReturnTrackModel" alias="OrderReturnTrackModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.Address" alias="Address"/>
+        <typeAlias type="cn.com.cgbchina.user.model.MenuMagModel" alias="MenuMagModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.LogsModel" alias="LogsModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.EspPublishInfModel" alias="EspPublishInfModel"/>
+        <typeAlias type="cn.com.cgbchina.promotion.model.PromotionModel" alias="PromotionModel"/>
+        <typeAlias type="cn.com.cgbchina.promotion.model.PromotionFormalModel" alias="PromotionFormalModel"/>
+        <typeAlias type="cn.com.cgbchina.promotion.model.PromotionRangeModel" alias="PromotionRangeModel"/>
+        <typeAlias type="cn.com.cgbchina.promotion.model.PromotionVendorModel" alias="PromotionVendorModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.ACustToelectronbankModel" alias="ACustToelectronbankModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblMakecheckjobHistoryModel" alias="TblMakecheckjobHistoryModel"/>
+        <typeAlias type="cn.com.cgbchina.user.model.ACardCustToelectronbankModel" alias="ACardCustToelectronbankModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.TblGoodsRecommendationYgModel" alias="TblGoodsRecommendationYgModel"/>
+        <typeAlias type="cn.com.cgbchina.promotion.model.PromotionPeriodModel" alias="PromotionPeriodModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsOperateDetailModel" alias="GoodsOperateDetailModel"/>
+
+
+    </typeAliases>
+</configuration>

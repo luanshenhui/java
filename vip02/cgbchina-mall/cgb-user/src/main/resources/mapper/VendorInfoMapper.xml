@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VendorInfo">
+    <resultMap id="VendorInfoMap" type="VendorInfoModel">
+        <result property="vendorId" column="vendor_id"/>
+        <result property="merId" column="mer_id"/>
+        <result property="fullName" column="full_name"/>
+        <result property="simpleName" column="simple_name"/>
+        <result property="taxCode" column="tax_code"/>
+        <result property="businessTypeId" column="business_type_id"/>
+        <result property="payCondition" column="pay_condition"/>
+        <result property="payGroup" column="pay_group"/>
+        <result property="commision" column="commision"/>
+        <result property="payWay" column="pay_way"/>
+        <result property="payCurrency" column="pay_currency"/>
+        <result property="freightTip" column="freight_tip"/>
+        <result property="feeType" column="fee_type"/>
+        <result property="provinceId" column="province_id"/>
+        <result property="province" column="province"/>
+        <result property="cityId" column="city_id"/>
+        <result property="city" column="city"/>
+        <result property="areaId" column="area_id"/>
+        <result property="area" column="area"/>
+        <result property="cooperAddress" column="cooper_address"/>
+        <result property="enterpriseAddress" column="enterprise_address"/>
+        <result property="postCode" column="post_code"/>
+        <result property="payAddress" column="pay_address"/>
+        <result property="buyAddress" column="buy_address"/>
+        <result property="payConditionAddress" column="pay_condition_address"/>
+        <result property="payGroupAddress" column="pay_group_address"/>
+        <result property="address" column="address"/>
+        <result property="debtAccount" column="debt_account"/>
+        <result property="prepayAccount" column="prepay_account"/>
+        <result property="debtMan" column="debt_man"/>
+        <result property="contact" column="contact"/>
+        <result property="phone" column="phone"/>
+        <result property="contactTax" column="contact_tax"/>
+        <result property="email" column="email"/>
+        <result property="invoice" column="invoice"/>
+        <result property="accBank" column="acc_bank"/>
+        <result property="accNo" column="acc_no"/>
+        <result property="status" column="status"/>
+        <result property="vendorRole" column="vendor_role"/>
+        <result property="unionPayNo" column="union_pay_no"/>
+        <result property="serviceTime" column="service_time"/>
+        <result property="specShopno" column="spec_shopno"/>
+        <result property="specShopnoType" column="spec_shopno_type"/>
+        <result property="bankNo" column="bank_no"/>
+        <result property="payCode" column="pay_code"/>
+        <result property="prodCode" column="prod_code"/>
+        <result property="planCode" column="plan_code"/>
+        <result property="stagesDesc" column="stages_desc"/>
+        <result property="mcc" column="mcc"/>
+        <result property="fixFee" column="fix_fee"/>
+        <result property="netStatus" column="net_status"/>
+        <result property="rightCode" column="right_code"/>
+        <result property="vendorDesc" column="vendor_desc"/>
+        <result property="vendorType" column="vendor_type"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="reserved1" column="reserved1"/>
+        <result property="eposVendorId" column="epos_vendor_id"/>
+        <result property="maximumAmt" column="maximum_amt"/>
+        <result property="vendorNo" column="vendor_no"/>
+        <result property="actionFlag" column="action_flag"/>
+        <result property="outSystemId" column="out_system_id"/>
+        <result property="isSecKill" column="is_sec_kill"/>
+        <result property="virtualVendorId" column="virtual_vendor_id"/>
+        <result property="vendorTime" column="vendor_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="orderStageCode" column="order_stage_code"/>
+        <result property="diffinfoForUpdate" column="diffinfo_for_update"/>
+    </resultMap>
+    <sql id="columns">
+        vendor_id,mer_id,full_name,simple_name,tax_code,business_type_id,pay_condition,pay_group,commision,pay_way,pay_currency,freight_tip,fee_type,province_id,province,city_id,city,area_id,area,cooper_address,enterprise_address,post_code,pay_address,buy_address,pay_condition_address,pay_group_address,address,debt_account,prepay_account,debt_man,contact,phone,contact_tax,email,invoice,acc_bank,acc_no,status,vendor_role,union_pay_no,service_time,spec_shopno,spec_shopno_type,bank_no,pay_code,prod_code,plan_code,stages_desc,mcc,fix_fee,net_status,right_code,vendor_desc,vendor_type,create_oper,modify_oper,create_time,modify_time,reserved1,epos_vendor_id,maximum_amt,vendor_no,action_flag,out_system_id,is_sec_kill,virtual_vendor_id,vendor_time,del_flag,order_stage_code,diffinfo_for_update
+    </sql>
+
+    <insert id="insert" parameterType="VendorInfoModel" useGeneratedKeys="true"
+            keyProperty="vendorId" keyColumn="vendor_id">
+        insert into tbl_vendor_inf
+        (vendor_id
+        ,mer_id
+        ,full_name
+        ,simple_name
+        ,tax_code
+        ,business_type_id
+        ,pay_condition
+        ,pay_group
+        ,commision
+        ,pay_way
+        ,pay_currency
+        ,freight_tip
+        ,fee_type
+        ,province_id
+        ,province
+        ,city_id
+        ,city
+        ,area_id
+        ,area
+        ,cooper_address
+        ,enterprise_address
+        ,post_code
+        ,pay_address
+        ,buy_address
+        ,pay_condition_address
+        ,pay_group_address
+        ,address
+        ,debt_account
+        ,prepay_account
+        ,debt_man
+        ,contact
+        ,phone
+        ,contact_tax
+        ,email
+        ,invoice
+        ,acc_bank
+        ,acc_no
+        ,status
+        ,vendor_role
+        ,union_pay_no
+        ,service_time
+        ,spec_shopno
+        ,spec_shopno_type
+        ,bank_no
+        ,pay_code
+        ,prod_code
+        ,plan_code
+        ,stages_desc
+        ,mcc
+        ,fix_fee
+        ,net_status
+        ,right_code
+        ,vendor_desc
+        ,vendor_type
+        ,create_oper
+        ,modify_oper
+        ,create_time
+        ,modify_time
+        ,reserved1
+        ,epos_vendor_id
+        ,maximum_amt
+        ,vendor_no
+        ,action_flag
+        ,out_system_id
+        ,is_sec_kill
+        ,virtual_vendor_id
+        ,vendor_time
+        ,del_flag
+        ,order_stage_code
+        ,diffinfo_for_update)
+        values(#{vendorId}
+        ,#{merId}
+        ,#{fullName}
+        ,#{simpleName}
+        ,#{taxCode}
+        ,#{businessTypeId}
+        ,#{payCondition}
+        ,#{payGroup}
+        ,#{commision}
+        ,#{payWay}
+        ,#{payCurrency}
+        ,#{freightTip}
+        ,#{feeType}
+        ,#{provinceId}
+        ,#{province}
+        ,#{cityId}
+        ,#{city}
+        ,#{areaId}
+        ,#{area}
+        ,#{cooperAddress}
+        ,#{enterpriseAddress}
+        ,#{postCode}
+        ,#{payAddress}
+        ,#{buyAddress}
+        ,#{payConditionAddress}
+        ,#{payGroupAddress}
+        ,#{address}
+        ,#{debtAccount}
+        ,#{prepayAccount}
+        ,#{debtMan}
+        ,#{contact}
+        ,#{phone}
+        ,#{contactTax}
+        ,#{email}
+        ,#{invoice}
+        ,#{accBank}
+        ,#{accNo}
+        ,#{status}
+        ,#{vendorRole}
+        ,#{unionPayNo}
+        ,#{serviceTime}
+        ,#{specShopno}
+        ,#{specShopnoType}
+        ,#{bankNo}
+        ,#{payCode}
+        ,#{prodCode}
+        ,#{planCode}
+        ,#{stagesDesc}
+        ,#{mcc}
+        ,#{fixFee}
+        ,#{netStatus}
+        ,#{rightCode}
+        ,#{vendorDesc}
+        ,#{vendorType}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,now()
+        ,#{modifyTime}
+        ,#{reserved1}
+        ,#{eposVendorId}
+        ,#{maximumAmt}
+        ,#{vendorNo}
+        ,#{actionFlag}
+        ,#{outSystemId}
+        ,#{isSecKill}
+        ,#{virtualVendorId}
+        ,#{vendorTime}
+        ,0
+        ,#{orderStageCode}
+        ,#{diffinfoForUpdate})
+    </insert>
+
+    <update id="update" parameterType="VendorInfoModel">
+        update tbl_vendor_inf set
+        <if test="merId !=null">mer_id = #{merId}
+            ,
+        </if>
+        <if test="fullName !=null">full_name = #{fullName}
+            ,
+        </if>
+        <if test="simpleName !=null">simple_name = #{simpleName}
+            ,
+        </if>
+        <if test="taxCode !=null">tax_code = #{taxCode}
+            ,
+        </if>
+        <if test="businessTypeId !=null">business_type_id = #{businessTypeId}
+            ,
+        </if>
+        <if test="payCondition !=null">pay_condition = #{payCondition}
+            ,
+        </if>
+        <if test="payGroup !=null">pay_group = #{payGroup}
+            ,
+        </if>
+        <if test="commision !=null">commision = #{commision}
+            ,
+        </if>
+        <if test="payWay !=null">pay_way = #{payWay}
+            ,
+        </if>
+        <if test="payCurrency !=null">pay_currency = #{payCurrency}
+            ,
+        </if>
+        <if test="freightTip !=null">freight_tip = #{freightTip}
+            ,
+        </if>
+        <if test="feeType !=null">fee_type = #{feeType}
+            ,
+        </if>
+        <if test="provinceId !=null">province_id = #{provinceId}
+            ,
+        </if>
+        <if test="province !=null">province = #{province}
+            ,
+        </if>
+        <if test="cityId !=null">city_id = #{cityId}
+            ,
+        </if>
+        <if test="city !=null">city = #{city}
+            ,
+        </if>
+        <if test="areaId !=null">area_id = #{areaId}
+            ,
+        </if>
+        <if test="area !=null">area = #{area}
+            ,
+        </if>
+        <if test="cooperAddress !=null">cooper_address = #{cooperAddress}
+            ,
+        </if>
+        <if test="enterpriseAddress !=null">enterprise_address = #{enterpriseAddress}
+            ,
+        </if>
+        <if test="postCode !=null">post_code = #{postCode}
+            ,
+        </if>
+        <if test="payAddress !=null">pay_address = #{payAddress}
+            ,
+        </if>
+        <if test="buyAddress !=null">buy_address = #{buyAddress}
+            ,
+        </if>
+        <if test="payConditionAddress !=null">pay_condition_address = #{payConditionAddress}
+            ,
+        </if>
+        <if test="payGroupAddress !=null">pay_group_address = #{payGroupAddress}
+            ,
+        </if>
+        <if test="address !=null">address = #{address}
+            ,
+        </if>
+        <if test="debtAccount !=null">debt_account = #{debtAccount}
+            ,
+        </if>
+        <if test="prepayAccount !=null">prepay_account = #{prepayAccount}
+            ,
+        </if>
+        <if test="debtMan !=null">debt_man = #{debtMan}
+            ,
+        </if>
+        <if test="contact !=null">contact = #{contact}
+            ,
+        </if>
+        <if test="phone !=null">phone = #{phone}
+            ,
+        </if>
+        <if test="contactTax !=null">contact_tax = #{contactTax}
+            ,
+        </if>
+        <if test="email !=null">email = #{email}
+            ,
+        </if>
+        <if test="invoice !=null">invoice = #{invoice}
+            ,
+        </if>
+        <if test="accBank !=null">acc_bank = #{accBank}
+            ,
+        </if>
+        <if test="accNo !=null">acc_no = #{accNo}
+            ,
+        </if>
+        <if test="status !=null">status = #{status}
+            ,
+        </if>
+        <if test="vendorRole !=null">vendor_role = #{vendorRole}
+            ,
+        </if>
+        <if test="unionPayNo !=null">union_pay_no = #{unionPayNo}
+            ,
+        </if>
+        <if test="serviceTime !=null">service_time = #{serviceTime}
+            ,
+        </if>
+        <if test="specShopno !=null">spec_shopno = #{specShopno}
+            ,
+        </if>
+        <if test="specShopnoType !=null">spec_shopno_type = #{specShopnoType}
+            ,
+        </if>
+        <if test="bankNo !=null">bank_no = #{bankNo}
+            ,
+        </if>
+        <if test="payCode !=null">pay_code = #{payCode}
+            ,
+        </if>
+        <if test="prodCode !=null">prod_code = #{prodCode}
+            ,
+        </if>
+        <if test="planCode !=null">plan_code = #{planCode}
+            ,
+        </if>
+        <if test="stagesDesc !=null">stages_desc = #{stagesDesc}
+            ,
+        </if>
+        <if test="mcc !=null">mcc = #{mcc}
+            ,
+        </if>
+        <if test="fixFee !=null">fix_fee = #{fixFee}
+            ,
+        </if>
+        <if test="netStatus !=null">net_status = #{netStatus}
+            ,
+        </if>
+        <if test="rightCode !=null">right_code = #{rightCode}
+            ,
+        </if>
+        <if test="vendorDesc !=null">vendor_desc = #{vendorDesc}
+            ,
+        </if>
+        <if test="vendorType !=null">vendor_type = #{vendorType}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        modify_time = now()
+        ,
+        <if test="reserved1 !=null">reserved1 = #{reserved1}
+            ,
+        </if>
+        <if test="eposVendorId !=null">epos_vendor_id = #{eposVendorId}
+            ,
+        </if>
+        <if test="maximumAmt !=null">maximum_amt = #{maximumAmt}
+            ,
+        </if>
+        <if test="vendorNo !=null">vendor_no = #{vendorNo}
+            ,
+        </if>
+        <if test="actionFlag !=null">action_flag = #{actionFlag}
+            ,
+        </if>
+        <if test="outSystemId !=null">out_system_id = #{outSystemId}
+            ,
+        </if>
+        <if test="isSecKill !=null">is_sec_kill = #{isSecKill}
+            ,
+        </if>
+        <if test="virtualVendorId !=null">virtual_vendor_id = #{virtualVendorId}
+            ,
+        </if>
+        <if test="vendorTime !=null">vendor_time = #{vendorTime}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="orderStageCode !=null">order_stage_code = #{orderStageCode}
+            ,
+        </if>
+        <if test="diffinfoForUpdate !=null">diffinfo_for_update = #{diffinfoForUpdate}
+        </if>
+        where vendor_id = #{vendorId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag = '0'
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="merId !=null">and mer_id = #{merId}</if>
+            <if test="fullName !=null">and full_name = #{fullName}</if>
+            <if test="simpleName !=null">and simple_name = #{simpleName}</if>
+            <if test="taxCode !=null">and tax_code = #{taxCode}</if>
+            <if test="businessTypeId !=null">and business_type_id = #{businessTypeId}</if>
+            <if test="payCondition !=null">and pay_condition = #{payCondition}</if>
+            <if test="payGroup !=null">and pay_group = #{payGroup}</if>
+            <if test="commision !=null">and commision = #{commision}</if>
+            <if test="payWay !=null">and pay_way = #{payWay}</if>
+            <if test="payCurrency !=null">and pay_currency = #{payCurrency}</if>
+            <if test="freightTip !=null">and freight_tip = #{freightTip}</if>
+            <if test="feeType !=null">and fee_type = #{feeType}</if>
+            <if test="provinceId !=null">and province_id = #{provinceId}</if>
+            <if test="province !=null">and province = #{province}</if>
+            <if test="cityId !=null">and city_id = #{cityId}</if>
+            <if test="city !=null">and city = #{city}</if>
+            <if test="areaId !=null">and area_id = #{areaId}</if>
+            <if test="area !=null">and area = #{area}</if>
+            <if test="cooperAddress !=null">and cooper_address = #{cooperAddress}</if>
+            <if test="enterpriseAddress !=null">and enterprise_address = #{enterpriseAddress}</if>
+            <if test="postCode !=null">and post_code = #{postCode}</if>
+            <if test="payAddress !=null">and pay_address = #{payAddress}</if>
+            <if test="buyAddress !=null">and buy_address = #{buyAddress}</if>
+            <if test="payConditionAddress !=null">and pay_condition_address = #{payConditionAddress}</if>
+            <if test="payGroupAddress !=null">and pay_group_address = #{payGroupAddress}</if>
+            <if test="address !=null">and address = #{address}</if>
+            <if test="debtAccount !=null">and debt_account = #{debtAccount}</if>
+            <if test="prepayAccount !=null">and prepay_account = #{prepayAccount}</if>
+            <if test="debtMan !=null">and debt_man = #{debtMan}</if>
+            <if test="contact !=null">and contact = #{contact}</if>
+            <if test="phone !=null">and phone = #{phone}</if>
+            <if test="contactTax !=null">and contact_tax = #{contactTax}</if>
+            <if test="email !=null">and email = #{email}</if>
+            <if test="invoice !=null">and invoice = #{invoice}</if>
+            <if test="accBank !=null">and acc_bank = #{accBank}</if>
+            <if test="accNo !=null">and acc_no = #{accNo}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="vendorRole !=null">and vendor_role = #{vendorRole}</if>
+            <if test="unionPayNo !=null">and union_pay_no = #{unionPayNo}</if>
+            <if test="serviceTime !=null">and service_time = #{serviceTime}</if>
+            <if test="specShopno !=null">and spec_shopno = #{specShopno}</if>
+            <if test="specShopnoType !=null">and spec_shopno_type = #{specShopnoType}</if>
+            <if test="bankNo !=null">and bank_no = #{bankNo}</if>
+            <if test="payCode !=null">and pay_code = #{payCode}</if>
+            <if test="prodCode !=null">and prod_code = #{prodCode}</if>
+            <if test="planCode !=null">and plan_code = #{planCode}</if>
+            <if test="stagesDesc !=null">and stages_desc = #{stagesDesc}</if>
+            <if test="mcc !=null">and mcc = #{mcc}</if>
+            <if test="fixFee !=null">and fix_fee = #{fixFee}</if>
+            <if test="netStatus !=null">and net_status = #{netStatus}</if>
+            <if test="rightCode !=null">and right_code = #{rightCode}</if>
+            <if test="vendorDesc !=null">and vendor_desc = #{vendorDesc}</if>
+            <if test="vendorType !=null">and vendor_type = #{vendorType}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="reserved1 !=null">and reserved1 = #{reserved1}</if>
+            <if test="eposVendorId !=null">and epos_vendor_id = #{eposVendorId}</if>
+            <if test="maximumAmt !=null">and maximum_amt = #{maximumAmt}</if>
+            <if test="vendorNo !=null">and vendor_no = #{vendorNo}</if>
+            <if test="actionFlag !=null">and action_flag = #{actionFlag}</if>
+            <if test="outSystemId !=null">and out_system_id = #{outSystemId}</if>
+            <if test="isSecKill !=null">and is_sec_kill = #{isSecKill}</if>
+            <if test="virtualVendorId !=null">and virtual_vendor_id = #{virtualVendorId}</if>
+            <if test="vendorTime !=null">and vendor_time = #{vendorTime}</if>
+            <if test="orderStageCode !=null">and order_stage_code = #{orderStageCode}</if>
+            <if test="diffinfoForUpdate !=null">and diffinfo_for_update = #{diffinfoForUpdate}</if>
+        </where>
+    </sql>
+    <!--模糊查询-->
+    <sql id="conditionsLike">
+        <where>
+            del_flag = '0'
+            <if test="vendorId !=null">and vendor_id like concat(concat('%',#{vendorId}),'%')</if>
+            <if test="merId !=null">and mer_id = #{merId}</if>
+            <if test="fullName !=null">and full_name like concat(concat('%',#{fullName}),'%')</if>
+            <if test="simpleName !=null and simpleName !=''">and simple_name like
+                concat(concat('%',#{simpleName}),'%')
+            </if>
+            <if test="taxCode !=null">and tax_code = #{taxCode}</if>
+            <if test="businessTypeId !=null">and business_type_id = #{businessTypeId}</if>
+            <if test="payCondition !=null">and pay_condition = #{payCondition}</if>
+            <if test="payGroup !=null">and pay_group = #{payGroup}</if>
+            <if test="commision !=null">and commision = #{commision}</if>
+            <if test="payWay !=null">and pay_way = #{payWay}</if>
+            <if test="payCurrency !=null">and pay_currency = #{payCurrency}</if>
+            <if test="freightTip !=null">and freight_tip = #{freightTip}</if>
+            <if test="feeType !=null">and fee_type = #{feeType}</if>
+            <if test="provinceId !=null">and province_id = #{provinceId}</if>
+            <if test="province !=null">and province = #{province}</if>
+            <if test="cityId !=null">and city_id = #{cityId}</if>
+            <if test="city !=null">and city = #{city}</if>
+            <if test="areaId !=null">and area_id = #{areaId}</if>
+            <if test="area !=null">and area = #{area}</if>
+            <if test="cooperAddress !=null">and cooper_address = #{cooperAddress}</if>
+            <if test="enterpriseAddress !=null">and enterprise_address = #{enterpriseAddress}</if>
+            <if test="postCode !=null">and post_code = #{postCode}</if>
+            <if test="payAddress !=null">and pay_address = #{payAddress}</if>
+            <if test="buyAddress !=null">and buy_address = #{buyAddress}</if>
+            <if test="payConditionAddress !=null">and pay_condition_address = #{payConditionAddress}</if>
+            <if test="payGroupAddress !=null">and pay_group_address = #{payGroupAddress}</if>
+            <if test="address !=null">and address = #{address}</if>
+            <if test="debtAccount !=null">and debt_account = #{debtAccount}</if>
+            <if test="prepayAccount !=null">and prepay_account = #{prepayAccount}</if>
+            <if test="debtMan !=null">and debt_man = #{debtMan}</if>
+            <if test="contact !=null">and contact = #{contact}</if>
+            <if test="phone !=null">and phone = #{phone}</if>
+            <if test="contactTax !=null">and contact_tax = #{contactTax}</if>
+            <if test="email !=null">and email = #{email}</if>
+            <if test="invoice !=null">and invoice = #{invoice}</if>
+            <if test="accBank !=null">and acc_bank = #{accBank}</if>
+            <if test="accNo !=null">and acc_no = #{accNo}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="vendorRole !=null">and vendor_role = #{vendorRole}</if>
+            <if test="unionPayNo !=null">and union_pay_no = #{unionPayNo}</if>
+            <if test="serviceTime !=null">and service_time = #{serviceTime}</if>
+            <if test="specShopno !=null">and spec_shopno = #{specShopno}</if>
+            <if test="specShopnoType !=null">and spec_shopno_type = #{specShopnoType}</if>
+            <if test="bankNo !=null">and bank_no = #{bankNo}</if>
+            <if test="payCode !=null">and pay_code = #{payCode}</if>
+            <if test="prodCode !=null">and prod_code = #{prodCode}</if>
+            <if test="planCode !=null">and plan_code = #{planCode}</if>
+            <if test="stagesDesc !=null">and stages_desc = #{stagesDesc}</if>
+            <if test="mcc !=null">and mcc = #{mcc}</if>
+            <if test="fixFee !=null">and fix_fee = #{fixFee}</if>
+            <if test="netStatus !=null">and net_status = #{netStatus}</if>
+            <if test="rightCode !=null">and right_code = #{rightCode}</if>
+            <if test="vendorDesc !=null">and vendor_desc = #{vendorDesc}</if>
+            <if test="vendorType !=null">and vendor_type = #{vendorType}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="reserved1 !=null">and reserved1 = #{reserved1}</if>
+            <if test="eposVendorId !=null">and epos_vendor_id = #{eposVendorId}</if>
+            <if test="maximumAmt !=null">and maximum_amt = #{maximumAmt}</if>
+            <if test="vendorNo !=null">and vendor_no = #{vendorNo}</if>
+            <if test="actionFlag !=null">and action_flag = #{actionFlag}</if>
+            <if test="outSystemId !=null">and out_system_id = #{outSystemId}</if>
+            <if test="isSecKill !=null">and is_sec_kill = #{isSecKill}</if>
+            <if test="virtualVendorId !=null">and virtual_vendor_id = #{virtualVendorId}</if>
+            <if test="vendorTime !=null">and vendor_time = #{vendorTime}</if>
+            <if test="orderStageCode !=null">and order_stage_code = #{orderStageCode}</if>
+            <if test="diffinfoForUpdate !=null">and diffinfo_for_update = #{diffinfoForUpdate}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="VendorInfoMap">
+        SELECT id,
+        <include refid="columns"/>
+        from vendor_inf
+        from tbl_vendor_inf
+        where id=#{vendorId}
+    </select>
+    <select id="findByVendorId" parameterType="Map" resultMap="VendorInfoMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_vendor_inf
+        where vendor_id=#{vendorId}
+    </select>
+    <select id="findAll" parameterType="VendorInfoModel" resultMap="VendorInfoMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_inf
+        <include refid="conditionsLike"/>
+    </select>
+
+    <select id="findAllVendor" parameterType="Map" resultMap="VendorInfoMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_inf
+        <include refid="conditionsLike"/>
+    </select>
+    <select id="findIdByName" parameterType="String" resultType="String">
+        SELECT vendor_id
+        from tbl_vendor_inf
+        where simple_name like concat(concat('%',#{simpleName}),'%')
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="VendorInfoMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_inf
+        <include refid="conditionsLike"/>
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="countLike" resultType="Long">
+        select count(1)
+        from tbl_vendor_inf
+        <include refid="conditionsLike"/>
+    </select>
+
+    <!--逻辑删除-->
+    <update id="updateById" parameterType="java.lang.String">
+        update tbl_vendor_inf set
+        del_flag
+        = '1'
+        where vendor_id = #{vendorId}
+    </update>
+    <!--根据vendorId查找-->
+    <select id="checkById" parameterType="String" resultMap="VendorInfoMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_inf
+        where vendor_id = #{vendorId}
+    </select>
+    <!--根据vendorId列表查找-->
+    <select id="findByVendorIds" parameterType="java.util.List" resultMap="VendorInfoMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_vendor_inf
+        WHERE vendor_id IN
+        <foreach collection="list" item="vendorId" index="index" open="(" separator="," close=")">
+            #{vendorId}
+        </foreach>
+        ORDER BY vendor_id
+    </select>
+    <!--根据供应商名字查询供应商 如果名字为空 查所有-->
+    <select id="findVenDtoByName" parameterType="String" resultType="cn.com.cgbchina.user.dto.VendorInfoIdDto">
+        SELECT full_name as fullName,simple_name as simpleName,vendor_id as vendorId  FROM  tbl_vendor_inf WHERE 1=1 <if test="_parameter !=null">AND simple_name LIKE concat(concat('%',#{_parameter}),'%')</if>
+    </select>
+    <!--根据供应商名字查询供应商 并且不包含指定供应商ID-->
+    <select id="findVenDtoByVendorIds" parameterType="Map" resultType="cn.com.cgbchina.user.dto.VendorInfoIdDto">
+        SELECT full_name as fullName,simple_name as simpleName,vendor_id as vendorId
+        FROM  tbl_vendor_inf
+        WHERE business_type_id = 'YG'
+        <if test="list !=null and list.size > 0">
+            AND vendor_id NOT IN
+            <foreach collection="list" item="vendorId" index="index" open="(" separator="," close=")">
+                #{vendorId}
+            </foreach>
+        </if>
+    </select>
+    <!--支付成功时，支付用-->
+    <select id="findVendorInfoByVendorId" parameterType="Map" resultType="String">
+        select
+        action_flag
+        from tbl_vendor_inf
+        WHERE
+        vendor_id IN
+        <foreach collection="vendorIdList" item="vendorIdList" index="index" open="(" separator="," close=")">
+            #{vendorIdList}
+        </foreach>
+        AND action_flag = '00'
+    </select>
+    <select id="findVendorInfosByVendorId" parameterType="String" resultMap="VendorInfoMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_vendor_inf
+        where vendor_id=#{vendor_Id}
+    </select>
+    <select id="findVendorInfoByVendorIds" parameterType="java.util.List" resultMap="VendorInfoMap">
+        select vendor_id, action_flag
+        from tbl_vendor_inf
+        WHERE
+        vendor_id IN
+        <foreach collection="vendorIdsList" item="vendorId" index="index" open="(" separator="," close=")">
+            #{vendorId}
+        </foreach>
+        AND action_flag = '00'
+    </select>
+    <select id="findInfoByConditions" parameterType="String" resultMap="VendorInfoMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_inf
+        where vendor_id=#{vendor_Id}
+        and vendor_role = '3'
+        and action_flag = '00'
+    </select>
+    <select id="findVendorRoleByConditions" parameterType="String" resultMap="VendorInfoMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_inf
+        where vendor_id=#{vendor_Id}
+        and vendor_role = '3'
+    </select>
+
+    <!-- add by geshuo 20160824: 查询需要推送的数量 -->
+    <select id="findNeedActionCount" resultType="Long">
+        select count(1)
+        from tbl_vendor_inf
+        where del_flag = 0
+        and action_flag='00'
+        and vendor_id in
+        <foreach collection="list" item="vendorId" index="index" open="(" separator="," close=")">
+            #{vendorId}
+        </foreach>
+    </select>
+    <select id="findByVendorIdsForBrandAuth" parameterType="java.util.List" resultMap="VendorInfoMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_vendor_inf
+        WHERE vendor_id IN
+        <foreach collection="list" item="vendorId" index="index" open="(" separator="," close=")">
+            #{vendorId}
+        </foreach>
+        AND status="0102" AND del_flag = 0
+    </select>
+
+</mapper>
+
+

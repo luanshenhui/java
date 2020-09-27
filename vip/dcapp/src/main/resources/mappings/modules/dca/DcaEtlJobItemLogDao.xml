@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.basicdata.dao.DcaEtlJobItemLogDao">
+	
+	<select id="findList" resultType="DcaEtlJobItemLog">
+		SELECT a.stepname AS stepname, a.result AS result, MAX(a.log_date) AS logDate
+		FROM dca_etl_job_item_log a
+		WHERE SUBSTR(a.stepname, 0, 8) = 'DCA_PHY_'
+			<if test="stepname != null and stepname != ''">
+				AND a.stepname LIKE 
+				<if test="dbName == 'oracle'">'%'||#{stepname}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{stepname}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%',#{stepname},'%')</if>
+			</if>
+			<if test="result != null and result != ''">
+				AND a.result = #{result}
+			</if>
+		GROUP BY a.stepname,a.result
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findDetailByStepname" resultType="DcaEtlJobItemLog">
+		SELECT a.result AS result, a.log_date AS logDate
+		FROM dca_etl_job_item_log a
+		WHERE a.stepname = #{stepname}
+		ORDER BY a.log_date DESC
+	</select>
+	
+	
+</mapper>

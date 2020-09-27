@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="WF_ORG_ROLE" >
+  <resultMap id="WF_ORG_ROLEResultMap" class="com.dhc.organization.role.domain.WF_ORG_ROLE" >
+    <result column="ROLE_ID" property="roleId" />
+    <result column="PARENT_ROLE_ID" property="parentRoleId" />
+    <result column="ROLE_NAME" property="roleName" />
+    <result column="ROLE_DESCRIPTION" property="roleDescription" />
+    <result column="IS_ADMINROLE" property="isAdminrole" />
+    <result column="ROLE_TIME_BEGIN" property="roleTimeBegin" />
+    <result column="ROLE_TIME_END" property="roleTimeEnd" />
+    <result column="USER_NUMBERS" property="userNumbers" />
+    <result column="IS_UNIQUE" property="isUnique" />
+  </resultMap>
+  <select id="select" resultMap="WF_ORG_ROLEResultMap" parameterClass="com.dhc.organization.role.domain.WF_ORG_ROLE" >
+    select ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN,
+      ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE
+    from WF_ORG_ROLE R
+	<dynamic prepend="WHERE">
+		<isNotNull prepend="AND" property="roleId">
+			ROLE_ID = #roleId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="parentRoleId">
+			PARENT_ROLE_ID = #parentRoleId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="roleName">
+			ROLE_NAME like #roleName#
+		</isNotNull>
+		<isNotNull prepend="AND" property="isAdminrole">
+			IS_ADMINROLE = #isAdminrole#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userId">
+			R.ROLE_ID IN
+	       (SELECT A.ROLE_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.USER_ID = #userId#)
+		</isNotNull>
+		<isNotNull prepend="OR" property="delegateRoleIdList">
+			R.ROLE_ID IN
+       			<iterate property="delegateRoleIdList" conjunction="," close=")" open="(" > 
+				  #delegateRoleIdList[]:VARCHAR# 
+				</iterate>
+		</isNotNull>
+	</dynamic>
+  </select>
+  
+  <select id="selectByIDs" resultMap="WF_ORG_ROLEResultMap" parameterClass="com.dhc.organization.role.domain.WF_ORG_ROLE" >
+    select ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN,
+      ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE
+    from WF_ORG_ROLE WHERE ROLE_ID IN 
+		<iterate property="roleIds" conjunction="," close=")" open="(" > 
+			#roleIds[]:VARCHAR# 
+		</iterate>
+   </select>
+  
+  <select id="paging" resultMap="WF_ORG_ROLEResultMap" parameterClass="com.dhc.organization.role.domain.WF_ORG_ROLE" >
+    select ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN,
+      ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE FROM 
+    (select ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN,
+      ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE
+    from WF_ORG_ROLE R
+	<dynamic prepend="WHERE">
+		<isNotNull prepend="AND" property="roleId">
+			ROLE_ID = #roleId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="parentRoleId">
+			PARENT_ROLE_ID = #parentRoleId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="roleName">
+			ROLE_NAME like #roleName#
+		</isNotNull>
+		<isNotNull prepend="AND" property="isAdminrole">
+			IS_ADMINROLE = #isAdminrole#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userId">
+			R.ROLE_ID IN
+	       (SELECT A.ROLE_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.USER_ID = #userId#)
+		</isNotNull>
+	</dynamic>
+	) TTT LIMIT #startRow#, #pageSize#
+  </select>
+  <select id="count" parameterClass="com.dhc.organization.role.domain.WF_ORG_ROLE" resultClass="java.lang.Integer" >
+    select COUNT(*)
+    from WF_ORG_ROLE R
+	<dynamic prepend="WHERE">
+		<isNotNull prepend="AND" property="roleId">
+			ROLE_ID = #roleId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="parentRoleId">
+			PARENT_ROLE_ID = #parentRoleId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="roleName">
+			ROLE_NAME like #roleName#
+		</isNotNull>
+		<isNotNull prepend="AND" property="isAdminrole">
+			IS_ADMINROLE = #isAdminrole#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userId">
+			R.ROLE_ID IN
+	       (SELECT A.ROLE_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.USER_ID = #userId#)
+		</isNotNull>
+	</dynamic>
+  </select>
+  <delete id="delete" parameterClass="string" >
+    delete from WF_ORG_ROLE WHERE ROLE_ID=#value#
+  </delete>
+  <insert id="insert" parameterClass="com.dhc.organization.role.domain.WF_ORG_ROLE" >
+    insert into WF_ORG_ROLE (ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE,
+      ROLE_TIME_BEGIN, ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE)
+    values (#roleId#, #parentRoleId:VARCHAR#, #roleName:VARCHAR#, #roleDescription:VARCHAR#, #isAdminrole#, #roleTimeBegin:DATE:NULL#,
+      #roleTimeEnd:DATE:NULL#, #userNumbers:NUMBER#, #isUnique#)
+  </insert>
+  
+  <insert id="insertRoleUser" parameterClass="com.dhc.organization.role.domain.WF_ORG_USER_ROLE" >
+	INSERT INTO WF_ORG_USER_ROLE
+	  (USER_ID, ROLE_ID)
+	VALUES
+	  (#userId#, #roleId#)
+  </insert>
+  
+  <insert id="insertRoleUnit" parameterClass="com.dhc.organization.role.domain.WF_ORG_ROLE_UNIT" >
+	INSERT INTO WF_ORG_ROLE_UNIT
+	  (UNIT_ID, ROLE_ID)
+	VALUES
+	  (#unitId#, #roleId#)
+  </insert>
+  
+  <insert id="deleteRoleUser" parameterClass="string" >
+	DELETE FROM WF_ORG_USER_ROLE WHERE ROLE_ID=#value#
+  </insert>
+  
+  <insert id="deleteRoleUnit" parameterClass="string" >
+	DELETE FROM WF_ORG_ROLE_UNIT WHERE ROLE_ID=#value#
+  </insert>
+  
+  <update id="update" parameterClass="com.dhc.organization.role.domain.WF_ORG_ROLE" >
+    update WF_ORG_ROLE
+    set ROLE_NAME = #roleName:VARCHAR#,
+      ROLE_DESCRIPTION = #roleDescription:VARCHAR#,
+      IS_ADMINROLE = #isAdminrole#,
+      ROLE_TIME_BEGIN = #roleTimeBegin:DATE:NULL#,
+      ROLE_TIME_END = #roleTimeEnd:DATE:NULL#,
+      USER_NUMBERS = #userNumbers:NUMBER#,
+      IS_UNIQUE = #isUnique#
+    WHERE ROLE_ID=#roleId#
+  </update>
+</sqlMap>

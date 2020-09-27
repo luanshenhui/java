@@ -1,0 +1,14 @@
+package cn.com.cgbchina.rest.provider.service.user;
+
+import cn.com.cgbchina.rest.provider.model.user.CustCarUpdate;
+import cn.com.cgbchina.rest.provider.model.user.CustCarUpdateReturn;
+
+/**
+ * MAL306 修改购物车(分期商城)
+ * 
+ * @author lizy 2016/4/28.
+ */
+public interface CustCarUpdateService {
+	CustCarUpdateReturn update(CustCarUpdate custCarUpdate);
+
+}

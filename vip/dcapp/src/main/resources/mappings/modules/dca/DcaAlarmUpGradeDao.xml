@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.risklist.dao.DcaAlarmUpGradeDao">
+    
+	<sql id="dcaAlarmUpGradeColumns">
+		a.UUID AS "uuid",
+		a.POWER_ID AS "powerId",
+		a.BIZ_ROLE_ID AS "bizRoleId",
+		a.ALARM_LEVEL AS "alarmLevel",
+		a.SUM_OUT_TIME AS "sumOutTime",
+		a.GRADE_ORG_POST AS "gradeOrgPost",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarksNew"
+	</sql>
+	
+	<sql id="dcaAlarmUpGradeJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaAlarmUpGrade">
+		SELECT 
+			<include refid="dcaAlarmUpGradeColumns"/>
+		FROM DCA_ALARM_UP_GRADE a
+		<include refid="dcaAlarmUpGradeJoins"/>
+		WHERE a.UUID = #{uuid}
+	</select>
+	
+	<select id="getAllFormList" resultType="DcaAlarmUpGrade">
+		SELECT 
+			<include refid="dcaAlarmUpGradeColumns"/>
+		FROM DCA_ALARM_UP_GRADE a
+		WHERE a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<select id="findAllList" resultType="DcaAlarmUpGrade">
+		SELECT 
+			<include refid="dcaAlarmUpGradeColumns"/>
+		FROM DCA_ALARM_UP_GRADE a
+		<include refid="dcaAlarmUpGradeJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dca_alarm_up_grade(
+			UUID,
+			POWER_ID,
+			BIZ_ROLE_ID,
+			ALARM_LEVEL,
+			SUM_OUT_TIME,
+			GRADE_ORG_POST,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS
+		) VALUES (
+			#{uuid},
+			#{powerId},
+			#{bizRoleId},
+			#{alarmLevel},
+			#{sumOutTime},
+			#{gradeOrgPost},
+			#{delFlag},
+			#{createPerson},
+			SYSDATE,
+			#{updatePerson},
+			SYSDATE,
+			#{remarksNew}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dca_alarm_up_grade SET 	
+			UUID = #{uuid},
+			POWER_ID = #{powerId},
+			BIZ_ROLE_ID = #{bizRoleId},
+			ALARM_LEVEL = #{alarmLevel},
+			SUM_OUT_TIME = #{sumOutTime},
+			GRADE_ORG_POST = #{gradeOrgPost},
+			CREATE_PERSON = #{createPerson},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = SYSDATE,
+			REMARKS = #{remarksNew}
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<update id="delete">
+		UPDATE DCA_ALARM_UP_GRADE SET 
+			DEL_FLAG = #{DEL_FLAG_DELETE}
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<!-- 修改-->
+	<update id="modify">
+		UPDATE DCA_ALARM_UP_GRADE SET
+			GRADE_ORG_POST = #{gradeOrgPost},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = SYSDATE,
+			REMARKS = #{remarksNew}
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<!-- 获取列表-->
+	<select id="getList" resultType="DcaAlarmUpGrade">
+		SELECT 
+			a.UUID AS "uuid",
+			a.POWER_ID AS "powerId",
+			a.BIZ_ROLE_ID AS "bizRoleId",
+			a.ALARM_LEVEL AS "alarmLevel",
+			a.SUM_OUT_TIME AS "sumOutTime",
+			a.GRADE_ORG_POST AS "gradeOrgPost",
+			a.DEL_FLAG AS "delFlag",
+			b.BIZ_ROLE_NAME AS "bizRoleName",
+			s.NAME AS "gradeOrgPostName"
+		FROM DCA_ALARM_UP_GRADE a
+		LEFT JOIN DCA_POWER_LIST b ON b.UUID = a.BIZ_ROLE_ID
+		LEFT JOIN SYS_OFFICE s ON s.ID = a.GRADE_ORG_POST
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="powerId != null and powerId != ''">
+				AND a.POWER_ID = #{powerId}
+			</if>
+			<if test="alarmLevel != null and alarmLevel != ''">
+				AND a.ALARM_LEVEL = #{alarmLevel}
+			</if>
+			<if test="bizRoleId != null and bizRoleId != ''">
+				AND a.BIZ_ROLE_ID = #{bizRoleId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 通过主键获取该条数据-->
+	<select id="getDcaAlarmUpGradeForm" resultType="DcaAlarmUpGrade">
+		SELECT 
+			a.UUID AS "uuid",
+			a.POWER_ID AS "powerId",
+			a.BIZ_ROLE_ID AS "bizRoleId",
+			a.ALARM_LEVEL AS "alarmLevel",
+			a.SUM_OUT_TIME AS "sumOutTime",
+			a.GRADE_ORG_POST AS "gradeOrgPost",
+			a.DEL_FLAG AS "delFlag",
+			a.REMARKS AS "remarksNew",
+			b.BIZ_ROLE_NAME AS "bizRoleName",
+			s.NAME AS "gradeOrgPostName",
+			d1.LABEL AS "powerName",
+			d2.LABEL AS "alarmLevelName",
+			a.SUM_OUT_TIME AS "sumOutTimeName"
+		FROM DCA_ALARM_UP_GRADE a
+		LEFT JOIN DCA_POWER_LIST b ON b.UUID = a.BIZ_ROLE_ID
+		LEFT JOIN SYS_OFFICE s ON s.ID = a.GRADE_ORG_POST
+		LEFT JOIN SYS_DICT d1 ON d1.VALUE = a.POWER_ID and d1.TYPE = 'power_id'
+		LEFT JOIN SYS_DICT d2 ON d2.VALUE = a.ALARM_LEVEL and d2.TYPE = 'alarm_level'
+		WHERE a.UUID = #{uuid}
+	</select>
+	
+	<!-- 通过相关条件获取该条数据-->
+	<select id="getForm" resultType="DcaAlarmUpGrade">
+		SELECT 
+			a.UUID AS "uuid",
+			a.SUM_OUT_TIME AS "sumOutTime"
+		FROM DCA_ALARM_UP_GRADE a
+		WHERE a.POWER_ID = #{powerId} 
+				AND a.BIZ_ROLE_ID = #{bizRoleId} 
+				AND a.ALARM_LEVEL = #{alarmLevel} 
+				AND a.GRADE_ORG_POST = #{gradeOrgPost} 
+				AND a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+	</select>
+	
+</mapper>

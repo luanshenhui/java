@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <title>菜单管理| Rkylin OMS</title>
+        <meta charset="utf-8" />
+     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT" />
+        
+        <!-- 加载 bootstrap 样式-->
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css" />
+        
+        <!-- 加载本页需要的三方插件样式 -->
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/jquery.dataTables.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/dataTables.bootstrap.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-tablesorter/themes/blue/style-custom.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-bootstrap-wizard/custom.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-steps/css/jquery.steps.css">
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/animate.css/animate.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/iCheck/skins/all.css" />
+    	<link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+    	<link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/user.css/dhtmlxtree.css">
+        <!-- 加载主题风格样式 -->
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" class="default-style" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change" class="style-change color-change" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/style-responsive.css" />
+        
+        <link rel="stylesheet" type="text/css"
+			href="/Apollo/madmin/vendors/dhtmlxtree/css/dhtmlxtree.css" />
+        
+		<link rel="stylesheet" type="text/css"
+			href="/Apollo/madmin/vendors/dhtmlxtree/css/MenuSkins/dhtmlxmenu_dhx_blue.css" />
+    </head>
+
+<body>  
+<div class="page-content">
+	<div class="container-fluid">
+		<div class="row">
+						<div class="col-lg-4">
+							<div class="portlet box portlet-violet">
+								<div class="portlet-header">
+									<div class="caption">功能菜单</div>
+								</div>
+								<div class="portlet-body">
+									<div id="menuTree" style="height:380px;overflow:auto;"></div>
+								</div>
+							</div>
+						</div>
+						
+						
+						<div class="col-lg-8">
+							<div class="portlet box portlet-blue tabbable">
+								<div class="portlet-header">
+									<div class="caption">选择角色</div>
+								</div>
+								<div class="portlet-body">
+									 	<form id="menuDetail"  action="" class="form-horizontal">
+                					
+		                					<div class="form-group">
+												<label for="menuName" class="col-sm-3 control-label">名称:<span class='require'>*</span>
+												</label>
+												<div class="col-sm-9">
+				                                    <input id="menuName" name="menuName" type="text" placeholder="" required maxlength="32" class="form-control  invalid " />
+												</div>
+											</div>
+		                					
+		                					<div class="form-group">
+												<label for="menuImg" class="col-sm-3 control-label">图片路径:<span class='require'></span>
+												</label>
+												<div class="col-sm-9">
+				                                     <input id="menuImg" name="menuImg" type="text" placeholder=""  maxlength="255" class="form-control " />
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label for="menuDes" class="col-sm-3 control-label">描述:<span class='require'></span>
+												</label>
+												<div class="col-sm-9">
+				                                     <input id="menuDes" name="menuDes" type="text" placeholder=""  maxlength="255" class="form-control " />
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label for="menuLocal" class="col-sm-3 control-label">请求URL:<span class='require'></span>
+												</label>
+												<div class="col-sm-9">
+				                                     <input id="menuLocal" name="menuLocal" type="text" placeholder=""  maxlength="255" class="form-control " />
+												</div>
+											</div>
+		                					
+		                					<div class="form-group">
+												<label for="menuDis" class="col-sm-3 control-label">默认显示
+												</label>
+												<div class="col-sm-7">
+				                                     <select  id="menuDis" name="menuDis" >
+																<option value="0">否</option>
+																<option value="1">是</option>
+													</select>
+				                                </div>
+											</div>
+											
+			                				<div class="modal-footer">
+						                   	 	<button type="button"  class="btn btn-primary" id="btn_menuReset" onClick="menuReset();">重置</button>
+						                        <button id="btn_menuSave" type="button" class="btn btn-primary" onclick="saveMenu()">保存</button>
+						                    </div>
+		                				</form>
+		                				
+		                				<form id="elementDetail"  action="" class="form-horizontal">
+                					
+		                					<div class="form-group">
+												<label for="eleId" class="col-sm-3 control-label">元素ID:<span class='require'>*</span>
+												</label>
+												<div class="col-sm-9">
+				                                    <input id="eleId" name="eleId" type="text" placeholder="" required maxlength="32" class="form-control  invalid " />
+				                                    
+												</div>
+											</div>
+		                					
+		                					<div class="form-group">
+												<label for="eleName" class="col-sm-3 control-label">元素名称:<span class='require'>*</span>
+												</label>
+												<div class="col-sm-9">
+				                                     <input id="eleName" name="eleName" required type="text" placeholder=""  maxlength="255" class="form-control " />
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label for="eleImg" class="col-sm-3 control-label">图片路径:<span class='require'></span>
+												</label>
+												<div class="col-sm-9">
+				                                     <input id="eleImg" name="eleImg" type="text" placeholder=""  maxlength="255" class="form-control " />
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label for="menuLocal" class="col-sm-3 control-label">元素类型:<span class='require'>*</span>
+												</label>
+												<div class="col-sm-9">
+												 		<select id="eleType" type="eleType" placeholder="" required maxlength="255" class="form-control "></select>
+				                                   <!--  <input id="eleType" name="eleType" type="text" placeholder=""  maxlength="255" class="form-control " />-->
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label for="eleDes" class="col-sm-3 control-label">描述:<span class='require'></span>
+												</label>
+												<div class="col-sm-9">
+				                                     <input id="eleDes" name="eleDes" type="text" placeholder=""  maxlength="255" class="form-control " />
+												</div>
+											</div>
+		                					
+		                					
+		                					
+		               					<div class="modal-footer">
+					                   	 	<button type="button"  class="btn btn-primary" id="btn_eleReset" onClick="eleReset();">重置</button>
+					                        <button id="btn_eleSave" type="button" class="btn btn-primary" onclick="saveEle()">保存</button>
+					                    </div>
+		                		
+		                				</form>
+		                				
+		                				
+		                			<form id="pageDetail"   action="" class="form-horizontal">
+                					
+                					<div class="form-group">
+										<label for="menuName" class="col-sm-3 control-label">页面ID:<span class='require'>*</span>
+										</label>
+										<div class="col-sm-9">
+		                                    <input id="pageId" name="pageId" type="text"  placeholder=""  required  maxlength="32"  class="form-control  invalid " />
+		                                    
+										</div>
+									</div>
+                					
+                					<div class="form-group">
+										<label for="pageName" class="col-sm-3 control-label">页面名称:<span class='require'></span>
+										</label>
+										<div class="col-sm-9">
+		                                     <input id="pageName" name="pageName" type="text" placeholder=""  maxlength="255" class="form-control " />
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label for="pageImg" class="col-sm-3 control-label">图片路径:<span class='require'></span>
+										</label>
+										<div class="col-sm-9">
+		                                     <input id="pageImg" name="pageImg" type="text" placeholder=""  maxlength="255" class="form-control " />
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label for="pageDes" class="col-sm-3 control-label">描述:<span class='require'></span>
+										</label>
+										<div class="col-sm-9">
+		                                     <input id="pageDes" name="pageDes" type="text" placeholder=""  maxlength="255" class="form-control " />
+										</div>
+									</div>
+									
+								
+                					<div class="form-group">
+										<label for="pageLocal" class="col-sm-3 control-label">请求URL:<span class='require'></span>
+										</label>
+										<div class="col-sm-9">
+		                                     <input id="pageLocal" name="pageLocal" type="text" placeholder=""  maxlength="255" class="form-control " />
+										</div>
+									</div>
+                					
+                					<div class="form-group">
+										<label for="pageDis" class="col-sm-3 control-label">默认显示
+										</label>
+										<div class="col-sm-7">
+		                                    
+		                                        <select  id="pageDis"  >
+																<option value="0">否</option>
+																<option value="1">是</option>
+													</select>
+		                                </div>
+									</div>
+                		
+                					<div class="modal-footer">
+			                   	 	<button type="button"  class="btn btn-primary" id="btn_pageReset" onClick="pageReset();">重置</button>
+			                        <button id="btn_pageSave" type="button" class="btn btn-primary" onclick="savePage()">保存</button>
+			                    </form>
+                		
+               				</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+	</div>
+
+
+
+
+
+
+		<!--END CONTENT -->
+	    <!-- 加载 jquery js-->
+	    <script src="/Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+	    <script src="/Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+	    <script src="/Apollo/madmin/js/jquery-ui.js"></script>
+	    
+	    <!-- 加载 bootstrap 和三方插件 js -->
+	    <script src="/Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+	    <script src="/Apollo/madmin/js/html5shiv.js"></script>
+	    <script src="/Apollo/madmin/js/respond.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script>
+	    <script src="/Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-pace/pace.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/holder/holder.js"></script>
+	    <script src="/Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script>
+	    <script src="/Apollo/madmin/vendors/moment/moment.js"></script>
+		<script src="/Apollo/madmin/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+	    <script src="/Apollo/madmin/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+	    <script src="/Apollo/madmin/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+    	<script src="/Apollo/madmin/vendors/jquery-tablesorter/jquery.tablesorter.js"></script>
+    	<script src="/Apollo/madmin/js/table-advanced.js"></script>
+   	    <script src="/Apollo/madmin/vendors/jquery-validate/jquery.validate.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-validate/message_zh.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    	<script src="/Apollo/madmin/js/Arraylist.js"></script>
+    	<script src="/Apollo/madmin/vendors/dhtmlxtree/dhtmlxcommon.js"></script>
+    	<script src="/Apollo/madmin/vendors/dhtmlxtree/dhtmlxmenu.js"></script>
+    	<script src="/Apollo/madmin/vendors/dhtmlxtree/dhtmlxtree.js"></script>
+    	<script src="/Apollo/madmin/vendors/dhtmlxtree/dhtmlXTreeExtend.js"></script>
+    	<script src="/Apollo/madmin/vendors/dhtmlxtree/DivDialogUtil.js"></script>
+    	<script src="/Apollo/madmin/jsplit/jsplit.js"></script>
+	    <!-- 加载本页面对应的js -->
+
+	    <!-- 加载本页面对应的js -->
+	    <script src="MenuMain.js"></script> 
+	    <script src="/views/static/js/export.js"></script>
+	    <script src="/views/static/js/form.js"></script> 
+</body>
+</html>

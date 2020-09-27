@@ -1,0 +1,34 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style>
+	#d1{
+		width:200px;
+		height:200px;
+		border:1px solid red;
+	}
+</style>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('#d1').click(function(e){
+			alert('你点击了一个div');
+		});
+		
+		$('#a1').click(function(e){
+			alert('你点击了一个链接');
+			//停止冒泡
+			e.stopPropagation();
+		});
+	});
+</script>
+</head>
+<body style="font-size:30px;">
+		<div id="d1">
+			<a href="javascript:;" 
+			id="a1">ClickMe</a>
+		</div>
+</body>
+</html>

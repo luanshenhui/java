@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="hongling.entity.Logistics" table="LOGISTICS">
+		<id name="id" type="integer">
+			<column name="ID" />
+			<generator class="increment"></generator>
+		</id>
+        <property name="sendto" type="string">
+            <column name="SENDTO"/>
+        </property>
+        <property name="sendend" type="string">
+            <column name="SENDEND" />
+        </property>
+        <property name="sendmode" type="string">
+            <column name="SENDMODE" />
+        </property>
+        <property name="sendcount" type="integer">
+            <column name="SENDCOUNT" />
+        </property>
+        <property name="MT_Price" type="double">
+            <column name="T_PRICE" />
+        </property>
+        <property name="MXF_Price" type="double">
+            <column name="MXF_PRICE" />
+        </property>
+        <property name="MXK_Price" type="double">
+            <column name="MXK_PRICE" />
+        </property>
+        <property name="MDY_Price" type="double">
+            <column name="MDY_PRICE" />
+        </property>
+        <property name="MXQ_Price" type="double">
+            <column name="MXQ_PRICE" />
+        </property>
+        <property name="MCY_Price" type="double">
+            <column name="MCY_PRICE" />
+        </property>
+        <property name="MPO_Price" type="double">
+            <column name="MPO_PRICE" />
+        </property>
+         <property name="MMJ_Price" type="double">
+            <column name="MMJ_PRICE" />
+        </property>
+        <property name="company" type="string">
+            <column name="COMPANY"/>
+        </property>
+        <property name="createby" type="string">
+            <column name="CREATEBY"/>
+        </property>
+        <property name="createtime" type="date">
+            <column name="CREATETIME"/>
+        </property>
+        <property name="closeby" type="string">
+            <column name="CLOSEBY" />
+        </property>
+        <property name="closetime" type="timestamp">
+            <column name="CLOSETIME" />
+        </property>
+        <property name="remark" type="string">
+            <column name="REMARK" />
+        </property>
+        <property name="status" type="integer">
+            <column name="STATUS" />
+        </property>
+	</class>
+</hibernate-mapping>

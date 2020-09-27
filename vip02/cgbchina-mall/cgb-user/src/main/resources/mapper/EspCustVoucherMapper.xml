@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EspCustVoucher">
+    <resultMap id="EspCustVoucherMap" type="EspCustVoucherModel">
+        <result property="voucherNo" column="voucher_no"/>
+        <result property="custIdNbr" column="cust_id_nbr"/>
+        <result property="custIdType" column="cust_id_type"/>
+        <result property="voucherId" column="voucher_id"/>
+        <result property="curStatus" column="cur_status"/>
+        <result property="orderId" column="order_id"/>
+        <result property="custVoucherDesc" column="cust_voucher_desc"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        voucher_no,cust_id_nbr,cust_id_type,voucher_id,cur_status,order_id,cust_voucher_desc,create_oper,create_time,modify_oper,modify_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="EspCustVoucherModel" useGeneratedKeys="true"
+            keyProperty="voucherNo" keyColumn="voucher_no">
+        insert into esp_cust_voucher
+        (cust_id_nbr
+        ,cust_id_type
+        ,voucher_id
+        ,cur_status
+        ,order_id
+        ,cust_voucher_desc
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag)
+        values(#{custIdNbr}
+        ,#{custIdType}
+        ,#{voucherId}
+        ,#{curStatus}
+        ,#{orderId}
+        ,#{custVoucherDesc}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{delFlag})
+    </insert>
+
+    <update id="update" parameterType="EspCustVoucherModel">
+        update esp_cust_voucher set
+        cust_id_nbr
+        = #{custIdNbr},cust_id_type
+        = #{custIdType},voucher_id
+        = #{voucherId},cur_status
+        = #{curStatus},order_id
+        = #{orderId},cust_voucher_desc
+        = #{custVoucherDesc},create_oper
+        = #{createOper},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime},del_flag
+        = #{delFlag}
+        where voucher_no = #{voucherNo}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="voucherNo !=null">and voucher_no = #{voucherNo}</if>
+            <if test="custIdNbr !=null">and cust_id_nbr = #{custIdNbr}</if>
+            <if test="custIdType !=null">and cust_id_type = #{custIdType}</if>
+            <if test="voucherId !=null">and voucher_id = #{voucherId}</if>
+            <if test="curStatus !=null">and cur_status = #{curStatus}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="custVoucherDesc !=null">and cust_voucher_desc = #{custVoucherDesc}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EspCustVoucherMap">
+        SELECT id,
+        <include refid="columns"/>
+        from esp_cust_voucher
+        where id=#{voucherNo}
+    </select>
+    <select id="findAll" resultMap="EspCustVoucherMap">
+        select id,
+        <include refid="columns"/>
+        from esp_cust_voucher
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="EspCustVoucherMap">
+        select id,
+        <include refid="columns"/>
+        from esp_cust_voucher
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="EspCustVoucherModel">
+        delete from esp_cust_voucher where id = voucherNo
+    </delete>
+</mapper>
+
+

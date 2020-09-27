@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for DPOS。
+
+@author zhanglin@dpn.com.cn
+@since 1.0.0 zhanglin@dpn.com.cn
+@version 1.0.13 zhanglin@dpn.com.cn
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 
+********************************************************************************
+变更履历
+-> 1.0.0 2015-03-04 zhanglin@dpn.com.cn : 初建。
+**************************************************************************** -->
+<mapper namespace="log">
+
+    <!-- 记LOG -->
+	
+	<insert id="insertEventLog" parameterType="map">		
+		INSERT INTO eventlog(
+			CREATE_DATE,ACTION_USER,ACTION_ORG_CODE,ACTION_DATE,INDEX_VALUE,ACTION_TYPE,
+			<if test="details_1 != null">details_1,</if>
+			<if test="details_2 != null">details_2,</if>
+			<if test="details_3 != null">details_3,</if>
+			<if test="details_4 != null">details_4,</if>
+			<if test="details_5 != null">details_5,</if>
+			ACTION_NAME
+			)
+		VALUES (
+			SYSDATE,#{action_user},#{action_org_code},SYSDATE,#{index_value},#{action_type},
+			<if test="details_1 != null">#{details_1},</if>
+			<if test="details_2 != null">#{details_2},</if>
+			<if test="details_3 != null">#{details_3},</if>
+			<if test="details_4 != null">#{details_4},</if>
+			<if test="details_5 != null">#{details_5},</if>
+			#{action_name}
+			)
+	</insert>
+
+</mapper>

@@ -1,0 +1,45 @@
+// Generated code from Butter Knife. Do not modify!
+package com.sanzeng.hello_watch.ui.activity.register;
+
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import butterknife.internal.ViewBinder;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class RegisterActivity$$ViewBinder<T extends RegisterActivity> implements ViewBinder<T> {
+  @Override
+  public Unbinder bind(Finder finder, T target, Object source) {
+    return new InnerUnbinder<>(target, finder, source);
+  }
+
+  protected static class InnerUnbinder<T extends RegisterActivity> implements Unbinder {
+    protected T target;
+
+    protected InnerUnbinder(T target, Finder finder, Object source) {
+      this.target = target;
+
+      target.showPwd = finder.findRequiredViewAsType(source, 2131558506, "field 'showPwd'", TextView.class);
+      target.showMsg = finder.findRequiredViewAsType(source, 2131558508, "field 'showMsg'", TextView.class);
+      target.showRegFbk = finder.findRequiredViewAsType(source, 2131558515, "field 'showRegFbk'", TextView.class);
+      target.watch_code = finder.findRequiredViewAsType(source, 2131558516, "field 'watch_code'", TextView.class);
+      target.register_tv = finder.findRequiredViewAsType(source, 2131558514, "field 'register_tv'", TextView.class);
+    }
+
+    @Override
+    public void unbind() {
+      T target = this.target;
+      if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+      target.showPwd = null;
+      target.showMsg = null;
+      target.showRegFbk = null;
+      target.watch_code = null;
+      target.register_tv = null;
+
+      this.target = null;
+    }
+  }
+}

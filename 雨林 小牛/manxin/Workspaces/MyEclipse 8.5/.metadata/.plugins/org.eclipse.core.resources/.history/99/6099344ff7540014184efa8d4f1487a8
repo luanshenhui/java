@@ -1,0 +1,40 @@
+package com.yulin.am;
+
+public class Pet {
+
+	/**
+	 * @param args
+	 */
+	private String name;
+	private int age;
+	//成长经验、饥饿、清洁、心情、叛逆
+	private int level=0;//经验 100点长一岁 自动生长
+	private int an=50;//饥饿 0~100
+	private int heart=50;//心情 0~100 小于0 心情叛逆下降
+	private int clene=50;//清洁 0~100 小于0离家出走
+	private int panni=50;//叛逆0~100 小于0 咬死
+	
+	public Pet(String name){
+		this.name=name;
+		age=0;
+		System.out.println("宠物已诞生~！");
+	}
+	public void showM(){//显示信息
+		System.out.println("名字："+name);
+		System.out.println("年龄："+age);
+		System.out.println("饥饿："+an);
+		System.out.println("心情："+heart);
+		System.out.println("清洁："+clene);
+		System.out.println("叛逆："+panni);
+	}
+	public void eatM(){
+		an+=30;//等同于饥饿+30
+		if(an>=100){
+			an=100;
+			System.out.println(name+":不能再喂食了~要撑死了");
+		}
+	}
+	
+
+
+}

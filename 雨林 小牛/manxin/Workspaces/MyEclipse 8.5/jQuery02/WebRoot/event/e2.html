@@ -1,0 +1,29 @@
+<html>
+ <head>
+    <title>e2.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <style>
+    	#d1{
+    		width: 200px;
+    		height: 200px;
+    		border: 1px solid red;
+    	}
+    </style>
+ 
+	<script type="text/javascript">
+		function clickDiv(e){
+			alert('你点击了一个div');
+		}
+		function clickA(e){
+			alert('你点击了一个链接');
+			//取消冒泡
+			e.cancelBubble = true;
+		}
+  </script>
+  </head>
+  <body style="font-size: 30px;">
+    <div id="d1" onclick="clickDiv(event);">
+   		<a href="javascript:;" id="a1" onclick="clickA(event);">ClickMe</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PromotionVendorModel">
+    <resultMap id="PromotionVendorMap" type="PromotionVendorModel">
+        <result property="id" column="id"/>
+        <result property="promotionId" column="promotion_id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="createDate" column="create_date"/>
+        <result property="vendorId" column="vendor_id"/>
+    </resultMap>
+    <sql id="columns">
+        id,promotion_id,vendor_id,is_valid,create_time
+    </sql>
+
+    <insert id="insert" parameterType="PromotionVendorModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_promotion_vendor
+        (promotion_id
+        ,vendor_id
+        ,is_valid
+        ,create_time)
+        values(#{promotionId}
+        ,#{vendorId}
+        ,#{isValid}
+        ,NOW())
+    </insert>
+
+    <update id="update" parameterType="PromotionVendorModel">
+        update tbl_promotion_vendor set
+        <if test="promotionId !=null">promotion_id = #{promotionId}
+            ,
+        </if>
+        <if test="vendorId !=null">vendor_id = #{vendorId}
+            ,
+        </if>
+        <if test="isValid !=null">is_valid = #{isValid}
+            ,
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="promotionId !=null">and promotion_id = #{promotionId}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="isValid !=null">and is_valid = #{isValid}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="PromotionVendorMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_promotion_vendor
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="PromotionVendorMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_promotion_vendor
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="PromotionVendorMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_promotion_vendor
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="PromotionVendorModel">
+        delete from tbl_promotion_vendor where id = id
+    </delete>
+    <select id="countPromAvailable" resultType="Integer" parameterType="Map">
+        select count(1)
+        from tbl_promotion_vendor
+        <include refid="conditions"/>
+    </select>
+    <!--批量插入数据-->
+    <insert id="insertAll" parameterType="List">
+        insert into tbl_promotion_vendor
+        (promotion_id
+        ,vendor_id
+        ,is_valid
+        ,create_time)
+        values
+        <foreach collection="list" separator="," item="pro">
+            (#{pro.promotionId}
+            ,#{pro.vendorId}
+            ,#{pro.isValid}
+            ,NOW()
+            )
+        </foreach>
+
+    </insert>
+    <select id="findByPromotion" parameterType="Integer" resultMap="PromotionVendorMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_promotion_vendor WHERE is_valid=1 AND promotion_id=#{_parameter}
+    </select>
+    <update id="logicDelete" parameterType="List">
+        <foreach collection="list" separator=";" item="deleteItem" close=";">
+            UPDATE tbl_promotion_vendor SET is_valid=0 WHERE promotion_id=#{deleteItem.promotionId} AND
+            vendor_id=#{deleteItem.vendorId}
+        </foreach>
+    </update>
+    <select id="findVendorByPromotionId" resultType="String" parameterType="Integer">
+        SELECT  vendor_id FROM  tbl_promotion_vendor WHERE promotion_id=#{_parameter} AND is_valid=1
+    </select>
+</mapper>
+
+

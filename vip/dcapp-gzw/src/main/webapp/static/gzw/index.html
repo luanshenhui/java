@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>大数据首页</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="js/jquery-1.8.3.js"></script>
+	<script src="js/echarts.min.js"></script>
+    <script src="js/autoPlay.js"></script>
+    <script src="js/module/time.js"></script>
+</head>
+<script>
+
+    var mytimeId;
+    var currentIndex;
+    var roundCount;
+
+    var isRunning = false;
+</script>
+<body>
+<div class="wrap">
+	<div class="container">
+        <div class="header">
+            <h1 class="header-log"><a href="/a" target="_blank" style="cursor:pointer"><img src="./image/logo.png"></a></h1>
+            <div class="header-btn" onclick="playBtnClick()"><img src="./image/header-icon-start.png" id="playImg"><span>自动播放</span></div>
+            <div class="header-nav header-nav-spac">
+               <!-- <ul class="header-nav-btn">
+                    <li class="next disable"><a href="javascript:void(0)" >&gt;</a></li>
+                    <li class="prev"><a href="javascript:void(0)" >&lt;</a></li>
+                </ul>-->
+				<ul id="head-items">
+                    <li class="on"><a href=" indexBox.html" title="监管职责" target="myFrame" ><i></i>首页</a> </li>
+                    <li  ><a href="gzw-SupervisoryDutiy.html" title="监管职责" target="myFrame"><i></i>监管职责</a> </li>
+                    <li><a href="gzw-workflowInstruction.html" title="流程说明" target="myFrame">流程说明</a> </li>
+                    <li><a href="gzw-SupervisoryDutiy2.html" title="风险库" target="myFrame">风险库</a> </li>
+                    <li><a href="gzw-propertyAnalyse1.html" title="产权管理" target="myFrame" >产权管理</a> </li>
+                    <li><a href="gzw-financialAnalysis-statistics.html" title="财务监督" target="myFrame">财务监督</a> </li>
+					<li><a href="gzw-corporateFinancialAnalysis-statistics.html" title="企业财务分析" target="myFrame">企业财务分析</a> </li>
+                    <li><a href="gzw-threeImportant1.html" title="三重一大" target="myFrame">三重一大</a> </li>
+                    <li><a href="gzw-businessDataVolume.html" title="国企总笼" target="myFrame"><i></i>国企总笼</a> </li>
+
+                </ul>
+            </div>
+            <!--<div class="header-nav">
+                <ul>
+
+                </ul>
+            </div>-->
+        </div>
+		<iframe width="1920" height="926" src="indexBox.html" frameborder="0" name="myFrame" id="firstpageFrame"></iframe>
+
+		<div class="clear"></div>
+		<div class="footer"></div>
+	    	
+    </div>
+</div>
+</body>
+</html>

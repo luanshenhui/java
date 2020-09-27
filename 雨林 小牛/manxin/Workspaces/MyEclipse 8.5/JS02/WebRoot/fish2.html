@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>fish2.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<style type="text/css">
+	img{
+		position: absolute;
+		right:10px;
+	}		
+	</style>
+	<script type="text/javascript">
+	function $(id){
+		return document.getElementById(id);
+	}
+	var fish = new Array("img/E/fish08_01.png","img/N/fish03_01.png","img/S/fish13_01.png","img/W/fish14_01.png")
+	var p = 1;
+	var w = 1;
+	var imgArr;
+	function f1(){
+		imgArr = new Array();
+		for(int i=0;i<4;i++){
+			imgArr = new Array($("img")+(i+1)),i,1);
+		}
+		w += 1;
+		for(var i = 0; i < 4;i++){
+			imgArr[i][0].style.right = w+imgArr[i][1];
+			p++;
+			if(p<=9){
+				p=1;
+			}
+			imgArr[i][0].src= "fish01_0"+p+".png"
+		}
+	}
+	var i = window.setInterval("f1()",1000/24);
+	function f2(){
+		clearInterval(i);
+	}
+	</script>
+  </head>
+  
+  <body background="bg.jpg">
+    <div id="d1"></div>
+    <img id="img1" src="img/E/fish08_01.png" vspace="300"/>
+  <img id="img2" src="img/N/fish03_01.png" hspace="500"/>
+  <img id="img3" src="img/S/fish13_01.png" hspace="400"/>
+  <img id="img4" src="img/W/fish14_01.png" vspace="300"/>
+  </body>
+</html>

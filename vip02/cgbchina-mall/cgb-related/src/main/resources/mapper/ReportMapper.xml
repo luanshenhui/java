@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportModel">
+    <resultMap id="ReportMap" type="ReportModel">
+        <result property="reportId" column="report_id"/>
+        <result property="reportCode" column="report_code"/>
+        <result property="reportNm" column="report_nm"/>
+        <result property="reportDate" column="report_date"/>
+        <result property="reportTime" column="report_time"/>
+        <result property="reportPath" column="report_path"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="reportRecNum" column="report_rec_num"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="reportDesc" column="report_desc"/>
+        <result property="airlineType" column="airline_type"/>
+    </resultMap>
+    <sql id="columns">
+    report_id,report_code,report_nm,report_date,report_time,report_path,ordertype_id,report_rec_num,vendor_id,report_desc,airline_type
+    </sql>
+
+    <!--报表管理页面 add by tongxueying Start-->
+    <select id="findReportAll" parameterType="Map" resultMap="ReportMap">
+        select
+        <include refid="columns"/>
+        from tbl_report
+        <include refid="selectConditions"/>
+        <![CDATA[ order by report_date desc limit #{offset}, #{limit} ]]>
+    </select>
+    <!--分页时用的总数-->
+    <select id="pageCount" resultType="Long">
+        select count(1)
+        from tbl_report
+        <include refid="selectConditions"/>
+    </select>
+    <sql id="selectConditions">
+        <where>
+             report_code IN
+            <foreach collection="reportCode" item="reportCode" index="index" open="(" separator=","  close=")">
+                #{reportCode}
+            </foreach>
+            <if test='reportType !=null'>
+                and (vendor_id is null or vendor_id = "")
+            </if>
+            <if test="reportNm !=null">and report_nm LIKE concat(concat('%',#{reportNm}),'%')</if>
+            <if test="startDate!=null">
+                <![CDATA[and report_date >= #{startDate}]]>
+            </if>
+            <if test="endDate!=null">
+                <![CDATA[and report_date <= #{endDate}]]>
+            </if>
+
+            <if test="reportPath !=null">and report_path = #{reportPath}</if>
+
+            <if test="vendorIdList !=null">
+                and vendor_id IN
+                <foreach collection="vendorIdList" item="vendorIdList" index="index" open="(" separator="," close=")">
+                    #{vendorIdList}
+                </foreach>
+            </if>
+            <if test="reportDesc !=null">and report_desc = #{reportDesc}</if>
+            <if test="airlineType !=null">and airline_type = #{airlineType}</if>
+        </where>
+    </sql>
+    <!--报表管理页面  end-->
+</mapper>
+
+

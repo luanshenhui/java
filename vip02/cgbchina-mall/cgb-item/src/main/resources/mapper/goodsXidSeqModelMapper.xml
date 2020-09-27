@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GoodsXidSeqModelModel">
+    <resultMap id="GoodsXidSeqModelMap" type="GoodsXidSeqModelModel">
+        <result property="goodsXidSeq" column="goods_xid_seq"/>
+    </resultMap>
+    <sql id="columns">
+    goods_xid_seq
+    </sql>
+
+    <insert id="insert" parameterType="GoodsXidSeqModelModel" useGeneratedKeys="true"
+            keyProperty="goodsXidSeq" keyColumn="goods_xid_seq">
+        insert into tbl_goods_xid_seq
+        ()
+        values()
+    </insert>
+
+    <update id="update" parameterType="GoodsXidSeqModelModel">
+        update tbl_goods_xid_seq set
+        where goods_xid_seq = #{goodsXidSeq}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="goodsXidSeq !=null">and goods_xid_seq = #{goodsXidSeq}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="GoodsXidSeqModelMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_goods_xid_seq
+        where id=#{goodsXidSeq}
+    </select>
+    <select id="findAll" resultMap="GoodsXidSeqModelMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_xid_seq
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="GoodsXidSeqModelMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_xid_seq
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="GoodsXidSeqModelModel">
+        delete from tbl_goods_xid_seq where id = goodsXidSeq
+    </delete>
+
+    <select id="findGoodsXidSeq" resultType="Integer">
+        select
+        <include refid="columns"/>
+        from tbl_goods_xid_seq
+    </select>
+
+    <update id="updateGoodsXidSeq">
+        update tbl_goods_xid_seq set goods_xid_seq = goods_xid_seq + 1
+    </update>
+</mapper>
+
+

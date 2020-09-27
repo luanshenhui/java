@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+           	 			http://www.springframework.org/schema/context 
+           	 			http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/util
+						http://www.springframework.org/schema/util/spring-util-3.0.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx.xsd
+						http://www.springframework.org/schema/context
+    					http://www.springframework.org/schema/context/spring-context-3.1.xsd
+				        http://www.springframework.org/schema/cache 
+           				http://www.springframework.org/schema/cache/spring-cache-4.1.xsd">
+	
+	<bean id="jdbcPropertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:jdbc.properties</value>
+				<value>classpath*:app.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- ============================================== 增加redis 支持 begin ============================================== -->
+	<context:property-placeholder location="classpath:redis.properties" />
+	<context:property-placeholder location="classpath:app.properties" />
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="300" />
+		<property name="maxActive" value="600" />
+		<property name="maxWait" value="1000" />
+		<!-- <property name="testOnBorrow" value="true" /> -->
+	</bean>
+	
+	<bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:hostName="172.20.2.250" p:port="6379" p:password="" p:poolConfig-ref="poolConfig" />
+		
+	<bean id="stringSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+    <bean id="valueSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+    <bean id="hashKeySerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+    <bean id="hashValueSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
+	
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+<!--         <property name="enableTransactionSupport" value="true"/> -->
+		<property name="keySerializer" ref="stringSerializer" />
+        <property name="valueSerializer" ref="valueSerializer"/>  
+        <property name="hashKeySerializer" ref="hashKeySerializer"/>   
+        <property name="hashValueSerializer" ref="hashValueSerializer"/>   
+	</bean>
+	
+	<!-- cache manager -->
+	<cache:annotation-driven cache-manager="cacheManager"/>
+    <bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+        <constructor-arg name="template" ref="redisTemplate" />
+    </bean>
+	<!-- ============================================== 增加redis 支持 end ============================================== -->
+
+	<util:properties id="api_properties" location="classpath:api.properties" />
+
+	<!-- 加载service,此时要排除要controller,因为controller已经spring-mvc中加载过了 -->
+
+	<context:component-scan base-package="cn.rkylin">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<context:component-scan base-package="cn.biz">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+	<bean class="cn.rkylin.apollo.common.util.BeanUtils" lazy-init="false" />
+	<!-- 引入jdbc配置文件 -->
+
+
+	<!-- 主数据源 -->
+	<import resource="applicationContext-masterDS.xml" />
+
+	<!-- 多个数据源时使用 -->
+	<!--<import resource="applicationContext-slaveDS.xml" /> -->
+
+	<!-- OA数据源 -->
+	<!-- <import resource="applicationContext-oaDS.xml" /> -->
+
+	<!-- rkylin_nm 数据源 -->
+	<!-- <import resource="applicationContext-nmDS.xml"/> -->
+
+	<!-- 动态切换数据源 -->
+	<bean id="sessionFactory" class="cn.rkylin.core.SessionFactory">
+		<property name="sessionMap">
+			<map>
+				<!-- key 对应 mapper.xml 配置文件中 conn的属性名 -->
+				<entry key="master" value-ref="sqlSession" />
+				<!-- <entry key="slave" value-ref="slaveSqlSession" /> -->
+				<!-- <entry key="oa" value-ref="oaSqlSession" /> -->
+				<!-- <entry key="nm" value-ref="nmSqlSession" /> -->
+			</map>
+		</property>
+		<!-- 默认数据源 -->
+		<property name="defaultDataSource" value="master" />
+	</bean>
+
+	<bean id="incre" class="org.springframework.jdbc.support.incrementer.MySQLMaxValueIncrementer">
+		<property name="incrementerName" value="fm_seq_project" />  <!--①设置维护主键的表名 -->
+		<property name="columnName" value="seq_project_id" />  <!--②用于生成主键值的列名 -->
+		<property name="cacheSize" value="99999" />   <!--③缓存大小 -->
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+</beans>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>erp</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
+    <!--Loading bootstrap css-->
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css">
+    <!--Loading style vendors-->
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/animate.css/animate.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/iCheck/skins/all.css">
+    <!--Loading style-->
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/pink-blue.css" class="default-style">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/pink-blue.css" id="theme-change" class="style-change color-change">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/style-responsive.css">
+    <link rel="shortcut icon" href="images/favicon.ico"> 
+</head>
+
+<body id="signup-page">
+    <div class="page-form">
+        <form id="signup-form"  class="form">
+            <div class="header-content">
+                <h1>输入新密码</h1>
+            </div>
+            <div class="body-content">
+                <div class="form-group">
+                    <div class="input-icon right"><i class="fa fa-user"></i>
+                        <input type="text" id="username" name="username" readonly="readonly" class="form-control required">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon right"><i class="fa fa-key"></i>
+                        <input id="password" type="password" placeholder="新密码" minlength="6" maxlength="12" name="password" class="form-control required">
+                         <input id="hidden" type="hidden" >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon right"><i class="fa fa-key"></i>
+                        <input type="password" placeholder="确认密码" name="passwordConfirm" minlength="6" maxlength="12" class="form-control required">
+                    </div>
+                </div>
+                <div class="form-group mbn"><a href="login.html" class="btn btn-warning">
+                	<i class="fa fa-chevron-circle-left"></i>&nbsp;
+						返回</a>
+                    <button type="button" id="onsubmit" class="btn btn-info pull-right">提交 &nbsp;
+                        <i class="fa fa-chevron-circle-right"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+    <script src="Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="Apollo/madmin/js/jquery-ui.js"></script>
+    <!--loading bootstrap js-->
+    <script src="Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+    <script src="Apollo/madmin/js/html5shiv.js"></script>
+    <script src="Apollo/madmin/js/respond.min.js"></script>
+    <script src="Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+    <script src="Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-validate/jquery.validate.min.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-validate/message_zh.js"></script>
+    <script>
+    	var username=decodeURI(window.location.href).split('account=')[1];
+    	$("#username").val(username);
+		
+		$("#onsubmit").click(function () {
+			onsubmit();
+		});
+        //BEGIN CHECKBOX & RADIO
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_minimal-grey',
+            increaseArea: '20%' // optional
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_minimal-grey',
+            increaseArea: '20%' // optional
+        });
+        //END CHECKBOX & RADIO
+    </script>
+    <script type="text/javascript">
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-145464-12', 'auto');
+        ga('send', 'pageview');
+        
+        function onsubmit(){
+        	if(!$("#signup-form").valid()) {
+       		 return false;
+       		}
+        	$.ajax({
+        	    type: "POST",
+        	    url: '/login/updateUser.action',
+        	    data: $("#signup-form").serialize(),
+        	    error: function (request) {
+        	        alert("Connection error");
+        	    },
+        	    success: function (json) {
+					if(json.result=="success"){
+						 alert("修改成功");
+						 window.location.href="/login.html";
+					}
+        	    }
+        	});
+        } 
+    </script>
+</body>
+</html>

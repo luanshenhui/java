@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}供应商管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "mall_cooperation" true}}
+            {
+            "type":"2",
+            "shopType":"YG"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

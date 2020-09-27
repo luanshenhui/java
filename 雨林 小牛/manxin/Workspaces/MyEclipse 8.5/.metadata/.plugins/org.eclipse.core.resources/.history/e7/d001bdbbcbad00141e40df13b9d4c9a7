@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    
+    <!-- 
+    	1.name指定包名，包与包之间的名称不能重复
+    	2.namespace包命名空间，用于拼我们访问包的路径，即URL，不要忘记/线
+     -->
+     <package name="day01" namespace="/day01" extends="struts-default">
+     	<!-- 
+			1.action是我们自己要写的业务组件，用于封装业务逻辑代码
+			2.name是指定action的名称的，该名称会用于我们访问action  ,
+			      同一包下可以有多个action,action名不能重复
+			3.class指定该action对应的业务组件，即我们自己定义的业务代码类
+			4.method指定要访问的方法名。这个method可以省略，若省略则默认调用execute方法
+			5.要访问当前的Action，其URL如下:
+			  http://localhost:8088/Struts01/day01/hello.action
+			  http://localhost:8088/应用名/namespace/actionName.action
+			  注意：action名称的后缀.action可以省略
+     	 -->
+     	 <action name="hello" class="day01.Demo">
+     	 	<!-- 
+     	 		1.用result指定action处理完请求之后，要去向的页面
+     	 		2.name指定result的名称，用于访问该result，用一个action下可以有多个result,
+     	 		  他们之间不能重复
+     	 	 -->
+     	 	 <result name="success">
+     	 	 
+     	 	 </result>
+     	 </action>
+     </package>

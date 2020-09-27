@@ -1,0 +1,19 @@
+package cn.rkylin.oms.system.appClient.service;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.oms.system.appClient.domain.App;
+import cn.rkylin.oms.system.appClient.vo.AppVo;
+
+public interface IAppService {
+
+	PageInfo<AppVo> findByWhere(int page, int length, AppVo param) throws Exception;
+
+	void saveApp(App app) throws Exception;
+
+
+	void deleteApp(App app) throws Exception;
+
+	AppVo getAppDetail(App app) throws Exception;
+
+}

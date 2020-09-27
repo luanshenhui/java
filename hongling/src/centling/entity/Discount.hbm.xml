@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="centling.entity.Discount" table="Discount">
+        <id name="ID" type="string">
+            <column name="ID" length="32" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="Memo" type="string">
+            <column name="Memo" />
+        </property>
+        <property name="MemberId" type="string">
+            <column name="MemberId" />
+        </property>
+        <property name="DisClothingId" type="integer">
+            <column name="DisClothingId" />
+        </property>
+        <property name="FromNum" type="integer">
+            <column name="FromNum"/>
+        </property>
+         <property name="ToNum" type="integer">
+            <column name="ToNum"/>
+        </property>
+         <property name="DiscountNum" type="integer">
+            <column name="DiscountNum"/>
+        </property>
+    </class>
+</hibernate-mapping>

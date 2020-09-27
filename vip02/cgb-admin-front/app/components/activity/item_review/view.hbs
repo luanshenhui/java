@@ -1,0 +1,217 @@
+{{#component "item-review js-component"}}
+    <p class="components-title"><strong>- 复审管理 -</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals checkStatus ""}}class="active"{{/equals}}><a data-role="nav" href="{{_HREF_.mainContext}}/mall/activity/item-review">所有复审相关活动</a></li>
+            <li {{#equals checkStatus "5"}}class="active"{{/equals}}><a data-role="nav" href="{{_HREF_.mainContext}}/mall/activity/item-review-waitting">待复审活动</a></li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <form class="form item-form-search form-inline">
+            <fieldset>
+                <p class="filter-name">
+                   <span class="span4 span-large"><label for="shortName">活动简称:</label>
+                      <input class="form-control" name="shortName" type="text" value="{{shortName}}" maxlength="200">
+                   </span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                   <span class="span5 span-large">
+                       <label for="id">活动编号:</label>
+                       <input class="form-control" name="id" type="text" value="{{id}}" maxlength="10"/>
+                  </span>
+                    &nbsp;&nbsp;
+                  <span class="span5 span-large">
+                        <label for="promType">活动类型:</label>
+                        <select class="select" name="promType" id="promType">
+                            <option value="" {{#equals promType ""}}selected{{/equals}}>请选择</option>
+                            <option value="10" {{#equals promType "10"}}selected{{/equals}}>折扣</option>
+                            <option value="20" {{#equals promType "20"}}selected{{/equals}}>满减</option>
+                            <option value="30" {{#equals promType "30"}}selected{{/equals}}>秒杀</option>
+                            <option value="40" {{#equals promType "40"}}selected{{/equals}}>团购</option>
+                            <option value="50" {{#equals promType "50"}}selected{{/equals}}>荷兰拍</option>
+                        </select>
+                    </span>
+                </p>
+                {{#equals checkStatus "5"}}
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="createOperType">活动发起者:</label>
+                           <select class="select" id="createOperType" name="createOperType">
+                               <option value="" {{#equals createOperType ""}}selected{{/equals}}>请选择</option>
+                               <option value="0" {{#equals createOperType "0"}}selected{{/equals}}>内管</option>
+                               <option value="1" {{#equals createOperType "1"}}selected{{/equals}}>供应商</option>
+                           </select>
+                        </span>
+                        &nbsp;&nbsp;&nbsp;
+                       <span class="span5 span-large">
+                           <label>&nbsp;活动时间:</label>
+                             <input class="form-control application_date input-small-z js-date-start" name="beginDate"
+                                    type="text" id="beginDate" value="{{beginDate}}"/>
+                             <em>-</em>
+                             <input class="form-control end_date input-small-z js-date-end" name="beginDate"
+                                    type="text" id="endDate" name="endDate" value="{{endDate}}"/>
+                        </span>
+                        &nbsp;&nbsp;
+                         <span class="span5 span-large">
+                            <label for="sourceId">销售渠道:</label>
+                            <select class="select" name="sourceId" id="sourceId">
+                                <option value="" {{#equals sourceId ""}}selected{{/equals}}>请选择</option>
+                                <option value="00" {{#equals sourceId "00"}}selected{{/equals}}>商城</option>
+                                <option value="01" {{#equals sourceId "01"}}selected{{/equals}}>CC</option>
+                                <option value="02" {{#equals sourceId "02"}}selected{{/equals}}>IVR</option>
+                                <option value="03" {{#equals sourceId "03"}}selected{{/equals}}>手机商城</option>
+                                <option value="04" {{#equals sourceId "04"}}selected{{/equals}}>短信</option>
+                                <option value="05" {{#equals sourceId "05"}}selected{{/equals}}>微信广发银行</option>
+                                <option value="06" {{#equals sourceId "06"}}selected{{/equals}}>微信广发信用卡</option>
+                                <option value="09" {{#equals sourceId "09"}}selected{{/equals}}>APP</option>
+                            </select>
+                        </span>
+                    </p>
+                {{else}}
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="checkStatus">复审状态:</label>
+                            <select class="select" name="doubleCheckStatus" id="checkStatus">
+                                <option value="" {{#equals doubleCheckStatus ""}}selected{{/equals}}>请选择</option>
+                                <option value="5" {{#equals doubleCheckStatus "5"}}selected{{/equals}}>待复审</option>
+                                <option value="7" {{#equals doubleCheckStatus "7"}}selected{{/equals}}>通过复审</option>
+                                <option value="8" {{#equals doubleCheckStatus "8"}}selected{{/equals}}>部分通过复审</option>
+                                <option value="6" {{#equals doubleCheckStatus "6"}}selected{{/equals}}>未通过复审</option>
+                            </select>
+                        </span>
+                        &nbsp;
+                       <span class="span5 span-large">
+                           <label for="createOperType">活动发起者:</label>
+                           <select class="select" name="createOperType" id="createOperType">
+                               <option value="" {{#equals createOperType ""}}selected{{/equals}}>请选择</option>
+                               <option value="0" {{#equals createOperType "0"}}selected{{/equals}}>内管</option>
+                               <option value="1" {{#equals createOperType "1"}}selected{{/equals}}>供应商</option>
+                           </select>
+                        </span>
+                        &nbsp;
+                         <span class="span5 span-large">
+                            <label>&nbsp;活动时间:</label>
+                             <input class="form-control application_date input-small-z js-date-start cursor-pointer" name="beginDate"
+                                    type="text" id="beginDate" value="{{beginDate}}"/>
+                             <em>-</em>
+                             <input class="form-control end_date input-small-z js-date-end cursor-pointer" name="endDate"
+                                    type="text" id="endDate" value="{{endDate}}"/>
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="sourceId">销售渠道:</label>
+                            <select class="select" name="sourceId" id="sourceId">
+                                <option value="" {{#equals sourceId ""}}selected{{/equals}}>请选择</option>
+                                <option value="00" {{#equals sourceId "00"}}selected{{/equals}}>商城</option>
+                                <option value="01" {{#equals sourceId "01"}}selected{{/equals}}>CC</option>
+                                <option value="02" {{#equals sourceId "02"}}selected{{/equals}}>IVR</option>
+                                <option value="03" {{#equals sourceId "03"}}selected{{/equals}}>手机商城</option>
+                                <option value="04" {{#equals sourceId "04"}}selected{{/equals}}>短信</option>
+                                <option value="05" {{#equals sourceId "05"}}selected{{/equals}}>微信广发银行</option>
+                                <option value="06" {{#equals sourceId "06"}}selected{{/equals}}>微信广发信用卡</option>
+                                <option value="09" {{#equals sourceId "09"}}selected{{/equals}}>APP</option>
+                            </select>
+                        </span>
+                    </p>
+                {{/equals}}
+            </fieldset>
+            <p class="filter-name">
+                <input class="btn btn-success btn-small pull-right margin-right-10" type="submit" value="查询"/>
+            </p>
+        </form>
+    </div>
+    <div class="main-box-table">
+        {{#equals _DATA_.total "0"}}
+            <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+        {{else}}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="10%">活动编号</th>
+                    <th width="15%">活动简称</th>
+                    <th width="10%">活动类型</th>
+                    <th width="10%">活动发起者</th>
+                    <th width="13%">报名时间</th>
+                    <th width="13%">活动时间</th>
+                    <th width="10%">活动状态</th>
+                    <th width="13%">操作</th>
+                </tr>
+                </thead>
+                <tbody data-data="{{json _DATA_}}">
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{id}}" >
+                        <td class="activity-id">{{id}}</td>
+                        <td class="activity-name">{{shortName}}</td>
+                        <td class="activity-type">
+                            {{#equals promType "10"}}折扣{{/equals}}
+                            {{#equals promType "20"}}满减{{/equals}}
+                            {{#equals promType "30"}}秒杀{{/equals}}
+                            {{#equals promType "40"}}团购{{/equals}}
+                            {{#equals promType "50"}}荷兰拍{{/equals}}
+                        </td>
+                        <td class="activity-user">
+                            {{#equals createOperType "0"}}内管{{/equals}}
+                            {{#equals createOperType "1"}}供应商{{/equals}}
+                        </td>
+                        <td class="activity-beginTime">
+                            {{#formatDate beginEntryDate}}{{/formatDate}}-{{#formatDate endEntryDate}}{{/formatDate}}
+                        </td>
+                        <td class="activity-endTime">
+                            {{#formatDate beginDate}}{{/formatDate}}-{{#formatDate endDate}}{{/formatDate}}
+                        </td>
+                        <td class="activity-state">
+                            {{#equals checkStatus "5"}}待复审{{/equals}}
+                            {{#equals checkStatus "7"}}通过复审{{/equals}}
+                            {{#equals checkStatus "8"}}部分通过复审{{/equals}}
+                            {{#equals checkStatus "6"}}未通过复审{{/equals}}
+                        </td>
+                        <td>
+                            {{#authorial "activityReview_audit"}}
+                                {{#equals checkStatus "7"}}
+                                {{else}}
+                                    {{#equals createOperType "0"}}
+                                        {{#equals promType "10"}}
+                                            {{#equals checkStatus "6"}}
+                                            {{else}}
+                                                <button class="btn btn-info btn-sm js-item-review-joined">审核</button>
+                                            {{/equals}}
+                                        {{/equals}}
+                                        {{#equals promType "20"}}
+                                            {{#equals checkStatus "6"}}
+                                            {{else}}
+                                                <button class="btn btn-info btn-sm js-item-review-joined">审核</button>
+                                            {{/equals}}
+                                        {{/equals}}
+                                        {{#equals promType "30"}}
+                                            {{#equals checkStatus "6"}}
+                                            {{else}}
+                                                <button class="btn btn-info btn-sm js-item-review-not-joined">审核</button>
+                                            {{/equals}}
+                                        {{/equals}}
+                                        {{#equals promType "40"}}
+                                            {{#equals checkStatus "6"}}
+                                            {{else}}
+                                                <button class="btn btn-info btn-sm js-item-review-not-joined">审核</button>
+                                            {{/equals}}
+                                        {{/equals}}
+                                        {{#equals promType "50"}}
+                                            {{#equals checkStatus "6"}}
+                                            {{else}}
+                                                <button class="btn btn-info btn-sm js-item-review-not-joined">审核</button>
+                                            {{/equals}}
+                                        {{/equals}}
+                                    {{else}}
+                                        <button class="btn btn-info btn-sm js-item-review-not-joined">审核</button>
+                                    {{/equals}}
+                                {{/equals}}
+                            {{/authorial}}
+                            <button class="btn btn-info btn-sm js-item-review-detail">查看</button>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        {{/equals}}
+    </div>
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+{{/component}}

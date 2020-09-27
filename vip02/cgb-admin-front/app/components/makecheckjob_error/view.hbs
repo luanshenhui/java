@@ -1,0 +1,83 @@
+{{#component "makecheckjob_error js-component"}}
+    <p class="components-title"><strong>对账文件异常处理</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+
+            <form class="form item-form-search form-inline business-form">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span-makecheckjob span-large business-weight">
+                            <label for="parametersType">日期:</label>
+                            <input class="form-control authorize_date js-date-start" id="startOpedate" type="text"
+                                   name="startOpedate" value="{{startOpedate}}">
+                                <em>-</em>
+                            <input class="form-control authorize_date js-date-end" id="endOpedate" type="text"
+                                   name="endOpedate" value="{{endOpedate}}">
+                        </span>
+                    </p>
+
+                    <p class="p">
+                        <input class="button btn-success btn-small pull-right margin-right-10" type="submit"
+                               value="查询"/>
+                    </p>
+                </fieldset>
+            </form>
+
+            <table class="table table-top">
+                <thead>
+                <tr>
+                    <th width="45%">日期</th>
+                    <th width="30%">状态</th>
+                    <th width="25%">操作</th>
+                </tr>
+                </thead>
+                <tbody data-content="{{_DATA_}}">
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{createDate}}">
+                        <td class="createDate">{{createDate}}</td>
+                        <td class="result">异常</td>
+                        <td class="">
+                            {{#equals isshoudong "0"}}
+                                {{#authorial "checkError_send"}}
+                                    <button class="btn btn-sm btn-info" data-id="{{createDate}}"
+                                            data-toggle="confirm"
+                                            data-title="操作记录"
+                                            data-content="确认进行操作吗?"
+                                            data-event="confirm:send-item">发送
+                                    </button>
+                                {{/authorial}}
+                                {{#authorial "checkError_autoHand"}}
+                                    <button class="btn btn-sm btn-info" data-id="{{createDate}}"
+                                            data-toggle="confirm"
+                                            data-title="操作记录"
+                                            data-content="确认进行自动补发对账文件吗?"
+                                            data-event="confirm:notmanual-item">启用自动
+                                    </button>
+                                {{/authorial}}
+                            {{else}}
+                                {{#equals isshoudong "1"}}
+                                    {{#authorial "checkError_send"}}
+                                        <button class="btn btn-sm btn-info js-error-notsend">
+                                            发送
+                                        </button>
+                                    {{/authorial}}
+                                    {{#authorial "checkError_autoHand"}}
+                                        <button class="btn btn-sm btn-info" data-id="{{createDate}}"
+                                                data-toggle="confirm"
+                                                data-title="操作记录"
+                                                data-content="确认进行手动补发对账文件吗?"
+                                                data-event="confirm:manual-item">启用手动
+                                        </button>
+                                    {{/authorial}}
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+
+    </div>
+{{/component}}

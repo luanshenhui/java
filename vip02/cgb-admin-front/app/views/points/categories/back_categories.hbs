@@ -1,0 +1,27 @@
+{{#partial "realTitle"}}后台类目管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        <p class="component-title">
+            <strong>后台类目管理</strong>
+            &nbsp;&nbsp;&nbsp;
+            <span class="category-id-desc">当前类目id：&nbsp;<span class="category-id-show"></span></span>
+            <a class="category-sync pull-right js-sync-back" href="javascript:void(0);">
+                <i class="fa fa-fw fa-refresh"></i>
+                同步后台类目
+            </a>
+        </p>
+        <div class="category-list">
+            {{#inject "category_list" true}}
+                {
+                "type":-1,
+                "channel":"JF"
+                }
+            {{/inject}}
+        </div>
+        <div class="edit-area">
+            {{#inject "category_edit"}}
+            {{/inject}}
+        </div>
+    </div>
+{{/partial}}
+{{> views/index_layout}}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yulin.orderMapping">
+	<!-- 点击下一步 保存订单 -->
+	<insert id="insertOrder" parameterType="com.yulin.dangdang.bean.Order">
+		insert into d_order values(#{id},#{user_id},#{status},#{order_time},#{order_desc},#{total_price},
+		#{receive_name},#{full_address},#{postal_code},#{mobile},#{phone});
+		<selectKey resultType="int" order="AFTER" keyProperty="id">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<!-- 保存Item -->
+	<insert id="insertItem" parameterType="com.yulin.dangdang.bean.Item">
+		insert into d_item values(null,#{order_id},#{product_id},#{product_name},#{dang_price},#{product_num},#{amount})
+	</insert>
+	
+	<!-- 地址保存  -->
+	<insert id="insertAddress" parameterType="com.yulin.dangdang.bean.Address">
+		insert into d_receive_address values(null,#{user_id},#{receive_name},#{full_address},#{postal_code},#{mobile},#{phone})
+	</insert>
+	
+	<!-- 将order表中的地址数据改为Null -->
+	<update id="updateAddress" parameterType="int">
+		update d_order set full_address = null where id = #{id}
+	</update>
+	
+	<!-- 购物车的假删除 -->
+	<select id="findItemById" parameterType="int" resultType=""></select>
+	
+	
+	
+	
+	
+	
+	
+</mapper>

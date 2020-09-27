@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="GBK"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gateway="http://www.agree.com.cn/GDBGateway">
+    <soapenv:Header>
+        <gateway:HeadType soapenv:actor="http://schemas.xmlsoap.org/soap/actor/next"
+                          soapenv:mustUnderstand="0">
+            <gateway:versionNo>1</gateway:versionNo>
+            <gateway:toEncrypt>0</gateway:toEncrypt>
+            <gateway:commCode>500001</gateway:commCode>
+            <gateway:commType>0</gateway:commType>
+            <gateway:receiverId>MALL</gateway:receiverId>
+            <gateway:senderId>SMSP</gateway:senderId>
+            <gateway:senderSN>0000000000000050674034</gateway:senderSN>
+            <gateway:senderDate>20170523</gateway:senderDate>
+            <gateway:senderTime>133848</gateway:senderTime>
+            <gateway:tradeCode>MAL401</gateway:tradeCode>
+            <gateway:gwErrorCode/>
+            <gateway:gwErrorMessage/>
+            <gateway:resendFlag>N</gateway:resendFlag>
+        </gateway:HeadType>
+    </soapenv:Header>
+    <soapenv:Body>
+        <gateway:NoAS400>
+            <gateway:field name="custName">\u6F2B\u5929</gateway:field>
+            <gateway:field name="contIdCard">440100199009080456</gateway:field>
+            <gateway:field name="contIdType">1</gateway:field>
+            <gateway:field name="csgName">\u6F2B\u5929</gateway:field>
+            <gateway:field name="csgMoblie">13533858663</gateway:field>
+            <gateway:field name="csgPhone"/>
+            <gateway:field name="csgProvince">\u5E7F\u4E1C\u7701</gateway:field>
+            <gateway:field name="csgCity">\u4F5B\u5C71\u5E02</gateway:field>
+            <gateway:field name="csgBorough"/>
+            <gateway:field name="csgAddress">
+                \u5E7F\u4E1C\u7701\u4F5B\u5C71\u5E02\u5357\u6D77\u533A\u706F\u6E56\u4E1C\u8DEF8\u53F7111111
+            </gateway:field>
+            <gateway:field name="deliveryPost">12345</gateway:field>
+            <gateway:field name="cardNo">6225551440555942</gateway:field>
+            <gateway:field name="validDate">2007</gateway:field>
+            <gateway:field name="sendTime">01</gateway:field>
+            <gateway:field name="ordermainDesc"/>
+            <gateway:field name="is_money">0</gateway:field>
+            <gateway:field name="is_merge">1</gateway:field>
+            <gateway:field name="goodsId">L19RF</gateway:field>
+            <gateway:field name="goodsNm">1</gateway:field>
+            <gateway:field name="businessType">00</gateway:field>
+            <gateway:field name="VOUCHER_MONEY">10</gateway:field>
+        </gateway:NoAS400>
+    </soapenv:Body>
+</soapenv:Envelope>

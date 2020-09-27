@@ -1,0 +1,273 @@
+package cn.rkylin.oms.system.unit.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.position.dao.IPositionDAO;
+import cn.rkylin.oms.system.position.domain.WF_ORG_STATION;
+import cn.rkylin.oms.system.unit.dao.IUnitDAO;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+import cn.rkylin.oms.system.user.dao.IUserDAO;
+/**
+ * brief description
+ * <p>
+ * Date : 2010/05/05
+ * </p>
+ * <p>
+ * Module : 组织单元管理
+ * </p>
+ * <p>
+ * Description: 组织单元业务对象
+ * </p>
+ * 
+ * @author 王潇艺
+ */
+@Service("unitService")
+public class UnitServiceImpl extends ApolloService implements IUnitService {
+    /**
+     * 组织单元数据访问接口
+     */
+	@Autowired
+	private IUnitDAO unitDAO;
+	/**
+     * 岗位数据访问接口
+     */
+	@Autowired
+	private IPositionDAO positionDAO;
+	/**
+     * 用户数据访问接口
+     */
+	@Autowired
+	private IUserDAO userDAO;
+
+	/**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 获取根组织，需要考虑当前组织，该用户是否能管理
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param userID
+     *            - 用户id
+     * @return 如果找到，返回JT_UNIT_TREE_V 如果没有找到，返回null
+     * @throws ServiceException
+     */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getRootUnit(String userId) throws Exception{
+		try {
+			List unitTree = unitDAO.getRootUnit(userId);
+			return unitTree;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 获取某组织下的所有子组织，需要考虑当前组织，该用户是否能管理
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param userID
+     *            - 用户id
+     * @param parentUnitID
+     *            - 父组织id
+     * @return 如果找到，返回List<JT_UNIT_TREE_V> 如果没有找到，返回null
+     * @throws ServiceException
+     */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List getSubUnit(String userId, String parentUnitID, boolean needStation, boolean needManagable) throws Exception {
+		List subTree = null;
+		try {
+			subTree = unitDAO.getSubUnit(userId, parentUnitID);
+			// 如果需要获取岗位，则取出该组织下的岗位
+			if (needStation) {
+				WF_ORG_STATION stationParam = new WF_ORG_STATION();
+
+				if (needManagable) {
+					stationParam.setUserId(userId);
+					stationParam.setManagable("true");
+				} else
+					stationParam.setManagable("false");
+				stationParam.setUnitId(parentUnitID);
+				List positionList = positionDAO.getStationByCondition(stationParam);
+				if (subTree == null)
+					subTree = new ArrayList();
+				if (positionList != null && positionList.size() > 0) {
+					for (int i = 0; i < positionList.size(); i++) {
+						WF_ORG_STATION temp = (WF_ORG_STATION) positionList.get(i);
+						Map stationMap = new HashMap();
+						stationMap.put("PARENT_UNIT_ID", parentUnitID + "@UNIT");
+						stationMap.put("STATION_ID", temp.getStationId() + "@STATION");
+						// 叫UNIT_ID是因为前台写死了。这样改改比较简单
+						stationMap.put("UNIT_ID", temp.getStationId() + "@STATION");
+						stationMap.put("STATION_NAME", temp.getStationName());
+						stationMap.put("MANAGEABLE", temp.getManagable());
+						subTree.add(stationMap);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage());
+		} 
+		return subTree;
+	}
+
+	/**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 保存组织单元，包括（组织机构基本信息、上级岗位信息、人员信息）
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param unitVO
+     *            - 含有人员列表的组织单元vo
+     * @param saveType
+     *            - 保存类型，0：新增保存，1：修改保存
+     * @return 保存后的WF_ORG_UNIT
+     * @throws ServiceException
+     */
+	@Override
+	public void saveUnit(WF_ORG_UNIT unitVO, String saveType, String extTableName, String idColName) {
+		try {
+			if (saveType.equals("0")) {
+				unitDAO.createUnit(unitVO, extTableName, idColName);
+			} else {
+				unitDAO.updateUnit(unitVO, extTableName, idColName);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	/**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 根据UnitID获取组织单元的明细信息 注意：WF_ORG_UNIT包含基本信息和人员信息
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param unitID
+     *            - 组织单元id
+     * @return 如果找到，返回WF_ORG_UNIT 如果没有找到，返回null
+     * @throws ServiceException
+     */
+	@Override
+	public WF_ORG_UNIT getUnitDetail(String unitID){
+		WF_ORG_UNIT unitVO = new WF_ORG_UNIT();
+		unitVO.setUnitId(unitID);
+		List listUnit = null;
+		try {
+			listUnit = unitDAO.getUnitByCondition(unitVO);
+			unitVO = (WF_ORG_UNIT) listUnit.get(0);
+//			unitVO.setExtInfoMap(iunitDAO.getExtInfo("unit", unitID));
+			// WF_ORG_UNIT unit = (WF_ORG_UNIT)listUnit.get(0);
+			// listUser = iuserDAO.getUserByUnitID(unitID);
+			// unit.setUserList(listUser);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return unitVO;
+	}
+
+	/**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 删除组织单元。如果组织单元下面有角色、人员、岗位，则该组织单元不能删除
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param unitID
+     *            - 组织单元id
+     * @param extTableName
+     *            - 扩展表名称
+     * @param idColumnName
+     *            - 扩展表id列名称
+     * @param advanceDelete
+     *            - 是否删除组织单元的管理角色和组织单元下的用户
+     * @throws ServiceException
+     */
+	@Override
+	public void deleteUnit(String unitID, String extTableName, String idColumnName, boolean advanceDelete)throws Exception {
+		try {
+			unitDAO.deleteUnit(unitID, extTableName, idColumnName, advanceDelete);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("删除失败");
+		}
+		
+	}
+
+	/**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 组织机构类型
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @return 如果找到，返回ArrayList<WF_ORG_DICTIONARY> 如果没有找到，返回new ArrayList
+     * @throws ServiceException
+     */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getUnitType(String type)  throws Exception {
+		ArrayList unitType = new ArrayList();
+		try {
+			unitType = unitDAO.getUnitType(type);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception("数据访问未知异常");
+		}
+		return unitType;
+	}
+
+	/**
+     * 获取用户信息
+     */
+	@Override
+	public List getUserDetail(String unitID) throws Exception {
+		List listUser = null;
+		try {
+			listUser = userDAO.getUserByUnitID(unitID);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception("数据访问未知异常");
+		}
+		return listUser;
+	}
+
+    @Override
+    public List getEntName() {
+         try {
+            return unitDAO.getEntName();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+}

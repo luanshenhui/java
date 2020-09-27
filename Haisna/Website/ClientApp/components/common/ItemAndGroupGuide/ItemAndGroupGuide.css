@@ -1,0 +1,35 @@
+﻿.contents {
+  display: flex;
+}
+
+.itemClass {
+  width: 180px;
+}
+
+.list {
+  height: 400px;
+  overflow-y: auto;
+}
+
+.selectableItem {
+  width: 620px;
+}
+
+.selectableItem .list {
+  height: inherit;
+  max-height: 400px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.selectedItem {
+  width: 180px;
+}
+
+.header {
+  height: 40px;
+}
+
+.selected {
+  font-weight: bold;
+}

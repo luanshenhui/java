@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <title>店铺管理 | Rkylin OMS</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT" />
+        
+        <!-- 加载 bootstrap 样式-->
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css" />
+        
+        <!-- 加载本页需要的三方插件样式 -->
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/jquery.dataTables.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/dataTables.bootstrap.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-tablesorter/themes/blue/style-custom.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-bootstrap-wizard/custom.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-steps/css/jquery.steps.css">
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/animate.css/animate.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/iCheck/skins/all.css" />
+        
+        <!-- 加载主题风格样式 -->
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" class="default-style" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change" class="style-change color-change" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/style-responsive.css" />
+    </head>
+    <body class="">
+	    <!--BEGIN CONTENT-->
+	    <div class="page-content">
+	        <div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-8 col-xs-8 col-sm-8 col-md-8"></div>
+					<div class="col-lg-4 col-xs-4 col-sm-4 col-md-4" style="margin-bottom: 10px;">
+	                    <div class="input-group">
+	                        <input id="quickSearch" type="text" placeholder="参数名称" class="form-control" />
+	                        <span class="input-group-btn">
+		                        <button id="btnQuickSearch" type="button" class="btn btn-primary">
+		                        	<i class="fa fa-search"></i>
+		                        </button>
+	                        </span>
+	                    </div>
+                    </div>
+				</div>
+				<div class="row">
+                    <div class="col-lg-12">
+				        <div class="portlet box portlet-blue" style="margin-bottom: 15px;">
+				            <div class="portlet-header">
+				                <div class="caption">系统参数列表</div>
+                                <div class="actions">
+                                	<a href="#" class="btn btn-xs btn-warning" data-toggle="modal" data-target="" onclick="">
+                                		<i class="fa fa-plus"></i>&nbsp;添加自定义参数
+                                	</a>&nbsp;
+                                </div>
+				            </div>
+				            <div class="portlet-body">
+                                <table id="shopTable" class="table table-hover table-striped table-bordered table-advanced tb-sticky-header" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="14%" colValue="">参数ID</th>
+                                            <th width="8%" colValue="">参数名称</th>
+                                            <th width="10%" colValue="">内部代码</th>
+                                            <th width="6%" colValue="">参数值</th>
+                                            <th width="18%" colValue="">操作</th>
+                                        </tr>
+                                        <tbody>
+
+                                        </tbody>
+                                    </thead>
+                                </table>
+				            </div>
+				        </div>
+                    </div>
+                </div>
+	        </div>
+	    </div>
+	    
+	    <!-- ====================================== 窗口区 ===================================== -->
+		<div id="newShopWizard" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header modal-header-primary">
+						<button type="button" data-dismiss="modal" aria-hidden="true" class="close">x</button>
+						<h4 id="modal-header-primary-label" class="modal-title">创建店铺向导</h4>
+					</div>
+					<div class="modal-body">
+						<div id="rootwizard-custom-circle">
+							<div class="navbar">
+								<div class="navbar-inner">
+									<ul>
+										<li><a href="#tab1-wizard-custom-circle" data-toggle="tab"><i class="glyphicon glyphicon-user"></i>
+											<p class="anchor"></p>
+												<p class="description">选择电商平台</p></a></li>
+										<li><a href="#tab2-wizard-custom-circle" data-toggle="tab"><i class="glyphicon glyphicon-send mln"></i>
+											<p class="anchor"></p>
+												<p class="description">验证</p></a></li>
+										<li><a href="#tab3-wizard-custom-circle" data-toggle="tab"><i class="glyphicon glyphicon-check mln"></i>
+											<p class="anchor"></p>
+												<p class="description">启用</p></a></li>
+										<li><a href="#tab4-wizard-custom-circle" data-toggle="tab"><i class="glyphicon glyphicon-shopping-cart"></i>
+											<p class="anchor"></p>
+												<p class="description">完成</p></a></li>
+									</ul>
+								</div>
+							</div>
+							<div id="bar" class="progress active">
+								<div class="bar progress-bar progress-bar-primary"></div>
+							</div>
+							<div class="tab-content" style="margin: 0px; padding-bottom: 0px;">
+							
+								<div id="tab1-wizard-custom-circle" class="tab-pane">
+									<h3 class="mbxl">选择平台</h3>
+									<form id="formShopTypeSelect" role="form" action="#" class="form-horizontal">
+										<div class="form-group">
+											<label for="prjId" class="col-sm-3 control-label">项目： <span class='require'>*</span>
+											</label>
+											<div class="col-sm-9">
+                                                <select id="prjId" name="prjId" class="form-control" required>
+                                                    <option value="">请选择</option>
+                                                </select>
+												<i class="alert alert-hide">项目是必选项！</i>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="shopType" class="col-sm-3 control-label">平台： <span class='require'>*</span>
+											</label>
+											<div class="col-sm-9">
+                                                <select id="shopType" name="shopType" class="form-control" required>
+                                                    <option value="">请选择</option>
+                                                    <option value="淘宝">淘宝</option>
+                                                    <option value="京东">京东</option>
+                                                    <option value="买卖云">买卖云</option>
+                                                </select>
+												<i class="alert alert-hide">平台是必选项！</i>
+											</div>
+										</div>
+									</form>
+								</div>
+								
+								<div id="tab2-wizard-custom-circle" class="tab-pane">
+									<h3 class="mbxl">设置帐号</h3>
+									<form id="validateForm" role="form" action="" class="form-horizontal">
+										<div class="form-group">
+											<label for="shopName" class="col-sm-3 control-label">店铺名称： <span class='require'>*</span>
+											</label>
+											<div class="col-sm-9">
+                                                <input id="shopName" name="shopName" type="text" placeholder="" minlength="1" maxlength="50" class="form-control required"/>
+<!-- 												<i class="alert alert-hide">店铺名称是必选项！6~50位字符</i> -->
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="shopAccount" class="col-sm-3 control-label">店铺帐号： <span class='require'>*</span>
+											</label>
+											<div class="col-sm-9">
+                                                <input id="shopAccount" name="shopAccount" type="text" placeholder="" minlength="6" maxlength="50" class="form-control required"/>
+<!-- 												<i class="alert alert-hide">店铺帐号是必选项！6~50位字符</i> -->
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="shopPassword" class="col-sm-3 control-label">店铺密码： <span class='require'>*</span>
+											</label>
+											<div class="col-sm-9">
+                                                <input id="shopPassword" name="shopPassword" type="password" placeholder="" minlength="6" maxlength="50" class="form-control required"/>
+<!-- 												<i class="alert alert-hide">店铺密码是必选项！6~50位字符</i> -->
+											</div>
+										</div>
+									</form>
+								</div>
+								
+								<div id="tab3-wizard-custom-circle" class="tab-pane">
+									<h3 class="mbxl">立即启用店铺？</h3>
+									<form id="formEnable" role="form" action="#" class="form-horizontal">
+										<div class="form-group">
+											<div class="col-sm-12">
+                                                <select id="enable" name="enable" class="form-control" required>
+                                                    <option value="y">是</option>
+                                                    <option value="n">否</option>
+                                                </select>
+												<i class="alert alert-hide">启用店铺是必选项！</i>
+											</div>
+										</div>
+									</form>
+								</div>
+								
+								<div id="tab4-wizard-custom-circle" class="tab-pane fadeIn">
+									<h3 class="mbxl"><i class="fa fa-check "></i>&nbsp;验证通过！</h3>
+									<p>您已创建店铺，启用后系统将自动开始下载订单。</p>
+								</div>
+								
+								<div class="action text-right">
+									<button type="button" name="previous" value="Previous" class="btn btn-info button-previous">
+										<i class="fa fa-arrow-circle-o-left mrx"></i>上一步
+									</button>
+									<button type="button" name="next" value="Next" class="btn btn-info button-next mlm">
+										下一步<i class="fa fa-arrow-circle-o-right mlx"></i>
+									</button>
+									<button type="button" id="btnShopWizardOK" aria-hidden="true" class="btn btn-primary" onclick="shopWizardFinish()">保存</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 导出文件 -->
+		<div id="exportList" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" class="modal fade" aria-labelledby="modal-header-primary-label">
+		</div>
+		
+        <!-- 店铺编辑页 -->
+        <div id="modalEdit" shopid="" tabindex="-1" role="dialog" aria-labelledby="modal-header-primary-label" data-backdrop="static" aria-hidden="true" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">店铺详情</h4>
+                    </div>
+                    <div class="modal-body">
+						<form id="shopDetailForm" role="form" action="" class="form-horizontal">
+							<div class="form-group">
+								<label for="shopName1" class="col-sm-3 control-label">店铺名称<span class='require'>*</span>
+								</label>
+								<div class="col-sm-9">
+                                     <input id="shopName1" name="shopName1" type="text" placeholder="" minlength="1" maxlength="50" class="form-control required" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="prjId1" class="col-sm-3 control-label">所属项目 <span class='require'>*</span>
+								</label>
+								<div class="col-sm-9">
+                                     <select id="prjId1" name="prjId1" class="form-control" required>
+                                         <option value="">请选择</option>
+                                     </select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="shopType1" class="col-sm-3 control-label">所属平台 <span class='require'>*</span>
+								</label>
+								<div class="col-sm-9">
+                                     <select id="shopType1" name="shopType1" class="form-control" required>
+                                         <option value="">请选择</option>
+                                         <option value="淘宝">淘宝</option>
+                                         <option value="京东">京东</option>
+                                         <option value="买卖云">买卖云</option>
+                                     </select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="shopTypeDetail" class="col-sm-3 control-label">平台店铺类型
+								</label>
+								<div class="col-sm-9">
+                                     <input id="shopTypeDetail" name="shopTypeDetail" type="text" placeholder="" minlength="0" maxlength="20" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="expireTime" class="col-sm-3 control-label">开始时间
+								</label>
+								<div class="col-sm-9">
+                                    <div class="input-group datetimepicker-default date">
+                                        <input id="startTime" name="startTime" type="text" class="form-control " placeholder="" data-format="YYYY-MM-DD HH:mm:ss" readonly />
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="expireTime" class="col-sm-3 control-label">到期时间
+								</label>
+								<div class="col-sm-9">
+                                    <div class="input-group datetimepicker-default date">
+                                        <input id="expireTime" name="expireTime" type="text" class="form-control compareDate greaterThenNow" placeholder="" data-format="YYYY-MM-DD HH:mm:ss" readonly />
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="remark" class="col-sm-3 control-label">备注
+								</label>
+								<div class="col-sm-9">
+                                     <textarea id="remark" rows="2" name="remark" placeholder="" maxlength="255" class="form-control"></textarea>
+								</div>
+							</div>
+						</form>
+					</div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
+                        <button id="btnShopDetailSave" type="button" class="btn btn-primary">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+		<!--END CONTENT -->
+	    <!-- 加载 jquery js-->
+	    <script src="/Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+	    <script src="/Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+	    <script src="/Apollo/madmin/js/jquery-ui.js"></script>
+	    
+	    <!-- 加载 bootstrap 和三方插件 js -->
+	    <script src="/Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+	    <script src="/Apollo/madmin/js/html5shiv.js"></script>
+	    <script src="/Apollo/madmin/js/respond.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script>
+	    <script src="/Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-pace/pace.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/holder/holder.js"></script>
+	    <script src="/Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script>
+	    <script src="/Apollo/madmin/vendors/moment/moment.js"></script>
+	    <script src="/Apollo/madmin/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+	    <script src="/Apollo/madmin/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+	    <script src="/Apollo/madmin/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+    	<script src="/Apollo/madmin/vendors/jquery-tablesorter/jquery.tablesorter.js"></script>
+    	<script src="/Apollo/madmin/js/table-advanced.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-validate/jquery.validate.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-validate/message_zh.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+
+	    <!-- 加载本页面对应的js -->
+	    <script src="systemParam.js"></script> 
+	    <script src="/views/static/js/export.js"></script>
+    </body>
+</html>

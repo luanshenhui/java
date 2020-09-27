@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BatchSmspCustModel">
+
+    <resultMap id="BatchSmspCustMap" type="cn.com.cgbchina.batch.model.BatchSmspCustModel">
+        <result property="id" column="id"/>
+        <result property="phone" column="phone"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="custName" column="cust_name"/>
+    </resultMap>
+
+    <select id="findSmspCustInfo" parameterType="Map" resultMap="BatchSmspCustMap">
+        select
+        tsc.id,
+        tsc.phone,
+        tsc.card_no,
+        act.cust_name
+        from
+        tbl_smsp_cust tsc,
+        a_card_cust_toelectronbank acct,
+        a_cust_toelectronbank act
+        where
+        tsc.card_no = acct.card_nbr
+        and acct.cert_nbr = act.cert_nbr
+        and tsc.id = #{id}
+        and tsc.user_type = #{userType}
+       <![CDATA[ limit #{offset}, #{limit} ]]>
+    </select>
+
+</mapper>
+
+

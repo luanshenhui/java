@@ -1,0 +1,472 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML LANG="ja">
+<HEAD>
+<meta http-equiv="Content-Style-Type"  content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link href="../../css/default.css" type="text/css" rel="stylesheet">
+<title>結果埴報（身体測定）</title>
+<style type="text/css">
+<!--
+.color1 {  background-color: #eeeeee; border-style: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px}
+.color2 {  background-color: #cccccc; border-style: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px}
+.color3 {  background-color: #eeeeee; border-style: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px}
+
+-->
+</style>
+<SCRIPT LANGUAGE="javascript">
+<!--  
+ function kensaCyushi(num)
+{
+    if(eval("obj.ch"+num+".checked")==true){
+        switch(num){
+        case 1:divSTOP1.innerHTML = "<SELECT name='p_stopcmt_1' style='width:120pt' onchange='yahooBB(1);'><OPTION SELECTED VALUE=''></OPTION><OPTION VALUE='11'>異常値  </OPTION><OPTION VALUE='12'>検コメ  </OPTION><OPTION VALUE='90'>取消    </OPTION><OPTION VALUE='<'>＜      </OPTION><OPTION VALUE='=<'>＝＜    </OPTION><OPTION VALUE='=>'>＝＞    </OPTION><OPTION VALUE='>'>＞      </OPTION><OPTION VALUE='B1'>高値希  </OPTION><OPTION VALUE='B2'>不足希  </OPTION><OPTION VALUE='B3'>希釈    </OPTION><OPTION VALUE='B4'>希釈    </OPTION><OPTION VALUE='B5'>濃縮    </OPTION><OPTION VALUE='C2'>再検不  </OPTION><OPTION VALUE='C3'>弱反応  </OPTION><OPTION VALUE='C4'>非特異  </OPTION><OPTION VALUE='C5'>抗補体  </OPTION><OPTION VALUE='C6'>薬影響  </OPTION><OPTION VALUE='C7'>報告参  </OPTION><OPTION VALUE='C8'>別紙参  </OPTION><OPTION VALUE='C9'>濃度報  </OPTION><OPTION VALUE='D1'>単位変  </OPTION><OPTION VALUE='D2'>基準変  </OPTION><OPTION VALUE='D3'>妊参照  </OPTION><OPTION VALUE='E0'>凝固参  </OPTION><OPTION VALUE='E2'>溶血参  </OPTION><OPTION VALUE='E3'>乳び参  </OPTION><OPTION VALUE='E4'>ビリ参  </OPTION><OPTION VALUE='E5'>Ｆ析参  </OPTION><OPTION VALUE='E6'>非特参  </OPTION><OPTION VALUE='E7'>不足参  </OPTION><OPTION VALUE='E8'>材料外  </OPTION><OPTION VALUE='E9'>凝集参  </OPTION><OPTION VALUE='F0'>不良参  </OPTION><OPTION VALUE='F1'>細胞壊  </OPTION><OPTION VALUE='F2'>汚染参  </OPTION><OPTION VALUE='F3'>ＬＹ少  </OPTION><OPTION VALUE='F4'>除蚕不  </OPTION><OPTION VALUE='F5'>容器外  </OPTION><OPTION VALUE='F6'>不備参  </OPTION><OPTION VALUE='F7'>長時参  </OPTION><OPTION VALUE='F8'>混濁参  </OPTION><OPTION VALUE='F9'>採不参  </OPTION><OPTION VALUE='G1'>自己陽  </OPTION><OPTION VALUE='G2'>他重複  </OPTION><OPTION VALUE='G3'>ＮＣＣ  </OPTION><OPTION VALUE='G4'>板不足参</OPTION><OPTION VALUE='G5'>分離剤参</OPTION><OPTION VALUE='G6'>再検修正</OPTION><OPTION VALUE='G7'>採り直し</OPTION><OPTION VALUE='G8'>修正値  </OPTION><OPTION VALUE='GA'>再検査済</OPTION><OPTION VALUE='GB'>不正確  </OPTION><OPTION VALUE='GC'>参考値  </OPTION><OPTION VALUE='GD'>検査不能</OPTION><OPTION VALUE='GE'>中止    </OPTION><OPTION VALUE='GF'>未提出  </OPTION><OPTION VALUE='GG'>量不足  </OPTION><OPTION VALUE='GH'>量過多  </OPTION><OPTION VALUE='GI'>不明    </OPTION><OPTION VALUE='GJ'>以上    </OPTION><OPTION VALUE='GK'>以下    </OPTION><OPTION VALUE='GL'>未満    </OPTION><OPTION VALUE='GM'>乳ビ　　</OPTION><OPTION VALUE='GN'>溶血　　</OPTION><OPTION VALUE='GO'>乳び尿  </OPTION><OPTION VALUE='GP'>Ｆ析出  </OPTION><OPTION VALUE='GQ'>不良    </OPTION><OPTION VALUE='GR'>生理中  </OPTION><OPTION VALUE='GS'>早朝尿  </OPTION><OPTION VALUE='GT'>随時尿  </OPTION><OPTION VALUE='GU'>粘調強  </OPTION><OPTION VALUE='GV'>不溶解  </OPTION><OPTION VALUE='GW'>１回目  </OPTION><OPTION VALUE='GX'>２回目　</OPTION><OPTION VALUE='GY'>ＶｉＣ  </OPTION><OPTION VALUE='GZ'>振子    </OPTION><OPTION VALUE='H1'>後日報  </OPTION><OPTION VALUE='H2'>再検中  </OPTION><OPTION VALUE='H3'>高値参  </OPTION><OPTION VALUE='H4'>低値参  </OPTION><OPTION VALUE='H5'>鏡検中  </OPTION><OPTION VALUE='H6'>目視    </OPTION><OPTION VALUE='H7'>ヘパ混入</OPTION><OPTION VALUE='H8'>採困難  </OPTION><OPTION VALUE='I0'>ＬＹ不  </OPTION><OPTION VALUE='I1'>量不可  </OPTION><OPTION VALUE='I2'>溶不可  </OPTION><OPTION VALUE='I3'>乳不可  </OPTION><OPTION VALUE='I4'>凝不可  </OPTION><OPTION VALUE='I5'>凝不可  </OPTION><OPTION VALUE='I6'>ビ不可  </OPTION><OPTION VALUE='I7'>非特不  </OPTION><OPTION VALUE='I9'>抗補不  </OPTION><OPTION VALUE='J1'>薬不可  </OPTION><OPTION VALUE='J2'>細不可  </OPTION><OPTION VALUE='J3'>材異不  </OPTION><OPTION VALUE='J4'>定性陰  </OPTION><OPTION VALUE='J5'>換算不  </OPTION><OPTION VALUE='J6'>干渉不  </OPTION><OPTION VALUE='J7'>分析不  </OPTION><OPTION VALUE='J8'>検出不  </OPTION><OPTION VALUE='J9'>不可能  </OPTION><OPTION VALUE='K1'>判定不  </OPTION><OPTION VALUE='K2'>陰性不可</OPTION><OPTION VALUE='K3'>同等不可</OPTION><OPTION VALUE='K4'>尿量不明</OPTION><OPTION VALUE='MA'>緩慢    </OPTION><OPTION VALUE='MB'>境界不明</OPTION><OPTION VALUE='MC'>氷無し  </OPTION><OPTION VALUE='MD'>加温後  </OPTION><OPTION VALUE='ME'>Ｅ凝集  </OPTION><OPTION VALUE='MF'>Ｐ集塊  </OPTION><OPTION VALUE='MG'>寒冷凝集</OPTION><OPTION VALUE='MH'>凝固    </OPTION><OPTION VALUE='MI'>一部凝固</OPTION><OPTION VALUE='MJ'>量不足  </OPTION><OPTION VALUE='ML'>３回目　</OPTION><OPTION VALUE='MM'>４回目　</OPTION><OPTION VALUE='MN'>５回目　</OPTION><OPTION VALUE='MO'>濃縮尿  </OPTION><OPTION VALUE='MP'>ＭＰ    </OPTION><OPTION VALUE='MQ'>別紙報告</OPTION><OPTION VALUE='MR'>ＢＪ蛋白</OPTION><OPTION VALUE='MS'>破損    </OPTION><OPTION VALUE='MT'>指のう  </OPTION><OPTION VALUE='MU'>へパ血  </OPTION><OPTION VALUE='MV'>ＥＤＴ血</OPTION><OPTION VALUE='MW'>血清    </OPTION><OPTION VALUE='MX'>感度以下</OPTION><OPTION VALUE='MY'>透析前  </OPTION><OPTION VALUE='MZ'>透析後  </OPTION><OPTION VALUE='SA'>用手法  </OPTION><OPTION VALUE='SB'>蓄尿不可</OPTION><OPTION VALUE='SC'>分離剤  </OPTION><OPTION VALUE='SD'>計算不能</OPTION><OPTION VALUE='SE'>食前    </OPTION><OPTION VALUE='SF'>食後    </OPTION><OPTION VALUE='SG'>依頼無し</OPTION><OPTION VALUE='SH'>再発行  </OPTION><OPTION VALUE='SI'>キサント</OPTION><OPTION VALUE='SJ'>血性    </OPTION></SELECT>";break;
+        case 2:divSTOP2.innerHTML = "<SELECT name='p_stopcmt_2' style='width:120pt' onchange='yahooBB(2);'><OPTION SELECTED VALUE=''></OPTION><OPTION VALUE='11'>異常値  </OPTION><OPTION VALUE='12'>検コメ  </OPTION><OPTION VALUE='90'>取消    </OPTION><OPTION VALUE='<'>＜      </OPTION><OPTION VALUE='=<'>＝＜    </OPTION><OPTION VALUE='=>'>＝＞    </OPTION><OPTION VALUE='>'>＞      </OPTION><OPTION VALUE='B1'>高値希  </OPTION><OPTION VALUE='B2'>不足希  </OPTION><OPTION VALUE='B3'>希釈    </OPTION><OPTION VALUE='B4'>希釈    </OPTION><OPTION VALUE='B5'>濃縮    </OPTION><OPTION VALUE='C2'>再検不  </OPTION><OPTION VALUE='C3'>弱反応  </OPTION><OPTION VALUE='C4'>非特異  </OPTION><OPTION VALUE='C5'>抗補体  </OPTION><OPTION VALUE='C6'>薬影響  </OPTION><OPTION VALUE='C7'>報告参  </OPTION><OPTION VALUE='C8'>別紙参  </OPTION><OPTION VALUE='C9'>濃度報  </OPTION><OPTION VALUE='D1'>単位変  </OPTION><OPTION VALUE='D2'>基準変  </OPTION><OPTION VALUE='D3'>妊参照  </OPTION><OPTION VALUE='E0'>凝固参  </OPTION><OPTION VALUE='E2'>溶血参  </OPTION><OPTION VALUE='E3'>乳び参  </OPTION><OPTION VALUE='E4'>ビリ参  </OPTION><OPTION VALUE='E5'>Ｆ析参  </OPTION><OPTION VALUE='E6'>非特参  </OPTION><OPTION VALUE='E7'>不足参  </OPTION><OPTION VALUE='E8'>材料外  </OPTION><OPTION VALUE='E9'>凝集参  </OPTION><OPTION VALUE='F0'>不良参  </OPTION><OPTION VALUE='F1'>細胞壊  </OPTION><OPTION VALUE='F2'>汚染参  </OPTION><OPTION VALUE='F3'>ＬＹ少  </OPTION><OPTION VALUE='F4'>除蚕不  </OPTION><OPTION VALUE='F5'>容器外  </OPTION><OPTION VALUE='F6'>不備参  </OPTION><OPTION VALUE='F7'>長時参  </OPTION><OPTION VALUE='F8'>混濁参  </OPTION><OPTION VALUE='F9'>採不参  </OPTION><OPTION VALUE='G1'>自己陽  </OPTION><OPTION VALUE='G2'>他重複  </OPTION><OPTION VALUE='G3'>ＮＣＣ  </OPTION><OPTION VALUE='G4'>板不足参</OPTION><OPTION VALUE='G5'>分離剤参</OPTION><OPTION VALUE='G6'>再検修正</OPTION><OPTION VALUE='G7'>採り直し</OPTION><OPTION VALUE='G8'>修正値  </OPTION><OPTION VALUE='GA'>再検査済</OPTION><OPTION VALUE='GB'>不正確  </OPTION><OPTION VALUE='GC'>参考値  </OPTION><OPTION VALUE='GD'>検査不能</OPTION><OPTION VALUE='GE'>中止    </OPTION><OPTION VALUE='GF'>未提出  </OPTION><OPTION VALUE='GG'>量不足  </OPTION><OPTION VALUE='GH'>量過多  </OPTION><OPTION VALUE='GI'>不明    </OPTION><OPTION VALUE='GJ'>以上    </OPTION><OPTION VALUE='GK'>以下    </OPTION><OPTION VALUE='GL'>未満    </OPTION><OPTION VALUE='GM'>乳ビ　　</OPTION><OPTION VALUE='GN'>溶血　　</OPTION><OPTION VALUE='GO'>乳び尿  </OPTION><OPTION VALUE='GP'>Ｆ析出  </OPTION><OPTION VALUE='GQ'>不良    </OPTION><OPTION VALUE='GR'>生理中  </OPTION><OPTION VALUE='GS'>早朝尿  </OPTION><OPTION VALUE='GT'>随時尿  </OPTION><OPTION VALUE='GU'>粘調強  </OPTION><OPTION VALUE='GV'>不溶解  </OPTION><OPTION VALUE='GW'>１回目  </OPTION><OPTION VALUE='GX'>２回目　</OPTION><OPTION VALUE='GY'>ＶｉＣ  </OPTION><OPTION VALUE='GZ'>振子    </OPTION><OPTION VALUE='H1'>後日報  </OPTION><OPTION VALUE='H2'>再検中  </OPTION><OPTION VALUE='H3'>高値参  </OPTION><OPTION VALUE='H4'>低値参  </OPTION><OPTION VALUE='H5'>鏡検中  </OPTION><OPTION VALUE='H6'>目視    </OPTION><OPTION VALUE='H7'>ヘパ混入</OPTION><OPTION VALUE='H8'>採困難  </OPTION><OPTION VALUE='I0'>ＬＹ不  </OPTION><OPTION VALUE='I1'>量不可  </OPTION><OPTION VALUE='I2'>溶不可  </OPTION><OPTION VALUE='I3'>乳不可  </OPTION><OPTION VALUE='I4'>凝不可  </OPTION><OPTION VALUE='I5'>凝不可  </OPTION><OPTION VALUE='I6'>ビ不可  </OPTION><OPTION VALUE='I7'>非特不  </OPTION><OPTION VALUE='I9'>抗補不  </OPTION><OPTION VALUE='J1'>薬不可  </OPTION><OPTION VALUE='J2'>細不可  </OPTION><OPTION VALUE='J3'>材異不  </OPTION><OPTION VALUE='J4'>定性陰  </OPTION><OPTION VALUE='J5'>換算不  </OPTION><OPTION VALUE='J6'>干渉不  </OPTION><OPTION VALUE='J7'>分析不  </OPTION><OPTION VALUE='J8'>検出不  </OPTION><OPTION VALUE='J9'>不可能  </OPTION><OPTION VALUE='K1'>判定不  </OPTION><OPTION VALUE='K2'>陰性不可</OPTION><OPTION VALUE='K3'>同等不可</OPTION><OPTION VALUE='K4'>尿量不明</OPTION><OPTION VALUE='MA'>緩慢    </OPTION><OPTION VALUE='MB'>境界不明</OPTION><OPTION VALUE='MC'>氷無し  </OPTION><OPTION VALUE='MD'>加温後  </OPTION><OPTION VALUE='ME'>Ｅ凝集  </OPTION><OPTION VALUE='MF'>Ｐ集塊  </OPTION><OPTION VALUE='MG'>寒冷凝集</OPTION><OPTION VALUE='MH'>凝固    </OPTION><OPTION VALUE='MI'>一部凝固</OPTION><OPTION VALUE='MJ'>量不足  </OPTION><OPTION VALUE='ML'>３回目　</OPTION><OPTION VALUE='MM'>４回目　</OPTION><OPTION VALUE='MN'>５回目　</OPTION><OPTION VALUE='MO'>濃縮尿  </OPTION><OPTION VALUE='MP'>ＭＰ    </OPTION><OPTION VALUE='MQ'>別紙報告</OPTION><OPTION VALUE='MR'>ＢＪ蛋白</OPTION><OPTION VALUE='MS'>破損    </OPTION><OPTION VALUE='MT'>指のう  </OPTION><OPTION VALUE='MU'>へパ血  </OPTION><OPTION VALUE='MV'>ＥＤＴ血</OPTION><OPTION VALUE='MW'>血清    </OPTION><OPTION VALUE='MX'>感度以下</OPTION><OPTION VALUE='MY'>透析前  </OPTION><OPTION VALUE='MZ'>透析後  </OPTION><OPTION VALUE='SA'>用手法  </OPTION><OPTION VALUE='SB'>蓄尿不可</OPTION><OPTION VALUE='SC'>分離剤  </OPTION><OPTION VALUE='SD'>計算不能</OPTION><OPTION VALUE='SE'>食前    </OPTION><OPTION VALUE='SF'>食後    </OPTION><OPTION VALUE='SG'>依頼無し</OPTION><OPTION VALUE='SH'>再発行  </OPTION><OPTION VALUE='SI'>キサント</OPTION><OPTION VALUE='SJ'>血性    </OPTION></SELECT>";break;
+        }
+    }else{
+        switch(num){
+        case 1:divSTOP1.innerHTML = "";break;
+        case 2:divSTOP2.innerHTML = "";break;
+        }
+    }
+}
+
+function yahooBB(num){
+  
+    var obj = document.inputform;
+    var str = num;
+   
+    if(str==1){
+        if(obj.p_stopcmt_1.value!=""){
+                obj.p_stopflg_1.value="S";
+                obj.p_rslcmtcd2_1.value="";
+        }else{
+                obj.p_stopflg_1.value="";
+                obj.p_rslcmtcd2_1.value=obj.p_stopcmt_1.value;
+        }
+    }else if(str==2){
+    
+        if(obj.p_stopcmt_2.value!=""){
+                 obj.p_stopflg_2.value="S";
+                 obj.p_rslcmtcd2_2.value="";
+                
+        }else{
+                 obj.p_stopflg_2.value="";
+                 obj.p_rslcmtcd2_2.value=obj.p_stopcmt_2.value;
+        }
+    }   
+    
+}
+
+function popUp()
+    {       
+          //../../../iamges/ic_notice_pacemaker_b.gif  
+        var left    = (screen.width/2)-300;
+        var top     = (screen.height/2)-150; 
+        var width   = 135;
+        var height  = 135; 
+        //alert("受信者はペースメーカです。"); 
+        
+        url="image.html";
+
+        window.open(url,"","left="+left+",top="+top+",toolbar=no,status=no,resizable=no,scrollbars=no,width="+width+",height="+height); 
+    }  
+
+function RoadData(str)  // VBからJSP　FORMにあるDATAを読み込む。
+{                 
+    
+   
+    
+
+
+/*
+ReceiveFromJavaPreValue(data1_1 As String, data1_2 As String, data1_3 As String, _
+                        data2_1 As String, data2_2 As String, data2_3 As String, _
+                        data3_1 As String, data3_2 As String, data3_3 As String, _
+                        data4_1 As String, data4_2 As String, data4_3 As String, _
+                        data5_1 As String, data5_2 As String, data5_3 As String, _
+                        data6_1 As String, data6_2 As String, data6_3 As String, _
+                        data1 As String, data2 As String, data3 As String, data4 As String, data5 As String, data6 As String, preyyyymmdd As String, prechk As String)
+
+ReceiveFromJavaPreValue("","","",                                                                                         
+                        "","","",                                                                                         
+                        "","","",                                                                                         
+                        "","","",                                                                                         
+                        "","","",                                                                                         
+                        "","","",                                                                                         
+                        obj.sdata18.value,obj.sdata19.value,obj.sdata20.value,obj.sdata21.value,obj.sdata22.value,obj.sdata23.value,obj.sdata24.value,obj.sdata25.value)
+*/
+   
+ 
+      obj = document.inputform;
+    
+    obj.p_stopflg_1.value="";
+    obj.p_stopflg_2.value="";
+    
+    
+     
+        
+ 
+    var jotainum= str;
+        if(jotainum==1){
+            
+            UserControl1.ReceiveFromJavaPreValue(
+                                                                obj.rdata0.value,
+                                                                obj.rdata6.value,
+                                                                obj.rdata12.value,
+                                                                obj.rdata1.value,
+                                                                obj.rdata7.value,
+                                                                obj.rdata13.value,
+                                                                obj.rdata2.value,
+                                                                obj.rdata8.value,
+                                                                obj.rdata14.value,
+                                                                obj.rdata3.value,
+                                                                obj.rdata9.value,
+                                                                obj.rdata15.value,
+                                                                obj.rdata4.value,
+                                                                obj.rdata10.value,
+                                                                obj.rdata16.value,
+                                                                obj.rdata5.value,
+                                                                obj.rdata11.value,
+                                                                obj.rdata17.value,
+                                                                obj.sdata18.value,
+                                                                obj.sdata19.value,
+                                                                obj.sdata20.value,
+                                                                obj.sdata21.value,
+                                                                obj.sdata22.value,
+                                                                obj.sdata23.value,
+                                                                obj.p_cslData2.value,
+                                                                obj.rdata24.value
+                                                                );
+         inputform2.sdata30.value=obj.sdata25.value; 
+         inputform2.rdata30.value=obj.rdata25.value; 
+   
+        }else if(jotainum==2){
+            
+            UserControl1.ReceiveFromJavaPreValue("","","", "","","","","","","","","","","","","","","", 
+                                                                obj.sdata18.value,
+                                                                obj.sdata19.value,
+                                                                obj.sdata20.value,
+                                                                obj.sdata21.value,
+                                                                obj.sdata22.value,
+                                                                obj.sdata23.value,
+                                                                obj.p_cslData2.value,
+                                                                "1"
+                                                                );          
+            inputform2.sdata30.value=obj.sdata25.value; 
+         }
+
+}
+    
+function SendData()
+{
+         
+        var tempint = 0; 
+       
+        var obj = document.inputform;
+        
+        obj.fdata0.value = UserControl1.SendToJava_data1_1();    
+        obj.fdata1.value = UserControl1.SendToJava_data2_1();    
+        obj.fdata2.value = UserControl1.SendToJava_data3_1();    
+        obj.fdata3.value = UserControl1.SendToJava_data4_1();    
+        obj.fdata4.value = UserControl1.SendToJava_data5_1();    
+        obj.fdata5.value = UserControl1.SendToJava_data6_1();    
+        obj.fdata6.value = UserControl1.SendToJava_data1_2();    
+        obj.fdata7.value = UserControl1.SendToJava_data2_2();    
+        obj.fdata8.value = UserControl1.SendToJava_data3_2();    
+        obj.fdata9.value = UserControl1.SendToJava_data4_2();    
+        obj.fdata10.value = UserControl1.SendToJava_data5_2();    
+        obj.fdata11.value = UserControl1.SendToJava_data6_2();    
+        obj.fdata12.value = UserControl1.SendToJava_data1_3();    
+        obj.fdata13.value = UserControl1.SendToJava_data2_3();    
+        obj.fdata14.value = UserControl1.SendToJava_data3_3();    
+        obj.fdata15.value = UserControl1.SendToJava_data4_3();    
+        obj.fdata16.value = UserControl1.SendToJava_data5_3();    
+        obj.fdata17.value = UserControl1.SendToJava_data6_3();    
+        obj.fdata24.value = UserControl1.SendToJava_check();
+        obj.fdata25.value = document.inputform2.rdata30.value;
+       
+        
+        switch(obj.fdata24.value){
+            case '1': obj.fdata18 .value = UserControl1.SendToJava_data1_1();
+                      obj.fdata19 .value = UserControl1.SendToJava_data2_1();
+                      obj.fdata20 .value = UserControl1.SendToJava_data3_1();
+                      obj.fdata21 .value = UserControl1.SendToJava_data4_1();
+                      obj.fdata22 .value = UserControl1.SendToJava_data5_1();
+                      obj.fdata23 .value = UserControl1.SendToJava_data6_1(); 
+                      break;
+                                                                                                                                    
+            case '2': obj.fdata18.value = UserControl1.SendToJava_data1_2();
+                      obj.fdata19.value = UserControl1.SendToJava_data2_2();
+                      obj.fdata20.value = UserControl1.SendToJava_data3_2();
+                      obj.fdata21.value = UserControl1.SendToJava_data4_2();
+                      obj.fdata22.value = UserControl1.SendToJava_data5_2();
+                      obj.fdata23.value = UserControl1.SendToJava_data6_2(); 
+                      break;
+                                                                                                                                    
+            case '3': obj.fdata18.value = UserControl1.SendToJava_data1_3();
+                      obj.fdata19.value = UserControl1.SendToJava_data2_3();
+                      obj.fdata20.value = UserControl1.SendToJava_data3_3();
+                      obj.fdata21.value = UserControl1.SendToJava_data4_3();
+                      obj.fdata22.value = UserControl1.SendToJava_data5_3();
+                      obj.fdata23.value = UserControl1.SendToJava_data6_3(); 
+                      break;
+        }                            
+   
+   
+    
+      if((obj.ch1.checked==true)&&(obj.p_stopcmt_1.value=="")){
+     alert("中止MentをListから選んで下さい");
+     return false;
+    }
+    
+    if((obj.ch2.checked==true)&&(obj.p_stopcmt_2.value=="")){
+     alert("中止MentをListから選んで下さい");
+     return false;
+    }
+      
+                 if(obj.ch1.checked==true){ 
+                   obj.p_stopflg_1.value = "S";
+                   obj.p_rslcmtcd2_1.value = obj.p_stopcmt_1.value;  
+                   obj.p_kenshin_jotai_code.value = "100080";
+                  }else{
+                   obj.p_stopflg_1.value = "";
+                   obj.p_rslcmtcd2_1.value = "";  
+                  }
+                  
+                 if(obj.ch2.checked==true){ 
+                   obj.p_stopflg_2.value = "S";
+                   obj.p_rslcmtcd2_2.value = obj.p_stopcmt_2.value;  
+                   obj.p_kenshin_jotai_code.value = "100080";
+                  }else{
+                   obj.p_stopflg_2.value = "";
+                   obj.p_rslcmtcd2_2.value = "";  
+                  }
+    
+   if(obj.fdata24.value!=3){
+           for(i=18;i<24;i++){
+                var temp = eval("obj.fdata"+i+".value");
+            
+                    if(temp==""){
+                        tempint =tempint + 1;
+                    }
+                
+                
+                }
+    }else if(obj.fdata24.value==3){
+        
+        if((obj.fdata18.value =="")||(obj.fdata19.value =="")){
+    
+                tempint =tempint + 1;
+            }
+        
+    }
+
+    if((tempint > 0)&&(obj.p_stopflg_1.value!="S")){
+        alert("空いているDATAがあります。");
+        return false;
+        
+        
+   }else if((document.inputform2.rdata30.value=="")&&(obj.p_stopflg_2.value!="S")){
+        alert("空いているDATAがあります。");
+         return false;
+   }else{
+   
+        x1 = obj.fdata20.value;
+        x2 = obj.fdata22.value;
+        
+      
+       yn1 = validate(x1);
+       yn2 = validate(x2);
+       
+       if(yn1 > 0|| yn2 > 0){
+           alert("体脂肪率や肥満度の入力の場合数字しか入力できません。");
+         
+           return false;
+       }
+       
+      //  alert(1);
+        var url = "update.jsp";
+        document.inputform.action = url;
+        document.inputform.submit();
+    }
+      
+}
+
+function validate(str){
+    var digits="0123456789-."
+    var temp
+    var temp2 = 0;
+    
+        for (var i=0;i<str.length;i++){
+        temp=str.substring(i,i+1)
+        if (digits.indexOf(temp)==-1){
+        
+        temp2 = temp2 + 1;
+              }
+           }
+        
+        return temp2;
+        
+}
+//-->
+</SCRIPT>
+<style type="text/css">
+	body { margin: 0 0 0 2px; }
+</style>
+</head>
+<body> 
+<form name="inputform" method=post>
+<input type=hidden name="p_dayid" value=101>
+<input type=hidden name="p_perid" value="90040650">
+<input type=hidden name="p_rsvno" value="247513">
+<input type=hidden name="p_kenshin_jotai_code" value="100040">
+<!-- ---------------------------------------------------------         中止　S        ---- //-->
+<input type="hidden" name="p_stopflg_1" value="">
+<input type="hidden" name="p_rslcmtcd2_1" value="">
+<input type="hidden" name="p_stopflg_2" value="">
+<input type="hidden" name="p_rslcmtcd2_2" value="">
+<!-- ---------------------------------------------------------         中止　E       ---- //-->
+<input type="hidden" name="fdata0" value=""><input type="hidden" name="fdata1" value=""><input type="hidden" name="fdata2" value=""><input type="hidden" name="fdata3" value=""><input type="hidden" name="fdata4" value=""><input type="hidden" name="fdata5" value=""><input type="hidden" name="fdata6" value=""><input type="hidden" name="fdata7" value=""><input type="hidden" name="fdata8" value=""><input type="hidden" name="fdata9" value=""><input type="hidden" name="fdata10" value=""><input type="hidden" name="fdata11" value=""><input type="hidden" name="fdata12" value=""><input type="hidden" name="fdata13" value=""><input type="hidden" name="fdata14" value=""><input type="hidden" name="fdata15" value=""><input type="hidden" name="fdata16" value=""><input type="hidden" name="fdata17" value=""><input type="hidden" name="fdata18" value=""><input type="hidden" name="fdata19" value=""><input type="hidden" name="fdata20" value=""><input type="hidden" name="fdata21" value=""><input type="hidden" name="fdata22" value=""><input type="hidden" name="fdata23" value=""><input type="hidden" name="fdata24" value=""><input type="hidden" name="fdata25" value="">
+<input type="hidden" name="rdata0" value="">
+<input type="hidden" name="rdata1" value="">
+<input type="hidden" name="rdata2" value="">
+<input type="hidden" name="rdata3" value="">
+<input type="hidden" name="rdata4" value="">
+<input type="hidden" name="rdata5" value="">
+<input type="hidden" name="rdata6" value="">
+<input type="hidden" name="rdata7" value="">
+<input type="hidden" name="rdata8" value="">
+<input type="hidden" name="rdata9" value="">
+<input type="hidden" name="rdata10" value="">
+<input type="hidden" name="rdata11" value="">
+<input type="hidden" name="rdata12" value="">
+<input type="hidden" name="rdata13" value="">
+<input type="hidden" name="rdata14" value="">
+<input type="hidden" name="rdata15" value="">
+<input type="hidden" name="rdata16" value="">
+<input type="hidden" name="rdata17" value="">
+<input type="hidden" name="rdata18" value="">
+<input type="hidden" name="rdata19" value="">
+<input type="hidden" name="rdata20" value="">
+<input type="hidden" name="rdata21" value="">
+<input type="hidden" name="rdata22" value="">
+<input type="hidden" name="rdata23" value="">
+<input type="hidden" name="rdata24" value="3">
+<input type="hidden" name="rdata25" value="80">
+
+<input type="hidden" name="p_cslData" value="20031224">
+<input type="hidden" name="sdata0" value="">
+<input type="hidden" name="sdata1" value="">
+<input type="hidden" name="sdata2" value="">
+<input type="hidden" name="sdata3" value="">
+<input type="hidden" name="sdata4" value="">
+<input type="hidden" name="sdata5" value="">
+<input type="hidden" name="sdata6" value="">
+<input type="hidden" name="sdata7" value="">
+<input type="hidden" name="sdata8" value="">
+<input type="hidden" name="sdata9" value="">
+<input type="hidden" name="sdata10" value="">
+<input type="hidden" name="sdata11" value="">
+<input type="hidden" name="sdata12" value="170">
+<input type="hidden" name="sdata13" value="60">
+<input type="hidden" name="sdata14" value="50">
+<input type="hidden" name="sdata15" value="60">
+<input type="hidden" name="sdata16" value="44">
+<input type="hidden" name="sdata17" value="44">
+<input type="hidden" name="sdata18" value="170">
+<input type="hidden" name="sdata19" value="60">
+<input type="hidden" name="sdata20" value="50">
+<input type="hidden" name="sdata21" value="60">
+<input type="hidden" name="sdata22" value="44">
+<input type="hidden" name="sdata23" value="44">
+<input type="hidden" name="sdata24" value="3">
+<input type="hidden" name="sdata25" value="60">
+
+<input type="hidden" name="p_cslData2" value="20031223">
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#999999">
+    <tr>
+        <td nowrap bgcolor="#eeeeee" height="15"><b><font color="#333333">結果埴報（身体測定）</font></b></td>
+    </tr>
+</table>
+
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#ffffff">
+    <tr>
+        <td nowrap width="100%" align="right" valign="middle"><img src="../../../images/regist.gif" alt="団体埴報を個別に設定する" border="0" onclick="javascript:SendData();" style="cursor:hand;"></td>
+    </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#ffffff">
+    <tr>
+         <td align="left" nowrap width=5%>
+                <input type="checkbox" name="ch1" value="0" border="0" onclick="javascript:kensaCyushi(1)" >身体計測 検査中止
+                
+                <!--img src="../../../images/012.gif"  onmouseover="this.src='../../../images/012_up.gif'" onmouseout="this.src='../../../images/012.gif'" border="0" onclick="javascript:kensaCyushi(1)" style="cursor:hand"-->
+                </td>
+                <td align="left"width=40%>
+               	<div id="divSTOP1">
+		
+		
+         </div>		
+                </td>
+                <td align="left" nowrap width=5%>
+                <!--img src="../../../images/012.gif"  onmouseover="this.src='../../../images/012_up.gif'" onmouseout="this.src='../../../images/012.gif'" border="0" onclick="javascript:kensaCyushi(2)" style="cursor:hand"-->
+                <input type="checkbox" name="ch2" value="0" border="0" onclick="javascript:kensaCyushi(2)">腹囲　検査中止
+                </td>
+                <td align="left" width=30% >
+                  <!-------------STOP BUTTON START DIV------------------------------------------//-->
+                	<div id="divSTOP2">
+		
+         </div>		
+                <!----------------STOP BUTTON START------------------------------------------//-->
+                </td>
+                </tr>
+</table>
+</form>
+
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#ffffff">
+    <tr>
+    <td width=60%>
+
+<OBJECT ID="UserControl1"
+CLASSID="CLSID:AC9164A2-C117-4B0F-B9FD-84930FA5F6B4"
+CODEBASE="shintai.CAB#version=1,0,0,0">
+</OBJECT>
+                        
+                        <OBJECT CLASSID="CLSID:5220cd21-c88d-11cf-b347-00aa00a28331" width="0" height="0">
+                        <PARAM NAME="LPKPATH" VALUE="lukeTest.lpk">
+                        </OBJECT>
+     
+    </td>
+    <td valign=top width=40%><br><br>
+    
+
+     <form name=inputform2 method=post >
+     <table border="0" cellpadding="2" cellspacing="1">
+                        <tr bgcolor="cccccc" height="15">
+                            <td nowrap align="left" height="15" class=title>項目名</td>
+                            <td colspan="2" nowrap height="15" class=title>前回値 20031223 </td>
+                            <td colspan="2" nowrap height="15" class=title>検査結果</td> 
+                        </tr>
+                        <tr bgcolor=#eeeeee height="15">
+                            <td nowrap align="left" width="52" height="15">腹囲</td>
+                            <td align="right" nowrap width="84" height="15"><input type="text" name="sdata30" value="" size="6" maxlength="5" border="0" style="text-align:right" value="" readonly class="color1"></td>
+                            <td nowrap align="right" height="15">cm</td>
+                            <td align="right" nowrap width="50" height="15"><input type="text" name="rdata30" value="" size="6" maxlength="5" border="0" style="text-align:right" value="" > </td>
+                            <td nowrap align="right" height="15">cm</td>
+                        </tr>
+                    </table> 
+     
+     </td>
+    </form>
+        
+      </tr>
+</table>              
+
+	<iframe width=1 height=1 onload=javascript:RoadData(1);></iframe>
+	
+	</body>
+
+</html>

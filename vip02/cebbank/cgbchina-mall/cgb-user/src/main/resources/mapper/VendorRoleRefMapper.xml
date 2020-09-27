@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VendorRoleRefModel">
+    <resultMap id="VendorRoleRefMap" type="VendorRoleRefModel">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="roleId" column="role_id"/>
+    </resultMap>
+    <sql id="columns">
+        id,user_id,role_id
+    </sql>
+
+    <insert id="insert" parameterType="VendorRoleRefModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_vendor_role_ref
+        (user_id
+        ,role_id)
+        values(#{userId}
+        ,#{roleId})
+    </insert>
+
+    <update id="update" parameterType="VendorRoleRefModel">
+        update tbl_vendor_role_ref set
+        <if test="userId !=null">user_id = #{userId}
+            ,
+        </if>
+        <if test="roleId !=null">role_id = #{roleId}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="userId !=null">and user_id = #{userId}</if>
+            <if test="roleId !=null">and role_id = #{roleId}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="VendorRoleRefMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_vendor_role_ref
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="VendorRoleRefMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_role_ref
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="VendorRoleRefMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_role_ref
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="VendorRoleRefModel">
+        delete from tbl_vendor_role_ref where id = id
+    </delete>
+    <select id="getRoleIdByUserId" parameterType="String" resultType="Long">
+        SELECT role_id FROM tbl_vendor_role_ref WHERE user_id =#{_parameter}
+    </select>
+    <select id="roleExists" parameterType="Long" resultType="Integer">
+        SELECT COUNT(1) FROM tbl_vendor_role_ref WHERE role_id=#{_parameter}
+    </select>
+    <insert id="insertUserRole" parameterType="cn.com.cgbchina.user.dto.UserRoleDto">
+        INSERT INTO tbl_vendor_role_ref (user_id,role_id) VALUES
+        <foreach collection="roles" item="roleId" separator=",">
+            (#{userId},#{roleId})
+        </foreach>
+    </insert>
+    <delete id="deleteUserRole" parameterType="Map">
+        DELETE FROM tbl_vendor_role_ref WHERE user_id=#{userId} AND role_id IN
+        <foreach collection="deleteList" separator="," open="(" close=")" item="deleteId">
+            #{deleteId}
+        </foreach>
+    </delete>
+    <!--add by liuhan-->
+    <select id="findByIdList" parameterType="java.util.List" resultType="String"              >
+        SELECT distinct user_id FROM tbl_vendor_role_ref WHERE role_id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>
+
+

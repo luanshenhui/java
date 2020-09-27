@@ -1,0 +1,157 @@
+package cn.rkylin.oms.system.dictionary.service;
+
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.github.pagehelper.PageInfo;
+import com.sun.tools.javac.code.Attribute.Array;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.dictionary.dao.IDictDAO;
+import cn.rkylin.oms.system.dictionary.domain.OMS_DICT;
+import cn.rkylin.oms.system.dictionary.vo.DictVO;
+
+/**
+ * <p>
+ * Module : 参数管理
+ * </p>
+ * <p>
+ * Description: 角色业务对象
+ * </p>
+ * 
+ */
+@Service("dictService")
+public class DictServiceImple extends ApolloService implements IDictService {
+	
+	@Autowired
+	private IDictDAO idictDAO;
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 查询参数列表
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	public PageInfo<DictVO> findByWhere(int page, int rows, DictVO dictVO) throws Exception {
+		PageInfo<DictVO> dictVOList = findPage(page, rows, "getDictByCondition", dictVO);
+		return dictVOList;
+	}
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 添加参数
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+//	@Transactional
+//	@CachePut(value = "dict", key = "T(String).valueOf('role:').concat(#roleVo.roleId)")
+	public void insert(DictVO dictVO) throws Exception {
+		idictDAO.insert("insertDict", dictVO);
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除参数
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public void delete(String dictId) throws Exception {
+		idictDAO.delete("deleteDict", dictId);
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 修改参数
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public void update(DictVO dictVO) throws Exception {
+		idictDAO.update("updateDict", dictVO);
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取客户端类型
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public List getParamDictByCode(OMS_DICT dict) throws Exception {
+		try {
+			List<DictVO> list =idictDAO.getParamDictByCode(dict);
+			if(!list.isEmpty()){
+				String [] arr=list.get(0).getDictValue().split(",");
+				return Arrays.asList(arr);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+		return null;
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 查找姓名
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public List getDictByCondition(DictVO dictVO) throws Exception {
+		try {
+			return idictDAO.getDictByCondition(dictVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 查找参数类型
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public List getDictTypeList(OMS_DICT oms_DICT) throws Exception {
+		
+		try {
+			return idictDAO.getDictTypeList(oms_DICT);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+	}
+}

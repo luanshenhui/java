@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ServicePromiseModel">
+    <resultMap id="ServicePromiseMap" type="ServicePromiseModel">
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="sort" column="sort"/>
+        <result property="icon" column="icon"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        code,name,sort,icon,is_enable,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="ServicePromiseModel" useGeneratedKeys="true"
+            keyProperty="code" keyColumn="code">
+        insert into tbl_service_promise
+        (name
+        ,sort
+        ,icon
+        ,is_enable
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        )
+        values(#{name}
+        ,#{sort}
+        ,#{icon}
+        ,#{isEnable}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        )
+    </insert>
+
+    <update id="update" parameterType="ServicePromiseModel">
+        update tbl_service_promise set
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="sort !=null">sort = #{sort}
+            ,
+        </if>
+        <if test="icon !=null">icon = #{icon}
+            ,
+        </if>
+        <if test="isEnable !=null">is_enable = #{isEnable}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = 0
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        modify_time = now()
+        where code = #{code}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="code !=null">and code = #{code}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="sort !=null">and sort = #{sort}</if>
+            <if test="icon !=null">and icon = #{icon}</if>
+            <if test="isEnable !=null">and is_enable = #{isEnable}</if>
+            and del_flag = 0
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="ServicePromiseMap">
+        SELECT code,
+        <include refid="columns"/>
+        from tbl_service_promise
+        where code=#{code}
+    </select>
+    <select id="findAll" resultMap="ServicePromiseMap">
+        select
+        <include refid="columns"/>
+        from tbl_service_promise
+        <include refid="conditions"/>
+    </select>
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_service_promise
+        <include refid="conditions"/>
+    </select>
+    <select id="pager" parameterType="Map" resultMap="ServicePromiseMap">
+        select code,
+        <include refid="columns"/>
+        from tbl_service_promise
+        <include refid="conditions"/>
+        <![CDATA[ order by sort limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="ServicePromiseModel">
+        update tbl_service_promise
+        set
+        del_flag = 1
+        ,is_enable = 1
+        where code = #{code}
+    </delete>
+
+    <!--校验name唯一性使用 by yuxinxin -->
+    <select id="findNameByName" parameterType="String" resultType="Long">
+        select count(1)
+        from tbl_service_promise
+        where name = #{name} and del_flag = 0
+    </select>
+
+    <!--校验sort唯一性使用 by yuxinxin -->
+    <select id="findSortBySort" parameterType="Integer" resultType="Long">
+        select count(1)
+        from tbl_service_promise
+        where sort = #{sort} and del_flag = 0
+    </select>
+
+    <select id="findServiceSortByIds" resultMap="ServicePromiseMap" parameterType="List">
+        select code,name,sort,icon
+        from tbl_service_promise where code in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and is_enable = 0
+        and del_flag = 0
+        ORDER BY sort
+    </select>
+
+    <select id="findAllAbled" resultMap="ServicePromiseMap">
+        select
+        <include refid="columns"/>
+        from tbl_service_promise
+        WHERE del_flag = 0 and is_enable = 0
+        ORDER BY sort
+    </select>
+
+    <select id="findServiceByIdEffective" parameterType="Map" resultMap="ServicePromiseMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_service_promise
+        where is_enable = 0
+        and del_flag = 0
+        and code=#{code}
+    </select>
+
+    <select id="findByIds" parameterType="List" resultMap="ServicePromiseMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_service_promise WHERE code IN
+        <foreach item="code" collection="list"
+                 open="(" separator="," close=")">
+            #{code}
+        </foreach>
+    </select>
+
+</mapper>
+
+

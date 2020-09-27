@@ -1,0 +1,14 @@
+<script type='text/javascript' src='../scripts/jquery/chart/highcharts.js'></script>
+<script type='text/javascript' src='../scripts/jquery/chart/exporting.js'></script>
+<script src="../pages/orden/statistic.js"></script>
+<div id="orden_statistic_form" class="list_search">
+	<h1></h1>
+	<select id="moneySignID" style="width:60px;"></select>
+	<select id="memberID" name="memberID"></select>
+	<input type="text" id="fromStatisticDate" />
+	<input type="text" id="toStatisticDate" />
+	<a id="btnStatistic"></a>
+	<a id="btnExportStatistic"></a>
+	<div id="statistic_grid"></div>
+	<div id="statistic_chart"></div>
+</div>

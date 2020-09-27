@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.riskmanage.dao.DcaRiskManageDao">
+    
+	<sql id="dcaRiskManageColumns">
+		a.RISK_MANAGE_ID AS "riskManageId",
+		a.BIZ_ROLE_ID AS "bizRoleId",
+		a.POWER_ID AS "powerId",
+		a.RISK_ID AS "riskId",
+		a.BIZ_FLOW_ID AS "bizFlowId",
+		a.BIZ_FLOW_NAME AS "bizFlowName",
+		a.BIZ_OPER_PERSON AS "bizOperPerson",
+		a.BIZ_OPER_POST AS "bizOperPost",
+		a.BIZ_DATA_ID AS "bizDataId",
+		a.BIZ_DATA_NAME AS "bizDataName",
+		a.INSTANCE_ID AS "instanceId",
+		a.TASK_ID AS "taskId",
+		a.TASK_NAME AS "taskName",
+		a.ALARM_LEVEL AS "alarmLevel",
+		a.ALARM_TYPE AS "alarmType",
+		a.RISK_LEVEL AS "riskLevel",
+		a.CPU_RESULT AS "cpuResult",
+		a.RISK_MSG AS "riskMsg",
+		a.RISK_TRANS_FLAG AS "riskTransFlag",
+		a.DEFINE_BY_MANUAL AS "defineByManual",
+		a.DEFINE_PERSON AS "definePerson",
+		a.DEFINE_STATUS AS "defineStatus",
+		a.DEFINE_DATE AS "defineDate",
+		a.EVIDENCE AS "evidence",
+		a.EXPLAINS AS "explains",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks"
+	</sql>
+	
+	<sql id="dcaRiskManageJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaRiskManage">
+		SELECT 
+			<include refid="dcaRiskManageColumns"/>
+		FROM DCA_RISK_MANAGE a
+		<include refid="dcaRiskManageJoins"/>
+		WHERE a.RISK_MANAGE_ID = #{riskManageId}
+	</select>
+	
+	<select id="findList" resultType="DcaRiskManage">
+		SELECT b.NAME AS "bizOperPostName", b.PARENT_IDS AS parentIds,
+			<include refid="dcaRiskManageColumns"/>
+		FROM DCA_RISK_MANAGE a
+		LEFT JOIN SYS_OFFICE b ON a.BIZ_OPER_POST = b.ID
+		<include refid="dcaRiskManageJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="bizOperPost != null and bizOperPost != ''">
+				AND a.BIZ_OPER_POST = #{bizOperPost}
+			</if>
+			<if test="bizOperPerson != null and bizOperPerson != ''">
+				AND a.BIZ_OPER_PERSON_ID = #{bizOperPerson}
+			</if>
+			<if test="defineStatus != null and defineStatus != '' and defineStatus != '-999'">
+				AND a.DEFINE_STATUS = #{defineStatus}
+			</if>
+			<if test="idxDataType != null and idxDataType != ''">
+				AND SUBSTR(a.POWER_ID, 0, 2) = #{idxDataType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 根据用户查询其对应的数据 -->
+	<!-- CHANGE BY geshuo 20161228:嵌入子查询，当同一个风险存在多条转发记录时，取update最新的一条 -->
+	<select id="findListByUser" resultType="DcaRiskManage">
+		SELECT DISTINCT b.RISK_MANAGE_ID, b.IS_DEFINE_POWER AS "isDefinePower", c.NAME AS "bizOperPostName", c.PARENT_IDS AS parentIds,			
+			<include refid="dcaRiskManageColumns"/>
+		FROM
+			DCA_RISK_MANAGE a
+		INNER JOIN (
+						SELECT p.* FROM (
+											SELECT RISK_MANAGE_ID,MAX(UPDATE_DATE) updateDate 
+											FROM DCA_RISK_TRANS 
+											GROUP BY RISK_MANAGE_ID
+										) o
+						LEFT JOIN DCA_RISK_TRANS p
+						ON (o.RISK_MANAGE_ID = p.RISK_MANAGE_ID 
+							AND o.updateDate = p.UPDATE_DATE)
+					) b 
+			ON a.RISK_MANAGE_ID = b.RISK_MANAGE_ID
+		LEFT JOIN SYS_OFFICE c ON a.BIZ_OPER_POST = c.ID
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="defineStatus != null and defineStatus != '' and defineStatus != '-999'">
+				AND a.DEFINE_STATUS = #{defineStatus}
+			</if>
+			<if test="idxDataType != null and idxDataType != ''">
+				AND SUBSTR(a.POWER_ID, 0, 2) = #{idxDataType}
+			</if>
+			<!-- 部门+岗位+账号 检索风险转发表 -->				
+			AND b.OFFICE_ID = #{currentUser.office.id}
+			AND b.POST_ID = #{postId}
+			AND b.USER_ID = #{currentUser.id}
+		</where>	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>	
+	</select>
+	
+	
+	<select id="findAllList" resultType="DcaRiskManage">
+		SELECT 
+			<include refid="dcaRiskManageColumns"/>
+		FROM DCA_RISK_MANAGE a
+		<include refid="dcaRiskManageJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO DCA_RISK_MANAGE(
+			RISK_MANAGE_ID,
+			BIZ_ROLE_ID,
+			POWER_ID,
+			RISK_ID,
+			BIZ_FLOW_ID,
+			BIZ_FLOW_NAME,
+			BIZ_OPER_PERSON,
+			BIZ_OPER_POST,
+			BIZ_DATA_ID,
+			BIZ_DATA_NAME,
+			INSTANCE_ID,
+			TASK_ID,
+			TASK_NAME,
+			ALARM_LEVEL,
+			ALARM_TYPE,
+			RISK_LEVEL,
+			CPU_RESULT,
+			RISK_MSG,
+			RISK_TRANS_FLAG,
+			DEFINE_BY_MANUAL,
+			DEFINE_PERSON,
+			DEFINE_STATUS,
+			DEFINE_DATE,
+			EVIDENCE,
+			EXPLAINS,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS
+		) VALUES (
+			#{riskManageId},
+			#{bizRoleId},
+			#{powerId},
+			#{riskId},
+			#{bizFlowId},
+			#{bizFlowName},
+			#{bizOperPerson},
+			#{bizOperPost},
+			#{bizDataId},
+			#{bizDataName},
+			#{instanceId},
+			#{taskId},
+			#{taskName},
+			#{alarmLevel},
+			#{alarmType},
+			#{riskLevel},
+			#{cpuResult},
+			#{riskMsg},
+			#{riskTransFlag},
+			#{defineByManual},
+			#{definePerson},
+			#{defineStatus},
+			#{defineDate},
+			#{evidence},
+			#{explains},
+			#{delFlag},
+			#{createPerson},
+			SYSDATE,
+			#{updatePerson},
+			SYSDATE,
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE DCA_RISK_MANAGE SET 	
+			RISK_MANAGE_ID = #{riskManageId},
+			BIZ_ROLE_ID = #{bizRoleId},
+			POWER_ID = #{powerId},
+			RISK_ID = #{riskId},
+			BIZ_FLOW_ID = #{bizFlowId},
+			BIZ_FLOW_NAME = #{bizFlowName},
+			BIZ_OPER_PERSON = #{bizOperPerson},
+			BIZ_OPER_POST = #{bizOperPost},
+			BIZ_DATA_ID = #{bizDataId},
+			BIZ_DATA_NAME = #{bizDataName},
+			INSTANCE_ID = #{instanceId},
+			TASK_ID = #{taskId},
+			TASK_NAME = #{taskName},
+			ALARM_LEVEL = #{alarmLevel},
+			ALARM_TYPE = #{alarmType},
+			RISK_LEVEL = #{riskLevel},
+			CPU_RESULT = #{cpuResult},
+			RISK_MSG = #{riskMsg},
+			RISK_TRANS_FLAG = #{riskTransFlag},
+			DEFINE_BY_MANUAL = #{defineByManual},
+			DEFINE_PERSON = #{definePerson},
+			DEFINE_STATUS = #{defineStatus},
+			DEFINE_DATE = #{defineDate},
+			EVIDENCE = #{evidence},
+			EXPLAINS = #{explains},
+			CREATE_PERSON = #{createPerson},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = SYSDATE,
+			REMARKS = #{remarks}
+		WHERE RISK_MANAGE_ID = #{riskManageId}
+	</update>
+	
+	<update id="delete">
+		UPDATE DCA_RISK_MANAGE SET 
+			DEL_FLAG = #{DEL_FLAG_DELETE}
+		WHERE RISK_MANAGE_ID = #{riskManageId}
+	</update>
+
+	<!-- 告警风险统计(权力):平台风险统计 add by geshuo 20161205  -->
+	<select id="findRiskStatData" resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaAlarmRiskStatEntity">
+		SELECT D.POWER_ID,S.LABEL,D.totalCount
+		FROM (SELECT POWER_ID,COUNT(1) totalCount
+			  FROM DCA_RISK_MANAGE
+			  GROUP BY POWER_ID) D
+		LEFT JOIN (SELECT VALUE,LABEL FROM SYS_DICT WHERE TYPE='power_id') S 
+		ON D.POWER_ID=S.VALUE
+	</select>
+	
+	<!-- 风险界定统计数据 add by yuduo 20161207-->
+	<select id="getRiskDefinedStatistics" parameterType="Map" resultType="com.hepowdhc.dcapp.modules.visualization.entity.RiskDefinedStatistics">
+    	SELECT  DEFINE_STATUS,  TO_CHAR(UPDATE_DATE,'MM') mon ,COUNT(to_char(UPDATE_DATE,'MM')) num
+			FROM
+			DCA_RISK_MANAGE 
+			WHERE DEL_FLAG = 0 
+			<if test="selectYear != null and selectYear != ''">
+				AND TO_CHAR(UPDATE_DATE,'yyyy') = #{selectYear}
+			</if>
+			<if test="idxDataType != null and idxDataType != ''">
+				AND SUBSTR(POWER_ID, 0, 2) = #{idxDataType}
+			</if>
+			GROUP BY
+			DEFINE_STATUS ,TO_CHAR(UPDATE_DATE,'MM')
+	</select>
+	
+	<!-- 风险界定统计数据(根据用户查询) add by CuiZhengwei 20161208 -->
+	<select id="getRiskDefinedReportByUser" parameterType="Map" resultType="com.hepowdhc.dcapp.modules.visualization.entity.RiskDefinedStatistics">
+		SELECT  t.DEFINE_STATUS,  to_char(t.UPDATE_DATE,'MM') mon ,count(1) num FROM
+		(
+			SELECT DEFINE_STATUS,UPDATE_DATE FROM DCA_RISK_MANAGE 
+			WHERE DEL_FLAG = 0 
+			<if test="selectYear != null and selectYear != ''">
+				AND to_char(UPDATE_DATE,'YYYY') = #{selectYear} 
+			</if>
+			<if test="userId != null and userId != ''">
+				AND BIZ_OPER_PERSON_ID = #{userId}
+			</if>
+			<if test="officeId != null and officeId !=''">
+				AND BIZ_OPER_POST = #{officeId}
+			</if>
+			<if test="idxDataType != null and idxDataType != ''">
+				AND SUBSTR(POWER_ID, 0, 2) = #{idxDataType}
+			</if>
+			OR RISK_MANAGE_ID IN 
+			(SELECT e.RISK_MANAGE_ID FROM DCA_RISK_TRANS e 
+			 <where> 				
+				e.USER_ID = #{user.id}
+				AND e.OFFICE_ID = #{user.office.id} 
+				AND e.POST_ID = #{postId}
+				<if test="selectYear != null and selectYear != ''">
+					AND to_char(e.UPDATE_DATE,'YYYY') = #{selectYear} 
+				</if>
+			 </where>
+			 )
+		) t
+		GROUP BY t.DEFINE_STATUS ,to_char(t.UPDATE_DATE,'MM')
+	</select>
+	
+	<!-- 风险信息表  add by liuboyu 20161206  -->
+	<select id="getRiskMes" resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaReportRiskMes">
+		SELECT 
+		a.BIZ_FLOW_NAME AS bizFlowName,
+		a.BIZ_OPER_PERSON AS bizOperPerson,
+		d.NAME AS bizOperPost,
+		a.BIZ_DATA_NAME AS bizDataName,
+		b.label AS riskLevel,
+		a.RISK_MSG AS riskMsg,
+		a.DEFINE_PERSON AS definePerson,
+		c.label AS defineStatus
+		FROM DCA_RISK_MANAGE a 
+		LEFT JOIN SYS_DICT b ON a.RISK_LEVEL=b.VALUE and b.TYPE='risk_level' 
+		LEFT JOIN SYS_DICT c ON a.DEFINE_STATUS=c.VALUE and c.TYPE='define_status' 
+		LEFT JOIN SYS_OFFICE d ON d.ID=a.BIZ_OPER_POST
+		<where>
+			a.DEL_FLAG=0
+			<if test="bizOperPost != null and bizOperPost != ''">
+				AND	a.BIZ_OPER_POST = #{bizOperPost}
+			</if> 
+			<if test="bizOperPerson != null and bizOperPerson != ''">
+				AND a.BIZ_OPER_PERSON_ID = #{bizOperPerson} 					 
+			</if>
+			<if test="currentUser != null and postId != null">
+				OR a.RISK_MANAGE_ID IN  (SELECT RISK_MANAGE_ID FROM DCA_RISK_TRANS e 
+				   WHERE e.USER_ID = #{currentUser.id} 
+					 and e.OFFICE_ID =#{currentUser.office.id} 
+					 and e.POST_ID = #{postId})	
+			</if>
+			<if test="idxDataType != null and idxDataType != ''">
+				AND SUBSTR(a.POWER_ID, 0, 2) = #{idxDataType}
+			</if>
+		</where> 	
+		ORDER BY a.BIZ_FLOW_ID
+	</select>
+
+	<!-- 风险走势统计 add by CuiZhengwei 20161207 -->
+	<select id="getRiskTrendReport" resultType="DcaRiskManage">
+		SELECT D.powerId, D.month, D.powerNum, S.LABEL
+		FROM
+		(
+		SELECT POWER_ID AS powerId, EXTRACT (MONTH FROM CREATE_DATE) AS month,
+		COUNT (POWER_ID) AS powerNum
+		FROM DCA_RISK_MANAGE
+		WHERE DEL_FLAG = 0 AND TO_CHAR(CREATE_DATE,'YYYY') = #{selectYear}
+		<if test="idxDataType != null and idxDataType != ''">
+			AND SUBSTR(POWER_ID, 0, 2) = #{idxDataType}
+		</if>
+		GROUP BY POWER_ID, EXTRACT (MONTH FROM CREATE_DATE)
+		) D
+		LEFT JOIN (SELECT VALUE,LABEL FROM SYS_DICT WHERE TYPE = 'power_id' ) S
+		ON D.powerId = S.VALUE
+	</select>
+	
+	
+	
+<!-- 告警风险统计(部门):风险界定状态 add by panghuidan 20161206 -->
+	<select id="findRiskDefineData" resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaAlarmRiskDefineEntity">
+		SELECT D.DEFINE_STATUS,S.LABEL,D.totalCount
+		FROM (
+			SELECT
+				DEFINE_STATUS,COUNT(1) totalCount
+			FROM DCA_RISK_MANAGE 
+			<include refid="risk_stat_conditions"></include>
+			GROUP BY DEFINE_STATUS
+		) D
+		LEFT JOIN (
+			SELECT VALUE,LABEL 
+			FROM SYS_DICT 
+			WHERE TYPE='define_status'
+		) S
+		ON D.DEFINE_STATUS=S.VALUE
+		
+	</select>
+	<!-- 告警风险统计(部门):告警风险年度统计个数 add by panghuidan 20161207 -->
+	<select id="findRiskcount" resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaAlarmRiskDefineEntity">
+
+		SELECT
+			(CASE
+			 WHEN A .alarmDateYear IS NULL THEN 
+			 		b.RISKDATEYEAR
+				ELSE
+					A .alarmDateYear
+				END
+			) AS YEAR,
+			NVL (A .alarmCount, 0) AS alarmCount,
+			NVL (b.riskCount, 0) AS riskCount
+		FROM
+			(SELECT
+					COUNT (1) alarmCount,
+					EXTRACT (YEAR FROM CREATE_DATE) AS alarmDateYear
+			 FROM
+					DCA_ALARM_DETAIL 
+			<include refid="risk_stat_conditions"></include>
+			AND EXTRACT (YEAR FROM CREATE_DATE) is not NULL 
+			
+			 GROUP BY
+					EXTRACT (YEAR FROM CREATE_DATE)
+			) A
+		FULL OUTER JOIN 
+			(SELECT
+					COUNT (1) riskCount,
+					EXTRACT (YEAR FROM CREATE_DATE) AS riskDateYear
+			 FROM
+					DCA_RISK_MANAGE 
+			<include refid="risk_stat_conditions"></include>
+			 AND EXTRACT (YEAR FROM CREATE_DATE) is not NULL
+			 
+			 GROUP BY
+					EXTRACT (YEAR FROM CREATE_DATE)
+		) b 
+		ON 
+			 A .alarmDateYear = b.riskDateYear
+		ORDER BY
+			YEAR DESC
+	</select>
+	<!-- 告警风险统计(部门):告警风险月份统计个数 add by panghuidan 20161207 -->
+	<select id="findRiskMonthcount" resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaAlarmRiskDefineEntity">
+
+		SELECT
+			(
+				CASE
+				WHEN A.alarmDateMonth IS NULL THEN
+					b.riskDateMonth
+				ELSE
+					A.alarmDateMonth
+				END
+			) AS month,
+			NVL (A.alarmCount, 0) AS alarmMonthCount,
+			NVL (b.riskCount, 0) AS riskMonthCount
+		FROM
+			(
+				SELECT
+					COUNT (1) alarmCount,
+					EXTRACT (Month FROM CREATE_DATE) AS alarmDateMonth
+				FROM
+					DCA_ALARM_DETAIL 
+				<include refid="risk_stat_conditions"></include>
+				AND EXTRACT (Month FROM CREATE_DATE) is not NULL
+				GROUP BY
+					EXTRACT (Month FROM CREATE_DATE)
+			) A
+		FULL OUTER JOIN (
+			SELECT
+				COUNT (1) riskCount,
+				EXTRACT (Month FROM CREATE_DATE) AS riskDateMonth
+			FROM
+				DCA_RISK_MANAGE 
+			<include refid="risk_stat_conditions"></include>
+			AND EXTRACT (Month FROM CREATE_DATE) is not NULL
+			
+			GROUP BY
+				EXTRACT (Month FROM CREATE_DATE)
+		) b ON A.alarmDateMonth = b.riskDateMonth
+		ORDER BY
+			month 
+	</select>
+	<!-- 告警风险统计(部门):查询下属 add by panghuidan 20161207 -->
+	<select id="findParent" resultType="com.thinkgem.jeesite.modules.sys.entity.Office">
+		SELECT D.id
+		FROM SYS_OFFICE D
+		WHERE PARENT_ID = #{id}
+		UNION
+		SELECT D.id
+		FROM SYS_OFFICE D
+		WHERE ID = #{id}
+	
+	</select>
+	<!-- 告警风险统计(部门):查询条件  add by panghuidan 20161207 -->
+	<sql id="risk_stat_conditions">
+		<where>
+			DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="parentList !=null">
+			<foreach collection="parentList" item="item" index="index"
+				open="AND (" separator="OR" close=")">
+				BIZ_OPER_POST = #{item.id}
+			</foreach>
+			</if>
+			<if test="idxDataType != null and idxDataType != ''">
+				AND SUBSTR(POWER_ID, 0, 2) = #{idxDataType}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 获取风险信息相关分类数量（首页使用） add by liuc 20161223 -->
+	<select id="getRiskDetailCountForHomePage" resultType="java.lang.Integer">
+		SELECT COUNT(DEFINE_STATUS) as count
+		FROM DCA_RISK_MANAGE
+		WHERE DEL_FLAG = #{DEL_FLAG_NORMAL} 
+			AND ALARM_LEVEL = #{alarmLevel}
+			<if test="defineStatus != null and defineStatus != ''">
+				AND DEFINE_STATUS = #{defineStatus} 
+			</if>
+			<if test="powerId != null and powerId != ''">
+				AND POWER_ID = #{powerId}
+			</if>
+			<if test="updateDate != null and updateDate != ''">
+				AND 
+				TRUNC(UPDATE_DATE,'mi') <![CDATA[ <= ]]> #{updateDate}
+			</if>
+	</select>
+	
+	<!-- 获取部门全路径 add by geshuo 20161228 -->
+	<select id="getParentOfficeList" resultType="String">
+		SELECT NAME 
+		FROM SYS_OFFICE
+		WHERE DEL_FLAG = 0
+			<if test="list !=null">
+				<foreach collection="list" item="item" index="index"
+					open="AND (" separator="OR" close=")">
+					ID = #{item}
+				</foreach>
+			</if>
+	</select>
+	
+	<!-- 根据节点名称统计风险数量  add by geshuo 20160105 -->
+	<select id="getRiskCountByTaskName" resultType="DcaSimpleCountEntity">
+		SELECT 
+			TASK_NAME AS name,
+			COUNT(1) AS count
+		FROM DCA_RISK_MANAGE
+		WHERE DEL_FLAG = 0
+		<if test="list != null">
+			AND TASK_NAME IN 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+	            	#{item}
+	        	</foreach>
+		</if>
+		GROUP BY TASK_NAME
+	</select>
+	<!-- 获取当年四个季度的数据 -->
+	<select id="getRiskQuarterData" resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaAlarmRiskDefineEntity">
+		SELECT 
+		 COUNT(*) riskCount
+		FROM DCA_RISK_MANAGE 
+		WHERE TO_CHAR(CREATE_DATE,'mm') <![CDATA[ >= ]]> 1 
+		AND 3 <![CDATA[ >= ]]> TO_CHAR(CREATE_DATE,'mm')
+		AND TO_CHAR(CREATE_DATE,'yy') = TO_CHAR(SYSDATE,'yy')
+		UNION ALL
+		SELECT
+		COUNT(*) riskCount
+		FROM DCA_RISK_MANAGE 
+		WHERE TO_CHAR(CREATE_DATE,'mm') <![CDATA[ > ]]> 3 
+		AND 6 <![CDATA[ >= ]]> TO_CHAR(CREATE_DATE,'mm')
+		AND TO_CHAR(CREATE_DATE,'yy') = TO_CHAR(SYSDATE,'yy')
+		UNION ALL
+		SELECT
+		COUNT(*) riskCount
+		FROM DCA_RISK_MANAGE 
+		WHERE TO_CHAR(CREATE_DATE,'mm') <![CDATA[ > ]]> 6
+		AND 9 <![CDATA[ >= ]]> TO_CHAR(CREATE_DATE,'mm')
+		AND TO_CHAR(CREATE_DATE,'yy') = TO_CHAR(SYSDATE,'yy')
+		UNION ALL
+		SELECT
+		COUNT(*) riskCount
+		FROM DCA_RISK_MANAGE 
+		WHERE TO_CHAR(CREATE_DATE,'mm') <![CDATA[ > ]]> 9
+		AND 12 <![CDATA[ >= ]]> TO_CHAR(CREATE_DATE,'mm')
+		AND TO_CHAR(CREATE_DATE,'yy') = TO_CHAR(SYSDATE,'yy')
+	</select>
+
+	<!-- 查询各专委会风险统计数据 add by geshuo 20170105 -->
+	<select id="getSpecialCommitteeRisk" resultType="DcaCountByPowerEntity">
+		SELECT
+		SUBSTR (POWER_ID, 3, 1) AS powerId,
+		COUNT (1) AS totalCount
+		FROM DCA_RISK_MANAGE
+		WHERE DEL_FLAG=0
+		<if test="startDate != null">
+			AND CREATE_DATE >= #{startDate}
+		</if>
+		<if test="endDate != null">
+			AND CREATE_DATE <![CDATA[ < ]]> #{endDate}
+		</if>
+		<if test="powerId != null">
+			AND SUBSTR (POWER_ID, 0, 2) = #{powerId}
+		</if>
+		GROUP BY SUBSTR (POWER_ID, 3, 1)
+		ORDER BY powerId
+	</select>
+
+	<!-- 统计节点告警数据详细 add by geshuo  -->
+	<select id="getNodeRiskDetail" parameterType="Map" resultType="DcaAlarmTypeCountEntity">
+		SELECT
+		'1' as ALARM_TYPE,
+		"NVL"(COUNT(1), '0') AS count
+		FROM DCA_RISK_MANAGE
+		WHERE SUBSTR(POWER_ID, 0, 2)=#{powerId}
+		AND TASK_NAME=#{taskName}
+		AND ALARM_TYPE = '1'
+		UNION
+		SELECT
+		'2' as ALARM_TYPE,
+		"NVL"(COUNT(1), '0') AS count
+		FROM DCA_RISK_MANAGE
+		WHERE SUBSTR(POWER_ID, 0, 2)=#{powerId}
+		AND TASK_NAME=#{taskName}
+		AND ALARM_TYPE = '2'
+		UNION
+		SELECT
+		'3' as ALARM_TYPE,
+		"NVL"(COUNT(1), '0') AS count
+		FROM DCA_RISK_MANAGE
+		WHERE SUBSTR(POWER_ID, 0, 2)=#{powerId}
+		AND TASK_NAME=#{taskName}
+		AND ALARM_TYPE = '3'
+		UNION
+		SELECT
+		'4' as ALARM_TYPE,
+		"NVL"(COUNT(1), '0') AS count
+		FROM DCA_RISK_MANAGE
+		WHERE SUBSTR(POWER_ID, 0, 2)=#{powerId}
+		AND TASK_NAME=#{taskName}
+		AND ALARM_TYPE = '4'		
+	</select>
+</mapper>

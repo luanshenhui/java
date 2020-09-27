@@ -1,0 +1,20 @@
+{{#each this}}
+<tr data-component="" data-data="{{json this}}" id="tr-add-{{itemCode}}">
+    <td width="20%" class="itemCode">{{itemCode}}</td>
+    <td width="60%" class="goodsName">{{goodsName}}</td>
+    <td width="5%" class="isGift"><div class="width-170">
+        {{#equals isGift "1"}}
+            是
+        {{/equals}}
+        {{#equals isGift "0"}}
+            否
+        {{/equals}}
+    </div></td>
+    <td width="15%">
+        <button class="btn btn-info btn-sm js-add-goods decoration_goods_add" id="add-{{itemCode}}" >
+            增加
+        </button>
+    </td>
+</tr>
+{{/each}}
+

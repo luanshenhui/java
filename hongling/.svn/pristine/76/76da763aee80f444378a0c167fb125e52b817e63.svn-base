@@ -1,0 +1,58 @@
+<script language= "javascript" src="../dict/list.js"></script>
+
+字典管理
+<a id="btnExport">导出到资源文件</a>
+<br/>
+<div style="margin-top:10px;display: ;">
+	<div style="margin-bottom: 10px;">
+	查询工艺权限&nbsp;&nbsp;账号：<input type="text" id="username" name="username"/> &nbsp;ID：<input type="text" id="checkMeniusID" name="checkMeniusID"/> &nbsp;<input type="button" id="checkMenius" value="查询" style="width:50px;" onclick="$.csDictList.checkMenius();"/>
+	</div>
+	<div>权限组 &nbsp;<input type="text" id="membergroup"/></div>
+	<div>工艺代码		提示：工艺ID以逗号隔开 1452,3524,</div>
+	<div><textarea style="height: 45px;width: 800px;" id="dictmenius"></textarea></div>
+	<div><input type="button" id="submitmenius" value="添加" style="width:50px;" onclick="$.csDictList.submitMenius();"/>
+	<input type="button" id="deletemenius" value="删除" style="width:50px;" onclick="$.csDictList.deleteMenius();"/></div>
+	<div>
+		10015	AA级客户
+		10016	A级客户
+		10017	B级客户
+		10018	C级客户
+	</div>
+	<div>
+		10253	MTM管理用户
+		10254	专卖店管理用户
+		10255	瑞璞管理用户
+		10256	凯妙管理用户
+		10257	财务管理用户
+		10258	总管理用户
+	</div>
+</div>
+<br/>
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<div style="margin-top:20px;display: ;">
+	<form id="myDictForm" action="service/dict/editDict" method="post">
+		<input type="text" id="type" name="type" style="display: none;"/>
+	
+		<div style="margin-bottom: 10px;"><input type="button" id="exportFabirc" value="面料更新" style="width:150px;" onclick="$.csDictList.exportFabirc();"/>&nbsp;&nbsp;<input type="button" id="exportFabircPrice" value="面料价格更新" style="width:150px;" onclick="$.csDictList.exportFabircPrice();"/></div>
+		<div style="margin-bottom: 10px;">查询固化款式&nbsp;&nbsp;款式号：<input type="text" id="styleID" name="styleID"/> &nbsp;<input type="button" id="checkStyle" value="查询" style="width:50px;" onclick="$.csDictList.checkStyle();"/></div>
+		
+		<div>删除固化款式		提示：款式号以逗号隔开 </div>
+		<div><textarea style="height: 45px;width: 800px;" id="delStyleID" name="delStyleID"></textarea></div>
+		<div style="margin-bottom: 10px;"><input type="button" id="styleDel" value="提交" style="width:50px;" onclick="$.csDictList.styleDel();"/></div>
+		
+		<div>添加固化款式		提示：款式号以逗号隔开 </div>
+		<div><textarea style="height: 45px;width: 800px;" id="addStyleID" name="addStyleID"></textarea></div>
+		<div style="margin-bottom: 10px;"><input type="button" id="styleAdd" value="提交" style="width:50px;" onclick="$.csDictList.styleAdd();"/></div>
+		<br/>
+		-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+		<div>用户的USERNAME&nbsp;<input type="text" id="membername"/></div>
+		<br/>
+		<div>混搭code 	提示：混搭code以逗号隔开 YX140009,YX140008,</div>
+		<div><textarea style="height:85px;width: 800px;" id="mixcodes"></textarea><a href="javascript:void(0)" onclick="$.csDictList.getAllMixcodes();"><img src="../../themes/default/images/ts.gif"/></a></div>
+		<div><input type="button" id="submitmenius" value="添加" style="width:50px;" onclick="$.csDictList.submitMixSelected();"/>
+		<input type="button" id="deletemenius" value="删除" style="width:50px;" onclick="$.csDictList.deleteMixSelected();"/></div>
+	
+	</form>
+</div>
+

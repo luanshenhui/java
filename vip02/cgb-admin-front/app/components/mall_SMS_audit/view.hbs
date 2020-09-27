@@ -1,0 +1,124 @@
+{{#component "sms-template-audit js-component"}}
+    <p class="components-title"><strong>- 短信模板审核 -</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form item-form-search form-inline">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="vendorId">ID:</label>
+                            <input type="text" name="id" value="{{id}}" class="form-control"/>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="status">当前状态:</label>
+                            <select name="status" id="status">
+                                <option value="">请选择</option>
+                                <option value="0202" {{#equals status "0202" }} selected {{/equals}}>已提交</option>
+                                <option value="0203" {{#equals status "0203" }} selected {{/equals}}>处理中</option>
+                                <option value="0204" {{#equals status "0204" }} selected {{/equals}}>已完成</option>
+                                <option value="0205" {{#equals status "0205" }} selected {{/equals}}>已拒绝</option>
+                                <option value="0206" {{#equals status "0206" }} selected {{/equals}}>白名单发送</option>
+                                <option value="0207" {{#equals status "0207" }} selected {{/equals}}>发送失败</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <input class="btn btn-success btn-small margin-right-0 float-right" type="submit"
+                                   value="查询"/>
+                        </span>
+                    </p>
+                </fieldset>
+            </form>
+
+            <div class="m-b-10">
+                {{#authorial  "shortMesAudit_audit"}}
+                    <button class="btn btn-info btn-small js-sms-template-pass">通过</button>
+                    <button class="btn btn-info btn-small js-sms-template-refuse">拒绝</button>
+                {{/authorial}}
+                {{#authorial  "shortMesAudit_edit"}}
+                    <button class="btn btn-info btn-small js-sms-template-name">白名单管理</button>
+                {{/authorial}}
+                {{#authorial  "shortMesAudit_smsSend"}}
+                    <button class="btn btn-info btn-small js-sms-template-send">白名单发送</button>
+                {{/authorial}}
+                <button class="btn btn-info btn-small js-sms-template-preview">短信预览</button>
+                </button>
+            </div>
+
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="2%"></th>
+                    <th width="3%">ID</th>
+                    <th width="10%">短信模板</th>
+                    <th width="10%">单品编码</th>
+                    <th width="10%">单品名称</th>
+                    <th width="10%">有效开始日期</th>
+                    <th width="10%">有效结束日期</th>
+                    <th width="10%">优惠券金额</th>
+                    <th width="10%">是否使用积分</th>
+                    <th width="10%">当前状态</th>
+                    <th width="15%">手工参数</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                        <td>
+                            <input class="js-check-this" name="checkSmsTemplate" type="checkbox" data-id="{{id}}"
+                                   data-data="{{json this}}"/>
+                        </td>
+                        <td class="id">{{id}}</td>
+                        <td class="smsp-id">{{smspId}}</td>
+                        <td class="item-code">{{itemCode}}</td>
+                        <td class="item-name">{{itemName}}</td>
+                        <td class="begin-date">{{#formatDate beginDate 'day'}}{{/formatDate}}</td>
+                        <td class="end-date">{{#formatDate endDate 'day'}}{{/formatDate}}</td>
+                        <td class="voucher-price">{{voucherPrice}}</td>
+                        <!--是否使用积分-->
+                        <td class="ifPoint">
+                            {{#equals "0" ifPoint}}
+                                否
+                            {{else}}
+                                是
+                            {{/equals}}
+                        </td>
+                        <!--当前状态-->
+                        <td class="status">
+                            {{#equals "0202" status}}
+                                已提交
+                            {{else}}
+                                {{#equals "0203" status}}
+                                    处理中
+                                {{else}}
+                                    {{#equals "0204" status}}
+                                        已完成
+                                    {{else}}
+                                        {{#equals "0205" status}}
+                                            已拒绝
+                                            {{else}}
+                                            {{#equals "0206" status}}
+                                                白名单发送
+                                                {{else}}
+                                                {{#equals "0207" status}}
+                                                    发送失败
+                                                {{/equals}}
+                                            {{/equals}}
+                                        {{/equals}}
+                                    {{/equals}}
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                        <td class="other-mess">{{otherMess}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            {{#equals _DATA_.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <div class="pagination" data-total="{{_DATA_.total}}"></div>
+            {{/equals}}
+        </div>
+    </div>
+{{/component}}

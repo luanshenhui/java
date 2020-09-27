@@ -1,0 +1,21 @@
+package com.yulin.dangdang.dao;
+
+import java.util.List;
+
+import com.yulin.dangdang.bean.Item;
+import com.yulin.dangdang.bean.Order;
+
+public interface OrderDao {
+	/***
+	 * @param order 订单表的对象
+	 * @return
+	 */
+	public boolean insertOrder(Order order);
+	
+	/***
+	 * @param item 订单选项
+	 * @return
+	 */
+	public boolean insertItem(List<Item> itemList);
+	
+}

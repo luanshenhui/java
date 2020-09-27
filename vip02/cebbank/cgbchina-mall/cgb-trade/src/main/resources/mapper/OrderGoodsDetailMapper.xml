@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderGoodsDetail">
+    <resultMap id="OrderGoodsDetailMap" type="OrderGoodsDetail">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="goodsCode" column="goods_code"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="itemPrice" column="item_price"/>
+        <result property="itemMarketPrice" column="item_market_price"/>
+        <result property="itemNum" column="item_num"/>
+        <result property="itemSmallPic" column="item_small_pic"/>
+        <result property="o2oCode" column="o2o_code"/>
+        <result property="o2oVoucherCode" column="o2o_voucher_code"/>
+        <result property="installmentPrice" column="installment_price"/>
+        <result property="installmentNum" column="installment_num"/>
+        <result property="freightSize" column="freight_size"/>
+        <result property="freightWeight" column="freight_weight"/>
+        <result property="itemImage1" column="item_image1"/>
+        <result property="itemImage2" column="item_image2"/>
+        <result property="itemImage3" column="item_image3"/>
+        <result property="itemImage4" column="item_image4"/>
+        <result property="itemImage5" column="item_image5"/>
+        <result property="brandId" column="brand_id"/>
+        <result property="backCategory1Id" column="back_category1_id"/>
+        <result property="backCategory2Id" column="back_category2_id"/>
+        <result property="backCategory3Id" column="back_category3_id"/>
+        <result property="promotionTitle" column="promotion_title"/>
+        <result property="mainImage" column="main_image"/>
+        <result property="saleChannel" column="sale_channel"/>
+        <result property="innerFlag" column="inner_flag"/>
+        <result property="stageNumber" column="stage_number"/>
+        <result property="mailOrderCode" column="mail_order_code"/>
+        <result property="adWord" column="ad_word"/>
+        <result property="giftWord" column="gift_word"/>
+        <result property="introduction" column="introduction"/>
+        <result property="serviceType" column="service_type"/>
+        <result property="buyLimit" column="buy_limit"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="itemAttrs" column="item_attrs"/>
+        <result property="productAttrs" column="product_attrs"/>
+    </resultMap>
+    <sql id="columns">
+        id,order_no,goods_code,goods_name,item_code,item_price,item_market_price,item_num,item_small_pic,o2o_code,o2o_voucher_code,installment_price,installment_num,freight_size,freight_weight,item_image1,item_image2,item_image3,item_image4,item_image5,brand_id,back_category1_id,back_category2_id,back_category3_id,promotion_title,main_image,sale_channel,inner_flag,stage_number,mail_order_code,ad_word,gift_word,introduction,service_type,buy_limit,create_time,modify_time,create_oper,modify_oper,del_flag,item_attrs,product_attrs
+    </sql>
+
+    <insert id="insert" parameterType="OrderGoodsDetail" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_goods_detail
+        (order_no
+        ,goods_code
+        ,goods_name
+        ,item_code
+        ,item_price
+        ,item_market_price
+        ,item_num
+        ,item_small_pic
+        ,o2o_code
+        ,o2o_voucher_code
+        ,installment_price
+        ,installment_num
+        ,freight_size
+        ,freight_weight
+        ,item_image1
+        ,item_image2
+        ,item_image3
+        ,item_image4
+        ,item_image5
+        ,brand_id
+        ,back_category1_id
+        ,back_category2_id
+        ,back_category3_id
+        ,promotion_title
+        ,main_image
+        ,sale_channel
+        ,inner_flag
+        ,stage_number
+        ,mail_order_code
+        ,ad_word
+        ,gift_word
+        ,introduction
+        ,service_type
+        ,buy_limit
+        ,create_time
+        ,modify_time
+        ,create_oper
+        ,modify_oper
+        ,del_flag
+        ,item_attrs
+        ,product_attrs)
+        values(#{orderNo}
+        ,#{goodsCode}
+        ,#{goodsName}
+        ,#{itemCode}
+        ,#{itemPrice}
+        ,#{itemMarketPrice}
+        ,#{itemNum}
+        ,#{itemSmallPic}
+        ,#{o2oCode}
+        ,#{o2oVoucherCode}
+        ,#{installmentPrice}
+        ,#{installmentNum}
+        ,#{freightSize}
+        ,#{freightWeight}
+        ,#{itemImage1}
+        ,#{itemImage2}
+        ,#{itemImage3}
+        ,#{itemImage4}
+        ,#{itemImage5}
+        ,#{brandId}
+        ,#{backCategory1Id}
+        ,#{backCategory2Id}
+        ,#{backCategory3Id}
+        ,#{promotionTitle}
+        ,#{mainImage}
+        ,#{saleChannel}
+        ,#{innerFlag}
+        ,#{stageNumber}
+        ,#{mailOrderCode}
+        ,#{adWord}
+        ,#{giftWord}
+        ,#{introduction}
+        ,#{serviceType}
+        ,#{buyLimit}
+        ,now()
+        ,#{modifyTime}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,#{delFlag}
+        ,#{itemAttrs}
+        ,#{productAttrs})
+    </insert>
+    <!--批量插入订单商品详情表 add by wujiao-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tbl_order_goods_detail
+        (order_no
+        ,goods_code
+        ,goods_name
+        ,item_code
+        ,item_price
+        ,item_market_price
+        ,item_num
+        ,item_small_pic
+        ,o2o_code
+        ,o2o_voucher_code
+        ,installment_price
+        ,installment_num
+        ,freight_size
+        ,freight_weight
+        ,item_image1
+        ,item_image2
+        ,item_image3
+        ,item_image4
+        ,item_image5
+        ,brand_id
+        ,back_category1_id
+        ,back_category2_id
+        ,back_category3_id
+        ,promotion_title
+        ,main_image
+        ,sale_channel
+        ,inner_flag
+        ,stage_number
+        ,mail_order_code
+        ,ad_word
+        ,gift_word
+        ,introduction
+        ,service_type
+        ,buy_limit
+        ,create_time
+        ,modify_time
+        ,create_oper
+        ,modify_oper
+        ,del_flag
+        ,item_attrs
+        ,product_attrs)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.orderNo}
+            ,#{item.goodsCode}
+            ,#{item.goodsName}
+            ,#{item.itemCode}
+            ,#{item.itemPrice}
+            ,#{item.itemMarketPrice}
+            ,#{item.itemNum}
+            ,#{item.itemSmallPic}
+            ,#{item.o2oCode}
+            ,#{item.o2oVoucherCode}
+            ,#{item.installmentPrice}
+            ,#{item.installmentNum}
+            ,#{item.freightSize}
+            ,#{item.freightWeight}
+            ,#{item.itemImage1}
+            ,#{item.itemImage2}
+            ,#{item.itemImage3}
+            ,#{item.itemImage4}
+            ,#{item.itemImage5}
+            ,#{item.brandId}
+            ,#{item.backCategory1Id}
+            ,#{item.backCategory2Id}
+            ,#{item.backCategory3Id}
+            ,#{item.promotionTitle}
+            ,#{item.mainImage}
+            ,#{item.saleChannel}
+            ,#{item.innerFlag}
+            ,#{item.stageNumber}
+            ,#{item.mailOrderCode}
+            ,#{item.adWord}
+            ,#{item.giftWord}
+            ,#{item.introduction}
+            ,#{item.serviceType}
+            ,#{item.buyLimit}
+            ,now()
+            ,#{item.modifyTime}
+            ,#{item.createOper}
+            ,#{item.modifyOper}
+            ,#{item.delFlag}
+            ,#{item.itemAttrs}
+            ,#{item.productAttrs})
+        </foreach>
+    </insert>
+    <update id="update" parameterType="OrderGoodsDetail">
+        update tbl_order_goods_detail set
+        order_no
+        = #{orderNo},goods_code
+        = #{goodsCode},goods_name
+        = #{goodsName},item_code
+        = #{itemCode},item_price
+        = #{itemPrice},item_market_price
+        = #{itemMarketPrice},item_num
+        = #{itemNum},item_small_pic
+        = #{itemSmallPic},o2o_code
+        = #{o2oCode},o2o_voucher_code
+        = #{o2oVoucherCode},installment_price
+        = #{installmentPrice},installment_num
+        = #{installmentNum},freight_size
+        = #{freightSize},freight_weight
+        = #{freightWeight},item_image1
+        = #{itemImage1},item_image2
+        = #{itemImage2},item_image3
+        = #{itemImage3},item_image4
+        = #{itemImage4},item_image5
+        = #{itemImage5},brand_id
+        = #{brandId},back_category1_id
+        = #{backCategory1Id},back_category2_id
+        = #{backCategory2Id},back_category3_id
+        = #{backCategory3Id},promotion_title
+        = #{promotionTitle},main_image
+        = #{mainImage},sale_channel
+        = #{saleChannel},inner_flag
+        = #{innerFlag},stage_number
+        = #{stageNumber},mail_order_code
+        = #{mailOrderCode},ad_word
+        = #{adWord},gift_word
+        = #{giftWord},introduction
+        = #{introduction},service_type
+        = #{serviceType},buy_limit
+        = #{buyLimit},create_time
+        = #{createTime},modify_time
+        = #{modifyTime},create_oper
+        = #{createOper},modify_oper
+        = #{modifyOper},del_flag
+        = #{delFlag},item_attrs
+        = #{itemAttrs},product_attrs
+        = #{productAttrs}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="orderNo !=null">and order_no = #{orderNo}</if>
+            <if test="goodsCode !=null">and goods_code = #{goodsCode}</if>
+            <if test="goodsName !=null">and goods_name = #{goodsName}</if>
+            <if test="itemCode !=null">and item_code = #{itemCode}</if>
+            <if test="itemPrice !=null">and item_price = #{itemPrice}</if>
+            <if test="itemMarketPrice !=null">and item_market_price = #{itemMarketPrice}</if>
+            <if test="itemNum !=null">and item_num = #{itemNum}</if>
+            <if test="itemSmallPic !=null">and item_small_pic = #{itemSmallPic}</if>
+            <if test="o2oCode !=null">and o2o_code = #{o2oCode}</if>
+            <if test="o2oVoucherCode !=null">and o2o_voucher_code = #{o2oVoucherCode}</if>
+            <if test="installmentPrice !=null">and installment_price = #{installmentPrice}</if>
+            <if test="installmentNum !=null">and installment_num = #{installmentNum}</if>
+            <if test="freightSize !=null">and freight_size = #{freightSize}</if>
+            <if test="freightWeight !=null">and freight_weight = #{freightWeight}</if>
+            <if test="itemImage1 !=null">and item_image1 = #{itemImage1}</if>
+            <if test="itemImage2 !=null">and item_image2 = #{itemImage2}</if>
+            <if test="itemImage3 !=null">and item_image3 = #{itemImage3}</if>
+            <if test="itemImage4 !=null">and item_image4 = #{itemImage4}</if>
+            <if test="itemImage5 !=null">and item_image5 = #{itemImage5}</if>
+            <if test="brandId !=null">and brand_id = #{brandId}</if>
+            <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+            <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+            <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+            <if test="promotionTitle !=null">and promotion_title = #{promotionTitle}</if>
+            <if test="mainImage !=null">and main_image = #{mainImage}</if>
+            <if test="saleChannel !=null">and sale_channel = #{saleChannel}</if>
+            <if test="innerFlag !=null">and inner_flag = #{innerFlag}</if>
+            <if test="stageNumber !=null">and stage_number = #{stageNumber}</if>
+            <if test="mailOrderCode !=null">and mail_order_code = #{mailOrderCode}</if>
+            <if test="adWord !=null">and ad_word = #{adWord}</if>
+            <if test="giftWord !=null">and gift_word = #{giftWord}</if>
+            <if test="introduction !=null">and introduction = #{introduction}</if>
+            <if test="serviceType !=null">and service_type = #{serviceType}</if>
+            <if test="buyLimit !=null">and buy_limit = #{buyLimit}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="itemAttrs !=null">and item_attrs = #{itemAttrs}</if>
+            <if test="productAttrs !=null">and product_attrs = #{productAttrs}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="OrderGoodsDetailMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_order_goods_detail
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="OrderGoodsDetailMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_goods_detail
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="OrderGoodsDetailMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_goods_detail
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="OrderGoodsDetail">
+        delete from tbl_order_goods_detail where id = id
+    </delete>
+    <select id="findTop" parameterType="List" resultMap="OrderGoodsDetailMap">
+        select id,
+        <include refid="columns"/>,
+        SUM(item_num) as orderCount
+        from tbl_order_goods_detail
+        where order_no in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item.orderId}
+        </foreach>
+        group by goods_code
+        ORDER BY orderCount DESC
+        LIMIT 10
+    </select>
+    <select id="findTopGoods" parameterType="List" resultMap="OrderGoodsDetailMap">
+        select id,
+        <include refid="columns"/>,
+        SUM(item_num) as orderCount
+        from tbl_order_goods_detail
+        where order_no in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item.orderId}
+        </foreach>
+        group by goods_code
+        ORDER BY orderCount DESC
+        LIMIT 5
+    </select>
+</mapper>
+
+

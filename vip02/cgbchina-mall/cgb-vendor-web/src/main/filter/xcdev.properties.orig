@@ -1,0 +1,119 @@
+# run mode ##
+mode=xcdev
+assetsHome=D:/front/cgb-vendor-front/build
+editorLayout=layout/editor
+decorationLayout=layout/decoration
+
+#domain
+domain=cgbchina.com.cn
+mainSite=shop.cgb.cn
+context=/vendorManage
+#Redis Config
+redis.host=21.96.33.65
+redis.port=6379
+<<<<<<< HEAD
+redis.maxTotal=20
+redis.maxIdle=2
+redis.maxWaitMillis=100
+=======
+redis.maxTotal=100
+redis.maxIdle=10
+redis.maxWaitMillis=100000
+>>>>>>> 216ae0b2c5513e4c79119b3499a8f555ac2f3c4b
+redis.testOnBorrow=true
+
+
+# active MQ
+mq.brokerURL=failover:(tcp://127.0.0.1:61616)
+mq.userName=
+mq.password=
+mq.sessionCacheSize=100
+mq.receiveTimeout=10000
+
+#log level
+logRoot=/home/wasadmin/logs/cgb-vendor-web
+logLevel=INFO
+logDefaultFile=RootLogFile
+#Es ElasticSearch Settings
+searchHost=21.96.33.65,21.96.33.85
+searchPort=9300
+searchClusterName=cgbelasticsearch
+#MySQL Configs \u7528\u4E8E\u6279\u91CF\u66F4\u65B0
+
+#MySQL Configs
+jdbcDriver=com.alibaba.cobar.jdbc.Driver
+reader.url=jdbc:mysql://21.96.34.29:8066/cgbmall?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+reader.username=developer
+reader.password=developer
+writer.url=jdbc:mysql://21.96.34.29:8066/cgbmall?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+writer.username=developer
+writer.password=developer
+initialSize=0
+dbcpMaxActive=20
+dbcpMaxIdle=20
+minIdle=1
+maxWait=10000
+#Session Config settings
+session.redis.host=21.96.33.65
+session.redis.port=6379
+session.redis.pool.maxTotal=100
+session.redis.pool.maxIdle=10
+session.redis.prefix=session
+
+#image server configuration
+imageBaseUrl=http://shop.cgbchina.com.cn
+### unused
+imageUploadUrl=http://img.cgb.cn/upload
+imgSizeMax=1048578
+#\u56FE\u7247\u670D\u52A1\u5668
+soTimeout=1501
+connectTimeout=601
+## \u56FE\u7247\u4E0A\u4F20\u670D\u52A1\u5668,fastdfs tracker
+trackers=21.96.1.110:22122
+
+#rest
+connect.smsIp=21.96.61.61
+connect.smsPort=10731
+connect.pwdIp=12.12.12.12
+connect.pwdPort=21
+connect.gatewayUrl=http://21.96.164.234:8113
+
+#\u5FEB\u9012100 url
+expressUrl=www.kuaidi100.com
+#mall
+#\u5927\u5546\u6237\u79C1\u94A5
+mainPrivateKey=/key/merkey000300103700068.private
+#\u5927\u5546\u6237\u516C\u94A5
+mainPublicKey=/key/merkey000300103700068.public
+#\u4F01\u4E1A\u7F51\u94F6\u516C\u94A5
+entPublicKey=/key/paykey.public
+####################\u5927\u5546\u6237\u53F7
+merchId=000300103700068
+##################\u56DE\u8C03\u5730\u5740
+returl=http://shop.cgbchina.com.cn/pay/dealPay
+########\u652F\u4ED8\u7F51\u5173\u5730\u5740
+payAddress=http://shop.cgbchina.com.cn/order/order_result
+#\u9759\u6001\u9875\u4E0A\u4F20\u8DEF\u5F84
+htmlUploadUrl=/data/fdfs/store/eshop/activity/temp/
+htmlUrl=/img/eshop/eshop/activity/temp/
+#\u9759\u6001\u9875\u9762\u53D1\u5E03\u8DEF\u5F84
+htmlPushUrl=/data/fdfs/store/eshop/activity/
+htmlPublishUrl=/img/eshop/eshop/activity/
+#\u77ED\u4FE1\u6A21\u677F\u540D\u5355\u5BFC\u5165
+smsTemplateUp=/home/wasadmin/template/smstemplate/
+smsTemplateDown=/home/wasadmin/template/smstemplate/temp
+
+# (\u65B0\u6587\u670D \u6279\u91CF\u5916\u90E8\u914D\u7F6E\u548C\u540E\u53F0\u914D\u7F6E\u4E00\u81F4) \u65B0\u6587\u670D\u79EF\u5206\u5BF9\u8D26\u6587\u4EF6\u8DEF\u5F84201510 [yyMMdd]\u5F53\u524D\u65E5\u671F  {yyMMdd}\u5BF9\u8D26\u6587\u4EF6\u65E5\u671F
+checkAccTxtJf=/cdadmin/UFSM/MALL/send/JFDJ/[yyyyMMdd]/
+checkAccTxtJfTxt=MALL.JFDJ.NNNNNN.S{yyMMdd}.N[yyMMdd]
+checkAccTxtJfTxtEnd=MALL.JFDJ.NNNNNN.S{yyMMdd}.N[yyMMdd].end
+checkAccTxtJfTarget=/cdadmin/UFSM/JFDJ/save/MALL/[yyyyMMdd]/
+#\u65B0\u6838\u5FC3fts taskid:\u6587\u670D\u5206\u914D\u4EFB\u52A1id ip:\u5E94\u75281\u673A\u5730\u5740  port:fts\u670D\u52A1\u7AEF\u53E3 timeout:\u8D85\u65F6\u65F6\u95F4\uFF0C\u5355\u4F4D\u79D2
+ftsTaskid=PBLYU16Q
+ftsIp=172.16.5.92
+ftsPort=32792
+ftsTimeout=60
+timeStart=18
+timeEnd=24
+#\u62A5\u8868\u4E0B\u8F7DURL
+report.url=http://web-1.shop.cgbchina.com.cn/img/ReportDownload

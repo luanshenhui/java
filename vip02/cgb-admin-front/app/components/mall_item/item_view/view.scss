@@ -1,0 +1,98 @@
+.item-view{
+  .image-ul {
+    clear: both;
+    .item-image-li {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #ccc;
+      line-height: 30px;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+  .main-box{
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    .item-lable1{
+      font-weight: normal;
+      width: 40%;
+      height: 43px;
+      text-align: right;
+      vertical-align: top;
+    }
+    .item-lable2{
+      width: 20%;
+    }
+    .item-span1{
+      width: 50%;
+//      height: 43px;
+      text-align: left;
+    }
+    .p-width{
+      float:left;
+      width: 50%;
+    }
+    .img-width{
+      width: 100px;
+      height: 100px;
+    }
+    .text-div {
+      width: 50%;
+      word-wrap: break-word;
+      word-break: break-all;
+      display: inline-block;
+    }
+  }
+  .table-list{
+    border-collapse: collapse;
+    table-layout:fixed;
+    tr:nth-child(even){
+      background: #f8f8f8;
+    }
+  }
+  .recommend-ul{
+    position: relative;
+    top: -40px;
+    left: 200px;
+  }
+  .recommend-li {
+    width: 170px;
+    text-align:center;
+    float:left;
+  }
+  .main-item-list-title {
+    font-size: 14px;
+    margin: 3px 10px;
+    text-align: center;
+    line-height:24px;
+  }
+  .price {
+    color: #aaa;
+    font-size: 14px;
+    margin: 3px 10px;
+    text-align: center;
+  }
+  .font-color-red {
+    color: #ed1a2e !important;
+  }
+  .admin-btn {
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 30px;
+  }
+  .font-color-b{
+    color: #328cff;
+  }
+  .approve-textarea{
+    height: 80px;
+    width: 300px !important;
+  }
+  .span-line {
+    position: relative;
+    left: 195px;
+    top: -25px;
+  }
+}
+

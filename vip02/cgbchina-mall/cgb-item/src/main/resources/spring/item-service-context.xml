@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    <util:properties id="propertieParam" location="classpath*:parameters.properties"/>
+    <import resource="classpath*:/spring/search-spirit-context.xml"/>
+    <import resource="classpath*:/spring/category-service-context.xml"/>
+
+    <!-- 发送到不同系统去 -->
+    <bean class="cn.com.cgbchina.rest.common.utils.PropertieUtils">
+        <property name="param" ref="propertieParam"></property>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+            </list>
+        </property>
+    </bean>
+    <context:component-scan base-package="cn.com.cgbchina.item"/>
+    <import resource="classpath*:/spring/rest-service-context.xml"/>
+    <beans profile="dev,test">
+        <import resource="classpath*:/spring/rest-service-context-test.xml"/>
+    </beans>
+    <beans profile="fdev,fsit,fuat,prod">
+        <import resource="classpath*:/spring/rest-service-context-real.xml"/>
+    </beans>
+    <beans profile="fsit,fuat,prod,fdev">
+        <import resource="classpath*:spring/rest-dubbo-consumer.xml"/>
+    </beans>
+</beans>

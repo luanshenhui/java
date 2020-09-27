@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.splitRule.dao.SplitRuleDAOImpl">
+  <resultMap id="BaseResultMap" type="cn.rkylin.oms.system.splitRule.vo.SplitRuleVO">
+    <id column="split_rule_id" jdbcType="VARCHAR" property="splitRuleId" />
+    <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="shop_type" jdbcType="VARCHAR" property="shopType" />
+    <result column="split_type" jdbcType="VARCHAR" property="splitType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="CHAR" property="deleted" />
+    <result column="enable" jdbcType="CHAR" property="enable" />
+    <result column="prj_id" jdbcType="VARCHAR" property="prjId" />
+    <result column="prj_name" jdbcType="VARCHAR" property="prjName" />
+    <result column="operation" jdbcType="VARCHAR" property="operation" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    
+    <result column="ec_item_id" jdbcType="VARCHAR" property="ecItemId" />
+    <result column="ec_item_code" jdbcType="VARCHAR" property="ecItemCode" />
+    <result column="ec_item_name" jdbcType="VARCHAR" property="ecItemName" />
+    <result column="outer_code" jdbcType="VARCHAR" property="outerCode" />
+    <result column="split_shop_name" jdbcType="VARCHAR" property="splitShopName" />
+    <result column="ruleSelect" jdbcType="VARCHAR" property="ruleSelect" />
+    
+  </resultMap>
+  <sql id="Base_Column_ListSplitRule">
+    splitrule.split_rule_id as split_rule_id , shop.shop_id as shop_id, shop.shop_name as shop_name, splitrule.shop_type as shop_type , 
+    splitrule.split_type as split_type, splitrule.create_time as create_time, splitrule.update_time as update_time, 
+    splitrule.deleted as deleted , splitrule.enable as enable , project.prj_id as prj_id , project.prj_name as prj_name ,
+    '' as operation ,'' as status,'' as ruleSelect
+  </sql>
+  <sql id="Export_Column_ListSplitRule">
+    project.prj_name as prj_name , shop.shop_name as shop_name , splitruleitem.ec_item_id AS ec_item_id , ecitem.ec_item_code as ec_item_code , 
+    ecitem.ec_item_name as ec_item_name , ecitem.outer_code as outer_code , 
+    splitruleitem.split_shop_name as split_shop_name , shop.shop_type as shop_type
+  </sql>
+  <select id="exportSplitInfo" parameterType="cn.rkylin.oms.system.splitRule.vo.SplitRuleVO" resultMap="BaseResultMap">
+		select
+		<include refid="Export_Column_ListSplitRule" />
+		from oms_split_rule splitrule 
+		     left join oms_split_rule_item splitruleitem on splitruleitem.split_rule_id = splitrule.split_rule_id
+		     inner join oms_shop shop on shop.shop_id = splitrule.shop_id 
+		     inner join oms_project project on project.prj_id = shop.prj_id
+		     left join oms_ec_item ecitem on ecitem.ec_item_id = splitruleitem.ec_item_id
+		where splitrule.deleted = 'n'
+		<if test="searchCondition != null">
+			and (shop.shop_name like CONCAT('%',#{searchCondition},'%') or project.prj_name like CONCAT('%',#{searchCondition},'%'))
+		</if>
+		<if test="shopId != null">
+			and splitrule.shop_id = #{shopId} 
+		</if>
+		<if test="otherSql != null">
+			${otherSql} 
+		</if>
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+	</select>
+  <select id="pageSelectSplitRule" parameterType="cn.rkylin.oms.system.splitRule.vo.SplitRuleVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_ListSplitRule" />
+		from oms_split_rule splitrule inner join oms_shop shop on shop.shop_id = splitrule.shop_id 
+		     inner join oms_project project on project.prj_id = shop.prj_id
+		where splitrule.deleted = 'n'
+		<if test="searchCondition != null">
+			and (shop.shop_name like CONCAT('%',#{searchCondition},'%') or project.prj_name like CONCAT('%',#{searchCondition},'%'))
+		</if>
+		<if test="shopId != null">
+			and splitrule.shop_id = #{shopId} 
+		</if>
+		<if test="splitRuleId != null">
+			and splitrule.split_rule_id = #{splitRuleId} 
+		</if>
+		<if test="otherSql != null">
+			${otherSql} 
+		</if>
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+	</select>
+	
+  <sql id="Base_Column_List">
+    split_rule_id, shop_id, shop_name, shop_type, split_type, create_time, update_time, 
+    deleted, enable
+  </sql>
+  <select id="selectByPrimaryKeySplitRule" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oms_split_rule
+    where split_rule_id = #{splitRuleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKeySplitRule" parameterType="java.lang.String">
+    delete from oms_split_rule
+    where split_rule_id = #{splitRuleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSplitRule" parameterType="cn.rkylin.oms.system.splitRule.domain.SplitRule">
+    insert into oms_split_rule (split_rule_id, shop_id, shop_name, 
+      shop_type, split_type, create_time, 
+      update_time, deleted, enable
+      )
+    values (#{splitRuleId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{shopType,jdbcType=VARCHAR}, #{splitType,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=CHAR}, #{enable,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelectiveSplitRule" parameterType="cn.rkylin.oms.system.splitRule.domain.SplitRule">
+    insert into oms_split_rule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="splitRuleId != null">
+        split_rule_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="shopType != null">
+        shop_type,
+      </if>
+      <if test="splitType != null">
+        split_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="enable != null">
+        enable,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="splitRuleId != null">
+        #{splitRuleId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopType != null">
+        #{shopType,jdbcType=VARCHAR},
+      </if>
+      <if test="splitType != null">
+        #{splitType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=CHAR},
+      </if>
+      <if test="enable != null">
+        #{enable,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelectiveSplitRule" parameterType="cn.rkylin.oms.system.splitRule.domain.SplitRule">
+    update oms_split_rule
+    <set>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopType != null">
+        shop_type = #{shopType,jdbcType=VARCHAR},
+      </if>
+      <if test="splitType != null">
+        split_type = #{splitType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=CHAR},
+      </if>
+      <if test="enable != null">
+        enable = #{enable,jdbcType=CHAR},
+      </if>
+    </set>
+    where split_rule_id = #{splitRuleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeySplitRule" parameterType="cn.rkylin.oms.system.splitRule.domain.SplitRule">
+    update oms_split_rule
+    set shop_id = #{shopId,jdbcType=VARCHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      shop_type = #{shopType,jdbcType=VARCHAR},
+      split_type = #{splitType,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=CHAR},
+      enable = #{enable,jdbcType=CHAR}
+    where split_rule_id = #{splitRuleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

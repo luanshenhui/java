@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.gzw.dao.DcaCompanyDao">
+    
+	<sql id="dcaCompanyColumns">
+		a.company_id AS "companyId",
+		a.company_ym AS "companyYm",
+		a.company_name AS "companyName",
+		a.company_file AS "companyFile"
+	</sql>
+	
+	<sql id="dcaCompanyJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaCompany">
+		SELECT 
+			<include refid="dcaCompanyColumns"/>
+		FROM dca_company a
+		<include refid="dcaCompanyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DcaCompany">
+		SELECT 
+			a.company_ID as "companyId",
+			a.create_ym as "companyYm",
+			a.err_type as "reviewType",
+			a.err_info as "reviewTypeCount",
+			a.file_name as "fileName",
+			a.err_file as "companyFile",
+			a.errsum as "sumErr",
+			substr(a.create_ym, 1, 4)||'年'||ltrim(substr(a.create_ym, 5, 2),0)||'月' as "companyYmF"
+		FROM DCA_COMPANY_ERR_INFO_M  a
+		<where>
+		    1=1
+		    <if test="companyId != null and companyId != ''">
+			and a.company_ID = #{companyId} 
+			</if>
+			<if test="companyYm != null and companyYm != ''">
+			and a.create_ym like #{companyYm} ||'%'
+			</if>
+		</where>
+		ORDER BY a.company_ID
+	</select>
+	
+	<select id="findListY" resultType="DcaCompany">
+		SELECT 
+			a.company_ID as "companyId",
+			a.create_ym as "companyYm",
+			a.err_type as "reviewType",
+			a.err_info as "reviewTypeCount",
+			a.file_name as "fileName",
+			a.err_file as "companyFile"
+		FROM DCA_COMPANY_ERR_INFO_M  a
+        WHERE
+		    a.company_ID = #{companyId} 
+			and a.create_ym like #{companyY} ||'%'
+		ORDER BY a.create_ym
+	</select>
+	
+    <select id="findListDistinct" resultType="DcaCompany">
+		SELECT 
+			DISTINCT a.company_ID as "companyId"
+		FROM DCA_COMPANY_ERR_INFO_M  a
+		ORDER BY a.company_ID
+	</select>
+	
+	<select id="findCount" resultType="String">
+		select 
+			nvl(sum(
+			substr(
+			substr(err_info,length(#{reviewType})+instr(err_info,#{reviewType}),length(err_info)),
+			1,
+			instr(substr(err_info,length(#{reviewType})+instr(err_info,#{reviewType}),length(err_info)),',',1)-1)
+			),0) as sumErr
+			from
+		dca_company_err_info_m
+		<where>
+		    company_ID = #{companyId} 
+			and err_info like '%'||	#{reviewType} ||'%'
+		</where>
+	</select>
+	
+	<select id="findListTime" resultType="DcaCompany">
+		select 
+			company_ID as "companyId"
+		from
+		    dca_company_err_info_m
+		where
+		    create_ym = #{companyYm} 
+		ORDER BY upload_FirstTime desc
+	</select>
+	
+	<select id="findCountYM" resultType="String">
+		select 
+			nvl(sum(
+			substr(
+			substr(err_info,length(#{reviewType})+instr(err_info,#{reviewType}),length(err_info)),
+			1,
+			instr(substr(err_info,length(#{reviewType})+instr(err_info,#{reviewType}),length(err_info)),',',1)-1)
+			),0) as sumErr
+			from
+		dca_company_err_info_m
+		<where>
+		    company_ID = #{companyId}
+		    and create_ym = #{companyYm}
+			and err_info like '%'||	#{reviewType} ||'%'
+		</where>
+	</select>
+	
+	<select id="findSum" resultType="String">
+		SELECT 
+			nvl(sum(errsum),0) as "errsum"
+		FROM DCA_COMPANY_ERR_INFO_M 
+		WHERE company_ID = #{companyId} 
+	</select>
+	
+	<select id="findAllList" resultType="DcaCompany">
+		SELECT 
+			<include refid="dcaCompanyColumns"/>
+		FROM dca_company a
+		<include refid="dcaCompanyJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO DCA_COMPANY_ERR_INFO_M(
+			company_ID,
+			create_ym,
+			upload_FirstTime,
+			CheckResult_Person,
+			upload_time,
+			err_type,
+			err_info,
+			file_name,
+			err_file,
+			errsum
+		) VALUES (
+			#{companyId},
+			#{companyYm},
+			sysdate,
+			#{companyName},
+			sysdate,
+			#{reviewType},
+			#{reviewTypeCount},
+			#{fileName},
+			#{companyFile},
+			#{sumErr}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE DCA_COMPANY_ERR_INFO_M SET 	
+			CheckResult_Person = #{companyName},
+			upload_time = sysdate,
+			err_type = #{reviewType},
+			err_info = #{reviewTypeCount},
+			file_name = #{fileName},
+			err_file = #{companyFile},
+			errsum = #{sumErr}
+		WHERE company_ID = #{companyId}   
+		AND   create_ym = #{companyYm} 
+	</update>
+	
+	<insert id="backup">
+		INSERT INTO DCA_COMPANY_ERR_INFO_M_BACKUP(
+		    backup_ID,
+			company_ID,
+			create_ym,
+			upload_FirstTime,
+			CheckResult_Person,
+			upload_time,
+			err_type,
+			err_info,
+			file_name,
+			err_file,
+			errsum
+		) VALUES (
+		    #{uid},
+			#{companyId},
+			#{companyYm},
+			sysdate,
+			#{companyName},
+			sysdate,
+			#{reviewType},
+			#{reviewTypeCount},
+			#{fileName},
+			#{companyFile},
+			#{sumErr}
+		)
+	</insert>
+	
+	<update id="delete">
+		DELETE FROM dca_company
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

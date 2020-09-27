@@ -1,0 +1,39 @@
+<div class="modal points-pool-add-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>积分池参数设置</h2>
+    </div>
+    <form class="form form-aligned point-pool-form" data-id="{{id}}">
+        <!--隐藏传递该条数据的id，删除和编辑时会用到-->
+        <input id="id" name="id" type="hidden" value="{{data.id}}">
+        <div class="modal-body points-pool-modal-body">
+            <div class="control-group">
+                <label for="curMonth">月份:</label>
+                {{#equals "edit" title}}
+                <input id="curMonth" name="curMonth" class="input-small" type="text" value="{{data.curMonth}}" readonly>
+                {{else}}
+                    <input id="curMonth" name="curMonth" class="input-small" type="text" value="{{data.curMonth}}" maxlength="6">
+                {{/equals}}
+            </div>
+
+            <div class="control-group">
+                <label for="maxPoint">当月最高积分:</label>
+                <input id="maxPoint" name="maxPoint"   type="text" value="{{data.maxPoint}}" maxlength="11">
+            </div>
+
+            <div class="control-group">
+                <label for="singlePoint">积分兑换价格:</label>
+                <input id="singlePoint" name="singlePoint"  type="text" value="{{data.singlePoint}}" maxlength="6"/>
+            </div>
+
+            <div class="control-group" >
+                <label for="pointRate">积分最高支付比例:</label>
+                <input id="pointRate" name="pointRate" type="text" value="{{data.pointRate}}" maxlength="4" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="确定">
+            <button class="btn btn-close btn-small close">取消</button>
+        </div>
+    </form>
+</div>

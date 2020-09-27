@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- Mybatis Mapper config for SYSTEM. @author zhanglin@dpn.com.cn @since 
+	1.0.0 zhanglin@dpn.com.cn @version 1.0.0 zhanglin@dpn.com.cn -->
+<!-- *************************************************************************** 
+	备忘记录 -> ******************************************************************************** 
+	变更履历 -> 1.0.0 2016-07-07 zhanglin@dpn.com.cn : 初建。 **************************************************************************** -->
+<mapper namespace="SQL.FEVENT">
+
+
+
+	<!-- **** select ******************************************************* -->
+	<select id="findByCno" parameterType="String"
+		resultType="com.dpn.ciqqlc.standard.model.VideoEventModel">
+		SELECT
+		id,
+		proc_Main_Id as procMainId,
+		proc_Type as procType,
+		file_Type as fileType,
+		file_Name as fileName,
+		port_Dept_Code as portDeptCode,
+		port_Org_Code as portOrgCode,
+		create_User as createUser,
+		create_Date as createDate
+		FROM
+		qlc_video_file_event
+		where procMainId = #{cardNo}
+	</select> 
+
+	<!-- **** insert ******************************************************* -->
+	<insert id="insert" parameterType="com.dpn.ciqqlc.standard.model.VideoEventModel" statementType="CALLABLE">
+			insert into qlc_video_file_event
+				(
+					id,
+					<if test="procMainId != null and procMainId != ''" >
+					proc_Main_Id,
+					</if>
+					<if test="procType != null and procType != ''" >
+					proc_Type,
+					</if>
+					<if test="fileType != null and fileType != ''" >
+					file_Type,
+					</if>
+					<if test="fileName != null and fileName != ''" >
+					file_Name,
+					</if>
+					<if test="portDeptCode != null and portDeptCode != ''" >
+					port_Dept_Code,
+					</if>
+					<if test="portOrgCode != null and portOrgCode != ''" >
+					port_Org_Code,
+					</if>
+					<if test="createUser != null and createUser != ''" >
+					create_User,
+					</if>
+					<if test="name != null and name != ''" >
+					name,
+					</if>
+					<if test="cunnar_flag != null and cunnar_flag != ''" >
+					cunnar_flag,
+					</if>
+					<if test="createDate != null and createDate != ''" >
+					create_Date
+					</if>
+				)
+			values 
+				(
+					CreateGUID(),
+					<if test="procMainId != null and procMainId != ''" >
+					#{procMainId},
+					</if>
+					<if test="procType != null and procType != ''" >
+					#{procType},
+					</if>
+					<if test="fileType != null and fileType != ''" >
+					#{fileType},
+					</if>
+					<if test="fileName != null and fileName != ''" >
+					#{fileName},
+					</if>
+					<if test="portDeptCode != null and portDeptCode != ''" >
+					#{portDeptCode},
+					</if>
+					<if test="portOrgCode != null and portOrgCode != ''" >
+					#{portOrgCode},
+					</if>
+					<if test="createUser != null and createUser != ''" >
+					#{createUser},
+					</if>
+					<if test="name != null and name != ''" >
+					#{name},
+					</if>
+					<if test="cunnar_flag != null and cunnar_flag != ''" >
+					#{cunnar_flag},
+					</if>
+					<if test="createDate != null and createDate != ''" >
+					#{createDate}
+					</if>
+				)
+	</insert>
+
+	<!-- **** update ******************************************************* -->
+
+	<!-- **** delete ******************************************************* -->
+	<delete id="deleteEvent">
+	delete
+		  from QLC_VIDEO_FILE_EVENT
+		 where PROC_TYPE = #{procType}
+		   and proc_main_id = #{procMainId}
+	</delete>
+
+</mapper>

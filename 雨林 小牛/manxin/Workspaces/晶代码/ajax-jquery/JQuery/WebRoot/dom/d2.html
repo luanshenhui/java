@@ -1,0 +1,45 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	function f1(){
+		var $obj = $('<div>首先要培养编程的兴趣</div>');
+		//append: 作为最后一个孩子添加进来。
+		$('body').append($obj);
+	}
+	
+	function f2(){
+		$('body').append(
+		'<div>首先要培养编程的兴趣</div>');
+	}
+	
+	function f3(){
+		$('body').prepend(
+		'<div>首先要培养编程的兴趣</div>');
+	}
+	
+	function f4(){
+		//$('ul').after('<p>hello jQuery</p>');
+		$('ul').before('<p>hello jQuery</p>');
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<a href="javascript:;" 
+	onclick="f3();">如何才能学好java?</a>
+	<br/>
+	<ul>
+		<li>item1</li>
+		<li>item2</li>
+		<li>item3</li>
+	</ul>
+	<input type="button" value="ClickMe" 
+	onclick="f4();"/>
+	
+	
+	
+</body>
+</html>

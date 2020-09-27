@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberGoodsFavorite">
+    <resultMap id="MemberGoodsFavoriteMap" type="MemberGoodsFavoriteModel">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="goodsCode" column="goods_code"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="price" column="price"/>
+        <result property="createTime" column="create_time"/>
+        <result property="memo" column="memo"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="vendorId" column="vendor_id"/>
+    </resultMap>
+    <sql id="columns">
+        id,cust_id,goods_code,item_code,price,create_time,memo,del_flag,modify_time,create_oper,modify_oper,vendor_id
+    </sql>
+
+    <insert id="insert" parameterType="MemberGoodsFavoriteModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_member_goods_favorite
+        (cust_id
+        ,goods_code
+        ,item_code
+        ,price
+        ,create_time
+        ,memo
+        ,del_flag
+        ,modify_time
+        ,create_oper
+        ,modify_oper
+        ,vendor_id)
+        values(#{custId}
+        ,#{goodsCode}
+        ,#{itemCode}
+        ,#{price}
+        ,#{createTime}
+        ,#{memo}
+        ,#{delFlag}
+        ,#{modifyTime}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,#{vendorId})
+    </insert>
+
+    <update id="update" parameterType="MemberGoodsFavoriteModel">
+        update tbl_member_goods_favorite set
+        cust_id
+        = #{custId},goods_code
+        = #{goodsCode},item_code
+        = #{itemCode},price
+        = #{price},create_time
+        = #{createTime},memo
+        = #{memo},del_flag
+        = #{delFlag},modify_time
+        = now(),create_oper
+        = #{createOper},modify_oper
+        = #{modifyOper},vendor_id
+        = #{vendorId}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="goodsCode !=null">and goods_code = #{goodsCode}</if>
+            <if test="itemCode !=null">and item_code = #{itemCode}</if>
+            <if test="price !=null">and price = #{price}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="memo !=null">and memo = #{memo}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="MemberGoodsFavoriteMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_member_goods_favorite
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="MemberGoodsFavoriteMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_member_goods_favorite
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="MemberGoodsFavoriteMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_member_goods_favorite
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="MemberGoodsFavoriteModel">
+        delete from tbl_member_goods_favorite where id = #{id}
+    </delete>
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_member_goods_favorite
+        <include refid="conditions"/>
+    </select>
+    <select id="countForNoRepeat" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_member_goods_favorite
+        <include refid="conditions"/>
+        <![CDATA[ group by item_code,cust_id ]]>
+    </select>
+
+    <select id="findTop" parameterType="Map" resultMap="MemberGoodsFavoriteMap">
+        select id,
+        <include refid="columns"/>,
+        count(1)as count
+        from tbl_member_goods_favorite
+        <include refid="conditions"/>
+        group by goods_code
+        ORDER BY count DESC
+        LIMIT 10
+    </select>
+    <select id="findByCustIdAndItemCode" parameterType="Map" resultMap="MemberGoodsFavoriteMap">
+        select * from tbl_member_goods_favorite mgf
+        where mgf.cust_id = #{custId}
+        and mgf.item_code = #{itemCode}
+        and mgf.del_flag = 0
+    </select>
+    <select id="pagerForNoRepeat" parameterType="Map" resultMap="MemberGoodsFavoriteMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_member_goods_favorite
+        <include refid="conditions"/>
+        <![CDATA[ group by item_code,cust_id order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="deleteById" parameterType="MemberGoodsFavoriteModel">
+        delete from tbl_member_goods_favorite
+        <include refid="conditions"/>
+    </delete>
+    <select id="pagerCountFavorite" resultMap="MemberGoodsFavoriteMap" parameterType="Map">
+    	select goods_code,item_code, count(distinct cust_id) as count
+    	from tbl_member_goods_favorite
+    	where del_flag='0'
+    	and <![CDATA[ date_format(create_time,'%y%m%d') >= date_format(#{startDate},'%y%m%d') ]]> 
+	    and <![CDATA[ date_format(create_time,'%y%m%d') <= date_format(#{endDate},'%y%m%d') ]]>
+	    group by item_code
+	    <![CDATA[ order by count desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="findMyFavoriteCount" resultType="Long" parameterType="String">
+        select count(1) from tbl_member_goods_favorite
+        where cust_id = #{custId} and del_flag=0
+    </select>
+</mapper>
+
+

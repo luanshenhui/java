@@ -1,0 +1,46 @@
+package com.yulin.am;
+
+import java.util.*;
+public class Game {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("******开始游戏********");
+		System.out.println("请输入宠物的名字：");
+		
+		Scanner scan = new Scanner(System.in);//创建扫描仪
+		String name=scan.next();
+		Pet pet = new Pet(name);
+		//System.out.println("宠物已诞生~！");
+		pet.showM();
+		while(true){
+			System.out.println("*******************************");
+			System.out.println("主人，您要干什么？");
+			System.out.println("1.喂食 2.洗澡 3.玩耍 4.打你 5.查看信息");
+			int in = scan.nextInt();
+			if(in==1){
+				;
+			}
+			else if(in==2){
+				;
+			}
+			else if(in==3){
+				;
+			}
+			else if(in==4){
+				;
+			}
+			else if(in==5){
+				pet.showM();
+			}
+			else{
+				System.out.println("您的操作有误~！");
+			}
+		}
+		
+	}
+
+}

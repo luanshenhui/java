@@ -1,0 +1,28 @@
+package com.cost.action;
+
+public class CostDelAction {
+	private int id;
+	private Cost cost;
+	
+	
+	public Cost getCost() {
+		return cost;
+	}
+
+	public void setCost(Cost cost) {
+		this.cost = cost;
+	}
+
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String execute() {
+		// TODO Auto-generated method stub
+		return "success";
+	}
+}

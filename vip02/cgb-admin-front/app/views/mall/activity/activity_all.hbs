@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}营销活动管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "activity/activity_manage" true}}
+            {
+            "tabType":"0"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

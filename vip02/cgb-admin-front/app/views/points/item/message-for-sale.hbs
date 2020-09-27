@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}礼品管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "points_present/present_manage" true}}
+            {
+            "type":"6",
+            "channel":"JF"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

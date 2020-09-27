@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommonDao">
+
+    <sql id="orderColumns">
+        order_id,ordermain_id,oper_seq,ordertype_id,ordertype_nm,payway_code,payway_nm,cardno,verify_flag,vendor_id,vendor_snm,source_id,source_nm,ot_source_id,ot_source_nm,goods_code,goods_id,bank_nbr,bonus_totalvalue,cal_money,orig_money,total_money,act_type,voucher_id,voucher_nm,voucher_price,voucher_no,act_id,acct_no,single_price,single_bonus,bonus_type,bonus_type_nm,goods_type,goods_type_name,is_tiein_sale,balance_status,batch_no,e_update_status,order_desc,cardno_benefit,validate_code,goods_payway_id,goods_num,goods_nm,mach_code,curr_type,exchange_rate,type_id,level_nm,goods_brand,goods_model,goods_color,goods_present,goods_present_desc,spec_flag,spec_desc,goods_range,goods_local,goodssend_flag,goodsaskfor_flag,goods_bill,goods_desc,goods_resv1,spec_shopno_type,pay_type_nm,inc_code,inc_code_nm,stages_num,commission_type,commission_rate,commission,spec_shopno,bonus_bank_nbr,bonus_spec_shopno,pay_code,prod_code,plan_code,stages_desc,mcc,inc_way,inc_take_way,inc_type,inc_rate,inc_money,inc_desc,uitopsfee,uitfeeflg,uitfeedam,uitopsdate,uitdrtuit,uitdrtamt,inc_backway,inc_back_price,inc_take_price,credit_flag,cash_auth_type,accredit_date,accredit_time,auth_code,rtn_code,rtn_desc,txn_msg1_desc,txn_msg2_desc,host_acc_code,host_acc_desc,bonus_trn_date,bonus_trn_time,bonus_trace_no,bonus_auth_type,bonus_accredit_date,bonus_accredit_time,bonus_auth_code,bonus_rtn_code,bonus_rtn_desc,bonus_txn_msg_desc,cal_way,locked_flag,vendor_oper_flag,msg_content,tmp_status_id,cur_status_id,cur_status_nm,sin_status_id,sin_status_nm,create_oper,modify_oper,comm_date,comm_time,version_num,ext_1,ext_2,ext_3,reserved1,rule_id,rule_nm,limit_code,cust_type,accredit_type,app_flag,cash_trace_no_1,cash_trace_no_2,bank_nbr_2,spec_shopno_2,accredit_date_2,accredit_time_2,auth_code_2,act_category,act_name,user_assc_nbr,vendor_phone,dfacct,dfname,dfhnbr,dfhname,cvv2,logistics_syn_flag,member_level,integraltype_id,mer_id,error_code,cardtype,receiver,received_time,cust_cart_id,miaosha_action_flag,del_flag,goods_attr1,goods_attr2,reference_no,order_id_host,create_time,modify_time,installment_price,member_name,first_reminde_time,reminde_times,reminde_flag,o2o_voucher_code,o2o_expire_flag,item_small_pic,sale_after_status,order_succ_time,tiein_sale_memo,sin_apply_memo,fenefit,costBy,period_id
+    </sql>
+
+    <sql id="orderMainColumns">
+        ordermain_id,ordertype_id,ordertype_nm,cardno,source_id,source_nm,source2_id,source2_nm,total_num,total_price,total_bonus,promot_discount,bonus_discount,voucher_discount,is_invoice,invoice,invoice_content,bp_cust_grp,csg_name,csg_id_type,csg_idcard,csg_postcode,csg_address,csg_phone1,csg_phone2,ordermain_desc,perm_limit,cash_limit,stages_limit,card_userid,cont_id_type,cont_idcard,cont_nm,cont_nm_py,cont_postcode,cont_address,cont_mob_phone,cont_hphone,exp_date,fore_accdate,cardtype_id,pdt_nbr,format_id,total_inc_price,state_code,state_nm,locked_flag,cur_status_id,cur_status_nm,create_oper,modify_oper,comm_date,comm_time,reserved1,cust_flag,vip_flag,acct_add_flag,cust_sex,ps_flag,cust_email,cust_birthday,exp_date_2,version_num,org_code,org_nm,org_level,csg_province,csg_city,csg_borough,accepted_no,serial_no,e_update_status,ismerge,integraltype_id,defraytype,mer_id,error_code,check_status,pay_result_time,desc1,desc2,desc3,reference_no,create_time,modify_time,del_flag
+    </sql>
+
+    <sql id="orderDoDetailColumns">
+        id,order_id,do_time,do_userid,user_type,status_id,status_nm,msg_content,do_desc,rule_id,rule_nm,create_oper,create_time,modify_oper,modify_time,del_flag
+    </sql>
+
+    <sql id="keyWordColumns">
+        id,key_words,ordertype_id,source_id,create_oper,create_time
+    </sql>
+
+    <select id="getTableRowsSum" parameterType="Map" resultType="Integer">
+        select count(1) from 
+        <if test="orgTableName == 'tbl_order_main'">
+        	tbl_order_main where create_time <![CDATA[<]]> #{transferDate}
+        </if>
+        <if test="orgTableName == 'tblordermain_history'">
+        	tblordermain_history where create_time <![CDATA[<]]> #{transferDate}
+        </if>
+        <if test="orgTableName == 'tbl_order'">
+        	tbl_order where create_time <![CDATA[<]]> #{transferDate}
+        </if>
+        <if test="orgTableName == 'tblorder_history'">
+        	tblorder_history where create_time <![CDATA[<]]> #{transferDate}
+        </if>
+        <if test="orgTableName == 'tbl_order_dodetail'">
+        	tbl_order_dodetail where do_time <![CDATA[<]]> #{transferDate}
+        </if>
+        <if test="orgTableName == 'tblorderdodetail_history'">
+        	tblorderdodetail_history where do_time <![CDATA[<]]> #{transferDate}
+        </if>
+        <if test="orgTableName == 'tbl_esp_keyword_record'">
+        	tbl_esp_keyword_record where create_time <![CDATA[<]]> #{transferDate}
+        </if>
+    </select>
+
+    <select id="getFirstRowsTable" parameterType="Map" resultType="Map">
+    	<if test="orgTableName == 'tbl_order_main'">
+        	select ordermain_id from tbl_order_main where create_time <![CDATA[<]]> #{transferDate} limit #{rows}
+        </if>
+        <if test="orgTableName == 'tblordermain_history'">
+        	select ordermain_id from tblordermain_history where create_time <![CDATA[<]]> #{transferDate} limit #{rows}
+        </if>
+        <if test="orgTableName == 'tbl_order'">
+        	select order_id from tbl_order where create_time <![CDATA[<]]> #{transferDate} limit #{rows}
+        </if>
+        <if test="orgTableName == 'tblorder_history'">
+        	select order_id from tblorder_history where create_time <![CDATA[<]]> #{transferDate} limit #{rows}
+        </if>
+        <if test="orgTableName == 'tbl_order_dodetail'">
+        	select id from tbl_order_dodetail where do_time <![CDATA[<]]> #{transferDate} limit #{rows}
+        </if>
+        <if test="orgTableName == 'tblorderdodetail_history'">
+        	select id from tblorderdodetail_history where do_time <![CDATA[<]]> #{transferDate} limit #{rows}
+        </if>
+        <if test="orgTableName == 'tbl_esp_keyword_record'">
+        	select id from tbl_esp_keyword_record where create_time <![CDATA[<]]> #{transferDate} limit #{rows}
+        </if> 
+    </select>
+    
+    <!-- 插入小订单相关表 -->
+    <insert id="insertOrderTable" parameterType="Map">
+        <if test="orgTableName == 'tbl_order'">
+        	insert into tblorder_history (<include refid="orderColumns"/>)
+			select
+        	<include refid="orderColumns"/>
+        	from tbl_order       
+        </if>
+        <if test="orgTableName == 'tblorder_history'">
+        	insert into tblorder_backup (<include refid="orderColumns"/>)
+			select
+        	<include refid="orderColumns"/>
+        	from tblorder_history
+        </if>
+        where order_id in
+        <foreach collection="idList" item="idItem" open="(" close=")" separator=",">
+            #{idItem}
+        </foreach>
+    </insert>
+    
+    <!-- 插入大订单相关表 -->
+    <insert id="insertOrderMainTable" parameterType="Map">
+    	<if test="orgTableName == 'tbl_order_main'">
+    		insert into tblordermain_history (<include refid="orderMainColumns"/>)
+        	select
+        	<include refid="orderMainColumns"/>
+        	from tbl_order_main
+    	</if>
+    	<if test="orgTableName == 'tblordermain_history'">
+    		insert into tblordermain_backup (<include refid="orderMainColumns"/>)
+        	select
+        	<include refid="orderMainColumns"/>
+        	from tblordermain_history   	
+    	</if>
+        where ordermain_id in
+        <foreach collection="idList" item="idItem" open="(" close=")" separator=",">
+            #{idItem}
+        </foreach>
+    </insert>
+    
+    <!-- 插入订单处理历史相关表 -->
+    <insert id="insertOrderDoDetailTable" parameterType="Map">
+        <if test="orgTableName == 'tbl_order_dodetail'">
+    		insert into tblorderdodetail_history (<include refid="orderDoDetailColumns"/>)
+        	select
+        	<include refid="orderDoDetailColumns"/>
+        	from tbl_order_dodetail
+    	</if>
+    	<if test="orgTableName == 'tblorderdodetail_history'">
+    		insert into tblorderdodetail_backup (<include refid="orderDoDetailColumns"/>)
+        	select
+        	<include refid="orderDoDetailColumns"/>
+        	from tblorderdodetail_history   	
+    	</if>
+        where id in
+        <foreach collection="idList" item="idItem" open="(" close=")" separator=",">
+            #{idItem}
+        </foreach>
+    </insert>
+
+    <!-- 插入关键字相关表 -->
+    <insert id="insertKeyWordTable" parameterType="Map">
+        insert into tbl_esp_keyword_record_mod
+        (<include refid="keyWordColumns"/>)
+        select
+        <include refid="keyWordColumns"/>
+        from tbl_esp_keyword_record where id in
+        <foreach collection="idList" item="idItem" open="(" close=")" separator=",">
+            #{idItem}
+        </foreach>
+    </insert>
+
+    <delete id="deleteTable" parameterType="Map">
+    	<if test="orgTableName == 'tbl_order_main'">
+    		delete from tbl_order_main where ordermain_id
+        </if>
+        <if test="orgTableName == 'tblordermain_history'">
+        	delete from tblordermain_history where ordermain_id       	
+        </if>
+        <if test="orgTableName == 'tbl_order'">
+        	delete from tbl_order where order_id 
+        </if>
+        <if test="orgTableName == 'tblorder_history'">
+        	delete from tblorder_history where order_id
+        </if>
+        <if test="orgTableName == 'tbl_order_dodetail'">
+        	delete from tbl_order_dodetail where id
+        </if>
+        <if test="orgTableName == 'tblorderdodetail_history'">
+        	delete from tblorderdodetail_history where id
+        </if>
+        <if test="orgTableName == 'tbl_esp_keyword_record'">
+        	delete from tbl_esp_keyword_record where id
+        </if>
+			in
+        <foreach collection="idList" item="idItem" open="(" close=")" separator=",">
+            #{idItem}
+        </foreach>
+    </delete>
+
+</mapper>

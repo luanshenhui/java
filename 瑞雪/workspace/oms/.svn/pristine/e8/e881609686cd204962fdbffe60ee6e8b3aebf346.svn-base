@@ -1,0 +1,75 @@
+package cn.rkylin.oms.system.dictionary.service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.github.pagehelper.PageInfo;
+import cn.rkylin.core.exception.BusinessException;
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.dictionary.dao.IDictDAO;
+import cn.rkylin.oms.system.dictionary.vo.DictVO;
+import cn.rkylin.oms.system.privilege.dao.IMenuGrantDAO;
+import cn.rkylin.oms.system.privilege.domain.WF_ORG_RESOURCE_AUTHORITY;
+import cn.rkylin.oms.system.role.dao.IRoleDAO;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.role.vo.RoleVo;
+import cn.rkylin.oms.system.unit.dao.IUnitDAO;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+import cn.rkylin.oms.system.user.dao.IUserDAO;
+import cn.rkylin.oms.system.user.domain.WF_ORG_USER;
+
+/**
+ * <p>
+ * Module : 角色管理
+ * </p>
+ * <p>
+ * Description: 角色业务对象
+ * </p>
+ * 
+ */
+@Service("dictService")
+public class DictServiceImple extends ApolloService implements IDictService {
+	
+	
+	@Autowired
+	private IDictDAO idictDAO;
+	
+	
+	public PageInfo<DictVO> findByWhere(int page, int rows, DictVO dictVO) throws Exception {
+		PageInfo<DictVO> dictVOList = findPage(page, rows, "getDictByCondition", dictVO);
+
+		return dictVOList;
+
+	}
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 添加角色
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 * @param roleName
+	 *            - 角色名称
+	 */
+//	@Transactional
+//	@CachePut(value = "dict", key = "T(String).valueOf('role:').concat(#roleVo.roleId)")
+	public void insert(DictVO dictVO) throws Exception {
+		idictDAO.insert("insertDict", dictVO);
+	}
+	@Override
+	public void delete(String dictId) throws Exception {
+		idictDAO.delete("deleteDict", dictId);
+	}
+	@Override
+	public void update(DictVO dictVO) throws Exception {
+		idictDAO.update("updateDict", dictVO);
+	}
+}

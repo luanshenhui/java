@@ -1,0 +1,41 @@
+@charset "utf-8";/* CSS Document */
+body, ol, ul, h1, h2, h3, h4, h5, h6, p, th, td, dl, dd, form, fieldset, legend, input, textarea, select {
+	margin: 0;
+	padding: 0
+}
+LI {
+	list-style: none;
+}
+IMG {
+	border: none;
+}
+body {
+	background: #d7dad6;
+	border: 0;
+	font: 14px "微软雅黑", "黑体", "宋体", Arial, Helvetica, sans-serif;
+	_font: 14px "宋体", "黑体", "微软雅黑", Arial, Helvetica, sans-serif;
+	color: #363636;
+	line-height: 20px
+}
+A {
+	text-decoration: none;
+	color: #979797;
+}
+A:hover {
+	color: #666;
+}
+A:visited {
+	color: #979797;
+}
+.main {
+	width: 100%;
+	height:706px;
+	background: url(../images/main_bg.jpg) no-repeat top center;
+	_background: url(../images/main_bg_ie6.jpg) no-repeat top center;
+}
+.content {
+	width:960px;
+	margin:0 auto;
+}
+.clear{ clear:both; float:none;}
+.bind_font{color: #363636;}

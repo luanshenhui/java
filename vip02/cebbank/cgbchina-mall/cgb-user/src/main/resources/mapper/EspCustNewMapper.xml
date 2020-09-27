@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EspCustNew">
+    <resultMap id="EspCustNewMap" type="EspCustNewModel">
+        <result property="custId" column="cust_id"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="birthUsedYear" column="birth_used_year"/>
+        <result property="birthUsedCount" column="birth_used_count"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="loginMac" column="login_mac"/>
+    </resultMap>
+    <sql id="columns">
+        cust_id,login_ip,birth_used_year,birth_used_count,last_login_time,session_id,login_mac
+    </sql>
+
+    <insert id="insert" parameterType="EspCustNewModel" useGeneratedKeys="true"
+            keyProperty="custId" keyColumn="cust_id">
+        insert into tbl_esp_cust_new
+        (login_ip
+        ,birth_used_year
+        ,birth_used_count
+        ,last_login_time
+        ,session_id
+        ,login_mac)
+        values(#{loginIp}
+        ,#{birthUsedYear}
+        ,#{birthUsedCount}
+        ,#{lastLoginTime}
+        ,#{sessionId}
+        ,#{loginMac})
+    </insert>
+
+    <update id="update" parameterType="EspCustNewModel">
+        update tbl_esp_cust_new set
+        login_ip
+        = #{loginIp},birth_used_year
+        = #{birthUsedYear},birth_used_count
+        = #{birthUsedCount},last_login_time
+        = #{lastLoginTime},session_id
+        = #{sessionId},login_mac
+        = #{loginMac}
+        where cust_id = #{custId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="loginIp !=null">and login_ip = #{loginIp}</if>
+            <if test="birthUsedYear !=null">and birth_used_year = #{birthUsedYear}</if>
+            <if test="birthUsedCount !=null">and birth_used_count = #{birthUsedCount}</if>
+            <if test="lastLoginTime !=null">and last_login_time = #{lastLoginTime}</if>
+            <if test="sessionId !=null">and session_id = #{sessionId}</if>
+            <if test="loginMac !=null">and login_mac = #{loginMac}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EspCustNewMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_cust_new
+        where id=#{custId}
+    </select>
+    <select id="findAll" resultMap="EspCustNewMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_cust_new
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="EspCustNewMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_cust_new
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="EspCustNewModel">
+        delete from tbl_esp_cust_new where id = custId
+    </delete>
+    <select id="getTblEspCustNew" resultMap="EspCustNewMap">
+        select id,birth_used_count
+        from tbl_esp_cust_new
+        <include refid="conditions"/>
+    </select>
+    <update id="updateTblEspCustNew" parameterType="EspCustNewModel">
+        update tbl_esp_cust_new set
+        birth_used_count = #{birth_used_count}
+        where cust_id = #{custId}
+        and #{birth_used_count}>=0
+    </update>
+    <update id="updateTblEspCustNew0" parameterType="EspCustNewModel">
+        update tbl_esp_cust_new set
+        birth_used_count = 0
+        where cust_id = #{custId}
+    </update>
+    <update id="updateBirthUsedCount" parameterType="String">
+        update tbl_esp_cust_new set
+        birth_used_count = birth_used_count - 1
+        where cust_id = #{custId}
+    </update>
+</mapper>
+
+

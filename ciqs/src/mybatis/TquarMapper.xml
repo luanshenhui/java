@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SQL.Tquar">
+
+<insert id="insertSelective" parameterType="com.dpn.ciqqlc.standard.model.Tquar">
+    insert into QLC_ORIG_TQUAR
+ <!--    <trim prefix="(" suffix=")" suffixOverrides=",">
+        TID,
+      <if test="APPRAISER != null and APPRAISER  != ''">
+        APPRAISER,
+      </if>
+      <if test="AUDID != null and AUDID  != ''">
+        AUDID,
+      </if>
+      <if test="CATEGORY != null and  CATEGORY != ''">
+        CATEGORY,
+      </if>
+      <if test="CHECKID != null and CHECKID  != ''">
+        CHECKID,
+      </if>
+      <if test="CNAME != null and CNAME  != ''">
+        CNAME,
+      </if>
+      <if test="DEREGNOTIDES != null and DEREGNOTIDES  != ''">
+        DEREGNOTIDES,
+      </if>
+      <if test="DEREGNOTISN != null and DEREGNOTISN  != ''">
+        DEREGNOTISN,
+      </if>
+      <if test="ERDES != null and ERDES  != ''">
+        ERDES,
+      </if>
+      <if test="FIRSTINTCPED != null and  FIRSTINTCPED != ''">
+        FIRSTINTCPED,
+      </if>
+      <if test="FORMDATE != null and FORMDATE  != ''">
+        FORMDATE,
+      </if>
+      <if test="GOODSID != null and GOODSID  != ''">
+        GOODSID,
+      </if>
+      <if test="ID != null and ID  != ''">
+        ID,
+      </if>
+      <if test="INFECTEDSEAT != null and  INFECTEDSEAT != ''">
+        INFECTEDSEAT,
+      </if>
+      <if test="INFECTEDSTATE != null and INFECTEDSTATE  != ''">
+        INFECTEDSTATE,
+      </if>
+      <if test="INTERDATE != null and  INTERDATE != ''">
+        INTERDATE,
+      </if>
+      <if test="LAB != null and  LAB != ''">
+        LAB,
+      </if>
+      <if test="LIFEPHASE != null and LIFEPHASE  != ''">
+        LIFEPHASE,
+      </if>
+      <if test="LIFESTATE != null and LIFESTATE  != ''">
+        LIFESTATE,
+      </if>
+      <if test="LNAME != null and  LNAME != ''">
+        LNAME,
+      </if>
+      <if test="LNAMEOLD != null and LNAMEOLD  != ''">
+        LNAMEOLD,
+      </if>
+      <if test="PESTNUM != null and PESTNUM  != ''">
+        PESTNUM,
+      </if>
+      <if test="PESTNUMUNIT != null and PESTNUMUNIT  != ''">
+        PESTNUMUNIT,
+      </if>
+      <if test="QICLASS != null and QICLASS  != ''">
+        QICLASS,
+      </if>
+      <if test="VERINO != null and VERINO  != ''">
+        VERINO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        CreateGUID() ,
+      <if test="APPRAISER != null and APPRAISER  != ''">
+        #{APPRAISER},
+      </if>
+      <if test="AUDID != null and AUDID  != ''">
+        #{AUDID},
+      </if>
+      <if test="CATEGORY != null and CATEGORY  != ''">
+        #{CATEGORY},
+      </if>
+      <if test="CHECKID != null and CHECKID  != ''">
+        #{CHECKID},
+      </if>
+      <if test="CNAME != null and CNAME  != ''">
+        #{CNAME},
+      </if>
+      <if test="DEREGNOTIDES != null and DEREGNOTIDES  != ''">
+        #{DEREGNOTIDES},
+      </if>
+      <if test="DEREGNOTISN != null and DEREGNOTISN != ''">
+        #{DEREGNOTISN},
+      </if>
+      <if test="ERDES != null and  ERDES != ''">
+        #{ERDES},
+      </if>
+      <if test="FIRSTINTCPED != null and  FIRSTINTCPED != ''">
+        #{FIRSTINTCPED},
+      </if>
+      <if test="FORMDATE != null and FORMDATE  != ''">
+        to_date(#{FORMDATE},'yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="GOODSID != null and GOODSID  != ''">
+        #{GOODSID},
+      </if>
+      <if test="ID != null and  ID != ''">
+        #{ID},
+      </if>
+      <if test="INFECTEDSEAT != null and INFECTEDSEAT  != ''">
+        #{INFECTEDSEAT},
+      </if>
+      <if test="INFECTEDSTATE != null and  INFECTEDSTATE != ''">
+        #{INFECTEDSTATE},
+      </if>
+      <if test="INTERDATE != null and INTERDATE  != ''">
+        to_date('${INTERDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="LAB != null and LAB  != ''">
+        #{LAB},
+      </if>
+      <if test="LIFEPHASE != null and  LIFEPHASE != ''">
+        #{LIFEPHASE},
+      </if>
+      <if test="LIFESTATE != null and LIFESTATE  != ''">
+        #{LIFESTATE},
+      </if>
+      <if test="LNAME != null and LNAME  != ''">
+        #{LNAME},
+      </if>
+      <if test="LNAMEOLD != null and LNAMEOLD  != ''">
+        #{LNAMEOLD},
+      </if>
+      <if test="PESTNUM != null and PESTNUM  != ''">
+        #{PESTNUM},
+      </if>
+      <if test="PESTNUMUNIT != null and PESTNUMUNIT  != ''">
+        #{PESTNUMUNIT},
+      </if>
+      <if test="QICLASS != null and  QICLASS != ''">
+        #{QICLASS},
+      </if>
+      <if test="VERINO != null and VERINO  != ''">
+        #{VERINO},
+      </if>
+    </trim> -->
+    
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        TID,
+      <if test="APPRAISER != null">
+        APPRAISER,
+      </if>
+      <if test="AUDID != null">
+        AUDID,
+      </if>
+      <if test="CATEGORY != null">
+        CATEGORY,
+      </if>
+      <if test="CHECKID != null">
+        CHECKID,
+      </if>
+      <if test="CNAME != null">
+        CNAME,
+      </if>
+      <if test="DEREGNOTIDES != null">
+        DEREGNOTIDES,
+      </if>
+      <if test="DEREGNOTISN != null">
+        DEREGNOTISN,
+      </if>
+      <if test="ERDES != null">
+        ERDES,
+      </if>
+      <if test="FIRSTINTCPED != null">
+        FIRSTINTCPED,
+      </if>
+      <if test="FORMDATE != null">
+        FORMDATE,
+      </if>
+      <if test="GOODSID != null">
+        GOODSID,
+      </if>
+      <if test="ID != null">
+        ID,
+      </if>
+      <if test="INFECTEDSEAT != null">
+        INFECTEDSEAT,
+      </if>
+      <if test="INFECTEDSTATE != null">
+        INFECTEDSTATE,
+      </if>
+      <if test="INTERDATE != null">
+        INTERDATE,
+      </if>
+      <if test="LAB != null">
+        LAB,
+      </if>
+      <if test="LIFEPHASE != null">
+        LIFEPHASE,
+      </if>
+      <if test="LIFESTATE != null">
+        LIFESTATE,
+      </if>
+      <if test="LNAME != null">
+        LNAME,
+      </if>
+      <if test="LNAMEOLD != null">
+        LNAMEOLD,
+      </if>
+      <if test="PESTNUM != null">
+        PESTNUM,
+      </if>
+      <if test="PESTNUMUNIT != null">
+        PESTNUMUNIT,
+      </if>
+      <if test="QICLASS != null">
+        QICLASS,
+      </if>
+      <if test="VERINO != null">
+        VERINO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+       CreateGUID(),
+      <if test="APPRAISER != null">
+        #{APPRAISER,jdbcType=NVARCHAR},
+      </if>
+      <if test="AUDID != null">
+        #{AUDID,jdbcType=NVARCHAR},
+      </if>
+      <if test="CATEGORY != null">
+        #{CATEGORY,jdbcType=NVARCHAR},
+      </if>
+      <if test="CHECKID != null">
+        #{CHECKID,jdbcType=VARCHAR},
+      </if>
+      <if test="CNAME != null">
+        #{CNAME,jdbcType=NVARCHAR},
+      </if>
+      <if test="DEREGNOTIDES != null">
+        #{DEREGNOTIDES,jdbcType=NVARCHAR},
+      </if>
+      <if test="DEREGNOTISN != null">
+        #{DEREGNOTISN,jdbcType=NVARCHAR},
+      </if>
+      <if test="ERDES != null">
+        #{ERDES,jdbcType=NVARCHAR},
+      </if>
+      <if test="FIRSTINTCPED != null">
+        #{FIRSTINTCPED,jdbcType=VARCHAR},
+      </if>
+      <if test="FORMDATE != null">
+         to_date(#{FORMDATE},'yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="GOODSID != null">
+        #{GOODSID,jdbcType=DECIMAL},
+      </if>
+      <if test="ID != null">
+        #{ID,jdbcType=DECIMAL},
+      </if>
+      <if test="INFECTEDSEAT != null">
+        #{INFECTEDSEAT,jdbcType=NVARCHAR},
+      </if>
+      <if test="INFECTEDSTATE != null">
+        #{INFECTEDSTATE,jdbcType=NVARCHAR},
+      </if>
+      <if test="INTERDATE != null">
+         to_date(#{INTERDATE},'yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="LAB != null">
+        #{LAB,jdbcType=NVARCHAR},
+      </if>
+      <if test="LIFEPHASE != null">
+        #{LIFEPHASE,jdbcType=NVARCHAR},
+      </if>
+      <if test="LIFESTATE != null">
+        #{LIFESTATE,jdbcType=NVARCHAR},
+      </if>
+      <if test="LNAME != null">
+        #{LNAME,jdbcType=NVARCHAR},
+      </if>
+      <if test="LNAMEOLD != null">
+        #{LNAMEOLD,jdbcType=NVARCHAR},
+      </if>
+      <if test="PESTNUM != null">
+        #{PESTNUM,jdbcType=DECIMAL},
+      </if>
+      <if test="PESTNUMUNIT != null">
+        #{PESTNUMUNIT,jdbcType=NVARCHAR},
+      </if>
+      <if test="QICLASS != null">
+        #{QICLASS,jdbcType=DECIMAL},
+      </if>
+      <if test="VERINO != null">
+        #{VERINO,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+    <update id="updateByPrimaryKeySelective" parameterType="com.dpn.ciqqlc.standard.model.Tquar">
+    update QLC_ORIG_TQUAR
+    <set>
+      <if test="APPRAISER != null and APPRAISER  != ''">
+        APPRAISER = #{APPRAISER},
+      </if>
+      <if test="AUDID != null and  AUDID != ''">
+        AUDID = #{AUDID},
+      </if>
+      <if test="CATEGORY != null and CATEGORY  != ''">
+        CATEGORY = #{CATEGORY},
+      </if>
+      <if test="CHECKID != null and  CHECKID != ''">
+        CHECKID = #{CHECKID},
+      </if>
+      <if test="CNAME != null and CNAME  != ''">
+        CNAME = #{CNAME},
+      </if>
+      <if test="DEREGNOTIDES != null and DEREGNOTIDES  != ''">
+        DEREGNOTIDES = #{DEREGNOTIDES},
+      </if>
+      <if test="DEREGNOTISN != null and DEREGNOTISN  != ''">
+        DEREGNOTISN = #{DEREGNOTISN},
+      </if>
+      <if test="ERDES != null and ERDES  != ''">
+        ERDES = #{ERDES},
+      </if>
+      <if test="FIRSTINTCPED != null and FIRSTINTCPED  != ''">
+        FIRSTINTCPED = #{FIRSTINTCPED},
+      </if>
+      <if test="FORMDATE != null and FORMDATE  != ''">
+        FORMDATE=to_date('${FORMDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="GOODSID != null and  GOODSID != ''">
+        GOODSID = #{GOODSID},
+      </if>
+      <if test="ID != null and  ID != ''">
+        ID = #{ID},
+      </if>
+      <if test="INFECTEDSEAT != null and INFECTEDSEAT  != ''">
+        INFECTEDSEAT = #{INFECTEDSEAT},
+      </if>
+      <if test="INFECTEDSTATE != null and  INFECTEDSTATE != ''">
+        INFECTEDSTATE = #{INFECTEDSTATE},
+      </if>
+      <if test="INTERDATE != null and INTERDATE  != ''">
+        INTERDATE=to_date('${INTERDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="LAB != null and LAB  != ''">
+        LAB = #{LAB},
+      </if>
+      <if test="LIFEPHASE != null and  LIFEPHASE != ''">
+        LIFEPHASE = #{LIFEPHASE},
+      </if>
+      <if test="LIFESTATE != null and  LIFESTATE != ''">
+        LIFESTATE = #{LIFESTATE},
+      </if>
+      <if test="LNAME != null and LNAME  != ''">
+        LNAME = #{LNAME},
+      </if>
+      <if test="LNAMEOLD != null and LNAMEOLD  != ''">
+        LNAMEOLD = #{LNAMEOLD},
+      </if>
+      <if test="PESTNUM != null and  PESTNUM != ''">
+        PESTNUM = #{PESTNUM},
+      </if>
+      <if test="PESTNUMUNIT != null and PESTNUMUNIT  != ''">
+        PESTNUMUNIT = #{PESTNUMUNIT},
+      </if>
+      <if test="QICLASS != null and  QICLASS != ''">
+        QICLASS = #{QICLASS},
+      </if>
+      <if test="VERINO != null and VERINO  != ''">
+        VERINO = #{VERINO},
+      </if>
+    </set>
+    where ID = #{ID}
+  </update>
+  
+  <sql id="Base_Column_List">
+    TID, APPRAISER, AUDID, CATEGORY, CHECKID, CNAME, DEREGNOTIDES, DEREGNOTISN, ERDES, 
+    FIRSTINTCPED, FORMDATE, GOODSID, ID, INFECTEDSEAT, INFECTEDSTATE, INTERDATE, LAB, 
+    LIFEPHASE, LIFESTATE, LNAME, LNAMEOLD, PESTNUM, PESTNUMUNIT, QICLASS, VERINO
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="com.dpn.ciqqlc.standard.model.Tquar">
+    select 
+    <include refid="Base_Column_List" />
+    from QLC_ORIG_TQUAR
+    where ID = #{ID}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from QLC_ORIG_TQUAR
+    where ID = #{ID}
+  </delete>
+</mapper>

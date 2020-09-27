@@ -1,0 +1,11 @@
+package cn.rkylin.oms.system.unit.service;
+
+import java.util.List;
+
+public interface IUnitService {
+
+	List getRootUnit(String userId) throws Exception;
+
+	List getSubUnit(String userId, String itemId, boolean needStation, boolean b) throws Exception;
+
+}

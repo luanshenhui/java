@@ -1,0 +1,188 @@
+查询一、
+	1.查询出跟张无忌同一部门的员工信息
+		select * from emp where deptno=(select deptno from emp where ename='张无忌') and ename<>'张无忌';
+	2.查询出比所有战士工资都高的法师的名字
+		select ename from emp where job='法师' and salary>all(select salary from emp where job='战士');
+	3.谁的工资比法师高（不包括法师）
+		select ename from emp where salary>any(select salary from emp where job='法师') and job<>'法师';
+	4.谁跟张三丰在同一个部门(有两个张三丰分别在两个部门)
+		select ename,salary,job,deptno 
+		from emp
+		where deptno in ( select deptno from emp
+		where ename = '陈一' )
+		and ename <> '陈一';
+		注意：=any 等同于in
+		
+查询二、
+	1.谁是孙悟空的下属，(mgr是自己领导的编号)
+		select ename from emp where mgr in (select empno from emp where ename='孙悟空');
+		
+查询三、
+	1.每个部门工资最高的人是谁，显示出部门、姓名和工资
+		select deptno,ename,salary from emp where (deptno,salary) in(select deptno,max(salary) from emp group by deptno);
+	2.哪个部门的平均工资比30部门高
+		select deptno,avg(salary)平均工资 from emp group by deptno having avg(salary)>(select avg(salary) from emp where deptno=30);
+	3.哪个部门的人数最多
+		select deptno,count(*) from emp group by deptno having count(*)=(select max(count(*)) from emp group by deptno);
+	4.那些员工所在的部门的平均薪水大于8000
+		select ename,deptno from emp where deptno in (select deptno from emp group by deptno having avg(salary)>8000);
+
+表的约束：
+	1.非空约束：not null 
+	2.唯一约束：unique
+	3.主键约束：primary key：非空，并且唯一
+	4.检查约束：check 条件：根据check后面的条件约束字段
+	5.外键约束：foreign key：这一列的数据必须来源于其它列或其它表的某一列
+	
+	一个字段可以添加多个约束，约束之间没有顺序可言，主键和外键不能是一个列
+	
+表间关系：
+	从表和主表：外键所引用的列所在的表为主表，外键所在的表为从表。
+	
+	1:1关系：
+	一条数据对应一条数据
+	一张主表对应一张从表
+	
+	1:m关系:
+	一条数据对应多条数据
+	一张主表对应多张从表
+	
+	m:1关系：
+	多条数据对应一条数据
+	多张主表对应一张从表
+	
+	m:m关系：
+	多条数据对应多条数据
+	多张主表对应多张从表
+	
+	用户表：
+		用户id、登录名、密码、真实姓名
+		create table t_user(
+			id number(4) primary key,
+			logid varchar(20) unique not null,
+			pwd varchar(20) not null,
+			name varchar(20) not null
+		);
+		insert into t_user values(1001,'admin','1234','Tom');
+		
+		成绩表：
+			成绩id,用户id,成绩
+		create table t_score(
+			id number(4) primary key,
+			userid number(4) references t_user(id),
+			score number(3) check (score>0 and score<100) 
+		);
+		
+	后添加约束语法:
+		alter table 表名 add constraint 约束别名 primary key(id);
+	
+	注意：not null 不能后添加
+	
+	联合主键：由多个字段共同充当主键的功能，插入数据时只要保证3个数据不同时相同就行
+		create table test2(
+			t1 number(4),
+			t2 number(4),
+			t3 number(4),
+			primary key(t1,t2,t3)
+		);
+查询一、
+	1.哪些员工的薪水比本部门的平均薪水高
+		select ename,deptno,salary,from emp e where salary>(select avg(salary) from emp where deptno=e.deptno);
+	2.哪些人是其他人的经理
+		select * from emp e where empno in (select mgr from emp where e.empno=mgr);
+		select ename from emp a
+		where exists  (select  1  from emp_xxx 
+		where mgr = a.empno);
+	3.查询每个部门中，谁比自己所在job的平均工资高
+		select * from emp e where salary>any(select avg(salary) from emp where job=e.job and deptno=e.deptno group by job);
+		
+查询二、
+	查询出每个员工的姓名和他领导的姓名
+		select a.ename 员工名,b.ename 领导名 from emp a join emp b on a.mgr=b.empno;
+	查询出所有员工的编号、姓名、岗位(job)、部门名和工作地点
+		select e.empno 编号,e.ename 员工名,e.job 岗位,d.dname 部门名,d.location 工作地点  from emp e join dept d on e.deptno=d.deptno;
+		
+查询三、
+	查询出所有人的姓名，部门名和工作地点
+	内连接/等值连接/自然连接
+		select * from emp 
+	左外连接	
+		select * from emp left join dept on emp.deptno=dept.deptno
+	右外连接
+		select * from emp right join dept on emp.deptno=dept.deptno
+	全外连接
+		select * from emp full join dept on emp.deptno=dept.deptno
+	
+练习：
+	1.显示所有员工的姓名 ename，部门号 deptno 和部门名称 dname。
+		select * from emp full join dept on emp.deptno=dept.deptno
+	2.选择在泉水工作的员工的员工姓名、职位、部门编码、部门名字 
+		select * from emp join dept on emp.deptno=dept.deptno where location='泉水';
+	3.查询出猪八戒的领导是谁。
+		select ename from emp e where empno in(select mgr from emp where e.empno=mgr and ename='猪八戒');
+	4.孙悟空领导谁
+		select ename from emp where mgr in (select empno from emp where ename='孙悟空');
+	5.查询所有部门的部门名字 dname，所在位置 location，员工数量和工资平均值
+		.1select dname,location,人数,平均 from dept d join(select deptno,count(*) 人数, avg(salary) 平均 from emp 
+		group by deptno) e On d.deptno = e.deptno;
+		.2select dname,e.deptno,location,count(*),avg(salary) from emp e join dept d on e.deptno=d.deptno group by dname,e.deptno,location
+	6.查询和 战士组 相同部门的员工姓名 ename 和雇用日期 hiredate
+		select enamr,hirdate from emp join dept on emp.deptno=dept.deptno where dname='战士组';
+	7.查询工资比公司平均工资高的所有员工的员工号 empno，姓名 ename 和工资 。
+		select empno 员工号,ename 姓名,salary 工资 from emp where salary>(select avg(salary) from emp);
+	8.查询在部门的 location 为野区的部门工作的员工的员工姓名 ename，部门名称 dname 和岗位名称 job
+		select ename 姓名,dname 部门名称,job 岗位 from emp join dept on emp.deptno=dept.deptno where location='野区';
+	9.查询管理者是 王重阳 的员工姓名 ename 和工资 sal
+		select ename,salary from emp where mgr=(select empno from emp where ename='王重阳');
+	10.显示 法师组 部门有哪些职位
+		select job from emp join dept on emp.deptno=dept.deptno where dname='法师组';
+	11.各个部门中工资大于 5000 的员工人数
+		select deptno,count(*) from emp where deptno in(select deptno from emp where salary>5000) group by deptno;
+	12.哪些员工的工资，高于整个公司的平均工资，列出员工的名字和工资，降序排列
+		select ename,salary from emp where salary>(select avg(salary) from emp) order by salary desc;
+	13.所在部门平均工资高于 5000 的员工名字
+		select deptno,avg(salary),ename from emp group by deptno,ename having avg(salary)>5000;
+	14.列出各个部门中工资最高的员工的信息：名字、部门号、工资
+		select deptno,ename,salary from emp where (deptno,salary) in(select deptno,max(salary) from emp group by deptno);
+	15.哪个部门的平均工资是最高的，列出部门号、平均工资
+		select * from emp where salary=(select max(e) from (select avg(salary)e from emp group by deptno));
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

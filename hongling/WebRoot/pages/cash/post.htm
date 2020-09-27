@@ -1,0 +1,40 @@
+<script src="../cash/post.js"></script>
+<form id="form" class="form_template">
+<input type="hidden" name="ID" id="ID"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label lblUsername star"></td>
+		<td><input type="text"  readonly="readonly" id="companyName" class="pick textbox" style="width: 150px"/>
+			<input type="hidden" id="pubMemberID"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="label lblNum"></td>
+		<td><input type="text" id="num" name="num" class="textbox" style="width: 100px"/><span id="tip_priceUnit"></span></td>
+	</tr>
+	<tr>
+		<td class="label lblNoticeNum star"></td>
+		<td><input type="text" id="noticeNum" name="noticeNum" class="textbox" style="width: 100px"/><span id="tip_noticeUnit"></span></td>
+	</tr>
+	<tr>
+		<td class="label lblStopNum star"></td>
+		<td><input type="text" id="stopNum" name="stopNum" class="textbox" style="width: 100px"/><span id="tip_stopUnit"></span></td>
+	</tr>
+	<tr>
+		<td class="label lblIsReconciliation"></td>
+		<td><select id="isReconciliation" style="width: 150px"></select></td>
+	</tr>
+	<tr>
+		<td class="label lblPubDate"></td>
+		<td><input type="text" id="pubDate" name="pubDate" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblMemo" ></td>
+		<td><input type="text" id="memo" name="memo" class="textbox" style="width: 150px"/></td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="btnSaveCash"></a> <a id="btnCancelCash"></a>
+</div>
+</form>

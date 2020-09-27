@@ -1,0 +1,85 @@
+package com.yulin.dangdang.dao.daoimpl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.yulin.dangdang.bean.Product;
+import com.yulin.dangdang.common.MyBatisUtil;
+import com.yulin.dangdang.dao.ProductDao;
+
+public class ProductImpl implements ProductDao{
+
+	private String namespace = "com.yulin.cateMapping";
+	//@Override
+	//第一种方法book_list2.jsp
+	/*public List<Product> findProduct(int id) {
+		List<Product> list = new ArrayList<Product>();
+		SqlSession session = MyBatisUtil.getSession();
+		list = session.selectList(namespace + ".findProduct", id);
+		return list;
+	}*/
+	
+	//第二种方法 book_list.jsp
+	@Override
+	public List<Product> findProduct(int id, int page) {
+		SqlSession session = MyBatisUtil.getSession();
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("id", id);
+		map.put("page", page*5);
+		List<Product> list = session.selectList(namespace+".findBook", map);
+		return list;
+	}
+	
+	@Override
+	public List<Product> findAll() {
+		return null;
+	}
+	
+	public List<Product> findById(int id){
+		SqlSession session = MyBatisUtil.getSession();
+		List<Product> list = session.selectList(namespace + ".findById", id);
+		return list;
+	}
+	
+
+	@Override
+	public List<Product> findProductByTime() {
+		SqlSession session = MyBatisUtil.getSession();
+		List<Product> list = session.selectList(namespace + ".findProductByTime");
+		return list;
+	}
+
+	@Override
+	public List<Product> findProductAll() {
+		SqlSession session = MyBatisUtil.getSession();
+		List<Product> list = session.selectList(namespace + ".findProductIn");
+		return list;
+	}
+
+	@Override
+	public List<Product> findProductByTimeAll() {
+		SqlSession session = MyBatisUtil.getSession();
+		List<Product> list = session.selectList(namespace + ".findProductByTimeAll");
+		return list;
+	}
+	
+	@Override
+	public List<Product> findGood(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public static void main(String[] args) {
+		ProductImpl pl = new ProductImpl();
+//		System.out.println(pl.findProduct(9, 0).size());
+		List<Product> list = pl.findProductByTimeAll();
+		System.out.println(list);
+//		for(Object b : list){
+//			System.out.println(list);
+//		}
+	}
+
+}

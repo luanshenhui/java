@@ -1,0 +1,12 @@
+<tr data-component="{{pp this}}" id="{{id}}">
+  <td class="component-id"><a href="/components/{{id}}">{{id}}</a></td>
+  <td class="component-category-id">{{category}}</td>
+  <td class="component-name">{{name}}</td>
+  <td class="component-desc">{{description}}</td>
+  <td class="component-path">{{path}}</td>
+  <td class="component-api">{{api}}</td>
+  <td>
+    <button class="btn btn-small js-component-edit">编辑</button>
+    <button class="btn btn-small js-component-delete" data-toggle="confirm" data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？" data-event="confirm:delete-component">删除</button>
+  </td>
+</tr>

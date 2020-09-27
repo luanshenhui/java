@@ -1,0 +1,1353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- Mybatis Mapper config for SYSTEM. @author zhanglin@dpn.com.cn @since 
+	1.0.0 zhanglin@dpn.com.cn @version 1.0.0 zhanglin@dpn.com.cn -->
+<!-- *************************************************************************** 
+	备忘记录 -> ******************************************************************************** 
+	变更履历 -> 1.0.0 2016-07-07 zhanglin@dpn.com.cn : 初建。 **************************************************************************** -->
+<mapper namespace="SQL.DOCS">
+
+
+
+	<!-- **** select ******************************************************* -->
+	<select id="findByDoc" parameterType="Map" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel">
+		SELECT
+		t.DEC_USER as DecUser,
+		t.DEC_DATE as DecDate,
+		t.DOC_ID as DocId,
+		t.PROC_MAIN_ID as ProcMainId,
+		t.DOC_TYPE as DocType
+		FROM
+		QLC_CHECK_DOCS_RCD t
+		WHERE 1=1
+		<if test='ProcMainId != null and ProcMainId != ""'>
+		AND t.PROC_MAIN_ID =#{ProcMainId}
+		</if>
+		<if test='DocType != null and DocType != ""'>
+		AND t.DOC_TYPE =#{DocType}
+		AND EXISTS (
+                  SELECT 
+	                        CODE
+	              FROM 
+	                        QLC_C_CHECK_DOCS_RCD_TYPE_CODE
+	              WHERE   
+	                        PROJ_CODE=#{proj_code}
+	              AND 
+	                        CODE=t.DOC_TYPE
+    	)             
+		</if>
+		order by t.DEC_DATE desc
+	</select>
+	
+	<select id="findOnlyDoc" parameterType="Map" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel">
+		SELECT
+		t.DEC_USER as DecUser,
+		t.DEC_DATE as DecDate,
+		t.DOC_ID as DocId,
+		t.PROC_MAIN_ID as ProcMainId,
+		OPTION_1 as Option1,
+		OPTION_2 as Option2,
+		OPTION_3 as Option3,
+		OPTION_4 as Option4,
+		OPTION_5 as Option5,
+		OPTION_6 as Option6,
+		OPTION_7 as Option7,
+		OPTION_8 as Option8,
+		OPTION_9 as Option9,
+		OPTION_10 as Option10,
+		OPTION_11 as Option11,
+		OPTION_12 as Option12,
+		OPTION_13 as Option13,
+		OPTION_14 as Option14,
+		OPTION_15 as Option15,
+		OPTION_16 as Option16,
+		OPTION_17 as Option17,
+		OPTION_18 as Option18,
+		OPTION_19 as Option19,
+		OPTION_20 as Option20,
+		OPTION_21 as Option21,
+		OPTION_22 as Option22,
+		OPTION_23 as Option23,
+		OPTION_24 as Option24,
+		OPTION_25 as Option25,
+		OPTION_26 as Option26,
+		OPTION_27 as Option27,
+		OPTION_28 as Option28,
+		OPTION_29 as Option29,
+		OPTION_30 as Option30,
+		OPTION_31 as Option31,
+		OPTION_32 as Option32,
+		OPTION_33 as Option33,
+		OPTION_34 as Option34,
+		OPTION_35 as Option35,
+		OPTION_36 as Option36,
+		OPTION_37 as Option37,
+		OPTION_38 as Option38,
+		OPTION_39 as Option39,
+		OPTION_40 as Option40,
+		OPTION_41 as Option41,
+		OPTION_42 as Option42,
+		OPTION_43 as Option43,
+		OPTION_44 as Option44,
+		OPTION_45 as Option45,
+		OPTION_46 as Option46,
+		OPTION_47 as Option47,
+		OPTION_48 as Option48,
+		OPTION_49 as Option49,
+		OPTION_50 as Option50,
+		OPTION_51 as Option51,
+		OPTION_52 as Option52,
+		OPTION_53 as Option53,
+		OPTION_54 as Option54,
+		OPTION_55 as Option55,
+		OPTION_56 as Option56,
+		OPTION_57 as Option57,
+		OPTION_58 as Option58,
+		OPTION_59 as Option59,
+		OPTION_60 as Option60,
+		OPTION_61 as Option61,
+		OPTION_62 as Option62,
+		OPTION_63 as Option63,
+		OPTION_64 as Option64,
+		OPTION_65 as Option65,
+		OPTION_66 as Option66,
+		OPTION_67 as Option67,
+		OPTION_68 as Option68,
+		OPTION_69 as Option69,
+		OPTION_70 as Option70,
+		OPTION_71 as Option71,
+		OPTION_72 as Option72,
+		OPTION_73 as Option73,
+		OPTION_74 as Option74,
+		OPTION_75 as Option75,
+		OPTION_76 as Option76,
+		OPTION_77 as Option77,
+		OPTION_78 as Option78,
+		OPTION_79 as Option79,
+		OPTION_80 as Option80,
+		OPTION_81 as Option81,
+		OPTION_82 as Option82,
+		OPTION_83 as Option83,
+		OPTION_84 as Option84,
+		OPTION_85 as Option85,
+		OPTION_86 as Option86,
+		OPTION_87 as Option87,
+		OPTION_88 as Option88,
+		OPTION_89 as Option89,
+		OPTION_90 as Option90,
+		OPTION_91 as Option91,
+		OPTION_92 as Option92,
+		t.DOC_TYPE as DocType
+		FROM
+		QLC_CHECK_DOCS_RCD t
+		WHERE 1=1
+		<if test='ProcMainId != null and ProcMainId != ""'>
+		AND t.PROC_MAIN_ID =#{ProcMainId}
+		</if>
+		<if test='DocType != null and DocType != ""'>
+		AND t.DOC_TYPE =#{DocType}
+		</if>
+		order by t.DEC_DATE desc
+	</select>
+	
+	<select id="findById" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel">
+		SELECT
+		DEC_USER as DecUser,
+		DEC_DATE as DecDate,
+		DOC_ID as DocId,
+		PROC_MAIN_ID as ProcMainId,
+		DOC_TYPE as DocType,
+		OPTION_1 as Option1,
+		OPTION_2 as Option2,
+		OPTION_3 as Option3,
+		OPTION_4 as Option4,
+		OPTION_5 as Option5,
+		OPTION_6 as Option6,
+		OPTION_7 as Option7,
+		OPTION_8 as Option8,
+		OPTION_9 as Option9,
+		OPTION_10 as Option10,
+		OPTION_11 as Option11,
+		OPTION_12 as Option12,
+		OPTION_13 as Option13,
+		OPTION_14 as Option14,
+		OPTION_15 as Option15,
+		OPTION_16 as Option16,
+		OPTION_17 as Option17,
+		OPTION_18 as Option18,
+		OPTION_19 as Option19,
+		OPTION_20 as Option20,
+		OPTION_21 as Option21,
+		OPTION_22 as Option22,
+		OPTION_23 as Option23,
+		OPTION_24 as Option24,
+		OPTION_25 as Option25,
+		OPTION_26 as Option26,
+		OPTION_27 as Option27,
+		OPTION_28 as Option28,
+		OPTION_29 as Option29,
+		OPTION_30 as Option30,
+		OPTION_31 as Option31,
+		OPTION_32 as Option32,
+		OPTION_33 as Option33,
+		OPTION_34 as Option34,
+		OPTION_35 as Option35,
+		OPTION_36 as Option36,
+		OPTION_37 as Option37,
+		OPTION_38 as Option38,
+		OPTION_39 as Option39,
+		OPTION_40 as Option40,
+		OPTION_41 as Option41,
+		OPTION_42 as Option42,
+		OPTION_43 as Option43,
+		OPTION_44 as Option44,
+		OPTION_45 as Option45,
+		OPTION_46 as Option46,
+		OPTION_47 as Option47,
+		OPTION_48 as Option48,
+		OPTION_49 as Option49,
+		OPTION_50 as Option50,
+		OPTION_51 as Option51,
+		OPTION_52 as Option52,
+		OPTION_53 as Option53,
+		OPTION_54 as Option54,
+		OPTION_55 as Option55,
+		OPTION_56 as Option56,
+		OPTION_57 as Option57,
+		OPTION_58 as Option58,
+		OPTION_59 as Option59,
+		OPTION_60 as Option60,
+		OPTION_61 as Option61,
+		OPTION_62 as Option62,
+		OPTION_63 as Option63,
+		OPTION_64 as Option64,
+		OPTION_65 as Option65,
+		OPTION_66 as Option66,
+		OPTION_67 as Option67,
+		OPTION_68 as Option68,
+		OPTION_69 as Option69,
+		OPTION_70 as Option70,
+		group_id as groupId
+		FROM
+		QLC_CHECK_DOCS_RCD
+		WHERE 
+		<if test="_parameter != null and _parameter != ''">
+		DOC_ID = #{_parameter}
+		</if>
+		
+	</select>
+	
+	
+	<!-- **** insert ******************************************************* -->
+	<insert id="insertDocs" parameterType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel" >
+			insert into qlc_check_docs_rcd
+				(
+					DOC_ID
+					,PROC_MAIN_ID
+					<if test="docType != null and docType != ''" >
+					,DOC_TYPE
+					</if>
+					<if test="groupId != null and groupId != ''" >
+					,GROUP_ID
+					</if>
+					<if test="Option1 != null and Option1 != ''" >
+					,OPTION_1
+					</if>
+					<if test="Option2 != null and Option2 != ''" >
+					,OPTION_2
+					</if>
+					<if test="Option3 != null and Option3 != ''" >
+					,OPTION_3
+					</if>
+					<if test="Option4 != null and Option4 != ''" >
+					,OPTION_4
+					</if>
+					<if test="Option5 != null and Option5 != ''" >
+					,OPTION_5
+					</if>
+					<if test="Option6 != null and Option6 != ''" >
+					,OPTION_6
+					</if>
+					<if test="Option7 != null and Option7 != ''" >
+					,OPTION_7
+					</if>
+					<if test="Option8 != null and Option8 != ''" >
+					,OPTION_8
+					</if>
+					<if test="Option9 != null and Option9 != ''" >
+					,OPTION_9
+					</if>
+					<if test="Option10 != null and Option10 != ''" >
+					,OPTION_10
+					</if>
+					<if test="Option11 != null and Option11 != ''" >
+					,OPTION_11
+					</if>
+					<if test="Option12 != null and Option12 != ''" >
+					,OPTION_12
+					</if>
+					<if test="Option13 != null and Option13 != ''" >
+					,OPTION_13
+					</if>
+					<if test="Option14 != null and Option14 != ''" >
+					,OPTION_14
+					</if>
+					<if test="Option15 != null and Option15 != ''" >
+					,OPTION_15
+					</if>
+					<if test="Option16 != null and Option16 != ''" >
+					,OPTION_16
+					</if>
+					<if test="Option17 != null and Option17 != ''" >
+					,OPTION_17
+					</if>
+					<if test="Option18 != null and Option18 != ''" >
+					,OPTION_18
+					</if>
+					<if test="Option19 != null and Option19 != ''" >
+					,OPTION_19
+					</if>
+					<if test="Option20 != null and Option20 != ''" >
+					,OPTION_20
+					</if>
+					<if test="Option21 != null and Option21 != ''" >
+					,OPTION_21
+					</if>
+					<if test="Option22 != null and Option22 != ''" >
+					,OPTION_22
+					</if>
+					<if test="Option23 != null and Option23 != ''" >
+					,OPTION_23
+					</if>
+					<if test="Option24 != null and Option24 != ''" >
+					,OPTION_24
+					</if>
+					<if test="Option25 != null and Option25 != ''" >
+					,OPTION_25
+					</if>
+					<if test="Option26 != null and Option26 != ''" >
+					,OPTION_26
+					</if>
+					<if test="Option27 != null and Option27 != ''" >
+					,OPTION_27
+					</if>
+					<if test="Option28 != null and Option28 != ''" >
+					,OPTION_28
+					</if>
+					<if test="Option29 != null and Option29 != ''" >
+					,OPTION_29
+					</if>
+					<if test="Option30 != null and Option30 != ''" >
+					,OPTION_30
+					</if>
+					<if test="Option31 != null and Option31 != ''" >
+					,OPTION_31
+					</if>
+					<if test="Option32 != null and Option32 != ''" >
+					,OPTION_32
+					</if>
+					<if test="Option33 != null and Option33 != ''" >
+					,OPTION_33
+					</if>
+					<if test="Option34 != null and Option34 != ''" >
+					,OPTION_34
+					</if>
+					<if test="Option35 != null and Option35 != ''" >
+					,OPTION_35
+					</if>
+					<if test="Option36 != null and Option36 != ''" >
+					,OPTION_36
+					</if>
+					<if test="Option37 != null and Option37 != ''" >
+					,OPTION_37
+					</if>
+					<if test="Option38 != null and Option38 != ''" >
+					,OPTION_38
+					</if>
+					<if test="Option39 != null and Option39 != ''" >
+					,OPTION_39
+					</if>
+					<if test="Option40 != null and Option40 != ''" >
+					,OPTION_40
+					</if>
+					<if test="Option41 != null and Option41 != ''" >
+					,OPTION_41
+					</if>
+					<if test="Option42 != null and Option42 != ''" >
+					,OPTION_42
+					</if>
+					<if test="Option43 != null and Option43 != ''" >
+					,OPTION_43
+					</if>
+					<if test="Option44 != null and Option44 != ''" >
+					,OPTION_44
+					</if>
+					<if test="Option45 != null and Option45 != ''" >
+					,OPTION_45
+					</if>
+					<if test="Option46 != null and Option46 != ''" >
+					,OPTION_46
+					</if>
+					<if test="Option47 != null and Option47 != ''" >
+					,OPTION_47
+					</if>
+					<if test="Option48 != null and Option48 != ''" >
+					,OPTION_48
+					</if>
+					<if test="Option49 != null and Option49 != ''" >
+					,OPTION_49
+					</if>
+					<if test="Option50 != null and Option50 != ''" >
+					,OPTION_50
+					</if>
+					<if test="Option51 != null and Option51 != ''" >
+					,OPTION_51
+					</if>
+					<if test="Option52 != null and Option52 != ''" >
+					,OPTION_52
+					</if>
+					<if test="Option53 != null and Option53 != ''" >
+					,OPTION_53
+					</if>
+					<if test="Option54 != null and Option54 != ''" >
+					,OPTION_54
+					</if>
+					<if test="Option55 != null and Option55 != ''" >
+					,OPTION_55
+					</if>
+					<if test="Option56 != null and Option56 != ''" >
+					,OPTION_56
+					</if>
+					<if test="Option57 != null and Option57 != ''" >
+					,OPTION_57
+					</if>
+					<if test="Option58 != null and Option58 != ''" >
+					,OPTION_58
+					</if>
+					<if test="Option59 != null and Option59 != ''" >
+					,OPTION_59
+					</if>
+					<if test="Option60 != null and Option60 != ''" >
+					,OPTION_60
+					</if>
+					<if test="Option61 != null and Option61 != ''" >
+					,OPTION_61
+					</if>
+					<if test="Option62 != null and Option62 != ''" >
+					,OPTION_62
+					</if>
+					<if test="Option63 != null and Option63 != ''" >
+					,OPTION_63
+					</if>
+					<if test="Option64 != null and Option64 != ''" >
+					,OPTION_64
+					</if>
+					<if test="Option65 != null and Option65 != ''" >
+					,OPTION_65
+					</if>
+					<if test="Option66 != null and Option66 != ''" >
+					,OPTION_66
+					</if>
+					<if test="Option67 != null and Option67 != ''" >
+					,OPTION_67
+					</if>
+					<if test="Option68 != null and Option68 != ''" >
+					,OPTION_68
+					</if>
+					<if test="Option69 != null and Option69 != ''" >
+					,OPTION_69
+					</if>
+					<if test="Option70 != null and Option70 != ''" >
+					,OPTION_70
+					</if>
+					<if test="Option71 != null and Option71 != ''" >
+					,OPTION_71
+					</if>
+					<if test="Option72 != null and Option72 != ''" >
+					,OPTION_72
+					</if>
+					<if test="Option73 != null and Option73 != ''" >
+					,OPTION_73
+					</if>
+					<if test="Option74 != null and Option74 != ''" >
+					,OPTION_74
+					</if>
+					<if test="Option75 != null and Option75 != ''" >
+					,OPTION_75
+					</if>
+					<if test="Option76 != null and Option76 != ''" >
+					,OPTION_76
+					</if>
+					<if test="Option77 != null and Option77 != ''" >
+					,OPTION_77
+					</if>
+					<if test="Option78 != null and Option78 != ''" >
+					,OPTION_78
+					</if>
+					<if test="Option79 != null and Option79 != ''" >
+					,OPTION_79
+					</if>
+					<if test="Option80 != null and Option80 != ''" >
+					,OPTION_80
+					</if>
+						<if test="Option81 != null and Option81 != ''" >
+					,OPTION_81
+					</if>
+						<if test="Option82 != null and Option82 != ''" >
+					,OPTION_82
+					</if>
+						<if test="Option83 != null and Option83 != ''" >
+					,OPTION_83
+					</if>
+						<if test="Option84 != null and Option84 != ''" >
+					,OPTION_84
+					</if>
+						<if test="Option85 != null and Option85 != ''" >
+					,OPTION_85
+					</if>
+						<if test="Option86 != null and Option86 != ''" >
+					,OPTION_86
+					</if>
+						<if test="Option87 != null and Option87 != ''" >
+					,OPTION_87
+					</if>
+						<if test="Option88 != null and Option88 != ''" >
+					,OPTION_88
+					</if>
+					<if test="Option89 != null and Option89 != ''" >
+					,OPTION_89
+					</if>
+					<if test="Option90 != null and Option90 != ''" >
+					,OPTION_90
+					</if>
+					<if test="Option91 != null and Option91 != ''" >
+					,OPTION_91
+					</if>
+					<if test="Option92 != null and Option92 != ''" >
+					,OPTION_92
+					</if>
+					<if test="Option93 != null and Option93 != ''" >
+					,OPTION_93
+					</if>
+					<if test="Option94 != null and Option94 != ''" >
+					,OPTION_94
+					</if>
+					<if test="Option95 != null and Option95 != ''" >
+					,OPTION_95
+					</if>
+					<if test="Option96 != null and Option96 != ''" >
+					,OPTION_96
+					</if>
+					<if test="Option97 != null and Option97 != ''" >
+					,OPTION_97
+					</if>
+					<if test="Option98 != null and Option98 != ''" >
+					,OPTION_98
+					</if>
+					<if test="Option99 != null and Option99 != ''" >
+					,OPTION_99
+					</if>
+					<if test="Option100 != null and Option100 != ''" >
+					,OPTION_100
+					</if>
+					<if test="Option101 != null and Option101 != ''" >
+					,OPTION_101
+					</if>
+					<if test="Option102 != null and Option102 != ''" >
+					,OPTION_102
+					</if>
+					<if test="Option103 != null and Option103 != ''" >
+					,OPTION_103
+					</if>
+					<if test="Option104 != null and Option104 != ''" >
+					,OPTION_104
+					</if>
+					<if test="Option105 != null and Option105 != ''" >
+					,OPTION_105
+					</if>
+					<if test="Option106 != null and Option106 != ''" >
+					,OPTION_106
+					</if>
+					<if test="Option107 != null and Option107 != ''" >
+					,OPTION_107
+					</if>
+					<if test="Option108 != null and Option108 != ''" >
+					,OPTION_108
+					</if>
+					<if test="Option109 != null and Option109 != ''" >
+					,OPTION_109
+					</if>
+					<if test="Option110 != null and Option110 != ''" >
+					,OPTION_110
+					</if>
+					<if test="Option111 != null and Option111 != ''" >
+					,OPTION_111
+					</if>
+					<if test="Option112 != null and Option112 != ''" >
+					,OPTION_112
+					</if>
+					<if test="Option113 != null and Option113 != ''" >
+					,OPTION_113
+					</if>
+					<if test="Option114 != null and Option114 != ''" >
+					,OPTION_114
+					</if>
+					<if test="Option115 != null and Option115 != ''" >
+					,OPTION_115
+					</if>
+					<if test="Option116 != null and Option116 != ''" >
+					,OPTION_116
+					</if>
+					<if test="Option117 != null and Option117 != ''" >
+					,OPTION_117
+					</if>
+					<if test="Option118 != null and Option118 != ''" >
+					,OPTION_118
+					</if>
+					<if test="Option119 != null and Option119 != ''" >
+					,OPTION_119
+					</if>
+					<if test="Option120 != null and Option120 != ''" >
+					,OPTION_120
+					</if>
+					<if test="Option121 != null and Option121 != ''" >
+					,OPTION_121
+					</if>
+					<if test="Option122 != null and Option122 != ''" >
+					,OPTION_122
+					</if>
+					<if test="Option123 != null and Option123 != ''" >
+					,OPTION_123
+					</if>
+					<if test="Option124 != null and Option124 != ''" >
+					,OPTION_124
+					</if>
+					<if test="Option125 != null and Option125 != ''" >
+					,OPTION_125
+					</if>
+					<if test="Option126 != null and Option126 != ''" >
+					,OPTION_126
+					</if>
+					<if test="Option127 != null and Option127 != ''" >
+					,OPTION_127
+					</if>
+					<if test="Option128 != null and Option128 != ''" >
+					,OPTION_128
+					</if>
+					<if test="Option129 != null and Option129 != ''" >
+					,OPTION_129
+					</if>
+					<if test="Option130 != null and Option130 != ''" >
+					,OPTION_130
+					</if>
+					<if test="Option131 != null and Option131 != ''" >
+					,OPTION_131
+					</if>
+					<if test="Option132 != null and Option132 != ''" >
+					,OPTION_132
+					</if>
+					<if test="Option133 != null and Option133 != ''" >
+					,OPTION_133
+					</if>
+					<if test="Option134 != null and Option134 != ''" >
+					,OPTION_134
+					</if>
+					<if test="Option135 != null and Option135 != ''" >
+					,OPTION_135
+					</if>
+					<if test="Option136 != null and Option136 != ''" >
+					,OPTION_136
+					</if>
+					<if test="Option137 != null and Option137 != ''" >
+					,OPTION_137
+					</if>
+					<if test="Option138 != null and Option138 != ''" >
+					,OPTION_138
+					</if>
+					<if test="Option139 != null and Option139 != ''" >
+					,OPTION_139
+					</if>
+					<if test="Option140 != null and Option140 != ''" >
+					,OPTION_140
+					</if>
+					<if test="Option141 != null and Option141 != ''" >
+					,OPTION_141
+					</if>
+					<if test="Option142 != null and Option142 != ''" >
+					,OPTION_142
+					</if>
+					<if test="Option143 != null and Option143 != ''" >
+					,OPTION_143
+					</if>
+					<if test="DecUser != null and DecUser != ''" >
+					,DEC_USER
+					</if>
+					<if test="DecDate != null " >
+					,DEC_DATE
+					</if>
+				)
+			values 
+				(
+					CreateGUID()
+					
+					,#{procMainId}
+					<if test="docType != null and docType != ''" >
+					,#{docType}
+					</if>
+					<if test="groupId != null and groupId != ''" >
+					,#{groupId}
+					</if>
+					<if test="Option1 != null and Option1 != ''" >
+					,#{Option1}
+					</if>
+					<if test="Option2 != null and Option2 != ''" >
+					,#{Option2}
+					</if>
+					<if test="Option3 != null and Option3 != ''" >
+					,#{Option3}
+					</if>
+					<if test="Option4 != null and Option4 != ''" >
+					,#{Option4}
+					</if>
+					<if test="Option5 != null and Option5 != ''" >
+					,#{Option5}
+					</if>
+					<if test="Option6 != null and Option6 != ''" >
+					,#{Option6}
+					</if>
+					<if test="Option7 != null and Option7 != ''" >
+					,#{Option7}
+					</if>
+					<if test="Option8 != null and Option8 != ''" >
+					,#{Option8}
+					</if>
+					<if test="Option9 != null and Option9 != ''" >
+					,#{Option9}
+					</if>
+					<if test="Option10 != null and Option10 != ''" >
+					,#{Option10}
+					</if>
+					<if test="Option11 != null and Option11 != ''" >
+					,#{Option11}
+					</if>
+					<if test="Option12 != null and Option12 != ''" >
+					,#{Option12}
+					</if>
+					<if test="Option13 != null and Option13 != ''" >
+					,#{Option13}
+					</if>
+					<if test="Option14 != null and Option14 != ''" >
+					,#{Option14}
+					</if>
+					<if test="Option15 != null and Option15 != ''" >
+					,#{Option15}
+					</if>
+					<if test="Option16 != null and Option16 != ''" >
+					,#{Option16}
+					</if>
+					<if test="Option17 != null and Option17 != ''" >
+					,#{Option17}
+					</if>
+					<if test="Option18 != null and Option18 != ''" >
+					,#{Option18}
+					</if>
+					<if test="Option19 != null and Option19 != ''" >
+					,#{Option19}
+					</if>
+					<if test="Option20 != null and Option20 != ''" >
+					,#{Option20}
+					</if>
+					<if test="Option21 != null and Option21 != ''" >
+					,#{Option21}
+					</if>
+					<if test="Option22 != null and Option22 != ''" >
+					,#{Option22}
+					</if>
+					<if test="Option23 != null and Option23 != ''" >
+					,#{Option23}
+					</if>
+					<if test="Option24 != null and Option24 != ''" >
+					,#{Option24}
+					</if>
+					<if test="Option25 != null and Option25 != ''" >
+					,#{Option25}
+					</if>
+					<if test="Option26 != null and Option26 != ''" >
+					,#{Option26}
+					</if>
+					<if test="Option27 != null and Option27 != ''" >
+					,#{Option27}
+					</if>
+					<if test="Option28 != null and Option28 != ''" >
+					,#{Option28}
+					</if>
+					<if test="Option29 != null and Option29 != ''" >
+					,#{Option29}
+					</if>
+					<if test="Option30 != null and Option30 != ''" >
+					,#{Option30}
+					</if>
+					<if test="Option31 != null and Option31 != ''" >
+					,#{Option31}
+					</if>
+					<if test="Option32 != null and Option32 != ''" >
+					,#{Option32}
+					</if>
+					<if test="Option33 != null and Option33 != ''" >
+					,#{Option33}
+					</if>
+					<if test="Option34 != null and Option34 != ''" >
+					,#{Option34}
+					</if>
+					<if test="Option35 != null and Option35 != ''" >
+					,#{Option35}
+					</if>
+					<if test="Option36 != null and Option36 != ''" >
+					,#{Option36}
+					</if>
+					<if test="Option37 != null and Option37 != ''" >
+					,#{Option37}
+					</if>
+					<if test="Option38 != null and Option38 != ''" >
+					,#{Option38}
+					</if>
+					<if test="Option39 != null and Option39 != ''" >
+					,#{Option39}
+					</if>
+					<if test="Option40 != null and Option40 != ''" >
+					,#{Option40}
+					</if>
+					<if test="Option41 != null and Option41 != ''" >
+					,#{Option41}
+					</if>
+					<if test="Option42 != null and Option42 != ''" >
+					,#{Option42}
+					</if>
+					<if test="Option43 != null and Option43 != ''" >
+					,#{Option43}
+					</if>
+					<if test="Option44 != null and Option44 != ''" >
+					,#{Option44}
+					</if>
+					<if test="Option45 != null and Option45 != ''" >
+					,#{Option45}
+					</if>
+					<if test="Option46 != null and Option46 != ''" >
+					,#{Option46}
+					</if>
+					<if test="Option47 != null and Option47 != ''" >
+					,#{Option47}
+					</if>
+					<if test="Option48 != null and Option48 != ''" >
+					,#{Option48}
+					</if>
+					<if test="Option49 != null and Option49 != ''" >
+					,#{Option49}
+					</if>
+					<if test="Option50 != null and Option50 != ''" >
+					,#{Option50}
+					</if>
+					<if test="Option51 != null and Option51 != ''" >
+					,#{Option51}
+					</if>
+					<if test="Option52 != null and Option52 != ''" >
+					,#{Option52}
+					</if>
+					<if test="Option53 != null and Option53 != ''" >
+					,#{Option53}
+					</if>
+					<if test="Option54 != null and Option54 != ''" >
+					,#{Option54}
+					</if>
+					<if test="Option55 != null and Option55 != ''" >
+					,#{Option55}
+					</if>
+					<if test="Option56 != null and Option56 != ''" >
+					,#{Option56}
+					</if>
+					<if test="Option57 != null and Option57 != ''" >
+					,#{Option57}
+					</if>
+					<if test="Option58 != null and Option58 != ''" >
+					,#{Option58}
+					</if>
+					<if test="Option59 != null and Option59 != ''" >
+					,#{Option59}
+					</if>
+					<if test="Option60 != null and Option60 != ''" >
+					,#{Option60}
+					</if>
+					<if test="Option61 != null and Option61 != ''" >
+					,#{Option61}
+					</if>
+					<if test="Option62 != null and Option62 != ''" >
+					,#{Option62}
+					</if>
+					<if test="Option63 != null and Option63 != ''" >
+					,#{Option63}
+					</if>
+					<if test="Option64 != null and Option64 != ''" >
+					,#{Option64}
+					</if>
+					<if test="Option65 != null and Option65 != ''" >
+					,#{Option65}
+					</if>
+					<if test="Option66 != null and Option66 != ''" >
+					,#{Option66}
+					</if>
+					<if test="Option67 != null and Option67 != ''" >
+					,#{Option67}
+					</if>
+					<if test="Option68 != null and Option68 != ''" >
+					,#{Option68}
+					</if>
+					<if test="Option69 != null and Option69 != ''" >
+					,#{Option69}
+					</if>
+					<if test="Option70 != null and Option70 != ''" >
+					,#{Option70}
+					</if>
+					<if test="Option71 != null and Option71 != ''" >
+					,#{Option71}
+					</if>
+					<if test="Option72 != null and Option72 != ''" >
+					,#{Option72}
+					</if>
+					<if test="Option73 != null and Option73 != ''" >
+					,#{Option73}
+					</if>
+					<if test="Option74 != null and Option74 != ''" >
+					,#{Option74}
+					</if>
+					<if test="Option75 != null and Option75 != ''" >
+					,#{Option75}
+					</if>
+					<if test="Option76 != null and Option76 != ''" >
+					,#{Option76}
+					</if>
+					<if test="Option77 != null and Option77 != ''" >
+					,#{Option77}
+					</if>
+					<if test="Option78 != null and Option78 != ''" >
+					,#{Option78}
+					</if>
+					<if test="Option79 != null and Option79 != ''" >
+					,#{Option79}
+					</if>
+					<if test="Option80 != null and Option80 != ''" >
+					,#{Option80}
+					</if>
+					<if test="Option81 != null and Option81 != ''" >
+					,#{Option81}
+					</if>
+					<if test="Option82 != null and Option82 != ''" >
+					,#{Option82}
+					</if>
+					<if test="Option83 != null and Option83 != ''" >
+					,#{Option83}
+					</if>
+					<if test="Option84 != null and Option84 != ''" >
+					,#{Option84}
+					</if>
+					<if test="Option85 != null and Option85 != ''" >
+					,#{Option85}
+					</if>
+					<if test="Option86 != null and Option86 != ''" >
+					,#{Option86}
+					</if>
+					<if test="Option87 != null and Option87 != ''" >
+					,#{Option87}
+					</if>
+					<if test="Option88 != null and Option88 != ''" >
+					,#{Option88}
+					</if>
+					<if test="Option89 != null and Option89 != ''" >
+					,#{Option89}
+					</if>
+					<if test="Option90 != null and Option90 != ''" >
+					,#{Option90}
+					</if>
+					<if test="Option91 != null and Option91 != ''" >
+					,#{Option91}
+					</if>
+					<if test="Option92 != null and Option92 != ''" >
+					,#{Option92}
+					</if>
+					<if test="Option93 != null and Option93 != ''" >
+					,#{Option93}
+					</if>
+					<if test="Option94 != null and Option94 != ''" >
+					,#{Option94}
+					</if>
+					<if test="Option95 != null and Option95 != ''" >
+					,#{Option95}
+					</if>
+					<if test="Option96 != null and Option96 != ''" >
+					,#{Option96}
+					</if>
+					<if test="Option97 != null and Option97 != ''" >
+					,#{Option97}
+					</if>
+					<if test="Option98 != null and Option98 != ''" >
+					,#{Option98}
+					</if>
+					<if test="Option99 != null and Option99 != ''" >
+					,#{Option99}
+					</if>
+					<if test="Option100 != null and Option100 != ''" >
+					,#{Option100}
+					</if>
+					<if test="Option101 != null and Option101 != ''" >
+					,#{Option101}
+					</if>
+					<if test="Option102 != null and Option102 != ''" >
+					,#{Option102}
+					</if>
+					<if test="Option103 != null and Option103 != ''" >
+					,#{Option103}
+					</if>
+					<if test="Option104 != null and Option104 != ''" >
+					,#{Option104}
+					</if>
+					<if test="Option105 != null and Option105 != ''" >
+					,#{Option105}
+					</if>
+					<if test="Option106 != null and Option106 != ''" >
+					,#{Option106}
+					</if>
+					<if test="Option107 != null and Option107 != ''" >
+					,#{Option107}
+					</if>
+					<if test="Option108 != null and Option108 != ''" >
+					,#{Option108}
+					</if>
+					<if test="Option109 != null and Option109 != ''" >
+					,#{Option109}
+					</if>
+					<if test="Option110 != null and Option110 != ''" >
+					,#{Option110}
+					</if>
+					<if test="Option111 != null and Option111 != ''" >
+					,#{Option111}
+					</if>
+					<if test="Option112 != null and Option112 != ''" >
+					,#{Option112}
+					</if>
+					<if test="Option113 != null and Option113 != ''" >
+					,#{Option113}
+					</if>
+					<if test="Option114 != null and Option114 != ''" >
+					,#{Option114}
+					</if>
+					<if test="Option115 != null and Option115 != ''" >
+					,#{Option95}
+					</if>
+					<if test="Option116 != null and Option116 != ''" >
+					,#{Option116}
+					</if>
+					<if test="Option117 != null and Option117 != ''" >
+					,#{Option117}
+					</if>
+					<if test="Option118 != null and Option118 != ''" >
+					,#{Option118}
+					</if>
+					<if test="Option119 != null and Option119 != ''" >
+					,#{Option119}
+					</if>
+					<if test="Option120 != null and Option120 != ''" >
+					,#{Option120}
+					</if>
+					<if test="Option121 != null and Option121 != ''" >
+					,#{Option121}
+					</if>
+					<if test="Option122 != null and Option122 != ''" >
+					,#{Option122}
+					</if>
+					<if test="Option123 != null and Option123 != ''" >
+					,#{Option123}
+					</if>
+					<if test="Option124 != null and Option124 != ''" >
+					,#{Option124}
+					</if>
+					<if test="Option125 != null and Option125 != ''" >
+					,#{Option125}
+					</if>
+					<if test="Option126 != null and Option126 != ''" >
+					,#{Option126}
+					</if>
+					<if test="Option127 != null and Option127 != ''" >
+					,#{Option127}
+					</if>
+					<if test="Option128 != null and Option128 != ''" >
+					,#{Option128}
+					</if>
+					<if test="Option129 != null and Option129 != ''" >
+					,#{Option129}
+					</if>
+					<if test="Option130 != null and Option130 != ''" >
+					,#{Option130}
+					</if>
+					<if test="Option131 != null and Option131 != ''" >
+					,#{Option131}
+					</if>
+					<if test="Option132 != null and Option132 != ''" >
+					,#{Option132}
+					</if>
+					<if test="Option133 != null and Option133 != ''" >
+					,#{Option133}
+					</if>
+					<if test="Option134 != null and Option134 != ''" >
+					,#{Option134}
+					</if>
+					<if test="Option135 != null and Option135 != ''" >
+					,#{Option135}
+					</if>
+					<if test="Option136 != null and Option136 != ''" >
+					,#{Option136}
+					</if>
+					<if test="Option137 != null and Option137 != ''" >
+					,#{Option137}
+					</if>
+					<if test="Option138 != null and Option138 != ''" >
+					,#{Option138}
+					</if>
+					<if test="Option139 != null and Option139 != ''" >
+					,#{Option139}
+					</if>
+					<if test="Option140 != null and Option140 != ''" >
+					,#{Option140}
+					</if>
+					<if test="Option141 != null and Option141 != ''" >
+					,#{Option141}
+					</if>
+					<if test="Option142 != null and Option142 != ''" >
+					,#{Option142}
+					</if>
+					<if test="Option143 != null and Option143 != ''" >
+					,#{Option143}
+					</if>
+					<if test="DecUser != null " >
+					,#{DecUser}
+					</if>
+					<if test="DecDate != null " >
+					,#{DecDate}
+					</if>
+				)
+	</insert>
+
+	<!-- **** update ******************************************************* -->
+    <update id="updateDocs" parameterType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel">
+        UPDATE qlc_check_docs_rcd
+       <set>
+       		<if test="Option1 != null">OPTION_1 = #{Option1},</if>
+       		<if test="Option2 != null">OPTION_2 = #{Option2},</if>
+       		<if test="Option3 != null">OPTION_3 = #{Option3},</if>
+       		<if test="Option4 != null">OPTION_4 = #{Option4},</if>
+       		<if test="Option5 != null">OPTION_5 = #{Option5},</if>
+       		<if test="Option6 != null">OPTION_6 = #{Option6},</if>
+       		<if test="Option7 != null">OPTION_7 = #{Option7},</if>
+       		<if test="Option8 != null">OPTION_8 = #{Option8},</if>
+       		<if test="Option9 != null">OPTION_9 = #{Option9},</if>
+       		<if test="Option10 != null">OPTION_10 = #{Option10},</if>
+       		<if test="Option11 != null">OPTION_11 = #{Option11},</if>
+       		<if test="Option12 != null">OPTION_12 = #{Option12},</if>
+       		<if test="Option13 != null">OPTION_13 = #{Option13},</if>
+       		<if test="Option14 != null">OPTION_14 = #{Option14},</if>
+       		<if test="Option15 != null">OPTION_15 = #{Option15},</if>
+       		<if test="Option16 != null">OPTION_16 = #{Option16},</if>
+       		<if test="Option17 != null">OPTION_17 = #{Option17},</if>
+       		<if test="Option18 != null">OPTION_18 = #{Option18},</if>
+       		<if test="Option19 != null">OPTION_19 = #{Option19},</if>
+       		<if test="Option20 != null">OPTION_20 = #{Option20},</if>
+       		<if test="Option21 != null">OPTION_21 = #{Option21},</if>
+       		<if test="Option22 != null">OPTION_22 = #{Option22},</if>
+       		<if test="Option23 != null">OPTION_23 = #{Option23},</if>
+       		<if test="Option24 != null">OPTION_24 = #{Option24},</if>
+       		<if test="Option25 != null">OPTION_25 = #{Option25},</if>
+       		<if test="Option26 != null">OPTION_26 = #{Option26},</if>
+       		<if test="Option27 != null">OPTION_27 = #{Option27},</if>
+       		<if test="Option28 != null">OPTION_28 = #{Option28},</if>
+       		<if test="Option29 != null">OPTION_29 = #{Option29},</if>
+       		<if test="Option30 != null">OPTION_30 = #{Option30},</if>
+       		
+       		<if test="Option31 != null">OPTION_31 = #{Option31},</if>
+       		<if test="Option32 != null">OPTION_32 = #{Option32},</if>
+       		<if test="Option33 != null">OPTION_33 = #{Option33},</if>
+       		<if test="Option34 != null">OPTION_34 = #{Option34},</if>
+       		<if test="Option35 != null">OPTION_35 = #{Option35},</if>
+       		<if test="Option36 != null">OPTION_36 = #{Option36},</if>
+       		<if test="Option37 != null">OPTION_37 = #{Option37},</if>
+       		<if test="Option38 != null">OPTION_38 = #{Option38},</if>
+       		<if test="Option39 != null">OPTION_39 = #{Option39},</if>
+       		<if test="Option40 != null">OPTION_40 = #{Option40},</if>
+       		<if test="Option41 != null">OPTION_41 = #{Option41},</if>
+       		<if test="Option42 != null">OPTION_42 = #{Option42},</if>
+       		<if test="Option43 != null">OPTION_43 = #{Option43},</if>
+       		<if test="Option44 != null">OPTION_44 = #{Option44},</if>
+       		<if test="Option45 != null">OPTION_45 = #{Option45},</if>
+       		<if test="Option46 != null">OPTION_46 = #{Option46},</if>
+       		<if test="Option47 != null">OPTION_47 = #{Option47},</if>
+       		<if test="Option48 != null">OPTION_48 = #{Option48},</if>
+       		<if test="Option49 != null">OPTION_49 = #{Option49},</if>
+       		<if test="Option50 != null">OPTION_50 = #{Option50},</if>
+       		<if test="Option51 != null">OPTION_51 = #{Option51},</if>
+       		<if test="Option52 != null">OPTION_52 = #{Option52},</if>
+       		<if test="Option53 != null">OPTION_53 = #{Option53},</if>
+       		<if test="Option54 != null">OPTION_54 = #{Option54},</if>
+       		<if test="Option55 != null">OPTION_55 = #{Option55},</if>
+       		<if test="Option56 != null">OPTION_56 = #{Option56},</if>
+       		<if test="Option57 != null">OPTION_57 = #{Option57},</if>
+       		<if test="Option58 != null">OPTION_58 = #{Option58},</if>
+       		<if test="Option59 != null">OPTION_59 = #{Option59},</if>
+       		<if test="Option60 != null">OPTION_60 = #{Option60},</if>
+       		<if test="Option61 != null">OPTION_61 = #{Option61},</if>
+       		<if test="Option62 != null">OPTION_62 = #{Option62},</if>
+       		<if test="Option63 != null">OPTION_63 = #{Option63},</if>
+       		<if test="Option64 != null">OPTION_64 = #{Option64},</if>
+       		<if test="Option65 != null">OPTION_65 = #{Option65},</if>
+       		<if test="Option66 != null">OPTION_66 = #{Option66},</if>
+       		<if test="Option67 != null">OPTION_67 = #{Option67},</if>
+       		<if test="Option68 != null">OPTION_68 = #{Option68},</if>
+       		<if test="Option69 != null">OPTION_69 = #{Option69},</if>
+       		<if test="Option70 != null">OPTION_70 = #{Option70},</if>
+       		<if test="Option71 != null">OPTION_71 = #{Option71},</if>
+       		<if test="Option72 != null">OPTION_72 = #{Option72},</if>
+       		<if test="Option73 != null">OPTION_73 = #{Option73},</if>
+       		<if test="Option74 != null">OPTION_74 = #{Option74},</if>
+       		<if test="Option75 != null">OPTION_75 = #{Option75},</if>
+       		<if test="Option76 != null">OPTION_76 = #{Option76},</if>
+       		<if test="Option77 != null">OPTION_77 = #{Option77},</if>
+       		<if test="Option78 != null">OPTION_78 = #{Option78},</if>
+       		<if test="Option79 != null">OPTION_79 = #{Option79},</if>
+       		<if test="Option80 != null">OPTION_80 = #{Option80},</if>
+       		<if test="Option81 != null">OPTION_81 = #{Option81},</if>
+       		<if test="Option82 != null">OPTION_82 = #{Option82},</if>
+       		<if test="Option83 != null">OPTION_83 = #{Option83},</if>
+       		<if test="Option84 != null">OPTION_84 = #{Option84},</if>
+       		<if test="Option85 != null">OPTION_85 = #{Option85},</if>
+       		<if test="Option86 != null">OPTION_86 = #{Option86},</if>
+       		<if test="Option87 != null">OPTION_87 = #{Option87},</if>
+       		<if test="Option88 != null">OPTION_88 = #{Option88},</if>
+       		<if test="Option89 != null">OPTION_89 = #{Option89},</if>
+       		<if test="Option90 != null">OPTION_90 = #{Option90},</if>
+       		<if test="Option91 != null">OPTION_91 = #{Option91},</if>
+       		DOC_ID = #{DocId}
+       </set>
+        WHERE DOC_ID = #{DocId}
+    </update>
+    
+      <update id="updateDocsByApplyNo" parameterType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel">
+        UPDATE qlc_check_docs_rcd
+       <set>
+       		<if test="Option1 != null">OPTION_1 = #{Option1},</if>
+       		<if test="Option2 != null">OPTION_2 = #{Option2},</if>
+       		<if test="Option3 != null">OPTION_3 = #{Option3},</if>
+       		<if test="Option4 != null">OPTION_4 = #{Option4},</if>
+       		<if test="Option5 != null">OPTION_5 = #{Option5},</if>
+       		<if test="Option6 != null">OPTION_6 = #{Option6},</if>
+       		<if test="Option7 != null">OPTION_7 = #{Option7},</if>
+       		<if test="Option8 != null">OPTION_8 = #{Option8},</if>
+       		<if test="Option9 != null">OPTION_9 = #{Option9},</if>
+       		<if test="Option10 != null">OPTION_10 = #{Option10},</if>
+       		<if test="Option11 != null">OPTION_11 = #{Option11},</if>
+       		<if test="Option12 != null">OPTION_12 = #{Option12},</if>
+       		<if test="Option13 != null">OPTION_13 = #{Option13},</if>
+       		<if test="Option14 != null">OPTION_14 = #{Option14},</if>
+       		<if test="Option15 != null">OPTION_15 = #{Option15},</if>
+       		<if test="Option16 != null">OPTION_16 = #{Option16},</if>
+       		<if test="Option17 != null">OPTION_17 = #{Option17},</if>
+       		<if test="Option18 != null">OPTION_18 = #{Option18},</if>
+       		<if test="Option19 != null">OPTION_19 = #{Option19},</if>
+       		<if test="Option20 != null">OPTION_20 = #{Option20},</if>
+       		<if test="Option21 != null">OPTION_21 = #{Option21},</if>
+       		<if test="Option22 != null">OPTION_22 = #{Option22},</if>
+       		<if test="Option23 != null">OPTION_23 = #{Option23},</if>
+       		<if test="Option24 != null">OPTION_24 = #{Option24},</if>
+       		<if test="Option25 != null">OPTION_25 = #{Option25},</if>
+       		<if test="Option26 != null">OPTION_26 = #{Option26},</if>
+       		<if test="Option27 != null">OPTION_27 = #{Option27},</if>
+       		<if test="Option28 != null">OPTION_28 = #{Option28},</if>
+       		<if test="Option29 != null">OPTION_29 = #{Option29},</if>
+       		<if test="Option30 != null">OPTION_30 = #{Option30},</if>
+       		
+       		<if test="Option31 != null">OPTION_31 = #{Option31},</if>
+       		<if test="Option32 != null">OPTION_32 = #{Option32},</if>
+       		<if test="Option33 != null">OPTION_33 = #{Option33},</if>
+       		<if test="Option34 != null">OPTION_34 = #{Option34},</if>
+       		<if test="Option35 != null">OPTION_35 = #{Option35},</if>
+       		<if test="Option36 != null">OPTION_36 = #{Option36},</if>
+       		<if test="Option37 != null">OPTION_37 = #{Option37},</if>
+       		<if test="Option38 != null">OPTION_38 = #{Option38},</if>
+       		<if test="Option39 != null">OPTION_39 = #{Option39},</if>
+       		<if test="Option40 != null">OPTION_40 = #{Option40},</if>
+       		<if test="Option41 != null">OPTION_41 = #{Option41},</if>
+       		<if test="Option42 != null">OPTION_42 = #{Option42},</if>
+       		<if test="Option43 != null">OPTION_43 = #{Option43},</if>
+       		<if test="Option44 != null">OPTION_44 = #{Option44},</if>
+       		<if test="Option45 != null">OPTION_45 = #{Option45},</if>
+       		<if test="Option46 != null">OPTION_46 = #{Option46},</if>
+       		<if test="Option47 != null">OPTION_47 = #{Option47},</if>
+       		<if test="Option48 != null">OPTION_48 = #{Option48},</if>
+       		<if test="Option49 != null">OPTION_49 = #{Option49},</if>
+       		<if test="Option50 != null">OPTION_50 = #{Option50},</if>
+       		<if test="Option51 != null">OPTION_51 = #{Option51},</if>
+       		<if test="Option52 != null">OPTION_52 = #{Option52},</if>
+       		<if test="Option53 != null">OPTION_53 = #{Option53},</if>
+       		<if test="Option54 != null">OPTION_54 = #{Option54},</if>
+       		<if test="Option55 != null">OPTION_55 = #{Option55},</if>
+       		<if test="Option56 != null">OPTION_56 = #{Option56},</if>
+       		<if test="Option57 != null">OPTION_57 = #{Option57},</if>
+       		<if test="Option58 != null">OPTION_58 = #{Option58},</if>
+       		<if test="Option59 != null">OPTION_59 = #{Option59},</if>
+       		<if test="Option60 != null">OPTION_60 = #{Option60},</if>
+       		<if test="Option61 != null">OPTION_61 = #{Option61},</if>
+       		<if test="Option62 != null">OPTION_62 = #{Option62},</if>
+       		<if test="Option63 != null">OPTION_63 = #{Option63},</if>
+       		<if test="Option64 != null">OPTION_64 = #{Option64},</if>
+       		<if test="Option65 != null">OPTION_65 = #{Option65},</if>
+       		<if test="Option66 != null">OPTION_66 = #{Option66},</if>
+       		<if test="Option67 != null">OPTION_67 = #{Option67},</if>
+       		<if test="Option68 != null">OPTION_68 = #{Option68},</if>
+       		<if test="Option69 != null">OPTION_69 = #{Option69},</if>
+       		<if test="Option70 != null">OPTION_70 = #{Option70},</if>
+       		<if test="Option71 != null">OPTION_71 = #{Option71},</if>
+       		<if test="Option72 != null">OPTION_72 = #{Option72},</if>
+       		<if test="Option73 != null">OPTION_73 = #{Option73},</if>
+       		<if test="Option74 != null">OPTION_74 = #{Option74},</if>
+       		<if test="Option75 != null">OPTION_75 = #{Option75},</if>
+       		<if test="Option76 != null">OPTION_76 = #{Option76},</if>
+       		<if test="Option77 != null">OPTION_77 = #{Option77},</if>
+       		<if test="Option78 != null">OPTION_78 = #{Option78},</if>
+       		<if test="Option79 != null">OPTION_79 = #{Option79},</if>
+       		<if test="Option80 != null">OPTION_80 = #{Option80},</if>
+       		<if test="Option81 != null">OPTION_81 = #{Option81},</if>
+       		<if test="Option82 != null">OPTION_82 = #{Option82},</if>
+       		<if test="Option83 != null">OPTION_83 = #{Option83},</if>
+       		<if test="Option84 != null">OPTION_84 = #{Option84},</if>
+       		<if test="Option85 != null">OPTION_85 = #{Option85},</if>
+       		<if test="Option86 != null">OPTION_86 = #{Option86},</if>
+       		<if test="Option87 != null">OPTION_87 = #{Option87},</if>
+       		<if test="Option88 != null">OPTION_88 = #{Option88},</if>
+       		<if test="Option89 != null">OPTION_89 = #{Option89},</if>
+       		<if test="Option90 != null">OPTION_90 = #{Option90},</if>
+       		<if test="Option91 != null">OPTION_91 = #{Option91},</if>
+       		proc_main_id = #{ProcMainId}
+       </set>
+        WHERE proc_main_id = #{ProcMainId} and doc_type =#{DocType}
+    </update>
+    
+    
+	<!-- **** delete ******************************************************* -->
+	<delete id="deleteDocsByDocTypeNProcMainId" parameterType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel">
+		delete
+		  from qlc_check_docs_rcd
+		 where doc_type = #{DocType}
+		   and proc_main_id = #{ProcMainId}
+		   <if test="groupId != null and groupId != ''">
+			   and group_id = #{groupId}
+		   </if>
+		   <if test="groupId == null or groupId == ''">
+			   and group_id is null
+		   </if>
+	</delete>
+</mapper>

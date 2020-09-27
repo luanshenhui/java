@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClearQuery">
+    <resultMap id="clearQueryModel" type="cn.com.cgbchina.batch.model.ClearQueryModel"></resultMap>
+    <resultMap id="orderDoDetail" type="cn.com.cgbchina.batch.model.OrderDoDetailModel"></resultMap>
+
+    <update id="updateClearFlagStatus" parameterType="Map">
+        update tbl_order_clear set clearflag=#{updateclearFlag} where clearflag =#{changeClearFlag} and status_id =#{statusId}
+    </update>
+
+    <select id="getClearOrders" parameterType="String" resultMap="clearQueryModel">
+        select
+            c.id as orderClearId,
+            c.opertime as operTime,
+            e.ordernbr as orderNbr,
+            o.order_id as orderId,
+            o.create_time as createTime,
+            o.cardno as cardNo,
+            o.total_money as totalMoney,
+            o.voucher_price as voucherPrice,
+            o.mer_id as merId,
+            o.reserved1 as reserved1,
+            o.spec_shopno as specShopno,
+            o.stages_num as stagesNum,
+            o.uitdrtamt as uitdrtamt,
+            o.act_type as actType,
+            o.fenefit as fenefit,
+            o.costby as costBy,
+            p.goods_price as goodsPrice,
+            p.goods_price - o.total_money as discountMoney
+        from
+            tbl_order o,
+            tbl_order_extend1 e,
+            tbl_order_clear c,
+            tbl_goods_payway p
+        where
+            o.order_id = e.order_id
+        and o.goods_payway_id = p.goods_payway_id
+        and o.order_id = c.order_id
+
+        and o.ordertype_id = 'FQ'
+        and c.clearflag = '2'
+        and c.status_id = #{statusId}
+    </select>
+
+    <update id="updateOrderClear" parameterType="Map">
+        update tbl_order_clear set 
+        <if test="statusId != null and statusId != ''">
+        	status_id = #{statusId},
+        </if>
+        clearflag = #{clearFlag},cleartime=#{clearTime} where id =#{orderClearId}
+    </update>
+
+    <update id="updateSinStatusId" parameterType="Map">
+        update tbl_order set sin_status_id=#{sinStatusId} ,balance_status = #{balanceStatus} ,sin_status_nm=#{sinStatusNm} where order_id=#{orderId}
+    </update>
+
+    <insert id="insertOrderDoDetail" parameterType="cn.com.cgbchina.batch.model.OrderDoDetailModel" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into tbl_order_dodetail
+        (order_id
+        ,do_time
+        ,do_userid
+        ,user_type
+        ,status_id
+        ,status_nm
+        ,msg_content
+        ,do_desc
+        ,rule_id
+        ,rule_nm
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag)
+        values(#{orderId}
+        ,now()
+        ,#{doUserid}
+        ,#{userType}
+        ,#{statusId}
+        ,#{statusNm}
+        ,#{msgContent}
+        ,#{doDesc}
+        ,#{ruleId}
+        ,#{ruleNm}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{delFlag})
+    </insert>
+
+    <update id="updateBalanceStatus" parameterType="Map">
+        update tbl_order set balance_status = #{balanceStatus} where order_id=#{orderId}
+    </update>
+
+    <select id="getClearOrdersJF" parameterType="String" resultMap="clearQueryModel">
+        select
+            c.id as orderClearId,
+            c.opertime as operTime,
+            v.union_pay_no as unionPayNo,
+            o.order_id as orderId,
+            o.create_time as createTime,
+            o.cardno as "cardNo",
+            o.total_money as totalMoney,
+            o.ordermain_id as orderMainId,
+            o.stages_num as stagesNum,
+            o.uitdrtamt as "uitdrtamt",
+            p.cal_money as calMoney,
+            p.is_birth as isBirth
+        from
+            tbl_order o,
+            tbl_vendor_inf v,
+            tbl_order_clear c,
+            tbl_goods_payway p
+        where
+            o.vendor_id = v.vendor_id
+        and o.goods_payway_id = p.goods_payway_id
+        and o.order_id = c.order_id
+
+        and o.ordertype_id = 'JF'
+        and c.clearflag = '2'
+        and c.status_id = #{statusId}
+    </select>
+
+    <select id="getCfgMsg" parameterType="String" resultType="java.util.HashMap">
+        select
+            argument_other
+        from
+            tbl_cfg_pricesystem
+        where
+            pricesystem_id = #{birthLevel}
+    </select>
+
+    <select id="findOrderById" parameterType="String" resultType="cn.com.cgbchina.batch.model.OrderSubModel">
+        select
+        ordertype_id ordertypeId,
+        cur_status_id curStatusId,
+        ordermain_id orderMainId,
+        vendor_id vendorId,
+        goods_id goodsId,
+        goods_num goodsNum,
+        goods_nm goodsNm,
+        bonus_totalvalue bonusTotalvalue,
+        create_oper createOper,
+        create_time createTime
+        from tbl_order
+        where order_id = #{orderId}
+    </select>
+</mapper>

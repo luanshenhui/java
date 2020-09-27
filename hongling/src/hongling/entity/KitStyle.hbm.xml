@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="hongling.entity.KitStyle" table="KitStyle">
+		<id name="ID" type="integer">
+			<column name="ID" />
+			<generator class="increment"></generator>
+		</id>
+		<!-- 款式号 -->
+		<property name="code" type="string">
+			<column name="CODE"/>
+		</property>
+		<!-- 中文简介 -->
+		<property name="title_Cn" type="string">
+			<column name="TITLE_CN"/>
+		</property>
+		<!-- 英文文简介 -->
+		<property name="title_En" type="string">
+			<column name="TITLE_EN"/>
+		</property>
+		<!--单件组合代码 -->
+		<property name="categoryID" type="string">
+			<column name="CategoryID"/>
+		</property>
+		<!-- 适用面料 -->
+		<property name="fabrics" type="string">
+			<column name="FABRICS"/>
+		</property>
+		<!-- 默认面料 -->
+		<property name="defaultFabric" type="string">
+			<column name="DEFAULTFABRIC"/>
+		</property>
+		<!-- 状态 -->
+		<property name="status" type="integer">
+			<column name="STATUS"/>
+		</property>
+		<!-- 创建人 -->
+		<property name="createBy" type="string">
+			<column name="CREATEBY"/>
+		</property>
+		<!-- 创建时间 -->
+		<property name="createTime" type="date">
+			<column name="CREATETIME" />
+		</property>
+		<!-- 关闭人 -->
+		<property name="closeBy" type="string">
+			<column name="CLOSEBY"/>
+		</property>
+		<!-- 关闭时间 -->
+		<property name="closeTime" type="date">
+			<column name="CLOSETIME" />
+		</property>
+		<!--服装分类 -->
+		<property name="clothingID" type="integer">
+			<column name="CLOTHINGID"/>
+		</property>
+		<!--款式风格 -->
+		<property name="styleID" type="integer">
+			<column name="STYLEID"/>
+		</property>
+	</class>
+</hibernate-mapping>

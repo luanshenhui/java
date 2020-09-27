@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="centling.entity.ExpressCom" table="ExpressCom">
+        <id name="ID" type="string">
+            <column name="ID" length="32" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="Name" type="string">
+            <column name="Name" />
+        </property>
+        <property name="Addr" type="string">
+            <column name="Addr" />
+        </property>
+        <property name="Tel" type="string">
+            <column name="Tel" />
+        </property>
+        <property name="Mobile" type="string">
+            <column name="Mobile" />
+        </property>
+        <property name="LinkMan" type="string">
+            <column name="LinkMan" />
+        </property>
+        <property name="Shortname" type="string">
+            <column name="Shortname" />
+        </property>
+        <property name="Memo" type="string">
+            <column name="Memo" />
+        </property>
+        <property name="Seq" type="integer">
+            <column name="Seq" />
+        </property>
+        <property name="StatusID" type="integer">
+            <column name="StatusID" />
+        </property>
+    </class>
+</hibernate-mapping>

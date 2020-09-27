@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ShopMember">
+    <resultMap id="ShopMemberMap" type="ShopMemberModel">
+        <result property="id" column="id"/>
+        <result property="userCode" column="user_code"/>
+        <result property="cardCode" column="card_code"/>
+        <result property="custIdNbr" column="cust_id_nbr"/>
+        <result property="custIdType" column="cust_id_type"/>
+        <result property="password" column="password"/>
+        <result property="pwStrength" column="pw_strength"/>
+        <result property="regTime" column="reg_time"/>
+        <result property="showName" column="show_name"/>
+        <result property="isUserCodeAuth" column="is_user_code_auth"/>
+        <result property="isCardCodeAuth" column="is_card_code_auth"/>
+        <result property="isMobileAuth" column="is_mobile_auth"/>
+        <result property="userGrade" column="user_grade"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        id,user_code,card_code,cust_id_nbr,cust_id_type,password,pw_strength,reg_time,show_name,is_user_code_auth,is_card_code_auth,is_mobile_auth,user_grade,last_login_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="ShopMemberModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_shop_member
+        (user_code
+        ,card_code
+        ,cust_id_nbr
+        ,cust_id_type
+        ,password
+        ,pw_strength
+        ,reg_time
+        ,show_name
+        ,is_user_code_auth
+        ,is_card_code_auth
+        ,is_mobile_auth
+        ,user_grade
+        ,last_login_time
+        ,del_flag)
+        values(#{userCode}
+        ,#{cardCode}
+        ,#{custIdNbr}
+        ,#{custIdType}
+        ,#{password}
+        ,#{pwStrength}
+        ,#{regTime}
+        ,#{showName}
+        ,#{isUserCodeAuth}
+        ,#{isCardCodeAuth}
+        ,#{isMobileAuth}
+        ,#{userGrade}
+        ,#{lastLoginTime}
+        ,#{delFlag})
+    </insert>
+
+    <update id="update" parameterType="ShopMemberModel">
+        update tbl_shop_member set
+        user_code
+        = #{userCode},card_code
+        = #{cardCode},cust_id_nbr
+        = #{custIdNbr},cust_id_type
+        = #{custIdType},password
+        = #{password},pw_strength
+        = #{pwStrength},reg_time
+        = #{regTime},show_name
+        = #{showName},is_user_code_auth
+        = #{isUserCodeAuth},is_card_code_auth
+        = #{isCardCodeAuth},is_mobile_auth
+        = #{isMobileAuth},user_grade
+        = #{userGrade},last_login_time
+        = #{lastLoginTime},del_flag
+        = #{delFlag}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="userCode !=null">and user_code = #{userCode}</if>
+            <if test="cardCode !=null">and card_code = #{cardCode}</if>
+            <if test="custIdNbr !=null">and cust_id_nbr = #{custIdNbr}</if>
+            <if test="custIdType !=null">and cust_id_type = #{custIdType}</if>
+            <if test="password !=null">and password = #{password}</if>
+            <if test="pwStrength !=null">and pw_strength = #{pwStrength}</if>
+            <if test="regTime !=null">and reg_time = #{regTime}</if>
+            <if test="showName !=null">and show_name = #{showName}</if>
+            <if test="isUserCodeAuth !=null">and is_user_code_auth = #{isUserCodeAuth}</if>
+            <if test="isCardCodeAuth !=null">and is_card_code_auth = #{isCardCodeAuth}</if>
+            <if test="isMobileAuth !=null">and is_mobile_auth = #{isMobileAuth}</if>
+            <if test="userGrade !=null">and user_grade = #{userGrade}</if>
+            <if test="lastLoginTime !=null">and last_login_time = #{lastLoginTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="ShopMemberMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_shop_member
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="ShopMemberMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_shop_member
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="ShopMemberMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_shop_member
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="ShopMemberModel">
+        delete from tbl_shop_member where id = id
+    </delete>
+</mapper>
+
+

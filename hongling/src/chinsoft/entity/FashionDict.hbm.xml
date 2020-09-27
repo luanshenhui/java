@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.FashionDict" table="FashionDict">
+        <id name="ID" type="integer" >
+            <column name="ID"/>
+        </id>
+        <property name="Name" type="string">
+            <column name="Name"/>
+        </property>
+        <property name="Extension" type="string">
+            <column name="Extension" />
+        </property>
+        <property name="ParentID" type="integer">
+            <column name="ParentID"/>
+        </property>
+        <property name="Describe" type="string">
+            <column name="Describe"/>
+        </property>
+        <property name="Occasion" type="string">
+            <column name="Occasion"/>
+        </property>
+        <property name="Code" type="integer">
+            <column name="Code"/>
+        </property>
+        <property name="isDefault" type="integer">
+            <column name="isDefault"/>
+        </property>
+        <property name="NameEN" type="string">
+            <column name="NameEN"/>
+        </property>
+        <property name="NameDE" type="string">
+            <column name="NameDE"/>
+        </property>
+        <property name="NameFR" type="string">
+            <column name="NameFR"/>
+        </property>
+        <property name="NameJA" type="string">
+            <column name="NameJA"/>
+        </property>
+        <property name="DescribeEN" type="string">
+            <column name="DescribeEN"/>
+        </property>
+        <property name="DescribeDE" type="string">
+            <column name="DescribeDE"/>
+        </property>
+        <property name="DescribeFR" type="string">
+            <column name="DescribeFR"/>
+        </property>
+        <property name="DescribeJA" type="string">
+            <column name="DescribeJA"/>
+        </property>
+        <property name="OccasionEN" type="string">
+            <column name="OccasionEN"/>
+        </property>
+        <property name="OccasionDE" type="string">
+            <column name="OccasionDE"/>
+        </property>
+        <property name="OccasionFR" type="string">
+            <column name="OccasionFR"/>
+        </property>
+        <property name="OccasionJA" type="string">
+            <column name="OccasionJA"/>
+        </property>
+        <property name="Bxlb" type="string">
+            <column name="Bxlb"/>
+        </property>
+        <property name="isShow" type="integer">
+            <column name="isShow"/>
+        </property>
+    </class>
+</hibernate-mapping>

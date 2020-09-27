@@ -1,0 +1,54 @@
+.daysView {
+  display: table-cell;
+}
+
+.daysTitle {
+  height: 25px;
+  line-height: 28px;
+  opacity: 0.5;
+  cursor: default;
+}
+
+.days {
+  width: 189px;
+  padding-bottom: 2px;
+}
+
+.day {
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+}
+
+.current {
+  background: #f39c12;
+  color: #fff;
+  border-radius: 4px;
+  opacity: 0.8;
+}
+
+.saturday {
+  color: #0077ff;
+}
+
+.sunday {
+  color: #ff0000;
+}
+
+.prev,
+.next {
+  opacity: 0.4;
+}
+
+.today {
+  position: relative;
+}
+
+.today:after {
+  content: ".";
+  position: absolute;
+  bottom: 15px;
+  right: 1px;
+  font-size: 20px;
+  color: #f39c12;
+}

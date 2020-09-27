@@ -1,0 +1,19 @@
+<script src="../blcash/common.js"></script>
+<script src="../blcash/BlAddNum.js"></script>
+<form id="blAddNumForm" class="form_template">
+<input type="hidden" name="blId" id="blId"/>
+<input type="hidden" name="memberid" id="memberid"/>
+<input type="hidden" name="flag" id="flag"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label blLblAddNum star"></td>
+		<td>
+			<input type="text" id="blAddMoneyNum"/><span id="tip_addnum"></span>
+		</td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="blBtnSaveNum"></a> <a id="blBtnCancelNum"></a>
+</div>
+</form>

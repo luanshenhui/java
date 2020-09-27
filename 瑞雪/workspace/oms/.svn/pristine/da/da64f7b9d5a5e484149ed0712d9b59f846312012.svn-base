@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.role.dao.RoleDAOImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.role.vo.RoleVo">
+		<id column="ROLE_ID" property="roleId" />
+	    <result column="chk" property="chk" />
+	    <result column="radio" property="radio" />
+	    <result column="PARENT_ROLE_ID" property="parentRoleId" />
+	    <result column="ROLE_NAME" property="roleName" />
+	    <result column="ROLE_DESCRIPTION" property="roleDescription" />
+	    <result column="IS_ADMINROLE" property="isAdminrole" />
+	    <result column="ROLE_TIME_BEGIN" property="roleTimeBegin" />
+	    <result column="ROLE_TIME_END" property="roleTimeEnd" />
+	    <result column="USER_NUMBERS" property="userNumbers" />
+	    <result column="IS_UNIQUE" property="isUnique" />
+	</resultMap>
+	
+	<select id="getRoleByCondition" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.role.vo.RoleVo" >
+    select '' as chk, '' as radio, ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN,
+      ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE
+    from WF_ORG_ROLE R
+	where 1=1
+		<if test="roleId != null">
+			and ROLE_ID = #{roleId}
+		</if>
+		<if test="parentRoleId != null">
+			and  PARENT_ROLE_ID = #{parentRoleId}
+		</if>
+		<if test="roleName != null">
+			and ROLE_NAME = #{roleName}
+		</if>
+  		<if test="searchCondition != null"> 
+			and ROLE_NAME like CONCAT('%',#{searchCondition},'%') 
+		</if> 
+		<if test="isAdminrole != null">
+			and IS_ADMINROLE = #{isAdminrole}
+		</if>
+		<if test="userId != null">
+			and R.ROLE_ID in
+	       (SELECT A.ROLE_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.USER_ID = #{userId})
+		</if>
+		<if test="delegateRoleIdList != null">
+			OR R.ROLE_ID in
+				<foreach collection="array" item="delegateUnitIdList" index="index" close=")" open="(" separator=","> 
+				  #{delegateUnitIdList} 
+				</foreach>
+		</if>
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+  </select>
+  
+  <select id="WF_ORG_ROLE_select" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.role.domain.WF_ORG_ROLE" >
+    select ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN,
+      ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE
+    from WF_ORG_ROLE R 
+	 where 1=1
+		<if test="roleId != null">
+			and ROLE_ID = #{roleId}
+		</if>
+		<if test="parentRoleId != null">
+			and PARENT_ROLE_ID = #{parentRoleId}
+		</if>
+		<if test="roleName != null">
+			and ROLE_NAME like #{roleName}
+		</if>
+		<if test="isAdminrole != null">
+			and IS_ADMINROLE = #{isAdminrole}
+		</if>
+		<if test="userId != null">
+			and R.ROLE_ID IN
+	       (SELECT A.ROLE_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.USER_ID = #{userId})
+		</if>
+		<if test="delegateRoleIdList != null">
+			OR R.ROLE_ID in
+				<foreach collection="list" item="delegateUnitIdList" index="index" close=")" open="(" separator=","> 
+				  #{delegateUnitIdList} 
+				</foreach>
+		</if>
+  </select>
+ 
+  <select id="selectByPrimaryKeyRole" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		ROLE_ID,ROLE_NAME,ROLE_DESCRIPTION,IS_ADMINROLE,USER_NUMBERS
+		from WF_ORG_ROLE
+		where ROLE_ID = #{value}
+  </select>
+ 
+  <insert id="insertRole" parameterType="cn.rkylin.oms.system.role.vo.RoleVo" >
+    insert into WF_ORG_ROLE (ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE,
+      ROLE_TIME_BEGIN, ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE)
+    values (#{roleId,jdbcType=VARCHAR},#{parentRoleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{roleDescri,jdbcType=VARCHAR},#{isAdminrole,jdbcType=VARCHAR},#{roleTimeBegin,jdbcType=TIMESTAMP},#{roleTimeEnd,jdbcType=TIMESTAMP},
+      #{userNumbers,jdbcType=DECIMAL}, #{isUnique,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertRoleUnit" parameterType="cn.rkylin.oms.system.role.domain.WF_ORG_ROLE_UNIT" >
+	INSERT INTO WF_ORG_ROLE_UNIT
+	  (UNIT_ID, ROLE_ID)
+	VALUES
+	  (#{unitId,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR} )
+  </insert>
+  
+  <insert id="insertRoleUser" parameterType="cn.rkylin.oms.system.role.domain.WF_ORG_USER_ROLE" >
+	INSERT INTO WF_ORG_USER_ROLE
+	  (USER_ID, ROLE_ID)
+	VALUES
+	  (#{userId,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateRole" parameterType="cn.rkylin.oms.system.role.vo.RoleVo" >
+    update WF_ORG_ROLE
+    set ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+      ROLE_DESCRIPTION = #{roleDescri,jdbcType=VARCHAR},
+      IS_ADMINROLE = #{isAdminrole,jdbcType=VARCHAR},
+      ROLE_TIME_BEGIN = #{roleTimeBegin,jdbcType=TIMESTAMP},
+      ROLE_TIME_END = #{roleTimeEnd,jdbcType=TIMESTAMP},
+      USER_NUMBERS = #{userNumbers,jdbcType=DECIMAL},
+      IS_UNIQUE =  #{isUnique,jdbcType=VARCHAR}
+    WHERE ROLE_ID=#{roleId}
+  </update>
+
+   
+
+  <delete id="deleteRoleUser" parameterType="string" >
+		DELETE from WF_ORG_USER_ROLE WHERE ROLE_ID= #{value}
+  </delete>
+	
+  <delete id="deleteRole" parameterType="string" >
+		delete from WF_ORG_ROLE WHERE ROLE_ID= #{value}
+  </delete>
+	
+  <delete id="deleteRoleUnit" parameterType="string" >
+		DELETE from WF_ORG_ROLE_UNIT WHERE ROLE_ID= #{value}
+  </delete>
+  
+  <select id="select_role" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.role.domain.WF_ORG_ROLE" >
+    select ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN,
+      ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE
+    from WF_ORG_ROLE R
+	where 1=1
+		<if test="roleId != null">
+			and ROLE_ID = #{roleId}
+		</if>
+		<if test="parentRoleId != null">
+			and PARENT_ROLE_ID = {parentRoleId}
+		</if>
+		<if test="roleName != null">
+			and ROLE_NAME like #{roleName}
+		</if>
+		<if test="isAdminrole != null">
+			and IS_ADMINROLE = #{isAdminrole}
+		</if>
+		<if test="userId != null">
+			and R.ROLE_ID IN
+	       (SELECT A.ROLE_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.USER_ID = #{userId})
+		</if>
+		<if test="delegateRoleIdList != null">
+			OR R.ROLE_ID IN
+				<foreach collection="list" item="delegateUnitIdList" index="index" close=")" open="(" separator=","> 
+				  #{delegateUnitIdList} 
+				</foreach>
+		</if>
+  </select>
+
+</mapper>

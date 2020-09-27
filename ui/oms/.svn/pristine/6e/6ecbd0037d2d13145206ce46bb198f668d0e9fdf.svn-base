@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.shop.dao.ShopDAOImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.shop.vo.ShopVO">
+		<id column="shop_id" jdbcType="VARCHAR" property="shopId" />
+		<result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+		<result column="prj_id" jdbcType="VARCHAR" property="prjId" />
+		<result column="prj_name" jdbcType="VARCHAR" property="prjName" />
+		<result column="shop_type" jdbcType="VARCHAR" property="shopType" />
+		<result column="need_split_order" jdbcType="VARCHAR" property="needSplitOrder" />
+		<result column="parent_shop" jdbcType="VARCHAR" property="parentShop" />
+		<result column="shop_account" jdbcType="VARCHAR" property="shopAccount" />
+		<result column="validate" jdbcType="VARCHAR" property="validate" />
+		<result column="enable" jdbcType="VARCHAR" property="enable" />
+		<result column="deleted" jdbcType="VARCHAR" property="deleted" />
+		<result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+		<result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="validate_status" jdbcType="VARCHAR" property="validateStatus" />
+		<result column="operation" jdbcType="VARCHAR" property="operation" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="parentshopname" jdbcType="VARCHAR" property="parentshopname" />
+		<result column="parentshoenable" jdbcType="VARCHAR" property="parentshoenable" />
+		
+		<result column="api_url" jdbcType="VARCHAR" property="apiUrl" />
+		<result column="app_key" jdbcType="VARCHAR" property="appKey" />
+		<result column="app_secret" jdbcType="VARCHAR" property="appSecret" />
+		<result column="session_key" jdbcType="VARCHAR" property="sessionKey" />
+	</resultMap>
+
+	<sql id="Base_Column_ListShop">
+		shop_id, shop_name, prj_id, shop_type, shop_account, validate, 
+		enable, deleted, create_time, modify_time, start_time, expire_time, need_split_order, parent_shop, 
+		(select prj_name from oms_project prj where prj.prj_id = oms_shop.prj_id) as prj_name, 
+		'' as status, '' as validate_status, '' as operation, remark,
+		(select shop_name from oms_shop parentshop where parentshop.shop_id = oms_shop.parent_shop) as parentshopname,
+		api_url, app_key, app_secret, session_key
+	</sql>
+
+	<select id="pageSelectShop" parameterType="cn.rkylin.oms.system.shop.vo.ShopVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_ListShop" />
+		from oms_shop
+		where 1=1
+		<if test="searchCondition != null">
+			and shop_name like CONCAT('%',#{searchCondition},'%')
+		</if>
+		<choose> 
+			<when test="deleted !=null ">
+			</when>
+			<otherwise>
+				and deleted = 'n'
+			</otherwise>  
+		</choose>
+		
+		<if test="searchCondition != null">
+			and shop_name like CONCAT('%',#{searchCondition},'%')
+		</if>
+		<if test="shopId != null">
+			and shop_id = #{shopId}
+		</if>
+		<if test="shopName != null">
+			and shop_name = #{shopName}
+		</if>
+		<if test="shopType != null">
+			and shop_type = #{shopType}
+		</if>
+		<if test="needSplitOrder != null">
+			and need_split_order = #{needSplitOrder}
+		</if>
+		<if test="enable != null">
+			and enable = #{enable}
+		</if>
+		<if test="prjId != null">
+			and prj_id = #{prjId}
+		</if>
+		<if test="parentShop != null">
+			and parent_shop = #{parentShop}
+		</if>
+		
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+	</select>
+	<!-- 获取指定项目需要分单的店铺信息 -->
+	<select id="pageSelectSplitShop" parameterType="cn.rkylin.oms.system.shop.vo.ShopVO" resultMap="BaseResultMap">
+		select
+		s.shop_id,
+		s.shop_name,
+		s.shop_type
+		from
+		  oms_shop s 
+		where s.deleted = 'n' 
+		  and s.need_split_order = 'y' 
+		<if test="prjId != null">
+			and prj_id = #{prjId}
+		</if>
+	</select>
+	<!-- 导出功能继承 -->
+	<resultMap id="BaseResultExportMap" type="cn.rkylin.oms.system.shop.vo.ShopExportVO" extends="BaseResultMap">
+	</resultMap>
+	<select id="exportSelectShop" parameterType="cn.rkylin.core.ApolloMap" resultMap="BaseResultExportMap" >
+		select
+		<include refid="Base_Column_ListShop" />
+		from oms_shop
+		where deleted = 'n'
+		<if test="value != null">
+			and shop_name like CONCAT('%',#{value},'%')
+		</if>
+		<if test="selectWhere != null">
+			${selectWhere}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKeyShop" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_ListShop" />
+		from oms_shop
+		where shop_id = #{value}
+	</select>
+	
+	<delete id="deleteByPrimaryKeyShop" parameterType="java.lang.String">
+		delete from oms_shop
+		where shop_id = #{shopId,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="insertShop" parameterType="cn.rkylin.oms.system.shop.vo.ShopVO">
+		insert into oms_shop (shop_id, shop_name, prj_id,
+		shop_type, shop_account, need_split_order, parent_shop, 
+		validate, enable, deleted, expire_time, 
+		create_time, modify_time, start_time, remark)
+		values (#{shopId,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, #{prjId,jdbcType=VARCHAR},#{shopType,jdbcType=VARCHAR}, 
+		#{shopAccount,jdbcType=VARCHAR}, #{needSplitOrder,jdbcType=VARCHAR}, #{parentShop,jdbcType=VARCHAR},
+		#{validate,jdbcType=VARCHAR}, #{enable,jdbcType=VARCHAR}, #{deleted,jdbcType=VARCHAR}, #{expireTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="insertSelectiveShop" parameterType="cn.rkylin.oms.system.shop.vo.ShopVO">
+		insert into oms_shop
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="shopId != null">
+				shop_id,
+			</if>
+			<if test="shopName != null">
+				shop_name,
+			</if>
+			<if test="prjId != null">
+				prj_id,
+			</if>
+			<if test="shopType != null">
+				shop_type,
+			</if>
+			<if test="shopAccount != null">
+				shop_account,
+			</if>
+			<if test="validate != null">
+				validate,
+			</if>
+			<if test="enable != null">
+				enable,
+			</if>
+			<if test="deleted != null">
+				deleted,
+			</if>
+			<if test="needSplitOrder != null">
+				need_split_order,
+			</if>
+			<if test="parentShop != null">
+				parent_shop,
+			</if>
+			<if test="expireTime != null">
+				expire_time,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+			<if test="startTime != null">
+				start_time,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="shopId != null">
+				#{shopId,jdbcType=VARCHAR},
+			</if>
+			<if test="shopName != null">
+				#{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="prjId != null">
+				#{prjId,jdbcType=VARCHAR},
+			</if>
+			<if test="shopType != null">
+				#{shopType,jdbcType=VARCHAR},
+			</if>
+			<if test="shopAccount != null">
+				#{shopAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="validate != null">
+				#{validate,jdbcType=VARCHAR},
+			</if>
+			<if test="enable != null">
+				#{enable,jdbcType=VARCHAR},
+			</if>
+			<if test="deleted != null">
+				#{deleted,jdbcType=VARCHAR},
+			</if>
+			<if test="needSplitOrder != null">
+				#{needSplitOrder,jdbcType=VARCHAR},
+			</if>
+			<if test="parentShop != null">
+				#{parentShop,jdbcType=VARCHAR},
+			</if>
+			<if test="expireTime != null">
+				#{expireTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="startTime != null">
+				#{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKeySelectiveShop" parameterType="cn.rkylin.oms.system.shop.vo.ShopVO">
+		update oms_shop
+		<set>
+			<if test="shopName != null">
+				shop_name = #{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="prjId != null">
+				prj_id = #{prjId,jdbcType=VARCHAR},
+			</if>
+			<if test="shopType != null">
+				shop_type = #{shopType,jdbcType=VARCHAR},
+			</if>
+			<if test="shopAccount != null">
+				shop_account = #{shopAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="validate != null">
+				validate = #{validate,jdbcType=VARCHAR},
+			</if>
+			<if test="enable != null">
+				enable = #{enable,jdbcType=VARCHAR},
+			</if>
+			<if test="deleted != null">
+				deleted = #{deleted,jdbcType=VARCHAR},
+			</if>
+			<if test="needSplitOrder != null">
+				need_split_order = #{needSplitOrder,jdbcType=VARCHAR},
+			</if>
+			<if test="parentShop != null">
+				parent_shop = #{parentShop,jdbcType=VARCHAR},
+			</if>
+			<if test="expireTime != null">
+				expire_time = #{expireTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="startTime != null">
+				start_time = #{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where shop_id = #{shopId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateByPrimaryKeyShop" parameterType="cn.rkylin.oms.system.shop.vo.ShopVO">
+		update oms_shop
+		set shop_name = #{shopName,jdbcType=VARCHAR},
+		prj_id = #{prjId,jdbcType=VARCHAR},
+		shop_type = #{shopType,jdbcType=VARCHAR},
+		shop_account = #{shopAccount,jdbcType=VARCHAR},
+		validate = #{validate,jdbcType=VARCHAR},
+		enable = #{enable,jdbcType=VARCHAR},
+		deleted = #{deleted,jdbcType=VARCHAR},
+		need_split_order = #{needSplitOrder,jdbcType=VARCHAR}, 
+		parent_shop = #{parentShop,jdbcType=VARCHAR}, 
+		expire_time = #{expireTime,jdbcType=TIMESTAMP},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+		start_time = #{startTime,jdbcType=TIMESTAMP},
+		remark = #{remark,jdbcType=VARCHAR}
+		where shop_id = #{shopId,jdbcType=VARCHAR}
+	</update>
+</mapper>

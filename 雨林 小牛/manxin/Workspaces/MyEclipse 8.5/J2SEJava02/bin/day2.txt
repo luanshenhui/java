@@ -1,0 +1,16 @@
+一、Collection
+	数组的容器：数组
+	缺点：
+		1.长度无法改变
+		2.元素的位置固定
+		
+	ArrayList集合、线性集合、底层是数组弥补了数组的缺点。
+	ArrayList list = new ArrayList();
+	list.add(数据);
+
+二、Collections	工具类，跟Arrays类似，给我们提供了操作集合的工具方法
+
+三、Map接口，实现类HashMap<Key,Value(必须是引用类型)>,映射。
+		用键-值对儿的方式保存数据，每个数据都会有一个Key值，我们可以通过Key值来找到这个元素
+		
+		

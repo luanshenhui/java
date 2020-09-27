@@ -1,0 +1,1137 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>出口食品生产企业监督检查</title>
+<%@ include file="/common/resource_show.jsp"%>
+<link rel="stylesheet" href="${ctx}/static/viewer/assets/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="${ctx}/static/viewer/dist/viewer.css"></link>
+<link rel="stylesheet" href="${ctx}/static/viewer/demo/css/main.css"></link>
+</head>
+<body  class="bg-gary">
+<script src="${ctx}/static/viewer/assets/js/jquery.min.js"></script>
+<script src="${ctx}/static/viewer/assets/js/bootstrap.min.js"></script>
+<script src="${ctx}/static/viewer/dist/viewer.js"></script>
+<script src="${ctx}/static/viewer/demo/js/main.js"></script>
+<script type="text/javascript" src="/ciqs/cuplayer/Images/swfobject.js"></script>
+<script type="text/javascript">
+/**
+ * 页面初始化加载
+ * wangzhy
+ */
+$(function(){
+	$("#imgd1").hide();
+	$("#CuPlayerMiniV").hide();
+	
+	if($(".green_type_1").length>0){
+	$("#icon1").attr("class","icongreen");
+	}
+	if($(".green_type_2").length>0){
+	$("#icon2").attr("class","icongreen");
+	}
+	if($(".green_type_3").length>0){
+	$("#icon3").attr("class","icongreen");
+	}
+	
+	var totalSss = 0;
+	var addHour = 0;
+	var procArray = eval('('+$("#procArray").val()+')');
+	$(".writeHour").each(function(){
+		var id = this.id;
+		var index = id.substring(4);
+		
+		if(null != procArray[index-1] && null != procArray[index-1].create_date_str){
+			$("#psn"+index).text(procArray[index-1].create_user);
+			$("#date"+index).text(procArray[index-1].create_date_str);
+			$("#icon"+index).addClass("icongreen");
+		}else{
+			$("#psn"+index).text("");
+			$("#date"+index).text('');
+			$("#icon"+index).addClass("iconyellow");
+		}
+				
+		if(index > 1){
+			var dateText = $("#date"+index).text();
+			var dateText0 = $("#date"+(index-1)).text();
+			if(dateText != '' && dateText0 != ''){
+				addHour = getHour(dateText0, dateText);
+				$("#hour"+(index-1)).text("+"+addHour);
+				totalSss += getSss(dateText0, dateText);
+			}else{
+				$("#hour"+(index-1)).text("-");
+			}
+		}
+	});
+	$("#totalHour").text(formatSss(totalSss));
+});
+
+/**
+ * 计算2个日期的天数
+ */
+function getDay(startDate){
+	var date1 = new Date(startDate); 
+	var date2 = new Date();
+	var day = "";
+	day = (date2.getTime() - date1.getTime())/(1000 * 60 * 60 *24);
+    return day;
+}
+
+/**
+ * 计算2个日期小时差
+ */
+function getHour(startDate,endDate){
+	var date1 = new Date(startDate); 
+	var date2 = new Date(endDate);
+	var hour = "";
+	hour = (date2.getTime() - date1.getTime())/(1000 * 60 * 60 );
+	hour = hour.toFixed(2);
+    return hour;
+}
+
+/**
+ * 计算2个日期毫秒差
+ */
+function getSss(startDate,endDate){
+	var date1 = new Date(startDate); 
+	var date2 = new Date(endDate);
+	var sss = 0;
+	sss = date2.getTime() - date1.getTime();
+    return sss;
+}
+
+function formatSss(sss){
+return "";
+	var hours = parseInt(sss / (1000*60*60));
+	var minutes = parseInt(sss % (1000*60*60) / (1000*60));
+	var seconds = parseInt(sss % (1000*60) / 1000);
+	return (hours < 10 ? "0"+hours : hours) + "小时" + (minutes < 10 ? "0"+minutes : minutes) + "分钟";// + (seconds < 10 ? "0"+seconds : seconds);
+}
+
+/**
+ * 显示图片浏览
+ * path 数据库保存的图片地址 E:/201708/20170823/1B083FEA24D6E00004df8.jpg
+ * wangzhy
+ */
+function toImgDetail(path){
+	url = "/ciqs/showVideo?imgPath="+path;
+	$("#imgd1").attr("src",url);
+	$("#imgd1").click();
+}
+
+
+//打开模板表格
+function showTemplate(apply_no){
+var compName= "${model.enterprisesname}";
+// 	window.open("/ciqs/expFoodProd/toPage?applyid="+applyid+"&page=expFoodProd_qiye_jiandu_jcb");
+window.open("/ciqs/extxz/toTextXwjList?apply_no="+apply_no+"&compName="+compName);
+	
+}
+
+//打开模板表格
+function showTemplate2(apply_no){
+var compName= "${model.enterprisesname}";
+// 	window.open("/ciqs/expFoodProd/toPage?applyid="+applyid+"&page=expFoodProd_qiye_jiandu_jcb");
+window.open("/ciqs/extxz/toTextXwjList2?apply_no="+apply_no+"&compName="+compName);
+	
+}
+
+/**
+ * 图片和视频文件上传
+ * formId form表单Id
+ * uploadFileId input file标签Id
+ * procMainId 业务主键Id
+ * procType 环节类型
+ * fileType 文件类型 1图片 2视频 3音频
+ * package_no 业务单号
+ * wangzhy
+ */
+function fileSubmit(formId,uploadFileId,procMainId,procType,fileType,package_no){
+	if(typeof $("#"+uploadFileId).val() == 'undefined' || $("#"+uploadFileId).val() == ''){
+		alert("请选择一个文件!");
+		return;
+	}
+	var path = $("#"+uploadFileId).val();
+	var type = path.substring(path.lastIndexOf('.')+1,path.length);
+	if((procType == 'V_KB_C_M_2' || procType == 'V_JL_C_M_2') 
+		&& (type == 'jpg' || type == 'jpeg' || type == 'png' || type == 'gif' || type == 'bmp')){
+		alert("请选择一个视频文件!");
+		return;
+	}
+	if((procType == 'V_JL_C_M_3' || procType == 'V_CYSJ_C_M_3') 
+		&& (type != 'jpg' && type != 'jpeg' && type != 'png' && type != 'gif' && type != 'bmp')){
+		alert("请选择一个图片文件!");
+		return;
+	}
+	var url ='fileVideoOrImg?id='+procMainId+'&procType='+procType+'&fileType='+fileType+'&package_no='+package_no;
+	$("#"+formId).attr("action",url);
+	$("#"+formId).submit();
+}
+
+function getPlace(place_number){
+	window.scroll(0, document.getElementById(place_number).offsetTop-306);
+}
+</script>
+<div class="freeze_div_dtl" style="position: fixed;width: 100%;background-color:#f0f2f5;top:0px;height:290px;">
+<div class="title-bg" >
+<div class=" title-position margin-auto white">
+<div class="title"><span class="font-24px" style="color:white;">行政检查/</span><a href="list" style="color:white;">出口食品生产企业监督检查</a></div>
+<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+</div>
+</div>
+<div class="flow-bg"  style=" height:235px;" >
+<div class="flow-position2 margin-auto"  style=" height:235px;" >
+
+<ul class="white font-18px flow-height font-weight">
+<li>检查启动</li>
+<li>实施监督检查</li>
+<li>后续处置</li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<ul class="flow-icon">
+  <li id="icon1"><div class="hour white font-12px"><span id="hour1" class="writeHour"></span></div><a href="#tab1"><img src="${ctx}/static/show/images/expFoodProd/prod1.png" width="80" height="80" onclick="getPlace('module_1')"/></a></li>
+  <li id="icon2"><div class="hour white font-12px"><span id="hour2" class="writeHour"></span></div><a href="#tab2"><img src="${ctx}/static/show/images/expFoodProd/prod3.png" width="80" height="80" onclick="getPlace('module_2')"/></a></li>
+  <li id="icon3"><div class="hour white font-12px"><span id="hour3" class="writeHour"></span></div><a href="#tab3"><img src="${ctx}/static/show/images/expFoodProd/prod3.png" width="80" height="80" onclick="getPlace('module_3')"/></a></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li class="white font-18px font-weight"> <br /><!-- 历时：<span id="totalHour">0</span> --></li>
+</ul>
+<input type="hidden" id="procArray" value="${procArray }"/>
+<ul class="flow-info" >
+	<li>
+		<span id="psn1" >
+			
+		</span><br />
+	  	<span class="font-10px" >
+	  		<span id="date1" >
+	  		
+	  		</span>
+	  	</span>
+	</li>
+	<li><span id="psn2" ></span><br />
+	  <span class="font-10px" ><span id="date2" ></span></span>
+	</li>
+	<li><span id="psn3" ></span><br />
+	  <span class="font-10px" ><span id="date3" ></span></span>
+	</li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li class="font-10px"></li>
+	<li class="font-10px"></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="blank_div_dtl" style="margin-top:290px;">
+</div>
+
+<div class="margin-chx">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">
+    <tr class="table_xqlbbj">
+      <td width="300" height="35" align="center" valign="bottom">企业名称</td>
+      <td width="300" height="35" align="center" valign="bottom">监管类型</td>
+      <td width="300" height="35" align="center" valign="bottom">地址</td>
+      <td width="300" height="35" align="center" valign="bottom">计划监管时间</td>
+    </tr>
+    <tr class="table_xqlbnr">
+      <td width="300" height="90" align="center">${model.enterprisesname}</td>
+      <td width="300" height="90" align="center">${model.plantype}</td>
+      <td width="300" height="90" align="center">${model.address}</td>
+      <td width="300" height="90" align="center">${model.plansupdate}</td>
+    </tr>
+    <tr class="table_xqlbbj">
+      <td width="300" height="35" align="center" valign="bottom">监管负责人</td>
+      <td width="300" height="35" align="center" valign="bottom">监管人员</td>
+      <td width="300" height="35" align="center" valign="bottom">实际监管时间</td>
+      <td width="300" height="35" align="center" valign="bottom">实际监管人</td>
+    </tr>
+    <tr class="table_xqlbnr">
+      <td width="300" height="90" align="center">${model.pesponsible}</td>
+      <td width="300" height="90" align="center">${model.subname}</td>
+      <td width="300" height="90" align="center"><fmt:formatDate value="${model.actualdate}" type="both" pattern="yyyy-MM-dd"/></td>
+      <td width="300" height="90" align="center">${model.practicename}</td>
+    </tr>
+  	<tr class="table_xqlbbj">
+  		<td width="300" height="35" align="center" valign="bottom">是否有违规操作</td>
+  		<td width="300" height="35" align="center" valign="bottom"></td>
+      	<td width="300" height="35" align="center" valign="bottom"></td>
+      	<td width="300" height="35" align="center" valign="bottom"></td>
+  	</tr>
+    <tr class="table_xqlbnr">
+      	<td width="300" height="90" align="center"></td>
+      	<td width="300" height="90" align="center"></td>
+      	<td width="300" height="90" align="center"></td>
+      	<td width="300" height="90" align="center"></td>
+    </tr>
+  </table>
+</div>
+<div class="margin-auto width-1200 tips" id="module_1">报告审查</div>
+<!-- <div class="title-cxjg">1.报告审查</div> -->
+<div class="margin-chx">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">
+	<tr class="table_xqlbbj">
+      <td height="35" align="left" valign="bottom" colspan="5">检查启动环节</td>
+    </tr>
+    <tr class="table_xqlbnr">
+      <td width="220" height="90" align="center"><a href="/ciqs/expFoodProd/jumpText?userId=${userId}&subId=${subId}">查看年度报告</a></td>
+    </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">
+	<tr class="table_xqlbbj">
+       <td height="35" align="left" valign="bottom" colspan="5">实施监督检查环节</td>
+    </tr>
+    <tr class="table_xqlbbj">
+      <td width="220" height="35" align="center" valign="bottom">检查结果</td>
+      <td width="220" height="35" align="center" valign="bottom">审批人</td>
+      <td width="220" height="35" align="center" valign="bottom">审批时间</td>
+      <td width="220" height="35" align="center" valign="bottom">审批机构</td>
+      <td width="220" height="35" align="center" valign="bottom">审批决定</td>
+    </tr>
+    <tr class="table_xqlbnr">
+      <td width="220" height="90" align="center">${model.liveresult}</td>
+      <td width="220" height="90" align="center">${model.subname}</td>
+      <td width="220" height="90" align="center">${model.plansupdate}</td>
+      <td width="220" height="90" align="center">${model.depname}</td>
+      <td width="220" height="90" align="center">${model.liveresult}</td>
+    </tr>
+    <tr class="table_xqlbbj">
+      <td width="220" height="35" align="center" valign="bottom">审批意见</td>
+<!--       <td width="220" height="35" align="center" valign="bottom">年度报告</td> -->
+      <td width="220" height="35" align="center" valign="bottom"></td>
+      <td width="220" height="35" align="center" valign="bottom"></td>
+      <td width="220" height="35" align="center" valign="bottom"></td>
+       <td width="220" height="35" align="center" valign="bottom"></td>
+    </tr>
+    <tr class="table_xqlbnr">
+      <td width="220" height="90" align="center">${model.liveresult}</td>
+<!--       <td width="220" height="90" align="center">addr</td> -->
+      <td width="220" height="90" align="center"></td>
+      <td width="220" height="90" align="center"></td>
+      <td width="220" height="90" align="center"></td><td width="220" height="90" align="center"></td>
+    </tr>
+    </table>
+<c:if test="${not empty V_BGSC_JD_ZG or not empty V_BGSC_JD_QT}">    
+	<table id="V_XZJC_SJ_BS_1" width="100%" border="0" cellpadding="0" class="table-xqlb green_type_1">
+    	<c:forEach items="${V_BGSC_JD_ZG}" var="v" varStatus="status">
+			    <tr class="green_type_2">
+				    <c:if test="${status.count == 1}"><td width="250" class="table_xqlbbj2" rowspan="${fn:length(V_BGSC_JD_ZG)}">整改报告照片</td></c:if>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user }
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+	</c:forEach>
+<!-- 实施监督检查环节    其他 -->
+	<c:if test="${not empty V_BGSC_JD_QT}">
+			<c:forEach items="${V_BGSC_JD_QT }" var="v" varStatus="status">
+			    <tr class="green_type_2">
+			    	<c:if test="${status.count == 1}"><td width="250" class="table_xqlbbj2" rowspan="${fn:length(V_BGSC_JD_QT)}"> 其他</td></c:if>
+				    <td align="center">
+				    	<span class="blue">
+				    		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${v.qt_name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				    	</span>
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user}
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</c:if>	
+<c:if test="${not empty V_BGSC_CZ_SP or not empty V_BGSC_CZ_TZ  or not empty V_BGSC_CZ_SD or not empty V_BGSC_CZ_JL or not empty V_BGSC_CZ_JY or not empty V_BGSC_CZ_QT}"> 
+ 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">	
+	 <tr class="table_xqlbbj">
+      	<td height="35" align="left" valign="bottom" colspan="5">后续处置环节</td>
+    </tr>
+    </table>
+    <table id="V_XZJC_SJ_BS_1" width="100%" border="0" cellpadding="0" class="table-xqlb">
+   <!--  V_BGSC_CZ_SP -->
+    <c:if test="${not empty V_BGSC_CZ_SP }">
+			<c:forEach items="${V_BGSC_CZ_SP}" var="v" varStatus="status">
+			    <tr class="green_type_3">
+				    <td width="250" class="table_xqlbbj2">约谈审批单&nbsp;<c:if test="${fn:length(V_BGSC_CZ_SP) gt 1 }">${status.count }</c:if></td>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user}
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		<!-- V_BGSC_CZ_TZ -->
+		   <c:if test="${not empty V_BGSC_CZ_TZ}">
+			<c:forEach items="${V_BGSC_CZ_TZ}" var="v" varStatus="status">
+			    <tr class="green_type_3">
+				    <td width="250" class="table_xqlbbj2">约谈通知书&nbsp;<c:if test="${fn:length(V_BGSC_CZ_TZ) gt 1 }">${status.count }</c:if></td>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user}
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		<!-- V_BGSC_CZ_SD -->
+	 	<c:if test="${not empty V_BGSC_CZ_SD}">
+				<c:forEach items="${V_BGSC_CZ_SD }" var="v" varStatus="status">
+				    <tr class="green_type_3">
+				     	<c:if test="${status.count == 1}"><td width="250" class="table_xqlbbj2" rowspan="${fn:length(V_BGSC_CZ_SD)}">送达回证</td></c:if>
+<!-- 					    <td width="250" class="table_xqlbbj2">送达回证&nbsp;<c:if test="${fn:length(V_BGSC_CZ_SD) gt 1 }">${status.count }</c:if></td> -->
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user }
+					    	</span>
+					    </td>
+					    <td width="300" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<!-- 约谈记录视频 -->
+			<c:if test="${not empty V_BGSC_CZ_JL}">
+				<c:forEach items="${V_BGSC_CZ_JL}" var="v" varStatus="status">
+				    <tr class="green_type_3">
+					    <td width="250" class="table_xqlbbj2">约谈记录视频&nbsp;<c:if test="${fn:length(V_BGSC_CZ_JL) gt 1 }">${status.count }</c:if></td>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date}" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="300" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/video-btn.png" width="42" height="42" title="视频查看" onclick="showVideo('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<!-- 约谈纪要照片 -->
+			<c:if test="${not empty V_BGSC_CZ_JY}">
+				<c:forEach items="${V_BGSC_CZ_JY}" var="v" varStatus="status">
+				    <tr class="green_type_3">
+				    	<c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_BGSC_CZ_JY)}">约谈纪要照片</td></c:if>
+<!-- 					    <td width="250" class="table_xqlbbj2">约谈纪要照片&nbsp;<c:if test="${fn:length(V_BGSC_CZ_JY) gt 1 }">${status.count }</c:if></td> -->
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date}" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="300" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+<!-- 后续处置环节环节    其他 -->
+	<c:if test="${not empty V_BGSC_CZ_QT }">
+			<c:forEach items="${V_BGSC_CZ_QT }" var="v" varStatus="status">
+			    <tr class="green_type_3">
+			    	<c:if test="${status.count == 1}"><td width="250" class="table_xqlbbj2" rowspan="${fn:length(V_BGSC_CZ_QT)}"> 其他</td></c:if>
+				    <td align="center">
+				    	<span class="blue">
+				    		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${v.qt_name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				    	</span>
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user}
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</c:if>	
+</div>
+<!-- ************************************************************************************ -->
+<div class="margin-auto width-1200 tips" id="module_1">现场检查</div>
+<div class="margin-chx">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">
+ <tr class="table_xqlbbj">
+     <td height="35" align="left" valign="bottom" colspan="5">检查启动环节</td>
+ </tr>
+<%--  <tr class="table_xqlbbj">
+      <td width="220" height="35" align="center" valign="bottom">检查计划下达时间</td>
+      <td width="220" height="35" align="center" valign="bottom">下达人员</td>
+      <td width="220" height="35" align="center" valign="bottom">检查计划</td>
+    </tr>
+    <tr class="table_xqlbnr">
+      <td width="220" height="90" align="center">${model.reg_comp_plc }</td>
+      <td width="220" height="90" align="center">${model.comp_plc }</td>
+      <td width="220" height="90" align="center"${model.enter_accp }></td>
+    </tr> --%>
+    <tr class="table_xqlbnr">
+      <td width="220" height="90" align="center" colspan="2">《备案出口食品生产企业名录库》</td>
+      <td width="220" height="90" align="center" ><a href="/ciqs/extxz/company">查看生产企业名录</a></td>
+    </tr>
+     <tr class="table_xqlbnr">
+      <td width="220" height="90" align="center" colspan="2">备案出口食品生产企业的质量安全管理体系运行情况执法检查人员名录库</td>
+      <td width="220" height="90" align="center" ><a href="/ciqs/extxz/personList">查看</a></td>
+    </tr>
+	<!--q 年度现场检查计划 -->
+    <c:if test="${not empty V_XCCY_QD_JH}">
+				<c:forEach items="${V_XCCY_QD_JH}" var="v" varStatus="status">
+				    <tr class="green_type_1">
+					   <c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_XCCY_QD_JH)}">年度现场检查计划</td></c:if>
+<!-- 					    <td width="250" class="table_xqlbbj2">年度现场检查计划&nbsp;<c:if test="${fn:length(V_XCCY_QD_JH) gt 1 }">${status.count }</c:if></td> -->
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date}" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="300" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+		<!-- q行政监督检查审批 -->
+		<c:if test="${not empty V_XCCY_QD_SP}">
+				<c:forEach items="${V_XCCY_QD_SP}" var="v" varStatus="status">
+				    <tr class="green_type_1">
+				    	<c:if test="${status.count == 1}"><td width="250" class="table_xqlbbj2" rowspan="${fn:length(V_XCCY_QD_SP)}">行政监督检查审批</td></c:if>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date}" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="300" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+		<!-- q行政监督检查通知	 -->
+<c:if test="${not empty V_XCCY_QD_TZ}">
+				<c:forEach items="${V_XCCY_QD_TZ}" var="v" varStatus="status">
+				    <tr class="green_type_1">
+				    	<c:if test="${status.count == 1}"><td width="250" class="table_xqlbbj2" rowspan="${fn:length(V_XCCY_QD_TZ)}">行政监督检查通知</td></c:if>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date}" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="300" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>	
+		<!--q 送达回证	 -->
+<c:if test="${not empty V_XCCY_QD_SD}">
+				<c:forEach items="${V_XCCY_QD_SD}" var="v" varStatus="status">
+				    <tr class="green_type_1">
+				    	<c:if test="${status.count == 1}"><td width="250" class="table_xqlbbj2" rowspan="${fn:length(V_XCCY_QD_SD)}">送达回证</td></c:if>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date}" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="300" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>			
+</table>
+
+	<c:if test="${not empty V_XCCY_JD_CY or not empty V_XCCY_JD_HY or not empty V_XCCY_JD_QT or not empty textTime}">
+ 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">
+  		<tr class="table_xqlbbj">
+      		<td height="35" align="left" valign="bottom">实施监督检查环节</td>
+      	</tr>
+    </table>
+    </c:if>
+    <table id="V_XZJC_SJ_BS_1" width="100%" border="0" cellpadding="0" class="table-xqlb">
+	<!-- q首次会议签到 -->
+    	<c:if test="${not empty V_XCCY_JD_CY }">
+			<c:forEach items="${V_XCCY_JD_CY }" var="v" varStatus="status">
+			    <tr class="green_type_2">
+			    	<c:if test="${status.count == 1}"><td width="250" class="table_xqlbbj2" rowspan="${fn:length(V_XCCY_JD_CY)}">首次会议签到</td></c:if>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user}
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		
+		<!-- q末次会议签到 -->
+		<c:if test="${not empty V_XCCY_JD_HY }">
+			<c:forEach items="${V_XCCY_JD_HY }" var="v" varStatus="status">
+			    <tr class="green_type_2">
+<!-- 				    <td width="250" class="table_xqlbbj2">末次会议签到&nbsp;<c:if test="${fn:length(V_XCCY_JD_HY) gt 1 }">${status.count }</c:if></td> -->
+				    <c:if test="${status.count == 1}"><td width="250" class="table_xqlbbj2" rowspan="${fn:length(V_XCCY_JD_HY)}">末次会议签到</td></c:if>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user }
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		
+		<!-- q其他	 -->		
+			<c:if test="${not empty V_XCCY_JD_QT}">
+				<c:forEach items="${V_XCCY_JD_QT}" var="v" varStatus="status">
+				    <tr class="green_type_2">
+				    	<c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_XCCY_JD_QT)}">其他</td></c:if>
+					    <td align="center">
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${v.qt_name}:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+		
+<!-- 监督检查表 -->
+		<c:if test="${not empty textTime }">
+		<tr>
+		    <td width="250" class="table_xqlbbj2">企业监督检查表</td>
+		    <td align="center">
+		    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+		    	<span class='blue'>
+		    		<fmt:formatDate value="${textTime}" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+		    	</span>
+		    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+		    	<span class="blue">
+		    		${textPerson} 
+		    	</span>
+		    </td>
+		    <td width="300" align="center" valign="middle">
+		    	<a href='javascript:showTemplate("${model.apply_no}");'>
+		      		<span class="margin-auto">企业监督检查表</span>
+		      	</a>
+		    </td>
+		</tr>
+		</c:if>
+		
+<%-- 		<c:if test="${not empty V_XZJC_SJ_XJ_3 }">
+			<c:forEach items="${V_XZJC_SJ_XJ_3 }" var="v" varStatus="status">
+			    <tr>
+				    <td width="250" class="table_xqlbbj2">末次会议照片、签到表照片&nbsp;<c:if test="${fn:length(V_XZJC_SJ_XJ_3) gt 1 }">${status.count }</c:if></td>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user }
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		
+		
+		<c:if test="${not empty V_XZJC_SJ_XJ_4 }">
+			<c:forEach items="${V_XZJC_SJ_XJ_4 }" var="v" varStatus="status">
+			    <tr>
+				    <td width="250" class="table_xqlbbj2">不符合项及跟踪报告照片&nbsp;<c:if test="${fn:length(V_XZJC_SJ_XJ_4) gt 1 }">${status.count }</c:if></td>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user }
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		
+		
+		
+		<c:if test="${not empty V_XZJC_SJ_XJ_5 }">
+			<c:forEach items="${V_XZJC_SJ_XJ_5 }" var="v" varStatus="status">
+			    <tr>
+				    <td width="250" class="table_xqlbbj2">其他&nbsp;<c:if test="${fn:length(V_XZJC_SJ_XJ_5) gt 1 }">${status.count }</c:if></td>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user }
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if> --%>
+    </table>
+    
+    <c:if test="${not empty V_XCCY_CZ_ZG  or not empty V_XCCY_CZ_QT or boo1}"> 
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">
+  		<tr class="table_xqlbbj">
+      		<td height="35" align="left" valign="bottom">后续处置环节</td>
+      	</tr>
+    </table>
+   </c:if>
+    <table id="V_XZJC_HC_BS_1" width="100%" border="0" cellpadding="0" class="table-xqlb">
+	<!-- q 整改情况    -->
+	    <c:if test="${not empty V_XCCY_CZ_ZG}">
+			<c:forEach items="${V_XCCY_CZ_ZG}" var="v" varStatus="status">
+			    <tr class="green_type_3">
+				    <td width="250" class="table_xqlbbj2">整改报告照片&nbsp;<c:if test="${fn:length(V_XCCY_CZ_ZG) gt 1 }">${status.count }</c:if></td>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user }
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		
+		<!-- q其他	 -->		
+			<c:if test="${not empty V_XCCY_CZ_QT}">
+				<c:forEach items="${V_XCCY_CZ_QT}" var="v" varStatus="status">
+				    <tr class="green_type_3">
+				    	<c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_XCCY_CZ_QT)}">现场检查照片</td></c:if>
+					    <td align="center">
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${v.qt_name}:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<c:if test="${boo1}">
+			<tr class="table_xqlbnr">
+		      <td width="220" height="90" align="center" colspan="2">不符合项及跟踪报告</td>
+		      <td width="220" height="90" align="center" ><a href="/ciqs/expFoodPOF/unPassXwjable?apply_no=${apply_no}&compName=${model.orgname}&type=V_SP_A_C">不符合项及跟踪报告</a></td>
+		    </tr>
+		    </c:if>
+	</table>
+    </div>
+	<!-- ************************************************************************************ -->
+<c:if test="${not empty V_SP_RP_1 or not empty V_SP_RP_2 or not empty V_SP_RP_3 or not empty V_SP_RP_4 or not empty V_SP_RP_5 or not empty V_SP_JD_QT or not empty V_SP_RP_6 or not empty V_XZJC_HC_ZS_3 or not empty V_SP_CZ_QT or boo2}"> 
+<div class="margin-auto width-1200 tips" id="module_1">专项检查</div>
+<div class="margin-chx">
+<c:if test="${not empty V_SP_RP_1 or not empty V_SP_RP_2 or not empty V_SP_RP_3}">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">
+	<tr class="table_xqlbbj">
+      <td height="35" align="left" valign="bottom" colspan="5">检查启动环节</td>
+    </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="0" class="table-xqlb">
+<%--     <tr class="table_xqlbbj">
+      <td width="220" height="35" align="center" valign="bottom">监管检查通知书下发时间</td>
+      <td width="220" height="35" align="center" valign="bottom">下发人员</td>
+      <td width="220" height="35" align="center" valign="bottom">监管检查通知书</td>
+      <td width="220" height="35" align="center" valign="bottom">送达回证</td>
+      <td width="220" height="35" align="center" valign="bottom"></td>
+    </tr>
+    <tr class="table_xqlbnr">
+      <td width="220" height="90" align="center">${model.legal_psn }</td>
+      <td width="220" height="90" align="center">${model.e_mail }</td>
+      <td width="220" height="90" align="center">${model.post_no }</td>
+      <td width="220" height="90" align="center">${model.con_name }</td>
+      <td width="220" height="90" align="center"></td>
+    </tr> --%>
+    
+    <!-- q行政监督检查审批 -->
+	    	<c:if test="${not empty V_SP_RP_1}">
+				<c:forEach items="${V_SP_RP_1}" var="v" varStatus="status">
+				    <tr class="green_type_1">
+					    <c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_SP_RP_1)}">行政监督检查审批 </td></c:if>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user }
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+	<!-- q行政监督检查通知	 -->		
+			<c:if test="${not empty V_SP_RP_2}">
+				<c:forEach items="${V_SP_RP_2}" var="v" varStatus="status">
+				    <tr class="green_type_1">
+				    	<c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_SP_RP_2)}">行政监督检查通知</td></c:if>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user }
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			
+	<!-- q送达回证 -->			
+			<c:if test="${not empty V_SP_RP_3}">
+				<c:forEach items="${V_SP_RP_3}" var="v" varStatus="status">
+				    <tr class="green_type_1">
+				    	<c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_SP_RP_3)}">送达回证</td></c:if>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user }
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+  </table>
+</c:if>  
+<c:if test="${not empty V_SP_RP_4 or not empty V_SP_RP_5 or not empty V_SP_JD_QT}">  
+  		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">
+	  		<tr class="table_xqlbbj">
+	      		<td height="35" align="left" valign="bottom">实施监督检查环节</td>
+	      	</tr>
+	    </table>
+  	    <table width="100%" border="0" cellpadding="0" class="table-xqlb">
+<!--q 现场检查记录-->
+	    	<c:if test="${not empty V_SP_RP_4}">
+				<c:forEach items="${V_SP_RP_4}" var="v" varStatus="status">
+				    <tr class="green_type_2">
+					    <c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_SP_RP_4)}">现场检查记录</td></c:if>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user }
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/video-btn.png" width="42" height="42" title="视频查看" onclick="showVideo('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+		<!-- q首次会议签到表	 -->		
+			<c:if test="${not empty V_SP_RP_5}">
+				<c:forEach items="${V_SP_RP_5}" var="v" varStatus="status">
+				    <tr  class="green_type_2">
+				    	<c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_SP_RP_5)}">首次会议签到表	</td></c:if>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user }
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<!-- q末次会议签到表	 -->
+			<c:if test="${not empty V_SP_RP_7}">
+				<c:forEach items="${V_SP_RP_7}" var="v" varStatus="status">
+				    <tr  class="green_type_2">
+				    	<c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_SP_RP_7)}">末次会议签到表</td></c:if>
+					    <td align="center">
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user }
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<!-- q其他	 -->		
+			<c:if test="${not empty V_SP_JD_QT}">
+				<c:forEach items="${V_SP_JD_QT}" var="v" varStatus="status">
+				    <tr class="green_type_2">
+				    	<c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_SP_JD_QT)}">其他</td></c:if>
+					    <td align="center">
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${v.qt_name}:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<!-- 监督检查表 -->
+			<c:if test="${not empty adtextTime }">
+			<tr>
+			    <td width="250" class="table_xqlbbj2">企业监督检查表</td>
+			    <td align="center">
+			    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+			    	<span class='blue'>
+			    		<fmt:formatDate value="${adtextTime}" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+			    	</span>
+			    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+			    	<span class="blue">
+			    		${adtextPerson} 
+			    	</span>
+			    </td>
+			    <td width="300" align="center" valign="middle">
+			    	<a href='javascript:showTemplate2("${apply_no}");'>
+			      		<span class="margin-auto">企业监督检查表</span>
+			      	</a>
+			    </td>
+			</tr>
+			</c:if>
+	    </table>
+</c:if>
+<c:if test="${not empty V_SP_RP_6 or boo2}">  
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-xqlb">
+  		<tr class="table_xqlbbj">
+      		<td height="35" align="left" valign="bottom">后续处置环节</td>
+      	</tr>
+    </table>
+<!-- 整改报告   -->  
+    <table  width="100%" border="0" cellpadding="0" class="table-xqlb">
+    	<c:if test="${not empty V_SP_RP_6}">
+			<c:forEach items="${V_SP_RP_6}" var="v" varStatus="status">
+			    <tr class="green_type_3">
+				    <td width="250" class="table_xqlbbj2">整改报告照片&nbsp;<c:if test="${fn:length(V_SP_RP_6) gt 1 }">${status.count }</c:if></td>
+				    <td align="center">
+				    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class='blue'>
+				    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+				    	</span>
+				    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+				    	<span class="blue">
+				    		${v.create_user }
+				    	</span>
+				    </td>
+				    <td width="300" align="center" valign="middle">
+				    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+				    </td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		
+		<!-- 不符合项及跟踪报告	 -->	
+		<c:if test="${boo2}">
+		<tr class="table_xqlbnr">
+	      <td width="220" height="90" align="center" colspan="2">不符合项及跟踪报告</td>
+	      <td width="220" height="90" align="center" ><a href="/ciqs/expFoodPOF/unPassXwjable?apply_no=${apply_no}&compName=${model.orgname}&type=V_SP_A_D">不符合项及跟踪报告</a></td>
+	    </tr>
+	    </c:if>
+		<!-- q其他	 -->		
+			<c:if test="${not empty V_SP_CZ_QT}">
+				<c:forEach items="${V_SP_CZ_QT}" var="v" varStatus="status">
+				    <tr class="green_type_3">
+				    	<c:if test="${status.count == 1}"><td width="200" class="table_xqlbbj2" rowspan="${fn:length(V_SP_CZ_QT)}">其他</td></c:if>
+					    <td align="center">
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${v.qt_name}:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	操作时间:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class='blue'>
+					    		<fmt:formatDate value="${v.create_date }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/>
+					    	</span>
+					    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;
+					    	<span class="blue">
+					    		${v.create_user}
+					    	</span>
+					    </td>
+					    <td width="60" align="center" valign="middle">
+					    	<img style="cursor: pointer;" src="/ciqs/static/show/images/photo-btn.png" width="42" height="42" title="照片查看" onclick="toImgDetail('${v.file_name}')"/>
+					    </td>
+					</tr>
+				</c:forEach>
+			</c:if>
+    </table>
+</c:if>		
+</div>
+</c:if> 
+<div class="margin-auto width-1200 tips" ></div>
+<!-- 图片查看 -->
+<div class="row" style="z-index:200000;">
+ 	<div class="col-sm-8 col-md-6" style="z-index:200000;">
+      	<div class="docs-galley" style="z-index:200000;">
+	       	<ul class="docs-pictures clearfix" style="z-index:200000;">
+         		<li>
+         			<img id="imgd1" style="z-index:200000;" <%-- data-original="${ctx}/static/viewer/assets/img/tibet-1.jpg" --%> 
+         			src="${ctx}/static/viewer/assets/img/thumbnails/tibet-3.jpg" alt="Cuo Na Lake" />
+         		</li>
+	       	</ul>
+      	</div>
+   	</div>
+</div>
+<div style="text-align: center;margin: auto;margin-top: 10px;width:200px;padding-bottom: 10px;">
+			<input type="button" class="search-btn" value="返回"  onclick="JavaScript:history.go(-1);"/>
+		</div>
+<%@ include file="/common/player.jsp"%>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<script src="../blexpresscom/common.js"></script>
+<script src="../bldelivery/BlDeliveryF.js"></script>
+<script src="../bldelivery/setting.js"></script>
+<form id="formSetting" class="form_template">
+<input type="hidden" name="ordenSettingID" id="ordenSettingID"/>
+<h1></h1>
+<table>
+
+	<tr>
+		<td class="label star lblApplyDeliveryType"></td>
+		<td id="applyDeliveryTypeIDContainer"></td>
+	</tr>
+	<tr>
+		<td  class="label star lblExpressCom"></td>
+		<td><select id="expressComId" class="expressComId2" style="width: 155px"></select></td>
+	</tr>
+	<tr class="auto">
+		<td class="label star lblApplyDeliveryDays"></td>
+		<td id="applyDeliveryDaysContainer"></td>
+	</tr>
+	<tr>
+<!-- 		<td class="label star lblApplyDeliveryAddress"></td>
+		<td><input id="applyDeliveryAddress" name="applyDeliveryAddress" type="text" class="textbox"/></td> -->
+		<td class="label star lblApplyDeliveryCountry"></td>
+		<td>
+			<input id="countryName" name="countryName" type="text"/>
+			<input type="hidden" id="countryCode" name="countryCode" />
+		</td>
+	</tr>
+	<tr class="state">
+		<td class="label star lblApplyDeliveryDivision"></td>
+		<td>
+			<input id="division" name="division" type="text">
+			<input type="hidden" id="divisionCode" name="divisionCode">
+		</td>
+	</tr>
+	<tr>
+		<td class="label star lblApplyDeliveryCity"></td>
+		<td><input id="city" name="city" type="text"/></td>
+	</tr>
+	<tr>
+		<td class="label star lblApplyAddressLine1"></td>
+		<td><input id="addressLine1" name="addressLine1" type="text"/></td>
+	</tr>
+	<tr>
+		<td class="label lblApplyAddressLine2"></td>
+		<td><input id="addressLine2" name="addressLine2" type="text"/></td>
+	</tr>
+	<tr>
+		<td class="label star lblApplyPostalCode"></td>
+		<td>
+			<!-- <input id="postalCode" name="postalCode" type="text" onclick="$.csDeliverySetting.getPostalCodes();" readonly="readonly"/> -->
+			<input id="postalCode" name="postalCode" type="text" />
+		</td>
+	</tr>
+	
+</table>
+<div class="operation">
+	<a id="btnSubmitSetting"></a> <a id="btnCancelSetting"></a>
+</div>
+</form>

@@ -1,0 +1,137 @@
+{{#component "brands-info js-component"}}
+    <p class="components-title"><strong>- 品牌管理 -</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals type "1"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/brands/brands-info-all">所有品牌</a>
+            </li>
+            <li {{#equals type "2"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/brands/brands-info-waitting">待审核</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form form-inline form-aligned">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="brandName">品牌名称:</label>
+                            <input class="form-control" type="text" id="brandName" name="brandName"
+                                   value="{{brandName}}" maxlength="100" />
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="brandInforStatus">状态:</label>
+                            <select class="form-control select" id="brandInforStatus" name="brandInforStatus">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals "00" brandInforStatus}}selected{{/equals}}>待审核</option>
+                                <option value="01" {{#equals "01" brandInforStatus}}selected{{/equals}}>审核通过</option>
+                                <option value="02" {{#equals "02" brandInforStatus}}selected{{/equals}}>审核拒绝</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="brandInforStatus">品牌分类:</label>
+                            <select class="form-control select" id ="brandCategoryId" name="brandCategoryId"></select>
+                            <input type="hidden" class="brandCategoryId" value="{{brandCategoryId}}">
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                        <input class="btn btn-success btn-small pull-right margin-right-10" type="submit" value="查询"/>
+                    </p>
+                </fieldset>
+            </form>
+            <div class="add m-b-10">
+                {{#authorial "goodsBrand_add"}}
+                    <a class="btn btn-info btn-small js-brand-add">+ 新增</a>
+                {{/authorial}}
+
+            </div>
+            {{#equals _DATA_.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th width="5%">品牌ID</th>
+                        <th width="20%">品牌名称</th>
+                        <th width="10%">品牌图标</th>
+                        <th width="10%">状态</th>
+                        <th width="10%">品牌分类</th>
+                        <th width="15%">APP首页显示</th>
+                        <th width="30%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each _DATA_.data}}
+                        <tr data-data="{{json this}}" data-id="{{id}}" data-name="{{brandName}}" >
+                            <td>{{id}}</td>
+                            <td>{{brandName}}</td>
+                            {{#if brandImage}}
+                                <td><img data-original="{{brandImage}}" class="brands-icon" alt="暂无图片"></td>
+                            {{else}}
+                                <td>暂无图片</td>
+                            {{/if}}
+                            <td>
+                                {{#equals brandInforStatus '00'}}
+                                    待审核
+                                {{/equals}}
+                                {{#equals brandInforStatus '01'}}
+                                    审核通过
+                                {{/equals}}
+                                {{#equals brandInforStatus '02'}}
+                                    审核拒绝
+                                {{/equals}}
+                            </td>
+                            <td>
+                                {{brandCategoryName}}
+                            </td>
+                            <td data-brand-state="brandState">
+                                {{#equals brandState '1'}}
+                                    <i class="icon-btn-show {{#authorial "goodsBrand_control"}} put-state {{/authorial}}"></i>
+                                {{else}}
+                                    <i class="icon-btn-hide {{#authorial "goodsBrand_control"}} put-state {{/authorial}}"></i>
+                                {{/equals}}
+                            </td>
+                            <td>
+                                {{#equals brandInforStatus '00'}}
+                                    <button class="btn btn-info btn-sm js-brand-view">查看</button>
+                                    {{#authorial "goodsBrand_audit"}}
+                                        <button class="btn btn-info btn-sm js-brand-audit">审核</button>
+                                    {{/authorial}}
+                                {{else}}
+                                    <button class="btn btn-info btn-sm js-brand-view">查看</button>
+                                    {{#authorial "goodsBrand_edit"}}
+                                        <button class="btn btn-info btn-sm js-brand-edit">编辑</button>
+                                    {{/authorial}}
+                                    {{#authorial "goodsBrand_delete"}}
+                                        <button class="btn btn-info btn-sm js-brand-del"
+                                                onclick="return check(this);" data-name="{{brandName}}" id="{{id}}"
+                                                data-toggle="confirm"
+                                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                                data-event="confirm:delete-brand">
+                                            删除
+                                        </button>
+                                    {{/authorial}}
+                                {{/equals}}
+                                {{#equals brandInforStatus '01'}}
+                                    {{#authorial "goodsBrand_adDetails"}}
+                                        <button class="btn btn-info btn-sm js-brand-detail">广告详情</button>
+                                    {{/authorial}}
+                                {{/equals}}
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+                <input type="hidden" class="del-name" value=""/>
+            {{/equals}}
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+    </div>
+{{/component}}
+<script type="text/javascript">
+    function check(data) {
+        $(".del-name").val($(data).data("name"));
+    }
+</script>
+

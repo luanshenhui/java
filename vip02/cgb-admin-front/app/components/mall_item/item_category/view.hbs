@@ -1,0 +1,65 @@
+{{#component "release-items-category js-component"}}
+    <p class="components-title"><strong>发布商品</strong></p>
+    <div class="category-list fixed-category">
+        <div class="category category-{{_DATA_.categoryLevel}} js-component" id="{{_DATA_.categoryLevel}}"
+             data-comp-path="category_list"
+             data-type="{{#equals type "1"}}frontCategory{{else}}backCategory{{/equals}}">
+            <div class="category-header">
+        <p class="item-name-p">
+          <strong class="item-name">
+              {{#equals _DATA_.categoryLevel 1}}一级类目{{/equals}}
+              {{#equals _DATA_.categoryLevel 2}}二级类目{{/equals}}
+              {{#equals _DATA_.categoryLevel 3}}三级类目{{/equals}}
+              {{#equals _DATA_.categoryLevel 4}}四级类目{{/equals}}
+          </strong>
+        </p>
+            </div>
+            <div class="form category-body">
+                <div class="search-item">
+                    <div class=" search-item-group">
+                        <i class="fa fa-fw fa-search"></i>
+                        <input type="text" class="search-item-input js-search-item" placeholder="搜索关键字">
+                    </div>
+                </div>
+                <ul class="divide-ul">
+                    {{#each _DATA_.data}}
+                        <li class="divide-li" data-category="{{json this}}">
+                          <span class="normal-status">
+                            {{#equals hasChild "true"}} <i class="fa fa-fw fa-angle-right next "></i>
+                                <i class="fa fa-fw fa-angle-right white next  hide"></i>{{/equals}}
+                              <a href="javascript:void(0);" class="item-pop"><span>{{name}}</span></a>
+                          </span>
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="selected-category">
+    <span class="selected-category-span">
+      <span>你当前选择的是:</span>
+      <span class="selected-path"></span>
+        <input type="hidden" name="channel" value="{{channel}}">
+    </span>
+    </div>
+    <div class="button-submit">
+        <button class="btn btn-success btn-small js-submit-spu" disabled>确定类目</button>
+        <button class="btn btn-success btn-small js-download-xl" disabled>下载商品导入模板</button>
+        <button class="btn btn-success btn-small js-add-to-list" disabled>加入到批量下载</button>
+        <p style="font-size: 12px;color: #0610FD;">提示：批量导入商品，请先下载导入模板</p>
+    </div>
+    <div class="clear"></div>
+    <div class="js-spu-list">
+        <table class="table js-spu-table" style="display: none;width: 850px">
+            <thead>
+            <tr>
+                <th width="150px">产品编码</th>
+                <th width="550px">产品名称</th>
+                <th width="150px">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+{{/component}}

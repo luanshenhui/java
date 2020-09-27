@@ -1,0 +1,18 @@
+{{#component "js-component headLogin "}}
+    <div class="header clearfix">
+        <div class="header-box clearfix">
+            <div class="header-message pull-left">您好！{{#if _USER_}}{{_USER_.name}}，{{/if}}欢迎来到广发商城运营管理平台
+                {{#if _USER_}}<a id="js-logout" href="javascript:void(0)" class="font-color-red">【退出】</a>{{/if}}
+            </div>
+            <div class="pull-right"><a href="{{_HREF_.main}}/mall" class="font-color-black">广发信用卡网上商城</a></div>
+        </div>
+    </div>
+    <div class="navbar">
+        <div class="navbar-collapse">
+            <div class="navbar-header">
+                <div class="icon-logo company"><i class="icon-logo"></i></div>
+                <div class="icon-yylogo company"></div>
+            </div>
+        </div>
+    </div>
+{{/component}}

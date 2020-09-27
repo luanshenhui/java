@@ -1,0 +1,66 @@
+package cn.rkylin.oms.system.messageDefine.vo;
+
+import org.apache.commons.lang.StringUtils;
+
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE;
+
+public class MessageDefineVo extends OMS_MESSAGE {
+	/**
+	* 序列
+	*/
+	private static final long serialVersionUID = 7261100665980740680L;
+	
+	/**
+	* orderBy子句
+	*/
+	private String orderBy;
+	/*
+	 * 列表操作按钮定义
+	 */
+	private static final String OPERATION_BTN_EDIT = "<button onclick=\"operationEdit(\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',this)\" MessageID=\"%s\" type=\"button\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-edit\"></i>&nbsp;修改</button>";
+	private static final String OPERATION_BTN_DELETE = "<button onclick=\"operationDelete(this)\" MessageID=\"%s\" type=\"button\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash-o\"></i>&nbsp;删除</button>";
+	private static final String OPERATION_BTN_ENABLE = "<button onclick=\"operationEnable(\'%s\',this)\" MessageID=\"%s\" type=\"button\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-edit\"></i>&nbsp;启用</button>";
+
+	/**
+	* 搜索条件
+	*/
+	private String searchCondition;
+	/**
+	 * 操作
+	 */
+	private String operation;
+	
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(String operation1) {
+		StringBuffer opButton = new StringBuffer();
+		if (StringUtils.isNotEmpty(getMsgId())) {
+				opButton.append(String.format(OPERATION_BTN_EDIT, getMsgId(),getMsgCode(),getMsgName(),getSendWay(),getTitle(),getEnabled(),getTemplate(),getRetries(), getMsgId()));
+				opButton.append("&nbsp;");
+				opButton.append(String.format(OPERATION_BTN_ENABLE,getEnabled(), getMsgId()));
+				opButton.append("&nbsp;");
+				opButton.append(String.format(OPERATION_BTN_DELETE, getMsgId()));
+				opButton.append("&nbsp;");
+		}
+		this.operation = opButton.toString();;
+	}
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
+	}
+
+}

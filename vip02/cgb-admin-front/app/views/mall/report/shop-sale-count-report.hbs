@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}商户销售统计报表{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"YG06",
+            "reportCode":"YG06,YG10,YG14"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

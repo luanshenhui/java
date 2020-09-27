@@ -1,0 +1,2 @@
+select YYYYMM,INCOME,COST from ST_OPERATE_INFO
+order by YYYYMM

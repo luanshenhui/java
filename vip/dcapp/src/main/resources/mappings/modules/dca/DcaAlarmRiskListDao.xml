@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.risklist.dao.DcaAlarmRiskListDao">
+    
+	<sql id="dcaAlarmRiskListColumns">
+		a.RISK_ID AS "riskId",
+		a.RISK_NAME AS "riskName",
+		a.POWER_ID AS "powerId",
+		a.RISK_TASK AS "riskTask",
+		a.RISK_CONTENT AS "riskContent",
+		a.RISK_LEVEL AS "riskLevel",
+		a.MEASURE AS "measure",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks",
+		a.RISK_TYPE AS "riskType"
+	</sql>
+	
+	<sql id="dcaAlarmRiskListJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaAlarmRiskList">
+		SELECT 
+			<include refid="dcaAlarmRiskListColumns"/>
+		FROM DCA_ALARM_RISK_LIST a
+		<include refid="dcaAlarmRiskListJoins"/>
+		WHERE a.RISK_ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="DcaAlarmRiskList">
+		SELECT 
+			<include refid="dcaAlarmRiskListColumns"/>
+		FROM DCA_ALARM_RISK_LIST a
+		<include refid="dcaAlarmRiskListJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="powerId != null and powerId != ''">
+				AND a.POWER_ID = #{powerId}
+			</if>
+			<if test="riskType != null and riskType != ''">
+				AND a.RISK_TYPE = #{riskType}
+			</if>
+			<if test="riskLevel != null and riskLevel != ''">
+				AND a.RISK_LEVEL = #{riskLevel}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaAlarmRiskList">
+		SELECT 
+			<include refid="dcaAlarmRiskListColumns"/>
+		FROM DCA_ALARM_RISK_LIST a
+		<include refid="dcaAlarmRiskListJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO DCA_ALARM_RISK_LIST(
+			RISK_ID,
+			RISK_NAME,
+			POWER_ID,
+			RISK_TASK,
+			RISK_CONTENT,
+			RISK_LEVEL,
+			MEASURE,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS,
+			RISK_TYPE
+		) VALUES (
+			#{riskId},
+			#{riskName},
+			#{powerId},
+			#{riskTask},
+			#{riskContent},
+			#{riskLevel},
+			#{measure},
+			#{delFlag},
+			#{createPerson},
+			SYSDATE,
+			#{updatePerson},
+			SYSDATE,
+			#{remarks},
+			#{riskType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE DCA_ALARM_RISK_LIST SET 	
+			POWER_ID = #{powerId},
+			RISK_NAME = #{riskName},
+			RISK_TASK = #{riskTask},
+			RISK_CONTENT = #{riskContent},
+			RISK_LEVEL = #{riskLevel},
+			RISK_TYPE = #{riskType},
+			MEASURE = #{measure},
+			UPDATE_DATE = SYSDATE,
+			UPDATE_PERSON = #{updatePerson}
+		WHERE RISK_ID = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE DCA_ALARM_RISK_LIST SET 
+			DEL_FLAG = #{DEL_FLAG_DELETE}
+		WHERE RISK_ID = #{id}
+	</update>
+	
+	<!-- 根据风险名称和权力查询 -->
+	<select id="getByName" resultType="DcaAlarmRiskList">
+		SELECT 
+			<include refid="dcaAlarmRiskListColumns"/>
+		FROM DCA_ALARM_RISK_LIST a
+			<include refid="dcaAlarmRiskListJoins"/>
+		WHERE a.DEL_FLAG = #{DEL_FLAG_NORMAL} 
+		  AND a.RISK_NAME = #{riskName} 
+		  AND a.POWER_ID = #{powerId}
+	</select>
+	
+	<select id="getRiskByPowerId" resultType="DcaAlarmRiskList">
+		SELECT a.RISK_ID AS "riskId", a.RISK_NAME AS "riskName"
+		FROM DCA_ALARM_RISK_LIST a
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="powerId != null and powerId != ''">
+				AND a.POWER_ID = #{powerId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 获取风险清单数量（首页用） add by liuchang 20161228  -->
+	<select id="getRiskListCount" resultType="java.lang.Integer">
+		SELECT COUNT(RISK_ID)
+		FROM DCA_ALARM_RISK_LIST
+		WHERE
+			DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="updateDate != null and updateDate != ''">
+				AND 
+				TRUNC(UPDATE_DATE,'mi') <![CDATA[ <= ]]> #{updateDate}
+			</if>
+	</select>
+</mapper>

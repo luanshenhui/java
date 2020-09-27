@@ -1,0 +1,79 @@
+String和StringBuilder和stringBuffered区别
+string字符串长度不可以改变
+StringBuilder和StringBuilder长度是可以改变的
+StringBuilder是在java1.5之后才有 然后stringBuffered的执行
+效率比较高 但是线程不安全   stringBuffered是线程安全的但是执行效率比较慢
+工作中比较常用的是StringBuilder
+
+
+StringBuilder
+和String不同，该类的实例封装了一个可变字符序列。
+当我们需要对一个字符串进行频繁修改的时候，应首先选取该类来完成。
+常用构造方法:
+StringBuilder():
+创建一个不含有任何字符的StringBuilder
+
+StringBuilder(String str)
+创建一个包含str字符串的StringBuilder
+
+StringBuilder提供了用于修改字符串内容的方法:
+append():向当前字符串末尾追加新内容
+delete():删除字符串中的部分内容
+insert():向字符串的指定位置插入新内容
+replace():替换字符串中部分内容为新内容
+reverse()反转
+
+StringBuffer
+用法和功能与StringBuilder一模一样。
+StringBuffer是线程安全的。
+
+Date类
+Date类的实例用于描述一个日期和时间
+在以后的开发中，我们仅仅使用该类的实例去描述一个时间。对于时间的操作，我们不要再使用该类来完成。
+Date的设计存在千年虫问题。
+
+构造方法
+Date():创建一个用于描述当前系统时间的             Date对象
+Date重写了toString方法，该方法返回的字符串是用来描述它所描述的时间的。
+
+常用方法:
+long getTime():获取当前对象描述的时间的毫                  秒值
+所谓时间的毫秒值指的是从1970年的1月1日的0点0分0秒到这个时间点的毫秒值。
+
+
+SimpleDateFormat
+该类可以在Date与String之间相互转换。
+可以根据我们希望的格式将日期转换为字符串，反之也可以。
+
+DateFormat
+DateFormat是SimpleDateFormat的父类
+创建实例不需要使用new,而是使用该类提供的一个工厂方法
+也是用于将Date转换为字符串但是功能没有SimpleDateFormat强大。
+可以根据给定的地区返回这个地区使用的日期格式
+Calendar类 日历类
+可以方便的计算日期或者获取日期的信息
+Calendar是一个抽象类，所以本身不能实例化
+它有很多子类，最常用的为GregorianCalendar(格里高利历)
+
+Calendar calendar = Calendar.getInstance()
+
+Calendar的set方法。用于设置时间信息
+set(int field,int value)
+field:对应Calendar的常量，设置的时间单位
+value:对应的是这个时间单位的值
+
+
+get方法
+int get(int field)
+field:对应Calendar常量，设置时间的单位
+该方法获取对应时间单位上的值
+
+Calendar计算时间的方法add()
+add(int field,int value)
+对给定的时间单位“加”上给定的值
+
+
+
+
+
+

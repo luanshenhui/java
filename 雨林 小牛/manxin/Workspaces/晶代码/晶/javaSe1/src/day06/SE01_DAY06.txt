@@ -1,0 +1,111 @@
+Set集合
+Set集有别于List集最大的特点的是不存放相同的元素
+Set集合不能通过索引的形式获取元素。
+常见的实现类
+HashSet:使用散列算法实现的Set集合
+TreeSet:使用二叉树算法实现的Set集合
+
+遍历Set集合的元素只有一种方式。
+迭代器。Set集合不支持索引，也不具备List集合的get方法。
+
+hashcode方法与HashSet之间的关系
+HashSet在存放某个元素时，会先获取该元素的hashcode值，然后进行一系列的运算，之后确定将元素存放在什么位置。
+
+这里通过的算法确定位置，算法就是“散列算法”。
+
+可以看出，一个元素要想存入HashSet需要依赖hashcode()方法的返回值
+hashcode()方法时Object定义的方法
+所有类都具有该方法。
+我们应该妥善的重写hashcode()方法。
+
+javaAPI中对重写该方法有说明:
+若我们重写了equals()方法，就应该重写hashcode()方法。
+
+hashcode()方法应与equals()方法返回一致。
+即:当两个对象equals()方法返回true时，hashcode的返回值应该相同。
+
+在对象没有修改的前提下，多次调用hashcode方法返回的数字不应该发生改变。
+
+当两个对象的equals方法返回false时,hashcode值不是必须不同的。
+
+根据HashSet实现原理可以看出，若不同对象的hashcode值都相同，那么使用HashSet的效率会大大的降低。
+
+数据结构
+Map
+一种以键值(key-value)对的形式存放数据的结构。
+Map的存储要求是，key不能重复。
+
+最常用实现类
+HashMap:以散列算法实现的Map
+TreeMap:以二叉树算法实现的Map
+
+Map的存取元素的方法
+
+V put(K k,V v):
+ 将key-value对存入Map。若Key值已经在Map中存在的话，那么就将Value值替换。
+返回值则是被替换的Value，若该Key不存在，则将Value存入，返回值为null。
+
+V get(Object k)
+  根据给定的key值获取对应的Value.
+  若当前给定的key在Map中不存在，则返回null
+
+boolean containsKey(Object key)
+查看当前Map中是否包含给定的key
+包含返回true
+
+
+boolean containsValue(Object value)
+查看当前Map中是否包含给定的Value
+包含返回true
+
+HashSet实际上使用HashMap实现的。
+当我们将一个元素add到HashSet中时，
+HashSet将这个元素作为key存入了HashMap
+因为HashMap对key的要求是不重复且存放顺序与获取顺序不同，正好满足Set集合的特征。
+
+HashMap要求Key对象在hashCode值不发生改变的情况下，只能保存一次。
+
+HashMap的性能
+Capacity 容量:HashMap的散列数组的大小。
+
+Initial capacity 初始容量:
+   创建HashMap实例时，默认创建的散列数组的大小。默认为16。可以改变。但一般不会这样做。
+
+Size 大小:
+   HashMap中存储的数据总数。
+
+load factor 加载因子:
+   加载因子的值默认为0.75。这是一个比值，size/capacity。当size与capacity的比值大于0.75时，hashmap会对散列数组进行扩容，并重新分配内部元素位置(重新散列rehash)。rehash是需要消耗一定的性能的。应减少rehash的次数来提高性能。
+
+遍历Map
+遍历Map有三种方式:
+1:遍历Map中所有的key
+2:遍历Map中所有的键值对(Entry)
+3:遍历Map中所有的value(不常用)
+
+1:遍历Map中的所有key
+
+public Set keySet()
+调用keySet()方法会返回一个Set集合的实例，其中保存的元素为Map中的所有key
+
+2:遍历Map中的所有键值对Entry
+public Set entrySet()
+调用entrySet()方法会返回一个Set集合的实例，其中保存的元素为Map中的每一组键值对，每个键值对用一个Entry实例保存。
+
+java设计模式
+单例模式 singleton
+保证该类只可能有一个实例。
+通常单例模式用于对该实例共享。或者因为该类实例较为消耗资源，一个实例足以满足应用等情况下使用。
+
+模板模式
+定义某一个业务的流程骨架，而将不同的细节操作留给子类去实现。
+
+
+如果你想调用方法   那么必须创建对象   这样的话对栈内存的压力是非常大的
+
+
+
+
+
+
+

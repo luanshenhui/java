@@ -1,0 +1,74 @@
+<div class="modal partition-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <strong>{{title}}</strong>
+    </div>
+    <form class="form form-aligned gift_partition-form-add">
+        <input type="hidden" class="type-type" value="{{data.espAreaInfModel.integralType}}"/>
+        <input type="hidden" name="id" value="{{data.espAreaInfModel.id}}"/>
+        <div class="modal-body partition-info" data-data="{{json data}}">
+
+            <div class="control-group">
+                <label for="areaId"><em>*</em>分区代码：</label>
+                {{#equals "新增礼品分区" title}}
+                <input id="areaId" name="areaId" type="text" class="gift_partition_add form-control input-width-200 js-partition-code" pattern="^\d{2}$"
+                       value="{{data.espAreaInfModel.areaId}}" {{#if data.espAreaInfModel.areaId}}readonly{{/if}} maxlength="2" required>
+                <span class="note-error-empty"><i>&times;</i> 请输入两位数字</span>
+                <span class="note-error"><i>&times;</i> 请输入两位数字</span>
+                {{else}}
+                <input id="areaId" name="areaId" type="text" class="gift_partition_add form-control input-width-200"
+                       value="{{data.espAreaInfModel.areaId}}" {{#if data.espAreaInfModel.areaId}}readonly{{/if}} maxlength="2" required>
+                {{/equals}}
+            </div>
+            <div class="control-group">
+                <label for="areaName"><em>*</em>分区名称：</label>
+                {{#equals "新增礼品分区" title}}
+                <input id="areaName" name="areaName" type="text" class="gift_partition_add form-control input-width-200 js-partition-name"
+                       value="{{data.espAreaInfModel.areaName}}" {{#if data.espAreaInfModel.areaName}}readonly{{/if}} maxlength="20" required>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                {{else}}
+                <input id="areaName" name="areaName" type="text" class="gift_partition_add form-control input-width-200"
+                       value="{{data.espAreaInfModel.areaName}}" {{#if data.espAreaInfModel.areaName}}readonly{{/if}} maxlength="20" required>
+                {{/equals}}
+            </div>
+            <div class="control-group">
+                <label for="integralType"><em>*</em>积分类型：</label>
+                    <select class="form-control select js-point-type-selected select-style" name="integralType" required >
+                        <option value="" >请选择</option>
+                    </select>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="formatId"><em>*</em>限第三级卡产品编码：</label>
+                <textarea class="form-control form-area js-formatCode" id="formatId" name="formatId" required  maxlength="5000" pattern="^WWWW|^(\d{4}\,)*?\d{4}$">{{data.espAreaInfModel.formatId}}</textarea>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error"><i>&times;</i> 输入格式不正确</span>
+            </div>
+            <div class="control-group">
+                <label for="areaSeq"><em>*</em>显示顺序：</label>
+                <input id="areaSeq" name="areaSeq" type="text" class="gift_partition_add form-control input-width-200 js-partition-sort" pattern="^[1-9]\d*$" required
+                       value="{{data.espAreaInfModel.areaSeq}}" maxlength="2" >
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error"><i>&times;</i> 输入格式不正确</span>
+            </div>
+            <div class="control-group">
+                <label for="areaDesc">分区备注：</label>
+                <textarea class="form-control form-area" id="areaDesc" name="areaDesc" maxlength="150">{{data.espAreaInfModel.areaDesc}}</textarea>
+            </div>
+            {{#equals "编辑礼品分区" title}}
+            <div class="control-group">
+                <label for="modifyOper">最近修改用户：</label>
+                <input id="modifyOper" name="modifyOper" type="text" class="gift_partition_add form-control input-width-200" value="{{data.espAreaInfModel.modifyOper}}" readonly required>
+            </div>
+            <div class="control-group">
+                <label for="modifyTime">最近修改时间：</label>
+                <input id="modifyTime" type="text" class="gift_partition_add form-control input-width-200" value="{{formatDate data.espAreaInfModel.modifyTime}}" readonly required>
+            </div>
+            {{/equals}}
+            <div class="add-footer">
+                <input type="submit" class="btn btn-success btn-left" value="保存">
+                <button class="btn btn-info btn-right close">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>

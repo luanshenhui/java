@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yulin.searchMapping">
+	<select id="findSearch" parameterType="com.yulin.dangdang.bean.SearchKey"
+		 resultMap="Product">
+			select * from d_product p join d_book b on p.id=b.id
+		<where>
+			<if test="product_name != null">product_name like #{product_name}</if>
+			<if test="description != null"> and description like #{description}</if>
+			<if test="author != null"> and author like #{author}</if>
+			<if test="publishing != null"> and publishing like #{publishing}</if>
+			<if test="which_edtion != null"> and which_edtion like #{which_edtion}</if>
+			<if test="isbn != null"> and isbn like #{isbn}</if>
+			<if test="catalogue != null"> and catalogue like #{catalogue}</if>
+			<if test="print_number != null"> and print_number like #{print_number}</if>
+		</where>
+			
+	</select>
+</mapper>

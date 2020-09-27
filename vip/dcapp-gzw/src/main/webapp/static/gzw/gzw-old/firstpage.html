@@ -1,0 +1,584 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>大数据首页</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="js/jquery-1.8.3.js"></script>
+	<script src="js/echarts.min.js"></script>
+</head>
+
+<body>
+<div class="wrap">
+	<div class="container">
+        <div class="header">
+            <h1 class="header-log"><a href="/a" target="_blank" style="cursor:pointer"><img src="./image/logo.png"></a></h1>
+            <div class="header-btn"><img src="./image/header-icon-start.png"><span>自动播放</span></div>
+            <div class="header-nav header-nav-spac">
+                <ul class="header-nav-btn">
+                    <li class="next disable"><a href="javascript:void(0)" >&gt;</a></li>
+                    <li class="prev"><a href="javascript:void(0)" >&lt;</a></li>
+                </ul>
+				<ul>
+					<li><a href="gzw-businessDataVolume.html" title="融合分析"><i></i>融合分析</a> </li>
+					<li><a href="gzw-threeImportant1.html" title="三重一大">三重一大</a> </li>
+					<li><a href="javascript:void(0)" title="财务分析" >财务分析</a> </li>
+					<li><a href="javascript:void(0)" title="产权分析"  >产权分析</a> </li>
+				</ul>
+            </div>
+            <div class="header-nav">
+                <ul>
+                    <li><a href="gzw-SupervisoryDutiy.html" title="监管职责"><i></i>监管职责</a> </li>
+                    <li><a href="gzw-workflowInstruction.html" title="流程说明">流程说明</a> </li>
+                    <li><a href="javascript:void(0)" title="风险点" >风险点</a> </li>
+                </ul>
+            </div>
+        </div>
+		<div class="box">
+			<div class="left m-r-20">
+				<div class="small-box">
+					<img src="image/pic0.png" alt="" class="small-box-img1"/>
+				</div>
+				<div class="small-box">
+					<div class="l-title">
+						<span>风险等级 / 告警等级</span>
+						<p class="right">
+							<span class="end"></span><span class="m-r-20">已处理</span>
+						</p>
+					</div>
+					<div class="l-content line">
+						<div>红色<span class="red-font">风险</span>
+						<p>
+							<span class="line-font green wh50">75</span>
+							<span class="line-font red wh50 ml-10"></span>
+						</p>
+						<span class="right m-r-20">126</span>
+						</div>
+						<div>橙色<span class="red-font">风险</span>
+						<p>
+						<span class="line-font green wh45">48</span>
+						<span class="line-font orange wh45 ml-10"></span>
+						</p>
+
+						<span class="right m-r-20">107</span>
+						</div>
+						<div>黄色<span class="red-font">风险</span>
+						<p>
+						<span class="line-font green wh60">92</span>
+						<span class="line-font yellow wh40 ml-10"></span>
+						</p>
+						<span class="right m-r-20">126</span>
+						</div>
+					</div>
+					<div class="l-content m-t-15">
+						<div>红色<span class="red-font">告警</span>
+						<p>
+							<span class="line-font green wh50">75</span>
+							<span class="line-font red wh50 ml-10"></span>
+						</p>
+
+						<span class="right m-r-20">126</span>
+						</div>
+
+						<div>橙色<span class="red-font">告警</span>
+						<p>
+						<span class="line-font green wh45">48</span>
+						<span class="line-font orange wh45 ml-10"></span>
+						</p>
+
+						<span class="right m-r-20">107</span>
+						</div>
+						<div>黄色<span class="red-font">告警</span>
+						<p>
+						<span class="line-font green wh60">92</span>
+						<span class="line-font yellow wh40 ml-10"></span>
+						</p>
+						<span class="right m-r-20">126</span>
+						</div>
+					</div>
+				</div>
+				<div class="small-box">
+					<p class="title">数据引擎监控情况</p>
+					<img src="image/pic1.png" alt="" class="small-box-img3"/>
+				</div>
+			</div>
+	        <div class="center-box left">
+	        	<div class="c-logo"><span>业务综合效能分析</span></div>
+				<div class="center-box-container" id="center-form"></div>
+	        </div>
+	        <div class="right m-l-20">
+	        	<div class="small-box small-box4" >
+					<p class="title">告警风险对比
+						<span class="alarm"><i></i>告警</span>
+						<span class="risk"><i></i>风险</span>
+
+					</p>
+					<div class="small-box-form" id="small-box-form4"></div>
+				</div>
+				<div class="big-box">
+					<p class="title">各专委会风险状况</p>
+					<div class="small-box-form6" id="small-box-form6" ></div>
+				</div>
+
+	        </div>	
+		</div>
+		<div class="clear"></div>
+		<div class="footer">截至2016年12月23日 12：00：00</div>
+	    	
+    </div>
+</div>
+<script>
+	var myChart = echarts.init(document.getElementById('small-box-form6'));
+
+	// 指定图表的配置项和数据
+	var data = [
+		[[35,50,2000000000,'投资运营','投资运营']],[[45,65,4000000000,'绩效考核','绩效考核']],[[55,38,2000000000,'产权管理','产权管理']],
+		[[10,25,1000000000,'财务监督','财务监督']],[[35,30,5000000000,'改革重组','改革重组']],[[14,58,5000000000,'经营性资产监管','经营性资产监管']]
+	];
+
+	var option6 = {
+
+		legend: {
+			right: 10,
+			data: ['投资运营', '绩效考核','产权管理','财务监督','改革重组','经营性资产监管'],
+			padding: [400,  // 上
+				0, // 右
+				5,  // 下
+				0, // 左
+			],left:'40',textStyle:{
+				fontSize:'20',
+				color:'#fff'
+			},itemGap:25
+		},
+		xAxis: {
+			axisTick:{
+				show: false
+			},
+			axisLabel:{
+				show: false
+			},
+			axisLine:{
+				show: false
+			},
+			splitLine:{
+				show:false
+			}
+		},
+		yAxis: {
+			axisTick:{
+				show: false
+			},
+			axisLabel:{
+				show: false
+			},
+			axisLine:{
+				show: false
+			},
+			splitLine:{
+				show:false
+			}
+		},
+		series: [{
+			name: '投资运营',
+			data: data[0],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]) / 5e2;
+			},
+			label: {
+				normal:{textStyle:{fontSize:'20'},show:true,
+					formatter: function () {
+						return 20;
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top',
+
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: 'rgb(25, 183, 207)'
+					}, {
+						offset: 1,
+						color: 'blue'
+					}])
+				}
+			}
+		}, {
+			name: '绩效考核',
+			data: data[1],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]) / 5e2;
+			},
+			label: {
+				normal:{textStyle:{fontSize:'20'},show:true,
+					formatter: function () {
+						return 40;
+					}
+				},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: '#77dfee'
+					}, {
+						offset: 1,
+						color: '#04798a'
+					}])
+				}
+			}
+		}, {
+			name: '产权管理',
+			data: data[2],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]) / 5e2;
+			},
+			label: {
+				normal:{textStyle:{fontSize:'20'},show:true,
+					formatter: function () {
+						return 20;
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: '#f6c1f7'
+					}, {
+						offset: 1,
+						color: '#9006b3'
+					}])
+				}
+			}
+		}, {
+			name: '财务监督',
+			data: data[3],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]) / 5e2;
+			},
+			label: {
+				normal:{textStyle:{fontSize:'20'},show:true,
+					formatter: function () {
+						return 10;
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(120, 36, 50, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: '#5ef69b'
+					}, {
+						offset: 1,
+						color: '#037a33'
+					}])
+				}
+			}
+		}, {
+			name: '改革重组',
+			data: data[4],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]) / 5e2;
+			},
+			label: {
+				normal:{textStyle:{fontSize:'20'},show:true,
+					formatter: function () {
+						return 50;
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: 'yellow'
+					}, {
+						offset: 1,
+						color: '#ff0000'
+					}])
+				}
+			}
+		}, {
+			name: '经营性资产监管',
+			data: data[5],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]) / 5e2;
+			},
+			label: {
+				normal:{textStyle:{fontSize:'20'},show:true,
+					formatter: function () {
+						return 50;
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: '#f7c1cc'
+					}, {
+						offset: 1,
+						color: '#ff0000'
+					}])
+				}
+			}
+		}]
+	};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option6);
+	var targetElement = echarts.init(document.getElementById("center-form"));
+	var targetElement4 = echarts.init(document.getElementById("small-box-form4"));
+	var option = {
+		tooltip: {},
+		radar: {
+			indicator:
+					[
+				{ name: '管理类风险', max: 400},
+				{ name: '时效类风险', max: 400},
+				{ name: '监督类风险', max: 400},
+				{ name: '执行类风险', max: 400},
+				{ name: '效能类风险', max: 400},
+				{ name: '调查类风险', max: 400},
+				{ name: '决策类风险', max: 400}
+
+			],
+			splitNumber:4,
+			splitArea: {
+				areaStyle: {
+					color: '#161617',
+					shadowColor: '#161617',
+					shadowBlur: 10
+				}
+			}
+		},
+		textStyle:{fontSize:'24',color:'#fff'},
+		series: [{
+			name: '预算 vs 开销（Budget vs spending）',
+			type: 'radar',
+
+			tooltip: {
+				trigger: 'item'
+			},
+			itemStyle: {
+				normal: {
+					areaStyle: {type: 'default'},
+				}
+			},
+			data : [
+				{
+					value : [300, 180, 220, 200, 200, 300,80,210],
+					areaStyle:{
+						normal: {
+							opacity: 0.5,
+							color:'#9f6bfe'
+						}
+					},
+					lineStyle:{normal:{color:'#038cec'}},
+					itemStyle:{
+						normal:{
+							color:'#ff0000',
+							borderWidth:10,
+							borderType:'dashed',
+							shadowColor: 'yellow',
+							shadowBlur: 5,
+							opacity:1
+						}
+					}
+				}
+			]
+		}]
+	};
+	var option1 = {
+
+		tooltip : {
+			trigger: 'axis'
+		},
+		calculable : true,
+		xAxis : [
+			{
+				type : 'category',
+				data : ['1','2','3','4'],
+				name:'季度',
+				nameTextStyle:{
+					fontSize:12
+				}
+
+			}
+		],
+		yAxis : [
+			{
+				type : 'value',name:'数量',
+				nameTextStyle:{
+					fontSize:12
+				}
+			}
+		],textStyle:{fontSize:"20",color:"#fff"},
+		series : [
+			{
+				name:'告警',
+				type:'bar',
+				data:[10,20,30,50],
+				itemStyle:{
+					normal:{
+						color:'#ff0000'
+					}
+				}
+			},
+			{
+				name:'风险',
+				type:'bar',
+				data:[20,22,30,20],
+				itemStyle:{
+					normal:{
+						color:'#007498'
+					}
+				}
+			}
+		]
+	};
+	targetElement.setOption(option);
+//    targetElement4.setOption(option1);
+
+
+    $(function () {
+		$.getJSON("/a/index/api",{
+
+			ds:'dcapp',
+
+			fn:'gzw_demo_test_2.sql',
+
+//            arg:['thinkgem','huangr']
+
+			'arg[]':''
+
+		},function (res1) {
+
+			console.info("============",res1);
+
+			var val = res1[0].T1.split(',');
+
+//		for(var  k  in res1[0]){
+//			val.push(res1[0][k])
+//		}
+
+
+
+
+			var     option3 = {
+
+				tooltip : {
+					trigger: 'axis'
+				},
+				calculable : true,
+				xAxis : [
+					{
+						type : 'category',
+						data : ['1','2','3','4'],
+						name:'季度',
+						nameTextStyle:{
+							fontSize:12
+						}
+
+					}
+				],
+				yAxis : [
+					{
+						type : 'value',name:'数量',
+						nameTextStyle:{
+							fontSize:12
+						}
+					}
+				],textStyle:{fontSize:"20",color:"#fff"},
+				series : [
+					{
+						name:'告警',
+						type:'bar',
+						data:val,
+						itemStyle:{
+							normal:{
+								color:'#ff0000'
+							}
+						}
+					},
+					{
+						name:'风险',
+						type:'bar',
+						data:[20,22,30,20],
+						itemStyle:{
+							normal:{
+								color:'#007498'
+							}
+						}
+					}
+				]
+			};
+
+			targetElement4.setOption(option3);
+		})
+	})
+
+</script>
+</body>
+</html>

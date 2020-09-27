@@ -1,0 +1,14 @@
+﻿<script language= "javascript" src="../orden/confirm.js"></script>
+<form id="formConfirm" class="form_template">
+<input type="hidden" name="ordenConfirmID" id="ordenConfirmID"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label lblMemo"></td>
+		<td><textarea id="memo" name="memo" class="editor"></textarea></td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="btnSubmitConfirm"/> <a id="btnCancelConfirm"/>
+</div>
+</form>

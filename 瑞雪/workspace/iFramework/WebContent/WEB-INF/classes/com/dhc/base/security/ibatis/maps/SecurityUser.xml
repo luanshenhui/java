@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SecurityUser">
+
+  <resultMap id="securityUserResult" class="com.dhc.base.security.SecurityUser">
+    <result property="userName" column="username" columnIndex="1"/>
+    <result property="passWord" column="password" columnIndex="2"/>
+  </resultMap>
+  <select id="sercurity_getUserByUsername" resultMap="securityUserResult">
+  	select
+          USER_ID username,
+          USER_PASSWORD password
+    from WF_ORG_USER
+    where USER_ID = #username#
+  </select>  
+  <update id="sercurity_changePassword" parameterClass="com.dhc.base.security.SecurityUser">
+    update WF_ORG_USER
+    set USER_PASSWORD = #passWord#
+    where USER_ID = #username#
+  </update>
+  
+</sqlMap>

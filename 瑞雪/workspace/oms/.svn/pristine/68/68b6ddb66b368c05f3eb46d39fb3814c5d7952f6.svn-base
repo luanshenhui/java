@@ -1,0 +1,28 @@
+package cn.rkylin.oms.system.role.dao;
+
+import java.util.List;
+
+
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.role.domain.WF_ORG_USER_ROLE;
+
+public interface IRoleDAO {
+
+	List getRoleByCondition(WF_ORG_ROLE unitParam, int page, int rows) throws Exception;
+
+	void insert(String string, WF_ORG_ROLE ur) throws Exception;
+
+	List getRoleByCondition(WF_ORG_ROLE roleParam) throws Exception;
+
+	void insertUserRole(String string, WF_ORG_USER_ROLE ur) throws Exception;
+	
+	void delete(String stationParam,String string)throws Exception;
+	
+	WF_ORG_ROLE findByid(String stationParam,String roleId) throws Exception; 
+	
+	void update(WF_ORG_ROLE roleParam) throws Exception;
+
+	List getAllRoles(WF_ORG_ROLE roleVO) throws Exception; 
+	
+	List getRoleByIDs(WF_ORG_ROLE roleVO) throws Exception;
+}

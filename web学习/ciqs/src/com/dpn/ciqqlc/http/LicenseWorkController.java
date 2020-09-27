@@ -1,0 +1,580 @@
+package com.dpn.ciqqlc.http;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.FormBodyPart;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.util.JSONPObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.dpn.arch.sdk.model.DpnArchSdkModel.JSON;
+import com.dpn.ciqqlc.common.util.Constants;
+import com.dpn.ciqqlc.common.util.DateUtil;
+import com.dpn.ciqqlc.common.util.FileUtil;
+import com.dpn.ciqqlc.common.util.PageBean;
+import com.dpn.ciqqlc.service.Quartn;
+import com.dpn.ciqqlc.standard.model.CheckDocsRcdModel;
+import com.dpn.ciqqlc.standard.model.FileInfoDto;
+import com.dpn.ciqqlc.standard.model.HygieneLicenseEventDto;
+import com.dpn.ciqqlc.standard.model.LicenseDecDTO;
+import com.dpn.ciqqlc.standard.model.UserInfoDTO;
+import com.dpn.ciqqlc.standard.service.CommonService;
+import com.dpn.ciqqlc.standard.service.CompleteProcessDbService;
+import com.dpn.ciqqlc.standard.service.DeclareService;
+import com.dpn.ciqqlc.standard.service.ExpFoodProdService;
+import com.dpn.ciqqlc.standard.service.LicenseDecDbService;
+import com.dpn.ciqqlc.standard.service.LicenseWorkService;
+import com.dpn.ciqqlc.standard.service.OrigPlaceFlowService;
+
+
+/**
+ * LicenseWorkControllers.
+ * 
+ * @author LiuChao
+ * @since 1.0.0
+ * @version 1.0.0
+ */
+
+@Controller
+@RequestMapping(value="/work")
+public class LicenseWorkController {
+
+	/**
+     * logger.
+     * 
+     * @since 1.0.0
+     */
+    private final Logger logger_ = LoggerFactory.getLogger(this.getClass());
+    
+    /**
+     * DbServ.
+     * 
+     * @since 1.0.0
+     */
+    @Autowired
+    @Qualifier("licenseWorkService")
+    private LicenseWorkService licenseWorkService = null;
+    @Autowired
+    private Quartn quartnService;
+    @Autowired
+	private CommonService commonServer = null; 
+    @Autowired
+	private OrigPlaceFlowService origPlaceFlowService = null;
+    @Autowired
+    private LicenseDecDbService licenseDecDbService = null;
+    @Autowired
+    private CompleteProcessDbService completeProcessDbService = null;
+    @Autowired
+    @Qualifier("expFoodProdDb")
+    private ExpFoodProdService dbServ = null;
+    @Autowired
+	private DeclareService declareService = null;
+    
+    /**
+     * 获取当前登录用户
+     * @param request
+     * @return
+     */
+    UserInfoDTO getUser(HttpServletRequest request){
+    	Object userObj = request.getSession().getAttribute(Constants.USER_KEY);
+    	if(null != userObj){
+    		return (UserInfoDTO)userObj;
+    	}
+    	return new UserInfoDTO();
+    }
+   /************************************工作提醒*********************************************/ 
+    /**
+	 * 工作提醒
+	 * @param request
+	 * @param checkDocsRcd
+	 * @return
+	 */
+    @RequestMapping(value="/alert")
+    public String alert(HttpServletRequest request) {
+    	//LicenseDecDTO licenseDecDTO = new LicenseDecDTO(); 
+    	Map<String,String> map = new HashMap<String,String>();
+    	try {
+    		/*------分页-----*/
+    		int pages = 1;
+            if(request.getParameter("page") != null && !"".equals(request.getParameter("page"))) {
+                pages = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
+            }
+            PageBean page_bean = new PageBean(pages, String.valueOf(Constants.PAGE_NUM));
+    		/*------分页-----*/
+            map.put("firstRcd", String.valueOf((pages-1)*Constants.PAGE_NUM+1));                                     //数据定位
+    		map.put("lastRcd", String.valueOf(pages*Constants.PAGE_NUM+1));
+    		map.put("comp_name", request.getParameter("compName"));//企业名称
+    		map.put("starApproval_date", request.getParameter("starApproval_date"));//开始时间
+    		map.put("endApproval_date", request.getParameter("endApproval_date"));//结束时间
+    		if(request.getParameter("prolong")!=null&request.getParameter("prolong")!=""){
+    			map.put("prolong", request.getParameter("prolong"));//延期
+    		}else{
+    			map.put("prolong", "1");//延期
+    		}
+    		String userDept_code =  getUser(request).getDept_code();
+    		if(userDept_code!=null && userDept_code!=""){
+    			map.put("port_org_code", userDept_code);//受理局
+    			request.setAttribute("admissibleOrgCode", userDept_code);//回显受理局
+    			request.setAttribute("errorInfo", "不能查看其他企业信息");
+    		}else{
+    			map.put("port_org_code", request.getParameter("admissibleOrgCode"));//受理局
+    			request.setAttribute("admissibleOrgCode", request.getAttribute("admissibleOrgCode"));//回显受理局
+    		}
+    		if(!commonServer.isDirectyUnderOrg(request)){
+				map.put("admissible_org_code", commonServer.getOrg_code(request));
+			}
+        	//LicenseDecForm license = new LicenseDecForm();
+    		List list = licenseWorkService.findWorkAlert(map);
+			for (int i = 0; i < list.size(); i++) {
+				LicenseDecDTO dto = (LicenseDecDTO)list.get(i);
+				String approval_users_name = dto.getApproval_users_name();
+				if(approval_users_name !=null){
+					String[] arr = approval_users_name.split(",");
+					String spproval_users_nameStr = "";
+					for (int j = 0; j < arr.length; j++) {
+						if(j==0){
+							spproval_users_nameStr += "组长:"+arr[j]+" ";
+						}else{
+							if(j==1){
+								spproval_users_nameStr +="组员:"+arr[j];
+							}else{
+								spproval_users_nameStr +=","+arr[j];
+							}
+						}
+					}
+					dto.setApproval_users_name2(spproval_users_nameStr);
+				}
+			}
+        	request.setAttribute("alertList", list);
+        	//code
+        	request.setAttribute("portOrgCode", this.declareService.getOrganizeCiq());
+        	//page
+        	int counts=licenseWorkService.findCounts(map);
+        	//分页信息
+        	request.setAttribute("counts", counts);//总条数
+			request.setAttribute("itemInPage", Constants.PAGE_NUM);//每页显示条数
+			request.setAttribute("pages",  pages);
+			request.setAttribute("allPage", counts % page_bean.getPageSize()==0 ? (counts/page_bean.getPageSize()) : (counts/page_bean.getPageSize())+1);
+        	//回显
+			request.setAttribute("starApproval_date", request.getAttribute("starApproval_date"));//回显开始时间
+        	request.setAttribute("endApproval_date", request.getAttribute("endApproval_date"));//回显结束时间
+        	request.setAttribute("compName", request.getAttribute("compName"));//回显企业名称
+        	request.setAttribute("prolong", request.getAttribute("prolong"));//回显延期
+        	
+		} catch (Exception e) {
+			logger_.error("***********/work/alert************",e);
+			//return "/work/alert";
+		}
+    	if(request.getParameter("param_msg")=="Y"){
+    		request.setAttribute("param_msg", "Y");
+    	}if(request.getParameter("param_msg")=="N"){
+    		request.setAttribute("param_msg", "N");
+    	}
+		return "/work/alert";
+	}
+    
+   /* @RequestMapping("/informDoc")
+    public String informDoc(HttpServletRequest request){
+    	request.setAttribute("comp_name", request.getParameter("comp_name"));
+    	return "/work/informDoc";
+    }*/
+    
+    @RequestMapping("/insertProlong")
+    public String insertProlong(HttpServletRequest request){
+    	try {
+    		Map<String,String> map = new HashMap<String,String>();
+        	map.put("prolong", request.getParameter("prolong"));
+        	map.put("id", request.getParameter("id"));
+        	licenseWorkService.updateProlong(map);
+        	UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(
+    				Constants.USER_KEY);
+        	// 更新event表
+    		Map<String, String> eventmap = new HashMap<String, String>();
+    		eventmap.put("licence_id", request.getParameter("license_dno"));
+    		eventmap.put("status", "21");
+    		eventmap.put("opr_psn", user.getId());
+    		licenseDecDbService.insertEvent(eventmap);
+		} catch (Exception e) {
+			return "redirect:/work/alert?param_msg=N";
+		}
+    	return "redirect:/work/alert?param_msg=Y";
+    }
+    
+    /**
+	 * 决定doc提交方法
+	 * @param request
+	 * @param checkDocsRcd
+	 * @return
+	 */
+	@RequestMapping(value = "/submitDoc" ,method = RequestMethod.POST)
+	public String submitDoc(HttpServletRequest request,CheckDocsRcdModel checkDocsRcd,RedirectAttributes attr) {
+		try {
+			if(com.dpn.ciqqlc.common.util.StringUtils.isEmpty(checkDocsRcd.getDocId())){
+				commonServer.insertDocs(checkDocsRcd);
+			}else{
+				commonServer.updateDocs(checkDocsRcd);
+			}
+			attr.addFlashAttribute("msg","success");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+//		return "redirect:/work/flowCardDoc";
+		return "redirect:/work/flow";
+	}
+	
+/*****************************************工作流程*****************************************/	
+	 /**
+		 * 工作流程
+		 * @param request
+		 * @param checkDocsRcd
+		 * @return
+		 */
+	@RequestMapping(value="/flow")
+    public String flow(HttpServletRequest request) {
+    	//LicenseDecDTO licenseDecDTO = new LicenseDecDTO(); 
+    	Map<String,String> map = new HashMap<String,String>();
+    	try {
+    		/*------分页-----*/
+    		int pages = 1;
+            if(request.getParameter("page") != null && !"".equals(request.getParameter("page"))) {
+                pages = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
+            }
+            PageBean page_bean = new PageBean(pages, String.valueOf(Constants.PAGE_NUM));
+    		/*------分页-----*/
+            map.put("firstRcd", String.valueOf((pages-1)*Constants.PAGE_NUM+1));                                     //数据定位
+    		map.put("lastRcd", String.valueOf(pages*Constants.PAGE_NUM+1));
+    		map.put("comp_name", request.getParameter("compName"));//企业名称
+    		map.put("starApproval_date", request.getParameter("starApproval_date"));//开始时间
+    		map.put("endApproval_date", request.getParameter("endApproval_date"));//结束时间
+    		//String userDept_code =  getUser(request).getDept_code();
+//    		if(userDept_code!=null && userDept_code!=""){
+//    			map.put("port_org_code", userDept_code);//受理局
+//    			request.setAttribute("admissibleOrgCode", userDept_code);//回显受理局
+//    			request.setAttribute("errorInfo", "不能查看其他企业信息");
+//    		}else{
+    			map.put("port_org_code", request.getParameter("admissibleOrgCode"));//受理局
+    			request.setAttribute("admissibleOrgCode", request.getAttribute("admissibleOrgCode"));//回显受理局
+//    		}
+        	//LicenseDecForm license = new LicenseDecForm();
+			if(!commonServer.isDirectyUnderOrg(request)){
+				map.put("admissible_org_code", commonServer.getOrg_code(request));
+			}
+    		List list =	licenseWorkService.findWorkFlow(map);
+    		for (int i = 0; i < list.size(); i++) {
+				LicenseDecDTO dto = (LicenseDecDTO)list.get(i);
+				String approval_users_name = dto.getApproval_users_name();
+				if(approval_users_name !=null){
+					String[] arr = approval_users_name.split(",");
+					String spproval_users_nameStr = "";
+					for (int j = 0; j < arr.length; j++) {
+						if(j==0){
+							spproval_users_nameStr += "组长:"+arr[j]+" ";
+						}else{
+							if(j==1){
+								spproval_users_nameStr +="组员:"+arr[j];
+							}else{
+								spproval_users_nameStr +=","+arr[j];
+							}
+						}
+					}
+					dto.setApproval_users_name2(spproval_users_nameStr);
+				}
+			}
+        	request.setAttribute("alertList", list);
+        	//code
+        	request.setAttribute("portOrgCode", this.declareService.getOrganizeCiq());
+        	//page
+        	int counts=licenseWorkService.findFlowCounts(map);
+        	//分页信息
+        	request.setAttribute("counts", counts);//总条数
+			request.setAttribute("itemInPage", Constants.PAGE_NUM);//每页显示条数
+			request.setAttribute("pages",  pages);
+			request.setAttribute("allPage", counts % page_bean.getPageSize()==0 ? (counts/page_bean.getPageSize()) : (counts/page_bean.getPageSize())+1);
+        	//回显
+			request.setAttribute("starApproval_date", request.getAttribute("starApproval_date"));//回显开始时间
+        	request.setAttribute("endApproval_date", request.getAttribute("endApproval_date"));//回显结束时间
+        	request.setAttribute("compName", request.getAttribute("compName"));//回显企业名称
+        	
+		} catch (Exception e) {
+			logger_.error("***********/work/flow************",e);
+			//return "/work/alert";
+		}
+    	if(request.getParameter("param_msg")=="Y"){
+    		request.setAttribute("param_msg", "Y");
+    	}if(request.getParameter("param_msg")=="N"){
+    		request.setAttribute("param_msg", "N");
+    	}
+		return "/work/flow";
+	}
+	
+	@RequestMapping("/acceptFormDoc")
+	public String acceptFormDoc(HttpServletRequest request,LicenseDecDTO licenseDecDTO){
+		List<LicenseDecDTO> list=licenseWorkService.selectFlowCard(licenseDecDTO.getLicense_dno());
+		Map<String,Object> param = new HashMap<String, Object>();
+		try {
+			param.put("ProcMainId", licenseDecDTO.getLicense_dno());
+			param.put("DocType", "D_ACC_FORM");
+			CheckDocsRcdModel doc=quartnService.findOnlyDoc(param);
+			if(null!=doc){
+				list.get(0).setComp_name(doc.getOption4());
+				list.get(0).setContacts_name(doc.getOption7());
+				list.get(0).setContacts_phone(doc.getOption8());
+				list.get(0).setApproval_user(doc.getOption10());
+			}
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonStr = objectMapper.writeValueAsString(doc);//返回字符串，输出
+			request.setAttribute("obj", list.get(0));
+			request.setAttribute("doc", doc);
+			request.setAttribute("jsonStr", jsonStr);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String type = request.getParameter("type");
+		if(type !=null && type.equals("show")){
+			return "/work/acceptForm2";
+		}else{
+			return "/work/acceptForm";
+		}
+	}
+	
+	@RequestMapping("/flowCardDoc")
+	public String flowCard(HttpServletRequest request,@ModelAttribute("msg")String msg){
+		CheckDocsRcdModel model=new CheckDocsRcdModel();
+		model.setProcMainId(request.getParameter("license_dno"));
+		model.setDocType("F_CARD");
+		List<CheckDocsRcdModel> list = new ArrayList<CheckDocsRcdModel>();
+			list =	origPlaceFlowService.getOptionList(model);
+		if(!list.isEmpty()){
+			request.setAttribute("doc", list.get(0));
+			request.setAttribute("msg", "success");
+			return "/work/flowCardList";
+		}else{
+			List<LicenseDecDTO> listnl2=licenseWorkService.selectFlowCard(request.getParameter("license_dno"));
+			List<HygieneLicenseEventDto> listnl=licenseWorkService.selectHygieneCard(request.getParameter("license_dno"));
+			HygieneLicenseEventDto st_0=null;
+			HygieneLicenseEventDto st_1=null;
+			HygieneLicenseEventDto st_2=null;
+			HygieneLicenseEventDto st_3=null;
+			HygieneLicenseEventDto st_4=null;
+			HygieneLicenseEventDto st_5=null;
+			HygieneLicenseEventDto st_6=null;
+			HygieneLicenseEventDto st_18=null;
+			HygieneLicenseEventDto st_19=null;
+			HygieneLicenseEventDto st_20=null;
+//			0：申报，1：受理，2：受理审核，3：人员随机:4：人员随机审核，5：决定，6：决定审批(补发同意)
+//			7：终止申请，8：终止审批，9：补发申请，10补发审批，11：撤销，12：注销，13:整改，
+//			14：现场查验，15：撤销审批，16：注销审批，17：补发不同意,18:材料补正,19企业端提交,20初审
+			for(HygieneLicenseEventDto h:listnl){
+				h.setOpr_date_str(DateUtil.DateToString(h.getOpr_date(),"yyyy-MM-dd HH:mm:ss"));
+				if(h.getStatus().equals("0")){
+					st_0=h;
+				}
+				if(h.getStatus().equals("1")){
+					st_1=h;
+				}
+				if(h.getStatus().equals("2")){
+					st_2=h;
+				}
+				if(h.getStatus().equals("3")){
+					st_3=h;
+				}
+				if(h.getStatus().equals("4")){
+					st_4=h;
+				}
+				if(h.getStatus().equals("5")){
+					st_5=h;
+				}
+				if(h.getStatus().equals("6")){
+					st_6=h;
+				}
+				if(h.getStatus().equals("18")){
+					st_18=h;
+				}
+				if(h.getStatus().equals("19")){
+					st_19=h;
+				}
+				if(h.getStatus().equals("20")){
+					st_20=h;
+				}
+			}
+			model.setProcMainId(request.getParameter("license_dno"));
+			model.setDocType("D_SDHZ");
+			List<CheckDocsRcdModel> sdhzAll=origPlaceFlowService.getOptionList(model);
+			List<CheckDocsRcdModel> sdhz=new ArrayList<CheckDocsRcdModel>();
+			for(CheckDocsRcdModel m:sdhzAll){
+				if(null!=m.getOption20() && m.getOption20().equals("2")){//1企业端发起 2局端可查看
+					sdhz.add(m);
+				}
+			}
+			if(!sdhz.isEmpty()){
+				request.setAttribute("sdhz", sdhz.get(0));
+			}
+			request.setAttribute("st_0", st_0);
+			request.setAttribute("st_1", st_1);
+			request.setAttribute("st_2", st_2);
+			request.setAttribute("st_3", st_3);
+			request.setAttribute("st_4", st_4);
+			request.setAttribute("st_5", st_5);
+			request.setAttribute("st_6", st_6);
+			request.setAttribute("st_18", st_18);
+			request.setAttribute("st_19", st_19);
+			request.setAttribute("st_20", st_20);
+			if(!listnl2.isEmpty()){
+				request.setAttribute("flowCardList", listnl2.get(0));
+			}
+			Map<String,String> map = new HashMap<String,String>();
+    		map.put("id", request.getParameter("id"));
+    		map.put("license_dno", request.getParameter("license_dno"));
+			// 实地审查意见（现场审查组组长）合格或限期整改
+			String option80 = licenseWorkService.getLicenseNoByOptionList(map);
+			if(option80 !=null){
+				if(option80.equals("0")){
+					request.setAttribute("ishg", "合格");
+				}else{
+					request.setAttribute("ishg", "限期整改");
+				}
+			}
+			// 审查组成员
+    		LicenseDecDTO dto = this.completeProcessDbService.findById(map);
+    		if(dto.getApproval_users_name()!=null && !"".equals(dto.getApproval_users_name())){
+				String[] arr = (dto.getApproval_users_name()).split(",");
+				String spproval_users_nameStr = "";
+				for (int j = 0; j < arr.length; j++) {
+					if(j==0){
+						spproval_users_nameStr += "组长:"+arr[j]+" ";
+					}else{
+						if(j==1){
+							spproval_users_nameStr +="组员:"+arr[j];
+						}else{
+							spproval_users_nameStr +=","+arr[j];
+						}
+					}
+				}
+				request.setAttribute("spproval_users_name", spproval_users_nameStr);
+			}
+    		/*// 领取人
+    		CheckDocsRcdModel dto2=new CheckDocsRcdModel();
+        	// 查询营业执照记录
+        	dto2.setProcMainId(request.getParameter("license_dno"));
+    		dto2.setDocType("D_SDHZ");
+    		List<CheckDocsRcdModel> doclist = origPlaceFlowService.getOptionList(dto2);
+    		if(!doclist.isEmpty()){
+    			dto2 = (CheckDocsRcdModel) doclist.get(0);
+    			request.setAttribute("clbzlqr",dto2.getOption9()); 
+    		}*/
+			return "/work/flowCard";
+		}
+	}
+	
+	@RequestMapping("/bookShow")
+	public String bookShow(HttpServletRequest request,String license_dno){
+			request.setAttribute("license_dno", license_dno);
+			return "/work/bookShow";
+	}
+	
+	 /**
+     * 文件上传
+     * @param request
+     * @return
+     */
+    @RequestMapping("/uploadFile")
+    public String uploadImg(HttpServletRequest request,FileInfoDto dto){
+    	try {
+    		String path= FileUtil.uploadOneFile(request);
+    		if(StringUtils.isEmpty(path)){
+    			throw new Exception("上传失败");
+    		}
+    		dto.setFile_location(path);
+//    		dto.setMain_id("D_DF_LC");
+    		UserInfoDTO user=(UserInfoDTO)request.getSession().getAttribute(Constants.USER_KEY);
+    		if(null==user){
+    			throw new Exception("用户失效");
+    		}
+    		dto.setCreate_user(user.getId());
+    		dbServ.saveUpload(dto);
+    		
+    		// 调用局端上传接口
+			Map queryMap = new HashMap();
+			queryMap.put("type", "XKZFILEOUT");
+			String ciqsip = commonServer.getCiqsIp(queryMap);
+			sendPost("http://"+ciqsip+"/ciqs-dec/apps/saveUpload?type=1", new File(path));
+		} catch (Exception e) {
+			logger_.error("***********/expFoodProd/uploadFile************",e);
+			return "error";
+		}
+    	return "redirect:/work/alert";
+	}
+	
+    /**
+     * 向指定 URL 发送POST方法的请求
+     * 
+     * @param url
+     *            发送请求的 URL
+     * @param param
+     *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+     * @return 所代表远程资源的响应结果
+	 * @throws IOException 
+	 * @throws ParseException 
+     */
+    public String sendPost(String url, File file) throws Exception {
+    	String flag = "false";
+    	try {
+            DefaultHttpClient client = new DefaultHttpClient(); // 生成一个http客户端发送请求对象
+            HttpPost httpPost = new HttpPost(url); //设定请求方式
+            httpPost.setEntity(getMutipartEntry(file));
+            HttpResponse httpResponse = client.execute(httpPost); // 发送请求并等待响应
+            // 判断网络连接是否成功
+            if (httpResponse.getStatusLine().getStatusCode() != 200) {
+                 System.out.println("网络错误异常！!!!");
+            }
+            HttpEntity entity = httpResponse.getEntity(); // 获取响应里面的内容
+            flag = "OK";
+            // 得到服务气端发回的响应的内容（都在一个字符串里面）
+          } catch (Exception e) {
+        	  System.out.println(e.getMessage());
+          }
+    	return flag;
+    }
+    
+    private MultipartEntity getMutipartEntry(File file) throws UnsupportedEncodingException {
+        if (file == null) {
+            throw new IllegalArgumentException("文件不能为空");
+        }
+        FileBody fileBody = new FileBody(file);
+        FormBodyPart filePart = new FormBodyPart("file", fileBody);
+        MultipartEntity multipartEntity = new MultipartEntity();
+        multipartEntity.addPart(filePart);
+
+        return multipartEntity;
+    }
+}

@@ -1,0 +1,17 @@
+.cell {
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #fff;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.cell:hover {
+  color: #f39c12;
+  border: 1px solid #f39c12;
+  border-radius: 4px;
+}

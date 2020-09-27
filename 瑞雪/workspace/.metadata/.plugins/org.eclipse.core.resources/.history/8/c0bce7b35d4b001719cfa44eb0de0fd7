@@ -1,0 +1,135 @@
+package cn.rkylin.oms.system.logistics.dao;
+
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.logistics.domain.OMS_LGST;
+import cn.rkylin.oms.system.logistics.vo.LogisticsVO;
+
+/**
+ * <p>
+ * Module : 物流公司管理
+ * </p>
+ * <p>
+ * Description: 物流公司业务对象
+ * </p>
+ * <p>
+ * Remark :
+ * </p>
+ */
+@Repository(value = "lgstDAO")
+public class LogisticsDAOImpl implements ILogisticsDAO {
+	
+	/**
+	 * 自定义baseDao 增删改查方法
+	 */
+	@Autowired
+	protected IDataBaseFactory dao;
+	
+	/**
+	 * 自定义baseDao 增删改查方法
+	 */
+	@Autowired
+	private IDataBaseFactory dataBaseFactory;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getLgstByCondition(OMS_LGST lgstVO, int page, int rows) throws Exception {
+		// List<WF_ORG_ROLE> resultList = new ArrayList();
+		LogisticsVO vo = new LogisticsVO();
+		BeanUtils.copyProperties(lgstVO, vo);
+		return dataBaseFactory.findPage(page, rows, "getLgstByCondition", vo).getList();
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@Override
+	public void delete(String stationParam, String string) throws Exception {
+		dao.delete(stationParam, string);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@Override
+	public List getLgstByCondition(LogisticsVO lgstVO) throws Exception {
+		return dao.findAllList("getLgstByCondition", lgstVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 添加物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@Override
+	public void insert(LogisticsVO lgstVO) throws Exception {
+		dao.insert("insertLgst", lgstVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	public OMS_LGST findByid(String lgstId) throws Exception {
+		List<LogisticsVO> resultList = dao.findList("selectByLgstId", lgstId);
+		if (resultList != null && resultList.size() > 0) {
+			return resultList.get(0);
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 修改物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@Override
+	public void update(LogisticsVO ur) throws Exception {
+		dao.update("updateLgst", ur);
+	}
+
+}

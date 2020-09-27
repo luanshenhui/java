@@ -1,0 +1,455 @@
+{{#component "activitys-detail js-component"}}
+    <p>
+        <strong class="main-box-title" data-type=true>- 活动详细 -</strong>
+    </p>
+    <div class="main-box">
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">活动发起者：</label>
+                <span class="item-span1 text-div"> {{_DATA_.adminPromotionResultDto.createOperTypeName}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">活动编号：</label>
+                <span class="item-span1 text-div">{{_DATA_.adminPromotionResultDto.id}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">活动名称：</label>
+                <span class="item-span1 text-div"> {{_DATA_.adminPromotionResultDto.name}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">活动简称：</label>
+                <span class="item-span1 text-div"> {{_DATA_.adminPromotionResultDto.shortName}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">活动类型：</label>
+                <span class="item-span1 text-div active-type" data-value="{{_DATA_.adminPromotionResultDto.promTypeName}}"> {{_DATA_.adminPromotionResultDto.promTypeName}}</span>
+            </span>
+        </p>
+
+        <h3 class="item-title">- 活动基本条件 -</h3>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">渠道：</label>
+                <span class="item-span1 text-div"> {{_DATA_.adminPromotionResultDto.sourceNames}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">报名时间：</label>
+                <span class="item-span1 text-div"> {{#formatDate _DATA_.adminPromotionResultDto.beginEntryDate}}{{/formatDate}}
+                    -{{#formatDate _DATA_.adminPromotionResultDto.endEntryDate}}{{/formatDate}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">活动时间：</label>
+                <span class="item-span1 text-div"> {{#formatDate _DATA_.adminPromotionResultDto.beginDate}}{{/formatDate}}
+                    -{{#formatDate _DATA_.adminPromotionResultDto.endDate}}{{/formatDate}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">循环执行：</label>
+                <span class="item-span1 text-div"> {{_DATA_.adminPromotionResultDto.loopJobFormat}}{{_DATA_.adminPromotionResultDto.loopData}}</span>
+            </span>
+        </p>
+
+        <h3 class="item-title">- 活动优惠规则 -</h3>
+        {{#equals _DATA_.adminPromotionResultDto.promType "10"}}
+            <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">折扣比例：</label>
+                <span class="item-span1 text-div"> {{_DATA_.adminPromotionResultDto.ruleDiscountRateFormat}}</span>
+            </span>
+            </p>
+
+            <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">限购：</label>
+                {{#equals _DATA_.adminPromotionResultDto.ruleLimitBuyType "0"}}
+                    <span class="item-span1 text-div"> 单场内限购{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}件</span>
+                {{/equals}}
+                {{#equals _DATA_.adminPromotionResultDto.ruleLimitBuyType "1"}}
+                    <span class="item-span1 text-div"> 整个活动限购{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}件</span>
+                {{/equals}}
+            </span>
+            </p>
+        {{/equals}}
+        {{#equals _DATA_.adminPromotionResultDto.promType "20"}}
+            <p class="filter-name float-left full-cut" data-value="{{json this}}">
+
+            </p>
+
+        {{/equals}}
+        {{#equals _DATA_.adminPromotionResultDto.promType "30"}}
+            <p class="filter-name p-width">
+                 <span>
+                    <label class="item-lable1">限购数量：</label>
+                     {{#equals _DATA_.adminPromotionResultDto.ruleLimitBuyType "0"}}
+                         <span class="item-span1 text-div"> 单场内限购{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}件</span>
+                     {{/equals}}
+                     {{#equals _DATA_.adminPromotionResultDto.ruleLimitBuyType "1"}}
+                         <span class="item-span1 text-div"> 整个活动限购{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}件</span>
+                     {{/equals}}
+                </span>
+            </p>
+        {{/equals}}
+        {{#equals _DATA_.adminPromotionResultDto.promType "40"}}
+            <p class="filter-name p-width">
+                 <span>
+                    <label class="item-lable1">限购数量：</label>
+                     {{#equals _DATA_.adminPromotionResultDto.ruleLimitBuyType "0"}}
+                         <span class="item-span1 text-div"> 单场内限购{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}件</span>
+                     {{/equals}}
+                     {{#equals _DATA_.adminPromotionResultDto.ruleLimitBuyType "1"}}
+                         <span class="item-span1 text-div"> 整个活动限购{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}件</span>
+                     {{/equals}}
+                </span>
+            </p>
+        {{/equals}}
+        {{#equals _DATA_.adminPromotionResultDto.promType "50"}}
+            <p class="filter-name p-width">
+                 <span>
+                    <label class="item-lable1">降价频率：</label>
+                    <span class="item-span1 text-div"> {{_DATA_.adminPromotionResultDto.ruleFrequency}}秒</span>
+                </span>
+            </p>
+
+            <p class="filter-name p-width">
+                <span>
+                    <label class="item-lable1">限购数量：</label>
+                    {{#equals _DATA_.adminPromotionResultDto.ruleLimitBuyType "0"}}
+                    <span class="item-span1 text-div"> 单场内限购{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}件</span>
+                    {{/equals}}
+                    {{#equals _DATA_.adminPromotionResultDto.ruleLimitBuyType "1"}}
+                        <span class="item-span1 text-div"> 整个活动限购{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}件</span>
+                    {{/equals}}
+                </span>
+            </p>
+
+            <p class="filter-name p-width">
+                 <span>
+                    <label class="item-lable1">可拍次数：</label>
+                    <span>{{_DATA_.adminPromotionResultDto.ruleLimitTicket}}</span>
+                </span>
+            </p>
+
+            <p class="filter-name p-width">
+                 <span>
+                    <label class="item-lable1">每组商品：</label>
+                    <span class="item-span1 text-div"> {{_DATA_.adminPromotionResultDto.ruleGroupCount}}</span>
+                </span>
+            </p>
+        {{/equals}}
+        <h3 class="item-title">- 活动范围 -</h3>
+
+        {{#equals _DATA_.adminPromotionResultDto.promType "10"}}
+            {{#equals _DATA_.adminPromotionResultDto.createOperType "1"}}
+                <p class="filter-name p-width-supplier supplier-total">
+                    <span>
+                        <label class="item-lable1 allWidth supplier-total-each">供应商名称:<label class="vendor-name"></label></label>
+                    </span>
+                <table class="table table-top scroll-800">
+                    <thead>
+                    <tr>
+                        <th width="5%">序号</th>
+                        <th width="10%">供应商</th>
+
+                        <th width="20%">分类</th>
+                        <th width="10%">品牌</th>
+                        <th width="10%">单品编码</th>
+                        <th width="10%">商品名称</th>
+                        <th width="10%">活动价</th>
+                        <th width="10%">活动商品数量</th>
+                        <th width="10%">费用承担方</th>
+                    </tr>
+                    </thead>
+                    <tbody data-content="{{_DATA_}}">
+                    {{#each _DATA_.promItemDtos}}
+                        <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                            <td class="activity-id">{{id}}</td>
+                            <td class="vendor">{{vendor}}</td>
+
+                            <td class="activity-user">{{backCategory1Name}}>>{{backCategory2Name}}
+                                >>{{backCategory3Name}}</td>
+                            <td class="activity-beginTime">{{goodsBrandName}}</td>
+                            <td class="activity-endTime">{{itemCode}}</td>
+                            <td class="activity-state">{{goodsName}}</td>
+                            <td class="activity-state">{{price}}</td>
+                            <td class="activity-state">{{perStock}}</td>
+                            <td class="activity-state">
+                                {{#equals costBy "0"}}
+                                    行方
+                                {{else}}
+                                    供应商
+                                {{/equals}}
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+                </p>
+            {{/equals}}
+            {{#equals _DATA_.adminPromotionResultDto.createOperType "0"}}
+                <table class="table table-top scroll-800">
+                    <thead>
+                    <tr>
+                        <th width="5%">序号</th>
+                        <th width="20%">分类</th>
+                        <th width="10%">品牌</th>
+                        <th width="10%">单品编码</th>
+                        <th width="10%">商品名称</th>
+                        <th width="10%">供应商</th>
+                        <th width="10%">活动价</th>
+                        <th width="10%">活动商品数量</th>
+                        <th width="10%">费用承担方</th>
+                    </tr>
+                    </thead>
+                    <tbody data-content="{{_DATA_}}">
+                    {{#each _DATA_.promItemDtos}}
+                        <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                            <td class="activity-id">{{id}}</td>
+                            <td class="activity-user">{{backCategory1Name}}>>{{backCategory2Name}}
+                                >>{{backCategory3Name}}</td>
+                            <td class="activity-beginTime">{{goodsBrandName}}</td>
+
+                            <td class="activity-endTime">{{itemCode}}</td>
+                            <td class="activity-state">{{goodsName}}</td>
+                            <td class="vendor">{{vendor}}</td>
+                            <td class="activity-state">{{price}}</td>
+                            <td class="activity-state">{{perStock}}</td>
+                            <td class="activity-state">
+                                {{#equals costBy "0"}}
+                                    行方
+                                {{else}}
+                                    供应商
+                                {{/equals}}
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            {{/equals}}
+        {{/equals}}
+        {{#equals _DATA_.adminPromotionResultDto.promType "20"}}
+
+            <p class="filter-name p-width-supplier supplier-total">
+                <span>
+                    <label class="item-lable1 allWidth supplier-total-each">供应商名称:<label class="vendor-name"></label></label>
+                </span>
+            <table class="table table-top scroll-800">
+                <thead>
+                <tr>
+                    <th width="5%">序号</th>
+                    <th width="20%">分类</th>
+                    <th width="10%">品牌</th>
+
+                    <th width="10%">单品编码</th>
+                    <th width="10%">商品名称</th>
+                    <th width="10%">供应商</th>
+                    <th width="10%">活动价</th>
+                    <th width="10%">活动商品数量</th>
+                    <th width="10%">费用承担方</th>
+                </tr>
+                </thead>
+                <tbody data-content="{{_DATA_}}">
+                {{#each _DATA_.promItemDtos}}
+                    <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                        <td class="activity-id">{{id}}</td>
+                        <td class="activity-user">{{backCategory1Name}}>>{{backCategory2Name}}
+                            >>{{backCategory3Name}}</td>
+                        <td class="activity-beginTime">{{goodsBrandName}}</td>
+
+                        <td class="activity-endTime">{{itemCode}}</td>
+                        <td class="activity-state">{{goodsName}}</td>
+                        <td class="vendor">{{vendor}}</td>
+                        <td class="activity-state">{{price}}</td>
+                        <td class="activity-state">{{perStock}}</td>
+                        <td class="activity-state">
+                            {{#equals costBy "0"}}
+                                行方
+                            {{else}}
+                                供应商
+                            {{/equals}}
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            </p>
+        {{/equals}}
+        {{#equals _DATA_.adminPromotionResultDto.promType "30"}}
+            <div class="tab-contents">
+                <div data-role="content" class="tab-content">
+                    <table class="table table-top scroll-800">
+                        <thead>
+                        <tr>
+                            <th width="5%">序号</th>
+                            <th width="10%">供应商</th>
+                            <th width="5%">排序</th>
+                            <th width="20%">分类</th>
+                            <th width="10%">品牌</th>
+                            <th width="10%">单品编码</th>
+                            <th width="10%">商品名称</th>
+                            <th width="5%">活动价</th>
+                            <th width="8%">活动商品数量</th>
+                            <th width="10%">费用承担方</th>
+                            <th width="8%">可以使用优惠券</th>
+                        </tr>
+                        </thead>
+                        <tbody data-content="{{_DATA_}}">
+                        {{#each _DATA_.promItemDtos}}
+                            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                                <td class="activity-id">{{id}}</td>
+                                <td class="vendor">{{vendor}}</td>
+                                <td class="activity-type">{{sort}}</td>
+                                <td class="activity-user">{{backCategory1Name}}>>{{backCategory2Name}}
+                                    >>{{backCategory3Name}}</td>
+                                <td class="activity-beginTime">{{goodsBrandName}}</td>
+                                <td class="activity-endTime">{{itemCode}}</td>
+                                <td class="activity-state">{{goodsName}}</td>
+                                <td class="activity-state">{{price}}</td>
+                                <td class="activity-state">{{perStock}}</td>
+                                <td class="activity-state">
+                                    {{#equals costBy "0"}}
+                                        行方
+                                    {{else}}
+                                        供应商
+                                    {{/equals}}
+                                </td>
+                                <td>{{#equals couponEnable 1}}是{{else}}否{{/equals}}</td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {{/equals}}
+        {{#equals _DATA_.adminPromotionResultDto.promType "40"}}
+            <div class="tab-contents">
+                <div data-role="content" class="tab-content">
+                    <table class="table table-top scroll-800">
+                        <thead>
+                        <tr>
+                            <th width="5%">序号</th>
+                            <th width="15%">供应商</th>
+                            <th width="5%">排序</th>
+                            <th width="10%">分类</th>
+                            <th width="10%">品牌</th>
+                            <th width="10%">单品编码</th>
+                            <th width="10%">商品名称</th>
+                            <th width="10%">活动商品数量</th>
+                            <th width="5%">团购价格</th>
+                            <th width="10%">费用承担方</th>
+                            <th width="15%">团购分类</th>
+                        </tr>
+                        </thead>
+                        <tbody data-content="{{_DATA_}}">
+                        {{#each _DATA_.promItemDtos}}
+                            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                                <td class="activity-id">{{id}}</td>
+                                <td class="vendor">{{vendor}}</td>
+                                <td class="activity-type">{{sort}}</td>
+                                <td class="activity-user">{{backCategory1Name}}>>{{backCategory2Name}}
+                                    >>{{backCategory3Name}}</td>
+                                <td class="activity-beginTime">{{goodsBrandName}}</td>
+                                <td class="activity-endTime">{{itemCode}}</td>
+                                <td class="activity-state">{{goodsName}}</td>
+                                <td class="activity-state">{{perStock}}</td>
+                                <td class="activity-state">{{levelPrice}}</td>
+                                <td class="activity-state">
+                                    {{#equals costBy "0"}}
+                                        行方
+                                    {{else}}
+                                        供应商
+                                    {{/equals}}
+                                </td>
+                                <td class="activity-state">{{groupClassifyName}}</td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {{/equals}}
+        {{#equals _DATA_.adminPromotionResultDto.promType "50"}}
+            <div class="tab-contents">
+                <div data-role="content" class="tab-content">
+
+                    <table class="table table-top scroll-800">
+                        <thead>
+                        <tr>
+                            <th width="5%">序号</th>
+                            <th width="10%">供应商</th>
+                            <th width="10%">排序</th>
+                            <th width="10%">分类</th>
+                            <th width="10%">品牌</th>
+                            <th width="10%">单品编码</th>
+                            <th width="10%">商品名称</th>
+                            <th width="10%">起拍价（元）</th>
+                            <th width="10%">最低价（元）</th>
+                            <th width="5%">降价金额</th>
+                            <th width="10%">活动商品数量</th>
+                            <th width="10%">费用承担方</th>
+                        </tr>
+                        </thead>
+                        <tbody data-content="{{_DATA_}}">
+                        {{#each _DATA_.promItemDtos}}
+                            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                                <td class="activity-id">{{id}}</td>
+                                <td class="vendor">{{vendor}}</td>
+                                <td class="activity-type">{{sort}}</td>
+                                <td class="activity-user">{{backCategory1Name}}>>{{backCategory2Name}}
+                                    >>{{backCategory3Name}}</td>
+                                <td class="activity-beginTime">{{goodsBrandName}}</td>
+                                <td class="activity-endTime">{{itemCode}}</td>
+                                <td class="activity-state">{{goodsName}}</td>
+                                <td class="activity-beginTime">{{startPrice}}</td>
+                                <td class="activity-endTime">{{minPrice}}</td>
+                                <td class="activity-state">{{feeRange}}</td>
+                                <td class="activity-state">{{perStock}}</td>
+                                <td class="activity-state">
+                                    {{#equals costBy "0"}}
+                                        行方
+                                    {{else}}
+                                        供应商
+                                    {{/equals}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {{/equals}}
+        <div class="background-white">
+            <h3 class="item-title">- 促销内容 -</h3>
+
+            <div class="saleContent">{{{_DATA_.adminPromotionResultDto.description}}}</div>
+
+            <h3 class="item-title">- 审核结果 -</h3>
+
+            <div class="saleContent">{{{_DATA_.adminPromotionResultDto.auditLog}}}</div>
+        </div>
+
+        <div class="bottom-text">
+            <a href="{{_HREF_.mainContext}}/mall/activity/activity_all" class="btn btn-close btn-medium active-detail-back">返回</a>
+        </div>
+    </div>
+{{/component}}

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="WF_ORG_USER" >
+  <resultMap id="WF_ORG_USERResultMap" class="com.dhc.organization.user.domain.WF_ORG_USER" >
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="USER_ACCOUNT" property="userAccount" jdbcType="VARCHAR" />
+    <result column="USER_FULLNAME" property="userFullname" jdbcType="VARCHAR" />
+    <result column="USER_PASSWORD" property="userPassword" jdbcType="VARCHAR" />
+    <result column="USER_DESCRIPTION" property="userDescription" jdbcType="VARCHAR" />
+    <result column="USER_PASSWORD_CHANGED" property="userPasswordChanged" jdbcType="TIMESTAMP" />
+    <result column="USER_ACCOUNT_ENABLED" property="userAccountEnabled" jdbcType="CHAR" />
+    <result column="USER_ACCOUNT_LOCKED" property="userAccountLocked" jdbcType="CHAR" />
+    <result column="USER_ACCOUNT_CREATED" property="userAccountCreated" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="WF_ORG_USERResultMap2" class="com.dhc.organization.user.domain.WF_ORG_USER" >
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="USER_ACCOUNT" property="userAccount" jdbcType="VARCHAR" />
+    <result column="USER_FULLNAME" property="userFullname" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <parameterMap class="map" id="params">   
+    <parameter property="sqlStr"  javaType="String" jdbcType="VARCHAR" mode="IN"/>   
+	<parameter property="startRec"  javaType="java.lang.Integer" jdbcType="int" mode="IN"/>   
+	<parameter property="lastRec"  javaType="java.lang.Integer" jdbcType="int" mode="IN"/>   
+  </parameterMap>
+  <procedure id="GetPagingData" parameterMap="params" resultMap="WF_ORG_USERResultMap">   
+    {call GetPagingData(?,?,?)}
+  </procedure> 
+  
+  <select id="selectUser" resultMap="WF_ORG_USERResultMap2" parameterClass="java.lang.String" >
+	SELECT U.USER_ID, U.USER_FULLNAME, U.USER_ACCOUNT
+	  FROM WF_ORG_USER_UNIT UU
+	 INNER JOIN WF_ORG_USER U ON U.USER_ID = UU.USER_ID
+	 WHERE UU.UNIT_ID = #unitId#
+  </select>
+  
+  <select id="select" resultMap="WF_ORG_USERResultMap" parameterClass="com.dhc.organization.user.domain.WF_ORG_USER" >
+    SELECT USER_ID, USER_ACCOUNT, USER_FULLNAME, USER_PASSWORD, USER_DESCRIPTION,
+      USER_PASSWORD_CHANGED, USER_ACCOUNT_ENABLED, (CASE
+         WHEN USER_ACCOUNT_LOCKED = '1' THEN
+          '是'
+         ELSE
+          '否'
+       END) AS USER_ACCOUNT_LOCKED, USER_ACCOUNT_CREATED
+    FROM WF_ORG_USER
+	<dynamic prepend="WHERE">
+		<isNotNull prepend="AND" property="userId">
+			USER_ID = #userId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userAccount">
+			USER_ACCOUNT = #userAccount#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userFullname">
+			USER_FULLNAME like #userFullname#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userAccountLocked">
+			USER_ACCOUNT_LOCKED = #userAccountLocked#
+		</isNotNull>
+		<isNotNull prepend="AND" property="unitID">
+			USER_ID IN
+	       (SELECT DISTINCT (B.USER_ID)
+	          FROM WF_ORG_UNIT A, WF_ORG_USER_UNIT B
+	         WHERE A.UNIT_ID = B.UNIT_ID
+	           AND A.UNIT_ID = #unitID#)
+		</isNotNull>
+		<isNotNull prepend="AND" property="roleId">
+			USER_ID IN
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.ROLE_ID = #roleId#)
+		</isNotNull>
+		<isNotNull prepend="AND" property="stationId">
+    		USER_ID IN
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_STATION A
+	         WHERE A.STATION_ID = #stationId#)
+		</isNotNull>
+		<isNotNull prepend="AND" property="userPassword">
+			USER_PASSWORD = #userPassword#
+		</isNotNull>
+	</dynamic>
+   </select>
+   
+   <select id="selectByIDs" resultMap="WF_ORG_USERResultMap" parameterClass="com.dhc.organization.user.domain.WF_ORG_USER" >
+    SELECT USER_ID, USER_ACCOUNT, USER_FULLNAME, USER_PASSWORD, USER_DESCRIPTION,
+      USER_PASSWORD_CHANGED, USER_ACCOUNT_ENABLED, USER_ACCOUNT_LOCKED, USER_ACCOUNT_CREATED
+    FROM WF_ORG_USER WHERE USER_ID IN 
+		<iterate property="userIds" conjunction="," close=")" open="(" > 
+			#userIds[]:VARCHAR# 
+		</iterate>
+   </select>
+   
+   <select id="paging" resultMap="WF_ORG_USERResultMap" parameterClass="com.dhc.organization.user.domain.WF_ORG_USER" >
+     SELECT DISTINCT USER_ID, USER_ACCOUNT, USER_FULLNAME, USER_PASSWORD, USER_DESCRIPTION,
+      USER_PASSWORD_CHANGED, USER_ACCOUNT_ENABLED, USER_ACCOUNT_LOCKED, USER_ACCOUNT_CREATED
+    FROM 
+    (SELECT USER_ID, USER_ACCOUNT, USER_FULLNAME, USER_PASSWORD, USER_DESCRIPTION,
+      USER_PASSWORD_CHANGED, USER_ACCOUNT_ENABLED, (CASE
+         WHEN USER_ACCOUNT_LOCKED = '1' THEN
+          '是'
+         ELSE
+          '否'
+       END) AS USER_ACCOUNT_LOCKED, USER_ACCOUNT_CREATED
+    FROM WF_ORG_USER
+	<dynamic prepend="WHERE">
+	<![CDATA[	
+	      ROWNUM <= #endRow#
+	    ]]>
+		<isNotNull prepend="AND" property="userId">
+			USER_ID = #userId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userAccount">
+			USER_ACCOUNT = #userAccount#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userFullname">
+			USER_FULLNAME = #userFullname#
+		</isNotNull>
+		<isNotNull prepend="AND" property="unitID">
+			USER_ID IN
+	       (SELECT DISTINCT (B.USER_ID)
+	          FROM WF_ORG_UNIT A, WF_ORG_USER_UNIT B
+	         WHERE A.UNIT_ID = B.UNIT_ID
+	           AND A.UNIT_ID = #unitID#)
+		</isNotNull>
+		<isNotNull prepend="AND" property="roleId">
+			USER_ID IN
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.ROLE_ID = #roleId#)
+		</isNotNull>
+		<isNotNull prepend="AND" property="userPassword">
+			USER_PASSWORD = #userPassword#
+		</isNotNull>
+		) WHERE RR > #startRow#
+	</dynamic>
+  </select>
+  <delete id="delete" parameterClass="string" >
+    DELETE FROM WF_ORG_USER where USER_ID=#value#
+  </delete>
+  <delete id="deleteUserUnit" parameterClass="string" >
+    DELETE WF_ORG_USER_UNIT
+	 where USER_ID = #value#
+  </delete>
+  <delete id="deleteUserRole" parameterClass="string" >
+    DELETE WF_ORG_USER_ROLE
+	 WHERE USER_ID = #value#
+  </delete>
+  <delete id="deleteUserStation" parameterClass="string" >
+    DELETE WF_ORG_USER_STATION
+	 WHERE USER_ID = #value#
+  </delete>
+  <delete id="deleteUserPermission" parameterClass="string" >
+    DELETE WF_ORG_RESOURCE_AUTHORITY
+	 WHERE ROLE_ID=#value#
+  </delete>
+  <insert id="insert" parameterClass="com.dhc.organization.user.domain.WF_ORG_USER" >
+    INSERT INTO WF_ORG_USER (USER_ID, USER_ACCOUNT, USER_FULLNAME, USER_PASSWORD, USER_DESCRIPTION,
+      USER_PASSWORD_CHANGED, USER_ACCOUNT_ENABLED, USER_ACCOUNT_LOCKED, USER_ACCOUNT_CREATED)
+    values (#userId#, #userAccount#, #userFullname#, #userPassword#, #userDescription#,
+      #userPasswordChanged:DATE#, #userAccountEnabled#, #userAccountLocked#, #userAccountCreated:DATETIME#)
+  </insert>
+  <insert id="insertUserUnit" parameterClass="com.dhc.organization.unit.domain.WF_ORG_USER_UNIT" >
+    INSERT INTO WF_ORG_USER_UNIT
+	  (UNIT_ID, USER_ID)
+	VALUES
+	  (#unitId#, #userId#)
+  </insert>
+  <update id="update" parameterClass="com.dhc.organization.user.domain.WF_ORG_USER" >
+    UPDATE WF_ORG_USER
+    SET USER_ACCOUNT = #userAccount#,
+      USER_FULLNAME = #userFullname#,
+      <isNotNull property="userPassword">
+      	USER_PASSWORD = #userPassword#,
+      	USER_PASSWORD_CHANGED = GETDATE(),
+      </isNotNull>
+      USER_DESCRIPTION = #userDescription#
+    where USER_ID = #userId#
+  </update>
+  
+  <update id="lockUser" parameterClass="string" >
+    UPDATE WF_ORG_USER
+    SET USER_ACCOUNT_LOCKED = '1'
+    where USER_ID= #value#
+  </update>
+  
+  <update id="unlockUser" parameterClass="string" >
+    UPDATE WF_ORG_USER
+    SET USER_ACCOUNT_LOCKED = '0'
+    WHERE USER_ID= #value#
+  </update>
+  
+  <select id="count" parameterClass="com.dhc.organization.user.domain.WF_ORG_USER" resultClass="java.lang.Integer" >
+	SELECT COUNT(*)
+	  FROM (select DISTINCT U.USER_ID,
+		                U.USER_ACCOUNT,
+		                U.USER_FULLNAME,
+		                U.USER_PASSWORD,
+		                U.USER_DESCRIPTION,
+		                U.USER_PASSWORD_CHANGED,
+		                U.USER_ACCOUNT_ENABLED,
+						U.USER_ACCOUNT_LOCKED,
+		                U.USER_ACCOUNT_CREATED
+		  FROM WF_ORG_USER U
+		  LEFT JOIN WF_ORG_USER_UNIT UU ON U.USER_ID = UU.USER_ID
+	<dynamic prepend="WHERE">
+	    <isNotEqual prepend="AND" property="currentLoginUserID" compareValue="adminUser">
+			1=1
+			<isNotNull prepend="AND" property="adminRoleID">
+				<![CDATA[
+				(UU.UNIT_ID = null
+		    	OR UU.UNIT_ID = ''
+				OR U.USER_ID IN (SELECT T1.USER_ID
+							     FROM WF_ORG_USER_UNIT T1
+						    	WHERE T1.UNIT_ID IN (SELECT T2.UNIT_ID
+							                           FROM WF_ORG_ROLE_UNIT T2
+							                          WHERE T2.ROLE_ID = #adminRoleID#)))
+				AND U.USER_ID <> 'adminUser'
+				AND U.USER_ID <> #currentLoginUserID#
+				]]>
+			</isNotNull>
+		</isNotEqual>
+		<isNotNull prepend="AND" property="userAccount">
+			U.USER_ACCOUNT = #userAccount#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userFullname">
+			U.USER_FULLNAME like #userFullname#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userAccountLocked">
+			USER_ACCOUNT_LOCKED = #userAccountLocked#
+		</isNotNull>
+		<isNotNull prepend="AND" property="unitID">
+			U.USER_ID IN
+	       (SELECT DISTINCT (B.USER_ID)
+	          FROM WF_ORG_UNIT A, WF_ORG_USER_UNIT B
+	         WHERE A.UNIT_ID = B.UNIT_ID
+	           AND A.UNIT_ID = #unitID#)
+		</isNotNull>
+		<isNotNull prepend="AND" property="roleId">
+			U.USER_ID IN
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.ROLE_ID = #roleId#)
+		</isNotNull>
+		<isNotNull prepend="AND" property="stationId">
+			U.USER_ID IN
+	       (SELECT S.USER_ID
+	          FROM WF_ORG_USER_STATION S
+	         WHERE S.STATION_ID = #stationId#)
+		</isNotNull>
+		<isNotNull prepend="AND" property="userPassword">
+			U.USER_PASSWORD = #userPassword#
+		</isNotNull>
+	</dynamic>
+	) T1
+  </select>
+  
+   <select id="stationUserRemain" resultClass="java.lang.Integer" parameterClass="string" >
+	   <![CDATA[
+		SELECT (CASE
+		         WHEN (SELECT S1.USER_NUMBERS
+		                 FROM WF_ORG_STATION S1
+		                WHERE S1.STATION_ID = #value#) < 0 THEN
+		          99999999
+		         ELSE
+		          (SELECT S1.USER_NUMBERS
+		             FROM WF_ORG_STATION S1
+		            WHERE S1.STATION_ID = #value#)
+		       END) -
+		       (SELECT COUNT(S.USER_ID)
+		          FROM WF_ORG_USER_STATION S
+		         WHERE S.STATION_ID = #value#) AS STATION_USERS_REMAIN
+	   ]]>
+	</select>
+	
+   <select id="roleUserRemain" resultClass="java.lang.Integer" parameterClass="string" >
+	   <![CDATA[
+		SELECT (CASE
+		         WHEN (SELECT S1.USER_NUMBERS
+		                 FROM WF_ORG_ROLE S1
+		                WHERE S1.ROLE_ID = #value#) < 0 THEN
+		          99999999
+		         ELSE
+		          (SELECT S1.USER_NUMBERS
+		             FROM WF_ORG_ROLE S1
+		            WHERE S1.ROLE_ID = #value#)
+		       END) -
+		       (SELECT COUNT(S.USER_ID)
+		          FROM WF_ORG_USER_ROLE S
+		         WHERE S.ROLE_ID = #value#) AS ROLE_USERS_REMAIN
+	   ]]>
+	</select>
+</sqlMap>

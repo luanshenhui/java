@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.CrossRule" table="CrossRule">
+        <id name="ID">
+            <column name="ID"/>
+            <generator class="assigned" />
+        </id>
+        <property name="Rules" type="string" column="Rules"/>
+        <property name="Memo" type="string" column="Memo"/>
+    </class>
+</hibernate-mapping>

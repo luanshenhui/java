@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据铁笼-融合分析-风险界定统计</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/model.css" />
+<link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+<script src="js/echarts.js"></script>
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/js.js"></script>
+</head>
+
+<body>
+<div class="wrap">
+	<div class="container">
+        <div class="header">
+            <h1 class="header-log"><a href="/a" target="_blank" style="cursor:pointer"><img src="image/logo.png"></a></h1>
+            <div class="header-btn"><img src="image/header-icon-start.png"><span>自动播放</span></div>
+            <div class="header-nav header-nav-spac">
+                <ul class="header-nav-btn">
+                    <li class="next disable"><a href="javascript:void(0)" >&gt;</a></li>
+                    <li class="prev"><a href="javascript:void(0)" >&lt;</a></li>
+                </ul>
+                <ul>
+					<li><a href="gzw-businessDataVolume.html" title="融合分析"><i></i>融合分析</a> </li>
+                    <li><a href="gzw-threeImportant1.html" title="三重一大">三重一大</a> </li>
+                    <li><a href="javascript:void(0)" title="财务分析" >财务分析</a> </li>
+                    <li><a href="javascript:void(0)" title="产权分析"  >产权分析</a> </li>
+                    
+                </ul>
+            </div>
+            <div class="header-nav">
+                <ul>
+                    <li><a href="gzw-SupervisoryDutiy.html" title="监管职责"><i></i>监管职责</a> </li>
+                    <li><a href="gzw-workflowInstruction.html" title="流程说明">流程说明</a> </li>
+                    <li><a href="javascript:void(0)" title="风险点" target="_blank" >风险点</a> </li>
+                </ul>
+            </div>
+        </div>
+		<div class="box">
+			<div class="box-head">
+				<a href="firstpage.html" class="arrow-back"><i></i>首页</a>
+                <a href="gzw-businessDataVolume.html" class="arrow-back arrow-back2"><i></i>融合分析</a>
+                <p class="box-title">农投公司</p>
+               <!-- <a href="javascript:void(0)" class="arrow-left"><i></i></a>
+                <a href="javascript:void(0)" class="arrow-right"><i></i></a>-->
+			</div>
+            <div class="box-container">
+                <div class="box-left">
+                    <ul>
+                        <li>
+                            <a href="gzw-alarmRiskStatistics.html" class="">告警风险分析</a>
+                        </li>
+                        <li class="on">
+                            <a href="gzw-riskDefineStatistics.html" class="">风险界定分析</a>
+                        </li>
+                        <li>
+                            <a href="gzw-riskTrendAnalysis.html" class="">风险走势分析</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="box-right">
+                    <div class="box-right-title">
+                        <p><i></i>风险界定分析</p>
+                    </div>
+                    <div class="box-right-form risk-define-statistics">
+
+                        <div class="risk-form-main risk-define-statistics">
+                        	<div id="main" class="main1"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+		</div>
+		<div class="clear"></div>
+		<div class="footer">截至2016年12月23日 12：00：00</div>
+	    	
+    </div>
+</div>
+<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+      
+
+option = {
+    title:{
+        text:'风险界定统计表（2016年）',
+        textStyle:{color:'#fff',fontSize:'24'},
+        left:'45%'
+    },
+    toolbox: {
+        feature: {
+            dataView: {show: false, readOnly: false},
+            magicType: {show: false, type: ['line', 'bar']},
+            restore: {show: false},
+            saveAsImage: {show: false}
+        }
+    },
+    legend: {
+        data:['界定为风险','界定为非风险','未界定'],
+        right:'20',
+        textStyle:{
+            color:'#ffffff',
+            fontSize:18
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis : [
+        {
+            type : 'category',
+            axisLabel:{
+                show: true,
+                textStyle:{
+                    fontSize:20,
+                    color:'#7a7a7a'
+                }
+            },
+            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            axisTick:{
+                show: false
+            },
+            axisLabel:{
+                show: true,
+                textStyle:{
+                    fontSize:20,
+                    color:'#7a7a7a'
+                }
+            }
+
+        }
+    ],
+    series : [
+        {
+            name:'未界定',
+            type:'bar',
+            stack: '统计',
+            itemStyle: {
+                normal:{
+                    color:'#02a0f4'
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data:[5,11, 7, 19, 11, 19, 7, 19,29,27,11,7]
+        },
+        {
+            name:'界定为非风险',
+            type:'bar',
+            stack: '统计',
+            itemStyle: {
+                normal:{
+                    color:'#02c7f4'
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data:[7,15, 9, 19, 15, 19, 9, 23,19,24,15,9]
+        },
+        {
+            name:'界定为风险',
+            type:'bar',
+            barWidth : 20,
+            itemStyle: {
+                normal:{
+                    color:'#ee073d'
+                }
+            },
+            stack: '统计',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data:[12,12, 7, 23, 12, 23, 7, 10,20,27,12,7]
+        },
+        {
+            name:'总共',
+            type:'line',
+            lineStyle:{
+                normal:{
+                    color:'#ffc700'
+                }
+            },
+            data:[24, 38, 23, 61, 38, 61, 23,52,68,78,38,23],
+            itemStyle: {
+                normal: {
+                    barBorderWidth: 6,
+                    barBorderRadius:0,
+                    label : {
+                        show: true,
+                        position: 'top',
+                        textStyle: {
+                            color: '#ffc700',
+                            fontSize:20
+                        }
+                    }
+                }
+            },
+
+        }
+    ]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+</html>

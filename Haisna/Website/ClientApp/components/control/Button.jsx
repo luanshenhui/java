@@ -1,0 +1,18 @@
+﻿import styled from 'styled-components';
+
+const Button = styled.input.attrs({
+  type: 'button',
+})`
+  background-color: #a8b1bd;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  margin: 0 5px 0 0;
+  min-width: 100px;
+  outline: none;
+  padding: 7px;
+`;
+
+export default Button;

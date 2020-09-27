@@ -1,0 +1,43 @@
+{{#component "points-rate js-component"}}
+    <p class="components-title"><strong>积分兑换比例</strong></p>
+    <div class="add-new">
+        <button class="btn btn-success btn-sm js-rate-new m-b-10">新增</button>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="4%"></th>
+            <th width="10%">比例</th>
+            <th width="18%">供应商</th>
+            <th width="10%">品牌</th>
+            <th width="20%">品类</th>
+            <th width="18%">商品</th>
+            <th width="20%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                <td><input type="checkbox" name="checkRate" data-id="{{id}}"/></td>
+                <td class="rate-rate">{{rate}}</td>
+                <td class="rate-supplier">{{supplierName}}</td>
+                <td class="rate-brand">{{brandName}}</td>
+                <td class="rate-category">{{category}}</td>
+                <td class="rate-goods">{{goodsName}}</td>
+                <td>
+                    <button class="btn btn-sm js-rate-edit">编辑</button>
+                    <button id="{{id}}" class="btn btn-sm js-rate-delete" data-toggle="confirm"
+                            data-title="您确定删除吗？" data-content="删除之后无法恢复,确定要删除吗？"
+                            data-event="confirm:delete-rate">删除</button>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="m-b-10 m-l-10">
+        <input type="checkbox" class="js-all-check"/><span>全选</span>
+        <a href="javascript:void(0)" class="js-all-delete">删除</a>
+    </div>
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+{{/component}}

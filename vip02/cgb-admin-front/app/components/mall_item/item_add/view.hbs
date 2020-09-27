@@ -1,0 +1,209 @@
+{{#component "item-add add-item-div js-component"}}
+    <link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <p class="components-title h1-title">
+        <strong class="main-box-title" data-type=true>发布商品</strong>
+    </p>
+    <form class="form form-aligned goods-add-form" data-spu-id="{{spuId}}"
+          data-vendor-id="{{_DATA_.fullItem.goodsModel.vendorId}}" data-approve-status="{{_DATA_.fullItem.goodsModel.approveStatus}}">
+        <div class="main-box col-box table-infor">
+            {{#if spuPath}}
+                <div class="form-information control-group">
+                    <label for="product"><b><em>*</em>产品：</b></label>
+
+                    <div class="selected-category">
+                        <span class="selected-category-span">
+                          <span>您当前选择的是:</span>
+                          <span class="selected-path">{{spuPath}}</span>
+                        </span>
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="{{_HREF_.mainContext}}/mall/item/item-category">重新修改类目</a>
+                    </div>
+                </div>
+            {{/if}}
+            {{#if _DATA_.fullItem.goodsModel}}
+                <input type="hidden" name="code" value="{{_DATA_.fullItem.goodsModel.code}}"/>
+                <input type="hidden" name="productId" value="{{_DATA_.fullItem.goodsModel.productId}}"/>
+            {{/if}}
+            <div class="form-information control-group js-vendor-list">
+                <label for="vendorId"><b><em>*</em>供应商：</b></label>
+                <select name="vendorId" id="vendorId" class="js-vendor-select" required
+                        {{#if _DATA_.fullItem.goodsModel.vendorId}}disabled="disabled"{{/if}}>
+                    <option value="">请选择供应商</option>
+                    {{#each _DATA_.vendors}}
+                        <option value="{{vendorId}}"
+                                {{#equals _DATA_.fullItem.goodsModel.vendorId vendorId}}selected{{/equals}}
+                                data-vendorrole="{{vendorRole}}">{{simpleName}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="main-box-title">- 商品基本信息 - <label class="operate-tips">(加<b class="required">*</b>项必须填写或勾选至少一项)</label>
+            </div>
+            <div class="form-information control-group">
+                <label for="goodsName"><b><em>*</em>商品名称：</b></label>
+                <input type="text" class="form-control order-form" id="goodsName" name="goodsName"
+                       value="{{_DATA_.fullItem.goodsModel.name}}" required
+                       maxlength="80" placeholder="请输入商品名称，限制80个字以内"/>
+                <input type="hidden" name="productId" value=""/>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="form-information control-group">
+                <label for="manufacturer"><b>生产企业：</b></label>
+                <input type="text" class="form-control order-form" id="manufacturer" name="manufacturer"
+                       value="{{_DATA_.fullItem.goodsModel.manufacturer}}"
+                       maxlength="80" placeholder="请输入生产企业"/>
+            </div>
+            <div class="form-information control-group">
+                <label for="goodsType"><b><em>*</em>商品类型：</b></label>
+                <input name="goodsType" class="js-goods-type goods-type-entity" type="radio" required value="00"
+                       {{#if _DATA_.fullItem.goodsModel.goodsType}}disabled
+                           {{#equals _DATA_.fullItem.goodsModel.goodsType '00'}} checked="checked"{{/equals}}
+                       {{else}}
+                            checked="checked"
+                       {{/if}}/>实物商品
+                <input name="goodsType" class="m-l-20 js-goods-type js-o2o goods-type-o2o" required type="radio"  value="02"
+                    {{#if _DATA_.fullItem.goodsModel.goodsType}}disabled
+                        {{#equals _DATA_.fullItem.goodsModel.goodsType '02'}} checked="checked"{{/equals}}
+                    {{/if}}/>O2O商品
+            </div>
+            <div class="form-information control-group">
+                <label for="isInner"><b><em>*</em>是否内宣商品：</b></label>
+                <input name="isInner" type="radio" value="0"
+                       {{#equals _DATA_.fullItem.goodsModel.isInner 0}}checked{{/equals}}/>是
+                <input name="isInner" class="m-l-20" type="radio" value="1"
+                    {{#if  _DATA_.fullItem.goodsModel.isInner}}
+                        {{#equals _DATA_.fullItem.goodsModel.isInner 1}}checked{{/equals}}
+                    {{else}}checked{{/if}}/>否
+            </div>
+
+            <div class="form-information control-group">
+                <label for="autoDownShelfDate"><b><em>*</em>自动下架时间：</b></label>
+                <input type="text" required class="form-control order-form datepicker input-width-100"
+                       id="autoDownShelfDate" name="autoDownShelfDate"
+                       value="{{formatDate _DATA_.fullItem.goodsModel.autoOffShelfTime "day"}}"/>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error"><i>&times;</i> 只能输入日期</span>
+            </div>
+            <div class="form-information control-group">
+                <label for="cards"><b><em>*</em>第三级卡产品编码：</b></label>
+                <input type="text" class="form-control order-form " name="cards" required
+                       value="{{_DATA_.fullItem.goodsModel.cards}}"
+                       maxlength="5000" placeholder="请输入卡产品编码，格式为xxxx,xxxx,xxxx"/>
+            </div>
+            <div class="form-information control-group">
+                <label for="mailOrderCode"><b><em>*</em>邮购分期类别码：</b></label>
+                <select name="mailOrderCode" class="js-mail-stages" required
+                        data-mailordercode="{{_DATA_.fullItem.goodsModel.mailOrderCode}}"
+                        data-mail-stages="{{json _DATA_.mailStages}}">
+                    <option value="">请选择</option>
+                    {{#if _DATA_.mailStages}}
+                        {{#each _DATA_.mailStages}}
+                            <option value="{{code}}"
+                                    {{#equals code _DATA_.fullItem.goodsModel.mailOrderCode}}selected{{/equals}}>{{code}}</option>
+                        {{/each}}
+                    {{/if}}
+                </select>
+            </div>
+            <div class="form-information control-group">
+                <label for="productPointRate">积分支付比例：</label>
+                <input type="text" class="form-control order-form input-small js-point-rate" name="productPointRate"
+                       maxlength="4" value="{{_DATA_.fullItem.goodsModel.productPointRate}}">
+                <span class="span-line js-display-flag" style="display: none;width:400px;left:100px">
+                    <input type="checkbox" name="displayFlag" value=""/>是否仅显示全积分支付</span>
+            </div>
+            <div class="js-goods-other-attr"></div>
+            <div class="control-attr control-group" style="height:auto;">
+                <label class="control-label" data-price>属性：</label>
+                <div class="controls controls-attr">
+                    <div class="main-attr">
+                        <p class="font-color-red" style="margin-left: 55px">注：如无相关单品，请将库存设置为0，其他项目正常填写</p>
+
+                        <div class="spu base-attr clearfix">
+                            {{! spu_properties.hbs}}
+                        </div>
+                        <div class="skus attr-full clearfix" data-skus="{{json _DATA_.fullItem.itemList}}"
+                             data-sku-group="{{json _DATA_.fullItem.itemGroup}}"
+                             data-periods="{{json _DATA_.vendorRatios}}">
+                            {{! sku_properties.hbs}}
+                        </div>
+
+                        <div class="skus-table">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="form-information clearfix margin-top-20 "><label for="adWord"><b>商品卖点：</b></label>
+                <textarea class="form-control order-form js-ad" id="adWord" name="adWord"
+                          maxlength="80">{{_DATA_.fullItem.goodsModel.adWord}}</textarea>
+                <span class="remaining-text m-l-10">您还可以输入<i>80</i>字</span>
+            </div>
+            <div class="form-information clearfix margin-top-20"><label for="giftDesc"><b>赠品信息：</b></label>
+                <textarea class="form-control order-form js-gift" id="giftDesc" name="giftDesc"
+                          maxlength="100">{{_DATA_.fullItem.goodsModel.giftDesc}}</textarea>
+                <span class="remaining-text m-l-10">您还可以输入<i>100</i>字</span>
+            </div>
+            <div class="form-information"><label for="introduction"><b>商品描述：</b></label>
+                <div class="js-introduction"
+                     data-introduction="{{_DATA_.fullItem.goodsModel.introduction}}">
+                    <div class="clear"></div>
+                    <script type="text/plain" id="editor" style="width:935px;height:240px;"></script>
+                </div>
+            </div>
+            <div class="form-information clearfix margin-top-20 service-promise"
+                 data-service-promise="{{_DATA_.fullItem.goodsModel.serviceType}}">
+                <label><b>服务承诺：</b></label>
+            </div>
+            <div class="form-information clearfix margin-top-20">
+                <label><b>关联推荐商品：</b></label>
+                <div class="goods">
+                    <ul class="recommend-ul">
+                        {{#if _DATA_.fullItem.recommendGoodsList}}
+                            {{#each  _DATA_.fullItem.recommendGoodsList}}
+                                <li class="recommend-li" data-code="{{itemCode}}">
+                                    <a href="/mall/goods/{{goodsCode}}?itemCode={{itemCode}}"><img src="{{img}}" class="img-width"></a>
+                                    <div class="main-item-list-title">
+                                        <a class="font-color-b" href="/mall/goods/{{goodsCode}}?itemCode={{itemCode}}" title="{{goodsName}}">{{goodsName}}</a>
+                                    </div>
+                                    <a href="javascript:void(0)" class="btn btn-success btn-small js-recom-del">删除</a>
+                                </li>
+                            {{/each}}
+                        {{/if}}
+                    </ul>
+                </div>
+                <a href="javascript:void(0)" class="btn btn-success btn-small js-recom-select">选择</a>
+            </div>
+            <div class="admin-btn">
+                <input type="hidden" name="addType"/>
+                {{#equals business "add"}}
+                    <input class="btn btn-success btn-medium item-push-button" type="submit" data-type="save"
+                           onclick="return check(this);"
+                           value="保存"/>
+                {{/equals}}
+                {{#equals _DATA_.fullItem.goodsModel.approveStatus '00'}}
+                    <input class="btn btn-success btn-medium item-push-button" type="submit" data-type="save"
+                           onclick="return check(this);"
+                           value="保存"/>
+                {{/equals}}
+                <input class="btn btn-success btn-medium margin-left-20 item-push-button" type="submit"
+                       data-type="audit"
+                       onclick="return check(this);" value="提交审核"/>
+                <a href="{{_HREF_.mainContext}}/mall/item/all-goods" class="btn btn-info btn-medium margin-left-20">返
+                    回</a>
+            </div>
+        </div>
+        {{!--<div class="main-image">-->
+            <!--<img data-orginal="{{_DATA_.fullItem.goodsModel.mainImage}}" width="330px" height="330px">-->
+            <!--<div class="submit">-->
+                <!--<button type="button" class="btn btn-success"-->
+                        <!--id="replace-image-button">{{#if _DATA_.fullItem.goodsModel.mainImage}}-->
+                    <!--替换图片{{else}}{{#if spuPath}}上传图片{{else}}替换图片{{/if}}{{/if}}</button>-->
+                <!--<div>请上传小于1MB的PNG或JPG的图片</div>-->
+            <!--</div>-->
+        <!--</div>--}}
+    </form>
+{{/component}}
+<script type="text/javascript">
+    function check(data) {
+        $('input[name="addType"]').val($(data).data("type"));
+    }
+</script>

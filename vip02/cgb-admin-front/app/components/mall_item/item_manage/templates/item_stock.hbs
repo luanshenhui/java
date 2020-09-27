@@ -1,0 +1,41 @@
+<div class="modal item-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>库存</h2>
+    </div>
+    <form class="form form-aligned stock-form">
+        <div class="modal-body">
+            <p><strong>商品信息</strong></p>
+            <div class="control-group pull-left">
+                <label for="goodsCode">商品编码:</label>
+                <span class="break">{{goodsCode}}</span>
+                <input class="js-goods-code" type="hidden" name="goodsCode" value="{{goodsCode}}"/>
+            </div>
+            <div class="control-group pull-left">
+               <label  for="goodsCode">商品名称:</label>
+                <span class="break">{{goodsName}}</span>
+            </div>
+            <p class="main-box-title-popup"><strong>库存信息</strong></p>
+            {{#each itemList}}
+                <div class="js-item-tr">
+                    <div class="control-group pull-left">
+                        <label for="code">单品编码：</label>
+                        <span>{{code}}</span>
+                        <input class="item-code" type="hidden" name="code" value="{{code}}"/>
+                    </div>
+                    <div class="control-group pull-left">
+                        <label for="stock">库存:</label>
+                        <input id="stock" name="stock" value="{{stock}}" type="text" class="form-control input-width-100 item-stock" required  maxlength="8" pattern="^[0-9]\d*$"/>
+                        <span class="note-error"><i>&times;</i>请输入整数</span>
+                        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+        <div class="clear"></div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small js-stock-submit" value="确定">
+            <button class="btn btn-close btn-small close">关闭</button>
+        </div>
+    </form>
+</div>

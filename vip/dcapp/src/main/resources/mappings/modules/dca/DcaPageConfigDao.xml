@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.system.dao.DcaPageConfigDao">
+    
+	<sql id="dcaPageConfigColumns">
+		a.cfg_id AS "cfgId",
+		a.cfg_type AS "cfgType",
+		a.cfg_code AS "cfgCode",
+		a.cfg_name AS "cfgName",
+		a.cfg_value1 AS "cfgValue1",
+		a.cfg_value2 AS "cfgValue2",
+		a.cfg_value3 AS "cfgValue3",
+		a.cfg_value4 AS "cfgValue4",
+		a.cfg_value5 AS "cfgValue5",
+		a.cfg_value6 AS "cfgValue6",
+		a.del_flag AS "delFlag",
+		a.create_person AS "createPerson",
+		a.create_date AS "createDate",
+		a.update_person AS "updatePerson",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="dcaPageConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaPageConfig">
+		SELECT 
+			<include refid="dcaPageConfigColumns"/>
+		FROM dca_page_config a
+		<include refid="dcaPageConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DcaPageConfig">
+		SELECT 
+			<include refid="dcaPageConfigColumns"/>
+		FROM dca_page_config a
+		<include refid="dcaPageConfigJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaPageConfig">
+		SELECT 
+			<include refid="dcaPageConfigColumns"/>
+		FROM dca_page_config a
+		<include refid="dcaPageConfigJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getAllData" resultType="DcaPageConfig">
+		select
+			cfg_type,cfg_code,cfg_name,cfg_value1,cfg_value2,cfg_value3,cfg_value4,cfg_value5,cfg_value6 
+		FROM DCA_PAGE_CONFIG t 
+		WHERE del_flag='0'
+		ORDER BY cfg_type, CFG_VALUE1 DESC
+
+    </select>
+    
+    <select id="getInvolveDeptData" resultType="DcaPageConfig">
+		select
+			cfg_type,cfg_code,cfg_name,cfg_value1
+		FROM DCA_PAGE_CONFIG t 
+		WHERE del_flag='0'
+		AND CFG_TYPE='InvolveDept'
+		ORDER BY CFG_VALUE1 DESC
+
+    </select>
+	
+	<insert id="insert">
+		INSERT INTO dca_page_config(
+			cfg_id,
+			cfg_type,
+			cfg_code,
+			cfg_name,
+			cfg_value1,
+			cfg_value2,
+			cfg_value3,
+			cfg_value4,
+			cfg_value5,
+			cfg_value6,
+			del_flag,
+			create_person,
+			create_date,
+			update_person,
+			update_date,
+			remarks
+		) VALUES (
+			#{cfgId},
+			#{cfgType},
+			#{cfgCode},
+			#{cfgName},
+			#{cfgValue1},
+			#{cfgValue2},
+			#{cfgValue3},
+			#{cfgValue4},
+			#{cfgValue5},
+			#{cfgValue6},
+			#{delFlag},
+			#{createPerson},
+			SYSDATE,
+			#{updatePerson},
+			SYSDATE,
+			#{remarks}
+		)
+	</insert>
+	
+	<!-- 批量插入 -->
+	<insert id="insertBatch">
+		begin
+		<foreach item="item" collection="list" index="index" separator=";">
+			INSERT INTO dca_page_config(
+				cfg_id,
+				cfg_type,
+				cfg_code,
+				cfg_name,
+				cfg_value1,
+				cfg_value2,
+				cfg_value3,
+				cfg_value4,
+				cfg_value5,
+				cfg_value6,
+				del_flag,
+				create_person,
+				create_date,
+				update_person,
+				update_date,
+				remarks
+			) VALUES (
+				#{item.cfgId},
+				#{item.cfgType},
+				#{item.cfgCode},
+				#{item.cfgName},
+				#{item.cfgValue1},
+				#{item.cfgValue2},
+				#{item.cfgValue3},
+				#{item.cfgValue4},
+				#{item.cfgValue5},
+				#{item.cfgValue6},
+				#{item.delFlag},
+				#{item.createPerson},
+				SYSDATE,
+				#{item.updatePerson},
+				SYSDATE,
+				#{item.remarks}
+			)
+		</foreach>
+		;end;	
+	</insert>
+	
+	<update id="update">
+		UPDATE dca_page_config SET 	
+			cfg_id = #{cfgId},
+			cfg_type = #{cfgType},
+			cfg_code = #{cfgCode},
+			cfg_name = #{cfgName},
+			cfg_value1 = #{cfgValue1},
+			cfg_value2 = #{cfgValue2},
+			cfg_value3 = #{cfgValue3},
+			cfg_value4 = #{cfgValue4},
+			cfg_value5 = #{cfgValue5},
+			cfg_value6 = #{cfgValue6},
+			create_person = #{createPerson},
+			update_person = #{updatePerson},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE dca_page_config SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 删除表中全部数据 -->
+	<update id="delectAll">
+		DELETE FROM DCA_PAGE_CONFIG
+	</update>
+	
+	<!-- 查询部门列表 -->
+	<select id="getOfficeList" resultType="com.thinkgem.jeesite.modules.sys.entity.Office">
+		SELECT ID,NAME FROM SYS_OFFICE WHERE type = '2'	
+	</select>	
+	
+</mapper>

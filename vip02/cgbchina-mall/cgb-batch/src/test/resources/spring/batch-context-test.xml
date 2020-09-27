@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+       <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+              <property name="fileEncoding" value="utf-8" />
+              <property name="locations">
+                     <list>
+                            <value>classpath:excel.properties</value>
+                            <value>classpath:config.properties</value>
+                     </list>
+              </property>
+       </bean>
+       <util:properties id="app" location="classpath:app.properties,apptest.properties"/>
+       <import resource="classpath:spring/batch-context-1.xml"/>
+
+       <bean class="cn.com.cgbchina.common.utils.ExcelUtilAgency">
+              <property name="maxLimitNum" value="${excel.maxLimitNum}" />
+              <property name="diskPath" value="#{app.excelDiskPath}" />
+       </bean>
+       <bean class="cn.com.cgbchina.batch.util.ReportTaskUtil">
+        <property name="reportUrl" value="#{app.reportUrl}" />
+        <property name="diskPath" value="#{app.excelDiskPath}" />
+    </bean>
+       <context:component-scan base-package="cn.com.cgbchina.batch"/>
+       <import resource="classpath:spring/scheduler.xml"/>
+<import resource="classpath:/spring/promotionmq.xml"/>
+
+</beans>

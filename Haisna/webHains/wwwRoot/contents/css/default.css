@@ -1,0 +1,61 @@
+body, table {
+	font-size: 13px;
+	margin: 0px;
+}
+
+TEXTAREA,
+input[type="text"],
+input[type="password"],
+select {
+	border: 0;
+	padding: 2px 3px 2px 2px;
+	border:solid 1px #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+};
+
+A.navia:link    { color:#000000;}
+A.nabia:visited { color:#000000;}
+A.nabia:hover   { color:#FF6600; text-decoration:underline;}
+
+tr.canceled    { background-color:#FFDDFF } /*	取消伝票用	*/
+td.reservetab  { background-color:#CCCCCC }	/*	予約		*/
+td.questiontab { background-color:#CCCCCC }	/*	問診		*/
+td.resulttab   { background-color:#CCCCCC }	/*	結果		*/
+td.healthtab   { background-color:#CCCCCC }	/*	健康管理	*/ 
+td.afterstab   { background-color:#CCCCCC }	/*	アフターサービス*/
+td.infotab     { background-color:#CCCCCC }	/*	個人情報	*/
+td.mailtab     { background-color:#CCCCCC }	/*	Mail		*/
+
+td.selectedcolor   { background-color:#CCCCFF }	/*	選択色		*/
+td.shadowcolor	   { background-color:#CCCCCC }	/*	陰影用		*/
+
+td.bgimagecolor  { background-color:#006699 }	/*	背景等イメージカラー	*/
+.ftimagecolor  { color:#006699 }		/*	フォントイメージカラー	*/
+
+A:link    { color:#006699;}
+A:visited { color:#006699;}
+A:hover   { color:#000000; text-decoration: underline; }
+
+A.guideItem:link    { color:#006699;}
+A.guideItem:visited { color:#006699;}
+A.guideItem:hover   { color:#000000; text-decoration:underline; background-color:#99CCFF;}
+
+A { text-decoration: none; }
+
+input.rslErr   { color:#000000; background-color:#ffccff; }
+input.money    { ime-mode:disabled:text-align:right; }
+
+.reserve       { color:#FF3300;}
+.result        { color:#4BBCB7;}
+.judgement     { color:#6600ff;}
+.inquiry       { color:#6600ff;}
+.print         { color:#6600ff;}
+.demand        { color:#6600ff;}
+.download      { color:#6600ff;}
+.maintenance   { color:#ff66cc;}
+.contract      { color:#6600ff;}
+.hainsdef      { color:#cccccc;}
+
+IMG 	  { border-style:none }

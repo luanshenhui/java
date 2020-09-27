@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EspAreaInfModel">
+    <resultMap id="EspAreaInfMap" type="EspAreaInfModel">
+        <result property="id" column="id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="areaId" column="area_id"/>
+        <result property="areaName" column="area_name"/>
+        <result property="areaType" column="area_type"/>
+        <result property="focusImage" column="focus_image"/>
+        <result property="unfocusImage" column="unfocus_image"/>
+        <result property="areaSeq" column="area_seq"/>
+        <result property="integralType" column="integral_type"/>
+        <result property="goodsType" column="goods_type"/>
+        <result property="formatId" column="format_id"/>
+        <result property="areaDesc" column="area_desc"/>
+        <result property="curStatus" column="cur_status"/>
+        <result property="publishStatus" column="publish_status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,ordertype_id,area_id,area_name,area_type,focus_image,unfocus_image,area_seq,integral_type,goods_type,format_id,area_desc,cur_status,publish_status,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="EspAreaInfModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_esp_area_inf
+        (ordertype_id
+        ,area_id
+        ,area_name
+        ,area_type
+        ,focus_image
+        ,unfocus_image
+        ,area_seq
+        ,integral_type
+        ,goods_type
+        ,format_id
+        ,area_desc
+        ,cur_status
+        ,publish_status
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{ordertypeId}
+        ,#{areaId}
+        ,#{areaName}
+        ,#{areaType}
+        ,#{focusImage}
+        ,#{unfocusImage}
+        ,#{areaSeq}
+        ,#{integralType}
+        ,#{goodsType}
+        ,#{formatId}
+        ,#{areaDesc}
+        ,#{curStatus}
+        ,#{publishStatus}
+        ,#{delFlag}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="EspAreaInfModel">
+        update tbl_esp_area_inf set
+        <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+            ,</if>
+        <if test="areaId !=null">area_id = #{areaId}
+            ,</if>
+        <if test="areaName !=null">area_name = #{areaName}
+            ,</if>
+        <if test="areaType !=null">area_type = #{areaType}
+            ,</if>
+        <if test="focusImage !=null">focus_image = #{focusImage}
+            ,</if>
+        <if test="unfocusImage !=null">unfocus_image = #{unfocusImage}
+            ,</if>
+        <if test="areaSeq !=null">area_seq = #{areaSeq}
+            ,</if>
+        <if test="integralType !=null">integral_type = #{integralType}
+            ,</if>
+        <if test="goodsType !=null">goods_type = #{goodsType}
+            ,</if>
+        <if test="formatId !=null">format_id = #{formatId}
+            ,</if>
+        <if test="areaDesc !=null">area_desc = #{areaDesc}
+            ,</if>
+        <if test="curStatus !=null">cur_status = #{curStatus}
+            ,</if>
+        <if test="publishStatus !=null">publish_status = #{publishStatus}
+            ,</if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,</if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,</if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,</if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,</if>
+        modify_time = now()
+
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        where del_flag=0
+        <if test="id !=null">and id = #{id}</if>
+        <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+        <if test="areaId !=null">and area_id = #{areaId}</if>
+        <if test="areaName !=null">and area_name = #{areaName}</if>
+        <if test="areaType !=null">and area_type = #{areaType}</if>
+        <if test="focusImage !=null">and focus_image = #{focusImage}</if>
+        <if test="unfocusImage !=null">and unfocus_image = #{unfocusImage}</if>
+        <if test="areaSeq !=null">and area_seq = #{areaSeq}</if>
+        <if test="integralType !=null">and integral_type = #{integralType}</if>
+        <if test="goodsType !=null">and goods_type = #{goodsType}</if>
+        <if test="formatId !=null">and format_id = #{formatId}</if>
+        <if test="areaDesc !=null">and area_desc = #{areaDesc}</if>
+        <if test="curStatus !=null">and cur_status = #{curStatus}</if>
+        <if test="publishStatus !=null">and publish_status = #{publishStatus}</if>
+        <if test="createOper !=null">and create_oper = #{createOper}</if>
+        <if test="createTime !=null">and create_time = #{createTime}</if>
+        <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+        <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EspAreaInfMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_esp_area_inf
+        where id=#{id} and del_flag=0
+    </select>
+    <select id="findAll" resultMap="EspAreaInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_area_inf
+        <include refid="conditions"/>
+    </select>
+
+    <update id="delete" parameterType="EspAreaInfModel">
+       update tbl_esp_area_inf
+        set
+        del_flag = 1,
+        modify_oper = #{modifyOper},
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <!-- 查询分区信息 add by geshuo 20160728 -->
+    <select id="findAreaInfoByParams" parameterType="Map" resultMap="EspAreaInfMap">
+        select
+        <include refid="columns"/>
+        from tbl_esp_area_inf
+        <include refid="conditions"/>
+    </select>
+
+    <!--礼品分区查询-->
+    <sql id="pageConditions">
+
+        <where>
+            del_flag = 0
+            <if test="id !=null">and id = #{id}</if>
+            and ordertype_id = 'JF'
+            <if test="areaId !=null">and area_id = #{areaId}</if>
+            <if test="areaName !=null">and area_name LIKE concat(concat('%',#{areaName}),'%')</if>
+            <if test="areaType !=null">and area_type = #{areaType}</if>
+            <if test="focusImage !=null">and focus_image = #{focusImage}</if>
+            <if test="unfocusImage !=null">and unfocus_image = #{unfocusImage}</if>
+            <if test="areaSeq !=null">and area_seq = #{areaSeq}</if>
+            <if test="integralType !=null">and integral_type = #{integralType}</if>
+            <if test="goodsType !=null">and goods_type = #{goodsType}</if>
+            <if test="formatId !=null">and format_id = #{formatId}</if>
+            <if test="areaDesc !=null">and area_desc = #{areaDesc}</if>
+            <if test="curStatus !=null">and cur_status = #{curStatus}</if>
+            <if test="publishStatus !=null">and publish_status = #{publishStatus}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="pager" parameterType="Map" resultMap="EspAreaInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_area_inf
+        <include refid="pageConditions"/>
+        <![CDATA[ order by area_seq ASC limit #{offset}, #{limit} ]]>
+    </select>
+    <!--分页时用的总数-->
+    <select id="pageCount" resultType="Long">
+        select count(1)
+        from tbl_esp_area_inf
+        <include refid="pageConditions"/>
+    </select>
+
+    <!--校验sort是否重复-->
+    <select id="checkPartitionSort" parameterType="Integer" resultType="Long">
+        select count(1)
+        from tbl_esp_area_inf
+        where area_seq = #{areaSeq} and del_flag = 0 and ordertype_id ='JF'
+    </select>
+    <!--检验分区名称是否重复 -->
+    <select id="checkGiftPartition" parameterType="String" resultType="Long">
+        select count(1)
+        from tbl_esp_area_inf
+        where area_name = #{areaName} and del_flag = 0 and ordertype_id ='JF'
+    </select>
+    <!--检验分区code是否重复 -->
+    <select id="checkPartitionCode" parameterType="String" resultType="Long">
+        select count(1)
+        from tbl_esp_area_inf
+        where area_id= #{areaId} and del_flag = 0 and ordertype_id ='JF'
+    </select>
+    <!--分区查询 add by wangyixuan-->
+    <select id="findNameByAll" resultMap="EspAreaInfMap">
+        select
+        <include refid="columns"/>
+        from tbl_esp_area_inf where ordertype_id = 'JF' and cur_status = '0102' and del_flag = 0
+        <![CDATA[ order by modify_time desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="findNameByAllCount" resultType="Long">
+        select count(1)
+        from tbl_esp_area_inf where ordertype_id = 'JF' and cur_status = '0102' and del_flag = 0
+    </select>
+    <!--add by shangqinbin-->
+    <select id="findByAreaId" parameterType="Map" resultMap="EspAreaInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_area_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="findEspAreaInfByAreaId" parameterType="Map" resultMap="EspAreaInfMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_area_inf
+        where area_id=#{area_id} limit 1
+    </select>
+</mapper>
+
+

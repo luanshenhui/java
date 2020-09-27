@@ -1,0 +1,20 @@
+<div class="modal">
+  <div class="modal-header">
+    <h2>配置店铺模板</h2>
+  </div>
+  <form class="form form-aligned shop-template-form" template-id="{{id}}">
+    <div class="shop-template-new modal-dialog">
+      <div class="control-group">
+        <label for="shop-template-name"><span class="required">*</span>站点名称:</label>
+        <input id="shop-template-name" name="name" type="text" placeholder="请输入店铺模板名称" required value="{{name}}">
+        <span class="note"><i>&times;</i> 必填 不得为空</span>
+        <span class="note-error"><i>&times;</i> 必填 不得为空</span>
+        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input class="btn btn-medium btn-success" type="submit" value="确定">
+      <button class="btn btn-medium close">取消</button>
+    </div>
+  </form>
+</div>

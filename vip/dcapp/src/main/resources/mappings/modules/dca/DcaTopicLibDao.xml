@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.metadata.dao.DcaTopicLibDao">
+
+	<sql id="dcaTopicLibColumns">
+		a.TOPIC_ID AS "topicId",
+		a.TOPIC_NAME AS "topicName",
+		a.IS_SHOW AS "isShow",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS
+		"createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS
+		"updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks"
+	</sql>
+	<sql id="dcaPhy">
+		t.TABLE_NAME AS "tableName",
+		t.TABLE_COMMENT AS
+		"tableComment"
+	</sql>
+	<sql id="dcaPhyRef">
+		r.UUID AS "uuId",
+		r.TOPIC_ID AS "topicId",
+		r.PHY_NAME_EN AS
+		"phyNameEn",
+		r.PHY_NAME_CN AS "phyNameCn",
+		r.DEL_FLAG AS "delFlag"
+
+	</sql>
+
+
+	<sql id="dcaTopicLibJoins">
+	</sql>
+	<!--添加或修改主题库时：查找topicName 看是否有这个topicName 因为主题库名称不能重复 -->
+	<select id="selectTopicName" resultType="DcaTopicLib">
+		SELECT
+		<include refid="dcaTopicLibColumns" />
+		FROM DCA_TOPIC_LIB a
+		<include refid="dcaTopicLibJoins" />
+		WHERE a.TOPIC_NAME=#{topicName} AND a.DEL_FLAG='0'
+	</select>
+
+	<!--getDcaTopicLibBytopicName -->
+	<select id="getDcaTopicLibBytopicName" resultType="DcaTopicLib">
+		SELECT
+		<include refid="dcaTopicLibColumns" />
+		FROM DCA_TOPIC_LIB a
+		<include refid="dcaTopicLibJoins" />
+		WHERE a.TOPIC_NAME=#{topicName} AND a.DEL_FLAG='0'
+	</select>
+
+	<!--删除主题库时 查看此条的topicId 如果在关联表中有对应的topicId 则说明有关联关系 -->
+	<select id="selectTopicId" resultType="DcaTopicLib">
+		SELECT
+		<include refid="dcaPhyRef" />
+		FROM DCA_TOPIC_REF_PHYSICS r
+		<include refid="dcaTopicLibJoins" />
+		WHERE r.TOPIC_ID=#{topicId}
+	</select>
+
+	<!-- 关联物理表里查询物理表中文名getSearchResult -->
+	<select id="getSearchResult" resultType="DcaTopicLib">
+		<!-- SELECT infrosc.TABLENAMECN AS tableComment, infrosc.TABLENAMEEN AS 
+			tableName,dtrp.TOPIC_ID AS topicId FROM ( SELECT T.TABLE_COMMENT AS TABLENAMECN, 
+			T.TABLE_NAME AS TABLENAMEEN FROM information_schema.`TABLES` T, (SELECT DATABASE() 
+			AS dbname) T1 <where> T.TABLE_SCHEMA = T1.dbname AND T.TABLE_NAME LIKE CONCAT('dca','_','%') 
+			<if test="tableComment != null and tableComment != ''"> AND T.TABLE_COMMENT 
+			LIKE CONCAT('%', #{tableComment}, '%') </if> </where> ) infrosc LEFT JOIN 
+			DCA_TOPIC_REF_PHYSICS dtrp ON infrosc.TABLENAMEEN = dtrp.PHY_NAME_EN AND 
+			dtrp.TOPIC_ID=#{id} AND dtrp.DEL_FLAG = '0' ORDER BY dtrp.UUID DESC -->
+		SELECT
+		infrosc.TABLENAMECN AS tableComment,
+		infrosc.TABLENAMEEN AS tableName,dtrp.TOPIC_ID AS topicId
+		FROM
+		(
+		SELECT
+		T.COMMENTS AS TABLENAMECN,
+		T.TABLE_NAME AS TABLENAMEEN
+		FROM
+		USER_TAB_COMMENTS T
+		<where>
+
+			T.TABLE_NAME LIKE (SELECT s.VALUE
+				FROM SYS_DICT s
+			WHERE s.TYPE = 'dca_phy_type')||'%'
+
+			<if test="tableComment != null and tableComment != ''">
+				AND T.COMMENTS LIKE
+				<if test="dbName == 'oracle'">'%'||#{tableComment}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{tableComment}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%',#{tableComment},'%')</if>
+			</if>
+		</where>
+
+		) infrosc
+		LEFT JOIN DCA_TOPIC_REF_PHYSICS dtrp
+		ON
+		infrosc.TABLENAMEEN = dtrp.PHY_NAME_EN
+		AND dtrp.TOPIC_ID=#{id}
+		AND dtrp.DEL_FLAG = '0'
+		ORDER BY
+		dtrp.Topic_ID ASC,infrosc.TABLENAMEEN
+
+	</select>
+
+
+	<!--传入topicId与tableName查看表中是否存在这条数据 -->
+	<select id="selectTableName" resultType="DcaTopicLib">
+		SELECT
+		<include refid="dcaPhyRef" />
+		FROM DCA_TOPIC_REF_PHYSICS r
+		<include refid="dcaTopicLibJoins" />
+		WHERE r.TOPIC_ID=#{topicId} AND r.PHY_NAME_EN=#{tableName}
+	</select>
+	<!--传入topicId 得到tableNameList 是所有主题库相关表的表名集合 -->
+	<select id="selectTableNameList" resultType="string">
+		SELECT
+		r.PHY_NAME_EN AS tableName
+		FROM DCA_TOPIC_REF_PHYSICS r
+		<include refid="dcaTopicLibJoins" />
+		WHERE r.TOPIC_ID=#{topicId}
+	</select>
+
+	<!-- 删除本来是勾选状态，现在已经不勾选的条数 -->
+	<delete id="deletePhyRefRelation" parameterType="string">
+		DELETE
+		FROM DCA_TOPIC_REF_PHYSICS
+		WHERE
+		<foreach item="item" collection="list" index="index" open="("
+			separator="or" close=")">
+			TOPIC_ID = #{item.topicId}
+			AND
+			PHY_NAME_EN = #{item.tableName}
+		</foreach>
+	</delete>
+	<!--保存物理表关联 -->
+	<insert id="setPhyRef">
+		begin
+		<foreach item="item" collection="list" index="index"
+			separator=";">
+			INSERT INTO DCA_TOPIC_REF_PHYSICS(
+			UUID,
+			TOPIC_ID,
+			PHY_NAME_EN,
+			PHY_NAME_CN,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE
+			) VALUES
+
+			(
+			#{item.id},
+			#{item.topicId},
+			#{item.tableName},
+			#{item.tableComment},
+			#{item.delFlag},
+			#{item.createPerson},
+			sysdate,
+			#{item.updatePerson},
+			sysdate
+			)
+		</foreach>
+		;end;
+	</insert>
+	
+	<select id="get" resultType="DcaTopicLib">
+		SELECT
+		<include refid="dcaTopicLibColumns" />
+		FROM DCA_TOPIC_LIB a
+		<include refid="dcaTopicLibJoins" />
+		WHERE a.TOPIC_ID = #{id}
+	</select>
+
+	<!--查看主题库状态 getTopicLib -->
+	<select id="getTopicLib" resultType="String">
+		SELECT a.IS_SHOW AS isShow
+		
+		FROM DCA_TOPIC_LIB a
+		<include refid="dcaTopicLibJoins" />
+		WHERE a.TOPIC_ID = #{id} AND a.DEL_FLAG = '0'
+	</select>
+
+	<select id="findList" resultType="DcaTopicLib">
+		SELECT
+		<include refid="dcaTopicLibColumns" />
+		FROM DCA_TOPIC_LIB a
+		<include refid="dcaTopicLibJoins" />
+
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="topicName != null and topicName != ''">
+				AND a.TOPIC_NAME LIKE 
+				<if test="dbName == 'oracle'">'%'||#{topicName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{topicName}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%',#{topicName},'%')</if>
+			</if>
+			<if test="topicStatus != null and topicStatus != ''">
+				AND a.IS_SHOW = #{topicStatus}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DcaTopicLib">
+		SELECT
+		<include refid="dcaTopicLibColumns" />
+		FROM DCA_TOPIC_LIB a
+		<include refid="dcaTopicLibJoins" />
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dca_topic_lib(
+		TOPIC_ID,
+		TOPIC_NAME,
+		IS_SHOW,
+		DEL_FLAG,
+		CREATE_PERSON,
+		CREATE_DATE,
+		UPDATE_PERSON,
+		UPDATE_DATE,
+		REMARKS
+		) VALUES (
+		#{id},
+		#{topicName},
+		#{isShow},
+		#{delFlag},
+		#{createPerson},
+		sysdate,
+		#{updatePerson},
+		sysdate,
+		#{remarks}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE DCA_TOPIC_LIB SET
+		TOPIC_NAME = #{topicName},
+		IS_SHOW = #{isShow},
+		REMARKS = #{remarks},
+		UPDATE_PERSON = #{updatePerson},
+		UPDATE_DATE = sysdate
+		WHERE TOPIC_ID = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE DCA_TOPIC_LIB SET
+		DEL_FLAG = #{DEL_FLAG_DELETE},
+		UPDATE_DATE = sysdate
+		WHERE TOPIC_ID = #{id}
+	</update>
+
+	<!-- 根据主题库id查询主题库下管理的物理表  -->
+	<select id="findTopicPhysicsByTopicId" resultType="DcaTopicLib">
+		SELECT
+			T.TOPIC_NAME AS topicName,
+			P.PHY_NAME_EN AS tableName,
+			P.PHY_NAME_CN AS tableComment
+		FROM
+			DCA_TOPIC_LIB T
+		LEFT JOIN DCA_TOPIC_REF_PHYSICS P ON T.TOPIC_ID = P.TOPIC_ID
+		<where>
+			T.DEL_FLAG = #{DEL_FLAG_NORMAL} AND P.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="topicId != null and topicId != ''">
+				AND T.TOPIC_ID = #{topicId}
+			</if>
+            <if test="topicName != null and topicName != ''">
+                AND T.TOPIC_NAME = #{topicName}
+            </if>
+			<if test="tableComment != null and tableComment != ''">
+				AND P.PHY_NAME_CN LIKE '%'||#{tableComment}||'%'
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY T.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+
+</mapper>

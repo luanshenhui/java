@@ -1,0 +1,82 @@
+1、自定义标签
+	step1,先写一个java类，继承SimpleTagSupport类。
+	step2, override doTag方法，在该方法里面，编写
+	相应的处理逻辑。
+	step3,在.tld文件里面，描述这个标签。
+		<body-content>empty</body-content>
+		empty: 标签没有标签体。
+		<body-content>scriptless</body-content>
+		scriptless:  标签可以有标签体，但是，标签体的
+		内容不能够出现java代码(<%  %>,<%=  %>,<%!   %>)。
+		<body-content>JSP</body-content>
+		JSP:标签有标签体，并且，标签体的内容可以是
+		java代码。但是，只有复杂标签技术才支持。简单
+		标签技术只支持 empty,scriptless。	
+
+练习：写一个标签，按指定的格式输出日期。
+		<c1:date pattern="yyyy-MM-dd"/>
+		
+2、如果使用javaee5.0，如何使用el表达式和
+jstl？
+	(1)程序使用的规范应该与容器使用的规范一致。
+	比如:
+		javaee5.0对应的servlet规范是servlet2.5,
+	tomcat6.0实现了servlet2.5规范。
+		j2ee1.4对应的servlet规范是servlet2.4,
+	tomcat5.5实现了servlet2.4规范。
+	(2)不再需要拷贝jstl对应jar文件。
+
+3、mvc(model view controller)
+	(1)mvc是什么?
+		是一种软件架构思想，将一个软件按照模型、视图、
+	控制器来进行划分。其中，模型用来封装业务逻辑，
+	视图用来实现表示逻辑，控制器用来协调模型和视图(
+	视图向控制器发请求，控制器依据请求调用对应的模型
+	来处理；模型返回的处理结果要交给控制器，由控制器
+	选择对应的视图来展现处理的结果)。
+		使用mvc的最重要的优点是：可以实现模型的复用。
+	模型的复用有两层含义:
+		1)模型不关心返回的结果如何展现的，只需要把
+	处理结果交给不同的视图来展现。
+		2)可以使用不同的视图来访问模型。
+	(2)如何使用mvc来开发一个web应用程序(java平台)
+		1)model :java类
+		2)view: jsp
+		3)controller: servlet或者filter
+		
+1)model :java类或者容器管理的java类(比如，
+ejb,spring容器管理的javabean，这些容器会为
+java类提供很多基础服务，比如事务、安全等等，
+这样，在编写业务处理逻辑时，会更加的方便)。
+2)view: jsp或者模板技术、jsf。
+3)controller: servlet或者filter
+
+(3)mvc的优缺点
+	1)优点
+		a,可以实现模型的复用
+		b,代码很容易维护：
+			视图或者模型发生改变，不会彼此影响。
+		c,方便测试：
+			比如，将业务逻辑处理代码直接写在servlet
+		里面，需要部署到服务器上然后使用浏览器发请求
+		才能测试；而将业务逻辑写在java类里面，可以
+		直接测试。
+	2)缺点
+		按照mvc来开发一个软件，会增加设计的难度，也
+	会增加代码量，相应的开发成本也会增加。
+		
+案例:
+		step1,建表
+		create table t_account(
+			id int primary key auto_increment,
+			accountNo varchar(16) unique,
+			balance double
+		)type=innodb;
+		insert into t_account(accountNo,balance) 
+		values('62251000',1000);
+		step2, 模型
+
+
+	
+	
+		

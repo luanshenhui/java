@@ -1,0 +1,278 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		<title>进出境旅客携带物全过程执法记录</title>
+		<style type="text/css">
+		input.datepick{background:#FFF url(${ctx}/static/dec/images/dpn.date.pick.gif) no-repeat right}
+		#title_a{color:#ccc}
+		#title_a:hover{
+		  color:white;
+		}
+		</style>
+		<script src="${ctx}/static/viewer/assets/js/jquery.min.js"></script>
+		<script src="${ctx}/static/viewer/assets/js/bootstrap.min.js"></script>
+		<script src="${ctx}/static/viewer/dist/viewer.js"></script>
+		<script src="${ctx}/static/viewer/demo/js/main.js"></script>
+		<script type="text/javascript" src="${ctx}/cuplayer/Images/swfobject.js"></script>
+		<%@ include file="/common/resource_show.jsp"%>
+		<link rel="stylesheet" href="${ctx}/static/viewer/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="${ctx}/static/viewer/dist/viewer.css" />
+		<link rel="stylesheet" href="${ctx}/static/viewer/demo/css/main.css" />	
+		<script type="text/javascript"> 
+			jQuery(document).ready(function(){
+				$("#clearUp").click(function() {
+					$("#cardNo").val('');
+					$("#interceptDate1").val('');
+					$("#interceptDate2").val('');
+					$("#portOrg").val('');
+					$("#portOrgUmder").val('');
+					$("#declNo").val('');
+					$("#goodsItemName").val('');
+					$("#goodsType").val('');
+				});
+			});
+		
+			function pageUtil(page) {
+				$("#Intercepe_form").attr("action", "${ctx}/Belongings/Intercepe?page="+page);
+				$("#Intercepe_form").submit();
+			}
+			
+			function insertOBJFormSubmit(cardNo,qlcTravCarryObjId) {
+				var prodMainId = $("#prodMainId_"+qlcTravCarryObjId).val();
+			    if(prodMainId==''){
+			    	alert("业务单号不能为空!");
+			    	return;;
+			    }
+				if(confirm("确认要提交吗？")){
+				    $.ajax({	
+						url : "${ctx}/Belongings/insertItravCarryObj?cardNo="+cardNo+"&prodMainId="+prodMainId+"&qlcTravCarryObjId="+qlcTravCarryObjId,
+						method : "post",
+						success: function(data){
+						    if(data.result=="OK"){
+						    	alert("提交成功!");
+						    }else{
+						    	alert("提交失败!");
+						    }
+						}
+					});
+				}
+			} 
+			
+			function IntercepeFormSubmit() {
+				$("#Intercepe_form").attr("action", "${ctx}/Belongings/Intercepe");
+				$("#Intercepe_form").attr("method", "post");
+				$("#Intercepe_form").submit();
+			}
+			
+			function toDetails(card_no,qlcTravCarryObjId){
+				var prodMainId = $("#prodMainId_"+qlcTravCarryObjId).val();
+				$("#Intercepe_form").attr("action", "${ctx}/Belongings/details?card_no="+card_no+"&prod_main_id="+prodMainId);
+				$("#Intercepe_form").attr("method", "post");
+				$("#Intercepe_form").submit();
+			}
+		</script>
+		<style type="text/css">
+			.box-img-bg {
+				background-image: url(../static/show/disc/bg.png);
+				box-sizing: border-box;
+				width: 1198px;
+				height: 164px;
+				padding: 0 200px;
+				position: absolute;
+				display: none;
+				font-size: 20px;
+				line-height: 35px;
+				color: white;
+			}
+			
+			.box-content-style {
+				display: table-cell;
+				vertical-align: middle;
+				text-align: center;
+			}
+		</style>
+	</head>
+  
+ <body  class="bg-gary">
+		<div class="freeze_div_list">
+			<div class="title-bg" >
+			<div class=" title-position margin-auto white">
+			<div class="title"><span class="font-24px" style="color:white;">行政确认 /</span><a id="title_a" href="${ctx}/Belongings/Intercepe">进出境旅客携带物检疫</a></div>
+			<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+			</div>
+			</div>
+			<div class="flow-bg" >
+				<div class="flow-position margin-auto" >
+					<ul class="white font-18px flow-height font-weight">
+						<li style="width:150px">现场查验</li>
+						<li style="width:150px">现场检疫</li>
+						<li style="width:190px">封存、截留决定及实施</li>
+						<li style="width:190px">解除封存、截留</li>
+					</ul>
+					<ul>
+						<li style="width:150px"><img src="${ctx}/static/show/images/Belongings/belongingsA1.png" width="107" height="103" content=""/></li>
+						<li style="width:150px"><img src="${ctx}/static/show/images/Belongings/belongingsA3.png" width="107" height="103" content="执法人员根据现场检疫查验情况填写《口岸核生化事件相关记录单》、《旅检现场核生化有害因子监测调查表》、《移送人员信息登记表》、《核生化有害因子交接信息登记表》、《入出境尸体/棺柩/骸骨现场检查工作记录》。记录内容：应检物图像、《检疫犬截获动植物、动植物产品记录表》、全程监控录像、查验录像。"/></li>
+						<li style="width:190px"><img src="${ctx}/static/show/images/Belongings/belongingsA4.png" width="107" height="103" content="截留物品应装入专用密封袋进行封存，存放于专属存储室，分类摆放，由专人负责进出库以及日常保管。进境宠物暂存于宠物留验室，临床检查合格后，对进境宠物分类进行隔离检疫。记录内容：智能查验一体机电子记录及二维码标签。"/></li>
+						<li style="width:190px"><img src="${ctx}/static/show/images/Belongings/belongingsA5.png" width="107" height="103" content="经实验室检疫、隔离检疫合格的截留物，现场执法人员对封存截留的携带物予以放行。记录内容：全程录像；应急处置记录内容：《口岸核生化事件相关记录单》、《旅检现场核生化有害因子监测调查表》、《移送人员信息登记表》、《核生化有害因子交接信息登记表》、《入出境尸体/棺柩/骸骨现场检查工作记录》及《进出境重大植物疫情信息预警表》。"/></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="blank_div_list">
+		</div>
+		<div class="margin-auto width-1200 search-box">
+		<div id="alertBoxId" class="box-img-bg"><span class="box-content-style" id="alertContentId"></span></div>
+			<form action="${ctx}/Belongings/Intercepe"  method="post" id="Intercepe_form">
+			<table width="100%" border="0" class="table-search margin-auto">
+			  <tr>
+			    <td height="25" align="left" valign="middle">护照号码</td>
+			    <td height="25" align="left" valign="middle">开始时间</td>
+			    <td height="25" align="left" valign="middle">结束时间</td>
+			    <td height="25" align="left" valign="middle">直属局</td>
+			    <td height="25" align="left" valign="middle">分支机构</td>
+			    <td height="25">&nbsp;</td>
+			  </tr>
+			  
+			  <tr>
+			    <td width="200" height="50" align="left" valign="middle"><input type="text" name="cardNo" id="cardNo" size="14" value="${cardNo}" class="search-input input-175px" /></td>
+			    <td width="200" height="50" align="left" valign="middle"><input type="text" name="interceptDate1" id="interceptDate1" size="14" value="${interceptDate1}" class="search-input input-175px datepick" /></td>
+			    <td width="200" height="50" align="left" valign="middle"><input type="text" name="interceptDate2" id="interceptDate2" size="14" value="${interceptDate2}" class="search-input input-175px datepick" /></td>
+			    <td width="200" height="50" align="left">
+				    <select id="portOrg" class="search-input input-175px" name="portOrg">
+				        <option value="">请选择</option>
+						<c:if test="${not empty allorgList }">
+							<c:forEach items="${allorgList}" var="row">
+								<c:if test="${portOrg == row.code}">
+									<option selected="selected" value="${row.code}">${row.name}</option>
+								</c:if>
+								<c:if test="${portOrg != row.code}">
+									<option value="${row.code}">${row.name}</option>
+								</c:if>
+							</c:forEach>
+						</c:if>
+					</select>
+			    </td>
+			    <td width="200" height="50" align="left">
+				    <select id="portOrgUmder" class="search-input input-175px" name="portOrgUmder">
+				    	<option value="">请选择</option>
+						<c:if test="${not empty alldepList }">
+							<c:forEach items="${alldepList}" var="row">
+								<c:if test="${portOrgUmder == row.code}">
+									<option selected="selected" value="${row.code}">${row.name}</option>
+								</c:if>
+								<c:if test="${portOrgUmder != row.code}">
+									<option value="${row.code}">${row.name}</option>
+								</c:if>
+							</c:forEach>
+						</c:if> 
+					</select>
+			    </td>
+			  </tr>
+			  <tr>
+			    <td height="25" align="left" valign="middle">业务单号</td>
+			    <td height="25" align="left" valign="middle">品名</td>
+			    <td height="25">&nbsp;</td>
+			    <td height="25">&nbsp;</td>
+			    <td height="25">&nbsp;</td>
+			  </tr>
+			  <tr>
+			    <td width="200" height="50" align="left" valign="middle"><input type="text" name="declNo" id="declNo" value="${declNo}" size="14" class="search-input input-175px" /></td>
+			    <td width="200" height="50" align="left" valign="middle"><input type="text" name="goodsItemName" id="goodsItemName"size="14" value="${goodsItemName}" class="search-input input-175px" /></td>
+			  </tr>
+			  <tr>
+				<td></td>
+				<td></td>
+				<td style="width:250px">
+					<input type="submit" class="search-btn fo" value="搜索" style="cursor: pointer;" onclick="IntercepeFormSubmit()" />
+				</td>
+				<td>	
+					<input id="clearUp" type="button" class="search-btn fo" value="清空" style="cursor: pointer;" />
+				</td>
+				<td></td>
+			  </tr>
+			</table>
+			</form>
+		</div>
+		
+		<div class="margin-auto width-1200 tips" >共找到<span class="yellow font-18px" >  ${counts}  </span>条记录</div>
+		<div class="margin-auto width-1200  data-box">
+			<div class="margin-cxjg">
+  			<table class="margin-cxjg_table" border="0" cellspacing="0" cellpadding="0">
+    			<tr class="thead">
+			      <td>护照号码</td>
+			      <td>姓名</td>
+			      <td>直属局</td>
+			      <td>分支机构</td>
+			      <td>品名</td>
+			      <td>登记日期</td>
+				  <td>物品数量</td>	
+				  <td>物品重量</td>	
+				  <td>处理说明</td>	
+				  <td>处理方式</td>	
+				  <td>检疫官</td>	
+				  <td>业务单号</td>	
+				  <td>操作</td>
+			    </tr>
+				<form action="${ctx}/Belongings/insertItravCarryObj" method="post" id="insertItravCarryObj_form" >
+				   	<input type="hidden" name="decl_no" id="decl_no"/>
+				   	<input type="hidden" name="cardNo" id="cardNo_in"/>
+					<input type="hidden" name="portOrgCodeName"  id="portOrgCodeName"/>
+					<input type="hidden" name="portDeptCodeName" id="portDeptCodeName"/>
+					<input type="hidden" name="key" id="key"/>
+					<c:if test="${not empty list }">
+				       <c:forEach items="${list}" var="Intercepe">
+						<tr class="thead_nr">
+						  <td width="100" height="90" align="center"><strong> ${Intercepe.card_no}</strong></td>					      
+						  <td width="100" height="90" align="center">${Intercepe.name}</td>
+					      <td width="110" height="90" align="center">${Intercepe.port_zs_org_code}</td>
+					      <td width="120" height="90" align="center">${Intercepe.port_org_code}</td>
+					      <td width="100" height="90" align="center">${Intercepe.cag_name}</td>
+					      <td width="100" height="90" align="center"><fmt:formatDate value="${Intercepe.reg_date}" type="both" pattern="yyyy-MM-dd"/></td>
+					      <td width="92" height="90" align="center">${Intercepe.num_unit}</td>
+					      <td width="90" height="90" align="center">${Intercepe.weight_unit}</td>
+					      <td width="90" height="90" align="center">${Intercepe.deal_disc}</td>
+					      <td width="130" height="90" align="center">${Intercepe.deal_type}</td>
+					      <td width="130" height="90" align="center">${Intercepe.insp_opr}</td>
+					      <td width="188" height="90" align="center" style="padding:0px;margin:0px;">
+					      	<input type="text" id="prodMainId_${Intercepe.key}" class="search-input" value="${Intercepe.prod_main_id}" style="width:90px"/>
+					      </td>
+					      <td width="126" height="90" align="center" valign="middle">
+							<a href='#' style="width: 30px;" onclick="insertOBJFormSubmit('${Intercepe.card_no}','${Intercepe.key}')">
+								<span class="data-btn margin-auto">提交</span>
+							</a>
+							<a href='#' style="width: 30px;margin-top:5px;" onclick="toDetails('${Intercepe.card_no}','${Intercepe.key}')">
+								<span class="data-btn margin-auto">详细+</span>
+							</a>
+					     </td>
+						</tr>
+						</c:forEach>
+			            </c:if>
+						<tfoot>
+					       <jsp:include page="/common/pageUtil.jsp" flush="true"/>
+					    </tfoot>
+				  </table>
+				</form>
+			</div>
+		</div>
+		<div class="margin-auto width-1200 tips" ></div>
+</body>
+
+<script type="text/javascript">
+$("li").mouseenter(function () {
+	var img = this.getElementsByTagName("img")[0];
+	var str = img.getAttribute("content");
+	var alertBox = document.getElementById("alertBoxId");
+	var alertContent = document.getElementById("alertContentId");
+	alertContent.innerText = str;
+	alertBox.style.display = 'table';
+});
+
+$("li").mouseleave(function () {
+	var alertBox = document.getElementById("alertBoxId")
+	alertBox.style.display = 'none';
+});
+</script>
+</html>

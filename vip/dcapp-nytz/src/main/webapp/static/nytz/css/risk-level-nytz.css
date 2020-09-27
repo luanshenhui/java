@@ -1,0 +1,191 @@
+.risk-level {
+    font-size:16px;
+}
+.risk-level .risk-color{
+    margin-top: 10px;
+    margin-bottom: 15px;
+    color:#fff;
+}
+.risk-level span{
+    display: inline-block;
+    width:30px;
+    height:10px;
+    margin: 15px 10px 0 22px ;
+}
+.risk-level .risk-level-red{
+    background: #d20000;
+}
+.risk-level .risk-level-orange{
+    background: #e3950c;
+}
+.risk-level .risk-level-yellow{
+    background: #fff000;
+}
+.risk-level .risk-define-red{
+    background: #d20000;
+}
+.risk-level .risk-define-green{
+    background: #30ada0;
+}
+.risk-level .risk-define-blue{
+    background: #2593d6;
+}
+ .risk-form-main{
+    margin:0 0 0 25px;
+    height: 680px;
+    overflow-y: auto;
+}
+.alarm-risk-stat{
+     height:690px;
+ }
+.risk-form-main .main{
+    margin-top: 45px;
+}
+.risk-define-statistics .main1{
+    width: 1440px;
+    height:680px;
+    padding-top: 50px
+}
+.three-important  .risk-form-main{
+     height: 735px;
+ }
+.risk-form-main p{
+    font-size: 18px;
+    text-align: center;
+    padding:0;
+}
+.risk-level .company-module{
+    display: block;
+    float: left;
+    width:330px;
+    height: 190px;
+    margin: 30px 0 0 30px;
+    padding-top:15px;
+    background: #141515 !important;
+    border: 2px solid #090204;border-radius: 6px;
+    
+}
+.risk-form-main a:hover{text-decoration: none}
+.risk-form-main .form-left {
+    width: 1000px;
+    float: left;
+}
+.risk-form-main .form-right{
+    float: right;
+    padding: 20px 20px 0 0;
+}
+.form-right .md-box,.form-right .sm-box,.form-right .lg-box{
+    width: 350px;
+    border:2px solid #000;
+    background: #171718;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 0 1px 0 #fff;
+    box-sizing: content-box;
+}
+.form-right .lg-box{
+    height: 560px;
+}
+.form-right .md-box{
+    height: 370px;
+}
+.form-right .sm-box{
+    height: 200px;
+}
+.form-right .lg-box p{
+    font-size: 20px;
+    padding: 0;
+    color: #fff;text-align: left;
+}
+/*重大事项决策*/
+.form-left .decision-making ul {
+    margin: 20px 0 0 30px;
+}
+.form-left .decision-making ul li {
+    position: relative;
+    list-style: none;
+    display: inline-block;
+    font-size: 20px;
+    height: 35px;
+    margin-right: 80px;
+    line-height: 35px;
+    cursor: pointer;
+}
+.form-left .decision-making ul li.on{
+    color: #389ad1;
+}
+.form-left .decision-making ul li.on:before {
+    position: absolute;
+    top: 9px;
+    left: -15px;
+    width: 8px;
+    height: 15px;
+    background: url("../image/triangle.png");
+    content: '';
+}
+
+/******* 告警风险统计 *******/
+.alarm-risk-stat .form-chart-left{
+    float: left;
+}
+.alarm-risk-stat #main{
+    width: 500px;
+    height:300px;
+}
+.alarm-risk-stat #main1{
+    width: 500px;
+    height:300px;
+}
+.alarm-risk-stat #main2{
+    width: 750px;
+    height:500px;
+    float: right;
+    margin:50px 30px 0 0 ;
+}
+/****** 三重一大2 *******/
+.form-left #chart1{
+    width:1000px;
+    height:600px;
+    margin-top:20px;
+}
+.form-right #chart2{
+    width:350px;
+    height:350px;
+}
+.lg-box .risk-color span{
+    margin-right: 39px;
+    display: inline-block;
+    margin-top:5px;
+}
+.lg-box .risk-color span i{
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 12px;
+}
+.lg-box .risk-color .chart2-title1 i{
+    background:#81c5f2;
+}
+.lg-box .risk-color .chart2-title2 i{
+    background:#8c2766;
+}
+.lg-box .risk-color .chart2-title3 i{
+    background:#ec9320;
+}
+.lg-box .risk-color .chart2-title4 i{
+    background:#2dbedc;
+}
+.lg-box .risk-color .chart2-title5 i{
+    background:#d22c2d;
+}
+.lg-box .risk-color .chart2-title6 i{
+    background:#2cbe50;
+}
+/** 风险走势分析 **/
+.risk-trend-analyze .risk-trend-main #main{
+    width: 1400px;
+    height:650px;
+    margin-top:25px;
+}
+/** 风险界定统计 **/
+

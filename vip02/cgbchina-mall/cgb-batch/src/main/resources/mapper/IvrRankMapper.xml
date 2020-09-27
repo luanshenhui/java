@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IvrRank">
+    <!--获取可用的积分类型-->
+    <select id="findIntegraltypeList" resultType="String">
+        select
+        integraltype_id
+        from tbl_cfg_integraltype
+        where cur_status = '0'
+    </select>
+    <!--取得不同积分类型的单品编码和单品销售数量和-->
+    <select id="findItemSum" parameterType="Map" resultType="cn.com.cgbchina.batch.model.IvrRankModel">
+        select
+        o2.goods_id itemCode,
+        o2.integraltype_id integraltypeId,
+        o2.num itemSum
+        from (
+        select goods_id ,integraltype_id, sum(goods_num) num
+        from (
+        select goods_id,goods_num, integraltype_id
+        from tbl_order order1
+        where
+        order1.integraltype_id in
+        <foreach collection="integraltypeId" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and
+        order1.cur_status_id in
+        <foreach collection="paySuccessStatus" item="paySuccess" index="index" open="(" separator="," close=")">
+            #{paySuccess}
+        </foreach>
+        union all
+        select goods_id,goods_num,integraltype_id
+        from tblorder_backup backup
+        where
+        backup.integraltype_id in
+        <foreach collection="integraltypeId" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and backup.cur_status_id in
+        <foreach collection="paySuccessStatus" item="paySuccess" index="index" open="(" separator="," close=")">
+            #{paySuccess}
+        </foreach>
+        union all
+        select goods_id,goods_num,integraltype_id
+        from tblorder_history history
+        where
+        history.integraltype_id in
+        <foreach collection="integraltypeId" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and history.cur_status_id in
+        <foreach collection="paySuccessStatus" item="paySuccess" index="index" open="(" separator="," close=")">
+            #{paySuccess}
+        </foreach>
+        ) o
+        group by goods_id, integraltype_id ) o2
+        inner join (
+        select i.code
+        from tbl_item i
+        left join tbl_goods g on i.goods_code = g.code
+        where g.channel_ivr='02' ) u
+        on o2.goods_id= u.code
+        order by itemSum desc,integraltypeId asc
+    </select>
+    <!--更新已有的积分类型的删除标识-->
+    <update id="updateDelFlag" parameterType="Map" >
+        update tbl_sale_rank set
+        del_flag = 1
+        where jf_type in
+        <foreach collection="integraltypeId" item="item" index="index" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+
+    </update>
+    <!--将积分类型对应的销售数量和排序插入表中-->
+    <insert id="createRank" parameterType="Map">
+        insert into tbl_sale_rank
+        (goods_id
+        ,jf_type
+        ,rank
+        ,sale_num
+        ,rank_time
+        ,del_flag)
+        values(#{goodsId}
+        ,#{jfType}
+        ,#{rank}
+        ,#{saleNum}
+        ,#{rankTime}
+        ,0)
+    </insert>
+</mapper>
+
+

@@ -1,0 +1,20 @@
+package Demo;
+
+import java.util.List;
+
+public class Dept {
+	private String deptName;
+	private List<Emp> emps;
+	public String getDeptName() {
+		return deptName;
+	}
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+	public List<Emp> getEmps() {
+		return emps;
+	}
+	public void setEmps(List<Emp> emps) {
+		this.emps = emps;
+	}
+}

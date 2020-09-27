@@ -1,0 +1,245 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>动植物产品及废料</title>
+<%@ include file="/common/resource_show.jsp"%>
+<style type="text/css">
+input.datepick{
+	background:#FFF url(/ciqs/static/dec/images/dpn.date.pick.gif) no-repeat right
+/* 	position: absolute; */
+}
+ #title_a{color:#ccc}
+ #title_a:hover{
+ 	color:white;
+ 	}
+ 	.box-img-bg {
+	background-image: url(../static/show/disc/bg.png);
+	box-sizing: border-box;
+	width: 1198px;
+	height: 164px;
+	padding: 0 200px;
+	position: absolute;
+	display: none;
+	font-size: 20px;
+	line-height: 35px;
+	color: white;
+}
+
+.box-content-style {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+</style>
+<script type="text/javascript"> 
+		jQuery(document).ready(function(){
+			$("#clearUp").click(function() {
+				$("#date_begin").val('');
+				$("#date_over").val('');
+				$("#bill_no").val('');
+				$("#decl_no").val('');
+				$("#port_dept_code").val('');
+				$("#insp_user").val('');
+			});
+		});
+
+	function pageUtil(page) {
+// 		var s=window.location.href.split("search=search").length;
+// 		if(s>1){
+// 			search='search';	
+// 		}
+		var url="/ciqs/billlading/billladingList?page=" + page;
+// 		if(search && search=='search'){
+// 			url+="&search=search";
+// 		}
+		$("#billladingForm").attr("action", url);
+		$("#billladingForm").submit();
+	}
+	function setDiscription(str){
+		for(i=1;i<8;i++){
+			if("li"+i == str){
+				$("#"+str).show();
+			}else{
+				$("#li"+i).hide();
+			}
+		}
+	}
+	
+</script>
+</head>
+<body  class="bg-gary">
+<div class="freeze_div_list">
+<div class="title-bg" >
+<div class=" title-position margin-auto white">
+<div class="title">
+<!-- <a href="#" style="color:white; text-decoration: none;"><span  class="font-24px">大窑湾动植物产品及废料 </span></a> -->
+<span class="font-24px" style="color:white;">行政确认 /</span><a id="title_a" href="/ciqs/billlading/billladingList">动植物产品及废料</a>
+</div>
+<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+</div>
+</div>
+<div class="flow-bg" >
+<div class="flow-position margin-auto" >
+
+<ul class="white font-18px flow-height font-weight">
+<li>交通运输工具监管</li>
+<li>报检审单布控</li>
+<li>现场检验检疫</li>
+<li>实验室检验检疫</li>
+<li>综合评定</li>
+<li>签证放行归档</li>
+<li>后续监管</li>
+<li></li>
+</ul>
+<ul>
+  <li><img src="${ctx}/static/show/images/billlading/billA1.png" width="107" height="103" content="交通运输工具监管记录及监控进境船舶卫生监督全过程，具体记录内容包括船舶停靠时间、登船检疫方式、登船检疫结果，并可对船舶运行轨迹进行可视化监控。" /></li>
+  <li><img src="${ctx}/static/show/images/billlading/billA2.png" width="107" height="103" content="报检审单布控即为对随附单证的完整性、一致性，检疫许可证核销情况以及卫生证书等进行核查，核实无误后，勾选《报检受理核查确认事项单》、《审批核销确认事项单》以及《证书审核确认事项单》，依据《出入境检验检疫报检规定》受理企业申报。" /></li>
+  <li><img src="${ctx}/static/show/images/billlading/billA3.png" width="107" height="103" content="现场检验检疫环节通过随机抽查锁定查验对象和查验人员，查验人员需按照规定配备查验装备，进行开箱前查验、开箱查验、感官查验、掏箱查验等，并对查验的关键点信息进行拍照记录，在线填写原始记录单并使用执法记录仪对风险隐患证据进行视频记录并保存。" /></li>
+  <li><img src="${ctx}/static/show/images/billlading/billA4.png" width="107" height="103" content="实验室检验检疫包括抽采制样与送样检测两大环节。按照GB/T 18088-2000《出入境动物检疫采样》抽取代表性样品进行检验检疫。按随机和代表性原则多点抽样检查。具体记录内容包括：抽采样、制样过程记录、抽采样凭证、送样联系单、接样回执单以及检验报告。" /></li>
+  <li><img src="${ctx}/static/show/images/billlading/billA5.png" width="107" height="103" content="综合评定即对经查验不合格的货物进行退运或销毁处理、整改处理、不合格上报、商品复验以及样品管理等操作。具体的记录内容包括：检验检疫处理通知书、出入境动植物检疫处理监管记录表、工作电子记录等。" /></li>
+  <li><img src="${ctx}/static/show/images/billlading/billA6.png" width="107" height="103" content="签证放行归档包括评定放行环节、单据归档环节及档案调阅环节。具体记录内容包括：入境货物检验检疫证明、档案管理记录以及查（借）阅档申请表等。" /></li>
+  <li><img src="${ctx}/static/show/images/billlading/billA7.png" width="107" height="103" content="后续监管即利用车辆在途跟踪对货物从口岸放行至内地监管的流向进行过程监控，具体的记录内容包括货物目的地以及流向轨迹。" /></li>
+  <li></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="blank_div_list">
+</div>
+<div class="margin-auto width-1200 search-box">
+<div id="alertBoxId" class="box-img-bg"><span class="box-content-style" id="alertContentId"></span></div>
+<form action=""  method="post" id="billladingForm">
+<table width="100%" border="0" class="table-search margin-auto">
+  <tr>
+    <td height="25" >开始日期</td>
+    <td height="25">结束日期</td>
+    <td height="25">提单号</td>
+    <td height="25">报检号</td>
+    <td height="25">科室</td>
+    <td height="25">是否查验</td>
+  </tr>
+  <tr>
+    <td width="160" height="50"><input name="date_begin" type="text" class="search-input input-140px datepick" id="date_begin" value="${obj.date_begin}"/></td>
+    <td width="160" height="50"><input name="date_over" type="text" class="search-input input-140px datepick" id="date_over" value="${obj.date_over}"/></td>
+    <td width="160" height="50"><input name="bill_no" type="text" class="search-input input-140px"  id="bill_no" value="${obj.bill_no}"/></td>
+    <td width="160" height="50"><input name="decl_no" type="text" class="search-input input-140px"  id="decl_no" value="${obj.decl_no}"/></td>
+     <td width="250" height="50">
+     	 <select id="port_dept_code" class="search-input input-175px" name="port_dept_code">
+			<option value="">全部</option>
+			<c:if test="${not empty orgMap }">
+				<c:forEach items="${orgMap}" var="row">
+					<c:if test="${obj.port_dept_code == row.CODE}">
+						<option selected="selected" value="${row.CODE}">${row.NAME}</option>
+					</c:if>
+					<c:if test="${obj.port_dept_code!= row.CODE}">
+						<option value="${row.CODE}">${row.NAME}</option>
+					</c:if>
+				</c:forEach>
+			</c:if>
+		</select>
+     </td>
+     
+     <td width="250" height="50">
+     	 <select id="insp_user" class="search-input input-175px" name="insp_user" >
+     	 <option value="1">已查验</option>
+			<c:if test="${not empty checkList }">
+				<c:forEach items="${checkList}" var="row">
+					<c:if test="${obj.insp_user == row.CODE}">
+						<option selected="selected" value="${row.CODE}">${row.NAME}</option>
+					</c:if>
+					<c:if test="${obj.insp_user!= row.CODE}">
+						<option value="${row.CODE}">${row.NAME}</option>
+					</c:if>
+				</c:forEach>
+			</c:if>  
+		</select>
+     </td>
+     
+  </tr>
+  <tr>
+	<td></td>
+	<td></td>
+	<td style="width:250px">
+		<input type="submit" class="search-btn fo" value="搜索" style="cursor: pointer;" onclick="pageUtil('')"/>
+	</td>
+	<td>	
+		<input id="clearUp" type="button" class="search-btn fo" value="清空" style="cursor: pointer;"/>
+	</td>
+	<td></td>
+  </tr>
+</table>
+</form>
+</div>
+
+<div class="margin-auto width-1200 tips" >共找到<span class="yellow font-18px" >  
+	<c:if test="${not empty list }">
+	${counts} 
+	</c:if>
+	<c:if test="${empty list }">
+	0
+	</c:if>
+	</span>条记录</div>
+<div class="margin-auto width-1200  data-box">
+<div class="margin-cxjg">
+	<table class="margin-cxjg_table" border="0" cellspacing="0" cellpadding="0">
+ 			<tr class="thead">
+	      <td>船名</td>
+	      <td>科室</td>
+	      <td>航次</td>
+	      <td>提单号</td>
+	      <td>报检号</td>
+	      <td>报检时间</td>
+	      <td>申报单位</td>
+	      <td>风险预警</td>
+	      <td>受理报检单位</td>
+	      <td>操作</td>
+	    </tr>
+		<c:if test="${not empty list }">
+			<c:forEach items="${list}" var="row">
+				<tr>
+					<td width="11%" height="90" align="center" class="font-18px">${row.ship_name_en}</td>
+					<td width="11%" height="90" align="center">${row.port_dept_code}</td>
+					<td width="11%" height="90" align="center">${row.voyage_no}</td>
+					<td width="11%" height="90" align="center"><a href="/ciqs/billlading/billDetailByNo?billNo=${row.bill_no}">${row.bill_no}</a></td>
+					<td width="11%" height="90" align="center"><a href="/ciqs/billlading/declDetailByNo?declNo=${row.decl_no}">${row.decl_no}</a></td>
+					<td width="11%" height="90" align="center">${row.decl_date}</td>
+					<td width="11%" height="90" align="center">${row.ent_cname}</td>
+					<td width="11%" height="90" align="center">
+					<c:if test="${row.warning > 0}">
+					<a href="/ciqs/billlading/getWaring?bill_id=${row.bill_id}">有</a>
+					</c:if>
+					<c:if test="${row.warning == 0}">无</c:if></td>
+					<td width="11%" height="90" align="center">${row.insp_org_name }</td>
+					<td height="90" align="center" valign="middle">
+					<a href='javascript:jumpPage("/ciqs/billlading/showInfo?bill_id=${row.bill_id}&decl_no=${row.decl_no}&book_no=${row.book_no}&type=${row.type}");'>
+					<span class="data-btn margin-auto">详细+</span></a></td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		 <tfoot>
+		       <jsp:include page="/common/pageUtil.jsp" flush="true"/>
+		 </tfoot>
+	 </table>
+	</div>
+</div>
+<div class="margin-auto width-1200 tips" ></div>
+<%-- <jsp:include page="/common/pageUtil.jsp" flush="true"/> --%>
+</body>
+<script type="text/javascript">
+$("li").mouseenter(function () {
+	var img = this.getElementsByTagName("img")[0];
+	var str = img.getAttribute("content");
+	var alertBox = document.getElementById("alertBoxId");
+	var alertContent = document.getElementById("alertContentId");
+	alertContent.innerText = str;
+	alertBox.style.display = 'table';
+});
+
+$("li").mouseleave(function () {
+	var alertBox = document.getElementById("alertBoxId")
+	alertBox.style.display = 'none';
+});
+</script>
+</html>

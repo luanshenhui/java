@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EspAdvertiseModel">
+    <resultMap id="EspAdvertiseMap" type="EspAdvertiseModel">
+        <result property="id" column="id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="pageType" column="page_type"/>
+        <result property="advertisePos" column="advertise_pos"/>
+        <result property="advertiseImage" column="advertise_image"/>
+        <result property="advertiseHref" column="advertise_href"/>
+        <result property="advertiseSeq" column="advertise_seq"/>
+        <result property="publishStatus" column="publish_status"/>
+        <result property="advertiseDesc" column="advertise_desc"/>
+        <result property="linkType" column="link_type"/>
+        <result property="isStop" column="is_stop"/>
+        <result property="keyword" column="keyword"/>
+        <result property="pageId" column="page_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="orgCode" column="org_code"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,ordertype_id,page_type,advertise_pos,advertise_image,advertise_href,advertise_seq,publish_status,advertise_desc,link_type,is_stop,keyword,page_id,start_time,end_time,org_code,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="EspAdvertiseModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_esp_advertise
+        (ordertype_id
+        ,page_type
+        ,advertise_pos
+        ,advertise_image
+        ,advertise_href
+        ,advertise_seq
+        ,publish_status
+        ,advertise_desc
+        ,link_type
+        ,is_stop
+        ,keyword
+        ,page_id
+        ,start_time
+        ,end_time
+        ,org_code
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{ordertypeId}
+        ,#{pageType}
+        ,#{advertisePos}
+        ,#{advertiseImage}
+        ,#{advertiseHref}
+        ,#{advertiseSeq}
+        ,#{publishStatus}
+        ,#{advertiseDesc}
+        ,#{linkType}
+        ,#{isStop}
+        ,#{keyword}
+        ,#{pageId}
+        ,#{startTime}
+        ,#{endTime}
+        ,#{orgCode}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="EspAdvertiseModel">
+        update tbl_esp_advertise set
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="pageType !=null">page_type = #{pageType}
+                ,</if>
+            <if test="advertisePos !=null">advertise_pos = #{advertisePos}
+                ,</if>
+            <if test="advertiseImage !=null">advertise_image = #{advertiseImage}
+                ,</if>
+            <if test="advertiseHref !=null">advertise_href = #{advertiseHref}
+                ,</if>
+            <if test="advertiseSeq !=null">advertise_seq = #{advertiseSeq}
+                ,</if>
+            <if test="publishStatus !=null">publish_status = #{publishStatus}
+                ,</if>
+            <if test="advertiseDesc !=null">advertise_desc = #{advertiseDesc}
+                ,</if>
+            <if test="linkType !=null">link_type = #{linkType}
+                ,</if>
+            <if test="isStop !=null">is_stop = #{isStop}
+                ,</if>
+            <if test="keyword !=null">keyword = #{keyword}
+                ,</if>
+            <if test="pageId !=null">page_id = #{pageId}
+                ,</if>
+            <if test="startTime !=null">start_time = #{startTime}
+                ,</if>
+            <if test="endTime !=null">end_time = #{endTime}
+                ,</if>
+            <if test="orgCode !=null">org_code = #{orgCode}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+               </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="pageType !=null">and page_type = #{pageType}</if>
+            <if test="advertisePos !=null">and advertise_pos = #{advertisePos}</if>
+            <if test="advertiseImage !=null">and advertise_image = #{advertiseImage}</if>
+            <if test="advertiseHref !=null">and advertise_href = #{advertiseHref}</if>
+            <if test="advertiseSeq !=null">and advertise_seq = #{advertiseSeq}</if>
+            <if test="publishStatus !=null and publishStatus =='00'">and publish_status = '00'</if>
+            <if test="publishStatus !=null and publishStatus =='10'">and publish_status != '00'</if>
+            <if test="advertiseDesc !=null">and advertise_desc = #{advertiseDesc}</if>
+            <if test="linkType !=null">and link_type = #{linkType}</if>
+            <if test="isStop !=null">and is_stop = #{isStop}</if>
+            <if test="keyword !=null">and keyword = #{keyword}</if>
+            <if test="pageId !=null">and page_id = #{pageId}</if>
+            <if test="startTime !=null">and start_time = #{startTime}</if>
+            <if test="endTime !=null">and end_time = #{endTime}</if>
+            <if test="orgCode !=null">and org_code = #{orgCode}</if>
+            and del_flag = 0
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EspAdvertiseMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_advertise
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="EspAdvertiseMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_advertise
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="EspAdvertiseMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_advertise
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <update id="delete" parameterType="EspAdvertiseModel">
+        update tbl_esp_advertise set
+        del_flag
+        = 1,modify_oper
+        = #{modifyOper},modify_time
+        = now()
+        where id = #{id}
+    </update>
+
+    <update id="updateAdvetiseStatus" parameterType="EspAdvertiseModel">
+        update tbl_esp_advertise set
+        publish_status
+        = #{publishStatus},modify_oper
+        = #{modifyOper},modify_time
+        = now()
+        where id = #{id}
+    </update>
+    <update id="updateIsStop" parameterType="EspAdvertiseModel">
+        update tbl_esp_advertise set
+        is_stop
+        = #{isStop},modify_oper
+        = #{modifyOper},modify_time
+        = now()
+        where id = #{id}
+    </update>
+
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_esp_advertise
+        <include refid="conditions"/>
+    </select>
+</mapper>
+
+

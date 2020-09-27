@@ -1,0 +1,464 @@
+var storTable;
+var btnAdvSearchflg= false;
+jQuery(document).ready(function(){
+    $("#storDetailForm").validate({
+        debug : true,
+        errorPlacement : function(error, element) {
+            error.insertAfter(element);
+        },
+        rules : {
+            txtStorName : {  
+                required : true  
+            },  
+            txtStorCode : {  
+                required : true  
+            },  
+            txtPrjId : {  
+                required : true  
+            }
+        },
+        messages : {
+            txtStorName : "仓库名称不能为空，1-32位字符!",
+            txtStorCode : "仓库编码不能为空，1-50位字符!",
+            txtPrjId : "项目名称不能为空！"
+        }
+    });
+    storTable = $('#storTable').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "dom": '<"bottom"rtflp>',
+        "searching": false,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+        "ajax": {
+            "url": "/stor/storList.action",
+            "data": function ( d ) {
+                 if ($("#advSearchPanel").is(":hidden")) {
+                     d.quickSearch = encodeURI($('#quickSearch').val());
+                 }
+                 else {
+                     // 高级查询条件
+                     var gstorname = encodeURI($('#gstorname').val());
+                     var gstorcode =encodeURI($('#gstorcode').val());
+                     var gprjName =encodeURI($('#gprjName').val());
+                     var advData = {
+                         "storName": gstorname,
+                         "storCode": gstorcode,
+                         "prjName": gprjName
+                     };
+                     d.formJson = JSON.stringify(advData);
+                 }
+                }
+        },
+        "tableTools": {
+            "sRowSelect": "bootstrap"
+        },
+        "columns": [{
+                "data": "chk"
+            }, {
+                "data": "storName"
+            }, {
+                "data": "storCode"
+            }, {
+                "data": "prjName"
+            }, {
+                "data": "tel"
+            }, {
+                "data": "mobile"
+            }
+        ],
+        "columnDefs": [{
+                "orderable":false,
+                "targets":[0]
+            },{
+                "orderable":false,
+                "targets":[4]
+            },{
+                "orderable":false,
+                "targets":[5]
+            }
+        ],
+        "order": [[ 1, "desc" ],[ 2, "desc" ],[ 3, "desc" ]]
+    });
+});
+//重置按钮
+$("#advSearchReset").click(function(){
+    $('#gstorname').val('');
+    $('#gstorcode').val('');
+    $('#gprjName').val('');
+});
+//低级查询按钮
+$("#btnQuickSearch").click(function () {
+    storTable.draw();
+});
+//高级查询按钮
+$("#advSearchSubmit").click(function () {
+    setHidValue("frmAdvSearch");
+    storTable.draw();
+    $("#advSearchPanel").hide();
+    $("#btnAdvSearch").children("i:eq(0)").removeClass("fa-angle-double-up");
+    $("#btnAdvSearch").children("i:eq(0)").addClass("fa-angle-double-down");
+});
+
+//高级查询隐藏
+$("#advSearchPanel").hide();
+$("#btnAdvSearch").click(function () {
+    btnAdvSearchflg = true;
+    if ($("#advSearchPanel").is(":hidden")) {
+        $("#advSearchPanel").show();
+        $(this).children("i:eq(0)").removeClass("fa-angle-double-down");
+        $(this).children("i:eq(0)").addClass("fa-angle-double-up");
+    } else {
+        $("#advSearchPanel").hide();
+        $(this).children("i:eq(0)").removeClass("fa-angle-double-up");
+        $(this).children("i:eq(0)").addClass("fa-angle-double-down");
+    }
+});
+
+$("#advSearchPanel").click(function () {
+    btnAdvSearchflg = true;
+})
+
+$("body").click(function(e){ 
+    if(btnAdvSearchflg==true){
+        btnAdvSearchflg = false;
+    } else {
+        $("#advSearchPanel").hide();
+        $("#btnAdvSearch").children("i:eq(0)").removeClass("fa-angle-double-up");
+        $("#btnAdvSearch").children("i:eq(0)").addClass("fa-angle-double-down");    
+    }
+});
+
+  // 搜索框的回车事件
+$('#quickSearch').keydown(function(e){
+    if(e.keyCode==13){
+        $("#btnQuickSearch").click();
+    }
+});
+
+//选择行
+$('#storTable tbody').on('click','td',function () {
+    var len=$(this).children().length
+    if(len==0){//选择行
+        $("#storTable tbody input[type='checkbox']").prop("checked",false)
+        var first=$(this).parent().children()[0];
+        var ck = $(first).children()[0];
+        $(ck).prop("checked",true)
+    }else{//选择checkbox
+        
+    }
+})
+
+//全选
+$(".checkall").click(function(){
+    if($(this).attr("checked")){
+        $("input[name='chkItem']").attr("checked",$(this).attr("checked"));
+    }else{
+        $("input[name='chkItem']").removeAttr("checked");
+    }
+});
+
+//删除
+var storIdssum1 ="";
+function deleteStor(){
+    storIdssum1 = "";
+    $("input[type='checkbox']:checked").each(function(k,v){
+        if(storIdssum1==""){
+            storIdssum1=this.getAttribute('storid');
+        }else if(storIdssum1!=""){
+            storIdssum1+=","+this.getAttribute('storid');
+        }
+    });
+    if (storIdssum1 == null || storIdssum1==undefined || storIdssum1=="" || storIdssum1 == ","){
+        window.top.window.showModalAlert("请选择一个目标！");
+        return;
+    }
+    window.top.window.showModalConfirm("确定要删除该仓库吗？", delStor);
+}
+
+function delStor(){
+    debugger
+    var sURL = "/stor/deleteStor.action";
+     $.ajax({
+        url : sURL,
+        type : "post",
+        dataType : "json",
+        async: false,
+        data : {
+            storIds : storIdssum1
+        },
+        success : function(data) {
+             if (data.result == "success") {
+                    window.top.window.showScoMessage('ok', '删除成功');
+                } else{
+                    window.top.window.showModalAlert(data.msg);
+                }
+        },
+        error:function(XMLHttpRequest, textStatus) {
+            if (XMLHttpRequest.status == 500) {
+                var result = eval("(" + XMLHttpRequest.responseText + ")");
+                window.top.window.showModalAlert(result.errorObject.errorText);
+            }
+        }
+    });
+     storTable.draw();
+}
+
+//父窗体归还本页的编辑对话框
+$('#creatStor').on('hide.bs.modal', function () {
+    // 父窗体归还本页的编辑对话框
+    window.top.window.returnCustomModalDialog();
+    ClearInput();
+    $("#txtStorName").val("");
+    $("#txtStorCode").val(""); 
+    $("#txtPrjName").val("");
+    $("#txtPrjId").val("");
+    $("#storId").val("");
+    $("#storName").val("");
+    
+    $("#txtTel").val("");
+    $("#txtMobile").val(""); 
+    $("#txtAddr").val("");
+    $("#txtPostcode").val("");
+    $("#txtAreacode").val("");
+    $("#txtRemark").val("");
+});
+
+//添加
+function addStor(){
+
+    $("#createTitle").html("新建角色");
+    loadProject();
+    var editDialog = window.top.window.borrowCustomModalDialog($("#creatStor"));
+    editDialog.modal({show:true, backdrop:'static'});
+} 
+
+//加载项目
+function loadProject(id,storName) {
+    debugger
+    $.ajax({
+        type : "GET",
+        url : "/projectManager/getProjectName.action",
+        contentType : "application/json;charset=utf-8",
+        dataType : "json",
+        success : function(data) {
+            debugger
+            if (data.result == "success") {
+                window.top.window.$("#txtPrjId option").remove();
+                window.top.window.$("#txtPrjId").append("<option value=''>请选择</option>");
+                $.each(data.data, function(n, value) {
+                    window.top.window.$("#txtPrjId").append("<option value='" + value.prj_id + "'>"+ value.prj_name + "</option>");
+                });
+                if(null != id){
+                    window.top.window.$("#txtPrjId").val(id);
+                    window.top.window.$("#storName").val(storName);
+                }
+            } else {
+                window.top.window.showModalAlert(data.msg);
+                
+            }
+        },
+        error : function(XMLHttpRequest, textStatus) {
+            if (XMLHttpRequest.status == 500) {
+                var result = eval("(" + XMLHttpRequest.responseText + ")");
+                window.top.window.showModalAlert(result.errorObject.errorText);
+            }
+        }
+    });
+
+}
+//保存按钮
+$('#storSave').click(function(){
+    insertStor();
+    storTable.draw();
+});
+
+//新建/修改
+function insertStor() {
+    // 父窗体归还本页的编辑对话框
+    window.top.window.returnCustomModalDialog();
+    var txtStorName = $("#txtStorName").val();
+    var txtStorCode = $("#txtStorCode").val();
+    var txtPrjId = $("#txtPrjId").val();
+    var updateStorName = $("#storName").val();
+    
+    var txtTel = $("#txtTel").val();
+    var txtMobile = $("#txtMobile").val();
+    var txtAddr = $("#txtAddr").val();
+    var txtPostcode = $("#txtPostcode").val();
+    var txtAreacode = $("#txtAreacode").val();
+    var txtRemark = $("#txtRemark").val();
+   /////////////////////////////////////// 
+//    if(!$("#storDetailForm").valid()) {
+//        // 父窗体借用本页的编辑对话框
+//        window.top.window.borrowCustomModalDialog($("#creatStor"));
+//        return false;
+//    }
+    if(!$("#storDetailForm").valid()) {
+        // 父窗体借用本页的编辑对话框
+        window.top.window.borrowCustomModalDialog($("#creatStor"));
+        return false;
+    }
+    if($("#storId").val()!= null&&$("#storId").val()!=''){
+    var Sid =$("#storId").val();
+    var data = {
+            "storName": txtStorName,
+            "storCode": txtStorCode,
+            "prjId": txtPrjId,
+            "storId": Sid,
+            "updateStorName": updateStorName,
+            "prjName" : $("#txtPrjId").find("option:selected").text(),
+            "tel": txtTel,
+            "mobile": txtMobile,
+            "addr": txtAddr,
+            "postcode": txtPostcode,
+            "areacode": txtAreacode,
+            "remark": txtRemark 
+        };
+     $.ajax({
+            type:"POST",
+            url:"/stor/updateStor.action",
+            data:JSON.stringify(data),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            async: false, // 同步
+            success:function(data) {
+                if (data.result == "success") {
+                    $('#creatStor').modal('hide');
+                    window.top.window.showScoMessage('ok', '修改成功');
+                } else{
+                    window.top.window.showModalAlert(data.msg);
+                    var editDialog = window.top.window.borrowCustomModalDialog($("#creatStor"));
+                    editDialog.modal({show:true, backdrop:'static'});
+                }
+            },
+            error:function(XMLHttpRequest, textStatus) {
+                if (XMLHttpRequest.status == 500) {
+                    var result = eval("(" + XMLHttpRequest.responseText + ")");
+                    window.top.window.showModalAlert(result.errorObject.errorText);
+                }
+            }
+        });
+     $("#txtStorName").val("");
+     $("#txtStorCode").val(""); 
+     $("#txtPrjName").val("");
+     $("#txtPrjId").val("");
+     $("#storId").val("");
+     $("#storName").val("");
+   }else{
+       var data = {
+               "storName": txtStorName,
+               "storCode": txtStorCode,
+               "prjId": txtPrjId,
+               "prjName" : $("#txtPrjId").find("option:selected").text(),
+               "tel": txtTel,
+               "mobile": txtMobile,
+               "addr": txtAddr,
+               "postcode": txtPostcode,
+               "areacode": txtAreacode,
+               "remark": txtRemark 
+            };
+       $.ajax({
+           type:"POST",
+           url:"/stor/addStor.action",
+           data:JSON.stringify(data),
+           contentType: "application/json;charset=utf-8",
+           dataType: "json",
+           async: false, // 同步
+           success:function(data) {
+               debugger
+               if (data.result == "success") {
+                $('#creatStor').modal('hide');
+                window.top.window.showScoMessage('ok', '添加成功');
+               } else{
+                window.top.window.showModalAlert(data.msg);
+                var editDialog = window.top.window.borrowCustomModalDialog($("#creatStor"));
+                editDialog.modal({show:true, backdrop:'static'});
+               }
+           },
+           error:function(XMLHttpRequest, textStatus) {
+               if (XMLHttpRequest.status == 500) {
+                   var result = eval("(" + XMLHttpRequest.responseText + ")");
+                   window.top.window.showModalAlert(result.errorObject.errorText);
+               }
+           }
+       });
+       $("#txtStorName").val("");
+       $("#txtStorCode").val(""); 
+       $("#txtPrjName").val("");
+       $("#txtPrjId").val("");
+       $("#storId").val("");
+       $("#storName").val("");
+   }
+    $("#storId").val('');
+    storTable.draw();
+}
+
+
+//修改用户
+function updateStor(){
+    var idString = "";
+    $("input[type='checkbox']:checked").each(function(k,v){
+        if(idString==""){
+            if(this.getAttribute('storid')!=null)
+            idString=this.getAttribute('storid');
+        }else if(idString!=""){
+            if(this.getAttribute('storid')!=null)
+            idString+=","+this.getAttribute('storid');
+        }
+    });
+
+    if (idString == null || idString==undefined || idString=="" || idString == ","){
+        window.top.window.showModalAlert("请选择仓库");
+        return;
+    }else if(idString.split(",").length>1){
+        window.top.window.showModalAlert("只能选择一个仓库");
+        return;
+    }
+    var sURL = "/stor/getStorDetail.action";
+    jQuery.ajax( {
+        url : sURL,
+        type : "post",
+        dataType : "json",
+        data : {
+            storId : idString
+        },
+        success : function(data) {
+            if(data.errorMessage == undefined){
+                $("#storId").val(data.storDetail.storId);
+                $("#txtStorName").val(data.storDetail.storName);
+                $("#txtStorCode").val(data.storDetail.storCode);
+                $("#txtPrjId").val(data.storDetail.prjId);
+                $("#storName").val(data.storDetail.storName);
+                loadProject(data.storDetail.prjId , data.storDetail.storName);
+                $("#createTitle").html("修改仓库");
+                var editDialog = window.top.window.borrowCustomModalDialog($("#creatStor"));
+                editDialog.modal({show:true, backdrop:'static'});
+            }else {
+                if (data.errorMessage == "session timeout"){
+                    window.location.href = "/login.jsp";
+                }
+                else{
+                    window.top.window.showModalAlert(data.errorMessage);
+                    
+                }
+            }
+        },
+        error : function(XMLHttpRequest,textStatus,errorThrown){
+            window.top.window.showModalAlert("操作失败，可能是网络原因");
+        }
+    });
+}
+
+function ClearInput() {  
+    //清空输入域  
+   var validator = $("#storDetailForm").validate({  
+        submitHandler: function (form) {  
+            form.submit();  
+        }  
+    });  
+    validator.resetForm();  
+    $('#storDetailForm .state-error').removeClass('state-error');
+    $('#storDetailForm .state-success').removeClass('state-success');
+} 

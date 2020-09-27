@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for completeProcess.
+
+@author wangzhy
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.CP">
+
+    <!-- **** insert ******************************************************* -->
+
+    <!-- **** select ******************************************************* -->
+	<!-- 列表查询 -->
+	<select id="findLists"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select * from (
+		select 
+        t.id,
+        t.license_dno,
+        t.comp_name,
+        t.comp_addr,
+        t.management_addr,
+        t.management_area,
+        t.legal_name,
+        t.contacts_name,
+        t.contacts_phone,
+        t.mailbox,
+        t.fax,
+        t.employee_num,
+        t.certificate_numver,
+        t.management_type,
+        t.apply_scope,
+        t.apply_type,
+        t.hygiene_license_number,
+        t.declare_user,
+        t.declare_date,
+        t.status,
+        t.admissible_org_code,
+        t.approval_users_name,
+		 (select max(option_80) from QLC_CHECK_DOCS_RCD r where r.proc_main_id = t.license_dno and option_80 in ('0','1') and r.doc_type like 'D_PT_H_L_%') review_result,
+    			(select max(dec_date) from QLC_CHECK_DOCS_RCD r where r.proc_main_id = t.license_dno and r.doc_type like 'D_PT_H_L_%'and option_80 in ('0','1')) review_date,
+        trunc((sysdate-t.approval_date)) jb_date
+           from QLC_HYGIENE_LICENSE_DECLARE t
+        )
+		where 1=1
+		<if test="review_result != null and review_result != ''">
+				and review_result =#{review_result}
+		</if> 
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		 <if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		 </if>
+		 <if test="comp_name != null and comp_name != ''">
+			and comp_name like '%' || #{comp_name} || '%'
+		 </if>
+		 <if test="port_org_code != null and port_org_code != ''">
+			and admissible_org_code  = #{port_org_code}
+		 </if>
+		order by declare_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 列表查询记录数 -->
+	<select id="findListsCount"  resultType="java.lang.Integer">
+		 select count(id) from (
+		select 
+        t.id,
+        t.license_dno,
+        t.comp_name,
+        t.comp_addr,
+        t.management_addr,
+        t.management_area,
+        t.legal_name,
+        t.contacts_name,
+        t.contacts_phone,
+        t.mailbox,
+        t.fax,
+        t.employee_num,
+        t.certificate_numver,
+        t.management_type,
+        t.apply_scope,
+        t.apply_type,
+        t.hygiene_license_number,
+        t.declare_user,
+        t.declare_date,
+        t.approval_result,
+        t.approval_date,
+        t.status,
+        t.admissible_org_code,
+        t.approval_users_name,
+        (select option_80 from QLC_CHECK_DOCS_RCD where proc_main_id = t.license_dno and rownum = 1  ) review_result,
+        (select dec_date from QLC_CHECK_DOCS_RCD where proc_main_id = t.license_dno and rownum = 1  ) review_date,
+        trunc((sysdate-t.approval_date)) jb_date
+           from QLC_HYGIENE_LICENSE_DECLARE t
+       )
+		where 1=1
+		<if test="review_result != null and review_result != ''">
+				and review_result =#{review_result}
+		</if> 
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		 <if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		 </if>
+		 <if test="comp_name != null and comp_name != ''">
+			and comp_name like '%' || #{comp_name} || '%'
+		 </if>
+		 <if test="port_org_code != null and port_org_code != ''">
+			and admissible_org_code = #{port_org_code}
+		 </if>
+	</select>
+	
+	<!-- 查询详情 -->
+	<select id="findById"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select 
+			t.id,
+			t.license_dno,
+			t.comp_name,
+			t.comp_addr,
+			t.management_addr,
+			t.management_area,
+			t.legal_name,
+			t.contacts_name,
+			t.contacts_phone,
+			t.mailbox,
+			t.fax,
+			t.employee_num,
+			t.certificate_numver,
+			t.management_type,
+			t.apply_scope,
+			t.apply_type,
+			t.hygiene_license_number,
+			GET_qlc_users_name(t.declare_user) declare_user,
+			t.declare_date,
+			t.approval_result,
+			t.status,
+			t.jd_sp,
+			t.jd_result,
+			t.approval_users_name,
+			t.prolong,
+			GET_qlc_users_name((select OPR_PSN from QLC_HYGIENE_LICENSE_EVENT where opr_date =(select max(v.opr_date) from QLC_HYGIENE_LICENSE_EVENT  v where v.licence_id = t.license_dno and rownum = 1 and v.status = 2))) approval_user,
+			GET_qlc_users_name(t.approval_user) approval_user2,
+			t.approval_date approval_date2,
+    		(select max(v.opr_date) from QLC_HYGIENE_LICENSE_EVENT  v where v.licence_id = t.license_dno and rownum = 1 and v.status = 2) approval_date,
+			(select option_80 from QLC_CHECK_DOCS_RCD rcd where rcd.dec_date =(select max(dec_date) from QLC_CHECK_DOCS_RCD where proc_main_id = t.license_dno and doc_type like '%D_PT_H_L_%'  and option_80 is not null ) and rownum =1) review_result,
+      		GET_qlc_users_name((select OPR_PSN from QLC_HYGIENE_LICENSE_EVENT where opr_date =(select max(v.opr_date) from QLC_HYGIENE_LICENSE_EVENT  v where v.licence_id = t.license_dno and rownum = 1 and v.status = 6))) jd_user,
+    		(select max(v.opr_date) from QLC_HYGIENE_LICENSE_EVENT  v where v.licence_id = t.license_dno and rownum = 1 and v.status = 6) review_date,
+    		(select id from QLC_CHECK_DOCS_RCD r where r.proc_main_id = t.license_dno and r.doc_type='D_PT_H_L_0' and rownum = 1) iszg
+         from QLC_HYGIENE_LICENSE_DECLARE t
+	 	 where t.id=#{id}
+	</select>
+	
+	<select id="getDptFileuploadDate"  resultType="string" >
+		select max(dec_date) from QLC_CHECK_DOCS_RCD 
+		where proc_main_id = #{license_dno} 
+		and doc_type like '%D_PT_H_L_%' and option_80 is not null 
+	</select>
+	
+	<select id="getScbList"  resultType="string" >
+		select doc_type from QLC_CHECK_DOCS_RCD 
+		where proc_main_id = #{license_dno} 
+		and doc_type like '%D_PT_H_L_%'
+		order by dec_date desc
+	</select>
+
+	<select id="getFilePath"  resultType="string" >
+		select file_name from QLC_VIDEO_FILE_EVENT 
+		where proc_main_id = #{license_dno}
+		and proc_type = 'D_PT_H_L_1'
+	</select>
+	
+	<select id="getVolist"  resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel" >
+		select * from QLC_VIDEO_FILE_EVENT 
+		where proc_main_id = #{license_dno}
+		and proc_type like 'V_PT_H_L%'
+	</select>
+	
+	<select id="getBzInfo"  resultType="com.dpn.ciqqlc.standard.model.LicenseEventDTO" >
+		select 
+		LICENCE_ID,
+		STATUS,
+		OPR_DATE,
+		FILES,
+		GET_qlc_users_name(OPR_PSN) OPR_PSN
+		from QLC_HYGIENE_LICENSE_EVENT v
+    	where v.licence_id = #{license_dno}
+    	and v.status = 18
+		order by v.opr_date desc
+	</select>
+	
+	<select id="getBzInfo2"  resultType="com.dpn.ciqqlc.standard.model.LicenseEventDTO" >
+		select 
+		LICENCE_ID,
+		STATUS,
+		OPR_DATE,
+		FILES,
+		GET_qlc_users_name(OPR_PSN) OPR_PSN
+		from QLC_HYGIENE_LICENSE_EVENT v
+    	where v.licence_id = #{license_dno}
+    	and v.status = 21
+		order by v.opr_date desc
+	</select>
+	
+	<select id="dfbWinShow"  resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO" >
+		select * from QLC_CHECK_DOCS_RCD 
+        where proc_main_id = #{license_dno} 
+        and dec_date = (select max(dec_date) from QLC_CHECK_DOCS_RCD where proc_main_id = #{license_dno} and doc_type = #{doc_type})
+	</select>
+	
+	<select id="getBgYx"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO" >
+		select STATUS,GET_qlc_users_name(OPR_PSN) opr_psn,OPR_DATE from QLC_HYGIENE_LICENSE_EVENT 
+		 where OPR_DATE = 
+		(select max(OPR_DATE) from QLC_HYGIENE_LICENSE_EVENT where licence_id = #{license_dno} 
+		and STATUS in ('7','8','12','13','15','16'))
+	</select>
+	
+	<select id="getzzResult"  resultType="java.lang.String" >
+	  select ZZ_RESULT from QLC_HYGIENE_LICENSE_DECLARE t where license_dno = #{license_dno} 
+	</select>
+	
+	<select id="getzxResult"  resultType="java.lang.String" >
+	  select ZX_RESULT from QLC_HYGIENE_LICENSE_DECLARE t where license_dno = #{license_dno} 
+	</select>
+	
+    <!-- **** update ******************************************************* -->
+    
+    
+    <!-- **** delete ******************************************************* -->
+	
+	
+</mapper>

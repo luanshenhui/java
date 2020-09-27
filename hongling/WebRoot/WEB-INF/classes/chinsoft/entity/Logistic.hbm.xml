@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="chinsoft.entity.Logistic" table="Logistic">
+        <id name="ID" type="integer">
+			<column name="ID" />
+			<generator class="increment"></generator>
+		</id>
+		<property name="ordenID" type="string">
+            <column name="ORDENID" />
+        </property>
+        <property name="sysCode" type="string">
+            <column name="SYSCODE" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" />
+        </property>
+        <property name="address" type="string">
+            <column name="ADDRESS" />
+        </property>
+        <property name="mobile" type="string">
+            <column name="MOBILE" />
+        </property>
+        <property name="tel" type="string">
+            <column name="TEL" />
+        </property>
+        <property name="sendtime" type="string">
+			<column name="SENDTIME" />
+		</property>
+		<property name="logisticCompany" type="string">
+            <column name="LOGISTICCOMPANY" />
+        </property>
+        <property name="logisticNo" type="string">
+            <column name="LOGISTICNO" />
+        </property>
+	</class>
+</hibernate-mapping>

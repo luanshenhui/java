@@ -1,0 +1,50 @@
+package Demo;
+
+import java.util.ArrayList;
+
+public class OgnlTest {
+	public static void main(String[] args) throws OgnlException{
+		Foo foo = new Foo();
+		
+		//1.访问基本数据类型
+		//以root对象作为根，访问其下级属性
+		System.out.println("1.访问基本类型");
+		Object o1 = Ognl.getValue("id", foo);
+		Ognl.setValue("name",foo,"Lisi");
+		Object o2 = Ognl.getValue("name", foo);
+		System.out.println(o1.toString());
+		System.out.println(o2.toString());
+		
+		//2.访问数组、集合
+		System.out.println("2.访问数组、集合");
+		System.out.println(Ognl.getValue("citys[1]", foo));
+		System.out.println(Ognl.getValue("langs[2]", foo));
+		
+		//3.访问Map
+		System.out.println("3.访问Map");
+		System.out.println(Ognl.getValue("map.bbb", foo));
+		
+		//4.访问时做运算
+		System.out.println("4.访问时做运算");
+		System.out.println(Ognl.getValue("id+100", foo));
+		System.out.println(Ognl.getValue("'My name is'+name", foo));
+		
+		//5.访问时调用方法
+		System.out.println("5.访问时调用方法");
+		System.out.println(Ognl.getValue("name.toUpperCase()", foo));
+		
+		//6.直接调用静态方法
+		System.out.println("6.直接调用静态方法");
+		System.out.println(Ognl.getValue("@Demo.Foo@talk(name)", foo));
+		
+		//7.访问复杂的对象
+		Dept dept = new Dept();
+		dept.setDeptName("Java");
+		Emp e1 = new Emp("XiaoWang", 6000.00, dept);
+		Emp e2 = new Emp("XiaoZhao", 7000.00, dept);
+		Emp e3 = new Emp("XiaoLi", 8000.00, dept);
+		List<Emp> emps = new ArrayList<E>()
+		System.out.println("7.访问复杂的对象");
+		System.out.println(Ognl.getValue(""));
+	}
+}

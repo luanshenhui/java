@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="centling.entity.DHLDict" table="DHLDict">
+        <id name="ID" type="integer">
+            <column name="ID"/>
+        </id>
+        <property name="CountryCode" type="string">
+            <column name="CountryCode" />
+        </property>
+        <property name="CountryName" type="string">
+            <column name="CountryName" />
+        </property>
+        <property name="StateCode" type="string">
+            <column name="stateCode" />
+        </property>
+        <property name="StateName" type="string">
+            <column name="StateName" />
+        </property>
+        <property name="City" type="string">
+            <column name="City" />
+        </property>
+        <property name="CodeA" type="string">
+            <column name="CodeA" />
+        </property>
+        <property name="CodeB" type="string">
+            <column name="CodeB" />
+        </property>
+        <property name="CodeC" type="string">
+            <column name="CodeC" />
+        </property>
+    </class>
+</hibernate-mapping>

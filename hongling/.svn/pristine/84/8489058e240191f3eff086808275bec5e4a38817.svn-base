@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.CurableStyle" table="CurableStyle">
+    	<id name="ID">
+            <column name="ID"/>
+            <generator class="assigned" />
+        </id>
+        <property name="Ecode" type="string" column="Ecode"/>
+        <property name="Code" type="string" column="Code"/>
+        <property name="Remark" type="string" column="Remark"/>
+        <property name="Status" type="integer" column="Status"/>
+        <property name="CloseStatus" type="integer" column="CloseStatus"/>
+        <property name="LockStatus" type="integer" column="LockStatus"/>
+        
+    </class>
+</hibernate-mapping>

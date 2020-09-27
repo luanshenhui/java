@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<title>首页</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
+    <link rel="shortcut icon" href="Apollo/images/icons/favicon.png">
+    <link rel="apple-touch-icon" href="Apollo/images/icons/favicon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="Apollo/images/icons/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="Apollo/images/icons/favicon-114x114.png">
+    <!--Loading bootstrap css-->
+
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css">
+    <!--LOADING STYLESHEET FOR PAGE-->
+    <!--Loading style vendors-->
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/animate.css/animate.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-pace/pace.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/iCheck/skins/all.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/sco.message/sco.message.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-bootstrap-wizard/custom.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-steps/css/jquery.steps.css">
+    <!--Loading style-->
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/orange-blue.css" class="default-style">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change" class="style-change color-change">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/style-responsive.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/select2/select2-madmin.css">
+	<link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/multi-select/css/multi-select-madmin.css">
+	<link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/DataTables/media/css/dataTables.bootstrap.css">
+	    
+    <!-- 加载主题风格样式 -->
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/orange-blue.css" class="default-style" />
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change" class="style-change color-change" />
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/style-responsive.css" />
+</head>
+
+<body id="topBody" class=" ">
+    <div>
+        <!--BEGIN BACK TO TOP--><a id="totop" href="#"><i class="fa fa-angle-up"></i></a>
+        <!--END BACK TO TOP-->
+        <!--BEGIN TOPBAR-->
+        <div id="header-topbar-option-demo" class="page-header-topbar">
+            <nav id="topbar" role="navigation" style="margin-bottom: 0; z-index: 2;" class="navbar navbar-default navbar-static-top">
+                <div class="navbar-header">
+                    <button type="button" data-toggle="collapse" data-target=".sidebar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+<!--                     </button><a id="logo" href="index.html" class="navbar-brand"><span class="fa fa-rocket"></span><span class="logo-text"><img style="height: 40px;float: left; margin: -11px 0px 0px 0px;" src="/images/LOGO.png"></span><span style="display: none" class="logo-text-icon"><img style="height: 30px;float: left;margin: -4px 0px 0px -4px;" src="/images/LogoOnly.png"></span></a> -->
+                </div>
+                <div class="topbar-main"><a id="menu-toggle" href="#" class="hidden-xs"><i class="fa fa-bars"></i></a>
+                    <ul class="nav navbar navbar-top-links navbar-right mbn">
+                        <li class="dropdown topbar-user">
+                            <a data-hover="dropdown" href="#" class="dropdown-toggle"><img src="Apollo/images/user/head.jpg" alt="" class="img-responsive img-circle" />&nbsp;<span class="hidden-xs">个人中心</span>&nbsp;<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user pull-right">
+                            	<li><a href="javascript:;" onclick="changePageContent()"><i class="fa fa-pencil"></i>修改密码</a>
+                                </li>
+                                <li><a href="/"><i class="fa fa-key"></i>退出</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!--BEGIN MODAL CONFIG PORTLET-->
+<!--             <div id="modal-config" class="modal fade"> -->
+<!--                 <div class="modal-dialog"> -->
+<!--                     <div class="modal-content"> -->
+<!--                         <div class="modal-header"> -->
+<!--                             <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button> -->
+<!--                             <h4 class="modal-title">Modal title</h4> -->
+<!--                         </div> -->
+<!--                         <div class="modal-body"> -->
+<!--                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend et nisl eget porta. Curabitur elementum sem molestie nisl varius, eget tempus odio molestie. Nunc vehicula sem arcu, eu pulvinar neque cursus ac. Aliquam ultricies lobortis magna et aliquam. Vestibulum egestas eu urna sed ultricies. Nullam pulvinar dolor vitae quam dictum condimentum. Integer a sodales elit, eu pulvinar leo. Nunc nec aliquam nisi, a mollis neque. Ut vel felis quis tellus hendrerit placerat. Vivamus vel nisl non magna feugiat dignissim sed ut nibh. Nulla elementum, est a pretium hendrerit, arcu risus luctus augue, mattis aliquet orci ligula eget massa. Sed ut ultricies felis.</p> -->
+<!--                         </div> -->
+<!--                         <div class="modal-footer"> -->
+<!--                             <button type="button" data-dismiss="modal" class="btn btn-default">Close</button> -->
+<!--                             <button type="button" class="btn btn-primary">Save changes</button> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                 </div> -->
+<!--             </div> -->
+            <!--END MODAL CONFIG PORTLET-->
+        </div>
+        <!--END TOPBAR-->
+        <div id="wrapper">
+            <!--BEGIN SIDEBAR MENU-->
+            <nav id="sidebar" role="navigation" class="navbar-default navbar-static-side">
+                <div class="sidebar-collapse menu-scroll">
+                    <ul id="side-menu" class="nav">
+                        <li class="user-panel">
+                            <div class="thumb"><img src="Apollo/images/user/head.jpg" alt="" class="img-circle" />
+                            </div>
+                            <div class="info">
+                                <p>管理员</p>
+                                <ul class="list-inline list-unstyled">
+                                    <li><a id="logOut" href="javascript:;" data-hover="tooltip" title="退出"><i class="fa fa-sign-out"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                        <li class="active"><a href="index.html"><i class="fa fa-tachometer fa-fw"><div class="icon-bg bg-orange"></div></i><span class="menu-title">用户统计</span></a>
+                        </li>
+<!--                          <li><a href="#"><i class="fa fa-edit fa-fw"><div class="icon-bg bg-violet"></div></i><span class="menu-title">图片管理</span><span class="fa arrow"></span></a> -->
+<!--                             <ul class="nav nav-second-level"> -->
+<!--                                 <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-columns"></i><span class="submenu-title">上传图片</span></a> -->
+<!--                                 </li> -->
+<!--                             </ul> -->
+<!--                         </li> -->
+                         <li><a href="#"><i class="fa fa-edit fa-fw"><div class="icon-bg bg-violet"></div></i><span class="menu-title">角色管理</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-columns"></i><span class="submenu-title">角色列表</span></a>
+                                </li>
+                            </ul>
+                        </li>
+<!--                         <li><a href="#"><i class="fa fa-edit fa-fw"><div class="icon-bg bg-violet"></div></i><span class="menu-title">走势图</span><span class="fa arrow"></span></a> -->
+<!--                             <ul class="nav nav-second-level"> -->
+<!--                                 <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-columns"></i><span class="submenu-title">柱状图</span></a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-file-text-o"></i><span class="submenu-title">波动图</span></a> -->
+<!--                                 </li> -->
+<!--                             </ul> -->
+<!--                         </li> -->
+<!--                         <li><a href="#"><i class="fa fa-th-list fa-fw"><div class="icon-bg bg-blue"></div></i><span class="menu-title">系统管理</span><span class="fa arrow"></span></a> -->
+<!--                             <ul class="nav nav-second-level"> -->
+<!--                             	<li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">省区域</span></a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">用户管理</span></a> -->
+<!--                                 </li> -->
+<!--                             </ul> -->
+<!--                         </li> -->
+                    </ul>
+                </div>
+            </nav>
+            <!--END SIDEBAR MENU-->
+            <!--BEGIN PAGE WRAPPER-->
+            <div id="page-wrapper">
+                <!--BEGIN TITLE & BREADCRUMB PAGE-->
+                <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+                    <div class="page-header pull-left">
+                        <div class="page-title">用户统计</div>
+                    </div>
+                    <ol class="breadcrumb page-breadcrumb">
+                        <li id="breadcrumbL1"><i class="fa fa-home"></i>&nbsp;<a href="index.html">首页</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li id="breadcrumbL2"><a href="#">系统管理</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li id="breadcrumbL3" class="active">用户统计</li>
+                    </ol>
+                    <div class="btn btn-blue reportrange hide"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;report&nbsp;<i class="fa fa-angle-down"></i>
+                        <input type="hidden" name="datestart" />
+                        <input type="hidden" name="endstart" />
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <!--END TITLE & BREADCRUMB PAGE-->
+                <!--BEGIN CONTENT-->
+                <iframe id="contentFrame" style="width:100%;height:100%;" scrolling="auto" frameborder="0" src="dashboard.html" width="100%"></iframe>
+                <!--END CONTENT-->
+            </div>
+            <!--BEGIN FOOTER-->
+            <div id="footer">
+                <div class="copyright">2017  System</div>
+            </div>
+            <!--END FOOTER-->
+            <!--END PAGE WRAPPER-->
+        </div>
+    </div>
+    
+    <script src="Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+    <script src="Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="Apollo/madmin/js/jquery-ui.js"></script>
+    <!--loading bootstrap js-->
+    <script src="Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+    <script src="Apollo/madmin/js/html5shiv.js"></script>
+    <script src="Apollo/madmin/js/respond.min.js"></script>
+    <script src="Apollo/madmin/vendors/metisMenu/jquery.metisMenu.js"></script>
+    <script src="Apollo/madmin/vendors/slimScroll/jquery.slimscroll.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script>
+    <script src="Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+    <script src="Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+    <script src="Apollo/madmin/vendors/sco.message/sco.message.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-notific8/notific8.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-highcharts/highcharts.js"></script>
+    <script src="Apollo/madmin/js/jquery.menu.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-pace/pace.min.js"></script>
+    <script src="Apollo/madmin/vendors/holder/holder.js"></script>
+    <script src="Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-news-ticker/jquery.newsTicker.min.js"></script>
+    <script src="Apollo/madmin/vendors/moment/moment.js"></script>
+    <script src="Apollo/madmin/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="Apollo/madmin/vendors/select2/select2.min.js"></script>
+   	<script src="Apollo/madmin/vendors/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="Apollo/madmin/vendors/multi-select/js/jquery.multi-select.js"></script>
+    <script src="Apollo/madmin/js/ui-dropdown-select.js"></script>
+    <!--CORE JAVASCRIPT-->
+    <script src="Apollo/madmin/js/main.js"></script>
+    
+    <script src="Apollo/madmin/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+    <script src="Apollo/madmin/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+    <script src="Apollo/madmin/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+   	<script src="Apollo/madmin/vendors/jquery-tablesorter/jquery.tablesorter.js"></script>
+    
+</body>
+
+</html>

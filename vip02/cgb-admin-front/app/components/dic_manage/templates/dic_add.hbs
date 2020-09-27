@@ -1,0 +1,41 @@
+<div class="modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>添加字典表</h2>
+    </div>
+    <form class="form form-aligned dic-form" component-id="{{id}}">
+        <div class="dic-new modal-body">
+            <div class="control-group">
+                <label for="dicCode"><span class="required">*</span>字典编码:</label>
+                <input id="dicCode" class="form-control" name="dicCode" type="text" placeholder="请输入字典code" required
+                       value="{{dicCode}}">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="dicName"><span class="required" style="">*</span>字典名:</label>
+                <input id="dicName" class="form-control" name="dicName" type="text" placeholder="请输入字典名" required
+                       value="{{dictName}}">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label style="vertical-align: top;">字典表达式:</label>
+                <div class="dic-item" style="display: inline-block; width: 240px;">
+                    <div class="dic-item-sub"><input type="text" class="item-key"> - <input type="text" class="item-value">
+                        <button type="button" class="btn btn-success btn-small" value="删除">删除</button> </div>
+                </div>
+                <div style="display: inline-block; width: 60px;vertical-align: top;"><button type="button" class="js-item-add" value="追加">追加</button></div>
+            </div>
+            <div class="control-group">
+                <label for="description">字典描述:</label>
+                <input id="description" class="form-control" name="description" type="text" placeholder="请输入字典描述"
+                       value="{{description}}">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-medium" value="确定">
+            <button class="btn btn-close btn-medium close">关闭</button>
+        </div>
+    </form>
+</div>

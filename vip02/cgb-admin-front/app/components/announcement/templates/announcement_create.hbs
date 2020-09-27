@@ -1,0 +1,23 @@
+<div class="modal">
+    <div class="modal-header">
+        <h2>发布公告</h2>
+    </div>
+    <form class="form form-aligned announcement-form" announcement-id="{{id}}">
+        <div class="announcement-new modal-body">
+            <div class="control-group">
+                <label for="topic"><span class="required">*</span>公告名称:</label>
+                <input id="topic" class="form-control" name="topic" type="text" required
+                       value="{{topic}}">
+            </div>
+            <div class="control-group">
+                <label for="content"><span class="required">*</span>公告内容:</label>
+                <input id="content" class="form-control" name="content" placeholder="需要富文本编辑器" type="text" required
+                       value="{{content}}">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-medium" value="发布">
+            <button class="btn btn-info btn-medium close">取消</button>
+        </div>
+    </form>
+</div>

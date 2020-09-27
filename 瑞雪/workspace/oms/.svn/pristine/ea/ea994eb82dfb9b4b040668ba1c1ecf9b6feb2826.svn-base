@@ -1,0 +1,84 @@
+package cn.rkylin.oms.common.context;
+
+import java.util.List;
+
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.role.vo.RoleVo;
+
+/**
+ * 用户
+ * @todo 暂时先用着，做完用户管理再替换，继承到User
+ * @author wangxiaoyi
+ * @version 1.0
+ * @create 2017年2月15日
+ */
+public class CurrentUser {
+	private String userId;
+	private String userName;
+	private String orgId;
+	private String orgName;
+	private WF_ORG_ROLE AdminRole;
+	private List<RoleVo> roleList;
+	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getOrgId() {
+		return orgId;
+	}
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
+	public String getOrgName() {
+		return orgName;
+	}
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+	public void setAdminRole(WF_ORG_ROLE adminRole) {
+		AdminRole = adminRole;
+	}
+	
+
+	public boolean hasAdminRole() {
+		boolean returnValue = false;
+		if (this.roleList != null) {
+			for (int i = 0; i < this.roleList.size(); i++) {
+				WF_ORG_ROLE role = (WF_ORG_ROLE) roleList.get(i);
+				if (role.getIsAdminrole() != null && role.getIsAdminrole().equals("是")) {
+					returnValue = true;
+					break;
+				}
+			}
+		}
+		return returnValue;
+	}
+
+	/**
+	 * 获取user的adminRole(每个用户应该只能有1个adminRole)
+	 * 
+	 * @return user的管理角色
+	 */
+	public WF_ORG_ROLE getAdminRole() {
+		WF_ORG_ROLE returnValue = null;
+		if (this.roleList != null) {
+			for (int i = 0; i < this.roleList.size(); i++) {
+				WF_ORG_ROLE role = (WF_ORG_ROLE) roleList.get(i);
+				if (role.getIsAdminrole() != null && role.getIsAdminrole().equals("是")) {
+					returnValue = role;
+					break;
+				}
+			}
+		}
+		return returnValue;
+	}
+}

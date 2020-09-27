@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VendorRoleMenu">
+    <resultMap id="VendorRoleMenuMap" type="VendorRoleMenuModel">
+        <result property="id" column="id"/>
+        <result property="menuId" column="menu_id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="rightRead" column="right_read"/>
+        <result property="rightWrite" column="right_write"/>
+        <result property="rightMod" column="right_mod"/>
+        <result property="rightDel" column="right_del"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="refuseDesc" column="refuse_desc"/>
+        <result property="vendorId" column="vendor_id"/>
+    </resultMap>
+    <sql id="columns">
+        id,menu_id,role_id,right_read,right_write,right_mod,right_del,check_status,refuse_desc,vendor_id
+    </sql>
+
+    <insert id="insert" parameterType="Map" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_vendor_role_menu
+        (menu_id
+        ,role_id
+        )
+        values
+        <foreach collection="resourceIds" separator="," item="resourceId">
+            (#{resourceId}
+            ,#{roleId})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="VendorRoleMenuModel">
+        update tbl_vendor_role_menu set
+        <if test="menuId !=null">menu_id = #{menuId}
+            ,
+        </if>
+        <if test="roleId !=null">role_id = #{roleId}
+            ,
+        </if>
+        <if test="rightRead !=null">right_read = #{rightRead}
+            ,
+        </if>
+        <if test="rightWrite !=null">right_write = #{rightWrite}
+            ,
+        </if>
+        <if test="rightMod !=null">right_mod = #{rightMod}
+            ,
+        </if>
+        <if test="rightDel !=null">right_del = #{rightDel}
+            ,
+        </if>
+        <if test="checkStatus !=null">check_status = #{checkStatus}
+            ,
+        </if>
+        <if test="refuseDesc !=null">refuse_desc = #{refuseDesc}
+            ,
+        </if>
+        <if test="vendorId !=null">vendor_id = #{vendorId}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="menuId !=null">and menu_id = #{menuId}</if>
+            <if test="roleId !=null">and role_id = #{roleId}</if>
+            <if test="rightRead !=null">and right_read = #{rightRead}</if>
+            <if test="rightWrite !=null">and right_write = #{rightWrite}</if>
+            <if test="rightMod !=null">and right_mod = #{rightMod}</if>
+            <if test="rightDel !=null">and right_del = #{rightDel}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="refuseDesc !=null">and refuse_desc = #{refuseDesc}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="VendorRoleMenuMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_vendor_role_menu
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="VendorRoleMenuMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_role_menu
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="VendorRoleMenuMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_role_menu
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="Map">
+        delete from tbl_vendor_role_menu where role_id = #{roleId} AND menu_id IN
+        <foreach collection="resourceIds" open="(" close=")" separator="," item="deleteId">
+            #{deleteId}
+        </foreach>
+    </delete>
+    <select id="getMenuByRoleId" parameterType="List" resultType="Long">
+        SELECT menu_id FROM tbl_vendor_role_menu WHERE role_id IN
+        <foreach collection="list" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </select>
+    <delete id="deleteByRoleId" parameterType="Long">
+        DELETE FROM tbl_vendor_role_menu WHERE role_id =#{_parameter}
+    </delete>
+</mapper>
+
+

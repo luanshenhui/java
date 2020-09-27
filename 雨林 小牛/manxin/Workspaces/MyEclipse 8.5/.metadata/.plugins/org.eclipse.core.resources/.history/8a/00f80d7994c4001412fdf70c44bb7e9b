@@ -1,0 +1,45 @@
+package com.yulin.web.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.yulin.web.common.MyBatisUtil;
+import com.yulin.web.entity.User;
+
+public class UserDaoImpl implements UserDao{
+
+	private String namespace = "EmpMapping";
+	public List<User> findAll() {
+		SqlSession session = MyBatisUtil.getSession();
+		List<User> list = session.selectList(namespace + ".findAll");
+		return list;
+	}
+	public boolean insertUser(User u) {
+		// 添加
+		SqlSession session = MyBatisUtil.getSession();
+		int flag = 0;
+		flag = session.insert(namespace + ".insertUser", u);
+		session.commit();
+		return flag == 1;
+	}
+	
+	public boolean updateUser(User u) {
+		// 修改
+		SqlSession session = MyBatisUtil.getSession();
+		int flag = 0;
+		flag = session.update(namespace + ".updateUser");
+		session.commit();
+		return flag == 1;
+	}
+
+	public static void main(String[] args) {
+		UserDaoImpl ud = new UserDaoImpl();
+//		System.out.println(ud.findAll());
+//		System.out.println(ud.insertUser(new User("1008","1234","hhhh",1000,22)));
+		System.out.println(ud.updateUser(new User("1008","1234","bbbb",1000,22)));
+		
+	}
+
+}

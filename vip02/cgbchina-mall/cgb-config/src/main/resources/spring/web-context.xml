@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <aop:aspectj-autoproxy/>
+    <context:component-scan base-package="com.spirit.common,com.spirit.web"/>
+
+    <!-- AOP support -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSources"/>
+    </bean>
+
+    <!-- redis配置 -->
+    <import resource="classpath*:spring/redis-context.xml"/>
+    <import resource="classpath*:spring/category-service-context.xml"/>
+    <import resource="classpath*:fastdfs-image-context.xml"/>
+    <!--ActiveMq配置 -->
+    <import resource="web-mq.xml"/>
+    <!-- 开发环境配置 -->
+    <beans profile="dev">
+        <!--数据源配置 -->
+        <import resource="classpath*:/spring/cgb-mybatis-context.xml"/>
+        <!-- service 注入 -->
+        <import resource="classpath*:/spring/user-service-context.xml"/>
+        <import resource="classpath*:/spring/item-service-context.xml"/>
+        <import resource="classpath*:/spring/trade-service-context.xml"/>
+        <import resource="classpath*:/spring/related-service-context.xml"/>
+        <import resource="classpath*:/spring/promotion-service-context.xml"/>
+        <import resource="classpath*:/spring/generator-context.xml"/>
+        <import resource="classpath*:/spring/rest-service-context-test.xml"/>
+        <import resource="classpath*:/spring/log-service-context.xml"/>
+        <import resource="classpath*:/spring/promotionmq.xml"/>
+    </beans>
+    <beans profile="xcdev">
+        <!--数据源配置 -->
+        <import resource="classpath*:/spring/cgb-mybatis-context.xml"/>
+        <!-- service 注入 -->
+        <import resource="classpath*:/spring/user-service-context.xml"/>
+        <import resource="classpath*:/spring/item-service-context.xml"/>
+        <import resource="classpath*:/spring/trade-service-context.xml"/>
+        <import resource="classpath*:/spring/related-service-context.xml"/>
+        <import resource="classpath*:/spring/promotion-service-context.xml"/>
+        <import resource="classpath*:/spring/generator-context.xml"/>
+        <import resource="classpath*:/spring/rest-service-context-real.xml"/>
+        <import resource="classpath*:/spring/log-service-context.xml"/>
+        <import resource="classpath*:/spring/promotionmq.xml"/>
+        <import resource="classpath*:/spring/ordermq.xml"/>
+    </beans>
+    <beans profile="test">
+        <import resource="classpath*:/spring/rest-service-context-test.xml"/>
+        <import resource="classpath*:/spring/dubbo-consumer.xml"/>
+        <import resource="classpath*:spring/rest-dubbo-consumer.xml"/>
+    </beans>
+
+    <beans profile="fdev,fsit,prod,fuat">
+        <!-- 测试环境，生产环境，预生产环境 dubbo 服务调用 -->
+        <import resource="classpath*:/spring/dubbo-consumer.xml"/>
+        <import resource="classpath*:/spring/rest-service-context-real.xml"/>
+        <import resource="classpath*:spring/rest-dubbo-consumer.xml"/>
+    </beans>
+
+    <beans profile="TODO">
+        <bean id="leaders" class="com.spirit.zookeeper.Leaders">
+            <constructor-arg index="0" value="#{app.zkAddress}"/>
+        </bean>
+    </beans>
+
+</beans>

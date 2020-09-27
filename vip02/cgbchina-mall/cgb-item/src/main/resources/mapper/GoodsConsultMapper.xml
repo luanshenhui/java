@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GoodsConsult">
+    <resultMap id="GoodsConsultMap" type="GoodsConsultModel">
+        <result property="id" column="id"/>
+        <result property="goodsCode" column="goods_code"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="backCategory1Id" column="back_category1_id"/>
+        <result property="backCategory2Id" column="back_category2_id"/>
+        <result property="backCategory3Id" column="back_category3_id"/>
+        <result property="goodsBrandId" column="goods_brand_id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="adviceContent" column="advice_content"/>
+        <result property="adviceDatetime" column="advice_datetime"/>
+        <result property="replyContent" column="reply_content"/>
+        <result property="replyDatetime" column="reply_datetime"/>
+        <result property="memberId" column="member_id"/>
+        <result property="isShow" column="is_show"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,goods_code,ordertype_id,back_category1_id,back_category2_id,back_category3_id,goods_brand_id,vendor_id,advice_content,advice_datetime,reply_content,reply_datetime,member_id,is_show,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="GoodsConsultModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_goods_consult
+        (goods_code
+        ,ordertype_id
+        ,back_category1_id
+        ,back_category2_id
+        ,back_category3_id
+        ,goods_brand_id
+        ,vendor_id
+        ,advice_content
+        ,advice_datetime
+        ,reply_content
+        ,reply_datetime
+        ,member_id
+        ,is_show
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{goodsCode}
+        ,#{ordertypeId}
+        ,#{backCategory1Id}
+        ,#{backCategory2Id}
+        ,#{backCategory3Id}
+        ,#{goodsBrandId}
+        ,#{vendorId}
+        ,#{adviceContent}
+        ,#{adviceDatetime}
+        ,#{replyContent}
+        ,#{replyDatetime}
+        ,#{memberId}
+        ,#{isShow}
+        ,#{delFlag}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="GoodsConsultModel">
+        update tbl_goods_consult set
+        goods_code
+        = #{goodsCode},ordertype_id
+        = #{ordertypeId},back_category1_id
+        = #{backCategory1Id},back_category2_id
+        = #{backCategory2Id},back_category3_id
+        = #{backCategory3Id},goods_brand_id
+        = #{goodsBrandId},vendor_id
+        = #{vendorId},advice_content
+        = #{adviceContent},advice_datetime
+        = #{adviceDatetime},reply_content
+        = #{replyContent},reply_datetime
+        = #{replyDatetime},member_id
+        = #{memberId},is_show
+        = #{isShow},del_flag
+        = #{delFlag},create_oper
+        = #{createOper},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="goodsCode !=null">and goods_code = #{goodsCode}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+            <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+            <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+            <if test="goodsBrandId !=null">and goods_brand_id = #{goodsBrandId}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="adviceContent !=null">and advice_content = #{adviceContent}</if>
+            <if test="adviceDatetime !=null">and advice_datetime = #{adviceDatetime}</if>
+            <if test="replyContent !=null">and reply_content = #{replyContent}</if>
+            <if test="replyDatetime !=null">and reply_datetime = #{replyDatetime}</if>
+            <if test="memberId !=null">and member_id = #{memberId}</if>
+            <if test="isShow !=null">and is_show = #{isShow}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="GoodsConsultMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_goods_consult
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="GoodsConsultMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_consult
+        <include refid="conditions"/>
+    </select>
+
+    <delete id="delete" parameterType="GoodsConsultModel">
+        delete from tbl_goods_consult where id = id
+    </delete>
+
+    <!--查询行数-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_goods_consult
+        where 1=1
+        <if test="goodsName !=null">
+            and goods_code in
+            <foreach collection="goodsName" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="brandName !=null">
+            and goods_brand_id in
+            <foreach collection="brandName" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="vendorName !=null">
+            and vendor_id in
+            <foreach collection="vendorName" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="isShow !=null">
+            and is_show = #{isShow}
+        </if>
+        <if test="vendorId !=null">
+            and vendor_id = #{vendorId}
+        </if>
+        <if test="memberId !=null">
+            and member_id = #{memberId}
+        </if>
+    </select>
+
+    <!--查询数据-->
+    <select id="pager" parameterType="Map" resultMap="GoodsConsultMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_consult
+        where 1=1
+        <if test="goodsName !=null">
+            and goods_code in
+            <foreach collection="goodsName" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="brandName !=null">
+            and goods_brand_id in
+            <foreach collection="brandName" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="vendorName !=null">
+            and vendor_id in
+            <foreach collection="vendorName" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="isShow !=null">
+            and is_show = #{isShow}
+        </if>
+        <if test="vendorId !=null">
+            and vendor_id = #{vendorId}
+        </if>
+        <if test="memberId !=null">
+            and member_id = #{memberId}
+        </if>
+        <if test="memberId !=null">
+            and member_id = #{memberId}
+        </if>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <!-- (批量)更新，商品资讯管理，显示或隐藏 -->
+    <update id="updateIsShowByIds" parameterType="Map">
+        UPDATE tbl_goods_consult SET
+        is_show =#{isShow},
+        modify_oper = #{modifyOper},
+        modify_time = now()
+        WHERE
+        id in
+        <if test="idsList !=null">
+            <foreach collection="idsList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <!-- 回复功能 -->
+    <update id="updateReplyContent" parameterType="Map">
+        UPDATE tbl_goods_consult SET
+        reply_content =#{replyContent},
+        reply_datetime = now(),
+        modify_oper = #{modifyOper},
+        modify_time = now()
+        WHERE
+        id =#{id}
+    </update>
+
+    <!-- 添加咨询-->
+    <insert id="insertGoodsConsult" parameterType="GoodsConsultModel" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        insert into tbl_goods_consult
+        (goods_code
+        ,ordertype_id
+        ,vendor_id
+        ,advice_content
+        ,advice_datetime
+        ,member_id
+        ,is_show
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,back_category1_id
+        ,back_category2_id
+        ,back_category3_id
+        ,goods_brand_id)
+        values
+        (#{goodsCode}
+        ,#{ordertypeId}
+        ,#{vendorId}
+        ,#{adviceContent}
+        ,now()
+        ,#{memberId}
+        ,0
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        ,#{backCategory1Id}
+        ,#{backCategory2Id}
+        ,#{backCategory3Id}
+        ,#{goodsBrandId})
+    </insert>
+
+    <!-- 按goodsCode查询行数-->
+    <select id="countByCode" resultType="Long">
+        select count(1)
+        from tbl_goods_consult
+        where 1=1
+        <if test="goodsCode !=null">
+            and goods_code = #{goodsCode}
+        </if>
+        <if test="isShow !=null">
+            and is_show = #{isShow}
+        </if>
+    </select>
+
+    <!-- 按goodsCode查询数据-->
+    <select id="pagerByCode" parameterType="Map" resultMap="GoodsConsultMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_consult
+        where 1=1
+        <if test="goodsCode !=null">
+            and goods_code = #{goodsCode}
+        </if>
+        <if test="isShow !=null">
+            and is_show = #{isShow}
+        </if>
+        <![CDATA[ order by create_time limit #{offset}, #{limit} ]]>
+    </select>
+</mapper>
+
+

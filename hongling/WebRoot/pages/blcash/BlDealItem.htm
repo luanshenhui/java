@@ -1,0 +1,35 @@
+<script src="../blcash/common.js"></script>
+<script src="../blcash/BlDealItem.js"></script>
+<form id="BlDealItemForm" class="form_template">
+<input type="hidden" name="ID" id="ID"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label blLblDealItemName star"></td>
+		<td>
+			<input type="text" id="name"/><span id="tip_DealItemName"></span>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblIOFlagName star"></td>
+		<td>
+			<select id="ioFlag" style="width:153px;"></select><span id="tip_IOFlag"></span>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblMemo"></td>
+		<td>
+			<input type="text" id="memo"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblEn"></td>
+		<td>
+			<input type="text" id="en"/>
+		</td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="blBtnSaveDealItem"></a> <a id="blBtnCancelDealItem"></a>
+</div>
+</form>

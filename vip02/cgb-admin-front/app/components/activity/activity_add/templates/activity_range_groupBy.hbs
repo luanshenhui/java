@@ -1,0 +1,36 @@
+{{#each this}}
+    <tr class="activeRuleTr" data-component="" data-id="{{index}}">
+        <td class="NO" title="{{index}}">{{index}}</td>
+        <td class="sequence"><input type="text" class="form-label-15" maxlength="3" value="{{seq}}"></td>
+        <td style="overflow: hidden;" class="category" data-category="{{backCategory}}" title="{{backCategoryName}}">{{backCategoryName}}</td>
+        <td class="brand" title="{{goodsBrandName}}">{{goodsBrandName}}</td>
+        <td class="singleProductNO" title="{{itemCode}}">{{itemCode}}</td>
+        <td class="productName" title="{{goodsName}}">{{goodsName}}</td>
+        <td class="suppliers" title="{{venderName}}">{{venderName}}</td>
+        <td class="cost">
+            {{#equals costBy "1"}}
+                <input type="radio" name="cost{{index}}" value="行方">行方
+                <input type="radio" name="cost{{index}}" value="供应商" checked>供应商
+            {{else}}
+                <input type="radio" name="cost{{index}}" value="行方" checked>行方
+                <input type="radio" name="cost{{index}}" value="供应商">供应商
+            {{/equals}}
+        </td>
+        <td class="itmeCount"><input type="text" class="form-control form-label-35" maxlength="10" value="{{stock}}"></td>
+        <td class="itmeCount"><input type="text" class="form-control form-label-35" maxlength="10" value="{{levelPrice}}"></td>
+        <td><select class="group_classify" style="width: auto">
+            {{#each classifyList}}
+                {{#equals @index 0}}
+                    <option value="">请选择</option>
+                    <option value="{{id}}" {{#equals id ../groupClassify}}selected{{/equals}}>{{name}}</option>
+                    {{else}}
+                    <option value="{{id}}" {{#equals id ../groupClassify}}selected{{/equals}}>{{name}}</option>
+
+                {{/equals}}
+            {{/each}}
+        </select></td>
+        <td class="sid"><a class="btn btn-info btn-small act-range-groupby-delete">删除</a></td>
+        <td class="goodsCode" style="display: none">{{goodsCode}}</td>
+
+    </tr>
+{{/each}}

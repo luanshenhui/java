@@ -1,0 +1,257 @@
+servlet中讲到的jsp
+
+1、jsp是什么?
+ java server page
+ sun公司制订的一种服务器端动态页面生成技术的规范。因为直接使用servlet生成动态页面过于麻烦(需要使用out.println输出，不方便编写及修改)，所以，sun制订了一种更为简单的动态页面生成技术，也就是jsp。
+2、如何写一个jsp文件?
+ step1 编写一个以.jsp为后缀的文件
+ step2 在文件里面，可以添加如下的内容
+	1)html(包括css,javascript): 直接写。
+	2)java代码:
+		a, java代码片断
+		  <%  java代码    %>
+		b, jsp表达式
+		  <%= java表达式  %>
+	3)指令:
+		a,什么是指令:
+	  	  通知容器，在将.jsp文件转换成.java文件时，做一些额外的处理。
+		b,语法:
+	  	  <%@ 指令名称　属性名称=属性值 %>
+		c,page指令
+	  	  import属性:导包比如 <%@page import="java.util.*,java.text.*"%>
+		  pageEncoding属性:告诉容器，.jsp文件保存时的编码，这样，可以确保容器在读取.jsp文件时，不发生解码的错误。　
+		  contentType属性:　相当于response.setContentType。
+	4)隐含对象   有9个隐含对象，记住！
+		a,什么是隐含对象?
+		  在.jsp文件里面，不用获取或者创建，就可以直接使用的对象。因为容器会负责获取或者创建这些对象。
+		b,有哪一些隐含对象
+		  out
+		  request
+		  response(另外６个以后再讲)
+3、jsp是如何执行的?
+ step1，容器需要先将.jsp文件转换成.java文件(其实就是将.jsp转换成一个servlet类)
+	转换规则:
+	1)html  ---->  放到service方法里，使用out.write()输出,out.write()会将null转换成""输出，而out.println会直接输出null。
+	2)<%  %> -->  放到service方法里，照搬。
+	3)<%= %> --> 放到service方法里，使用out.print()输出
+ step2,容器将servlet实例化，初始化，调用其service方法执行。
+4、转发
+ (1)什么是转发?
+	一个web组件(servlet/jsp)	将未完成的处理任务转交给另外一个web组件继续完成。
+ (2)如何转发
+	step1 先绑订数据
+	   request.setAttribute(String name,Object obj);
+	step2 获得转发器
+	   RequestDispatcher rd = request.getRequestDispatcher(String url);
+	   //url:要转发的目的地的组件的地址
+	step3 转发
+	   rd.forward(request,response);
+	   可以在目的地组件里，通过getAttribute方法获得事先绑订的数据
+   	   Object obj = request.getAttribute(String name);
+	   如果name对应的对象不存在，会返回null。
+	   //解除绑订
+	   request.removeAttribute(String name);
+5、servlet如何处理系统异常
+ step1 将异常先抛出。
+ step2 编写一个错误处理页面(error.jsp)
+ step3 在web.xml文件里，使用　
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error.jsp</location>
+	</error-page>	
+-------------------------------------------------------------------------
+day01
+
+1、jsp基础
+  （1）jsp是什么？
+  java server page
+  sun公司制订的一种服务器端动态页面生存技术的规范。
+  （2）如何写一个jsp文件？
+    step1 .jsp为后缀
+    step2 添加
+          1）html（css，js）：直接写
+          2）java代码：
+             a java代码将啊片段：<% %>
+             b jsp表达式：<%=   %>
+             c jsp声明：<%!  %>用来给jsp对应的servlet增加属性和方法。
+          3）隐含对象
+             a out 
+             b request 
+             c response 
+             d session 
+             e applcation 
+             f pageContext:jsp页面上下文，是PageContext的实例，容器会为每一个jsp实例创建唯一的一个pageContext对象 
+               作用1：绑定数据(只有该jsp实例自己能访问） setAttribute,removeAttribute,getAttribute
+               作用2：访问其它八个隐含对象（自定义jsp标签时演示）。
+             g page：代表jsp实例本身，用不到 
+             h config：ServletConfig的实例，可以将jsp当成一个servlet，在web.xml文件当中，添加初始化参数，并使用该隐含对象去访问。
+             i exception：jsp在运行过程当中出错，可以通过该隐含对象获得出错的相关信息。
+               如何使用exception来处理jsp运行过程中产生的异常？
+               step1 先写一个错误处理页面（error.jsp），在error.jsp中，使用isErrorPage="true",调用exception.getMessage()方法输出错误信息。
+               step2 在有可能出错的页面，添加errorPage="error.jsp"当页面出错后，容器会调用error.jsp
+          4)指令
+           a,page指令
+            import属性：导包
+            pageEncoding属性：告诉容器，在读取.jsp文件时，该.jsp文件的编码。
+            contentType属性：response.setContentType.
+            errorPage属性：指定一个错误处理页面。
+            isErrorPage属性：当前页面是否是一个错误处理页面（true表示是，false表示不是）。
+            isELIgnorde属性：是否忽略el表达式，true表示忽略。
+            session属性：当值为false时，容器不再添加获得session对象的代码，即不支持session了。
+           b、include指令
+             <%indlude file="head.jsp"%>:在容器将.jsp文件转换成.java文件时，在指令所在的位置导入另一个文件的内容。
+           c、taglib指令
+             用来引入标签。
+          5）注释
+           a、<!-- 注释内容 -->：内容可以是java代码，该代码会被执行，执行结果不会显示再浏览器端。
+           b、<%-- 注释内容 -->：注释内容不能是java代码，并且不会显示在浏览器端。
+  （3)jsp如何执行
+     step1 .jsp文件先转换成.java文件（即转换为一个servlet）
+       a、html---->service方法里，out.write输出。
+       b、<%   %> -->  service方法里，照搬。
+       c、<%=  %> -->  service方法里，out.print输出。
+       d、<%!  %> ---> 添加属性和方法。
+     step2 实例化，并调用其service方法。
+
+2、jsp标签与el表达式
+  （1）jsp标签是什么？
+     为了方便jsp页面代码的维护，可以将jsp中的java代码使用jsp标签来代替。jsp标签类似于html标签，由sun公司制定相应的规范，不依赖于容器。
+  （2）jstl（java standard taglib）：java标准标签库
+  （3）el表达式是什么？
+     是一套简单的计算规则，用来给标签的属性赋值，也可以脱离标签直接使用
+   掌握：
+    a，访问bean的属性（在jsp文件里面，使用el表达式访问request当中绑定的数据）。
+      第一种方式：
+      ${user.name}:容器一次从pageContext,request,session,application中查找绑定名为“user”的对象（即getAttribute("user"));
+      如果找到了，则不再向下继续查找，然后调用getName方法，并输出；如果找不到，输出“”（空字符串）。
+      可以使用pageScope,requestScope,	sessionScope,applicationScope指定查询的范围，比如: ${sessionScope.user.name}。
+      第二种方式：
+      ${user["name"]}或者${user[propname]}，后一种形式中，propname是一个变量。此外，还可以${user.interest[0]},用来访问数组中的某个元素。
+
+练习：
+	写一个SomeServlet,绑订一个User对象到request，然后转发给一个some.jsp，使用el表达式，输出User对象的姓名，年龄。
+		
+    b, 获得请求参数值
+	${param.username} :
+	等价于 request.getParameter("username");
+	4{paramValues.city}:
+	等价于 request.getParameterValues("city");
+    c,进行一些简单的计算，计算结果可以直接输出，
+	也可以用来给标签的属性赋值。
+	算术运算:可以进行"+","-","*","/","%",但是，"+"运算不能连接字符串。
+	关系运算:可以进行"==","!=",">","<",">=","<="
+	逻辑运算:可以进行"&&","||","!"
+	empty运算: 以下四种情况，结果为true。
+		第1种情况  空字符串
+		第2种情况  空的集合
+		第3种情况  值为null
+		第4种情况  找不到
+  (4)jstl中的核心标签
+	1)使用步骤
+		step1 将标签所对应的.jar文件放到
+		WEB-INF\lib下。
+		standard.jar jstl.jar
+				
+		D:\czh\MyEclipse 5.5.1 GA\eclipse\plugins\com.genuitec.eclipse.j2eedt.core_5.5.1\data\libraryset\JSTL1.1\lib
+		step2 在.jsp文件当中，使用taglib指令引入标签。
+	2)常见的几个核心标签
+	    a,<c:if test="" var="" scope=""></c:if>
+		test属性：一般使用el表达式来赋值，当值为true时，容器会执行标签体的内容。
+		var属性：指定绑订名称
+		scope属性：指定绑订的范围(page,request,session,appication)。
+	    b,<c:choose>
+		<c:when test="">
+		</c:when>
+		...
+		<c:otherwise>
+		</c:otherwise>
+		</c:choose>
+	    c,<forEach items="" var="" varStatus=""></forEach>
+		经常用于遍历一个List集合
+		items属性:  一般使用el表达式来获得一个集合。
+		var属性：指定绑订名。绑订范围会使用pageContext。
+		varStatus属性：指定一个绑订名，该绑订名对应的对象封装了当前迭代的状态，比如是第几次访问，当前访问的对象的下标。
+	3)标签是如何执行的？
+		容器碰到一个标签以后：
+		step1 依据命名空间找到对应的标签的描述文件(.tld文件)。容器会先从WEB-INF\下查找，找不到，会查找.jar文件。
+		step2 依据标签名找到对应的标签类
+		step3 将该标签类实例化，调用相应的方法。
+	练习：
+		使用jstl的核心标签以及el表达式，实现员工的
+		“增删改查"。提示：只需要修改emplist.jsp,
+		empupdate.jsp。
+
+el表达式的作用：反问bean的属性，读取请求参数
+
+---------------------------------------------------
+day02
+1、自定义标签
+	step1 写一个java类，继承SimpleTagSupport类。
+	step2 override doTag方法，在该方法里面，编写相应的处理逻辑。
+	step3 在.tld文件当中，描述标签。(可以参考c.tld文件来写), .tld文件必须放到WEB-INF\下，或者放到META-INF\下。
+		<body-content>empty/scriptless/JSP</body-content>
+		empty:标签没有标签体。
+		scriptless:标签可以有标签体，但是，标签体的内容不能够出现java代码(<%  %>,<%=  %>,<%!  %>)。
+		JSP:标签可以有标签体，并且，标签体的内容可以有java代码。只有在复杂标签技术当中，才能使用该值。
+		
+	写一个DateTag标签，输出当前的系统日期,
+	<c1:date/> 会输出 2012-08-14
+	
+2、el函数
+	(1)什么是el函数?
+		对el表达式的结果进行处理的一个方法。
+	比如:
+	${fn:length(str)}
+	容器先找到str,接下来依据fn找到对应的.tld文件，依据函数名(length)找到对应的java类，并调用相应的方法来处理str,最后输出。
+	(2)自定义el函数
+	step1 写一个java类，需要提供public static方法。
+	step2 在public static方法当中，编写处理逻辑。
+	step3 在.tld文件当中，描述函数。
+	(可以参考fn.tld文件)。
+	
+	写一个el函数，将字符串变成大写输出
+	${fn1:toUpperCase(str))
+	
+3、javaee5.0及以上版本，如果使用jstl核心标记以及el表达式。
+	1)使用 <%@page isELIgnored="false"%>,让容器不再忽略el表达式。(javaee5.0之后，也就是servlet2.5规范之后，容器默认情况下，会忽略el表达式)。
+	2)如果要使用核心标签，将jstl1.2.jar 放到WEB-INF\lib下。
+4、mvc(model,view,controller)
+	(1)什么是mvc?
+		是一种软件架构的思想，将一个软件的组成部分划分成模型(封装业务逻辑)、视图(展现结果、提供操作界面)以及控制器(协调模型与视图)三个部分。
+		mvc的目的，是为了让模型可以被多个视图共享：
+		a,模型只需要提供数据，不关心数据以何种方式来展现。比如，模型返回某种产品每个月的销量，可以提供多种不同的视图(图形的方式、表格的方式等等)展现给不同需求的客户。
+		b,可以使用不同的视图来访问同一个模型。
+	(2)在web应用(java平台)中，如何使用mvc?
+		a, 模型可以使用java类来实现(或者也可以使用一些组件来实现，比如ejb,spring容器管理的java对象等等)。
+		模型包括业务逻辑和为保证业务逻辑能够正常执行的一些基础服务(比如事务、安全、日志等等)。基础服务可以自己写，有时，基础服务比较复杂，可以通过调用"中间件"(实现了基础服务器的软件，一般需要购买)来实现，如果基础服务要求不高，也可以使用ejb容器、spring容器提供的基础服务。
+		b,视图使用jsp来实现(也可以使用模板技术,jsf等等)。
+		c,控制器使用servlet来实现(也可以使用过滤器)。
+	(3)mvc的优缺点
+		a,优点
+		a1：模型可以被多个视图共享。	
+		a2: 模型写好之后，可以立即测试。(比如，将业务逻辑写在servlet类里面，需要部署之后，才能测试，而写在一个java类里面更方便测试，不需要部署)。
+		a3:方便分工协作。
+		a4: 方便代码的维护。
+		b,缺点
+		使用mvc,增加了设计的难度，并且，增加了代码量与开发的成本。
+
+	练习：计算产品的销售价格
+		计算规则:
+			产品的销售价格 = 产品出厂价 * ( 1 +  税率)。税率要依据产品的销售地点来查询数据库来获得。
+模型：
+step1  建表 t_tax
+create table t_tax(
+id int primary key auto_increment,
+cityName varchar(50) unique,
+taxRate double);
+insert into t_tax(cityName,taxRate) values('bj',0.13);
+insert into t_tax(cityName,taxRate) values('cs',0.08);
+step2 TaxService
+public double taxing(cityName,basePrice);
+查询数据库，可以使用dao
+step3 测试TaxService
+视图：
+tax_form.jsp (basePrice,cityName)
+view_tax.jsp
+---------------------------------------------------------------------------
+

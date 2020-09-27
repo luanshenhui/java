@@ -1,0 +1,76 @@
+package Demo;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Foo {
+	private int id;
+	private String name;
+	private String[] citys;
+	private List<String> langs;
+	private Map<String, String> map;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String[] getCitys() {
+		return citys;
+	}
+	public void setCitys(String[] citys) {
+		this.citys = citys;
+	}
+	public List<String> getLangs() {
+		return langs;
+	}
+	public void setLangs(List<String> langs) {
+		this.langs = langs;
+	}
+	public Map<String, String> getMap() {
+		return map;
+	}
+	public void setMap(Map<String, String> map) {
+		this.map = map;
+	}
+	public Foo(int id, String name, String[] citys, List<String> langs,
+			Map<String, String> map) {
+//		super();
+		this.id = id;
+		this.name = name;
+		this.citys = citys;
+		this.langs = langs;
+		this.map = map;
+	}
+	
+	public static String talk(){
+		return "Hello";
+	}
+	public static String talk(String name){
+		return "Hello," + name;
+	}
+	
+	public Foo(){
+		id = 1;
+		name = "Zhangsan";
+		citys = new String[]{"Beijing","Shanghai","Guangzhou"};
+		langs = new ArrayList<String>();
+		langs.add("Java");
+		langs.add("php");
+		langs.add("c#");
+		
+		map = new HashMap<String, String>();
+		map.put("aaa", "AAA");
+		map.put("bbb", "BBB");
+		map.put("ccc", "CCC");
+	}
+	
+}

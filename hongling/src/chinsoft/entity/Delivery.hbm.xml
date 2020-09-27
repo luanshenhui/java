@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Delivery" table="Delivery">
+        <id name="ID" type="string">
+            <column name="ID"/>
+             <generator class="sequence">
+            	<param name= "sequence">DELIVERY_ID</param> 
+            </generator>
+        </id>
+        
+        <property name="DeliveryDate" type="date">
+            <column name="DeliveryDate"/>
+        </property>
+        <property name="DeliveryAddress" type="string">
+            <column name="DeliveryAddress"/>
+        </property>
+         <property name="PubMemberID" type="string">
+            <column name="PubMemberID"/>
+        </property>
+         <property name="StatusID" type="integer">
+            <column name="StatusID"/>
+        </property>
+         <property name="ExpressComId" type="string">
+            <column name="EXPRESSCOMID"/>
+        </property>
+         <property name="YundanId" type="string">
+            <column name="YundanId"/>
+        </property>
+        <property name="ApplyDate" type="date">
+            <column name="ApplyDate"/>
+        </property>
+         <property name="Memo" type="string">
+            <column name="Memo"/>
+        </property>
+        <property name="AddressLine1" column="AddressLine1" type="string"/>
+        <property name="AddressLine2" column="AddressLine2" type="string"/>
+        <property name="City" column="City" type="string"/>
+        <property name="Division" column="Division" type="string"/>
+        <property name="DivisionCode" column="DivisionCode" type="string"/>
+        <property name="PostalCode" column="PostalCode" type="string"/>
+        <property name="CountryCode" column="CountryCode" type="string"/>
+        <property name="CountryName" column="CountryName" type="string"/>
+        <property name="FederalTaxID" column="FederalTaxID" type="string"/>
+        <property name="PhoneNumber" column="PhoneNumber" type="string"/>
+        <property name="PhoneExtension" column="PhoneExtension" type="string"/>
+        <property name="FaxNumber" column="FaxNumber" type="string"/>
+        <property name="Telex" column="Telex" type="string"/>
+        <property name="Email" column="Email" type="string"/>
+    </class>
+</hibernate-mapping>

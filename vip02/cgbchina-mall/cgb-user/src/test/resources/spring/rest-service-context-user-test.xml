@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util 
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+    <util:properties id="propertieParam" location="classpath*:parameters-test.properties"/>
+
+    <bean id="aspectBean" class="cn.com.cgbchina.rest.common.aspect.ServiceExceptionAspect"/>
+    <bean id="aspectBean2" class="cn.com.cgbchina.rest.common.aspect.ProviderServiceExceptionAspect"/>
+
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="TestAspect" ref="aspectBean">
+            <!--配置com.spring.service包下所有类或接口的所有方法-->
+            <aop:pointcut id="restBusinessService"
+                          expression="execution(* cn.com.cgbchina.rest.visit.service.*.*.*(..))"/>
+            <aop:after-throwing pointcut-ref="restBusinessService" method="afterThrowing" throwing="ex"/>
+            <aop:after-returning pointcut-ref="restBusinessService" method="afterReturn" returning="returnValue"/>
+        </aop:aspect>
+        <aop:aspect id="TestAspect2" ref="aspectBean2">
+            <!--配置com.spring.service包下所有类或接口的所有方法-->
+            <aop:pointcut id="restBusinessService2"
+                          expression="execution(* cn.com.cgbchina.rest.provider.test.*.*.*(..))"/>
+            <aop:after-returning pointcut-ref="restBusinessService2" method="afterReturn" returning="returnValue"/>
+        </aop:aspect>
+    </aop:config>
+    <!-- 状态码转换工具类 -->
+    <bean class="cn.com.cgbchina.rest.common.utils.StatusConverUtils">
+        <property name="filePath" value="/statusCodes.list"/>
+    </bean>
+    <!-- 设置spring content工具类 -->
+    <bean class="cn.com.cgbchina.rest.common.utils.SpringContextUtils"/>
+    <!-- 扫描交易码 -->
+    <bean class="cn.com.cgbchina.rest.common.utils.ScanTradeCode"/>
+    <!-- 注入国密算法 -->
+    <bean class="cfca.sadk.cgb.toolkit.SM2Toolkit"/>
+    <!-- 发送到不同系统去 -->
+    <bean class="cn.com.cgbchina.rest.common.utils.PropertieUtils">
+        <property name="param" ref="propertieParam"></property>
+    </bean>
+    <!-- Soap的发送位置，发送到网关去 -->
+    <bean class="cn.com.cgbchina.rest.common.utils.SoapTestHttpHelper">
+        <property name="url" value="http://172.16.63.247:38081/TestProject-0.0.1SNAPSHOT/selectXml2"/>
+        <property name="memberName" value="qwe"/>
+    </bean>
+	<beans profile="fdev,fsit,fuat,prod">
+		<import resource="classpath*:spring/rest-dubbo-consumer.xml"/>
+	</beans>
+</beans>

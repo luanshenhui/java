@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="centling.entity.FabricDiscount" table="FabricDiscount">
+        <id name="ID" column="ID" type="string">
+            <generator class="uuid.hex" />
+        </id>
+        <property name="FabricCode" type="string">
+            <column name="FabricCode" />
+        </property>
+        <property name="StartDate" type="date">
+            <column name="StartDate" />
+        </property>
+        <property name="EndDate" type="date">
+            <column name="EndDate" />
+        </property>
+        <property name="Discount" type="double">
+            <column name="Discount" />
+        </property>
+    </class>
+</hibernate-mapping>

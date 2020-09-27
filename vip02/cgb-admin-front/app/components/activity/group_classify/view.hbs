@@ -1,0 +1,37 @@
+{{#component "group_classify js-component"}}
+    <p class="components-title"><strong>- 团购商品类别管理 -</strong></p>
+    <div class="m-b-10">
+        {{#authorial "activityGroup_add"}}
+            <button class="btn btn-small btn-info js-classify-new" type="button">+ 新增
+            </button>
+        {{/authorial}}
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>分类名称</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-attribute="{{json this}}">
+                <td>{{name}}</td>
+                <td>
+                {{#authorial "activityGroup_delete"}}
+                        <button id="{{id}}" class="btn btn-sm btn-info" data-toggle="confirm"
+                                data-title="您确定删除吗?" data-content="删除之后无法恢复,不要删除已绑定团购商品的类别,确定要删除吗？"
+                                data-event="confirm:delete-groupClassify">删除
+                        </button>
+                {{/authorial}}
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    {{/equals}}
+{{/component}}

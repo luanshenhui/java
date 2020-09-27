@@ -1,0 +1,927 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<%@ include file="/common/resource_show.jsp"%>
+<link rel="stylesheet"
+	href="${ctx}/static/viewer/assets/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="${ctx}/static/viewer/dist/viewer.css"></link>
+<link rel="stylesheet" href="${ctx}/static/viewer/demo/css/main.css"></link>
+<script src="${ctx}/static/viewer/assets/js/jquery.min.js"></script>
+<script src="${ctx}/static/viewer/assets/js/bootstrap.min.js"></script>
+<script src="${ctx}/static/viewer/dist/viewer.js"></script>
+<script src="${ctx}/static/viewer/demo/js/main.js"></script>
+<style>
+.muy {
+	border-bottom: 1px solid #dcdcdc;
+	padding-right: 20px;
+	margin-top: 1px;
+	height:49px;
+	line-height:45px;
+}
+</style>
+<script type="text/javascript">
+		var type='<%=request.getParameter("type")%>';
+	$.fn.getHour = function(startDate, endDate, flg, b) {
+		if (!endDate || !startDate) {
+			return $(this).html("-");
+		}
+		var date1 = new Date(startDate.replace(/-/g, "/"));
+		var date2;
+		if (b) {
+			date2 = new Date();
+		} else {
+			date2 = new Date(endDate.replace(/-/g, "/"));
+		}
+		if (!flg) {
+			flg = "";
+		}
+		var hour = "0";
+		hour = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60);
+		hour = hour.toFixed(2);
+		if (hour) {
+			$(this).html(flg + hour);
+		} else {
+			$(this).html("-");
+		}
+	};
+
+	$(function() {
+		$("#imgd1").hide();
+		$.ajax({
+					url : "getData" + location.search + "&math="
+							+ Math.random(),
+					type : "get",
+					scriptCharset : "utf-8",
+					dataType : "json",
+					success : function(data) {
+						var vo = data.vo;
+						var vslDec = data.vslDec;
+						var contaEvent = data.contaEvent;
+						//var checkJob = data.checkJob;
+						var videoEvent = data.videoEvent;
+						var goodsDecl = data.goodsDecl;
+						var model = data.data;
+						var billLading = data.billLading;
+						var billLadingBooking = data.billLadingBooking;
+						var limsList = data.limsList;
+						var tfVsaList = data.tfVsaList;
+						var contaList = data.contaList;
+						var contaEventList = data.contaEventList;
+						var dywUnQualifyRecordList = data.dywUnQualifyRecordList;
+						// 查询实验室检验检疫
+						var laboratoryList = data.laboratoryList;
+						// TODO hehe
+						if (laboratoryList != null && laboratoryList.length > 0) {
+							var str = '';
+							$("#time_4").text(laboratoryList[0].chk_cre_dt);
+							$("#name_4").text(laboratoryList[0].chk_creator);
+							for (var i = 0; i < laboratoryList.length; i++) {
+								var item = laboratoryList[i];
+								str += '<tbody>'
+										+ '	<tr>'
+										+ '		<td width="164" class="table_xqlbbj2">抽样时间</td>'
+										+ '		<td class="flow-td-bord" colspan="2">'
+										+ item.chk_cre_dt
+										+ '</td>'
+										+ '	</tr>'
+										+ '	<tr>'
+										+ '		<td width="164" class="table_xqlbbj2">抽样过程记录</td>';
+								str += '<td class="flow-td-bord" colspan="2">';
+								if (item.chk_video_file_path) {
+									var arr = item.chk_video_file_path
+											.split(',');
+									for (var j = 0; j < arr.length; j++) {
+										var fileName = arr[j];
+										str += '<img src="/ciqs/static/show/images/photo-btn.png" onclick="toImgDetail(\'http://10.21.37.249/ciq-video/showVideo?filePath='
+												+ item.fileMonth
+												+ ','
+												+ item.fileDate
+												+ ','
+												+ fileName + '\')"/>'
+									}
+								}
+								str += '</td></tr><tr>'
+										+ '		<td width="164" class="table_xqlbbj2">抽采样凭证</td>'
+										+ '		<td class="flow-td-bord" colspan="2">';
+								str += '<a target="_Blank" href="sampling?id='+item.id+'"/>查看</td>'
+										+ '	</tr>'
+										+ '	<tr>'
+										+ '		<td width="164" class="table_xqlbbj2">箱号</td>'
+										+ '		<td class="flow-td-bord" colspan="2">'
+										+ item.chk_conta_no + '</td>'
+										+ '	</tr>' + '	<tr></tr>' + '</tbody>';
+							}
+							var laboraTable = document
+									.getElementById("laboratoryBox");
+							laboraTable.innerHTML = str;
+						}
+						
+						if (vo) {
+							$("#list_info").children().eq(0).html(
+									vo.ship_name_en);
+							$("#list_info").children().eq(1).html(vo.voyage_no);
+							var str = '<a href="/ciqs/billlading/billDetailByNo?billNo='+vo.bill_no+'">'+vo.bill_no+'</a>'
+							$("#list_info").children().eq(2).html(str);
+							var str1 = '<a href="/ciqs/billlading/declDetailByNo?declNo='+vo.decl_no+'">'+vo.decl_no+'</a>'
+							$("#list_info").children().eq(3).html(str1);
+							$("#list_info")
+									.children()
+									.eq(4)
+									.html(
+											vo.decl_date == null || undefined ? ""
+													: vo.decl_date.substring(
+															"0", "19"));
+							$("#list_info").children().eq(5).html(vo.ent_cname);
+							$("#list_info").children().eq(6).html(
+									vo.warning > 0 ? "有" : "无");
+							$("#list_info").children().eq(7).html(
+									vo.insp_org_name);
+							$("#shipxy").append("<a href='showShip?shipname="+vo.ship_name_en+"'>船舶动态跟踪</a>");
+						}
+						
+						if(tfVsaList){
+							var html = "";
+							var html_tr = "<tr>";
+							var html_td = "<td>";
+							var html_tdEnd = "</td>";
+							var html_trEnd = "</tr>";
+							var imgStr = '';
+							if(vo.decl_no=='117000007240278'){
+								imgStr = "&nbsp;&nbsp;&nbsp;&nbsp;<img src='/ciqs/static/show/images/photo-btn.png' onclick='toImgDetail(\"/ciqs/static/117000007240278.jpg\")' />";
+							}
+							if(vo.decl_no=='117000007278192'){
+								imgStr = "&nbsp;&nbsp;&nbsp;&nbsp;<img src='/ciqs/static/show/images/photo-btn.png' onclick='toImgDetail(\"/ciqs/static/117000007278192.jpg\")' />";
+							}
+							for (var i = 0; i < tfVsaList.length; i++) {
+								html+=html_tr+html_td+tfVsaList[i].cert_style_name+html_tdEnd;
+								html+=html_td+"&nbsp;&nbsp;&nbsp;&nbsp;"+tfVsaList[i].collection_dt+"&nbsp;&nbsp;&nbsp;&nbsp;"+tfVsaList[i].collecter_name+html_tdEnd;
+								html+=html_td+"&nbsp;&nbsp;&nbsp;&nbsp;"+tfVsaList[i].recheck_date+"&nbsp;&nbsp;&nbsp;&nbsp;"+tfVsaList[i].reviewer_name+html_tdEnd;
+								html+=html_td+"&nbsp;&nbsp;&nbsp;&nbsp;"+tfVsaList[i].make_cert_date+"&nbsp;&nbsp;&nbsp;&nbsp;"+tfVsaList[i].cert_maker_name+html_tdEnd;
+								html+=html_td+"&nbsp;&nbsp;&nbsp;&nbsp;"+tfVsaList[i].cert_issue_dt+"&nbsp;&nbsp;&nbsp;&nbsp;"+tfVsaList[i].cert_licensor_name+imgStr+html_tdEnd;
+								html+=html_trEnd;
+							}
+							if(html==""){
+								$("#certQf").prev().remove();
+								$("#certQf").remove();
+							}else{
+								$("#certQf").append(html);
+							}
+							
+						}
+						
+						if (vslDec) {
+							$("#jt_1").text(vslDec.est_arriv_date);
+							$("#time_1").text(vslDec.est_arriv_date ? vslDec.est_arriv_date.substring(0, 16): "");
+							$("#jt_2").text(vslDec.check_type_aprv);
+							$("#jt_3").text("合格");
+						}else{
+							$("#jt_1").text("2017-11-25 19:21:02");
+							$("#time_1").text("2017-11-25 19:21:02");
+							$("#jt_2").text("靠泊检疫");
+							$("#jt_3").text("合格");
+						}
+
+						if (contaEvent) {
+							if(billLading.insp_user){
+								$("#plan_date").text(contaEvent.plan_date);
+								$("#time_3").text(contaEvent.plan_date);
+								$("#plan_menth").text("双随机");
+								$("#name_3").text(billLading.insp_user);
+								$("#user_menth").text(billLading.insp_user);
+							}
+						}
+						if (limsList) {
+							var html = "";
+							for (var i = 0; i < limsList.length; i++) {
+								html += "<tr><td class=\"table_xqlbbj2\" width=\"164\">接样时间</td><td>"
+										+ limsList[i].start_date
+										+ "</td></tr><tr><td class=\"table_xqlbbj2\" width=\"164\">检测报告</td><td><a href='queryLimsContent?id="
+										+ limsList[i].id + "'>检测报告</a></td></tr>";
+							}
+							if(html.length>0){
+								$("#jyjc").empty();
+								$("#jyjc").append(html);
+							}
+						}
+						if (videoEvent && videoEvent.length > 0) {
+						    var vdate = "";
+							for (var i = 0; i < videoEvent.length; i++) {
+								var time = videoEvent[i].create_date?videoEvent[i].create_date.substring(0,16):"";
+								var h;
+								if (videoEvent[i].file_type == 1) {
+									h = "<div class='muy'><img src='/ciqs/static/show/images/photo-btn.png' onclick='toImgDetail(\"http://10.21.37.249/ciq-video/showVideo?filePath="
+											+ videoEvent[i].fileMonth
+											+ ","
+											+ videoEvent[i].fileDate
+											+ ","
+											+ videoEvent[i].file_name
+											+ "\")'/></div>";
+								} else if (videoEvent[i].file_type == 2) {
+									h = "<div class='muy'><img src='/ciqs/static/show/images/video-btn.png' onclick='showVideo(\"" + videoEvent[i].file_name + "\")'/></div>";
+								}
+								vdate = i == (videoEvent.length-1) ? videoEvent[i].create_date:vdate;
+								
+							    $("#check_date").html(vdate);
+								$("#xcjc_cysj").append(
+												"<div  class='muy'>快检人员:"
+														+ videoEvent[i].create_user
+														+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;快检时间:"
+														+ videoEvent[i].create_date + "</div>");
+								$("#xcjc_cysj").next().append(h);
+								if (!$("#time_3").text()) {
+									$("#name_3")
+											.html(videoEvent[i].create_user);
+									$("#time_3").text(time);
+								} else if (new Date(time) > new Date($(
+										"#time_3").text())) {
+									$("#name_3")
+											.html(videoEvent[i].create_user);
+									$("#time_3").text(time);
+								}
+							}
+						}
+						if (contaList) {
+							var html = "";
+							for (var i = 0; i < contaList.length; i++) {
+								html += "集装箱号："
+										+ contaList[i].conta_no
+										+ "&nbsp;&nbsp;&nbsp;&nbsp;<a href='showCar?conta="
+										+ contaList[i].conta_no
+										+ "'>在途跟踪</a><br/>";
+							}
+							$("#contaNos").append(html);
+						}
+						if(contaEventList && contaEventList.length > 0){
+							$("#time_5").text(contaEventList[0].finish_date);
+							$("#name_5").text(contaEventList[0].finish_user);
+							var check_result = "";
+							var cont = "";
+							for (var i = 0; i < contaEventList.length; i++) {
+								if(contaEventList[i].remark=='2'){
+									check_result = "不合格";
+								}
+								cont += "<tr><td>"+ contaEventList[i].conta_no 
+										+"</td><td>" 
+										+ contaEventList[i].finish_user
+										+"</td><td>" 
+										+ contaEventList[i].finish_date 
+										+"</td><td>" 
+										+ (contaEventList[i].remark=='2'?'不合格':'合格')
+										+"</td></tr>";
+							}
+							$("#getCyRecord").append(cont);
+							if(cont.length>0 && check_result.length==0){
+								check_result = "合格";
+							}
+							$("#check_result").text(check_result);
+						}
+						if (goodsDecl) {
+							$("#sdbk_bjsj")
+									.text(
+											goodsDecl.decl_date == null
+													|| undefined ? ""
+													: goodsDecl.decl_date
+															.substring("0",
+																	"19"));
+							$("#sdbk_bjqy").text(goodsDecl.consignee_cname);
+							$("#name_2").text(goodsDecl.consignee_cname);
+							$("#time_2")
+									.text(
+											goodsDecl.decl_date == null
+													|| undefined ? ""
+													: goodsDecl.decl_date
+															.substring("0",
+																	"16"));
+						}
+						if (model && model.oper_date) {
+							$("#sdbk_slqr")
+									.append(
+											"<a href='/ciqs/billlading/rlqr?a=1'>报检受理核查确认事项单</a>");
+							$("#sdbk_slqr")
+									.append(
+											"</br><a href='/ciqs/billlading/rlqr?a=2'>审批核销确认事项单</a>");
+							$("#sdbk_slqr")
+									.append(
+											"</br><a href='/ciqs/billlading/rlqr?a=3'>证书审核确认事项单</a>");
+							$("#sdbk_slry").text(model.oper_name);
+							$("#sdbk_slsj").text(model.oper_date);
+						}
+						if (billLading && billLading.op_code == "RL") {
+							$("#qzfx_fxsj").text(billLading.op_str_date);
+							$("#qzfx_fxks").text(billLading.port_dept_code);
+							$("#qzfx_fxry").text(billLading.op_user);
+							$("#name_6").text(billLading.op_user);
+							$("#time_6").text(billLading.op_str_date ? billLading.op_str_date.substring(0, 16): "");
+						}else{
+							$("#fx").prev().remove();
+							$("#fx").remove();
+						}
+						if (billLadingBooking) {
+							if(billLadingBooking.dest_area.length==null || billLadingBooking.dest_area.length<1  ){
+								$("#houxujianguan").hide();
+								$("#module_7").hide();
+							}else{
+								$("#lxjk_mdd").text(billLadingBooking.dest_area);
+								$("#lxjk_slbjdw").text(
+										billLadingBooking.dest_org_code);
+								//$("#name_7").text(billLadingBooking.approve_user);
+								$("#time_7").text(billLading.op_str_date ? billLading.op_str_date.substring(0, 16): "");
+							}
+						}else{
+							$("#houxujianguan").hide();
+							$("#module_7").hide();
+						}
+
+						if (dywUnQualifyRecordList
+								&& dywUnQualifyRecordList.length > 0) {
+							for (var a = 0; a < dywUnQualifyRecordList.length; a++) {
+								var tyr = "<tr><td class='flow-td-bord'>"
+										+ dywUnQualifyRecordList[a].create_user
+										+ "</td><td class='flow-td-bord'>"
+										+ dywUnQualifyRecordList[a].conta_no
+										+ "</td>"
+										+ "<td class='flow-td-bord'>"
+										+ dywUnQualifyRecordList[a].result
+										+ "</td><td class='flow-td-bord'><a href='/ciqs/billlading/billladingText?t=1&type="
+										+ type
+										+ "&book_no="
+										+ dywUnQualifyRecordList[a].book_no
+										+ "&bill_id="
+										+ dywUnQualifyRecordList[a].bill_id
+										+ "'>检疫处理通知书</a></td>"
+										+ "<td class='flow-td-bord'><a href='/ciqs/billlading/billladingText?t=2&type="
+										+ type
+										+ "&book_no="
+										+ dywUnQualifyRecordList[a].book_no
+										+ "&bill_id="
+										+ dywUnQualifyRecordList[a].bill_id
+										+ "'>检疫处理报告单</a></td><td class='flow-td-bord'>";
+								if (dywUnQualifyRecordList[a].enforce_records
+										&& dywUnQualifyRecordList[a].enforce_records
+												.split(",").length > 1) {
+									var arr = dywUnQualifyRecordList[a].enforce_records
+											.split(",");
+									for (var i = 0; i < arr.length; i++) {
+										if (arr[i]) {
+											tyr += "<img src='/ciqs/static/show/images/photo-btn.png' onclick='toImgDetail(\""
+													+ "/ciqs/showVideo?imgPath="
+													+ arr[i].substring(0, 6)
+													+ "/"
+													+ arr[i].substring(0, 6)
+													+ "/" + arr[i] + "\")'/>";
+										}
+									}
+								}
+								tyr += "</td></tr>";
+								// 	    				<img src='/ciqs/static/show/images/photo-btn.png' onclick='toImgDetail(\""+dywUnQualifyRecordList.ENFORCE_RECORDS+"\")'/></td></tr>";
+								$("#qualifyRecord").append(tyr);
+							}
+						}
+						$(".icon4")
+								.html(
+										"<div class='hour white font-12px'></div><img src='../static/show/images/user-photo.png' width='80' height='80' />");
+						$(".icon4").attr("class", "iconyellow");
+						$(".icon5")
+								.html(
+										"<div class='hour white font-12px'></div><img src='../static/show/images/user-photo.png' width='80' height='80' />");
+						$(".icon5").attr("class", "iconyellow");
+						$("#flow_color").children().eq(0).find("div").getHour(
+								$("#time_1").text(), $("#time_2").text(), "+");
+						$("#flow_color").children().eq(1).find("div").getHour(
+								$("#time_2").text(), $("#time_3").text(), "+");
+						$("#flow_color").children().eq(2).find("div").getHour(
+								$("#time_3").text(), $("#time_4").text(), "+");
+						$("#flow_color").children().eq(3).find("div").getHour(
+								$("#time_4").text(), $("#time_5").text(), "+");
+						$("#flow_color").children().eq(4).find("div").getHour(
+								$("#time_5").text(), $("#time_6").text(), "+");
+						$("#flow_color").children().eq(5).find("div").getHour(
+								$("#time_6").text(), $("#time_7").text(), "+");
+						var b = false;
+						if (!$("#time_6").text()) {
+							b = true;
+						}
+						$("#flow_Billling").getHour(
+								$("#time_2").text(),
+								$("#time_6").text() == "" ? nowDate() : $(
+										"#time_6").text(), null, b);
+						$("td,span").each(
+								function(k, v) {
+									if ($(v).text() == 'undefined'
+											|| $(v).text() == 'null') {
+										$(v).text("");
+									}
+						});
+						var str = ciqFormatTime(2,6,"time_");
+						$("#flow_Billling").text(str);   
+
+						if ($("#time_1").text().toString().length == 0) {
+							$(".del-1").remove();
+						}
+						if ($("#time_2").text().toString().length == 0) {
+							$(".del-2").remove();
+						}
+						if ($("#time_3").text().toString().length == 0) {
+							$(".del-3").remove();
+						}
+						if ($("#time_4").text().toString().length == 0) {
+							$(".del-4").remove();
+						}
+						if ($("#time_5").text().toString().length == 0) {
+							$(".del-5").remove();
+						}
+						if ($("#time_6").text().toString().length == 0) {
+							$(".del-6").remove();
+						}
+						if ($("#time_7").text().toString().length == 0) {
+							$(".del-7").remove();
+						}
+
+						$("span[id^='time_']").each(
+								function() {
+									if ($(this).text()) {
+										var dataid = $(this)[0]
+												.getAttribute('id');
+										$("li[data-id='" + dataid + "']").attr(
+												"class", "icongreen");
+									} else {
+										// 	    						var dataid=$(this)[0].getAttribute('id');
+										// 	    						$("li[data-id='"+dataid+"']").attr("class","iconyellow");
+									}
+								});
+						
+						$("td[class='flow-td-bord']").each(function(){	//删除行为空
+							if(!$(this).text()){
+								$(this).parent().remove();
+							}
+						});
+						
+						if($("#getCyRecord").find("tr").length<2){
+							$("#getCyRecord").remove();
+						}
+						
+						if($("#qualifyRecord").find("tr").length<2){
+							$("#qualifyRecord").prev().remove();
+							$("#qualifyRecord").remove();
+						}
+						
+						$(".title-cxjg").each(function(){   //删除主标题 
+							if($(this).next().find("table").length==1){
+								var e=$(this).next().find("table tbody");
+								if($(e).children().length==0){
+									$(e).parent().parent().prev().remove();
+								}
+							}
+							if($(this).next().find("table").length > 1){ //删除子标题标题 
+								$(this).next().find("table tbody").each(function(){
+									if($(this).children().length==0){
+										if($(this).parent().prev().text() && $(this).parent().prev().find("tbody").length==0){
+// 										console.log($(this).parent().prev().find("tbody"));
+// 										console.log($(this).parent().prev().text());
+// 										console.log($(this).parent().prev()[0]);
+											$(this).parent().prev().remove();
+										}
+									}
+								});
+							}
+						});
+						$(".title-cxjg").each(function(){//删除子标题标题 后，在删除落下主标题
+							if($(this).next().find("table tr").length == 0){
+								$(this).next().remove();
+								$(this).remove();
+							}
+						});
+						
+						getInterfice();
+						
+					}
+				});
+	});
+
+	function getInterfice() {
+		$.ajax({
+					url : "getInterfice" + location.search + "&math=" + Math.random(),
+					type : "get",
+					scriptCharset : "utf-8",
+					dataType : "json",
+					success : function(data) {
+						var list = data.list;
+						if (list && list.length > 0) {
+							var html = "<table width='100%'><tr><td class='table_xqlbbj2' width='33%'>附随单据名称</td>"
+									+ "<td class='table_xqlbbj2' width='33%'>附随单据上传时间</td><td class='table_xqlbbj2' width='33%'>附随单据查看</td></tr>";
+							for (var i = 0; i < list.length; i++) {
+								//     				  		var html="<table style='height:120px; margin:0px;width:100%'><tr><td >附随单据主键</td><td >"+list[i].uuid +"</td><td >附随单据名称</td>"+
+								// 	    				  		"<td >"+list[i].attachname+"</td><td >附随单据类型编码</td><td >"+list[i].attachtypecode+"</td></tr><tr><td >附随单据中文名称</td>"+
+								// 	    				  		"<td >"+list[i].attachtypename+"</td><td >附随单据上传时间</td><td >"+list[i].attachtime+"</td><td >附随单据查看</td>"+
+								// 	    				  		"<td ><a href='#this' onclick='urlImgDetail(\""+list[i].attachurl+"\")'>查看</a></td></tr></table>";
+								// 	    					if(list[i+1]){
+								// 	    						html+="<div style='height: 10px;background:#dcdcdc;'></div>";
+								// 	    					}
+								html += "<tr><td>"
+										+ list[i].attachname
+										+ "</td><td>"
+										+ list[i].attachtime
+										+ "</td><td ><a href='"+list[i].attachurl+"'  target=\"_blank\">查看</a></td></tr>";
+							}
+							;
+							html += "</table>";
+							$("#interfice").append(html);
+							//     				  	$("#interfice td").css("border","solid 1px #dcdcdc");
+						}else{
+							$("#interfice").parent().remove();
+						}
+					}
+				});
+
+	};
+
+	function nowDate() {
+		var dd = new Date().toLocaleDateString().replace("年", "-").replace("月",
+				"-").replace("日", "");
+		var ss = new Date().toLocaleTimeString().replace("上午", " ").replace(
+				"下午", " ");
+		return dd + " " + ss;
+	}
+
+	function toImgDetail(path) {
+		url = path;
+		$("#imgd1").attr("src", url);
+		$("#imgd1").click();
+	}
+
+	function urlImgDetail(url) {
+		$("#imgd1").attr("src", url);
+		$("#imgd1").click();
+	}
+
+	function getPlace(place_number) {
+		window.scroll(0, document.getElementById(place_number).offsetTop - 306);
+	}
+</script>
+<title>动植物产品及废料</title>
+<style>
+.table-flow tr td {
+	height: 60px;
+	line-height: 30px;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+#title_a {
+	color: #ccc
+}
+
+#title_a:hover {
+	color: white;
+}
+</style>
+</head>
+<body class="bg-gary">
+	<div class="freeze_div_dtl"
+		style="position: fixed; top: 0px; width: 100%">
+		<div class="title-bg">
+			<div class=" title-position margin-auto white">
+				<div class="title">
+					<!-- <a href="#" style="color:white; text-decoration: none;"><span  class="font-24px">大窑湾动植物产品及废料</span></a> -->
+					<span class="font-24px" style="color: white;">行政确认 /</span><a
+						id="title_a" href="/ciqs/billlading/billladingList">动植物产品及废料</a>
+				</div>
+				<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+			</div>
+		</div>
+		<div class="flow-bg" style="height: 235px; background-color: #f0f2f5;">
+			<div class="flow-position2 margin-auto" style="height: 235px;">
+				<ul class="white font-17px flow-height font-weight">
+					<li>交通运输工具监管</li>
+					<li>报检审单布控</li>
+					<li>现场检验检疫</li>
+					<li>实验室检验检疫</li>
+					<li>综合评定</li>
+					<li>签证放行归档</li>
+					<li>后续监管</li>
+					<li></li>
+					<li></li>
+				</ul>
+				<ul class="flow-icon" id="flow_color">
+					<li class="iconyellow" data-id="time_1"><div
+							class="hour white font-12px"></div> <img
+						src="${ctx}/static/show/images/billlading/bill1.png" width="80"
+						height="80" onclick="getPlace('module_1')" /></li>
+					<li class="iconyellow" data-id="time_2"><div
+							class="hour white font-12px"></div> <img
+						src="${ctx}/static/show/images/billlading/bill2.png" width="80"
+						height="80" onclick="getPlace('module_2')" /></li>
+					<li class="iconyellow" data-id="time_3"><div
+							class="hour white font-12px"></div> <img
+						src="${ctx}/static/show/images/billlading/bill3.png" width="80"
+						height="80" onclick="getPlace('module_3')" /></li>
+					<li class="iconyellow" data-id="time_4"><div
+							class="hour white font-12px"></div> <img
+						src="${ctx}/static/show/images/billlading/bill4.png" width="80"
+						height="80" onclick="getPlace('module_4')" /></li>
+					<li class="iconyellow" data-id="time_5"><div
+							class="hour white font-12px"></div> <img
+						src="${ctx}/static/show/images/billlading/bill5.png" width="80"
+						height="80" onclick="getPlace('module_5')" /></li>
+					<li class="iconyellow" data-id="time_6"><div
+							class="hour white font-12px"></div> <img
+						src="${ctx}/static/show/images/billlading/bill6.png" width="80"
+						height="80" onclick="getPlace('module_6')" /></li>
+					<li class="iconyellow" data-id="time_7"><div
+							class="hour white font-12px"></div> <img
+						src="${ctx}/static/show/images/billlading/bill7.png" width="80"
+						height="80" onclick="getPlace('module_7')" /></li>
+					<li></li>
+					<li class="white font-12px font-weight" title="从审单到闸口放行的总时长"><br /> 历时：<span
+						id="flow_Billling">0</span></li>
+				</ul>
+				<ul class="flow-info">
+					<li><span id="name_1"></span><br /> <span id="time_1"
+						class="font-10px"></span></li>
+					<li><span id="name_2"></span><br /> <span id="time_2"
+						class="font-10px"></span></li>
+					<li><span id="name_3"></span><br /> <span id="time_3"
+						class="font-10px"></span></li>
+					<li><span id="name_4"></span><br /> <span id="time_4"
+						class="font-10px"></span></li>
+					<li><span id="name_5"></span><br /> <span id="time_5"
+						class="font-10px"></span></li>
+					<li><span id="name_6"></span><br /> <span id="time_6"
+						class="font-10px"></span></li>
+					<li><span id="name_7"></span><br /> <span id="time_7"
+						class="font-10px"></span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="blank_div_dtl"></div>
+	<div class="margin-auto width-1200 tips"
+		style="margin-top: 250px; color: green;"></div>
+	<div class="margin-chx">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"
+			class="table-xqlb">
+			<tr class="table_xqlbbj">
+				<td>船名</td>
+				<td>航次</td>
+				<td>提单号</td>
+				<td>报检号</td>
+				<td>报检时间</td>
+				<td>申报单位</td>
+				<td>风险预警</td>
+				<td>受理报检单位</td>
+			</tr>
+			<tr id="list_info" class="table_xqlbnr">
+				<td width="11%" height="90" align="center"></td>
+				<td width="11%" height="90" align="center"></td>
+				<td width="11%" height="90" align="center"></td>
+				<td width="11%" height="90" align="center"></td>
+				<td width="11%" height="90" align="center"></td>
+				<td width="11%" height="90" align="center"></td>
+				<td width="11%" height="90" align="center"></td>
+				<td width="11%" height="90" align="center"></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="title-cxjg" id="module_1">交通运输工具监管</div>
+	<div class="margin-chx">
+		<table width="100%" border="0" class="table-xqlb">
+			<tr>
+				<td width="164" class="table_xqlbbj2">船舶停靠时间</td>
+				<td class="flow-td-bord" id="jt_1"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">检疫方式</td>
+				<td class="flow-td-bord" id="jt_2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">检疫结果</td>
+				<td class="flow-td-bord" id="jt_3"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">船舶轨迹</td>
+				<td class="flow-td-bord" id="shipxy"></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="title-cxjg" id="module_2">报检审单布控</div>
+	<div class="margin-chx">
+		<table width="100%" border="0" class="table-xqlb">
+			<tr>
+				<td width="164" class="table_xqlbbj2">报检时间</td>
+				<td class="flow-td-bord" id="sdbk_bjsj" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">报检企业</td>
+				<td class="flow-td-bord" id="sdbk_bjqy" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">随附单据</td>
+				<td class="flow-td-bord nopading" style="padding: 0px"
+					id="interfice" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">受理确认</td>
+				<td class="flow-td-bord" id="sdbk_slqr" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">受理人员</td>
+				<td class="flow-td-bord" id="sdbk_slry" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">受理时间</td>
+				<td class="flow-td-bord" id="sdbk_slsj" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">通关单状态</td>
+				<td class="flow-td-bord" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">海关通关处理</td>
+				<td class="flow-td-bord" colspan="2"></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="title-cxjg" id="module_3">现场检验检疫</div>
+	<div class="margin-chx">
+		<table width="100%" border="0" class="table-xqlb">
+			<tr>
+				<td width="164" class="table_xqlbbj2">派工时间</td>
+				<td class="flow-td-bord" id="plan_date" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">派工方式</td>
+				<td class="flow-td-bord" id="plan_menth" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">被派工人员</td>
+				<td class="flow-td-bord" id="user_menth" colspan="2"></td>
+			</tr>
+			<!--
+			<tr>
+				<td width="164" class="table_xqlbbj2">原始记录单</td>
+				<td class="flow-td-bord" colspan="2"></td>
+			</tr>
+			-->
+			<tr>
+				<td width="164" class="table_xqlbbj2">移动快检</td>
+				<td class="flow-td-bord" id="xcjc_cysj" style="padding:0px"></td>
+				<td style="text-align: center; width: 60px;padding:0px"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">执法记录</td>
+				<td class="flow-td-bord" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">查验时间</td>
+				<td class="flow-td-bord" id="check_date" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">查验结果</td>
+				<td class="flow-td-bord" id="check_result" colspan="2"></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="title-cxjg" id="module_4">实验室检验检疫</div>
+	<div class="margin-chx">
+		<table width="100%" border="0" class="table-xqlb" id="laboratoryBox">
+			<tbody>
+				<tr>
+					<td width="164" class="table_xqlbbj2">抽样时间</td>
+					<td class="flow-td-bord"></td>
+				</tr>
+				<tr>
+					<td width="164" class="table_xqlbbj2">抽样过程记录</td>
+					<td class="flow-td-bord"></td>
+				</tr>
+				<tr>
+					<td width="164" class="table_xqlbbj2">抽采样凭证</td>
+					<td class="flow-td-bord"></td>
+				</tr>
+				<tr>
+					<td width="164" class="table_xqlbbj2">箱号</td>
+					<td class="flow-td-bord"></td>
+				</tr>
+			</tbody>
+		</table>
+		<table width="100%" border="0" class="table-xqlb" id="jyjc">
+			<tr>
+				<td width="164" class="table_xqlbbj2">接样时间</td>
+				<td class="flow-td-bord" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">检测报告</td>
+				<td class="flow-td-bord" colspan="2" ></td>
+			</tr>
+		</table>
+
+	</div>
+
+	<div class="title-cxjg" id="module_5">综合评定</div>
+	<div class="margin-chx">
+		<table width="100%" border="0" class="table-xqlb" id="getCyRecord">
+			<tr>
+				<td class="table_xqlbbj2">集装箱号</td>
+				<td class="table_xqlbbj2">评定人员</td>
+				<td class="table_xqlbbj2">评定时间</td>
+				<td class="table_xqlbbj2">评定结果</td>
+			</tr>
+		</table>
+		<div style="padding-left: 30px;">不合格</div>
+		<table width="100%" border="0" class="table-xqlb" id="qualifyRecord">
+			<tr>
+				<td class="table_xqlbbj2">审批人</td>
+				<td class="table_xqlbbj2">集装箱号</td>
+				<td class="table_xqlbbj2">处理结果</td>
+				<td class="table_xqlbbj2">检疫处理通知单</td>
+				<td class="table_xqlbbj2">检疫处理报告单</td>
+				<td class="table_xqlbbj2">执法记录</td>
+			</tr>
+		</table>
+		<!--
+		<div style="padding-left: 30px;">证稿拟制</div>
+		<table width="100%" border="0" class="table-xqlb">
+			<tr>
+				<td width="164" class="table_xqlbbj2">拟制人员</td>
+				<td width="164" class="table_xqlbbj2">核签人员</td>
+				<td width="164" class="table_xqlbbj2">操作时间</td>
+			</tr>
+		</table>
+		<div style="padding-left: 30px;">证稿核签</div>
+		<table width="100%" border="0" class="table-xqlb">
+			<tr>
+				<td width="164" class="table_xqlbbj2">拟制人员</td>
+				<td width="164" class="table_xqlbbj2">核签人员</td>
+				<td width="164" class="table_xqlbbj2">操作时间</td>
+			</tr>
+		</table>
+		-->
+	</div>
+
+	<div class="title-cxjg" id="module_6">签证放行归档</div>
+	<div class="margin-chx">
+		<div style="padding-left: 30px;">放行</div>
+		<table width="100%" border="0" class="table-xqlb" id="fx">
+			<tr>
+				<td width="164" class="table_xqlbbj2">闸口放行时间</td>
+				<td class="flow-td-bord" id="qzfx_fxsj" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">闸口放行科室</td>
+				<td class="flow-td-bord" id="qzfx_fxks" colspan="2"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">闸口放行人员</td>
+				<td class="flow-td-bord" id="qzfx_fxry" colspan="2"></td>
+			</tr>
+		</table>
+		<div style="padding-left: 30px;">签证</div>
+		<table width="100%" border="0" class="table-xqlb" id="certQf">
+			<tr>
+				<td class="table_xqlbbj2">证单种类</td>
+				<td class="table_xqlbbj2">检务收单</td>
+				<td class="table_xqlbbj2">证书复审</td>
+				<td class="table_xqlbbj2">证书缮制</td>
+				<td class="table_xqlbbj2">证书签发</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="title-cxjg" id="module_7">后续监管</div>
+	<div class="margin-chx" id="houxujianguan">
+		<table width="100%" border="0" class="table-xqlb">
+			<tr>
+				<td width="164" class="table_xqlbbj2">目的地</td>
+				<td class="flow-td-bord" id="lxjk_mdd"></td>
+			</tr>
+			<tr>
+				<td width="164" class="table_xqlbbj2">流向轨迹</td>
+				<td class="flow-td-bord" id="contaNos" style="text-align: left;"></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="margin-auto width-1200 tips"></div>
+	<!-- 图片查看 -->
+	<div class="row" style="z-index: 200000;">
+		<div class="col-sm-8 col-md-6" style="z-index: 200000;">
+			<div class="docs-galley" style="z-index: 200000;">
+				<ul class="docs-pictures clearfix" style="z-index: 200000;">
+					<li><img id="imgd1" style="z-index: 200000;"
+						src="${ctx}/static/viewer/assets/img/thumbnails/tibet-3.jpg" /></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div style="text-align: center; margin: auto; margin-top: 10px; width: 200px; padding-bottom: 10px;">
+		<input type="button" class="search-btn" value="返回"
+			onclick="JavaScript:history.go(-1);" />
+	</div>
+<%@ include file="/common/player.jsp"%>
+</body>
+</html>

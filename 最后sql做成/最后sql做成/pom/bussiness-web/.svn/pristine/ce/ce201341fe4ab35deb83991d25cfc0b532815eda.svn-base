@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>仪表盘 - Rkylin OMS</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT" />
+        <link rel="shortcut icon" href="Apollo/images/icons/favicon.ico" />
+        <link rel="apple-touch-icon" href="Apollo/images/icons/favicon.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="Apollo/images/icons/favicon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="Apollo/images/icons/favicon-114x114.png" />
+        <!--Loading bootstrap css-->
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" />
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css" />
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css" />
+        <!--LOADING STYLESHEET FOR PAGE-->
+        <!--Loading style vendors-->
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/animate.css/animate.css" />
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/iCheck/skins/all.css" />
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.css" />
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+        <!--Loading style-->
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/orange-blue.css" class="default-style" />
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change" class="style-change color-change" />
+        <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/style-responsive.css" />
+    </head>
+    <body>
+    
+    <div class="page-content">
+         <div id="change-transitions" class="row"></div>
+     </div>
+    
+    <script src="Apollo/madmin/js/jquery-1.10.2.min.js"></script> 
+    <script src="Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script> 
+    <script src="Apollo/madmin/js/jquery-ui.js"></script> 
+    <!--loading bootstrap js-->
+     
+    <script src="Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script> 
+    <script src="Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script> 
+    <script src="Apollo/madmin/js/html5shiv.js"></script> 
+    <script src="Apollo/madmin/js/respond.min.js"></script> 
+    <script src="Apollo/madmin/vendors/metisMenu/jquery.metisMenu.js"></script> 
+    <script src="Apollo/madmin/vendors/slimScroll/jquery.slimscroll.js"></script> 
+    <script src="Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script> 
+    <script src="Apollo/madmin/vendors/iCheck/icheck.min.js"></script> 
+    <script src="Apollo/madmin/vendors/iCheck/custom.min.js"></script> 
+    <script src="Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script> 
+    <script src="Apollo/madmin/vendors/jquery-highcharts/highcharts.js"></script> 
+    <script src="Apollo/madmin/js/jquery.menu.js"></script> 
+    <script src="Apollo/madmin/vendors/holder/holder.js"></script> 
+    <script src="Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script> 
+    <script src="Apollo/madmin/vendors/jquery-news-ticker/jquery.newsTicker.min.js"></script> 
+    <script src="Apollo/madmin/vendors/moment/moment.js"></script> 
+    <script src="Apollo/madmin/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+    <script src="Apollo/madmin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script> 
+    <!--LOADING SCRIPTS FOR PAGE-->
+     
+    <script src="Apollo/madmin/vendors/intro.js/intro.js"></script> 
+    <script src="Apollo/madmin/vendors/flot-chart/jquery.flot.js"></script> 
+    <script src="Apollo/madmin/vendors/flot-chart/jquery.flot.categories.js"></script> 
+    <script src="Apollo/madmin/vendors/flot-chart/jquery.flot.pie.js"></script> 
+    <script src="Apollo/madmin/vendors/flot-chart/jquery.flot.tooltip.js"></script> 
+    <script src="Apollo/madmin/vendors/flot-chart/jquery.flot.resize.js"></script> 
+    <script src="Apollo/madmin/vendors/flot-chart/jquery.flot.fillbetween.js"></script> 
+    <script src="Apollo/madmin/vendors/flot-chart/jquery.flot.stack.js"></script> 
+    <script src="Apollo/madmin/vendors/flot-chart/jquery.flot.spline.js"></script> 
+    <script src="Apollo/madmin/vendors/calendar/zabuto_calendar.min.js"></script> 
+    <script src="Apollo/madmin/vendors/sco.message/sco.message.js"></script> 
+    <script src="Apollo/madmin/vendors/intro.js/intro.js"></script> 
+<!--     <script src="Apollo/madmin/js/index.js"></script> -->
+    <script type="text/javascript">
+	
+	$("#change-transitions").children().remove();
+	
+	jQuery.ajax( {
+		url : "login/getProvinceList.action",
+		type : "post",
+		success : function(data) {
+			for(var a=0;a<data.data.length;a++){
+				var html="<div class='col-md-2'>"+
+			    			"<div class='box-placeholder'>"+
+			    			"<button data-toggle='dropdown' data-value="+data.data[a].provinceid+" class='btn btn-success btn-block'>"+data.data[a].province+"("+data.data[a].id+")"+"</button>"+
+							"</div>"+
+						  "</div>";
+						 $("#change-transitions").append(html);		
+			}
+			$("button").click(function () {
+				  var provinceid=this.getAttribute('data-value')
+				  window.location.href='login/groupList.action?provinceid='+provinceid;
+			});
+		}
+	});
+    </script>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+
+<html>
+  <head>
+    <title>d6.html</title>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script type="text/javascript" src="../js/jquery-1.4.3.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('ul li:eq(2)').click(function(){
+				$(this).css('font-size','60px');
+			});
+			$('#bl').click(function(){
+				var $obj = $('ul li:eq(2)').clone(true);
+				$('ul').append($obj);
+			});
+		});
+	</script>
+  </head>
+  
+  <body style="font-size: 30px;">
+    <ul>
+    	<li>item1</li>
+    	<li>item2</li>
+    	<li>item3</li>
+    </ul>
+    <input type="button" value="ClickMe" id="bl"/>
+  </body>
+</html>

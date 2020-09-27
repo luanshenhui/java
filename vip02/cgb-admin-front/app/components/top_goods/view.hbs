@@ -1,0 +1,89 @@
+{{#component "top_goods js-component"}}
+    <p class="components-title"><strong>- 置顶商品维护 -</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+
+            <form class="form item-form-search form-inline business-form">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large business-weight">
+                            <label for="parametersType">单品编码:</label>
+                            <input class="form-control" id="code" type="text" value="{{code}}" name="code">
+                        </span>
+                        <span class="span4 span-large business-weight">
+                            <label for="ordertypeId">单品名称:</label>
+                            <input class="form-control" id="itemName" type="text" value="{{itemName}}" name="itemName">
+                        </span>
+                    </p>
+
+                    <p class="p">
+
+                        <input class="btn btn-success btn-small pull-right margin-right-10" type="submit"
+                               value="查询"/>
+                    </p>
+                </fieldset>
+            </form>
+            {{#authorial "topGoods_add"}}
+                <div class="add-brands m-b-10">
+                    <button class="btn btn-medium btn-info btn-small js-topgoods-new">+ 新增</button>
+                </div>
+            {{/authorial}}
+            {{#equals _DATA_.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <table class="table table-top">
+                    <thead>
+                    <tr>
+                        <th width="20%">单品编码</th>
+                        <th width="25%">单品名称</th>
+                        <th width="10%">显示顺序</th>
+                        <th width="15%">商城状态</th>
+                        <th width="15%">APP状态</th>
+                        <th width="15%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody data-content="{{_DATA_.data}}">
+                    {{#each _DATA_.data}}
+                        <tr data-component="" data-stickOrder="{{itemModel.stickOrder}}" data-name="{{itemDescription}}"
+                            data-code="{{itemModel.code}}" data-data="{{json this}}">
+                            <td class="code">{{itemModel.code}}</td>
+                            <td class="itemDescription">{{itemDescription}}</td>
+                            <td class="stickOrder">{{itemModel.stickOrder}}</td>
+                            <td class="channelMall">
+                                {{#equals goodsModel.channelMall "02"}}
+                                    上架
+                                {{else}}
+                                    未上架
+                                {{/equals}}
+                            </td>
+                            <td class="channelApp">
+                                {{#equals goodsModel.channelApp "02"}}
+                                    上架
+                                {{else}}
+                                    未上架
+                                {{/equals}}
+                            </td>
+                            <td class="openCloseFlag">
+                                {{#authorial "topGoods_edit"}}
+                                    <button class="btn btn-sm btn-info js-topgoods-edit" data-id="{{itemModel.code}}"
+                                            data-data="{{json this}}">编辑
+                                    </button>
+                                {{/authorial}}
+                                {{#authorial "topGoods_delete"}}
+                                    <button class="btn btn-sm btn-info js-topgoods-delete" id="{{itemModel.code}}"
+                                            data-toggle="confirm"
+                                            data-title="您确定删除吗?" data-content="删除之后无法恢复,确定删除吗?"
+                                            data-event="confirm:delete-top">
+                                        删除
+                                    </button>
+                                {{/authorial}}
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            {{/equals}}
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+    </div>
+{{/component}}

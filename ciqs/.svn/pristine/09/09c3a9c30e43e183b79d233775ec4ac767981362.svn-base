@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SQL.WARNING_EVENT">
+
+ 	<!--    批量插入 -->
+	<insert id="insertEvents" parameterType="java.util.List">
+        INSERT INTO WARNING_EVENT (
+         EVENT_ID
+        , WARNING_ID, WARNING_NO, BUSINESS_TYPE, BUSINESS_NAME
+        , FIRST_MODULE_TYPE, FIRST_MODULE_NAME, SECOND_MODULE_TYPE, SECOND_MODULE_NAME, THIRD_MODULE_TYPE
+        ,THIRD_MODULE_NAME, CONTENT1, CONTENT2, CONTENT,UPDATE_TIME, SOURCE_TIME, SOURCE_OTHER_TIME
+        ,BUSINESS_TIME, USER_NAME, OPTION1, OPTION2, OPTION3, WARNING_BATCH_ID) 
+       
+        <foreach collection="list" item="item" index="index" separator="union all">
+        	(select CreateGUID()
+			,#{item.warningId , jdbcType=VARCHAR}
+			,#{item.warningNo, jdbcType=VARCHAR}
+			,#{item.businessType, jdbcType=VARCHAR}
+			,#{item.businessName, jdbcType=VARCHAR}
+			,#{item.firstModuleType, jdbcType=VARCHAR}
+			,#{item.firstModuleName, jdbcType=VARCHAR}
+			,#{item.secondModuleType, jdbcType=VARCHAR}
+			,#{item.secondModuleName, jdbcType=VARCHAR}
+			,#{item.thirdModuleType, jdbcType=VARCHAR}
+			,#{item.thirdModuleName, jdbcType=VARCHAR}
+			,#{item.content1, jdbcType=VARCHAR}
+			,#{item.content2, jdbcType=VARCHAR}
+			,#{item.content, jdbcType=VARCHAR}
+			,sysdate
+			,#{item.sourceTime, jdbcType=DATE}
+			,#{item.sourceOtherTime, jdbcType=DATE}
+			,#{item.businessTime, jdbcType=DATE}
+			,#{item.userName, jdbcType=VARCHAR}
+			,#{item.option1, jdbcType=VARCHAR}
+			,#{item.option2, jdbcType=VARCHAR}
+			,#{item.option3, jdbcType=VARCHAR}
+			,#{item.warningBatchId, jdbcType=VARCHAR}
+            from dual)
+        </foreach>
+    </insert> 
+    
+    
+    <!-- 根据类型和业务主键查询event记录 -->
+    <select id="selectEventByIdAndBusinessType" parameterType="com.dpn.ciqqlc.standard.model.WarningEventDto" resultType="com.dpn.ciqqlc.standard.model.WarningEventDto">
+		select 
+		EVENT_ID as eventId
+        , WARNING_ID as warningId, WARNING_NO as warningNo, BUSINESS_TYPE as businessType, BUSINESS_NAME as businessName
+        , FIRST_MODULE_TYPE as FirstModuleType, FIRST_MODULE_NAME as firstModuleName, 
+        SECOND_MODULE_TYPE as secondModuleType, SECOND_MODULE_NAME as secondModuleName, THIRD_MODULE_TYPE as thirdModuleType
+        ,THIRD_MODULE_NAME as thirdModuleName, content1, content2, content,UPDATE_TIME as updateTime, 
+        SOURCE_TIME as sourceTime, SOURCE_OTHER_TIME as sourceOtherTime
+        ,BUSINESS_TIME as businessTime, USER_NAME as userName, option1, option2, option3, WARNING_BATCH_ID as warningBatchId 
+		from WARNING_EVENT w 
+		where 1=1
+		<if test="warningId != null and warningId != ''">
+		and w.warning_id = #{warningId}
+		</if>
+		<if test="businessType != null and businessType != ''">
+		and w.business_type = #{businessType}
+		</if>
+	</select>
+	
+	<select id="findList"  parameterType="com.dpn.ciqqlc.standard.model.WarningEventDto"  resultType="com.dpn.ciqqlc.standard.model.WarningEventDto">
+		select * from
+		  WARNING_EVENT t
+	</select>
+	
+    
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" errorTracingEnabled="true" useStatementNamespaces="true" />
+    <sqlMap resource="com/dhc/authorization/resource/menu/dao/ibatis/sqlmap/WF_ORG_MENU.xml"/>
+    <sqlMap resource="com/dhc/authorization/delegate/dao/ibatis/sqlmap/WF_ORG_DELEGATE.xml"/>
+    <sqlMap resource="com/dhc/authorization/delegate/dao/ibatis/sqlmap/WF_ORG_DELEITEM.xml"/>
+    <sqlMap resource="com/dhc/authorization/resource/privilege/dao/ibatis/sqlmap/WF_ORG_RESOURCE_AUTHORITY.xml"/>
+    
+    <sqlMap resource="com/dhc/base/menu/dao/ibatis/maps/FavouriteMenu.xml"/>
+
+</sqlMapConfig>

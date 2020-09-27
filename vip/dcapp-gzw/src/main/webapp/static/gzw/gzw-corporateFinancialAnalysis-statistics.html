@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>企业财务分析</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/model.css" />
+    <link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+    <link rel="stylesheet" href="css/three-important1.css"/>
+    <link rel="stylesheet" href="css/personal.css"/>
+    <script src="js/echarts.min.js"></script>
+    <script src="js/jquery-1.8.3.js"></script>
+    <script src="js/js.js"></script>
+</head>
+<body>
+<div class="box">
+    <div class="box-head">
+        <!--<a href="firstpage.html" class="arrow-back"><i></i>首页</a>-->
+        <p class="box-title">企业财务分析</p>
+        <!--<a href="javascript:void(0)" class="arrow-left"><i></i></a>
+        <a href="javascript:void(0)" class="arrow-right"><i></i></a>-->
+    </div>
+    <div class="box-container">
+        <div class="box-left">
+            <ul>
+                <li class="on">
+                    <a href="gzw-corporateFinancialAnalysis-statistics.html">统计分析</a>
+                </li>
+                <li>
+                    <a href="gzw-corporateFinancialAnalysis-newsflash.html">快报分析</a>
+                </li>
+                <li>
+                    <a href="gzw-corporateFinancialAnalysis-annual.html">年报分析</a>
+                </li>
+            </ul>
+        </div>
+        <div class="box-right">
+            <div class="box-right-title">
+                <p><i></i>统计分析</p>
+            </div>
+            <div class="box-right-form  three-important1">
+                <div class="risk-form-main financial-chart corFinancial-chart corFinancial-chart-statistics">
+                    <p class="corFinancial-title">
+                        <span class="on">铁投</span><span>住投</span><span>工投</span>
+                        <span>旅文投</span><span>城投</span><span>农投</span>
+                    </p>
+                    <div id="chart1"  class="block-module block-module-background m-b-10"></div>
+                    <div id="chart2" class="block-module block-module-background m-b-10"></div>
+                    <div id="chart3" class="block-module block-module-background"></div>
+                    <div id="chart4" class="block-module block-module-background"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+</div>
+<script>
+    var myChart1 = echarts.init(document.getElementById('chart1'));
+    var option1 = {
+        title: {
+            text: '营业分析',
+            textStyle:{fontSize:'20',color:'#fff'}
+        },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            right:'2%',
+            itemGap:20,
+            data:['营业收入（万元）','营业成本（万元）'],
+            textStyle:{fontSize:'20',color:'#fff'}
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                //   data : ['铁投','农投','公投','贵阳银行','农商行','城投','旅文投','住投','工商','医管','轨道','阳光产权','城发'],
+                data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+                axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}}
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}}
+            }
+        ],
+        series : [
+            {
+                name:'营业收入（万元）',
+                type:'bar',
+                barWidth : 12,
+                data:[32, 24, 51, 32, 33, 75, 56, 18, 45, 12, 27, 39],
+                itemStyle : { normal: {color:'#5B9BD5',label : {show: true, position: 'top',textStyle:{fontSize:20 }}}},
+            },
+
+            {
+                name:'营业成本（万元）',
+                type:'bar',
+                data:[85, 57, 88, 70, 63, 110, 82, 65, 59, 32, 66, 91],
+                itemStyle : { normal: {color:'#ED7D31',label : {show: true, position: 'top',textStyle:{fontSize:20 }}}},
+
+            }
+        ]
+    };
+    myChart1.setOption(option1);
+
+    var myChart2 = echarts.init(document.getElementById('chart2'));
+    option2 = {
+        title: {
+            text: '企业规模',
+            textStyle:{fontSize:'20',color:'#fff'},
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}},
+                data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}}
+            }
+        ],
+        series : [
+            {
+                name:'企业规模',
+                type:'line',
+                stack: '总量',
+                data:[1090, 2010, 1350, 1150, 1100, 1390, 1290, 1430, 1590, 1390, 1400, 1380],
+                lineStyle:{
+                    normal:{
+                        color:'#5B9BD5'
+                    }
+                },
+                itemStyle:{
+                    normal:{
+                        color:'#5B9BD5',
+                        label : {show: true, position: 'top',textStyle:{fontSize:20 }}
+                    }
+                }
+            }
+        ]
+    };
+
+    myChart2.setOption(option2);
+
+    var myChart3 = echarts.init(document.getElementById('chart3'));
+    option3 = {
+        title: {
+            text: '负债分析',
+            textStyle:{fontSize:'20',color:'#fff'}
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        legend: {
+            right:'2%',
+            itemGap:20,
+            data:['资产负债比（%）','流动负债比（%）'],
+            textStyle:{fontSize:'20',color:'#fff'}
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                //  boundaryGap : false,
+                data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+                axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}}
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}}
+            }
+        ],
+        series : [
+            {
+                name:'资产负债比（%）',
+                type:'line',
+                smooth: true,
+                data:[90,57,78,95,60,67,58,88,79,95,75,89],
+                lineStyle:{
+                    normal:{
+                        color:'#ED7D31'
+                    }
+                },
+                itemStyle:{
+                    normal:{
+                        color:'#ED7D31',
+                        label : {show: true, position: 'top',textStyle:{fontSize:20 }}
+                    }
+                }
+            },
+            {
+                name:'流动负债比（%）',
+                type:'line',
+                smooth: true,
+                data:[59,32,35,45,55,75,37,58,36,43,58,57],
+                lineStyle:{
+                    normal:{
+                        color:'#5B9BD5'
+                    }
+                },
+                itemStyle:{
+                    normal:{
+                        color:'#5B9BD5',
+                        label : {show: true, position: 'top',textStyle:{fontSize:20 }}
+                    }
+                }
+            }
+        ]
+    };
+    myChart3.setOption(option3);
+
+    var myChart4 = echarts.init(document.getElementById('chart4'));
+    option4 = {
+        title : {
+            text: '利润构成',
+            x:'center',
+            textStyle:{fontSize:20,color:'#fff'}
+        },
+        legend: {
+            bottom: 'bottom',
+            data: [{name:'净利润',icon:'circle'},{name:'其他利润',icon:'circle'}],
+            textStyle: {
+                align: 'right',
+                color:'#FFFFFF',
+                fontSize:'20'
+            }
+        },
+        series : [
+            {
+                name: '利润构成',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '50%'],
+                data:[
+                    {value:450, name:'净利润',itemStyle:{normal:{color:'#81c5f2'}}},
+                    {value:600, name:'其他利润',itemStyle:{normal:{color:'#E97C30'}}}
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },textStyle: {color:'#FFFFFF',fontSize:'20'}
+                },
+                label: {
+                    normal: {
+                        position: 'outside',
+                        textStyle: {fontSize:'20'}
+                    }
+                }
+            }
+        ]
+    };
+    myChart4.setOption(option4);
+
+</script>
+</body>
+</html>

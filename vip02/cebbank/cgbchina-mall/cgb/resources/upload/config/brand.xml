@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+    <worksheet idx="0">
+        <!--保留空白位置，保证loop开始读取位置正确-->
+        <section startRow="0" endRow="1">
+        </section>
+        <!-- items:对应Java里面的Map<> bean的key -->
+        <loop startRow="2" endRow="2" items="brands" var="brand" varType="cn.com.cgbchina.item.dto.UploadBrandsDto">
+            <section startRow="2" endRow="2">
+                <mapping row="2" col="0">brand.successFlag</mapping>
+                <mapping row="2" col="1">brand.failReason</mapping>
+                <mapping row="2" col="2">brand.brandName</mapping>
+            </section>
+            <!--循环结束条件 最后离结束内容的偏移-->
+            <loopbreakcondition>
+                <!--offset 行偏移 正数n为读取当前行时先判断往下n行是否符合结束条件 负数测试过，走不通读取数据-->
+                <rowcheck offset="0">
+                    <!--offset 为判断该行那一列(个)单元格内容
+                        下面两个条件必须同时满足即&&-->
+                    <cellcheck offset="2"></cellcheck>
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>

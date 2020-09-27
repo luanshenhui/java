@@ -1,0 +1,1 @@
+select YLMC_JC,BRJC from ST_YCLRXHJCTJB

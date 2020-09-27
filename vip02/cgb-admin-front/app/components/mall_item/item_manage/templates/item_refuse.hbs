@@ -1,0 +1,20 @@
+<div class="modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>拒绝理由</h2>
+    </div>
+    <form class="form form-aligned refuse-form">
+        <div class="modal-body">
+            <th>拒绝理由 :</th>
+            <div class="control-group">
+                <input hidden id="param" name="param" value="{{json params}}">
+                <textarea class="h233-w289 js-text-area" id="refuseReason" name="refuseReason"
+                          maxlength="100"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="保存">
+            <button class="btn btn-info btn-small close">关闭</button>
+        </div>
+    </form>
+</div>

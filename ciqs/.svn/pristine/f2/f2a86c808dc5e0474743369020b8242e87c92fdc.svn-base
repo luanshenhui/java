@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=EDGE;" />
+    <title>H4C2页面样式示例（IFRAME）</title>
+    <link type="text/css" rel="stylesheet" href="../../../styles/dpn.h4c2.css" />
+    <style type="text/css">
+        
+    </style>
+    <script type="text/javascript" src="../../../styles/dpn.h4c2.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+</head>
+<body>
+    <!-- **** head ********************************************************* -->
+
+    <!-- **** menu ********************************************************* -->
+
+    <!-- **** content ****************************************************** -->
+    <div class="dpn-content">
+        <div class="crumb">当前位置&nbsp;:&nbsp;基本组件&nbsp;&gt;&nbsp;表格数据</div>
+        <div class="title">表格数据样式示例</div>
+        <div class="table">
+            <div class="data">共有&nbsp;<span class="number">xxx</span>&nbsp;条记录，分为&nbsp;<span class="number">xxx</span>&nbsp;页，每页显示&nbsp;<span class="number">xx</span>&nbsp;条记录</div>
+	        <div class="menu">
+                <ul>
+    	            <li><a href="javascript:void(0);"><img src="../../../images/dpn.oper.create.gif" />&nbsp;新建</a></li>
+                    <li><a href="javascript:void(0);"><img src="../../../images/dpn.oper.edit.gif" />&nbsp;编辑</a></li>
+    	            <li><a href="javascript:void(0);"><img src="../../../images/dpn.oper.import.gif" />&nbsp;导入</a></li>
+                    <li><a href="javascript:void(0);"><img src="../../../images/dpn.oper.export.gif" />&nbsp;导出</a></li>
+                    <li><a href="javascript:void(0);"><img src="../../../images/dpn.oper.delete.gif" />&nbsp;删除</a></li>
+                    <li><a href="javascript:void(0);"><img src="../../../images/dpn.oper.lock.gif" />&nbsp;锁定</a></li>
+                    <li><a href="javascript:void(0);"><img src="../../../images/dpn.oper.unlock.gif" />&nbsp;解锁</a></li>
+                    <li><a href="javascript:void(0);"><img src="../../../images/dpn.oper.convey.gif" />&nbsp;传送</a></li>
+    	        </ul>
+            </div>
+            <div class="main">
+                <table>
+                    <thead>
+                        <tr>
+                            <!-- 1000px -->
+                            <td width="120">申报序号</td>
+                            <td width="120">申报科室</td>
+                            <td width="160">货物名称</td>
+                            <td width="100">HS编码</td>
+                            <td width="140">审批状态</td>
+                            <td width="80">数量</td>
+                            <td width="80">重量</td>
+                            <td width="200">可执行操作</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10033</td>
+                            <td>口岸五科</td>
+                            <td>羊毛衫</td>
+                            <td>we12223</td>
+                            <td>Y</td>
+                            <td>400</td>
+                            <td>0.04</td>
+                            <td><a href="javascript:void(0);">编辑</a> | <a href="javascript:void(0);">详情</a> | <a href="javascript:void(0);">复制</a></td>
+                        </tr>
+                        <tr>
+                            <td>10033</td>
+                            <td>口岸五科</td>
+                            <td>羊毛衫</td>
+                            <td>we12223</td>
+                            <td>Y</td>
+                            <td>400</td>
+                            <td>0.04</td>
+                            <td><a href="javascript:void(0);">编辑</a> | <a href="javascript:void(0);">详情</a> | <a href="javascript:void(0);">复制</a></td>
+                        </tr>
+                        <tr>
+                            <td>10033</td>
+                            <td>口岸五科</td>
+                            <td>羊毛衫</td>
+                            <td>we12223</td>
+                            <td>75%</td>
+                            <td>400</td>
+                            <td>0.04</td>
+                            <td><a href="javascript:void(0);">编辑</a> | <a href="javascript:void(0);">详情</a> | <a href="javascript:void(0);">复制</a></td>
+                        </tr>
+                        <tr>
+                            <td>10033</td>
+                            <td>口岸五科</td>
+                            <td>羊毛衫</td>
+                            <td>we12223</td>
+                            <td>Y</td>
+                            <td>400</td>
+                            <td>0.04</td>
+                            <td><a href="javascript:void(0);">编辑</a> | <a href="javascript:void(0);">详情</a> | <a href="javascript:void(0);">复制</a></td>
+                        </tr>
+                        <tr>
+                            <td>10033</td>
+                            <td>口岸五科</td>
+                            <td>羊毛衫</td>
+                            <td>we12223</td>
+                            <td>Y</td>
+                            <td>400</td>
+                            <td>0.04</td>
+                            <td><a href="javascript:void(0);">编辑</a> | <a href="javascript:void(0);">详情</a> | <a href="javascript:void(0);">复制</a></td>
+                        </tr>
+                    </tbody>
+                    <thead>
+                        <tr>
+                            <td>申报序号</td>
+                            <td>申报科室</td>
+                            <td>货物名称</td>
+                            <td>HS编码</td>
+                            <td>审批状态</td>
+                            <td>数量</td>
+                            <td>重量</td>
+                            <td>可执行操作</td>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="100">
+                                <ul>
+                                    <li><a href="javascript:void(0);">首页</a></li>
+                                    <li><a href="javascript:void(0);">上页</a></li>
+                                    <li><a>...</a></li>
+                                    <li><a href="javascript:void(0);">2</a></li>
+                                    <li><a href="javascript:void(0);">3</a></li>
+                                    <li class="selected">4</li>
+                                    <li><a href="javascript:void(0);">5</a></li>
+                                    <li><a href="javascript:void(0);">6</a></li>
+                                    <li><a>...</a></li>
+                                    <li><a href="javascript:void(0);">下页</a></li>
+                                    <li><a href="javascript:void(0);">尾页</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- **** foot ********************************************************* -->
+
+    <!-- **** javascript *************************************************** -->
+    <script type="text/javascript">
+        jQuery(function () {
+        	
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<div class="modal new-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned organise-form" data-id="{{data.code}}">
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="code"><span class="required">*</span>机构代码:</label>
+                {{#equals add true}}
+                    <input id="code" class="form-control" name="code" type="text" required
+                           value="{{data.code}}" maxlength="4" pattern="^[0-9a-zA-Z]*$">
+                    <!--<span class="note"><i>&times;</i> 必填 不得为空</span>-->
+                    <span class="note-error"><i>&times;</i> 请输入字母或数字</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                {{else}}
+                    <input id="code" type="text" value="{{data.code}}" readonly disabled="disabled">
+                {{/equals}}
+            </div>
+            <div class="control-group">
+                <label for="fullName"><span class="required">*</span>机构全称:</label>
+                <input id="fullName" class="form-control" name="fullName" type="text" required
+                       value="{{data.fullName}}" maxlength="30" pattern="^([A-Za-z0-9]|[\u4E00-\u9FA5])+$">
+                <!--<span class="note"><i>&times;</i> 必填 不得为空</span>-->
+                <span class="note-error"><i>&times;</i> 机构全称包含大写字母、小写字母、数字</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="simpleName"><span class="required">*</span>机构简称:</label>
+                <input id="simpleName" class="form-control" name="simpleName" type="text" required
+                       value="{{data.simpleName}}" maxlength="10" pattern="^([A-Za-z0-9]|[\u4E00-\u9FA5])+$">
+                <!--<span class="note"><i>&times;</i> 必填 不得为空</span>-->
+                <span class="note-error"><i>&times;</i> 机构简称包含大写字母、小写字母、数字</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="level"><span class="required">*</span>机构级别:</label>
+                <input id="level" class="form-control" name="level" type="text" min="0"
+                       value="{{data.level}}" maxlength="1" pattern="^[0-9]\d*$" required>
+                <span class="note-error"><i>&times;</i> 请输入正整数</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="status">当前状态:</label>
+                <select class="select form-control" name="status" name="componentCategory">
+                    <option value="0" {{#equals data.status 0 }} selected {{/equals}}>启用</option>
+                    <option value="1" {{#equals data.status 1 }} selected {{/equals}}>停用</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label class="organise-desc" for="descript" class="btn-group-vertical">机构描述:</label>
+                <textarea id="descript" class="form-control remaining-target" name="descript" type="text"
+                          maxlength="200">{{data.descript}}</textarea>
+
+                <p class="remaining-text">您还可以输入<i>200</i>字</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="确定">
+            <button class="btn btn-close btn-small close">关闭</button>
+        </div>
+    </form>
+</div>

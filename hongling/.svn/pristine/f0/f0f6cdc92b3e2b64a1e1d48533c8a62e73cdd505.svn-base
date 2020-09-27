@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="centling.entity.Deal" table="Deal">
+        <id name="ID" type="string">
+            <column name="ID" length="32" />
+             <generator class="sequence">
+            	<param name= "sequence">DEAL_ID</param> 
+            </generator>
+        </id>
+        <property name="Memo" type="string">
+            <column name="Memo" />
+        </property>
+        <property name="AccountIn" type="double">
+            <column name="AccountIn" />
+        </property>
+        <property name="AccountOut" type="double">
+            <column name="AccountOut" />
+        </property>
+        <property name="DealDate" type="timestamp">
+            <column name="DealDate" />
+        </property>
+        <property name="DealItemId" type="integer">
+            <column name="DealItemId" />
+        </property>
+        <property name="DeliveryId" type="string">
+            <column name="DeliveryId" />
+        </property>
+        <property name="OrdenId" type="string">
+            <column name="OrdenId"/>
+        </property>
+        <property name="MemberId" type="string">
+            <column name="MemberId"/>
+        </property>
+        <property name="LocalNum" type="double">
+            <column name="LocalNum" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,114 @@
+package com.yulin.am;
+import java.util.*;
+
+public class DemoWorry {
+	public static void main(String[] args){
+		//范围问题
+	//	byte num1=129;//byte 范围-127~128 整数默认是int 
+		
+	//	int num2=2.0;//小数默认是double
+		
+		System.out.println(5/3);//1,自动类型转换
+		
+		char num3='中';
+		System.out.println(num3);
+		System.out.println((int)num3);//强制类型转换
+		System.out.println(Integer.toBinaryString((int)num3));//2进制
+		System.out.println(Integer.toHexString((int)num3));//16进制
+		
+//		boolean num4=true;
+//		System.out.println((int)num4);//类型不匹配，不能强制转换
+		
+		
+		//变量的错误
+//		int i;
+//		System.out.println(i);//变量只有赋值才能使用
+		
+//		System.out.println(a);//变量声明之后才能使用
+		
+//		int i;//同一个作用域内，同一个变量名不能声明多次
+		
+		for(int a=0;a<10;a++)
+		{
+			System.out.println("循环"+a);
+		}
+//		System.out.println("循环"+a);//超出变量的作用域
+		
+		//练习：int a=3,b=5;交换两个变量中的值
+		
+/*		int c;//方法一
+		int a=3,b=5;
+		c=b;
+		b=a;
+		a=c;
+		System.out.println("a:"+a+",b:"+b);*/
+		
+/*		int a=3,b=5;//方法2
+		a=a+b;
+		b=a-b;
+		a=a-b;
+		System.out.println("a:"+a+",b:"+b);*/
+		
+/*		int a=3,b=5;//方法3
+		a=a^b;
+		b=a^b;
+		a=a^b;
+		System.out.println("a:"+a+",b:"+b);*/
+		/*原理(比较二进制，0比1=1,1比1=0)
+		a:0011:3
+		b:0101:5
+		--------
+		a:0110:6
+		b:0101:5
+		---------
+		b:0011:3
+		a:0110:6
+		--------
+		a:0101:5*/
+		
+		//运算符练习：将 int i=12345;倒置输出(让 i=54321)
+		/*int i=12345;
+		int a=0;
+		a=a*10+i%10;//5
+		i=i/10;
+		a=a*10+i%10;//54
+		i=i/10;
+		a=a*10+i%10;//543
+		i=i/10;
+		a=a*10+i%10;//5432
+		i=i/10;
+		a=a*10+i%10;//54321
+		System.out.println(a);
+		
+		for(int j=0;j<5;j++){
+			a=a*10+i%10;
+			i=i/10;
+		}
+		System.out.println(a);
+		System.out.println(i);*/
+		
+		//输入一个6位的整数，让其倒置输出
+		//升级版：随意输入一个整数，然后将其倒置输出
+		/*Scanner scan = new Scanner(System.in);
+		System.out.println("请输入一个6位的整数");
+		int in=scan.nextInt();
+		//处理
+		int a=0;
+		for(int i=0;i<6;i++)
+		{
+			a=a*10+in%10;
+			in=in/10;
+		}
+		System.out.println(a);*/
+		
+		//升级版
+		Scanner scan = new Scanner(System.in);
+		System.out.println("请输入一组数字：");
+		int in = scan.nextInt();
+		int a=0;
+		//for(int i=0;i<in;i++){}
+		
+		
+	}
+
+}

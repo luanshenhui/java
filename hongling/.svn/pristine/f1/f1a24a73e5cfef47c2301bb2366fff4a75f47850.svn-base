@@ -1,0 +1,90 @@
+<script src="../member/view.js"></script>
+<div id="view_member" class="form_template">
+	<h1></h1>
+	<table>
+		<tr>
+			<td class="label lblParentName"></td>
+			<td id="_view_parentName"></td>
+		</tr>
+		<tr>
+			<td class="label lblUsername"></td>
+			<td id="_view_username"></td>
+			<td class="label lblName"></td>
+			<td id="_view_name"></td>
+		</tr>
+		<tr>
+			<td class="label lblRegistDate"></td>
+			<td id="_view_registDate"></td>
+			<td class="label lblLastLoginDate"></td>
+			<td id="_view_lastLoginDate"></td>
+		</tr>
+		<tr>
+			<td class="label lblGroup"></td>
+			<td id="_view_groupName"></td>
+			<td class="label lblStatus"></td>
+			<td id="_view_statusName"></td>
+		</tr>
+		<tr>
+			<td class="label lblPayType"></td>
+			<td id="_view_payTypeName"></td>
+			<td class="label lblMto"></td>
+			<td id="_view_isMTOName"></td>
+		</tr>
+		<tr>
+			<td class="label lblOrdenPre"></td>
+			<td id="_view_ordenPre"></td>
+			<td class="label lblHomePage"></td>
+			<td id="_view_homePageName"></td>
+		</tr>
+		<tr>
+			<td class="label lblClientIP"></td>
+			<td id="_view_clientIP"></td>
+		</tr>
+		<tr>
+			<td class="label lblTotal"></td>
+			<td id="_view_total"></td>
+			<td class="label lblConsume"></td>
+			<td id="_view_consume"></td>
+		</tr>
+		<tr>
+			<td class="label lblBalance"></td>
+			<td id="_view_balance"></td>
+			<td class="label lblCompanyName"></td>
+			<td id="_view_companyName"></td>
+		</tr>
+		<tr>
+			<td class="label lblCompanyShortName"></td>
+			<td id="_view_companyShortName"></td>
+			<!-- <td class="label lblContact"></td>
+			<td id="_view_expressComName"></td> -->
+		</tr>
+		<tr>
+			<td class="label lblReceiveAddress"></td>
+			<td id="_view_receiveAddress"></td>
+			<td class="label lblAccount"></td>
+			<td id="_view_account"></td>
+		</tr>
+		<tr>
+			<td class="label lblCmtPrice"></td>
+			<td colspan="3" id="_view_cmtPriceName"></td>
+		</tr>
+		<tr>
+			<td class="label lblOwnedPartner"></td>
+			<td id="_view_ownedPartner"></td>
+			<td class="label lblOwnedStore"></td>
+			<td id="_view_ownedStore"></td>
+		</tr>
+		<tr>
+			<td class="label lblContractNo"></td>
+			<td id="_view_contractNo"></td>
+			<td class="label lblMemo"></td>
+			<td colspan="3" id="_view_memo"></td>
+		</tr>
+		<tr>
+			<td class="label lblStopNum"></td>
+			<td id="_view_stopNum"></td>
+			<td class="label lblNoticeNum"></td>
+			<td colspan="3" id="_view_noticeNum"></td>
+		</tr>
+	</table>
+</div>

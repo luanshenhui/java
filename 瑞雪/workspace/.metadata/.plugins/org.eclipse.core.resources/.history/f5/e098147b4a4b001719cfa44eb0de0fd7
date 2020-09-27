@@ -1,0 +1,128 @@
+package cn.rkylin.oms.system.logistics.service;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.github.pagehelper.PageInfo;
+import cn.rkylin.core.exception.BusinessException;
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.storage.dao.IStorDAO;
+import cn.rkylin.oms.system.storage.domain.OMS_STOR;
+import cn.rkylin.oms.system.storage.vo.StorVO;
+
+@Service("storService")
+public class StorServiceImple extends ApolloService implements ILogisticsService {
+	
+	/**
+	 * 仓库数据访问对象
+	 */
+	@Autowired
+	private IStorDAO istorDAO;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据条件获取仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	public PageInfo<StorVO> findByWhere(int page, int rows, StorVO storVo) throws Exception {
+		PageInfo<StorVO> storVOList = findPage(page, rows, "getStorByCondition", storVo);
+		return storVOList;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Transactional
+	public void delete(String storId) throws Exception {
+		try {
+			List<String> listid = Arrays.asList(storId.split(","));
+			for (int i = 0; i < listid.size(); i++) {
+				istorDAO.delete("deleteStor", listid.get(i));
+			}
+		} catch (BusinessException ex) {
+			ex.printStackTrace();
+			throw new Exception("仓库已被使用,不能删除！");
+		}
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述:获取仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public List getStorByCondition(StorVO storVO) throws Exception {
+		try {
+			return istorDAO.getStorByCondition(storVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 添加仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public void insert(StorVO storVO) throws Exception {
+		istorDAO.insert(storVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取选中仓库信息
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public OMS_STOR selectStorDetail(String storId) throws Exception {
+		OMS_STOR storModel = istorDAO.findByid(storId);
+		return storModel;
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 修改仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public void update(StorVO storVO) throws Exception {
+		istorDAO.update(storVO);
+	}
+}

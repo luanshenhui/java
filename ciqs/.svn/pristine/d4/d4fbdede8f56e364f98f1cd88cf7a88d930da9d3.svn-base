@@ -1,0 +1,141 @@
+package com.dpn.ciqqlc.service;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+
+import com.dpn.ciqqlc.common.util.Constants;
+import com.dpn.ciqqlc.standard.model.CheckDocsRcdModel;
+import com.dpn.ciqqlc.standard.model.CheckResultModel;
+import com.dpn.ciqqlc.standard.model.ChkRckModel;
+import com.dpn.ciqqlc.standard.model.CodeLibraryDTO;
+import com.dpn.ciqqlc.standard.model.CountryDTO;
+import com.dpn.ciqqlc.standard.model.UserInfoDTO;
+import com.dpn.ciqqlc.standard.model.VideoEventModel;
+import com.dpn.ciqqlc.standard.service.CommonService;
+
+@Repository("commonServer")
+public class Common implements CommonService{
+	
+	@Autowired
+	@Qualifier("blankSST")
+	private SqlSession sqlSession = null;
+	
+	public void insertConfirm(ChkRckModel chkRckModel) throws Exception{
+		chkRckModel.setId(UUID.randomUUID().toString().replace("-",""));
+		this.sqlSession.insert("SQL.AREA.insertChkRckModel", chkRckModel);
+
+	}
+	public List<CheckResultModel> selectCheckResult(CheckResultModel checkResult) {
+		return sqlSession.selectList("SQL.AREA.selectCheckResult", checkResult);
+	}
+
+	public int save(VideoEventModel VideoEventModel) {
+		String uuid =	UUID.randomUUID().toString();
+		VideoEventModel.setId(uuid.replace("-",""));
+		//VideoEventModel.setCreateDate(new Date());
+		return this.sqlSession.insert("SQL.FEVENT.insert", VideoEventModel);
+	}
+
+	public void insertDocs(CheckDocsRcdModel checkDocsRcdModel) throws Exception{
+		String uuid =	UUID.randomUUID().toString();
+		checkDocsRcdModel.setDocId(uuid);
+		checkDocsRcdModel.setDecDate(new Date());
+		this.sqlSession.insert("SQL.DOCS.insertDocs", checkDocsRcdModel);
+	}
+	public List<CountryDTO> getCountryList(CountryDTO country) {
+		return sqlSession.selectList("SQL.AREA.getCountryList", country);
+	}
+	public List<CodeLibraryDTO> getCodeLibrary(Map<String, String> map) {
+		return sqlSession.selectList("SQL.AREA.getQlcCodeLibrary", map);
+	}
+	public String getDzOrgName(Map<String, Object> map) {
+		return sqlSession.selectOne("SQL.COMM.getDzOrgName", map);
+	}
+	
+	public void updateDocs(CheckDocsRcdModel checkDocsRcd) {
+		this.sqlSession.update("SQL.DOCS.updateDocs", checkDocsRcd);
+	}
+	
+	public int deleteDocsByDocTypeNProcMainId(
+			CheckDocsRcdModel checkDocsRcdModel) {
+		return this.sqlSession.delete("SQL.DOCS.deleteDocsByDocTypeNProcMainId", checkDocsRcdModel);
+	}
+	public String getOrg_code(String create_user) {
+		Map map = new HashMap();
+		map.put("uid", create_user);
+		return this.sqlSession.selectOne("SQL.COMM.getOrg_code", map);
+	}
+	public String getDirecty_under_org(String create_user) {
+		Map map = new HashMap();
+		map.put("uid", create_user);
+		return this.sqlSession.selectOne("SQL.COMM.getDirecty_under_org", map);
+	}
+	@Override
+	public void updateDocsByApplyNo(CheckDocsRcdModel checkDocsRcdModel) {
+		this.sqlSession.update("SQL.DOCS.updateDocsByApplyNo", checkDocsRcdModel);
+	}
+	@Override
+	public void deleteEvent(VideoEventModel v) {
+		sqlSession.delete("SQL.FEVENT.deleteEvent",v);
+		
+	}
+	@Override
+	public String getCiqsIp(Map queryMap) {
+		return this.sqlSession.selectOne("SQL.COMM.getCiqsIp",queryMap);
+	}
+		
+	public Boolean isDirectyUnderOrg(HttpServletRequest request) {
+		UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(
+				Constants.USER_KEY);
+		if(user !=null && user.getDirecty_under_org() !=null && user.getOrg_code()!=null){
+			if(user.getOrg_code().equals(user.getDirecty_under_org())){
+				return true;// 辽宁局
+			}else{
+				return false;// 分支局
+			}
+		}else{
+			return true;// 辽宁局
+		}
+	}
+	
+	/**
+	 * 返回去掉前两位的+01/02类型的机构代码
+	 * @param request 
+	 * @param type 01口岸许可证
+	 * @return
+	 */
+	@Override
+	public String getOrgType(HttpServletRequest request,String type) {
+		UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(
+				Constants.USER_KEY);
+		String org_code =user.getOrg_code();
+		if (!StringUtils.isEmpty(org_code)) {
+			return org_code + type;
+			//return org_code.substring(2,org_code.length())+type;
+		}
+		return null;
+	}
+	
+	public String getOrg_code(HttpServletRequest request) {
+		UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(
+				Constants.USER_KEY);
+		return user.getOrg_code();
+	}
+	
+	public static void main(String[] args) {
+		String a = "123456";
+		String b = a.substring(2, 6);
+		System.out.println(b);
+	}
+}

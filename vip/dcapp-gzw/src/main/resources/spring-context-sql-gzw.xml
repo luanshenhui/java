@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd"
+       default-lazy-init="true">
+    <bean name="sqlApi" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+	<!--begin indexBox by liuby-->
+                <entry key="gzw_index_box_bubble">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_index_box_bar1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_index_box_gauge1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_index_box_radar">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_index_box_bar2">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_company_value">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_bussiness_data_pie">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_risk_level_bar">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_risk_define_bar">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_alarm_level_bar">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_corporateFinancialAnalysis-annual">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <!--begin indexBox by liuby-->
+				
+				<!-- start css-->
+				<entry key="gzw_alarmRiskStatisticsPieTop">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_alarmRiskStatisticsPieBottom">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_alarmRiskStatisticsBarRight">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_riskDefineAnalysis">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_riskTrendAnalysis">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_month">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_companyId">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_corporateFinancialAnalysis-newsflashTop">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+				<entry key="gzw_corporateFinancialCompanyType">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw_corporateFinancialAnalysis-newsflashBot">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+				<entry key="gzw_corporateFinancialAnalysis-newsflashRight">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+				<!-- end css-->
+				<!--begin page by hunan-->
+                <entry key="gzw_property_analyse_bubble">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_property_analyse_pop_alarm">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_property_analyse_pop_risk">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_property_analyse_broadcast">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_three_important_bubble">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_three_important_pop_alarm">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_three_important_pop_risk">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_three_important_broadcast">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_three_important_risk_count">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_three_important_pie">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                    </bean>
+                </entry>
+
+                <entry key="gzw_personnel_efficiency">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+				<!--end page by hunan-->
+				<!--lishuo start -->
+				<entry key="gzw-financialAnalysis-annual">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw-financialAnalysis-newsflash">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw-financialAnalysis-annual_2">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="gzw-financialAnalysis-newsflash_2">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+				<!--lishuo end -->
+            </map>
+        </constructor-arg>
+    </bean>
+</beans>

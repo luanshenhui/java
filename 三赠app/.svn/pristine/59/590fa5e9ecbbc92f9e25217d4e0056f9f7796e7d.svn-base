@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/pop_window_padding">
+
+    <TextView
+        android:id="@+id/pop_use_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableBottom="@mipmap/bottom_line_icon"
+        android:drawablePadding="5dp"
+        android:gravity="center"
+        android:text="@string/string_use_guide"
+        android:textColor="#fff"
+        android:textSize="@dimen/pop_window_textSize" />
+
+    <TextView
+        android:id="@+id/pop_use_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/string_use_text"
+        android:textColor="#fff"
+        android:textSize="@dimen/pop_window_textSize"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/pop_color_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:drawableBottom="@mipmap/bottom_line_icon"
+        android:drawablePadding="5dp"
+        android:gravity="center"
+        android:text="@string/string_color_guide"
+        android:textColor="#fff"
+        android:textSize="@dimen/pop_window_textSize" />
+
+    <LinearLayout
+        android:id="@+id/color_type_LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/pop_window_padding"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/string_color_tips"
+            android:textColor="#fff"
+            android:textSize="@dimen/pop_window_textSize" />
+
+        <ListView
+            android:id="@+id/color_type_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+</LinearLayout>

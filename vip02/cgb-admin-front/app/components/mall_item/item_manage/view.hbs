@@ -1,0 +1,631 @@
+{{#component "item js-component"}}
+    <p class="components-title"><strong>- 商品管理 -</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix" data-type="{{type}}">
+            <li {{#equals type "1"}}class="active"{{/equals}} >
+                <a data-role="nav" href="{{_HREF_.mainContext}}/mall/item/all-goods">所有商品</a>
+            </li>
+            <li {{#equals type "2"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/mall/item/editing-goods">编辑中</a>
+            </li>
+            <li {{#equals type "3"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/mall/item/waitting-first-exam">待初审</a>
+            </li>
+            <li {{#equals type "4"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/mall/item/waitting-second-exam">待复审</a>
+            </li>
+            <li {{#equals type "5"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/mall/item/waitting-on-shelf">待上架</a>
+            </li>
+            <li {{#equals type "6"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/mall/item/on-sale">在售商品</a>
+            </li>
+            <li {{#equals type "7"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/mall/item/down-shelf-goods">下架审核</a>
+            </li>
+            <li {{#equals type "8"}}class="active"{{/equals}} data-type="{{type}}">
+                <a data-role="nav" href="{{_HREF_.mainContext}}/mall/item/waitting-change-exam">变更审核</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <!--搜索条件-->
+            <form class="form js-form-search form-inline form-aligned">
+                <fieldset>
+                    <input name="type" type="hidden" value="{{type}}"/>
+                    <input name="channel" type="hidden" value="YG"/>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="code">商品编码：</label>
+                            <input class="form-control" type="text" id="code" name="code"
+                                   value="{{code}}"/>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="vendorId">供应商：</label>
+                            <select class="form-control select" id="vendorId" name="vendorId">
+                                <option value="">请选择</option>
+                                {{#each _DATA_.vendors}}
+                                    <option value="{{vendorId}}"
+                                            {{#equals ../vendorId vendorId}}selected{{/equals}}>{{simpleName}}</option>
+                                {{/each}}
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="goodsName">商品名称：</label>
+                            <input class="form-control" type="text" id="goodsName" name="name" maxlength="40"
+                                   value="{{name}}"/>
+                        </span>
+                    </p>
+
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="brandId">品牌：</label>
+                            <input class="form-control" type="text" id="brandName" name="brandName" maxlength="40"
+                                   value="{{brandName}}"/>
+
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="approveStatus">审核状态：</label>
+                            <select class="form-control select" id="approveStatus" name="approveStatus">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals approveStatus "00"}}selected{{/equals}}>编辑中</option>
+                                <option value="01" {{#equals approveStatus "01"}}selected{{/equals}}>待初审</option>
+                                <option value="02" {{#equals approveStatus "02"}}selected{{/equals}}>待复审</option>
+                                <option value="03" {{#equals approveStatus "03"}}selected{{/equals}}>商品变更审核</option>
+                                <option value="04" {{#equals approveStatus "04"}}selected{{/equals}}>价格变更审核</option>
+                                <option value="05" {{#equals approveStatus "05"}}selected{{/equals}}>下架申请审核</option>
+                                <option value="06" {{#equals approveStatus "06"}}selected{{/equals}}>审核通过</option>
+                                <option value="70" {{#equals approveStatus "70"}}selected{{/equals}}>初审拒绝</option>
+                                <option value="71" {{#equals approveStatus "71"}}selected{{/equals}}>复审拒绝</option>
+                                <option value="72" {{#equals approveStatus "72"}}selected{{/equals}}>商品变更审核拒绝</option>
+                                <option value="73" {{#equals approveStatus "73"}}selected{{/equals}}>价格变更审核拒绝</option>
+                                <option value="74" {{#equals approveStatus "74"}}selected{{/equals}}>下架申请审核拒绝</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="channelSms">短信状态：</label>
+                            <select class="form-control select" id="channelSms" name="channelSms">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals channelSms "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01" {{#equals channelSms "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02" {{#equals channelSms "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="channelMall">广发商城：</label>
+                            <select class="form-control select" id="channelMall" name="channelMall">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals channelMall "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01" {{#equals channelMall "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02" {{#equals channelMall "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="">CC状态：</label>
+                            <select class="form-control select" id="channelCc" name="channelCc">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals channelCc "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01" {{#equals channelCc "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02" {{#equals channelCc "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="channelMallWx">微信广发银行：</label>
+                            <select class="form-control select" id="channelMallWx" name="channelMallWx">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals channelMallWx "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01" {{#equals channelMallWx "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02" {{#equals channelMallWx "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="channelCreditWx">微信广发信用卡：</label>
+                            <select class="form-control select" id="channelCreditWx" name="channelCreditWx">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals channelCreditWx "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01" {{#equals channelCreditWx "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02" {{#equals channelCreditWx "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="channelPhone">手机商城：</label>
+                            <select class="form-control select" id="channelPhone" name="channelPhone">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals channelPhone "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01" {{#equals channelPhone "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02" {{#equals channelPhone "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="channelApp">APP状态：</label>
+                            <select class="form-control select" id="channelApp" name="channelApp">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals channelApp "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01" {{#equals channelApp "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02" {{#equals channelApp "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                        <span class="span6 span-large">
+                            <label for="autoOffShelfTime">自动下架时间：</label>
+                            <input class="form-control js-date-start input-width-80 datepicker" type="text"
+                                   id="autoStartShelfTime"
+                                   name="autoStartShelfTime" value="{{autoStartShelfTime}}"/>
+                            <em>-</em>
+                            <input class="form-control js-date-end input-width-80 datepicker" type="text"
+                                   id="autoEndShelfTime"
+                                   name="autoEndShelfTime" value="{{autoEndShelfTime}}"/>
+                        </span>
+                        <span class="span5 span-large">
+                            <label for="backCategory">后台类目:</label>
+                            <select class="form-control select js-select1 width-120" data-level="1"
+                                    name="backCategory1Id">
+                                <option value="">请选择</option>
+                            </select>
+                            <em> - </em>
+                            <select class="form-control select js-select2 width-120" data-level="2"
+                                    name="backCategory2Id">
+                                <option value="">请选择</option>
+                            </select>
+                            <em> - </em>
+                            <select class="form-control select js-select3 width-120" data-level="3"
+                                    name="backCategory3Id">
+                                <option value="">请选择</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                        <a class="btn btn-success btn-small pull-right m-r-10 js-item-search"
+                           href="{{_HREF_.mainContext}}/mall/item/all-goods">重置</a>
+                        <a class="btn btn-success btn-small pull-right m-r-10 js-item-search" href="javascript:void(0)"> 查询</a>
+                    </p>
+                </fieldset>
+            </form>
+            <div class="add">
+                {{#authorial "goodsMan_add"}}
+                    <a href="{{_HREF_.mainContext}}/mall/item/item-category" class="btn btn-info btn-small">新增商品</a>
+                {{/authorial}}
+                {{#authorial "goodsMan_import"}}
+                <a class="btn btn-info btn-small" href="{{_HREF_.mainContext}}/images" target="_blank">图片空间</a>
+                <button class="btn btn-info btn-small js-import">商品导入</button>
+                {{/authorial}}
+                {{#authorial "goodsMan_export"}}
+                    <button class="btn btn-info btn-small js-export" data-type="export">商品导出</button>
+                    <span style="font-size: 12px;color: #0610FD;">提示：每次最多导出1000条</span>
+                {{/authorial}}
+            </div>
+            {{#equals _DATA_.pager.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <!--列表-->
+                <div class="main-box-table margin-top-10">
+                    <table cellspacing="0" cellpadding="0" border="0" class="table-th">
+                        <tr>
+                            <th width="21%">商品名称</th>
+                            <th width="47%">上下架状态</th>
+                            <th width="8%">审核状态</th>
+                            <th width="12%">自动下架时间</th>
+                            <th width="12%">操作</th>
+                        </tr>
+                    </table>
+                    {{#each _DATA_.pager.data}}
+                        <div class="order-tab">
+                            <div class="list-detail">
+                                <p>商品编码：{{goods.code}}</p>
+                                <p>供应商：{{vendorName}}</p>
+                                <p>品牌：{{brandName}}</p>
+                                {{!--<p>后台类目：{{goods.backCategory1Nm}}>{{goods.backCategory2Nm}}>{{backCategory3Name}}</p>--}}
+                            </div>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                   class="list-tabble-con table-list m-b-20">
+                                <tr data-data="{{json this}}">
+                                    {{!--待初审、待复审、下架审核、变更审核tab页显示复选框--}}
+                                    <td width="4%">
+                                        {{#of type "3,4,7,8,12"}}{{!--【待初审】【待复审】【下架审核】【变更审核】【待定价审核】--}}
+                                            <input class="js-check-this" name="checkGoodsItem" type="checkbox"
+                                                   data-code="{{goods.code}}" data-status="{{goods.approveStatus}}"/>
+                                        {{/of}}
+
+                                        {{!-- 多件商品一键上架 FROM 追加 多件商品一键上架 陈乐 2016.11.1 2016.11.1  --}}
+                                        {{#of type "5,6"}} {{!-- 【待上架】【在售】 除去正在审核中的数据 --}}
+                                            {{#of goods.approveStatus "06,72,73,74"}}
+                                            <input class="js-check-this" name="checkGoodsItem" type="checkbox"
+                                                   data-code="{{goods.code}}" data-status="{{goods.approveStatus}}"
+                                                   data-auto="{{goods.autoOffShelfTime}}"/>
+                                            {{/of}}
+                                        {{/of}}
+                                        {{!-- 多件商品一键上架 TO 追加 多件商品一键上架 陈乐 2016.11.1 2016.11.1  --}}
+
+                                    </td>
+                                    <td width="17%" class="text-left">
+                                        <a href="{{_HREF_.main}}/mall/goods/{{goods.code}}"
+                                           class="goods-name" target="_blank">{{goods.name}}</a>
+                                    </td>
+                                    <td width="47%">
+                                        <table class="table-state" width="0" border="0" data-code="{{goods.code}}"
+                                               data-status="{{goods.approveStatus}}"
+                                               data-auto="{{goods.autoOffShelfTime}}">
+                                            <tr>
+                                                <td class="table-state-table js-chennel-mall" data-channel="channelMall"
+                                                    data-state="{{goods.channelMall}}">广发商城
+                                                    {{#authorial "goodsMan_onOffSale"}}
+                                                        <i {{#equals goods.channelMall '00'}}class="icon-img-no" {{/equals}}
+                                                            {{#equals goods.channelMall '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                            {{#equals goods.channelMall '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                    {{else}}
+                                                        <i {{#equals goods.channelMall '00'}}class="icon-img-no" {{/equals}}
+                                                            {{#equals goods.channelMall '01'}}class="icon-img-down"{{/equals}}
+                                                            {{#equals goods.channelMall '02'}}class="icon-img-on"{{/equals}}></i>
+                                                    {{/authorial}}
+                                                </td>
+                                                <td class="table-state-table js-channel-cc" data-channel="channelCc"
+                                                    data-state="{{goods.channelCc}}">CC
+                                                    {{#authorial "goodsMan_onOffSale"}}
+                                                        <i {{#equals goods.channelCc '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelCc '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                            {{#equals goods.channelCc '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                    {{else}}
+                                                        <i {{#equals goods.channelCc '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelCc '01'}}class="icon-img-down"{{/equals}}
+                                                            {{#equals goods.channelCc '02'}}class="icon-img-on"{{/equals}}></i>
+                                                    {{/authorial}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table-state-table js-mall-wx" data-channel="channelMallWx"
+                                                    data-state="{{goods.channelMallWx}}">微信广发银行
+                                                    {{#authorial "goodsMan_onOffSale"}}
+                                                        <i {{#equals goods.channelMallWx '00'}}class="icon-img-no "{{/equals}}
+                                                            {{#equals goods.channelMallWx '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                            {{#equals goods.channelMallWx '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                    {{else}}
+                                                        <i {{#equals goods.channelMallWx '00'}}class="icon-img-no "{{/equals}}
+                                                            {{#equals goods.channelMallWx '01'}}class="icon-img-down"{{/equals}}
+                                                            {{#equals goods.channelMallWx '02'}}class="icon-img-on"{{/equals}}></i>
+                                                    {{/authorial}}
+                                                </td>
+                                                <td class="table-state-table js-channel-phone"
+                                                    data-channel="channelPhone"
+                                                    data-state="{{goods.channelPhone}}">手机商城
+                                                    {{#authorial "goodsMan_onOffSale"}}
+                                                        <i {{#equals goods.channelPhone '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelPhone '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                            {{#equals goods.channelPhone '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                    {{else}}
+                                                        <i {{#equals goods.channelPhone '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelPhone '01'}}class="icon-img-down"{{/equals}}
+                                                            {{#equals goods.channelPhone '02'}}class="icon-img-on"{{/equals}}></i>
+                                                    {{/authorial}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table-state-table js-credit-wx"
+                                                    data-channel="channelCreditWx"
+                                                    data-state="{{goods.channelCreditWx}}">微信广发信用卡
+                                                    {{#authorial "goodsMan_onOffSale"}}
+                                                        <i {{#equals goods.channelCreditWx '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelCreditWx '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                            {{#equals goods.channelCreditWx '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                    {{else}}
+                                                        <i {{#equals goods.channelCreditWx '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelCreditWx '01'}}class="icon-img-down"{{/equals}}
+                                                            {{#equals goods.channelCreditWx '02'}}class="icon-img-on"{{/equals}}></i>
+                                                    {{/authorial}}
+                                                </td>
+                                                <td class="table-state-table js-channel-app" data-channel="channelApp"
+                                                    data-state="{{goods.channelApp}}">APP
+                                                    {{#authorial "goodsMan_onOffSale"}}
+                                                        <i {{#equals goods.channelApp '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelApp '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                            {{#equals goods.channelApp '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                    {{else}}
+                                                        <i {{#equals goods.channelApp '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelApp '01'}}class="icon-img-down"{{/equals}}
+                                                            {{#equals goods.channelApp '02'}}class="icon-img-on"{{/equals}}></i>
+                                                    {{/authorial}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table-state-table js-channel-sms" data-channel="channelSms"
+                                                    data-state="{{goods.channelSms}}">短信
+                                                    {{#authorial "goodsMan_onOffSale"}}
+                                                        <i {{#equals goods.channelSms '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelSms '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                            {{#equals goods.channelSms '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                    {{else}}
+                                                        <i {{#equals goods.channelSms '00'}}class="icon-img-no"{{/equals}}
+                                                            {{#equals goods.channelSms '01'}}class="icon-img-down"{{/equals}}
+                                                            {{#equals goods.channelSms '02'}}class="icon-img-on"{{/equals}}></i>
+                                                    {{/authorial}}
+                                                </td>
+                                                <td class="table-state-table"></td>
+                                                <td class="table-state-table"></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <!--审核状态-->
+                                    <td width="8%">
+                                        {{#equals goods.approveStatus '00'}}编辑中{{/equals}}
+                                        {{#equals goods.approveStatus '01'}}待初审{{/equals}}
+                                        {{#equals goods.approveStatus '02'}}待复审{{/equals}}
+                                        {{#equals goods.approveStatus '03'}}商品变更审核{{/equals}}
+                                        {{#equals goods.approveStatus '04'}}价格变更审核{{/equals}}
+                                        {{#equals goods.approveStatus '05'}}下架申请审核{{/equals}}
+                                        {{#equals goods.approveStatus '06'}}审核通过{{/equals}}
+                                        {{#equals goods.approveStatus '70'}}初审拒绝{{/equals}}
+                                        {{#equals goods.approveStatus '71'}}复审拒绝{{/equals}}
+                                        {{#equals goods.approveStatus '72'}}商品变更审核拒绝{{/equals}}
+                                        {{#equals goods.approveStatus '73'}}价格变更审核拒绝{{/equals}}
+                                        {{#equals goods.approveStatus '74'}}下架申请审核拒绝{{/equals}}
+                                    </td>
+                                    <td width="12%">{{formatDate goods.autoOffShelfTime "day"}}</td>
+                                    <td width="12%">
+                                        {{#equals goods.approveStatus '00'}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_edit"}}
+                                                <a class="btn btn-info btn-sm js-edit-goods"
+                                                   data-goods-code="{{goods.code}}"
+                                                   data-spu-id="{{goods.productId}}">修改</a>
+                                            {{/authorial}}
+                                            {{#authorial "goodsMan_add,goodsMan_edit"}}
+                                                <button class="btn btn-info btn-sm js-submit-goods m-t-5"
+                                                        data-code={{goods.code}}>提交审核
+                                                </button>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '01'}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_firstTrial"}}
+                                                <a href="{{_HREF_.mainContext}}/mall/item/exam-first?goodsCode={{goods.code}}"
+                                                   class="btn btn-info btn-sm">初审</a>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '02'}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_review"}}
+                                                <a href="{{_HREF_.mainContext}}/mall/item/exam-second?goodsCode={{goods.code}}"
+                                                   class="btn btn-info btn-sm">复审</a>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '03'}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_goodsAudit"}}
+                                                <a href="{{_HREF_.mainContext}}/mall/item/exam-change?goodsCode={{goods.code}}"
+                                                   class="btn btn-info btn-sm">审核</a>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '04'}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_goodsAudit"}}
+                                                <a href="{{_HREF_.mainContext}}/mall/item/price-exam?goodsCode={{goods.code}}"
+                                                   class="btn btn-info btn-sm">审核</a>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '05'}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_offSaleAudit"}}
+                                                <a href="{{_HREF_.mainContext}}/mall/item/shelf-exam?goodsCode={{goods.code}}"
+                                                   class="btn btn-info btn-sm ">审核</a>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '06'}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_edit"}}
+                                                <a class="btn btn-info btn-sm js-edit-goods"
+                                                   data-goods-code="{{goods.code}}"
+                                                   data-spu-id="{{goods.productId}}">修改</a>
+                                            {{/authorial}}
+                                            {{#authorial "goodsMan_storage"}}
+                                                <a href="javascript:void(0)"
+                                                   class="btn btn-info btn-sm js-edit-stock m-t-5"
+                                                   data-id="{{goods.code}}">修改库存</a>
+                                            {{/authorial}}
+
+                                            {{#authorial "goodsMan_onOffSale"}}
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-info btn-sm js-shelfStatus-all m-t-5"
+                                               data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                               data-status="{{goods.approveStatus}}" data-state="02">一键上架</a>
+                                            {{/authorial}}
+
+                                            {{#authorial "goodsMan_onOffSale"}}
+                                                <a href="javascript:void(0)"
+                                                   class="btn btn-info btn-sm js-shelf-down-all m-t-5"
+                                                   data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                                   data-status="{{goods.approveStatus}}" data-state="01">一键下架</a>
+                                            {{/authorial}}
+
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '70'}}{{!--初审拒绝状态--}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_edit"}}
+                                                <a class="btn btn-info btn-sm js-edit-goods"
+                                                   data-goods-code="{{goods.code}}"
+                                                   data-spu-id="{{goods.productId}}">修改</a>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '71'}}{{!--复审拒绝状态--}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_edit"}}
+                                                <a class="btn btn-info btn-sm js-edit-goods"
+                                                   data-goods-code="{{goods.code}}"
+                                                   data-spu-id="{{goods.productId}}">修改</a>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '72'}}{{!--商品变更审核拒绝状态--}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_edit"}}
+                                                <a class="btn btn-info btn-sm js-edit-goods"
+                                                   data-goods-code="{{goods.code}}"
+                                                   data-spu-id="{{goods.productId}}">修改</a>
+                                            {{/authorial}}
+                                            {{#authorial "goodsMan_storage"}}
+                                                <a href="javascript:void(0)"
+                                                   class="btn btn-info btn-sm js-edit-stock m-t-5"
+                                                   data-id="{{goods.code}}">修改库存</a>
+                                            {{/authorial}}
+
+                                            {{#authorial "goodsMan_onOffSale"}}
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-info btn-sm js-shelfStatus-all m-t-5"
+                                               data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                               data-status="{{goods.approveStatus}}" data-state="02">一键上架</a>
+                                            {{/authorial}}
+
+                                            {{#authorial "goodsMan_onOffSale"}}
+                                                <a href="javascript:void(0)"
+                                                   class="btn btn-info btn-sm js-shelf-down-all m-t-5"
+                                                   data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                                   data-status="{{goods.approveStatus}}" data-state="01">一键下架</a>
+                                            {{/authorial}}
+
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '73'}}{{!--价格变更审核拒绝状态--}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_edit"}}
+                                                <a class="btn btn-info btn-sm js-edit-goods"
+                                                   data-goods-code="{{goods.code}}"
+                                                   data-spu-id="{{goods.productId}}">修改</a>
+                                            {{/authorial}}
+                                            {{#authorial "goodsMan_storage"}}
+                                                <a href="javascript:void(0)"
+                                                   class="btn btn-info btn-sm js-edit-stock m-t-5"
+                                                   data-id="{{goods.code}}">修改库存</a>
+                                            {{/authorial}}
+
+                                            {{#authorial "goodsMan_onOffSale"}}
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-info btn-sm js-shelfStatus-all m-t-5"
+                                               data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                               data-status="{{goods.approveStatus}}" data-state="02">一键上架</a>
+                                            {{/authorial}}
+
+                                            {{#authorial "goodsMan_onOffSale"}}
+                                                <a href="javascript:void(0)"
+                                                   class="btn btn-info btn-sm js-shelf-down-all m-t-5"
+                                                   data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                                   data-status="{{goods.approveStatus}}" data-state="01">一键下架</a>
+                                            {{/authorial}}
+
+                                        {{/equals}}
+                                        {{#equals goods.approveStatus '74'}}{{!--下架申请审核拒绝状态--}}
+                                            <a href="{{_HREF_.mainContext}}/mall/item/view-goods?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">查看</a>
+                                            {{#authorial "goodsMan_edit"}}
+                                                <a class="btn btn-info btn-sm js-edit-goods"
+                                                   data-goods-code="{{goods.code}}"
+                                                   data-spu-id="{{goods.productId}}">修改</a>
+                                            {{/authorial}}
+                                            {{#authorial "goodsMan_storage"}}
+                                                <a href="javascript:void(0)"
+                                                   class="btn btn-info btn-sm js-edit-stock m-t-5"
+                                                   data-id="{{goods.code}}">修改库存</a>
+                                            {{/authorial}}
+
+                                            {{#authorial "goodsMan_onOffSale"}}
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-info btn-sm js-shelfStatus-all m-t-5"
+                                               data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                               data-status="{{goods.approveStatus}}"  data-state="02">一键上架</a>
+                                            {{/authorial}}
+
+                                            {{#authorial "goodsMan_onOffSale"}}
+                                                <a href="javascript:void(0)"
+                                                   class="btn btn-info btn-sm js-shelf-down-all m-t-5"
+                                                   data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                                   data-status="{{goods.approveStatus}}" data-state="01">一键下架</a>
+                                            {{/authorial}}
+
+                                        {{/equals}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    {{/each}}
+                    {{!--全选按钮及相关操作--}}
+                    {{#equals type 3}}{{!--待初审tab--}}
+                        {{#authorial "goodsMan_firstTrial"}}
+                            <div class="m-b-10 m-l-10">
+                                <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                <a href="javascript:void(0)" class="js-all-pass font-color-bule" data-type="pass"
+                                   data-audit="2">通过</a>
+                                <a href="javascript:void(0)" class="js-all-refuse font-color-bule" data-type="refuse"
+                                   data-audit="2">拒绝</a>
+                            </div>
+                        {{/authorial}}
+                    {{/equals}}
+                    {{#equals type 4}}{{!--待复审tab--}}
+                        {{#authorial "goodsMan_review"}}
+                            <div class="m-b-10 m-l-10">
+                                <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                <a href="javascript:void(0)" class="js-all-pass font-color-bule" data-type="pass"
+                                   data-audit="3">通过</a>
+                                <a href="javascript:void(0)" class="js-all-refuse font-color-bule" data-type="refuse"
+                                   data-audit="3">拒绝</a>
+                            </div>
+                        {{/authorial}}
+                    {{/equals}}
+                    {{#equals type 7}}{{!--下架审核tab--}}
+                        {{#authorial "goodsMan_offSaleAudit"}}
+                            <div class="m-b-10 m-l-10">
+                                <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                <a href="javascript:void(0)" class="js-all-pass font-color-bule" data-type="pass"
+                                   data-audit="6">通过</a>
+                                <a href="javascript:void(0)" class="js-all-refuse font-color-bule" data-type="refuse"
+                                   data-audit="6">拒绝</a>
+                            </div>
+                        {{/authorial}}
+                    {{/equals}}
+                    {{#equals type 8}}{{!--变更审核tab--}}
+                        {{#authorial "goodsMan_goodsAudit"}}
+                            <div class="m-b-10 m-l-10">
+                                <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                <a href="javascript:void(0)" class="js-all-pass font-color-bule" data-type="pass"
+                                   data-audit="4">通过</a>
+                                <a href="javascript:void(0)" class="js-all-refuse font-color-bule" data-type="refuse"
+                                   data-audit="4">拒绝</a>
+                            </div>
+                        {{/authorial}}
+                    {{/equals}}
+                    {{!-- 多件商品一键上架 FROM 追加 多件商品一键上架 陈乐 2016.11.1 2016.11.1  --}}
+                    {{#of type "5,6"}}
+                        {{#authorial "goodsMan_onOffSale"}}
+                            <div class="m-b-10 m-l-10">
+                                <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                <a href="javascript:void(0)" class="js-all-shelf font-color-bule" data-type="{{type}}">
+                                    {{#equals type "5"}}一键上架{{else}}一键下架{{/equals}}</a>
+                                <span style="margin-left: 50px">渠道：</span>
+                                <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelMall" style="margin-left: 5px"/>广发商城
+                                <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelSms"/>短信
+                                <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelMallWx"/>微信广发银行
+                                <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelCc"/>CC
+                                <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelPhone"/>手机商城
+                                <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelApp"/>APP
+                                <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelCreditWx"/>微信广发信用卡
+                            </div>
+                        {{/authorial}}
+                    {{/of}}
+                    {{!-- 多件商品一键上架 TO 追加 多件商品一键上架 陈乐 2016.11.1 2016.11.1  --}}
+                </div>
+            {{/equals}}
+        </div>
+        <div class="pagination" data-total="{{_DATA_.pager.total}}"></div>
+    </div>
+{{/component}}

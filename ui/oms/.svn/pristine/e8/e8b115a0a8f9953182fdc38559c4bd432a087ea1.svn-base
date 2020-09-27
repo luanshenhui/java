@@ -1,0 +1,82 @@
+package cn.rkylin.oms.system.privilege.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.privilege.domain.WF_ORG_RESOURCE_AUTHORITY;
+
+public class MenuGrantDAOImpl implements IMenuGrantDAO {
+	@Autowired
+	protected IDataBaseFactory dao;
+
+	@Override
+	public void insertUserExclude(String userID, String resourceID) throws DataAccessException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteUserExclude(String userID, String resourceID) throws DataAccessException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean ifUserResourceAvailable(String userID, String resourceID) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isResourceAvailable(Map paramMap) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List getResourceAuthority(WF_ORG_RESOURCE_AUTHORITY authVO) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map getRoleMenuTreePrivileges(String roleID, String privilegeType) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map getStationMenuTreePrivileges(String stationID, String privilegeType) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map getElementPrivByMenuIDRoleID(WF_ORG_RESOURCE_AUTHORITY authVO, String type) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map getElementPrivByMenuIDStationID(WF_ORG_RESOURCE_AUTHORITY authVO) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deletePrivileges(WF_ORG_RESOURCE_AUTHORITY resAuth) throws DataAccessException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void insertPrivilege(WF_ORG_RESOURCE_AUTHORITY resAuth) throws DataAccessException {
+		// TODO Auto-generated method stub
+
+	}
+
+}

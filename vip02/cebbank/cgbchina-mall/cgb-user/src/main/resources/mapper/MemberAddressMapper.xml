@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberAddress">
+    <resultMap id="MemberAddressMap" type="MemberAddressModel">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="consignee" column="consignee"/>
+        <result property="provinceId" column="province_id"/>
+        <result property="provinceName" column="province_name"/>
+        <result property="cityId" column="city_id"/>
+        <result property="cityName" column="city_name"/>
+        <result property="areaId" column="area_id"/>
+        <result property="areaName" column="area_name"/>
+        <result property="address" column="address"/>
+        <result property="postcode" column="postcode"/>
+        <result property="telephone" column="telephone"/>
+        <result property="mobile" column="mobile"/>
+        <result property="isDefault" column="is_default"/>
+        <result property="creatOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        id,cust_id,consignee,province_id,province_name,city_id,city_name,area_id,area_name,address,postcode,telephone,mobile,is_default,create_oper,create_time,modify_oper,modify_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="MemberAddressModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_member_address
+        (cust_id
+        ,consignee
+        ,province_id
+        ,province_name
+        ,city_id
+        ,city_name
+        ,area_id
+        ,area_name
+        ,address
+        ,postcode
+        ,telephone
+        ,mobile
+        ,is_default
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag)
+        values(#{custId}
+        ,#{consignee}
+        ,#{provinceId}
+        ,#{provinceName}
+        ,#{cityId}
+        ,#{cityName}
+        ,#{areaId}
+        ,#{areaName}
+        ,#{address}
+        ,#{postcode}
+        ,#{telephone}
+        ,#{mobile}
+        ,#{isDefault}
+        ,#{creatOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,'0')
+    </insert>
+
+    <update id="update" parameterType="MemberAddressModel">
+        update tbl_member_address set
+        <if test="custId !=null">cust_id = #{custId}
+            ,
+        </if>
+        <if test="consignee !=null">consignee = #{consignee}
+            ,
+        </if>
+        <if test="provinceId !=null">province_id = #{provinceId}
+            ,
+        </if>
+        <if test="provinceName !=null">province_name = #{provinceName}
+            ,
+        </if>
+        <if test="cityId !=null">city_id = #{cityId}
+            ,
+        </if>
+        <if test="cityName !=null">city_name = #{cityName}
+            ,
+        </if>
+        <if test="areaId !=null">area_id = #{areaId}
+            ,
+        </if>
+        <if test="areaName !=null">area_name = #{areaName}
+            ,
+        </if>
+        <if test="address !=null">address = #{address}
+            ,
+        </if>
+        <if test="postcode !=null">postcode = #{postcode}
+            ,
+        </if>
+        <if test="telephone !=null">telephone = #{telephone}
+            ,
+        </if>
+        <if test="mobile !=null">mobile = #{mobile}
+            ,
+        </if>
+        <if test="isDefault !=null">is_default = #{isDefault}
+            ,
+        </if>
+        <if test="creatOper !=null">create_oper = #{creatOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="consignee !=null">and consignee = #{consignee}</if>
+            <if test="provinceId !=null">and province_id = #{provinceId}</if>
+            <if test="provinceName !=null">and province_name = #{provinceName}</if>
+            <if test="cityId !=null">and city_id = #{cityId}</if>
+            <if test="cityName !=null">and city_name = #{cityName}</if>
+            <if test="areaId !=null">and area_id = #{areaId}</if>
+            <if test="areaName !=null">and area_name = #{areaName}</if>
+            <if test="address !=null">and address = #{address}</if>
+            <if test="postcode !=null">and postcode = #{postcode}</if>
+            <if test="telephone !=null">and telephone = #{telephone}</if>
+            <if test="mobile !=null">and mobile = #{mobile}</if>
+            <if test="isDefault !=null">and is_default = #{isDefault}</if>
+            <if test="creatOper !=null">and create_oper = #{creatOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="MemberAddressMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_member_address
+        where id=#{id}
+    </select>
+    <select id="findAll" parameterType="java.lang.String" resultMap="MemberAddressMap">
+        select
+        <include refid="columns"/>
+        from tbl_member_address
+        where cust_id = #{custId} AND del_flag = '0'
+        <![CDATA[ order by create_time desc ]]>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="MemberAddressMap">
+        select
+        <include refid="columns"/>
+        from tbl_member_address
+        where cust_id = #{custId} AND del_flag = '0'
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_member_address
+        where cust_id = #{custId} AND del_flag = '0'
+    </select>
+    <delete id="delete" parameterType="java.lang.Long">
+        update tbl_member_address set
+        del_flag
+        = '1'
+        where id = #{id}
+    </delete>
+
+    <update id="setDefault" parameterType="java.lang.Long">
+        update tbl_member_address set
+        is_default
+        = '0'
+        where id = #{id}
+    </update>
+
+
+    <select id="findByCustId" parameterType="Map" resultMap="MemberAddressMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_member_address
+        where cust_id = #{custId} AND del_flag = '0'
+    </select>
+</mapper>
+
+

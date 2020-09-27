@@ -1,0 +1,418 @@
+package com.dpn.ciqqlc.standard.service;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.dpn.ciqqlc.http.form.ExpFoodPOFForm;
+import com.dpn.ciqqlc.standard.model.CertificationFileModel;
+import com.dpn.ciqqlc.standard.model.CheckDocsRcdModel;
+import com.dpn.ciqqlc.standard.model.CheckModel;
+import com.dpn.ciqqlc.standard.model.CodeLibraryDTO;
+import com.dpn.ciqqlc.standard.model.CompanyPsnDto;
+import com.dpn.ciqqlc.standard.model.CompanyPsnModel;
+import com.dpn.ciqqlc.standard.model.EfpeApplyCertificationDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyCheckEquDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyCommentFileDto;
+import com.dpn.ciqqlc.standard.model.EfpeApplyEquipmentDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyFileDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyModel;
+import com.dpn.ciqqlc.standard.model.EfpeApplyNoticeDto;
+import com.dpn.ciqqlc.standard.model.EfpeApplyProductDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyReviewNoticeDto;
+import com.dpn.ciqqlc.standard.model.EfpeApplySurapplyDto;
+import com.dpn.ciqqlc.standard.model.EfpePsnExptDto;
+import com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel;
+import com.dpn.ciqqlc.standard.model.ExpFoodPOFDTO;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckCodeDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdNewCodeDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdPointDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdReportDto;
+import com.dpn.ciqqlc.standard.model.FileInfoDto;
+import com.dpn.ciqqlc.standard.model.LicenseDecDTO;
+import com.dpn.ciqqlc.standard.model.QlcEfpePsnDto;
+import com.dpn.ciqqlc.standard.model.SelectModel;
+import com.dpn.ciqqlc.standard.model.UserInfoDTO;
+import com.dpn.ciqqlc.standard.model.UsersDTO;
+
+public interface ExpFoodPOFService {
+	/*查询申请信息*/
+	List<ExpFoodPOFDTO> selectPOF(ExpFoodPOFForm expFoodPOFForm) throws Exception;
+	/*查询所属机构*/
+	List<SelectModel> allOrgList();
+	/*查询详情*/
+	List<ExpFoodPOFDTO> selectDetailsPOF(ExpFoodPOFForm expFoodPOFForm) throws Exception;
+	/*查询商品信息*/
+	List<ExpFoodPOFDTO> selectProd(ExpFoodPOFForm expFoodPOFForm) throws Exception;
+	/*查询附件列表*/
+	List<ExpFoodPOFDTO> selecTattachList(ExpFoodPOFForm expFoodPOFForm) throws Exception;
+	/*上传评审任务通知书 */
+	void updateApproveNotice(ExpFoodPOFForm expFoodPOFForm);
+	
+	/**
+	 * 查询13字典项
+	 * @param expFoodProdCheckCodeDto
+	 * @return
+	 */
+	List<ExpFoodProdCheckCodeDto> selectTextList(ExpFoodProdCheckCodeDto expFoodProdCheckCodeDto);
+	
+	/**
+	 * 保存菜单字典
+	 * @param expFoodProdCheckDto
+	 */
+	void saveText(ExpFoodProdCheckDto expFoodProdCheckDto);
+	
+	/**
+	 * 字典分组查询列
+	 * @param expFoodProdCheckCodeDto
+	 * @return
+	 */
+	List<ExpFoodProdCheckCodeDto> getToTextList(ExpFoodProdCheckCodeDto expFoodProdCheckCodeDto);
+	
+	/**
+	 * 页面显示菜单字典和修改内容
+	 * @param expFoodProdCheckVo
+	 * @return
+	 * @throws Exception 
+	 */
+	List<ExpFoodProdCheckVo> getToTextView(ExpFoodProdCheckVo expFoodProdCheckVo) throws Exception;
+	
+	/**
+	 * 不符合内容的菜单内容
+	 * @param expFoodProdCheckVo
+	 * @return
+	 */
+	List<ExpFoodProdCheckVo> getToTextViewNoPass(
+			ExpFoodProdCheckVo expFoodProdCheckVo,HttpServletRequest r);
+	
+	/**
+	 * 保存前删除可能存在的申请单号
+	 * @param expFoodProdCheckDto
+	 */
+	void deleteExpFoodProdCheckDto(ExpFoodProdCheckDto expFoodProdCheckDto);
+	
+	/**
+	 * 分页数量
+	 * @param expFoodPOFForm
+	 * @return
+	 */
+	int findexpFoodCount(ExpFoodPOFForm expFoodPOFForm);
+	
+	/**
+	 * 食品备案列表
+	 * @param model
+	 * @return
+	 */
+	List<EfpeApplyModel> selectEfpeApply(EfpeApplyModel model);
+	
+	/**
+	 * 食品备案列表个数统计
+	 * @param model
+	 * @return
+	 */
+	int selectEfpeApplyCount(EfpeApplyModel model);
+	/**
+	 * 根据申请号查询  申请认证信息表
+	 * @param model
+	 * @return
+	 */
+	List<EfpeApplyCertificationDTO> selectCertificationList(EfpeApplyModel model);
+	/**
+	 * 根据申请号查询  备案申请主要检验设备表
+	 * @param model
+	 * @return
+	 */
+	List<EfpeApplyCheckEquDTO> selectCheckEquList(EfpeApplyModel model);
+	/**
+	 * 根据申请号查询  备案申请设备表
+	 * @param model
+	 * @return
+	 */
+	List<EfpeApplyEquipmentDTO> selectEquipmentList(EfpeApplyModel model);
+	/**
+	 * 备案申请附件表
+	 * @param model
+	 * @return
+	 */
+	List<EfpeApplyFileDTO> selectFileList(EfpeApplyModel model);
+	/**
+	 * 申请产品信息表
+	 * @param model
+	 * @return
+	 */
+	List<EfpeApplyProductDTO> selectProductList(EfpeApplyModel model);
+	/**
+	 * 食品备案基本信息
+	 * @param model
+	 * @return
+	 */
+	EfpeApplyModel selectOneEfpeApply(EfpeApplyModel model);
+	
+	/**
+	 * 行政许可app条件查询
+	 * @param model
+	 * @return
+	 */
+	List<EfpeApplyModel> selectEfpeApplyByAny(EfpeApplyModel model);
+	
+	/**
+	 * 人员随机分类code
+	 * @param model
+	 * @return
+	 */
+	List<SelectModel> psnTypeCode();
+	
+	/**
+	 * 人员随机级别code
+	 * @param model
+	 * @return
+	 */
+	List<SelectModel> psnLevelCode();
+	
+	/**
+	 * 人员随机一级部门code
+	 * @param model
+	 * @return
+	 */
+	List<SelectModel> psnLevelDept_1Code();
+	
+	/**
+	 * 人员随机二级部门code
+	 * @param model
+	 * @return
+	 */
+	List<CodeLibraryDTO> psnLevelDept_2Code();
+	
+	/**
+	 * 人员随机三级部门code
+	 * @param model
+	 * @return
+	 */
+	List<CodeLibraryDTO> psnLevelDept_3Code();
+	/**
+	 * 查询可随机人员
+	 * @param model
+	 * @return
+	 * @throws Exception 
+	 */
+	List<QlcEfpePsnDto> selectBasePsn(QlcEfpePsnDto dto) throws Exception;
+	/**
+	 * 查询可随机人员专业code
+	 * @param model
+	 * @return
+	 */
+	List<EfpePsnExptDto> expertise_code();
+	List<EfpePsnExptDto> expertise_code1();
+	List<EfpePsnExptDto> expertise_code2();
+	List<EfpePsnExptDto> expertise_code3();
+	List<EfpePsnExptDto> expertise_code4();
+	List<EfpePsnExptDto> expertise_code5();
+	
+	/**
+	 * 查找随机人员基础信息表
+	 * @param EfpePsnExptDto
+	 * @return
+	 * @throws Exception 
+	 */
+	List<QlcEfpePsnDto> findBasePsn(String id) throws Exception;
+	
+	List<ExpFoodProdPsnRdmDTO> selectRdmName(ExpFoodProdPsnRdmDTO foodProdPsnRdmDTO);
+	
+	int insterPersonRdm(ExpFoodProdPsnRdmDTO foodProdPsnRdmDTO) throws Exception;	
+	
+	
+	/**
+	 * 食品备案 报告内容
+	 * @param dto
+	 * @return
+	 */
+	ExpFoodProdReportDto selectOneEfpeInfo(ExpFoodProdReportDto dto)throws Exception;
+	
+	
+	/**
+	 * 食品备案 详情
+	 * @param point
+	 * @return
+	 * @throws Exception
+	 */
+	List<ExpFoodProdPointDto> selectExpFoodProdPoint(ExpFoodProdPointDto point)throws Exception;
+	
+	/**
+	 * 申请编号 查询随机人员
+	 * @param model
+	 * @return
+	 */
+	List<ExpFoodProdPsnRdmDTO> selectPsnRdm(EfpeApplyModel model);
+	
+	/**
+	 * 知识库分页列表
+	 * @param dto
+	 * @return
+	 * @throws Exception 
+	 */
+	List<FileInfoDto> findFileInfo(FileInfoDto dto) throws Exception;
+
+	/**
+	 * 知识库数据数量
+	 * @param dto
+	 * @return
+	 * @throws Exception 
+	 */
+	int findFileCount(FileInfoDto dto) throws Exception;
+	
+	
+	/**
+	 * 字典分组查询列
+	 * @param expFoodProdCheckCodeDto
+	 * @return
+	 */
+	List<ExpFoodProdNewCodeDto> getToTextNewList(ExpFoodProdNewCodeDto expFoodProdNewCodeDto) throws Exception;
+	
+	
+	/**
+	 * 页面显示菜单字典和修改内容
+	 * @param expFoodProdCheckVo
+	 * @param request 
+	 * @return
+	 * @throws Exception 
+	 */
+	List<ExpFoodProdCheckVo> getToTextView2(ExpFoodProdCheckVo expFoodProdCheckVo, HttpServletRequest request) throws Exception;
+	
+	/**
+	 * 查询13字典项
+	 * @param expFoodProdCheckCodeDto
+	 * @return
+	 */
+	List<ExpFoodProdNewCodeDto> selectTextNewList(ExpFoodProdNewCodeDto expFoodProdCheckCodeDto) throws Exception;
+	
+	
+	/**
+	 * 不符合内容的菜单内容
+	 * @param expFoodProdCheckVo
+	 * @return
+	 */
+	List<ExpFoodProdCheckVo> getToTextViewNoPassNew(
+			ExpFoodProdCheckVo expFoodProdCheckVo)throws Exception;
+	
+	/**
+	 * 保存11菜单字典
+	 * @param expFoodProdCheckDto
+	 */
+	void saveTextNew(ExpFoodProdCheckDto dto) throws Exception;
+	
+	/**
+	 * 获取下级部门
+	 * @return
+	 */
+	List<CodeLibraryDTO> gelDept_3Code();
+	
+	/**
+	 * 随机临时
+	 * @param model
+	 * @return
+	 */
+	List<CompanyPsnModel> selectCompanyPsn(CompanyPsnModel model);
+	
+	/**
+	 * 随机人员 临时
+	 * @param companyPsnDto
+	 * @return
+	 */
+	List<CompanyPsnDto> findCompanyPsnDto(CompanyPsnDto companyPsnDto);
+	
+	/**
+	 * 修改方法
+	 * @param c
+	 */
+	void updateChklist(CheckModel c) throws Exception;
+	
+	/**
+	 * doc表共同
+	 * @param param
+	 * @return
+	 */
+	List<CheckDocsRcdModel> getQtOption(Map<String, Object> param);
+	
+	/**
+	 * 11菜单选项
+	 * @param expFoodProdCheckVo
+	 * @return
+	 */
+	List<ExpFoodProdCheckVo> getChecklist(ExpFoodProdCheckVo expFoodProdCheckVo);
+	
+	/**
+	 * 通过人员代码找到人员
+	 * @param decUser
+	 * @return
+	 */
+	UsersDTO findUsersByCode(String decUser);
+	List<FileInfoDto> findFile(FileInfoDto dto);
+	/**
+	 * 随机企业 临时
+	 * @param model
+	 * @return
+	 */
+	List<EfpeRegulatoryModel> selectCompanyPsnNew(EfpeRegulatoryModel model);
+	
+	/**
+	 * 带有排除人员判断的随机
+	 * @param qlcEfpepsnDto
+	 * @return
+	 * @throws Exception
+	 */
+	List<QlcEfpePsnDto> selectBasePsnNoOne(QlcEfpePsnDto qlcEfpepsnDto) throws Exception;
+	
+	/**
+	 * 获取结果表所有
+	 * @param ac
+	 * @return
+	 */
+	List<ExpFoodProdCheckVo> getAllResult(Map<String, Object> ac);
+	List<EfpeApplyCommentFileDto> getFtpDownFile(ExpFoodProdPointDto e);
+	List<EfpeApplyNoticeDto> getMbModel(ExpFoodProdPointDto e);
+	EfpeApplyNoticeDto findEfpeApplyNoticeDto(EfpeApplyNoticeDto notice);
+	/**
+	 * 根据applyid查找附件
+	 * @param dto
+	 * @return
+	 */
+	List<CertificationFileModel> findCertificationList(EfpeApplyNoticeDto dto);
+	List<ExpFoodProdPsnRdmDTO> selectRdmName2(
+			ExpFoodProdPsnRdmDTO foodProdPsnRdmDTO);
+	
+
+	int psyCounts(Map<String, String> map);
+	
+	List<QlcEfpePsnDto> psyList(Map<String, String> map);
+	
+	QlcEfpePsnDto getQlcefpepsnDto(Map<String, Object> map);
+	
+	void updateQlcefpepsn(QlcEfpePsnDto qlcefpepsndto);
+	
+	void insertEfpePsn(List<QlcEfpePsnDto> list, UserInfoDTO user) throws Exception;
+	
+
+	/**
+	 * 跟新查出来的人员
+	 * @param foodProdPsnRdmDTO
+	 */
+	void updateSelectPerson(ExpFoodProdPsnRdmDTO foodProdPsnRdmDTO);
+	
+	List<CodeLibraryDTO> psnLevelDeptList(Map<String, String> map);
+	
+	List<QlcEfpePsnDto> psyList2(Map<String, String> map);
+	
+	int psyCounts2(Map<String, String> map);
+	EfpeApplySurapplyDto getSurapply(EfpeApplySurapplyDto surapply);
+	/**
+	 * 查看评审任务通知书
+	 * @param efpeApplyReviewNoticeDto
+	 * @return
+	 */
+	List<EfpeApplyReviewNoticeDto> findEfpeApplyReviewNoticeDto(
+			EfpeApplyReviewNoticeDto efpeApplyReviewNoticeDto);
+}

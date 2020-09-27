@@ -1,0 +1,95 @@
+@CHARSET "UTF-8";
+
+.selectClass {
+	width: 115px
+}
+
+.orgClass {
+	width: 500px;
+	text-align: left;
+}
+
+.bioContent {
+	margin-top: 30px;
+	display: none
+}
+
+.noBoder {
+	border: 0px
+}
+
+.bottomCenter {
+	text-align: center;
+	margin-top: 100px;
+}
+
+.titCenter {
+	text-align: center;
+	font-size: 30px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+.printEnt {
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+
+.printEntR {
+	float: right;
+}
+
+.printEntL {
+	float: left;
+}
+
+.printWeight {
+	font-weight: bold;
+}
+
+.floatWidth {
+	width: 900px;
+	text-align: left;
+}
+
+div.dpn-content div.table div.main table td p label.error,  #divContent table p label.error{
+	display: block;
+	height: 15px;
+	width: auto;
+	background-image: url(../images/dpn.form.error.gif);
+	background-repeat: no-repeat;
+	background-position: left;
+	padding-bottom: 8px;
+	text-indent: 25px;
+	color: #f60;
+	background-color: #fdf3ed
+}
+#divContent div#_pTitle p{
+	line-height: 30px;
+	text-align: left;
+	padding-left: 10px;
+	font-weight: bold;
+	font-size: 14px;
+}
+#divContent th {
+	line-height : 30px;
+	background-color:#f7f7f7;
+	border:1px solid #dadada; 
+	text-align : right; 
+	vertical-align:top;
+}
+#divContent td {
+	padding-top : 5px;
+	line-height : 30px;
+	border:1px solid #dadada; 
+	text-align : center; 
+	vertical-align:top;
+}
+#divContent span.need{color:#F00}
+#divContentButton{
+	text-align : center;
+	padding-top: 20px;
+}
+#divContentButton input.button{
+	height:25px;padding-right:5px;padding-left:5px;margin-right:5px;margin-left:5px
+}

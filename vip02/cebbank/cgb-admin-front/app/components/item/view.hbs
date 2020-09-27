@@ -1,0 +1,52 @@
+{{#component "items js-component"}}
+    <p class="components-title"><strong>商品列表</strong></p>
+    <div class="add-item">
+        <button class="btn btn-success btn-sm js-item-new" style="margin-bottom: 10px">新建商品</button>
+    </div>
+    <div>
+        <form method="get" class="item-form-search form-inline">
+            <fieldset>
+                <div class="form-group" style="float: left">
+                    <label for="id">ID:</label>
+                    <input name="id" value="{{id}}" class="form-control" required/>
+                </div>
+                <div class="form-group" style="float: left">
+                    <label for="itemName">商品名:</label>
+                    <input class="form-control" id="itemName">
+                </div>
+                <div class="form-group" >
+                    <label>&nbsp;;</label>
+                    <input class="btn btn-success btn-sm"type="submit" value="搜索"/>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="5%">商品ID</th>
+            <th width="10%">商品名</th>
+            <th width="20%">商品类型</th>
+            <th width="10%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}">
+                <td class="item-id">{{id}}</td>
+                <td class="item-name">{{itemName}}</td>
+                <td class="item-type">{{type}}</td>
+                <td>
+                    <button class="btn btn-sm js-item-edit">编辑</button>
+                    <button id="{{id}}" class="btn btn-sm js-item-delete">删除
+                    </button>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+<div class="pagination" data-total="{{_DATA_.total}}">
+</div>
+
+{{/component}}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Message" table="Message">
+        <id name="ID" type="string">
+            <column name="ID"/>
+            <generator class="uuid.hex" />
+        </id>
+        <property name="Title" type="string">
+            <column name="Title"/>
+        </property>
+        <property name="Content" type="text">
+            <column name="Content"/>
+        </property>
+        <property name="PubDate" type="date">
+            <column name="PubDate"/>
+        </property>
+        <property name="PubMemberID" type="string">
+            <column name="PubMemberID"/>
+        </property>
+        <property name="ReceiverID" type="string">
+            <column name="ReceiverID"/>
+        </property>
+        <property name="IsRead" type="integer">
+            <column name="IsRead"/>
+        </property>
+        <property name="ReadDate" type="date">
+            <column name="ReadDate"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.gzw.dao.DcaCoAlarmDetailDao">
+    
+	<!-- 查询告警等级统计数据 （首页用）add by geshuo 20170103 -->
+	<select id="getAlarmLevelDataCount" resultType="DcaCoAlarmLevelCountEntity">
+		SELECT 
+			c.VALUE AS coId,
+			c.REMARKS as coName,
+			a.alarmLevel,
+			a.alarmCount
+		FROM (SELECT VALUE,REMARKS FROM SYS_DICT WHERE TYPE='company_name') c
+		LEFT JOIN 
+			(
+				SELECT 
+					CO_ID AS coId,
+					ALARM_LEVEL AS alarmLevel,
+					COUNT(1) AS alarmCount
+				FROM DCA_CO_ALARM_DETAIL
+				WHERE DEL_FLAG=0
+				GROUP BY CO_ID, ALARM_LEVEL
+			)a
+		ON a.coId = c.VALUE
+		ORDER BY c.VALUE, a.alarmLevel
+	</select>
+	
+	<!-- 根据企业id查询告警统计数据  add by geshuo 20170104 -->
+	<select id="getAlarmCountByCoId" resultType="DcaCountByPowerEntity">
+		SELECT
+			a.POWER_ID as powerId,
+			a.alarmCount as totalCount,
+			d.LABEL as powerName
+		FROM
+			(
+				SELECT
+					SUBSTR (POWER_ID, 0, 2) AS POWER_ID,
+					COUNT (1) AS alarmCount
+				FROM DCA_CO_ALARM_DETAIL
+				WHERE CO_ID = #{coId}
+				AND DEL_FLAG=0
+				GROUP BY SUBSTR (POWER_ID, 0, 2)
+			) a
+		LEFT JOIN 
+			(
+				SELECT VALUE, LABEL
+				FROM SYS_DICT
+				WHERE TYPE = 'szyd_class'
+			) d ON d.VALUE = a.POWER_ID
+		ORDER BY a.POWER_ID
+	</select>
+	
+</mapper>

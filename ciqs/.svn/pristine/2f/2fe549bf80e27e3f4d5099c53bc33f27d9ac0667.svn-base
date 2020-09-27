@@ -1,0 +1,640 @@
+package com.dpn.ciqqlc.service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.dpn.ciqqlc.common.util.Constants;
+import com.dpn.ciqqlc.common.util.StringUtils;
+import com.dpn.ciqqlc.http.form.ExpFoodPOFForm;
+import com.dpn.ciqqlc.standard.model.CertificationFileModel;
+import com.dpn.ciqqlc.standard.model.CheckDocModel;
+import com.dpn.ciqqlc.standard.model.CheckDocsRcdModel;
+import com.dpn.ciqqlc.standard.model.CheckModel;
+import com.dpn.ciqqlc.standard.model.CodeLibraryDTO;
+import com.dpn.ciqqlc.standard.model.CompanyPsnDto;
+import com.dpn.ciqqlc.standard.model.CompanyPsnModel;
+import com.dpn.ciqqlc.standard.model.EfpeApplyCertificationDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyCheckEquDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyCommentFileDto;
+import com.dpn.ciqqlc.standard.model.EfpeApplyEquipmentDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyFileDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyModel;
+import com.dpn.ciqqlc.standard.model.EfpeApplyNoticeDto;
+import com.dpn.ciqqlc.standard.model.EfpeApplyProductDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyReviewNoticeDto;
+import com.dpn.ciqqlc.standard.model.EfpeApplySurapplyDto;
+import com.dpn.ciqqlc.standard.model.EfpeCerPouductModel;
+import com.dpn.ciqqlc.standard.model.EfpePsnExptDto;
+import com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel;
+import com.dpn.ciqqlc.standard.model.ExpFoodPOFDTO;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckCodeDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdNewCodeDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdPointDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdReportDto;
+import com.dpn.ciqqlc.standard.model.FileInfoDto;
+import com.dpn.ciqqlc.standard.model.LicenseDecDTO;
+import com.dpn.ciqqlc.standard.model.OrganizesDTO;
+import com.dpn.ciqqlc.standard.model.QlcEfpePsnDto;
+import com.dpn.ciqqlc.standard.model.SelectModel;
+import com.dpn.ciqqlc.standard.model.UserInfoDTO;
+import com.dpn.ciqqlc.standard.model.UsersDTO;
+import com.dpn.ciqqlc.standard.model.VideoEventModel;
+import com.dpn.ciqqlc.standard.service.ExpFoodPOFService;
+
+@Repository("expFoodPOFService")
+public class ExpFoodPOF implements ExpFoodPOFService{
+	
+	@Autowired
+	@Qualifier("blankSST")
+	private SqlSession sqlSession = null; 
+	
+	public List<ExpFoodPOFDTO> selectPOF(ExpFoodPOFForm expFoodPOFForm) throws Exception{
+		
+		return this.sqlSession.selectList("SQL.EXPFOODPOF.selectPOF",expFoodPOFForm);
+	}
+
+	public List<SelectModel> allOrgList() {
+		return this.sqlSession.selectList("SQL.EXPFOODPOF.allOrgList");
+	}
+
+	public List<ExpFoodPOFDTO> selectDetailsPOF(ExpFoodPOFForm expFoodPOFForm) throws Exception{
+		return this.sqlSession.selectList("SQL.EXPFOODPOF.selectDetailsPOF",expFoodPOFForm);
+	}
+	
+	
+	public List<ExpFoodProdCheckCodeDto> selectTextList(ExpFoodProdCheckCodeDto expFoodProdCheckCodeDto) {
+		return this.sqlSession.selectList("SQL.EXPFOODPOF.selectTextList",expFoodProdCheckCodeDto);
+	}
+
+	public void saveText(ExpFoodProdCheckDto expFoodProdCheckDto) {
+		sqlSession.insert("SQL.EXPFOODPOF.saveText",expFoodProdCheckDto);
+		
+	}
+
+	public List<ExpFoodProdCheckCodeDto> getToTextList(ExpFoodProdCheckCodeDto expFoodProdCheckCodeDto) {
+		List<ExpFoodProdCheckCodeDto> list= this.sqlSession.selectList("SQL.EXPFOODPOF.getToTextList",expFoodProdCheckCodeDto);
+		return list;
+	}
+
+	public List<ExpFoodProdCheckVo> getToTextView(
+			ExpFoodProdCheckVo expFoodProdCheckVo) throws Exception {
+		ExpFoodProdCheckCodeDto expFoodProdCheckCodeDto= new ExpFoodProdCheckCodeDto();
+		expFoodProdCheckCodeDto.setCheck_menu_type(expFoodProdCheckVo.getCheck_menu_type());
+		List<ExpFoodProdCheckCodeDto> textList =sqlSession.selectList("SQL.EXPFOODPOF.selectTextList",expFoodProdCheckCodeDto);
+		List<ExpFoodProdCheckVo> listmit=sqlSession.selectList("SQL.EXPFOODPOF.getToTextView",expFoodProdCheckVo);
+		List<ExpFoodProdCheckVo> list=new ArrayList<ExpFoodProdCheckVo>();
+		for(ExpFoodProdCheckCodeDto ex:textList){
+			ExpFoodProdCheckVo vo=new ExpFoodProdCheckVo();
+			vo.setCheck_code_id(ex.getCheck_code_id());
+			vo.setCheck_contents(ex.getCheck_contents());
+			vo.setCheck_menu_type(ex.getCheck_menu_type());
+			vo.setCheck_req(ex.getCheck_req());
+			vo.setCheck_title(ex.getCheck_title());
+			for(ExpFoodProdCheckVo x:listmit){
+				if(x.getCheck_code_id().equals(ex.getCheck_code_id())){
+					vo.setApply_no(x.getApply_no());
+					vo.setChech_psn(x.getChech_psn());
+					vo.setCheck_date(x.getCheck_date());
+					vo.setCheck_disc(x.getCheck_disc());
+					vo.setCheck_proc_type(x.getCheck_proc_type());
+					vo.setCheck_result(x.getCheck_result());
+					vo.setCheck_type(x.getCheck_type());
+					if(null!=x.getApply_no() && null!=x.getCheck_proc_type() && !x.getApply_no().equals("") 
+								&& !x.getCheck_proc_type().equals("")){
+						VideoEventModel videoEvent=new VideoEventModel();
+						videoEvent.setProcMainId(x.getApply_no());
+//						videoEvent.setProcType(x.getCheck_proc_type());
+						videoEvent.setProcType("V_SP_F_D_"+x.getCheck_code_id());
+						List<VideoEventModel> videolist= sqlSession.selectList("SQL.ORIGPLACE.getViewImg", videoEvent);
+						vo.setEventList(videolist);
+					}
+				}
+			}
+			list.add(vo);
+		}
+//		for(ExpFoodProdCheckVo e:list){
+//				if(null!=e.getApply_no() && null!=e.getCheck_proc_type() && !e.getApply_no().equals("") && !e.getCheck_proc_type().equals("")){
+//					VideoEventModel videoEvent=new VideoEventModel();
+//					videoEvent.setProcMainId(e.getApply_no());
+//					videoEvent.setProcType(e.getCheck_proc_type());
+//					List<VideoEventModel> videolist= sqlSession.selectList("SQL.ORIGPLACE.getViewImg", videoEvent);
+//					e.setEventList(videolist);
+//				}
+//			}
+		return list;
+	}
+
+	public List<ExpFoodPOFDTO> selectProd(ExpFoodPOFForm expFoodPOFForm) throws Exception{
+		return this.sqlSession.selectList("SQL.EXPFOODPOF.selectProd",expFoodPOFForm);
+	}
+
+	public List<ExpFoodPOFDTO> selecTattachList(ExpFoodPOFForm expFoodPOFForm)  throws Exception{
+		return this.sqlSession.selectList("SQL.EXPFOODPOF.selecTattachList",expFoodPOFForm);
+	}
+
+	public void updateApproveNotice(ExpFoodPOFForm expFoodPOFForm) {
+		this.sqlSession.update("SQL.EXPFOODPOF.updateApproveNotice",expFoodPOFForm);
+	}
+
+	public List<ExpFoodProdCheckVo> getToTextViewNoPass(
+			ExpFoodProdCheckVo expFoodProdCheckVo,HttpServletRequest request) {
+		List<ExpFoodProdCheckVo> list=sqlSession.selectList("SQL.EXPFOODPOF.getToTextViewNew",expFoodProdCheckVo);
+		for(ExpFoodProdCheckVo e:list){
+				if(null!=e.getApply_no() && null!=e.getCheck_proc_type() && !e.getApply_no().equals("") && !e.getCheck_proc_type().equals("")){
+					VideoEventModel videoEvent=new VideoEventModel();
+					videoEvent.setProcMainId(e.getApply_no());
+//					videoEvent.setProcType(e.getCheck_proc_type());
+					if(StringUtils.isNotEmpty(request.getParameter("type"))){
+						videoEvent.setProcType(request.getParameter("type")+"_"+e.getCheck_code_id());
+					}else{
+						videoEvent.setProcType("V_SP_A_C_"+e.getCheck_code_id());
+					}
+					List<VideoEventModel> videolist= sqlSession.selectList("SQL.ORIGPLACE.getViewImg", videoEvent);
+					e.setEventList(videolist);
+				}
+			}
+		return list;
+	
+	}
+
+	public void deleteExpFoodProdCheckDto(
+			ExpFoodProdCheckDto expFoodProdCheckDto) {
+		this.sqlSession.delete("SQL.EXPFOODPOF.deleteExpFoodProdCheckDto",expFoodProdCheckDto);
+	}
+
+	public int findexpFoodCount(ExpFoodPOFForm expFoodPOFForm) {
+		return sqlSession.selectOne("SQL.EXPFOODPOF.findexpFoodCount", expFoodPOFForm);
+	}
+
+	public List<EfpeApplyModel> selectEfpeApply(EfpeApplyModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectEfpeApply", model);
+	}
+
+	public int selectEfpeApplyCount(EfpeApplyModel model) {
+		return sqlSession.selectOne("SQL.EXPFOODPOF.selectEfpeApplyCount", model);
+	}
+
+	public List<EfpeApplyCertificationDTO> selectCertificationList(
+			EfpeApplyModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectCertificationList", model);
+	}
+
+	public List<EfpeApplyCheckEquDTO> selectCheckEquList(EfpeApplyModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectCheckEquList", model);
+	}
+
+	public List<EfpeApplyEquipmentDTO> selectEquipmentList(EfpeApplyModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectEquipmentList", model);
+	}
+
+	public List<EfpeApplyFileDTO> selectFileList(EfpeApplyModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectFileList", model);
+	}
+
+	public List<EfpeApplyProductDTO> selectProductList(EfpeApplyModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectProductList", model);
+	}
+
+	public EfpeApplyModel selectOneEfpeApply(EfpeApplyModel model) {
+		List<EfpeApplyModel> list=sqlSession.selectList("SQL.EXPFOODPOF.selectOneEfpeApply", model);
+		return list.size()>1?list.get(0):null;
+	}
+
+	public List<EfpeApplyModel> selectEfpeApplyByAny(EfpeApplyModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectEfpeApplyByAny", model);
+	}
+
+	public List<SelectModel> psnTypeCode() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.psnTypeCode");
+	}
+	public List<SelectModel> psnLevelCode() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.psnLevelCode");
+	}
+
+	public List<SelectModel> psnLevelDept_1Code() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.psnLevelDept_1Code");
+	}
+
+//	public List<SelectModel> psnLevelDept_2Code() {
+//		return sqlSession.selectList("SQL.EXPFOODPOF.psnLevelDept_2Code");
+//	}
+//
+//	public List<SelectModel> psnLevelDept_3Code() {
+//		return sqlSession.selectList("SQL.EXPFOODPOF.psnLevelDept_3Code");
+//	}
+	
+	public List<CodeLibraryDTO> psnLevelDept_2Code() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.psnLevelDept_2Code");
+	}
+
+	public List<CodeLibraryDTO> psnLevelDept_3Code() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.psnLevelDept_3Code");
+	}
+	
+	public List<EfpePsnExptDto> expertise_code() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.expertise_code");
+	}
+	public List<EfpePsnExptDto> expertise_code1() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.expertise_code1");
+	}
+	public List<EfpePsnExptDto> expertise_code2() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.expertise_code2");
+	}
+	public List<EfpePsnExptDto> expertise_code3() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.expertise_code3");
+	}
+	public List<EfpePsnExptDto> expertise_code4() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.expertise_code4");
+	}
+	public List<EfpePsnExptDto> expertise_code5() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.expertise_code5");
+	}
+	
+	public List<QlcEfpePsnDto> selectBasePsn(QlcEfpePsnDto dto) throws Exception{
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectBasePsn",dto);
+	}
+	
+	public List<ExpFoodProdPsnRdmDTO> selectRdmName(ExpFoodProdPsnRdmDTO foodProdPsnRdmDTO) {
+		
+		if(sqlSession.selectList("SQL.EXPFOODPOF.selectRdmName",foodProdPsnRdmDTO) == null){
+			return null;
+		}
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectRdmName",foodProdPsnRdmDTO);
+	}
+	
+	public int insterPersonRdm(ExpFoodProdPsnRdmDTO foodProdPsnRdmDTO) throws Exception{
+		if(null==foodProdPsnRdmDTO.getRdm_date()){
+			foodProdPsnRdmDTO.setRdm_date(new Date());
+		}
+		return sqlSession.insert("SQL.EXPFOODPOF.insertPeson", foodProdPsnRdmDTO);
+	}
+	
+	public List<QlcEfpePsnDto> findBasePsn(String id) throws Exception{		
+			List<QlcEfpePsnDto> list = sqlSession.selectList("SQL.EXPFOODPOF.findBasePsn", id);
+			if(list !=null && list.size() >0){
+				return list;
+			}
+				return null;
+	}
+
+	public ExpFoodProdReportDto selectOneEfpeInfo(ExpFoodProdReportDto dto)
+			throws Exception {
+		return sqlSession.selectOne("SQL.EXPFOODPOF.selectOneEfpeInfo",dto);
+	}
+
+	public List<ExpFoodProdPointDto> selectExpFoodProdPoint(ExpFoodProdPointDto point)
+			throws Exception {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectExpFoodProdPoint", point);
+	}
+
+	public List<ExpFoodProdPsnRdmDTO> selectPsnRdm(EfpeApplyModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectPsnRdm", model);
+	}
+	
+	public List<FileInfoDto> findFileInfo(FileInfoDto dto) throws Exception{
+		return  sqlSession.selectList("SQL.EXPFOODPOF.findFileInfo", dto);
+	}
+
+	public int findFileCount(FileInfoDto dto) throws Exception{
+		return  sqlSession.selectOne("SQL.EXPFOODPOF.findFileCount", dto);
+	}
+
+	public List<ExpFoodProdNewCodeDto> getToTextNewList(
+			ExpFoodProdNewCodeDto expFoodProdNewCodeDto) throws Exception {
+		return this.sqlSession.selectList("SQL.EXPFOODPOF.getToTextNewList",expFoodProdNewCodeDto);
+	}
+
+	public List<ExpFoodProdCheckVo> getToTextView2(
+			ExpFoodProdCheckVo expFoodProdCheckVo,HttpServletRequest request) throws Exception {
+		ExpFoodProdNewCodeDto expFoodProdNewCodeDto= new ExpFoodProdNewCodeDto();
+		expFoodProdNewCodeDto.setCheck_menu_type(expFoodProdCheckVo.getCheck_menu_type());
+		List<ExpFoodProdNewCodeDto> textList =sqlSession.selectList("SQL.EXPFOODPOF.selectTextNewList",expFoodProdNewCodeDto);
+		if(StringUtils.isNotEmpty(request.getParameter("type")) && request.getParameter("type").equals("2")){
+			expFoodProdCheckVo.setTd("V_SP_A_C");//行政检查
+		}else if(StringUtils.isNotEmpty(request.getParameter("type")) && request.getParameter("type").equals("3")){	
+			expFoodProdCheckVo.setTd("V_SP_A_D");//行政检查
+		}else{
+			expFoodProdCheckVo.setTd("V_SP_F_D");//行政许可
+		}
+		List<ExpFoodProdCheckVo> listmit=sqlSession.selectList("SQL.EXPFOODPOF.getToTextViewNew",expFoodProdCheckVo);
+		List<ExpFoodProdCheckVo> list=new ArrayList<ExpFoodProdCheckVo>();
+		for(ExpFoodProdNewCodeDto ex:textList){
+			ExpFoodProdCheckVo vo=new ExpFoodProdCheckVo();
+			vo.setCheck_code_id(ex.getCheck_code_id());
+			vo.setCheck_contents(ex.getCheck_contents());
+			vo.setCheck_menu_type(ex.getCheck_menu_type());
+			vo.setReq(ex.getReq());
+			vo.setTd(ex.getTd());
+			vo.setCheck_req(ex.getCheck_req());
+			vo.setTk_nubmer(ex.getTk_nubmer());
+			vo.setCheck_title(ex.getCheck_title());
+			for(ExpFoodProdCheckVo x:listmit){
+				if(x.getCheck_code_id().equals(ex.getCheck_code_id())){
+					vo.setApply_no(x.getApply_no());
+					vo.setChech_psn(x.getChech_psn());
+					vo.setCheck_date(x.getCheck_date());
+					vo.setCheck_disc(x.getCheck_disc());
+					vo.setCheck_proc_type(x.getCheck_proc_type());
+					vo.setCheck_result(x.getCheck_result());
+					vo.setCheck_type(x.getCheck_type());
+					if(null!=x.getApply_no() && null!=x.getCheck_proc_type() && !x.getApply_no().equals("") 
+								&& !x.getCheck_proc_type().equals("")){
+						VideoEventModel videoEvent=new VideoEventModel();
+						videoEvent.setProcMainId(x.getApply_no());
+						if(StringUtils.isNotEmpty(request.getParameter("type")) && request.getParameter("type").equals("2")){
+							videoEvent.setProcType("V_SP_A_C_"+x.getCheck_code_id());//行政检查
+						}else if(StringUtils.isNotEmpty(request.getParameter("type")) && request.getParameter("type").equals("3")){	
+							videoEvent.setProcType("V_SP_A_D_"+x.getCheck_code_id());//行政检查
+						}else{
+							videoEvent.setProcType("V_SP_F_D_"+x.getCheck_code_id());//行政许可
+						}
+						List<VideoEventModel> videolist= sqlSession.selectList("SQL.ORIGPLACE.getViewImg", videoEvent);
+						vo.setEventList(videolist);
+					}
+				}
+			}
+			list.add(vo);
+		}
+		return list;
+	
+	}
+
+	public List<ExpFoodProdNewCodeDto> selectTextNewList(
+			ExpFoodProdNewCodeDto expFoodProdNewCodeDto) throws Exception {
+		return this.sqlSession.selectList("SQL.EXPFOODPOF.selectTextNewList",expFoodProdNewCodeDto);
+	}
+
+	public List<ExpFoodProdCheckVo> getToTextViewNoPassNew(
+			ExpFoodProdCheckVo expFoodProdCheckVo) throws Exception {
+		List<ExpFoodProdCheckVo> list=sqlSession.selectList("SQL.EXPFOODPOF.getToTextViewNew",expFoodProdCheckVo);
+		for(ExpFoodProdCheckVo e:list){
+				if(null!=e.getApply_no() && null!=e.getCheck_proc_type() && !e.getApply_no().equals("") && !e.getCheck_proc_type().equals("")){
+					VideoEventModel videoEvent=new VideoEventModel();
+					videoEvent.setProcMainId(e.getApply_no());
+//					videoEvent.setProcType(e.getCheck_proc_type());
+					videoEvent.setProcType("V_SP_F_D_"+e.getCheck_code_id());
+					List<VideoEventModel> videolist= sqlSession.selectList("SQL.ORIGPLACE.getViewImg", videoEvent);
+					e.setEventList(videolist);
+				}
+			}
+		return list;
+	
+	
+	}
+
+	public void saveTextNew(ExpFoodProdCheckDto dto) {
+		sqlSession.insert("SQL.EXPFOODPOF.saveText",dto);
+		
+	}
+
+	public List<CodeLibraryDTO> gelDept_3Code() {
+		return sqlSession.selectList("SQL.EXPFOODPOF.psnLevelDept_3Code");
+	}
+
+	public List<CompanyPsnModel> selectCompanyPsn(CompanyPsnModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectCompanyPsn",model);
+	}
+
+	public List<CompanyPsnDto> findCompanyPsnDto(CompanyPsnDto companyPsnDto) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.findCompanyPsnDto",companyPsnDto);
+	}
+
+	@Override
+	public void updateChklist(CheckModel c) {
+		sqlSession.update("SQL.EXPFOODPOF.updateChklist",c);
+	}
+
+	
+	@Override
+	public List<ExpFoodProdCheckVo> getChecklist(
+			ExpFoodProdCheckVo expFoodProdCheckVo) {
+		return this.sqlSession.selectList("SQL.EXPFOODPOF.getChecklist", expFoodProdCheckVo);
+	}
+
+	@Override
+	public UsersDTO findUsersByCode(String decUser) {
+		return this.sqlSession.selectOne("findUsersByCode", decUser);
+	}
+
+	@Override
+	public List<FileInfoDto> findFile(FileInfoDto dto) {
+		return  sqlSession.selectList("SQL.EXPFOODPOF.findFile", dto);
+	}
+
+	@Override
+	public List<EfpeRegulatoryModel> selectCompanyPsnNew(
+			EfpeRegulatoryModel model) {
+		return  sqlSession.selectList("SQL.EXPFOODPOF.selectCompanyPsnNew", model);
+	}
+
+	@Override
+	public List<QlcEfpePsnDto> selectBasePsnNoOne(QlcEfpePsnDto qlcEfpepsnDto) throws Exception {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectBasePsn",qlcEfpepsnDto);
+	}
+
+
+	
+
+	@Override
+	public List<EfpeApplyCommentFileDto> getFtpDownFile(ExpFoodProdPointDto e) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.getFtpDownFile",e);
+	}
+
+
+	@Transactional
+	@Override
+	public void updateQlcefpepsn(QlcEfpePsnDto qlcefpepsndto) {
+		this.sqlSession.update("SQL.EXPFOODPOF.updateQlcefpepsn",qlcefpepsndto);
+		// 更新users_ciq表信息
+		Map<String,String> map=new HashMap<String,String>();
+		map.put("id", qlcefpepsndto.getPsnId());
+		// 用户名
+		map.put("psn_name", qlcefpepsndto.getPsnName());
+		// 用户所属科室(二级部门)
+		map.put("dept_code", qlcefpepsndto.getLevelDept_2());
+		// 所属组织代码(一级部门)
+		map.put("org_code", qlcefpepsndto.getLevelDept_1());
+		// 联系电话
+		map.put("bs_tel", qlcefpepsndto.getBsTel());
+		// 移动电话
+		map.put("mobile_phone", qlcefpepsndto.getMobilePhone());
+		// 职务
+		map.put("cur_post", qlcefpepsndto.getCurPost());
+		// 类型
+		map.put("type", qlcefpepsndto.getType());
+		this.sqlSession.update("SQL.EXPFOODPOF.updateUsersCiq",map);
+	}
+	
+	@Transactional
+	@Override
+	public void insertEfpePsn(List<QlcEfpePsnDto> list,UserInfoDTO sessionUser) throws Exception {
+		
+		for (int i = 0; i < list.size(); i++) {
+			QlcEfpePsnDto newQlcEfpePsn = (QlcEfpePsnDto)list.get(i);
+			Map<String,String> map = new HashMap<String,String>();
+			String psn_code = newQlcEfpePsn.getPsnCode();
+			String type = newQlcEfpePsn.getType();
+			String psn_id = "";
+			String org_code = newQlcEfpePsn.getLevelDept_1();
+			if(psn_code !=null){
+				psn_id = psn_code.replace("辽", "L");
+				newQlcEfpePsn.setPsnId(psn_id);
+			}
+			map.put("psn_code", psn_code);
+			map.put("psn_id", psn_id);
+			map.put("org_code", org_code);
+			map.put("type", type);
+			// 根据评审编号判断时候存在，如果存在插入QLC_EFPE_PSN，不存在则更新
+			QlcEfpePsnDto efpePsn = sqlSession.selectOne("SQL.EXPFOODPOF.psnCodeBygetQlcefpepsn",map);
+			if(efpePsn !=null){ // 更新
+				this.sqlSession.update("SQL.EXPFOODPOF.updateQlcefpepsn",newQlcEfpePsn);
+			}else{ // 插入
+				this.sqlSession.insert("SQL.EXPFOODPOF.insertQlcefpepsn",newQlcEfpePsn);
+				// 如果org_code不存在提示一级部门不存在
+				OrganizesDTO org = sqlSession.selectOne("SQL.EXPFOODPOF.orgCodeByOrganizes",map);
+				if(org == null){
+					throw new Exception("一级部门不存在!");
+				}else{
+					// 插入users_ciq
+					UserInfoDTO user = sqlSession.selectOne("SQL.EXPFOODPOF.userIdByUser",map);
+					
+					map.put("id", psn_id);
+					map.put("psn_name", newQlcEfpePsn.getPsnName());
+					// 用户所属科室(二级部门)
+					map.put("dept_code", newQlcEfpePsn.getLevelDept_2());
+					// 所属组织代码(一级部门)
+					map.put("org_code", newQlcEfpePsn.getLevelDept_1());
+					// 联系电话
+					map.put("bs_tel", newQlcEfpePsn.getBsTel());
+					// 移动电话
+					map.put("mobile_phone", newQlcEfpePsn.getMobilePhone());
+					// 职务
+					map.put("cur_post", newQlcEfpePsn.getCurPost());
+					// 用户所属处室
+					map.put("directy_under_org", sessionUser.getDirecty_under_org());
+					
+					if(user == null){ // 插入
+						this.sqlSession.insert("SQL.EXPFOODPOF.insertUsersCiq",map);
+					}else{// 更新
+						this.sqlSession.update("SQL.EXPFOODPOF.updateUsersCiq",map);
+					}
+				}
+			}
+		}
+	}
+
+
+	@Override
+	public List<EfpeApplyNoticeDto> getMbModel(ExpFoodProdPointDto e) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.getMbModel",e);
+	}
+
+	@Override
+	public EfpeApplyNoticeDto findEfpeApplyNoticeDto(EfpeApplyNoticeDto notice) {
+		return sqlSession.selectOne("SQL.EXPFOODPOF.findEfpeApplyNoticeDto",notice);
+	}
+
+	@Override
+	public List<CertificationFileModel> findCertificationList(
+			EfpeApplyNoticeDto dto) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.findCertificationList",dto);
+	}
+
+	@Override
+	public List<ExpFoodProdPsnRdmDTO> selectRdmName2(
+			ExpFoodProdPsnRdmDTO foodProdPsnRdmDTO) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.selectRdmName2",foodProdPsnRdmDTO);
+	}
+
+	@Override
+	public void updateSelectPerson(ExpFoodProdPsnRdmDTO foodProdPsnRdmDTO) {
+		sqlSession.update("SQL.EXPFOODPOF.updateSelectPerson",foodProdPsnRdmDTO);
+		
+	}
+
+	@Override
+	public List<CheckDocModel> getQtOption(Map<String, Object> param) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.getQtOption2",param);
+	}
+
+	@Override
+	public List<ExpFoodProdCheckVo> getAllResult(Map<String, Object> ac) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.getAllResult",ac);
+	}
+
+	@Override
+	public int psyCounts(Map<String, String> map) {
+		return sqlSession.selectOne("SQL.EXPFOODPOF.psyCounts",map);
+	}
+
+	@Override
+	public List<QlcEfpePsnDto> psyList(Map<String, String> map) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.psyList",map);
+	}
+
+	@Override
+	public QlcEfpePsnDto getQlcefpepsnDto(Map<String, Object> map) {
+		return sqlSession.selectOne("SQL.EXPFOODPOF.getQlcefpepsnDto",map);
+	}
+
+	@Override
+	public List<CodeLibraryDTO> psnLevelDeptList(Map<String, String> map) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.psnLevelDeptList",map);
+	}
+
+	@Override
+	public int psyCounts2(Map<String, String> map) {
+		return sqlSession.selectOne("SQL.EXPFOODPOF.psyCounts2",map);
+	}
+
+	@Override
+	public List<QlcEfpePsnDto> psyList2(Map<String, String> map) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.psyList2",map);
+	}
+
+	@Override
+	public EfpeApplySurapplyDto getSurapply(EfpeApplySurapplyDto surapply) {
+		return sqlSession.selectOne("SQL.EXPFOODPOF.getSurapply",surapply);
+	}
+
+	@Override
+	public List<EfpeApplyReviewNoticeDto> findEfpeApplyReviewNoticeDto(
+			EfpeApplyReviewNoticeDto efpeApplyReviewNoticeDto) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.findEfpeApplyReviewNoticeDto",efpeApplyReviewNoticeDto);
+	}
+
+	@Override
+	public List<CheckDocModel> getQtOption2(Map<String, Object> param) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.getQtOption2",param);
+	}
+
+	@Override
+	public List<EfpeCerPouductModel> getEfpeCerPouductList(
+			EfpeCerPouductModel model) {
+		return sqlSession.selectList("SQL.EXPFOODPOF.getEfpeCerPouductList",model);
+	}
+
+	@Override
+	public EfpeCerPouductModel getEfpeCerPouduct(EfpeCerPouductModel model) {
+		return sqlSession.selectOne("SQL.EXPFOODPOF.getEfpeCerPouduct",model);
+	}
+
+	@Override
+	public List<VideoEventModel> selectVideoEventModelList(VideoEventModel videoEvent) {
+		return sqlSession.selectList("SQL.ORIGPLACE.getViewImg", videoEvent);
+	}
+}

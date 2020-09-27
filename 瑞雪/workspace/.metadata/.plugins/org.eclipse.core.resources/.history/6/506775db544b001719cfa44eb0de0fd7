@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.logistics.dao.LogisticsDAOImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.logistics.vo.LogisticsVO">
+		<id column="lgst_id" property="lgstId" />
+	    <result column="chk" property="chk" />
+	    <result column="lgst_code" property="lgstCode" />
+	    <result column="lgst_name" property="lgstName" />
+     	<result column="deleted" property="deleted" />
+	    <result column="create_time" property="createtime" />
+	    <result column="update_time" property="updatetime" />
+	    <result column="remark" property="remark" />
+	</resultMap>
+	
+	<select id="getLgstByCondition" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.logistics.vo.LogisticsVO" >
+    select '' as chk,  lgst_id, lgst_code,lgst_name, deleted, create_time, update_time , remark 
+    from OMS_LGST 
+	where 1=1
+		<if test="lgstId != null">
+			and lgst_id = #{lgstId}
+		</if>
+		<choose> 
+			<when test="deleted !=null ">
+			</when>
+			<otherwise>
+				and deleted = 'n'
+			</otherwise>  
+		</choose>
+		<if test="lgstCode != null">
+			and  lgst_code = #{lgstCode}
+		</if>
+		<if test="lgstName != null">
+			and lgst_name = #{lgstName}
+		</if>
+  		<if test="searchCondition != null"> 
+			and lgst_name like CONCAT('%',#{searchCondition},'%')  or lgst_code like CONCAT('%',#{searchCondition},'%')
+		</if> 
+		
+		<if test="updatetime != null">
+			and update_time = #{updatetime}
+		</if>
+		<if test="createtime != null">
+			and create_time = #{createtime} 
+		</if>
+		<if test="remark != null">
+			and remark = #{remark} 
+		</if> 
+		<if test="orderBy != null">
+			ORDER BY ${orderBy} 
+		</if>
+  </select>
+  
+  
+  <update id="deleteLgst" parameterType="cn.rkylin.oms.system.logistics.vo.LogisticsVO" >
+    update OMS_LGST
+    set deleted = 'y' 
+    WHERE lgst_id = #{lgstId}
+  </update>
+  
+  <insert id="insertLgst" parameterType="cn.rkylin.oms.system.logistics.vo.LogisticsVO" >
+    insert into OMS_LGST (lgst_id, lgst_code, lgst_name,deleted, create_time, update_time, remark) 
+    values (#{lgstId,jdbcType=VARCHAR},#{lgstCode,jdbcType=VARCHAR}, #{lgstName,jdbcType=VARCHAR},#{deleted,jdbcType=VARCHAR},
+    now(), now(), #{remark,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		lgst_id,lgst_code,lgst_name,deleted, create_time, update_time, remark 
+		from OMS_LGST
+		where lgst_id = #{value} AND deleted = 'n'
+  </select>
+  
+  <update id="updateLgst" parameterType="cn.rkylin.oms.system.logistics.vo.LogisticsVO" >
+    update OMS_LGST
+    set lgst_name = #{lgstName,jdbcType=VARCHAR},
+      lgst_code = #{lgstCode,jdbcType=VARCHAR},
+      update_time =  now(),
+      remark = #{remark,jdbcType=VARCHAR}  
+    WHERE lgst_id=#{lgstId} 
+  </update>
+  
+</mapper>

@@ -1,0 +1,17 @@
+package cn.rkylin.oms.system.messageDefine.service;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE;
+import cn.rkylin.oms.system.messageDefine.vo.MessageDefineVo;
+
+
+public interface IMessageDefineService {
+	PageInfo<MessageDefineVo> findByWhere(int page, int length, MessageDefineVo param) throws Exception;
+
+	void saveMessage(OMS_MESSAGE message) throws Exception;
+
+	public void delete(String msgId) throws Exception;
+	
+	public void doEnable(String msgId) throws Exception;
+}

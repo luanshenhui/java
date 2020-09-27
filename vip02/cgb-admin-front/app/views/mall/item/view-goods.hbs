@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}查看商品详情{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+            {{#inject "mall_item/item_view" true}}
+            {
+            "type":"1"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

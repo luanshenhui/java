@@ -1,0 +1,674 @@
+package cn.rkylin.oms.system.unit.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONArray;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
+import cn.rkylin.core.controller.ApolloController;
+import cn.rkylin.oms.common.context.CurrentUser;
+import cn.rkylin.oms.common.context.WebContextFactory;
+import cn.rkylin.oms.system.config.BizTypeDefine;
+import cn.rkylin.oms.system.config.ElementDefine;
+import cn.rkylin.oms.system.config.OrgnizationConfig;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+import cn.rkylin.oms.system.unit.service.IUnitService;
+
+/**
+ * 组织单元管理Action类
+ * 
+ * @author 王潇艺
+ * @version
+ */
+@Controller
+@RequestMapping("/unit")
+public class UnitController extends ApolloController {
+    private static final Log logger = LogFactory.getLog(UnitController.class);
+    /**
+     * 组织单元业务对象
+     */
+    @Autowired
+    private IUnitService unitService;
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 根据当前用户的角色，获取组织机构树（只取根结点）
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     * 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getUnitTree", method = RequestMethod.GET)
+    public void getUnitTree(HttpServletResponse response, String shopId) throws Exception {
+        // Map<String, Object> returnMap = new HashMap<String, Object>();
+        try {
+            CurrentUser currentUser = WebContextFactory.getWebContext().getCurrentUser();
+            @SuppressWarnings("rawtypes")
+            // List unitTree = unitService.getRootUnit(currentUser.getUserId());
+            List unitTree = unitService.getRootUnit("adminUser");
+            String strXml = null;
+            if (unitTree.size() != 0) {
+                strXml = this.parseUnit2XMLString(unitTree);
+            }
+            if (!unitTree.isEmpty()) {
+                response.setContentType("text/xml");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(strXml);
+            }
+        } catch (Exception ex) {
+            logger.error(ex);
+        }
+    }
+
+    /**
+     * 查询权限
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     */
+    @SuppressWarnings("rawtypes")
+    @ResponseBody
+    @RequestMapping(value = "/getUnitTreeManageable", method = RequestMethod.POST)
+    public Map<String, Object> getUnitTreeManageable(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        try {
+            CurrentUser currentUser = WebContextFactory.getWebContext().getCurrentUser();
+            List unitTree = unitService.getRootUnit(currentUser.getUserId());
+            if (unitTree.size() > 0) {
+                JSONArray json = JSONArray.fromObject(unitTree);
+                String srt = json.toString();
+//                response.setContentType("text/json");
+//                response.setCharacterEncoding("UTF-8");
+//                response.getWriter().write(srt);
+                returnMap.put("obj", srt);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 把组织单元列表中的数据转换成为xml字符串用于前台显示组织机构树
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     * 
+     * @param wf_org_tree_v
+     *            - 组织机构树
+     * @return 组织机构树xml字符串
+     * @throws Exception
+     */
+    private String parseUnit2XMLString(List wf_org_tree_v) {
+
+        // WF_ORG_UNIT unitVO = (WF_ORG_UNIT) wf_org_tree_v.get(0);
+        // String unitid = unitVO.getUnitId();
+        // String unitname = unitVO.getUnitName();
+        // 用于存所有的根组织
+        List rootOrgList = new ArrayList();
+        // 用于存所有的子组织
+        List subOrgList = new ArrayList();
+        // 用于存组织树的xml内容
+        String StrOrgXML = "";
+        // 把根组织和子组织分开
+        for (int i = 0; i < wf_org_tree_v.size(); i++) {
+            HashMap map = (HashMap) wf_org_tree_v.get(i);
+            if (map.get("PARENT_UNIT_ID") == null)
+                rootOrgList.add(map);
+            else
+                subOrgList.add(map);
+        }
+        // 循环每一个根组织，把它的子组织灌满
+        try {
+            Document document = DocumentHelper.createDocument();
+            Element itemsElement = document.addElement("tree");
+            itemsElement.addAttribute("id", "0");
+            for (int j = 0; j < rootOrgList.size(); j++) {
+                HashMap map = (HashMap) rootOrgList.get(j);
+                Element rootElement = itemsElement.addElement("item");
+                rootElement.addAttribute("text", (String) map.get("UNIT_NAME"));
+                rootElement.addAttribute("id", (String) map.get("UNIT_ID"));
+                // pageElement.addAttribute("open", "1");
+                rootElement.addAttribute("im0", "WF_ORG_UNIT.gif");
+                rootElement.addAttribute("im1", "WF_ORG_UNIT.gif");
+                rootElement.addAttribute("im2", "WF_ORG_UNIT.gif");
+                // pageElement.addAttribute("call", "1");
+                rootElement.addAttribute("select", "1"); // 设置节点为选中,否则需要选中一个节点双击展开图标才会发起子节点请求
+                String StrunitId = (String) map.get("UNIT_ID");
+                OrglistToXML(subOrgList, StrunitId, rootElement);
+                StrOrgXML = document.asXML();
+            }
+        } catch (Exception ex) {
+            StrOrgXML = "0";
+        }
+        return StrOrgXML;
+    }
+
+    /*
+     * 根据传入的parentid，找它下面的所有子结点 递推，一直找下去，直到子结点不再有子结点，方法开始递归
+     * 
+     * @param orgList - 完整的“子结点列表”
+     * 
+     * @param unitId - 父结点id
+     * 
+     * @param itemsElements - 父结点element对象
+     */
+    private void OrglistToXML(List orgList, String unitId, Element itemsElements) throws Exception {
+        try {
+            for (int i = 0; i < orgList.size(); i++) {
+                HashMap map = (HashMap) orgList.get(i);
+                if (map.get("PARENT_UNIT_ID").equals(unitId)) {
+                    Element pageElement = itemsElements.addElement("item");
+                    pageElement.addAttribute("text", (String) map.get("UNIT_NAME"));
+                    pageElement.addAttribute("id", (String) map.get("UNIT_ID"));
+                    pageElement.addAttribute("im0", "WF_ORG_UNIT.gif");
+                    pageElement.addAttribute("im1", "WF_ORG_UNIT.gif");
+                    pageElement.addAttribute("im2", "WF_ORG_UNIT.gif");
+                    String StrunitId = (String) map.get("UNIT_ID");
+                    OrglistToXML(orgList, StrunitId, pageElement);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 获取组织单元下面的子组织单元，用于组织树动态加载
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getSubUnitTree", method = RequestMethod.GET)
+    public void getSubUnitTree(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // if (SecurityUtil.existUnavailableChar(request, "id,needStation"))
+            // {
+            // return mapping.findForward("unpermitted-character");
+            // }
+            String parentNodeIDOld = request.getParameter("id").toString();
+            String itemId = parentNodeIDOld.substring(0, parentNodeIDOld.lastIndexOf("@"));
+            boolean needStation = (request.getParameter("needStation") == null
+                    || request.getParameter("needStation").equals("")) ? false : true;
+
+            CurrentUser currentUser = WebContextFactory.getWebContext().getCurrentUser();
+            List subItem = unitService.getSubUnit(currentUser.getUserId(), itemId, needStation, false);
+            String strXml = null;
+            if (subItem.size() != 0) {
+                strXml = this.parseSubUnit2XMLString(subItem, null);
+                response.setContentType("text/xml");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(strXml);
+            } else {
+                response.setContentType("text/xml");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("");
+                // Document document = DocumentHelper.createDocument();
+                // response.getWriter().write(document.asXML());
+            }
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getSubUnitTreeManageable", method = RequestMethod.POST)
+    public Map<String, Object> getSubUnitTreeManageable(HttpServletRequest request, HttpServletResponse response) {
+        try {
+//            if (SecurityUtil.existUnavailableChar(request, "id,needStation")) {
+//                return mapping.findForward("unpermitted-character");
+//            }
+            Map<String, Object> returnMap = new HashMap<String, Object>();
+            String itemId = request.getParameter("id").toString();
+            itemId = itemId.substring(0, itemId.lastIndexOf("@"));
+            boolean needStation = (request.getParameter("needStation") == null
+                    || request.getParameter("needStation").equals("")) ? false : true;
+            CurrentUser currentUser = WebContextFactory.getWebContext().getCurrentUser();
+            String userID = currentUser.getUserId();
+            List subItem = unitService.getSubUnit(userID, itemId, needStation, true);
+            if (subItem.size() > 0) {
+                JSONArray json = JSONArray.fromObject(subItem);
+                String srt = json.toString();
+                returnMap.put("obj", srt);
+//                response.setContentType("text/json");
+//                response.setCharacterEncoding("UTF-8");
+//                response.getWriter().write(srt);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+     
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 把子组织单元数据结点成为xml字符串用于前台显示组织机构树。注意：此方法不需要递归 ，子组织单元下不会包含下层组织单元。
+     * 如果stationList不为空，则需要也转成xml字符串
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     * 
+     * @param subUnitList
+     *            - 子组织机构列表
+     * @param subStationList
+     *            - 子岗位列表
+     * @return 子组织单元结点xml字符串
+     * @throws Exception
+     */
+    public String parseSubUnit2XMLString(List subUnitList, List subStationList) {
+        Document document = DocumentHelper.createDocument();
+        Element itemsElement = document.addElement("tree");
+        HashMap map_praId = (HashMap) subUnitList.get(0); // 取父节点
+        itemsElement.addAttribute("id", (String) map_praId.get("PARENT_UNIT_ID"));
+        String StrOrgXML = "";
+        for (int j = 0; j < subUnitList.size(); j++) {
+            HashMap map = (HashMap) subUnitList.get(j);
+            Element itemElement = itemsElement.addElement("item");
+            // 两种可以，一个是画Unit，一个是画Station，先根据名称来判断吧
+            // 要根据不同的结点类型，来画图标
+            if ((String) map.get("UNIT_NAME") != null) {
+                itemElement.addAttribute("text", (String) map.get("UNIT_NAME"));
+                itemElement.addAttribute("id", (String) map.get("UNIT_ID"));
+                itemElement.addAttribute("im0", "WF_ORG_UNIT.gif");
+                itemElement.addAttribute("im1", "WF_ORG_UNIT.gif");
+                itemElement.addAttribute("im2", "WF_ORG_UNIT.gif");
+            } else {
+                itemElement.addAttribute("text", (String) map.get("STATION_NAME"));
+                itemElement.addAttribute("id", (String) map.get("STATION_ID"));
+                itemElement.addAttribute("im0", "WF_ORG_STATION.gif");
+                itemElement.addAttribute("im1", "WF_ORG_STATION.gif");
+                itemElement.addAttribute("im2", "WF_ORG_STATION.gif");
+            }
+            StrOrgXML = document.asXML();
+        }
+        return StrOrgXML;
+
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 获取组织机构明细页面需要的组织类型
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @SuppressWarnings("rawtypes")
+    @ResponseBody
+    @RequestMapping(value = "/getUnitType", method = RequestMethod.POST)
+    public  Map<String, Object> getUnitType(HttpServletRequest request, HttpServletResponse response) {
+        // if (SecurityUtil.existUnavailableChar(request, "type")) {
+        // return mapping.findForward("unpermitted-character");
+        // }
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String type = request.getParameter("type").toString();
+        try {
+//            response.setContentType("text/json");
+//            response.setCharacterEncoding("UTF-8");
+            List unitType = unitService.getUnitType(type);
+            String str = this.listToJson(unitType);
+//            response.getWriter().write(str);
+            returnMap.put("obj",str);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returnMap;
+
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 保存组织单元（新建保存、修改保存）。根据saveType来确定是新建保存还是修改保存
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @SuppressWarnings("rawtypes")
+    @ResponseBody
+    @RequestMapping(value = "/saveUnit", method = RequestMethod.POST)
+    public Map<String, Object> saveUnit(HttpServletRequest request, HttpServletResponse response) {
+
+        // if (SecurityUtil.existUnavailableChar(request,
+        // "orgName,orgDes,orgSta,orgType,id,userId")) {
+        // return mapping.findForward("unpermitted-character");
+        // }
+
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String unitName = request.getParameter("orgName").toString();
+        String unitDescription = request.getParameter("orgDes").toString();
+        String stationId = request.getParameter("orgSta").toString();
+        String unitType = request.getParameter("orgType").toString();
+        String id = request.getParameter("id").toString();
+        String saveType = request.getParameter("flag").toString();
+        String userId = request.getParameter("userId").toString();
+        id = id.substring(0, id.lastIndexOf("@")); // 截取id，使用@分割
+
+        // String extInfo = request.getParameter("extInfo"); // 获取扩展信息
+        // Map map = new HashMap();
+        // String info[] = extInfo.split("&");
+        // for (int j = 0; j < info.length; j++) {
+        // int s = info[j].lastIndexOf("=");
+        // map.put(info[j].substring(0, s), info[j].substring(s + 1,
+        // info[j].length()));
+        // }
+
+        // BizTypeDefine bizTypeDefine =
+        // OrgnizationConfig.getBizTypeDefine("unit");
+        // ArrayList list = bizTypeDefine.getElementList();
+        Map finalElementMap = new HashMap();
+        String idColumnName = "";
+        // for (int i = 0; i < list.size(); i++) {
+        // ElementDefine ed = (ElementDefine) list.get(i);
+        // Iterator mapIter = map.keySet().iterator();
+        // if (ed.getName().equalsIgnoreCase("id")) {
+        // idColumnName = ed.getColumn();
+        // }
+        // while (mapIter.hasNext()) {
+        // String extInfoName = mapIter.next().toString().trim();
+        // if (extInfoName.equals(ed.getName().trim())) {
+        // if (ed.getType().equalsIgnoreCase("DateField")) {
+        // String temp = map.get(extInfoName).toString();
+        // temp = temp.replaceAll("[+]", " "); // 替换序列话后对空格的编码
+        // // temp = temp.replaceAll("%3A", ":");
+        // finalElementMap.put(ed.getColumn(), temp);
+        // } else {
+        // finalElementMap.put(ed.getColumn(), map.get(extInfoName));
+        // }
+        //
+        // }
+        // }
+        // }
+
+        // String[] userIdStrArray = null;
+
+        WF_ORG_UNIT unitVO = new WF_ORG_UNIT();
+        unitVO.setExtInfoMap(finalElementMap);// 扩展信息hashMap
+        if (!userId.equals("")) {
+            if (userId.lastIndexOf(",") != -1) {
+                String[] userIdStrArray = userId.split(",");
+                unitVO.setUnitUsersArray(userIdStrArray);
+            } else {
+                String[] userIdStrArray2 = new String[1];
+                userIdStrArray2[0] = userId;
+                unitVO.setUnitUsersArray(userIdStrArray2);
+            }
+        }
+
+        unitVO.setUnitName(unitName);
+        unitVO.setUnitDescription(unitDescription);
+        unitVO.setStationId(stationId.equals("") ? null : stationId);
+        unitVO.setUnitType(unitType);
+        String uuid = java.util.UUID.randomUUID().toString().replaceAll("-", "");
+
+        if (saveType.equals("0")) {
+            unitVO.setParentUnitId(id);
+            unitVO.setUnitId(uuid);
+        } else if (saveType.equals("1")) {
+            // String unitId = request.getParameter(id);
+            unitVO.setUnitId(id);
+        }
+
+        try {
+//            writer = response.getWriter();
+            // unitBO.saveUnit(unitVO, saveType, bizTypeDefine.getTable(),
+            // idColumnName);
+            unitService.saveUnit(unitVO, saveType, null, null);
+            // 将为截串的数据返回给页面，将没有@UNIT的字段id添加上@UNIT字符串
+            if (saveType.equals("0")) {
+                id = request.getParameter("id").toString();
+                unitVO.setParentUnitId(id);
+                unitVO.setUnitId(uuid + "@UNIT");
+            } else if (saveType.equals("1")) {
+                id = request.getParameter("id").toString();
+                unitVO.setUnitId(id);
+            }
+
+            // String itemDetail = JSONObject.fromObject(unitVO).toString();
+            returnMap.put("itemDetail", unitVO);
+            // response.setContentType("text/json");
+            // response.setCharacterEncoding("UTF-8");
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 获取给定组织单元的明细信息
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getUnitDetail", method = RequestMethod.POST)
+    public Map<String, Object> getUnitDetail(HttpServletRequest request, HttpServletResponse response) {
+        // if (SecurityUtil.existUnavailableChar(request, "itemId")) {
+        // return mapping.findForward("unpermitted-character");
+        // }
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        // PrintWriter writer = null;
+        JSONObject jsonObject = new JSONObject();
+        String unitID = request.getParameter("itemId").toString();
+        unitID = unitID.substring(0, unitID.lastIndexOf("@"));
+        try {
+            WF_ORG_UNIT unitVO = unitService.getUnitDetail(unitID);
+            if (unitVO != null) {
+                // WF_ORG_USER userVO = (WF_ORG_USER)list.get(1);
+                unitVO.setUnitId(request.getParameter("itemId").toString());
+                List userList = unitService.getUserDetail(unitID);
+                returnMap.put("unitDetail", unitVO);
+                returnMap.put("userDetail", userList);
+            }
+        } catch (Exception e) {
+            jsonObject.put("errorMessage", e);
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 删除组织单元，如果组织下有角色、岗位、人员，则该组织单元不能被删除
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/deleteUnit", method = RequestMethod.POST)
+    public Map<String, Object> deleteUnit(HttpServletRequest request, HttpServletResponse response) {
+
+        // if (SecurityUtil.existUnavailableChar(request, "itemId")) {
+        // return mapping.findForward("unpermitted-character");
+        // }
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+//        JSONObject jsonObject = new JSONObject();
+//        PrintWriter writer = null;
+        // 扩展表的表名
+        String extTableName = "";
+        // 扩展表的主键字段名
+        String idColumnName = "";
+
+        String unitID = request.getParameter("itemId");
+        unitID = unitID.substring(0, unitID.lastIndexOf("@"));
+        try {
+//            writer = response.getWriter();
+
+            // BizTypeDefine bizTypeDefine =
+            // OrgnizationConfig.getBizTypeDefine("unit");
+            // extTableName = bizTypeDefine.getTable();
+            // if (bizTypeDefine.getElementList() != null ||
+            // bizTypeDefine.getElementList().size() > 0) {
+            // for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+            // ElementDefine ed = (ElementDefine)
+            // bizTypeDefine.getElementList().get(j);
+            // if (ed.getName().equalsIgnoreCase("id")) {
+            // idColumnName = ed.getColumn();
+            // break;
+            // }
+            // }
+            // }
+            unitService.deleteUnit(unitID, null, null, false); // bizTypeDefine.getTable()
+            // String str = "success";
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e);
+            e.printStackTrace();
+        }
+        return returnMap; 
+
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 获取组织单元下面的子组织单元和岗位，用于组织树动态加载
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    // public void getSubUnitTreeWithPosition(ActionMapping mapping, ActionForm
+    // form, HttpServletRequest request,
+    // HttpServletResponse response) {
+    //
+    // }
+
+    /**
+     * @param list
+     *            list对象
+     * @return String
+     */
+    private String listToJson(List<?> list) {
+
+        // StringBuilder json = new StringBuilder();
+        // String jsonStr = "{\"data\":\"";
+        String tempStr = null;
+        try {
+            JSONArray json;
+            json = JSONArray.fromObject(list);
+            // String tempStr = null;
+            tempStr = json.toString().replace('{', '[');
+            tempStr = tempStr.replace('}', ']');
+            tempStr = tempStr.replaceAll("\\s*['\"]?\\w+['\"]?\\:\\s*", "");
+            // jsonStr += tempStr;
+            // jsonStr += "\",\"success\":true}";
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return tempStr;
+    }
+}

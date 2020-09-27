@@ -1,0 +1,44 @@
+@charset "gb2312";
+/* CSS Document */
+*{padding: 0;margin: 0;
+}
+html,body{height: 100%;}
+body{
+	font-family: "Microsoft YaHei", 'helvetica neue', tahoma, arial, 'hiragino sans gb', 'Simsun', sans-serif;
+	font-size: 14px;
+	color: #666666;
+}
+.login-input{
+	height:28px;
+	width:232px;
+	border:solid 1px #CCC;
+}
+.reg-title{
+	width:100%;
+	float:left;
+	text-align:right;
+	background-color:#F00;
+	height:30px;
+}
+.reg-form{
+	width:232px;
+	float:right;
+	text-align:left;
+	height:30px;
+	background-color:#6F0;
+}
+.login-link{
+	color:#1888de;
+	text-decoration:none;
+}
+.login-link:hover{
+	color:#1888de;
+}
+.login-btn-link{
+	color:#FFF;
+	text-decoration:none;
+}
+.login-btn-link:hover{
+	color:#FFF;
+	text-decoration: none;
+}

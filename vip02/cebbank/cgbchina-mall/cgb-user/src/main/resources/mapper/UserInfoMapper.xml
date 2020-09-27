@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserInfo">
+    <resultMap id="UserInfoMap" type="UserInfoModel">
+        <result property="id" column="user_id"/>
+        <result property="orgCode" column="org_code"/>
+        <result property="name" column="name"/>
+        <result property="pwfirst" column="pwfirst"/>
+        <result property="pwsecond" column="pwsecond"/>
+        <result property="password" column="password"/>
+        <result property="papersType" column="papers_type"/>
+        <result property="papersNum" column="papers_num"/>
+        <result property="mobile" column="mobile"/>
+        <result property="phone" column="phone"/>
+        <result property="fax" column="fax"/>
+        <result property="email" column="email"/>
+        <result property="descript" column="descript"/>
+        <result property="status" column="status"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="refuseDesc" column="refuse_desc"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="isFirst" column="is_first"/>
+        <result property="editPwTime" column="edit_pw_time"/>
+        <result property="loginTime" column="login_time"/>
+        <result property="loginCount" column="login_count"/>
+        <result property="errorCount" column="error_count"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        user_id,org_code,name,pwfirst,pwsecond,password,papers_type,papers_num,mobile,phone,fax,email,descript,status,check_status,refuse_desc,create_oper,modify_oper,create_time,modify_time,is_first,edit_pw_time,login_time,login_count,error_count,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="UserInfoModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="user_id">
+        insert into local_user_inf
+        (user_id
+        ,org_code
+        ,name
+        ,pwfirst
+        ,pwsecond
+        ,password
+        ,papers_type
+        ,papers_num
+        ,mobile
+        ,phone
+        ,fax
+        ,email
+        ,descript
+        ,status
+        ,check_status
+        ,refuse_desc
+        ,create_oper
+        ,create_time
+        ,is_first)
+        values(#{userId}
+        ,#{orgCode}
+        ,#{name}
+        ,#{pwfirst}
+        ,#{pwsecond}
+        ,#{password}
+        ,#{papersType}
+        ,#{papersNum}
+        ,#{mobile}
+        ,#{phone}
+        ,#{fax}
+        ,#{email}
+        ,#{descript}
+        ,#{status}
+        ,#{checkStatus}
+        ,#{refuseDesc}
+        ,#{createOper}
+        ,now()
+        ,#{isFirst})
+    </insert>
+
+    <update id="update" parameterType="UserInfoModel">
+        update local_user_inf set
+        <if test="orgCode !=null">org_code = #{orgCode}
+            ,
+        </if>
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="pwfirst !=null">pwfirst = #{pwfirst}
+            ,
+        </if>
+        <if test="pwsecond !=null">pwsecond = #{pwsecond}
+            ,
+        </if>
+        <if test="password !=null">password = #{password}
+            ,
+        </if>
+        <if test="papersType !=null">papers_type = #{papersType}
+            ,
+        </if>
+        <if test="papersNum !=null">papers_num = #{papersNum}
+            ,
+        </if>
+        <if test="mobile !=null">mobile = #{mobile}
+            ,
+        </if>
+        <if test="phone !=null">phone = #{phone}
+            ,
+        </if>
+        <if test="fax !=null">fax = #{fax}
+            ,
+        </if>
+        <if test="email !=null">email = #{email}
+            ,
+        </if>
+        <if test="descript !=null">descript = #{descript}
+            ,
+        </if>
+        <if test="status !=null">status = #{status}
+            ,
+        </if>
+        <if test="checkStatus !=null">check_status = #{checkStatus}
+            ,
+        </if>
+        <if test="refuseDesc !=null">refuse_desc = #{refuseDesc}
+            ,
+        </if>
+        <if test="isFirst !=null">is_first = #{isFirst}
+            ,
+        </if>
+        <if test="editPwTime !=null">edit_pw_time = #{editPwTime}
+            ,
+        </if>
+        <if test="loginTime !=null">login_time = #{loginTime}
+            ,
+        </if>
+        <if test="loginCount !=null">login_count = #{loginCount}
+            ,
+        </if>
+        <if test="errorCount !=null">error_count = #{errorCount}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        modify_oper = #{modifyOper},
+        modify_time = now()
+        where user_id = #{id} and del_flag != 1
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag = 0
+            and user_id != 'admin'
+            <if test="id !=null">and user_id LIKE concat(concat('%',#{id}),'%')</if>
+            <if test="orgCode !=null">and org_code = #{orgCode}</if>
+            <if test="name !=null">and name  LIKE concat(concat('%',#{name}),'%')</if>
+            <if test="roleName !=null">and name in
+            <foreach collection="roleName" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            </if>
+            <if test="orgSimpleNames !=null">and org_code in
+                <foreach collection="orgSimpleNames" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="pwfirst !=null">and pwfirst = #{pwfirst}</if>
+            <if test="pwsecond !=null">and pwsecond = #{pwsecond}</if>
+            <if test="password !=null">and password = #{password}</if>
+            <if test="papersType !=null">and papers_type = #{papersType}</if>
+            <if test="papersNum !=null">and papers_num = #{papersNum}</if>
+            <if test="mobile !=null">and mobile = #{mobile}</if>
+            <if test="phone !=null">and phone = #{phone}</if>
+            <if test="fax !=null">and fax = #{fax}</if>
+            <if test="email !=null">and email = #{email}</if>
+            <if test="descript !=null">and descript = #{descript}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="refuseDesc !=null">and refuse_desc = #{refuseDesc}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="isFirst !=null">and is_first = #{isFirst}</if>
+            <if test="editPwTime !=null">and edit_pw_time = #{editPwTime}</if>
+            <if test="loginTime !=null">and login_time = #{loginTime}</if>
+            <if test="loginCount !=null">and login_count = #{loginCount}</if>
+            <if test="errorCount !=null">and error_count = #{errorCount}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="UserInfoMap">
+        SELECT
+        <include refid="columns"/>
+        from local_user_inf
+        where user_id =#{id}
+        and del_flag = 0
+    </select>
+
+    <select id="findByUserId" parameterType="Map" resultMap="UserInfoMap">
+        SELECT
+        <include refid="columns"/>
+        from local_user_inf
+        where user_id=#{userId}
+        and del_flag = 0
+        and status = 0
+    </select>
+
+    <select id="findByName" parameterType="Map" resultMap="UserInfoMap">
+        SELECT
+        <include refid="columns"/>
+        from local_user_inf
+        where name=#{userName}
+        and del_flag = 0
+    </select>
+
+    <select id="findByNameFlag" parameterType="Map" resultMap="UserInfoMap">
+        SELECT
+        <include refid="columns"/>
+        from local_user_inf
+        where name=#{userName}
+    </select>
+
+    <select id="findByNameId" parameterType="Map" resultMap="UserInfoMap">
+        SELECT
+        <include refid="columns"/>
+        from local_user_inf
+        where user_id=#{id}
+    </select>
+
+    <select id="findAll" resultMap="UserInfoMap">
+        select
+        <include refid="columns"/>
+        from local_user_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from local_user_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="UserInfoMap">
+        select
+        <include refid="columns"/>
+        from local_user_inf
+        <include refid="conditions"/>
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <delete id="delete" parameterType="UserInfoModel">
+        delete from local_user_inf where user_id = id
+    </delete>
+
+    <!-- 首次登录更新密码 -->
+    <update id="updatePwdByCode" parameterType="UserInfoModel">
+        UPDATE local_user_inf SET
+        <if test="password !=null">password = #{password},</if>
+        is_first = '1',modify_time = now(),edit_pw_time = now()
+        WHERE
+        user_id = #{id}
+    </update>
+
+    <select id="findUserInfoByOrgCode" parameterType="java.lang.String"  resultMap="UserInfoMap">
+        SELECT
+        <include refid="columns"/>
+        from local_user_inf
+        where org_code=#{orgCode}
+        and del_flag = 0
+    </select>
+</mapper>
+
+

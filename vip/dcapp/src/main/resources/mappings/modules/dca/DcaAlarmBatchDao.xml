@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.batch.dao.DcaAlarmBatchDao">
+    
+	<sql id="dcaAlarmDetailColumns">
+		a.ALARM_DETAIL_ID AS "alarmDetailId",
+		a.BIZ_ROLE_ID AS "bizRoleId",
+		a.POWER_ID AS "powerId",
+		a.RISK_ID AS "riskId",
+		a.BIZ_FLOW_ID AS "bizFlowId",
+		a.BIZ_FLOW_NAME AS "bizFlowName",
+		a.BIZ_OPER_PERSON AS "bizOperPerson",
+		a.BIZ_OPER_POST AS "bizOperPost",
+		a.BIZ_DATA_ID AS "bizDataId",
+		a.BIZ_DATA_NAME AS "bizDataName",
+		a.WF_ID AS "wfId",
+		a.TASK_ID AS "taskId",
+		a.TASK_NAME AS "taskName",
+		a.ALARM_LEVEL AS "alarmLevel",
+		a.ALARM_TYPE AS "alarmType",
+		a.CPU_RESULT AS "cpuResult",
+		a.ALARM_MSG AS "alarmMsg",
+		a.ALARM_TIME_1ST AS "alarmTime1st",
+		a.ALARM_STATUS AS "alarmStatus",
+		a.VISUAL_SCOPE AS "visualScope",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks"
+	</sql>
+	
+	<select id="getDetailInfo" resultType="DcaAlarmDetail">
+		SELECT 
+			<include refid="dcaAlarmDetailColumns"/>
+		FROM DCA_ALARM_DETAIL a
+		WHERE a.DEL_FLAG = #{DEL_FLAG_NORMAL} 
+			AND a.POWER_ID = #{powerId}
+			AND a.ALARM_LEVEL = #{alarmLevel}
+	</select>
+	
+</mapper>

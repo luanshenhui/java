@@ -1,0 +1,64 @@
+<script src="../bldelivery/BlDeliveryH.js"></script>
+<script src="../bldelivery/BlDeliveryDetailView.js"></script>
+<script src="../bldelivery/BlDeliveryDetailF.js"></script>
+<div id="BlDeliveryDetailFSearch" class="list_search">
+	<h2 class="center" style="font-weight:normal"></h2><br/>
+	<div class="search_left">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<label class="blDetailLblKeyword"></label>
+		<input type="text" id="blDetailKeyword" style="width:50px;">&nbsp;&nbsp;&nbsp;&nbsp;
+		<label class="blDetailLblDeliverDate"></label>
+		<input type="text" id="blDeliverFromDate" class="date"/>
+		<input type="text" id="blDeliverToDate" class="date"/>&nbsp;&nbsp;&nbsp;&nbsp;
+		<a id="blDetailBtnSearch"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+		<a id="blDetailBtnExportDelivery"></a>
+	</div>
+</div>
+<div id="BlDeliveryDetailFResult"></div>
+<div id="BlDeliveryDetailFStatistic" class="pagingleft"></div>
+<div id="BlDeliveryDetailFPagination" class="paging"></div>
+<textarea  id="BlDeliveryDetailFTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td><input type="checkbox" onclick="$.csControl.checkAll('chkRowDetail', this.checked);"/><label class="blLblNumber"></label></td>
+			<td class="blLblUserName"></td>
+			<td class="blLblUserCode"></td>
+			<td class="blLblDeliveryAddr"></td>
+			<td class="blLblCreateDate"></td>
+			<td class="blLblDeliveryDate"></td>
+			<td class="blLblTrackingNumber"></td>
+			<td class="blLblOperate"></td>
+			<td class="blLblExportDelivery"></td>
+			<td class="blLblCancel"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ordenID}">
+			<td class="center"><input type="checkbox" value="{$T.row.ID}" name="chkRowDetail"/>No.{$T.row.number}</td>
+			<td class="center">{$T.row.username}</td>
+			<td class="center">{$T.row.name}</td>
+			<td class="center" width="260">{$T.row.deliveryAddress}</td>
+			<td class="center">{$.csDate.formatMillisecondDate($T.row.applyDate)}</td>
+			<td class="center">{$.csDate.formatMillisecondDate($T.row.deliveryDate)}</td>
+			<td class="center">
+			    {#if $T.row.yundanId != null}
+			        {#if $T.row.expressComName == "DHL"}
+					    <a onclick="$.csBlDeliveryHList.openTrack('{$T.row.yundanId}');" style="color:#ffab00;">{$T.row.yundanId}</a>
+					{#/if}
+					{#if $T.row.expressComName != "DHL"}
+						{$T.row.yundanId}
+					{#/if}
+				{#/if}
+			</td>
+			<td class="center"><a class="view" onclick="$.csBlDeliveryDetailView.openView('{$T.row.ID}');"></a></td>
+			<td class="center">
+				<a class="blExportDelivery" onclick="$.csBlDeliveryHList.exportDeliveryDetail('{$T.row.ID}');"></a>
+			</td>
+			<td class="center">
+				{#if $T.row.statusId == DELIVERY_STATE_APPLY}
+					<a class="blCancel" onclick="$.csBlDeliveryDetailFList.cancleDeliveryDetail('{$T.row.ID}');"></a>
+				{#/if}
+			</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

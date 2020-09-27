@@ -1,0 +1,37 @@
+<script src="../message/common.js"></script>
+<script src="../message/list.js"></script>
+<div id="MessageSearch" class="list_search">
+	<input type="hidden" id="inOrSent">
+	<h1></h1>
+	<label class="lblKeyword"></label><input type="text" id="keyword"/>
+	<a id="btnSearch"></a>
+	<a id="btnInbox"></a>
+	<a id="btnSentbox"></a>
+	<a id="btnRemove"></a>
+	<a id="btnSendMessage"></a>
+</div>
+<div id="MessageResult"></div>
+<div id="MessageStatistic"></div>
+<div id="MessagePagination" class="paging"></div>
+<textarea  id="MessageTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class='check'><input type="checkbox" onclick="$.csControl.checkAll('chkRow', this.checked);"/></td>
+			<td class="lblTitle"></td>
+			<td class="lblPubDate"></td>
+			<td class="lblPubMember"></td>
+			<td class="lblReceiver"></td>
+			<td class="lblReadDate"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ID}">
+			<td class="center check"><input type="checkbox" value="{$T.row.ID}" name="chkRow"/></td>
+			<td class="link" onclick="$.csMessageList.openView('{$T.row.ID}')">{$T.row.title}</td>
+			<td class="center">{$.csDate.formatMillisecondDate($T.row.pubDate)}</td>
+			<td>{$T.row.pubMemberName}</td>
+			<td>{$T.row.receiverName}</td>
+			<td class="center">{$.csDate.formatMillisecondDate($T.row.readDate)}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea >

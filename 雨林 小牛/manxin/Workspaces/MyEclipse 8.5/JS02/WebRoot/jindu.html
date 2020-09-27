@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>jindu.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<!-- 进度条 -->
+	<style type="text/css">
+		div{
+			font-size:40px;
+			width:1px;
+			height:50px;
+			background-color: blue;
+		}
+		img{
+			position: absolute;
+			right:10px;
+		}
+		
+	</style>
+	<script type="text/javascript">
+	function $(id){
+		return document.getElementById(id);
+	}
+	var w = 1;
+	var p = 1;
+	function f1(){
+		if(p++ >= 9){
+			p=1;
+		}
+		var path="img/E/fish08_0"+p+".png";
+		$("img").src= path;
+		$("img").style.right = w;
+		w += 10;
+//		$("d1").style.width = w;
+	}
+	var i = window.setInterval("f1()", 1000/24);
+//	var i = window.setInterval("f1()", 2000);
+	function f2(){
+		clearInterval(i);
+	}
+	</script>
+  </head>
+  
+  <body background="bg.jpg">
+  
+  <div id="d1"></div>
+  <input type="button" value="time" onclick="f2();"/>
+  <img id="img" src="img/E/fish08_01.png"/>
+  </body> 
+</html>

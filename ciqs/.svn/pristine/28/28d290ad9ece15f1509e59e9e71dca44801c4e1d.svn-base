@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for QLC_EXP_FOOD_PROD.
+@author xwj
+-->
+<mapper namespace="SQL.ExpFoodProd">
+
+	<!-- 分页查询列表 -->
+	<select id="findList0" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+		    t.id,
+		    t.exp_main_id,
+			t.comp_name,
+			t.monitor_type,
+			t.addr,
+			t.plan_moni_date,
+			t.moni_man_por,
+			t.moni_psn,
+			t.act_moni_date,
+			t.act_monit_por,
+			t.is_break_law,
+			t.investigate_result,
+			t.apply_no
+		 from QLC_EXP_FOOD_PROD t
+		 where 1=1
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="plan_moni_date_begin != null and plan_moni_date_begin != ''">
+			<![CDATA[ and t.plan_moni_date >= to_date(#{plan_moni_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="plan_moni_date_end != null and plan_moni_date_end != ''">
+			<![CDATA[ and t.plan_moni_date <= to_date(#{plan_moni_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="monitor_type != null and monitor_type != ''">
+			and t.monitor_type=#{monitor_type}
+		</if>
+		<if test="moni_psn != null and moni_psn != ''">
+			and t.moni_psn=#{moni_psn}
+		</if>
+		order by t.create_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 分页查询列表 -->
+	<select id="0findList0" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+		    t.*,
+		    t2.plantype,
+		    t2.plansupdate,
+		    t2.pesponsible,
+		    t2.subname,
+		    t2.actualdate,
+		    t2.practicename,
+		    t2.liveresult,
+		    t3.applycode,
+		    e.is_break_law,
+		    e.monitor_type,
+		    e.addr,
+		    e.moni_man_por,
+		    e.moni_psn,
+		    e.act_monit_por,
+		    e.attach_file,
+		    e.prod_comp,
+		    e.reg_comp_plc,
+		    e.comp_plc,
+		    e.enter_accp,
+		    e.legal_psn,
+		    e.e_mail,
+		    e.post_no,
+		    e.con_name,
+		    e.con_tel,
+		    e.buness_licen
+		 from 
+			 (select orgname, max(startdate) maxdate from efpe_apply group by orgname) t0
+	     left join EFPE_APPLY t on t0.orgname = t.orgname and t0.maxdate = t.startdate
+	     left join 
+	      (select orgname, max(actualdate) as maxdate from EFPE_REGULATORY group by orgname) t1
+	      on t.orgname = t1.orgname
+	     left join EFPE_REGULATORY t2  on t1.orgname = t2.orgname and t1.maxdate = t2.actualdate
+	     left join EFPE_ACTIVITY t3 on t.applyid = t3.applyid
+	     left join qlc_exp_food_prod e on t.orgname = e.comp_name
+		 where 1=1
+		<if test="orgname != null and orgname != ''">
+			and t.orgname like '%' || #{orgname} || '%'
+		</if>
+		<if test="startdate_begin != null and startdate_begin != ''">
+			and t2.startdate >= to_date(#{startdate_begin}, 'yyyy-mm-dd')
+		</if>
+		<if test="startdate_end != null and startdate_end != ''">
+			<![CDATA[ and t2.startdate <= to_date(#{startdate_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="plantype != null and plantype != ''">
+			and t2.plantype=#{plantype}
+		</if>
+		<if test="subname != null and subname != ''">
+			and t2.subname=#{subname}
+		</if>
+		order by t.startdate desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<select id="findEfpeRegulatory" resultType="com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel">
+		select 
+			f.PLANTYPE, 
+			f.PRACTICENAME,
+			f.ACTUALDATE,
+			f.PESPONSIBLE,
+			f.PLANSUPDATE,
+			f.SUBNAME,
+			f.SUBID,
+			t.ENTERPRISESNAME,
+			t.enterprisesId,
+			t.depname,
+			t.productname, 
+			t.blno,
+			t.headname,
+			t.address
+		 from EFPE_ENTERPRISES t ,EFPE_REGULATORY f where t.userid=f.userid
+		 and depname=#{depname}  and f.ACTUALDATE is null
+		 <if test="enterprisesname != null and enterprisesname != ''">
+			and t.enterprisesname like =#{enterprisesname} 
+		</if>
+		 <if test="planType != null and planType != ''">
+			and f.plantype=#{planType}
+		</if>
+		 <if test="subName != null and subName != ''">
+			and f.subname = #{subName} 
+		</if>
+		 <if test="subId != null and subId != ''">
+			and f.SUBID = #{subId}
+		</if>
+		 <if test="userId != null and userId != ''">
+			and f.userId = #{userId}
+		</if>
+		 and  f.subid not in ( SELECT apply_no FROM  QLC_EXP_FOOD_PROD_PSN_RDM )
+		 order by f.ACTUALDATE desc
+	</select>
+	
+	<select id="findEfpeRegulatoryAll" resultType="com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel2">
+		select 
+			f.PLANTYPE, 
+			f.PRACTICENAME,
+			f.ACTUALDATE,
+			f.PESPONSIBLE,
+			f.PLANSUPDATE,
+			f.SUBNAME,
+			f.SUBID,
+			f.LIVERESULT,
+			t.ENTERPRISESNAME,
+			t.enterprisesId,
+			t.depname,
+			t.productname, 
+			t.ENTERPRISESNAME,
+			f.SUBID as apply_no,
+			f.SUBID as applycode,
+	      	t.ENTERPRISESNAME as orgname,
+	      	t.depname as orgname,
+	      	t.productname as ipc_product, 
+	      	f.SUBID as applyid,
+	      	f.userid,
+			t.address
+		 from EFPE_ENTERPRISES t ,EFPE_REGULATORY f where t.userid=f.userid
+		 and depname=#{depname}
+		 <if test="enterprisesname != null and enterprisesname != ''">
+			and t.enterprisesname like =#{enterprisesname} 
+		</if>
+		 <if test="planType != null and planType != ''">
+			and f.plantype=#{planType}
+		</if>
+		 <if test="subName != null and subName != ''">
+			and f.subname = #{subName} 
+		</if>
+		 <if test="subId != null and subId != ''">
+			and f.SUBID = #{subId}
+		</if>
+		 <if test="userId != null and userId != ''">
+			and f.userId = #{userId}
+		</if>
+		 order by f.ACTUALDATE desc
+	</select>
+	
+	<select id="findEfpeRegulatoryAll2" resultType="com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel2">
+		select 
+			f.PLANTYPE, 
+			f.PRACTICENAME,
+			f.ACTUALDATE,
+			f.PESPONSIBLE,
+			f.PLANSUPDATE,
+			f.SUBNAME,
+			f.SUBID,
+			f.LIVERESULT,
+			t.ENTERPRISESNAME,
+			t.enterprisesId,
+			t.depname,
+			t.productname, 
+			t.ENTERPRISESNAME,
+			f.userid,
+			f.SUBID as applyid,
+	      	t.ENTERPRISESNAME as orgname,
+	      	t.depname as orgname,
+	      	t.productname as ipc_product, 
+	      	f.SUBID as applycode,
+			t.address
+		 from EFPE_ENTERPRISES t ,EFPE_REGULATORY f where t.userid=f.userid
+		 <if test="depname != null and depname != ''">
+			and t.depname=#{depname}
+		</if>
+		 <if test="enterprisesname != null and enterprisesname != ''">
+			and t.enterprisesname like '%'||#{enterprisesname}||'%'
+		</if>
+		 <if test="planType != null and planType != ''">
+			and f.plantype=#{planType}
+		</if>
+		 <if test="subName != null and subName != ''">
+			and f.subname = #{subName} 
+		</if>
+		 <if test="subId != null and subId != ''">
+			and f.SUBID = #{subId}
+		</if>
+		 <if test="userId != null and userId != ''">
+			and f.userId = #{userId}
+		</if>
+		 order by f.ACTUALDATE desc
+	</select>
+	
+	<select id="findList" resultType="com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel">
+	select * from (
+		select a.*,rownum rid from  (
+		select 
+			f.PLANTYPE, 
+			f.PRACTICENAME,
+			f.ACTUALDATE,
+			f.LIVERESULT,
+			(select wm_concat(psn_name) from QLC_EXP_FOOD_PROD_PSN_RDM where apply_no=f.subid and PSN_TYPE='0') as PESPONSIBLE,
+			(select to_char(max(work_date),'YYYY-MM') from QLC_EXP_FOOD_PROD_PSN_RDM where apply_no=f.subid) as PLANSUPDATE,
+			(select wm_concat(psn_name) from QLC_EXP_FOOD_PROD_PSN_RDM where apply_no=f.subid) as SUBNAME,
+			f.SUBID,
+			f.userId,
+			t.ENTERPRISESNAME,
+			t.enterprisesId,
+			t.address
+		 from EFPE_ENTERPRISES t ,EFPE_REGULATORY f where t.userid=f.userid
+		 and t.depname=#{depname}
+		 <if test="enterprisesname != null and enterprisesname != ''">
+			and t.enterprisesname like '%' || #{enterprisesname} || '%'
+		</if>
+		 <if test="planType != null and planType != ''">
+			and f.plantype=#{planType}
+		</if>
+		 <if test="startdate_begin != null and startdate_begin != ''">
+			and f.ACTUALDATE >= to_date(#{startdate_begin}, 'yyyy-mm-dd')
+		 </if>
+		 <if test="startdate_end != null and startdate_end != ''">
+			<![CDATA[ and f.ACTUALDATE <= to_date(#{startdate_end}, 'yyyy-mm-dd') ]]>
+		 </if>
+		 <if test="subName != null and subName != ''">
+			and f.subname like '%' || #{subName} || '%'
+		</if>
+		 order by f.ACTUALDATE desc,f.SUBID
+	 ) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<select id="findListCount"  resultType="java.lang.Integer">
+	select 
+		count(*)
+	 from EFPE_ENTERPRISES t ,EFPE_REGULATORY f where t.userid=f.userid
+	  <if test="enterprisesname != null and enterprisesname != ''">
+			and t.enterprisesname like '%' || #{enterprisesname} || '%'
+		</if>
+		 <if test="planType != null and planType != ''">
+			and f.plantype=#{planType}
+		</if>
+		 <if test="startdate_begin != null and startdate_begin != ''">
+			and f.ACTUALDATE >= to_date(#{startdate_begin}, 'yyyy-mm-dd')
+		 </if>
+		 <if test="startdate_end != null and startdate_end != ''">
+			<![CDATA[ and f.ACTUALDATE <= to_date(#{startdate_end}, 'yyyy-mm-dd') ]]>
+		 </if>
+		 <if test="subName != null and subName != ''">
+			and f.subname like '%' || #{subName} || '%'
+		</if>
+		 and t.depname=#{depname}
+	</select>
+	
+	<!-- 分页查询列表 -->
+	<select id="findListApp" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+		    t.*,
+		    t2.plantype,
+		    t2.plansupdate,
+		    t2.pesponsible,
+		    t2.subname,
+		    t2.actualdate,
+		    t2.practicename,
+		    t3.applycode,
+		    t2.liveresult
+		 from 
+			 (select orgname, max(startdate) maxdate from efpe_apply group by orgname) t0
+	     left join EFPE_APPLY t on t0.orgname = t.orgname and t0.maxdate = t.startdate
+	     left join 
+	      (select orgname, max(actualdate) as maxdate from EFPE_REGULATORY group by orgname) t1
+	      on t.orgname = t1.orgname
+	     left join EFPE_REGULATORY t2  on t1.orgname = t2.orgname and t1.maxdate = t2.actualdate
+	       left join EFPE_ACTIVITY t3 on t.applyid = t3.applyid
+	     left join qlc_exp_food_prod e on t.orgname = e.comp_name
+		 where 1=1
+		<if test="orgname != null and orgname != ''">
+			and t.orgname like '%' || #{orgname} || '%'
+		</if>
+		<if test="startdate_begin != null and startdate_begin != ''">
+			and t2.startdate >= to_date(#{startdate_begin}, 'yyyy-mm-dd')
+		</if>
+		<if test="startdate_end != null and startdate_end != ''">
+			<![CDATA[ and t2.startdate <= to_date(#{startdate_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="plantype != null and plantype != ''">
+			and t2.plantype=#{plantype}
+		</if>
+		<if test="subname != null and subname != ''">
+			and t2.subname=#{subname}
+		</if>
+		AND        not exists(
+			                 SELECT 
+			                           PROC_MAIN_ID 
+			                 FROM      
+			                           QLC_CHK_RCD 
+			                 WHERE 
+			                           QLC_CHK_RCD.PROJ_CODE=#{proj_code}
+			                 AND          
+			                           PROC_MAIN_ID=t.applyid
+			                )
+		order by t.startdate desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询记录数 -->
+	<select id="findListCount0"  resultType="java.lang.Integer">
+		select count(t.applyid) 
+		 from EFPE_APPLY t
+		 left join 
+		 	(select orgname, max(actualdate) as maxdate from EFPE_REGULATORY group by orgname) t1
+		 	on t.orgname = t1.orgname
+		 left join EFPE_REGULATORY t2  on t1.orgname = t2.orgname and t1.maxdate = t2.actualdate
+		 where 1=1
+		<if test="comp_name != null and comp_name != ''">
+			and t.orgname like '%' || #{comp_name} || '%'
+		</if>
+		<if test="plan_moni_date_begin != null and plan_moni_date_begin != ''">
+			<![CDATA[ and t2.plansupdate >= to_date(#{plan_moni_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="plan_moni_date_end != null and plan_moni_date_end != ''">
+			<![CDATA[ and t2.plansupdate <= to_date(#{plan_moni_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="monitor_type != null and monitor_type != ''">
+			and t2.plantype=#{monitor_type}
+		</if>
+		<if test="moni_psn != null and moni_psn != ''">
+			and t2.subname=#{moni_psn}
+		</if>
+	</select>
+	
+	<!-- 查询记录数 -->
+	<select id="0findListCount0"  resultType="java.lang.Integer">
+		select count(t.applyid) 
+		 from 
+			 (select orgname, max(startdate) maxdate from efpe_apply group by orgname) t0
+	     left join EFPE_APPLY t on t0.orgname = t.orgname and t0.maxdate = t.startdate
+	     left join 
+	      (select orgname, max(actualdate) as maxdate from EFPE_REGULATORY group by orgname) t1
+	      on t.orgname = t1.orgname
+	     left join EFPE_REGULATORY t2  on t1.orgname = t2.orgname and t1.maxdate = t2.actualdate
+		 where 1=1
+		<if test="orgname != null and orgname != ''">
+			and t.orgname like '%' || #{orgname} || '%'
+		</if>
+		<if test="startdate_begin != null and startdate_begin != ''">
+			<![CDATA[ and t2.startdate >= to_date(#{startdate_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="startdate_end != null and startdate_end != ''">
+			<![CDATA[ and t2.startdate <= to_date(#{startdate_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="plantype != null and plantype != ''">
+			and t2.plantype=#{plantype}
+		</if>
+		<if test="subname != null and subname != ''">
+			and t2.subname=#{subname}
+		</if>
+	</select>
+	
+	<!-- 查询详情 -->
+	<select id="findById0" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdDTO">
+		select 
+		    t.id,
+		    t.exp_main_id,
+			t.comp_name,
+			t.monitor_type,
+			t.addr,
+			t.plan_moni_date,
+			t.moni_man_por,
+			t.moni_psn,
+			t.act_moni_date,
+			t.act_monit_por,
+			t.is_break_law,
+			t.investigate_result,
+			t.apply_no
+		 from QLC_EXP_FOOD_PROD t
+		 where t.id=#{id}
+	</select>
+	
+	<!-- 查询详情 -->
+	<select id="findById" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyDTO">
+		select 
+		    t.*,
+		    t2.plantype,
+		    t2.plansupdate,
+		    t2.pesponsible,
+		    t2.subname,
+		    t2.actualdate,
+		    t2.practicename,
+		    t2.liveresult,
+		    
+		    <!-- 是否有违规操作  -->
+		    e.is_break_law,
+		    <!-- 检查结果 -->
+		    e.monitor_type,
+		    <!-- 年度报告 -->
+		    e.addr,
+		    <!-- 审批人 -->
+		    e.moni_man_por,
+		    <!-- 审批时间-->
+		    e.moni_psn,
+		    <!-- 审批机构 -->
+		    e.act_monit_por,
+		    <!-- 审批决定 -->
+		    e.attach_file,
+		    <!-- 审批意见-->
+		    e.prod_comp,
+		    <!-- 检查计划下达时间 -->
+		    e.reg_comp_plc,
+		    <!-- 下达人员 -->
+		    e.comp_plc,
+		    <!-- 检查计划-->
+		    e.enter_accp,
+		    <!-- 监管检查通知书下发时间-->
+		    e.legal_psn,
+		    <!-- 下发人员 -->
+		    e.e_mail,
+		    <!-- 监管检查通知书 -->
+		    e.post_no,
+		    <!-- 送达回证 -->
+		    e.con_name,
+		    <!-- 现场检查结果 -->
+		    e.con_tel,
+		    <!-- 专项检查结果 -->
+		    e.buness_licen
+		 from 
+			 (select orgname, max(startdate) maxdate from efpe_apply group by orgname) t0
+	     left join EFPE_APPLY t on t0.orgname = t.orgname and t0.maxdate = t.startdate
+	     left join 
+	      (select orgname, max(actualdate) as maxdate from EFPE_REGULATORY group by orgname) t1
+	      on t.orgname = t1.orgname
+	     left join EFPE_REGULATORY t2  on t1.orgname = t2.orgname and t1.maxdate = t2.actualdate
+	     left join qlc_exp_food_prod e on t.orgname = e.comp_name
+		 where t.applyid=#{applyid}
+	</select>
+	
+	<!-- 查询 1.文档类型 2.业务主键 查询doc -->
+	<select id="findDocByTypeNMainId" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO">
+		select 
+		    *
+		 from QLC_CHECK_DOCS_RCD t
+		 where t.doc_type = #{doc_type} and t.proc_main_id = #{proc_main_id}
+	</select>
+	
+	<insert id="insert" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" statementType="CALLABLE" >
+		insert into QLC_EXP_FOOD_PROD
+			(
+				id,
+				exp_main_id,
+				<if test="comp_name != null and comp_name != ''" >
+				comp_name,
+				</if>
+				<if test="monitor_type != null and monitor_type != ''" >
+				monitor_type,
+				</if>
+				<if test="addr != null and addr != ''" >
+				addr,
+				</if>
+				<if test="plan_moni_date != null">
+				plan_moni_date,
+				</if>
+				<if test="moni_man_por != null and moni_man_por != ''">
+				moni_man_por,
+				</if>
+				<if test="moni_psn != null and moni_psn != ''">
+				moni_psn,
+				</if>
+				<if test="act_moni_date != null">
+				act_moni_date,
+				</if>
+				<if test="act_monit_por != null and act_monit_por !=''" >
+				act_monit_por,
+				</if>
+				<if test="is_break_law != null and is_break_law !=''" >
+				is_break_law,
+				</if>
+				<if test="attach_file != null and attach_file != ''" >
+				attach_file,
+				</if>
+			)
+		values 
+			(
+				CreateGUID(),
+				CreateGUID(),
+				<if test="comp_name != null and comp_name != ''" >
+				#{comp_name},
+				</if>
+				<if test="monitor_type != null and monitor_type != ''" >
+				#{monitor_type},
+				</if>
+				<if test="addr != null and addr != ''" >
+				#{addr},
+				</if>
+				<if test="plan_moni_date != null" >
+				#{plan_moni_date},
+				</if>
+				<if test="moni_man_por != null and moni_man_por != ''" >
+				#{moni_man_por},
+				</if>
+				<if test="moni_psn != null and moni_psn != ''" >
+				#{moni_psn},
+				</if>
+				<if test="act_moni_date != null" >
+				#{act_moni_date},
+				</if>
+				<if test="act_monit_por != null and act_monit_por != ''" >
+				#{act_monit_por},
+				</if>
+				<if test="is_break_law != null and is_break_law != ''" >
+				#{is_break_law},
+				</if>
+				<if test="attach_file != null and attach_file != ''" >
+				#{attach_file},
+				</if>
+			)
+	</insert> 
+	
+	<!-- 查询图片视频列表 -->
+	<select id="videoFileEventList"  resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+		select t1.file_name, t2.name as create_user, t1.create_date,t1.name as qt_name, t1.proc_type
+		from QLC_VIDEO_FILE_EVENT t1
+		left join USERS_CIQ t2 on t1.create_user = t2.id
+		where t1.proc_main_id = #{proc_main_id}
+		order by t1.proc_type, t1.create_date desc
+	</select>
+	
+	<!-- 查询随机人员列表 by erikWang -->
+	<select id="findByPseon" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(
+		SELECT 
+			p.id,
+		   	f.APPLY_DATE as apply_time, 
+			f.COMP_NAME as comp_name,
+			p.PSN_NAME,
+			p.BEL_SCOPE,
+			f.PROC_TYPE as proc_type,
+			f.APPLY_TYPE as apply_type
+		 from QLC_EXP_FOOD_PROD_PSN_RDM p 
+		 LEFT JOIN QLC_EXP_FOOD_PROD f ON p.APPLY_NO = f.APPLY_NO
+		 WHERE  1=1
+		 	<if test="id != null and id != ''">
+				AND p.id =#{id}
+			</if>
+			<if test="apply_time_begin != null and apply_time_begin != ''">
+				<![CDATA[ and f.APPLY_DATE >= to_date(#{apply_time_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="apply_time_over != null and apply_time_over != ''">
+				<![CDATA[ and f.APPLY_DATE <= to_date(#{apply_time_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test='comp_name != null and comp_name != ""'>
+		 	AND
+			f.COMP_NAME like '%' || #{comp_name} || '%'	
+			</if>
+			<if test='psn_name != null and psn_name != ""'>
+		 	AND
+			p.PSN_NAME like '%' || #{psn_name} || '%'	
+			</if>
+			<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			p.bel_scope =#{bel_scope}
+			</if>
+			) a 
+     	where  <![CDATA[ rownum <#{lastRcd}) where rid>=#{firstRcd} ]]>
+	</select>
+	
+	<!-- 查询随机人员数据源表 -->
+	<select id="findByBasePseon" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		SELECT
+		u.id,
+		u.name as psn_name,
+		p.psn_prof,
+		p.psn_goodat,
+		p.psn_level,
+		p.in_post,
+		p.bel_scope
+		from QLC_EXP_FOOD_PROD_PSN p
+		left join USERS_CIQ u on p.psn_id=u.id 
+		WHERE 1=1 and u.name is not null
+		and org_code != #{sl_org_code}
+		<if test='psn_prof != null and psn_prof != ""'>
+		 	AND
+			p.psn_prof like '%' || #{psn_prof} || '%'			
+		</if>
+		<if test='psn_goodat != null and psn_goodat != ""'>
+		 	AND
+			p.psn_goodat like '%' || #{psn_goodat} || '%'			
+		</if>
+		<if test='psn_level != null and psn_level != ""'>
+		 	AND
+			p.psn_level =#{psn_level}			
+		</if>
+		<if test='in_post != null and in_post != ""'>
+		 	AND
+			p.in_post =#{in_post}			
+		</if>
+		<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			p.bel_scope =#{bel_scope}			
+		</if>
+		<if test='id != null and id != ""'>
+		 	AND
+			p.psn_id =#{id}			
+		</if>
+	</select>
+	
+	<!-- 查询随机人员数据源表 -->
+	<select id="findByBasePseon2" parameterType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto" resultType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto">
+		SELECT * from qlc_efpe_psn
+		WHERE 1=1 
+		<if test='psnExpertise != null and psnExpertise != ""'>
+			AND ${psnExpertise}
+		</if>
+		<if test='psnLevel != null and psnLevel != ""'>
+		 	AND p.psn_level = #{psnLevel}
+		</if>
+		<if test='psnType != null and psnType != ""'>
+		 	AND p.psn_type = #{psnType}			
+		</if>
+		<if test='levelDept_1 != null and levelDept_1 != ""'>
+		 	AND p.level_dept_1 =#{levelDept_1}			
+		</if>
+		<if test='levelDept_2 != null and levelDept_2 != ""'>
+		 	AND p.level_dept_2 =#{levelDept_2}			
+		</if>
+		<if test='levelDept_3 != null and levelDept_3 != ""'>
+		 	AND p.level_dept_3 =#{levelDept_3}			
+		</if>
+		<if test='in_post != null and in_post != ""'>
+		 	AND p.in_post =#{in_post}			
+		</if>
+	</select>
+	
+	<select id="findPersonCount" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO"  resultType="java.lang.Integer">
+		SELECT 
+		   count(*) 
+		 from QLC_EXP_FOOD_PROD_PSN_RDM p 
+		 LEFT JOIN QLC_EXP_FOOD_PROD f ON p.APPLY_NO = f.APPLY_NO
+		 WHERE  1=1
+		 	<if test="id != null and id != ''">
+				AND p.id =#{id}
+			</if>
+			<if test="apply_time_begin != null and apply_time_begin != ''">
+				<![CDATA[ and f.APPLY_DATE >= to_date(#{apply_time_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="apply_time_over != null and apply_time_over != ''">
+				<![CDATA[ and f.APPLY_DATE <= to_date(#{apply_time_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test='comp_name != null and comp_name != ""'>
+		 	AND
+			f.COMP_NAME like '%' || #{comp_name} || '%'	
+			</if>
+			<if test='psn_name != null and psn_name != ""'>
+		 	AND
+			p.PSN_NAME like '%' || #{psn_name} || '%'	
+			</if>
+			<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			p.bel_scope =#{bel_scope}
+			</if>
+	</select>
+	
+	<select id="findAllPseon" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		SELECT 
+			p.id,
+		   	f.APPLY_DATE as apply_time, 
+			f.COMP_NAME as comp_name,
+			p.PSN_NAME,
+			p.BEL_SCOPE,
+			f.PROC_TYPE as proc_type,
+			f.APPLY_TYPE as apply_type
+		 from QLC_EXP_FOOD_PROD_PSN_RDM p 
+		 LEFT JOIN QLC_EXP_FOOD_PROD f ON p.APPLY_NO = f.APPLY_NO
+		 WHERE  1=1
+			<if test="apply_time_begin != null and apply_time_begin != ''">
+				<![CDATA[ and f.apply_date >= to_date(#{apply_time_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="apply_time_over != null and apply_time_over != ''">
+				<![CDATA[ and f.apply_date <= to_date(#{apply_time_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test='comp_name != null and comp_name != ""'>
+		 	AND
+			f.COMP_NAME like '%' || #{comp_name} || '%'	
+			</if>
+			<if test='psn_name != null and psn_name != ""'>
+		 	AND
+			p.PSN_NAME like '%' || #{psn_name} || '%'	
+			</if>
+			<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			p.bel_scope =#{bel_scope}
+			</if>
+	</select>
+	
+	<select id="findAllPseonNew" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(
+		SELECT 
+        er.id,
+          ea.STARTDATE as apply_time, 
+        ea.ORGNAME as comp_name,
+        er.PSN_NAME,
+        er.BEL_SCOPE,
+        ea.APPLYNOTENAME as proc_type,
+        ea.APPLYTYPENAME as apply_type
+      from QLC_EXP_FOOD_PROD_PSN_RDM er   
+      left JOIN EFPE_ACTIVITY ea on er.APPLY_NO= ea.APPLYCODE
+      -- left JOIN EFPE_APPLY ep on ea.APPLYID=ep.APPLYID
+		 WHERE  1=1
+			<if test="apply_time_begin != null and apply_time_begin != ''">
+				<![CDATA[ and ea.STARTDATE >= to_date(#{apply_time_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="apply_time_over != null and apply_time_over != ''">
+				<![CDATA[ and ea.STARTDATE <= to_date(#{apply_time_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test='comp_name != null and comp_name != ""'>
+		 	AND
+			ep.ORGNAME like '%' || #{comp_name} || '%'	
+			</if>
+			<if test='psn_name != null and psn_name != ""'>
+		 	AND
+			er.PSN_NAME like '%' || #{psn_name} || '%'	
+			</if>
+			<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			er.bel_scope =#{bel_scope}
+			</if>
+			<if test='type != null and type != ""'>
+		 	AND
+			er.type =#{type}
+			</if>
+			order by ea.STARTDATE desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+		<select id="findAllPseonNewCount" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="java.lang.Integer">
+		SELECT 
+          count(er.id)
+      from QLC_EXP_FOOD_PROD_PSN_RDM er   
+      left JOIN EFPE_ACTIVITY ea on er.APPLY_NO= ea.APPLYCODE
+		 WHERE  1=1
+			<if test="apply_time_begin != null and apply_time_begin != ''">
+				<![CDATA[ and ea.STARTDATE >= to_date(#{apply_time_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="apply_time_over != null and apply_time_over != ''">
+				<![CDATA[ and ea.STARTDATE <= to_date(#{apply_time_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test='comp_name != null and comp_name != ""'>
+		 	AND
+			ep.ORGNAME like '%' || #{comp_name} || '%'	
+			</if>
+			<if test='psn_name != null and psn_name != ""'>
+		 	AND
+			er.PSN_NAME like '%' || #{psn_name} || '%'	
+			</if>
+			<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			er.bel_scope =#{bel_scope}
+			</if>
+			<if test='type != null and type != ""'>
+		 	AND
+			er.type =#{type}
+			</if>
+	</select>
+	
+	<select id="findAllPseonDown" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		SELECT 
+        er.id,
+          ea.STARTDATE as apply_time, 
+        ea.ORGNAME as comp_name,
+        er.PSN_NAME,
+        er.BEL_SCOPE,
+        ea.APPLYNOTENAME as proc_type,
+        ea.APPLYTYPENAME as apply_type
+      from QLC_EXP_FOOD_PROD_PSN_RDM er   
+      left JOIN EFPE_ACTIVITY ea on er.APPLY_NO= ea.APPLYCODE
+      -- left JOIN EFPE_APPLY ep on ea.APPLYID=ep.APPLYID
+		 WHERE  1=1
+			<if test="apply_time_begin != null and apply_time_begin != ''">
+				<![CDATA[ and ea.STARTDATE >= to_date(#{apply_time_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="apply_time_over != null and apply_time_over != ''">
+				<![CDATA[ and ea.STARTDATE <= to_date(#{apply_time_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test='comp_name != null and comp_name != ""'>
+		 	AND
+			ep.ORGNAME like '%' || #{comp_name} || '%'	
+			</if>
+			<if test='psn_name != null and psn_name != ""'>
+		 	AND
+			er.PSN_NAME like '%' || #{psn_name} || '%'	
+			</if>
+			<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			er.bel_scope =#{bel_scope}
+			</if>
+	</select>
+	
+	
+	<select id="findRadmPeson" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		SELECT 
+        er.id,
+        ea.STARTDATE as apply_time, 
+        ea.ORGNAME as comp_name,
+        er.PSN_NAME,
+        er.BEL_SCOPE,
+        ea.APPLYNOTENAME as proc_type,
+        ea.APPLYTYPENAME as apply_type
+      from QLC_EXP_FOOD_PROD_PSN_RDM er   
+      left JOIN EFPE_ACTIVITY ea on er.APPLY_NO= ea.APPLYCODE
+      -- left JOIN EFPE_APPLY ep on ea.APPLYID=ep.APPLYID
+		 WHERE  1=1
+		 	<if test='psn_id != null and psn_id != ""'>
+		 	AND
+			er.psn_id =#{psn_id}
+			</if>
+			<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			er.bel_scope =#{bel_scope}
+			</if>
+			order by ea.STARTDATE desc
+	</select>
+	
+	<select id="findFoodProdReport" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdReportDto" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdReportDto">
+		SELECT 
+       *
+      from EFPE_YEAR_REPORT 
+		 WHERE 
+			userId =#{userId}
+			order by startdate desc
+	</select>
+<!-- 			and  rownum =1  -->
+	
+	<!-- **** insert ******************************************************* -->
+	 <insert id="insertPeson" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" statementType="CALLABLE" >
+			insert into QLC_EXP_FOOD_PROD_PSN_RDM
+				(
+					id,
+					<if test="apply_no != null and apply_no != ''" >
+					APPLY_NO,
+					</if>
+					<if test="psn_id != null and psn_id != ''" >
+					PSN_ID,
+					</if>
+					<if test="psn_name != null and psn_name != ''" >
+					PSN_NAME,
+					</if>
+					<if test="psn_prof != null and psn_prof != ''">
+					PSN_PROF,
+					</if>
+					<if test="psn_goodat != null and psn_goodat != ''">
+					PSN_GOODAT,
+					</if>
+					<if test="psn_level != null and psn_level != ''">
+					PSN_LEVEL,
+					</if>
+					<if test="in_post != null and in_post != ''">
+					IN_POST,
+					</if>
+					<if test="bel_scope != null and bel_scope !=''" >
+					BEL_SCOPE,
+					</if>
+					<if test="rdm_date != null " >
+					RDM_DATE,
+					</if>
+					<if test="rdm_user != null and rdm_user != ''" >
+					RDM_USER,
+					</if>
+					<if test="rdm_type != null and rdm_type != ''" >
+					RDM_TYPE
+					</if>
+				)
+			values 
+				(
+					CreateGUID(),
+					<if test="apply_no != null and apply_no != ''" >
+					#{apply_no},
+					</if>
+					<if test="psn_id != null and psn_id != ''" >
+					#{psn_id},
+					</if>
+					<if test="psn_name != null and psn_name != ''" >
+					#{psn_name},
+					</if>
+					<if test="psn_prof != null and psn_prof != ''" >
+					#{psn_prof},
+					</if>
+					<if test="psn_goodat != null and psn_goodat != ''" >
+					#{psn_goodat},
+					</if>
+					<if test="psn_level != null and psn_level != ''" >
+					#{psn_level},
+					</if>
+					<if test="in_post != null and in_post != ''" >
+					#{in_post},
+					</if>
+					<if test="bel_scope != null and bel_scope != ''" >
+					#{bel_scope},
+					</if>
+					<if test="rdm_date != null " >
+					#{rdm_date},
+					</if>
+					<if test="rdm_user != null and rdm_user != ''" >
+					#{rdm_user},
+					</if>
+					<if test="rdm_type != null and rdm_type != ''" >
+					#{rdm_type}
+					</if>
+				)
+	</insert> 
+	
+	<select id="findCheckList" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckDto">
+		select
+			*
+		from
+			QLC_EXP_FOOD_PROD_CHECK
+		where
+			apply_no = #{applyid}
+	</select>
+	
+	<select id="selectReport"  parameterType="com.dpn.ciqqlc.standard.model.FileInfoDto"  resultType="com.dpn.ciqqlc.standard.model.FileInfoDto">
+		select * from QLC_FILE_INFO where main_id = #{main_id} and remark = #{remark}
+	</select>
+	
+</mapper>

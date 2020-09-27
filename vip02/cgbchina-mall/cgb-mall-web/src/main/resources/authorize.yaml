@@ -1,0 +1,91 @@
+#
+# typical syntax
+# auths:
+#   - url: /magic/url
+#     types:
+#       - BIG_BROTHER
+#       - BIG_SISTER
+#     roles:
+#       - BOSS
+#       - WTF
+#
+auths:
+  - url : /images/user
+    types:
+       - ALL
+
+  - url : /api/cart
+    types:
+       - ALL
+
+  - url: /api/tradeInfos
+    types:
+       - ALL
+
+  - url: /password
+    types:
+       - ALL
+
+  - url: /design/.*
+    types :
+       - ALL
+
+  - url: /api/design/.*
+    types:
+       - ALL
+
+  - url: /api/seller/.*
+    types:
+       - ALL
+
+  - url: /seller/.*
+    types:
+       - ALL
+
+  - url: /api/buyer/.*
+    types:
+       - ALL
+
+  - url: /buyer/.*
+    types:
+      - ALL
+
+  - url: /api/user/.*
+    types:
+      - ALL
+
+  - url: /user/.*
+    types:
+       - ALL
+
+  - url: /api/mall/Favorite/.*
+    types:
+      - ALL
+
+  - url: /api/goodsConsult/addGoodsConsult
+    types:
+      - ALL
+
+  - url: /api/goodsDetail/drawCoupon
+    types:
+      - ALL
+
+  - url: /api/goodsDetail/addToGoodsCart
+    types:
+      - ALL
+
+  - url: /api/pointsGift/addToGiftCart
+    types:
+      - ALL
+
+  - url: /api/pointsGift/getUserName
+    types:
+      - ALL
+
+  - url: /order/.*
+    types:
+      - ALL
+
+  - url: /api/goodsDetail/findUserPoints
+    types:
+      - ALL

@@ -1,0 +1,108 @@
+{{#component "price-system-maintenance js-component"}}
+    <p class="components-title"><strong>积分设置 > 价格体系维护维护</strong></p>
+
+    <ul class="nav nav-tabs">
+        <li class="active js-tab-li-first"><a href="javascript:void(0)">金普卡参数</a></li>
+        <li class="js-tab-li-secend"><a href="javascript:void(0)">其他级别参数</a></li>
+    </ul>
+    <div class="js-tab-first">
+        <div class="add-new right">
+            <button class="btn btn-success btn-sm js-gold-add m-b-10">新增</button>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th width="4%">选择</th>
+                <th width="9%">基础价格下限</th>
+                <th width="9%">基础价格上限</th>
+                <th width="9%">金普卡参数</th>
+                <th width="9%">创建用户</th>
+                <th width="9%">创建日期</th>
+                <th width="9%">创建时间</th>
+                <th width="9%">最近修改用户</th>
+                <th width="9%">最近修改日期</th>
+                <th width="9%">最近修改时间</th>
+                <th width="15%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each _DATA_.data}}
+                <tr data-data="{{json this}}">
+                    <td><input type="checkbox" name="checkGold"/></td>
+                    <td class="price-base-min">{{basePriceMin}}</td>
+                    <td class="price-base-max">{{basePriceMax}}</td>
+                    <td class="price-param">{{cardParam}}</td>
+                    <td class="price-create-user">{{creatUser}}</td>
+                    <td class="price-create-date">{{creatDate}}</td>
+                    <td class="price-create-time">{{creatTime}}</td>
+                    <td class="price-modify-user">{{modifyUser}}</td>
+                    <td class="price-modify-date">{{modifyDate}}</td>
+                    <td class="price-modify-time">{{modifyTime}}</td>
+                    <td>
+                        <button class="btn btn-sm js-gold-edit">编辑</button>
+                        <button id="{{id}}" class="btn btn-sm" data-toggle="confirm"
+                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                data-event="confirm:gold-delete">删除</button>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <div class="m-b-10 m-l-10">
+            <input type="checkbox" class="js-gold-all-check"/><span>全选</span>
+            <a href="javascript:void(0)" class="js-all-delete">删除</a>
+        </div>
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    </div>
+
+    <div class="js-tab-second" style="display: none">
+        <div class="add-new right">
+            <button class="btn btn-success btn-sm js-other-add m-b-10">新增</button>
+        </div>
+        <table class="table" >
+            <thead>
+            <tr data-data="{{json this}}">
+                <th width="4%">选择</th>
+                <th width="9%">体系代码</th>
+                <th width="9%">体系名称</th>
+                <th width="9%">级别参数</th>
+                <th width="9%">创建用户</th>
+                <th width="9%">创建日期</th>
+                <th width="9%">创建时间</th>
+                <th width="9%">最近修改用户</th>
+                <th width="9%">最近修改日期</th>
+                <th width="9%">最近修改时间</th>
+                <th width="15%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each _DATA_.data}}
+                <tr data-data="{{json this}}">
+                    <td><input type="checkbox" name="checkOther"/></td>
+                    <td class="system-code">{{systemCode}}</td>
+                    <td class="system-name">{{systemName}}</td>
+                    <td class="system-level-param">{{levelParam}}</td>
+                    <td class="system-create-user">{{creatUser}}</td>
+                    <td class="system-create-date">{{creatDate}}</td>
+                    <td class="system-create-time">{{creatTime}}</td>
+                    <td class="system-modify-user">{{modifyUser}}</td>
+                    <td class="system-modify-date">{{modifyDate}}</td>
+                    <td class="system-modify-time">{{modifyTime}}</td>
+                    <td>
+                        <button class="btn btn-sm js-other-edit">编辑</button>
+                        <button id="{{id}}" class="btn btn-sm " data-toggle="confirm"
+                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                data-event="confirm:other-delete">删除</button>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <div class="m-b-10 m-l-10">
+            <input type="checkbox" class="js-other-all-check"/><span>全选</span>
+            <a href="javascript:void(0)" class="js-all-delete">删除</a>
+        </div>
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    </div>
+
+{{/component}}

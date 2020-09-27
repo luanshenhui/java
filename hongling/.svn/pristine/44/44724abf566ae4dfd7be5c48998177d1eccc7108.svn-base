@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="hongling.entity.StyleProcess" table="StyleProcess">
+        <id name="ID" type="integer">
+			<column name="ID" />
+			<generator class="increment"></generator>
+		</id>
+		<!-- 款式号 -->
+		<property name="styleCode" type="string">
+			<column name="styleCode" length="20" />
+		</property>
+		<!-- 面料 -->
+		<property name="fabricCode" type="string">
+			<column name="fabricCode" length="200" />
+		</property>
+		<!-- 款式工艺 -->
+		<property name="process" type="string">
+			<column name="process" length="2000" />
+		</property>
+		<!-- 特殊工艺 -->
+		<property name="specialProcess" type="string">
+			<column name="specialProcess" length="200" />
+		</property>
+		<!-- 款式工艺 -->
+		<property name="processCode" type="string">
+			<column name="processCode" length="2000" />
+		</property>
+		<!-- 特殊工艺 -->
+		<property name="specialProcessCode" type="string">
+			<column name="specialProcessCode" length="200" />
+		</property>
+		<!-- 衬衣长短袖（长袖：3028，短袖：3029） -->
+		<property name="shirt" type="integer">
+			<column name="shirt" />
+		</property>
+	</class>
+</hibernate-mapping>

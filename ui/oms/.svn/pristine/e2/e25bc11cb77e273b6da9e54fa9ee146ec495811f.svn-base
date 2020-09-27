@@ -1,0 +1,109 @@
+package cn.rkylin.oms.system.unit.dao;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.config.BizTypeDefine;
+import cn.rkylin.oms.system.config.ElementDefine;
+import cn.rkylin.oms.system.config.OrgnizationConfig;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+@Repository(value = "unitDAO")
+public class UnitDAOImpl implements IUnitDAO {
+	@Autowired
+	protected IDataBaseFactory dao;
+	@Autowired
+	private SqlSession sqlSession;
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getUnitByCondition(WF_ORG_UNIT unitParam) throws Exception {
+		return dao.getUnitByCondition(unitParam);
+	}
+
+//	@Override
+//	@SuppressWarnings({ "rawtypes", "unchecked" })
+//	public Map getExtInfo(String bizType, String idColumnValue) {
+//		// 扩展表的表名
+//		String extTableName = "";
+//		// 扩展表的主键字段名
+//		String idColumnName = "";
+//		Connection conn = null;
+//		Statement stmt = null;
+//		Map returnMap = new HashMap();
+//		Map temp = new HashMap();
+//		try {
+//			// 确定tableName和idColumnName
+//			BizTypeDefine bizTypeDefine = OrgnizationConfig.getBizTypeDefine(bizType);
+//			extTableName = bizTypeDefine.getTable();
+//			if (bizTypeDefine.getElementList() != null || bizTypeDefine.getElementList().size() > 0) {
+//				for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+//					ElementDefine ed = (ElementDefine) bizTypeDefine.getElementList().get(j);
+//					if (ed.getName().equalsIgnoreCase("id")) {
+//						idColumnName = ed.getColumn();
+//						break;
+//					}
+//				}
+//			} else {
+//				return new HashMap();
+//			}
+//
+//			String selectSQL = "SELECT * FROM " + extTableName + " WHERE " + idColumnName + " = '" + idColumnValue
+//					+ "'";
+//			conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+//			stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery(selectSQL);
+//			if (rs.next()) {
+//				for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+//					temp.put(rs.getMetaData().getColumnName(i), rs.getString(i));
+//				}
+//				if (bizTypeDefine.getElementList() != null || bizTypeDefine.getElementList().size() > 0) {
+//					for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+//						ElementDefine ed = (ElementDefine) bizTypeDefine.getElementList().get(j);
+//						if (ed.getName().equalsIgnoreCase("id")) {
+//							idColumnName = ed.getColumn();
+//							continue;
+//						}
+//						returnMap.put(ed.getName(), temp.get(ed.getColumn()) == null ? "" : temp.get(ed.getColumn()));
+//					}
+//				}
+//			}
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				if (stmt != null)
+//					stmt.close();
+//				if (conn != null)
+//					conn.close();
+//			} catch (Exception ex) {
+//			}
+//		}
+//		return returnMap;
+//	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getRootUnit(String userId) throws Exception {
+		return dao.findList("selectRootUnit", userId);
+	}
+
+	@SuppressWarnings({ "unused", "rawtypes", "unchecked" })
+	@Override
+	public List getSubUnit(String userId, String parentUnitID) throws Exception {
+		List subTree = new ArrayList();
+		HashMap paramMap = new HashMap();
+		paramMap.put("userID", userId);
+		paramMap.put("parentUnitID", parentUnitID);
+		return subTree = dao.findList("selectSubUnit", paramMap);
+	}
+
+}

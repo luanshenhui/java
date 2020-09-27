@@ -1,0 +1,20 @@
+<li class="add-attr-li" style="list-style-type: none;">
+    <form class="add-attribute-form form" onkeydown="if(event.keyCode==13){return false;}">
+        <div class="form-line">
+            <div class="form-part">
+                <input type="radio" name="valueType" value="1" checked/>可枚举
+            </div>
+            <div class="form-part">
+                <input type="radio" name="valueType" value="0">不可枚举
+            </div>
+            <div class="input-group input-group-append" style="display:inline-table;position:relative;">
+                <input type="text" class="update-category-input" name="name">
+                <span class="input-group-btn">
+                  <button class="btn btn-success btn-small js-create-attribute" type="button">添加</button>
+                </span>
+            </div>
+            <button type="button" class="btn btn-success btn-small js-attribute-cancel" style="margin-left:20px;">取消
+            </button>
+        </div>
+    </form>
+</li>

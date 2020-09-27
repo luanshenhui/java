@@ -1,0 +1,188 @@
+package hongling.service.assemble;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import jxl.Cell;
+import jxl.CellType;
+import jxl.DateCell;
+import jxl.Sheet;
+import jxl.Workbook;
+import centling.business.BlDealManager;
+import centling.entity.Deal;
+import chinsoft.business.CashManager;
+import chinsoft.business.MemberManager;
+import chinsoft.core.DataAccessObject;
+import chinsoft.entity.Cash;
+import chinsoft.entity.Member;
+
+public class ParseImportTrafficDealUtil {
+	
+	private BlDealManager dmDao=new BlDealManager();
+	private CashManager cashManager=new CashManager();
+	MemberManager mmDao =new MemberManager();
+	
+	public String[] parseExcel(String path) throws Exception {
+		InputStream is = null;
+		Workbook workbook = null;
+		Sheet sheet = null;
+		int count=0;
+		int countImport=0;
+		String [] info =new String[2];
+		info[1]="";
+		try {
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			is = new FileInputStream(path);
+			workbook = Workbook.getWorkbook(is);
+
+			for (int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++) {
+				sheet = workbook.getSheet(numSheet);
+				if (sheet == null) {
+					continue;
+				}
+				int column = sheet.getColumns();
+				int row = sheet.getRows();
+				System.out.println("共有" + row + "行，" + column + "列数据");
+				int companyNum=0;
+				for(int i=3;i<row;i++){
+						Cell cellDeliveyrId =sheet.getCell(0,i);
+						String deliveryId = cellDeliveyrId.getContents();
+						if(null!=deliveryId&&!"".equals(deliveryId)){
+							count =count+1;
+							Cell cellTime =sheet.getCell(1,i);
+							Date date=null;
+							if(cellTime.getType() == CellType.DATE) { 
+								DateCell datecell = (DateCell)cellTime; 
+								date = datecell.getDate(); 
+							} 
+							Cell cellMemberName =sheet.getCell(2,i);
+							String memberName=cellMemberName.getContents();
+							Cell cellRMB = sheet.getCell(3,i);
+							String rmb=cellRMB.getContents();
+							double rMoney=Double.parseDouble(rmb);
+							Cell cellDollar = sheet.getCell(4,i);
+							String dollar=cellDollar.getContents();
+							double uMoney=Double.parseDouble(dollar);
+							Cell cellCompany = sheet.getCell(5,i);
+							String companyName=cellCompany.getContents();
+							if(null==companyName||"".equals(companyName)){
+								cellCompany = sheet.getCell(5,companyNum);
+								companyName=cellCompany.getContents();
+							}else{
+								companyNum=i;
+							}
+							Cell cellCounterman=sheet.getCell(6,i);
+							String countMan = cellCounterman.getContents();
+							Member member=mmDao.getMemberByUsername(memberName);
+						
+							//确定参数是member名字 还有币种一样
+							if(null!=member){
+								String memberId=member.getID();
+								//或者是根据主键获取用户id，但是现在输入的只有名字（已经暂时确认member的名字没有重复的值
+								Deal deal = new Deal();
+								deal.setDealDate(date);
+								deal.setMemberId(member.getID());
+								deal.setDealItemId(45);
+								//导运费 备注 追加 发货日期 运单号
+								deal.setMemo(countMan+" "+sdf.format(date)+" "+deliveryId);
+								deal.setDeliveryId(deliveryId);
+								int moneyflag=0;
+								Cash cash = cashManager.getCashByMemberID(memberId);
+								if (cash == null) {
+									Member parentMember = mmDao.getMemberByID(member.getParentID());
+									cash=cashManager.getCashByMemberID(parentMember.getID());
+									moneyflag=parentMember.getMoneySignID();
+								}else{
+									moneyflag=member.getMoneySignID();
+								}
+								if (cash == null) {
+									info[0]=memberName+"failed";
+									info[1]+="<br/>工作薄 中用户("+memberName+")cash为空<br/>";
+									break;
+								}else if (cash.getNoticeNum() == null || cash.getStopNum() == null || cash.getNum() == null) {
+									info[0]=memberName+"failed";
+									info[1]+="<br/>工作薄 中用户("+memberName+") 账户余额为空，或者停用金额为空，或者提醒金额为空<br/>";
+									break;
+								}
+								if(moneyflag==10361){
+									deal.setAccountOut(rMoney);
+								}else if(moneyflag==10360){
+									deal.setAccountOut(uMoney);
+								}
+									// 账户余额不为空，停用金额不为空，提醒金额不为空
+									java.math.BigDecimal c = new java.math.BigDecimal(cash.getNum());// 扣款前余额
+									java.math.BigDecimal d = new java.math.BigDecimal(deal.getAccountOut()); // 订单金额
+									Double localNum = c.subtract(d).doubleValue(); // 扣款后余额
+//										if (localNum >= cash.getStopNum() || cash.getNoticeNum() < 0) {
+										// 当前余额小于和等于停用金额或者提醒金额为负数，执行扣款
+										deal.setMemo(deal.getMemo()+memberName);
+										deal.setLocalNum(localNum);
+										Session session= DataAccessObject.openSessionFactory().openSession();
+										Transaction transaction=session.beginTransaction();
+										try {
+											List<Deal> dealList=dmDao.getDeals(deal.getMemberId(),deal.getDeliveryId(),deal.getDealItemId());
+											//List<DealDto> dealDtoList=dmDao.getDeals(deal.getMemberId(), deal.getDealDate(), new Date());
+											if(null==dealList){
+												session.saveOrUpdate(deal);
+												cash.setNum(localNum);
+												session.saveOrUpdate(cash);
+												transaction.commit();
+												countImport++;
+											}else if(dealList.size()==0){
+												session.saveOrUpdate(deal);
+												cash.setNum(localNum);
+												session.saveOrUpdate(cash);
+												transaction.commit();
+												countImport++;
+											}else{
+												info[0]=memberName+"failed";
+												info[1]+="<br/>工作薄 中用户("+memberName+"["+deal.getDeliveryId()+"]"+") 运费已经导入!<br/>";
+												break;
+											}
+										} catch (Exception e) {
+											e.printStackTrace();
+											transaction.rollback();
+										}finally{
+											session.close();
+										}
+//										} else {
+//											info[0]=memberName+"failed";
+//											info[1]+="工作薄 中用户("+memberName+") 余额不足无法扣费!";
+//											break;
+//										}
+							}
+						}else{
+							workbook.close();
+							is.close();
+							info[0]="success";
+							info[1]+="<br/>"+sheet.getName()+"共有 "+count+"条记录，插入"+ countImport +"条记录<br/>";
+							return info;
+						}
+						
+				}
+			}
+			// 操作完成时，关闭对象，释放占用的内存空间
+			workbook.close();
+			is.close();
+		} catch (Exception e) {
+			info[0]="failed";
+			info[1]="<br/>工作薄 " + sheet.getName() + " 信息不完整<br/>";
+			return info;
+		} finally {
+			if (is != null) {
+				is.close();
+			}
+		}
+		info[0]="success";
+		info[1]+="<br/>"+sheet.getName()+"共有 "+count+"条记录，插入"+ countImport +"条记录";
+		
+		return info;
+
+	}
+}

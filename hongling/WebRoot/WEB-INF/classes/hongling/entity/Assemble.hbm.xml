@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="hongling.entity.Assemble" table="STYLE">
+        <id name="ID" type="integer">
+			<column name="ID" />
+			<generator class="increment"></generator>
+		</id>
+		<property name="code" type="string">
+			<column name="CODE" length="20" />
+		</property>
+
+		<!-- 中文简介 -->
+		<property name="titleCn" type="string">
+			<column name="TITLE_CN" length="2000" />
+		</property>
+
+		<!-- 英文文简介 -->
+		<property name="titleEn" type="string">
+			<column name="TITLE_EN" length="2000" />
+		</property>
+		<!--服装分类 -->
+		<property name="clothingID" type="integer">
+			<column name="ClothingID" />
+		</property>
+
+		<!-- 款式风格 -->
+		<property name="styleID" type="integer">
+			<column name="STYLEID" />
+		</property>
+		<!-- 款式工艺 -->
+		<property name="process" type="string">
+			<column name="PROCESS" length="2000" />
+		</property>
+		<!-- 类似品牌 -->
+		<property name="brands" type="string">
+			<column name="BRANDS" length="200"></column>
+		</property>
+		<!-- 适用面料 -->
+		<property name="fabrics" type="string">
+			<column name="FABRICS" length="200" />
+		</property>
+
+		<!-- 默认面料 -->
+		<property name="defaultFabric" type="string">
+			<column name="DEFAULTFABRIC" length="200" />
+		</property>
+
+		<!-- 特殊工艺 -->
+		<property name="specialProcess" type="string">
+			<column name="SPECIALPROCESS" length="200" />
+		</property>
+		<!-- 状态 -->
+		<property name="status" type="integer">
+			<column name="STATUS" />
+		</property>
+		<!-- 创建人 -->
+		<property name="createBy" type="string">
+			<column name="CREATEBY" length="50" />
+		</property>
+		<!-- 创建时间 -->
+		<property name="createTime" type="date">
+			<column name="CREATETIME" />
+		</property>
+		<!-- 关闭人 -->
+		<property name="closeBy" type="string">
+			<column name="CLOSEBY" length="50" />
+		</property>
+		<!-- 关闭时间 -->
+		<property name="closeTime" type="date">
+			<column name="CLOSETIME" />
+		</property>
+		<!-- 衬衣长短袖（长袖：5000，短袖：5001） -->
+		<property name="shirt" type="integer">
+			<column name="SHIRT" />
+		</property>
+	</class>
+</hibernate-mapping>

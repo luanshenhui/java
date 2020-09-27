@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.apollo.mapper.projectShopMapper">
+	<sql id="columns">ID,SHOP_NAME,ERP_SHOP_NAME,ERP_SHOP_CODE,PLAT_ID,PLAT_NAME,PROJECT_ID,CREATE_DT</sql>
+	<sql id="tableName">fm_project_shop</sql>
+
+	<select id="findProjectShop" resultType="java.util.Map">
+		select
+		<include refid="columns" />
+		from
+		<include refid="tableName" />
+		t
+		where 1=1 and t.shop_status = 1
+		<if test="null != projectId and '' != projectId">
+			and t.project_id = #{projectId}
+		</if>
+	</select>
+
+	<update id="updateProjectShop" parameterType="cn.rkylin.core.ApolloMap">
+		update fm_project_shop set SHOP_NAME = #{shopName},ERP_SHOP_NAME =
+		#{erpShopName},ERP_SHOP_CODE = #{erpShopCode},PLAT_ID =
+		#{platId} , PLAT_NAME = #{platName}
+		where ID = #{shopId} AND
+		PROJECT_ID = #{projectId}
+	</update>
+
+	<insert id="addProjectShop" parameterType="cn.rkylin.core.ApolloMap">
+		insert into fm_project_shop
+		(SHOP_NAME,ERP_SHOP_NAME,ERP_SHOP_CODE,PLAT_ID,PLAT_NAME,SHOP_STATUS,PROJECT_ID,CREATE_DT)
+		VALUES(#{shopName},#{erpShopName},#{erpShopCode},#{platId},#{platName},#{shopStatus},#{projectId},now())
+	</insert>
+
+
+</mapper>

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--注释-->
+<html>
+	<head>		
+		<script type="text/javascript" src="third.js"></script>		
+	</head>
+	<body>
+		<form id="form1">
+			<input type="button" value="添加新节点"
+			onclick="addNewNode();" />		
+			<br />
+			<select id="s1" onchange="showOptions();">
+				<option>--请选择--</option>
+				<option>Java</option>
+				<option>C++</option>
+				<option>PHP</option>
+			</select>方向
+			<select id="s2">
+				<option>--请选择--</option>
+			</select>课程
+			<br />
+			产品名称：<input type="text" id="txtName" /><br />
+			产品价格：<input type="text" id="txtPrice" /><br />
+			<input type="button" value="保存" onclick="saveData();" />
+			<table border="1" id="t1">
+				<tr>
+					<td>名称</td>
+					<td>价格</td>
+				</tr>
+				<tr>
+					<td>aa</td>
+					<td>10.00</td>
+				</tr>
+			</table>
+			<br />
+			<input type="button" value="页面的跳转" onclick="testPage();" />
+			<br />
+			<input type="button" value="遍历navigator对象的所有属性" onclick="testNavi();" />
+			<div style="border:1px solid red;width:200px;height:200px;" onclick="alert(event.srcElement);">
+				<p style="border:1px solid green;">
+					aa
+					<input type="button" value="click me" />
+				</p>
+			</div>
+
+			改进简单计算器：
+			<div style="border:1px solid black;" 
+			onclick="cal(event);">
+				<input type="button" value="1" />
+				<input type="button" value="2" />
+				<input type="button" value="3" />
+				<input type="button" value="4" />
+				<input type="button" value="+" />
+				<input type="button" value="-" />
+				<input type="button" value="=" />
+				<br />
+				<input type="text" id="txtNumber" />
+			</div>
+			<input type="button" value="使用Object封装" onclick="testObject();" />
+			<input type="button" value="使用自定义对象" onclick="testOwnObj();" />
+			<input type="button" value="使用Json" onclick="testJSon();" />
+		</form>
+	</body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ApplyPayment">
+    <resultMap id="ApplyPayMap" type="cn.com.cgbchina.batch.model.ApplyPayModel">
+        <result property="goodsNm" column="goods_nm"/>
+        <result property="goodsNum" column="goods_num"/>
+        <result property="totalMoney" column="total_money"/>
+        <result property="calMoney" column="cal_money"/>
+        <result property="goodssendFlag" column="goodssend_flag"/>
+        <result property="batchNo" column="batch_no"/>
+        <result property="sinStatusNm" column="sin_status_nm"/>
+        <result property="balanceStatus" column="balance_status"/>
+        <result property="vendorSnm" column="vendor_snm"/>
+        <result property="orderId" column="order_id"/>
+        <result property="cardno" column="cardno"/>
+        <result property="contNm" column="cont_nm"/>
+        <result property="xid" column="xid"/>
+    </resultMap>
+
+    <select id="findHisForReq" parameterType="Map" resultMap="ApplyPayMap">
+        select o.goods_nm,o.goods_num,o.total_money,o.cal_money,
+        o.goodssend_flag,o.batch_no,o.sin_status_nm,o.balance_status,
+        o.vendor_snm,o.order_id,o.cardno,ho.cont_nm,i.xid from tblorder_history o
+        left join tblordermain_history ho on o.ordermain_id = ho.ordermain_id
+        left join tbl_item i on i.code = o.goods_id
+        <include refid="conditionsLike"/>
+        and o.act_type != #{actTypeSecond}
+        and o.cur_status_id IN (#{curStatusReceive},#{curStatusBack},#{curStatusUnBack})
+        order by order_id desc
+    </select>
+
+    <select id="findHisReq" parameterType="Map" resultMap="ApplyPayMap">
+        select o.goods_nm,o.goods_num,o.total_money,o.cal_money,
+        o.goodssend_flag,o.batch_no,o.sin_status_nm,o.balance_status,
+        o.vendor_snm,o.order_id,o.cardno,ho.cont_nm,i.xid from tblorder_history o
+        left join tblordermain_history ho on o.ordermain_id = ho.ordermain_id
+        left join tbl_item i on i.code = o.goods_id
+        <include refid="conditionsLike"/>
+        order by order_id desc
+    </select>
+
+    <select id="findOrdForReq" parameterType="Map" resultMap="ApplyPayMap">
+        select o.goods_nm,o.goods_num,o.total_money,o.cal_money,
+        o.goodssend_flag,o.batch_no,o.sin_status_nm,o.balance_status,
+        o.vendor_snm,o.order_id,o.cardno,ho.cont_nm,i.xid from tbl_order o
+        left join tbl_order_main ho on o.ordermain_id = ho.ordermain_id
+        left join tbl_item i on i.code = o.goods_id
+        <include refid="conditionsLike"/>
+        and (o.act_type != '2' or o.act_type is null)
+        and o.cur_status_id IN (#{curStatusReceive},#{curStatusBack},#{curStatusUnBack})
+        order by order_id desc
+    </select>
+
+    <select id="findOrdReq" parameterType="Map" resultMap="ApplyPayMap">
+        select o.goods_nm,o.goods_num,o.total_money,o.cal_money,
+        o.goodssend_flag,o.batch_no,o.sin_status_nm,o.balance_status,
+        o.vendor_snm,o.order_id,o.cardno,ho.cont_nm,i.xid from tbl_order o
+        left join tbl_order_main ho on o.ordermain_id = ho.ordermain_id
+        left join tbl_item i on i.code = o.goods_id
+        <include refid="conditionsLike"/>
+        order by order_id desc
+    </select>
+
+    <sql id="conditionsLike">
+        <where>
+            <if test="startTime !=null">and <![CDATA[ o.create_time >= #{startTime} ]]></if>
+            <if test="endTime !=null">and <![CDATA[ o.create_time <= #{endTime} ]]></if>
+            <if test="sinStatusId !=null and sinStatusId neq '0000'">and o.sin_status_id = #{sinStatusId}</if>
+            <if test="sinStatusId !=null and sinStatusId eq '0000'">and (o.sin_status_id is null or o.sin_status_id = #{sinStatusId})</if>
+            <if test="ordertypeId !=null">and o.ordertype_id = #{ordertypeId}</if>
+            <if test="cardno !=null">and o.cardno LIKE concat(concat('%',#{cardno}),'%')</if>
+            <if test="orderId !=null">and o.order_id LIKE concat(#{orderId},'%')</if>
+            <if test="vendorSnm !=null">and o.vendor_snm LIKE concat(concat('%',#{vendorSnm}),'%')</if>
+            <if test="delFlag !=null">and o.del_flag = #{delFlag}</if>
+            <if test="ordermainId !=null">and o.ordermain_id like concat(#{ordermainId},'%')</if>
+            <if test="vendorId !=null">and o.vendor_id = #{vendorId}</if>
+            <if test="goodsNm !=null">and o.goods_nm LIKE concat(concat('%',#{goodsNm}),'%')</if>
+            <if test="tabNumber !=null">and o.cur_status_id IN ('0310','0334','0335')</if>
+            <if test="miaoshaActionFlag !=null">and o.miaosha_action_flag = #{miaoshaActionFlag}</if>
+            <if test="goodssendFlag !=null">and o.goodssend_flag = #{goodssendFlag}</if>
+        </where>
+    </sql>
+</mapper>
+
+

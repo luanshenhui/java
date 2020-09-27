@@ -1,0 +1,45 @@
+{{#component "js-component dictionary"}}
+    <p class="components-title"><strong>字典管理</strong></p>
+    {{#authorial "dicManage_add"}}
+        <div class="add-dic">
+            <button class="btn btn-small btn-success js-dictionary-new">添加字典</button>
+        </div>
+    {{/authorial}}
+    <table class="table table-horizontal center-text">
+        <thead>
+        <tr data-data="{{_DATA_}}">
+            <th width="5%">序号</th>
+            <th width="5%">字典编码</th>
+            <th width="10%">字典名</th>
+            <th width="30%">字典表达式</th>
+            <th width="10%">字典描述</th>
+            <th width="5%">创建时间</th>
+            <th width="10%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}" data-data="{{json this}}" data="{{json _DIC_.sex}}">
+                <td>{{id}}</td>
+                <td>{{dictCode}}</td>
+                <td>{{dictName}}</td>
+                <td>{{dictExpress}}</td>
+                <td>{{description}}</td>
+                <td>{{formatDate createTime}}</td>
+                <td>
+                    {{#authorial "dicManage_edit"}}
+                        <button class="btn btn-small  btn-info js-dic-edit">编辑</button>
+                    {{/authorial}}
+                    {{#authorial "dicManage_delete"}}
+                        <button id="{{id}}" class="btn btn-info btn-small js-dic-delete" data-toggle="confirm"
+                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？" data-event="confirm:delete-dic">
+                            删除
+                        </button>
+                    {{/authorial}}
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+{{/component}}

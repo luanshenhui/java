@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+    <worksheet idx="0" >
+    	<!--保留空白位置，保证loop开始读取位置正确-->
+    	<section startRow="0" endRow="1">
+    		
+    	</section>
+    	<!-- items:对应Java里面的Map<> bean的key -->
+        <loop startRow="2" endRow="2" items="items" var="item" varType="cn.com.cgbchina.item.dto.GoodsImportDto">
+            <section startRow="2" endRow="2">
+				<mapping row="2" col="0">item.successFlag</mapping>
+				<mapping row="2" col="1">item.failReason</mapping>
+                <mapping row="2" col="2">item.goodsCode</mapping>
+                <mapping row="2" col="3">item.itemCode</mapping>
+				<mapping row="2" col="4">item.goodsFlag</mapping>
+				<mapping row="2" col="5">item.goodsName</mapping>
+				<mapping row="2" col="6">item.productName</mapping>
+				<mapping row="2" col="7">item.manufacturer</mapping>
+				<mapping row="2" col="8">item.vendorId</mapping>
+				<mapping row="2" col="9">item.brandName</mapping>
+				<mapping row="2" col="10">item.backCategory1Id</mapping>
+				<mapping row="2" col="11">item.backCategory2Id</mapping>
+				<mapping row="2" col="12">item.backCategory3Id</mapping>
+				<mapping row="2" col="13">item.goodsType</mapping>
+				<mapping row="2" col="14">item.isInner</mapping>
+				<mapping row="2" col="15">item.mailOrderCode</mapping>
+				<mapping row="2" col="16">item.promotionTitle</mapping>
+				<mapping row="2" col="17">item.adWord</mapping>
+				<mapping row="2" col="18">item.giftDesc</mapping>
+				<mapping row="2" col="19">item.introduction</mapping>
+				<mapping row="2" col="20">item.serviceType</mapping>
+				<mapping row="2" col="21">item.recommendGoods1Code</mapping>
+				<mapping row="2" col="22">item.recommendGoods2Code</mapping>
+				<mapping row="2" col="23">item.recommendGoods3Code</mapping>
+				<mapping row="2" col="24">item.cards</mapping>
+				<mapping row="2" col="25">item.marketPrice</mapping>
+				<mapping row="2" col="26">item.price</mapping>
+				<mapping row="2" col="27">item.stock</mapping>
+				<mapping row="2" col="28">item.stockWarning</mapping>
+				<mapping row="2" col="29">item.o2oCode</mapping>
+				<mapping row="2" col="30">item.o2oVoucherCode</mapping>
+				<mapping row="2" col="31">item.fixPoint</mapping>
+				<mapping row="2" col="32">item.cash</mapping>
+				<mapping row="2" col="33">item.installmentNumber</mapping>
+				<mapping row="2" col="34">item.attribute1Name</mapping>
+				<mapping row="2" col="35">item.attribute1ValueName</mapping>
+				<mapping row="2" col="36">item.attribute2Name</mapping>
+				<mapping row="2" col="37">item.attribute2ValueName</mapping>
+				<mapping row="2" col="38">item.attribute3Name</mapping>
+				<mapping row="2" col="39">item.attribute3ValueName</mapping>
+				<mapping row="2" col="40">item.attribute4Name</mapping>
+				<mapping row="2" col="41">item.attribute4ValueName</mapping>
+				<mapping row="2" col="42">item.attribute5Name</mapping>
+				<mapping row="2" col="44">item.attribute5ValueName</mapping>
+				<mapping row="2" col="45">item.attribute6Name</mapping>
+				<mapping row="2" col="46">item.attribute6ValueName</mapping>
+				<mapping row="2" col="47">item.attribute7Name</mapping>
+				<mapping row="2" col="48">item.attribute7ValueName</mapping>
+				<mapping row="2" col="49">item.attribute8Name</mapping>
+				<mapping row="2" col="50">item.attribute8ValueName</mapping>
+            </section>
+            <!--循环结束条件 最后离结束内容的偏移 end 为Sample中，列表最后一行的内容 可空白-->
+            <loopbreakcondition>
+			
+            		<!--offset 行偏移 正数n为读取当前行时先判断往下n行是否符合结束条件 负数测试过，走不通读取数据-->
+                    <rowcheck offset="0">
+                    	<!--offset 为判断该行那一列(个)单元格内容-->
+						<cellcheck offset="4"></cellcheck>
+						<cellcheck offset="5"></cellcheck>
+                    </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>

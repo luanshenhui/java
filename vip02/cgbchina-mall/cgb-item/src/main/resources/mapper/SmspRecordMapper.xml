@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SmspRecordModel">
+    <resultMap id="SmspRecordMap" type="SmspRecordModel">
+        <result property="id" column="id"/>
+        <result property="sId" column="s_id"/>
+        <result property="totalNum" column="total_num"/>
+        <result property="successNum" column="success_num"/>
+        <result property="failNum" column="fail_num"/>
+        <result property="repeatNum" column="repeat_num"/>
+        <result property="loadStatus" column="load_status"/>
+        <result property="filePath" column="file_path"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,s_id,total_num,success_num,fail_num,repeat_num,load_status,file_path,create_oper,create_time
+    </sql>
+
+    <insert id="insert" parameterType="SmspRecordModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_smsp_record
+        (s_id
+        ,total_num
+        ,success_num
+        ,fail_num
+        ,repeat_num
+        ,load_status
+        ,file_path
+        ,create_oper
+        ,create_time)
+        values(#{sId}
+        ,#{totalNum}
+        ,#{successNum}
+        ,#{failNum}
+        ,#{repeatNum}
+        ,#{loadStatus}
+        ,#{filePath}
+        ,#{createOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="SmspRecordModel">
+        update tbl_smsp_record set
+            <if test="sId !=null">s_id = #{sId}
+                ,</if>
+            <if test="totalNum !=null">total_num = #{totalNum}
+                ,</if>
+            <if test="successNum !=null">success_num = #{successNum}
+                ,</if>
+            <if test="failNum !=null">fail_num = #{failNum}
+                ,</if>
+            <if test="repeatNum !=null">repeat_num = #{repeatNum}
+                ,</if>
+            <if test="loadStatus !=null">load_status = #{loadStatus}
+                ,</if>
+            <if test="filePath !=null">file_path = #{filePath}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="sId !=null">and s_id = #{sId}</if>
+            <if test="totalNum !=null">and total_num = #{totalNum}</if>
+            <if test="successNum !=null">and success_num = #{successNum}</if>
+            <if test="failNum !=null">and fail_num = #{failNum}</if>
+            <if test="repeatNum !=null">and repeat_num = #{repeatNum}</if>
+            <if test="loadStatus !=null">and load_status = #{loadStatus}</if>
+            <if test="filePath !=null">and file_path = #{filePath}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="SmspRecordMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_smsp_record
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="SmspRecordMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_smsp_record
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="SmspRecordMap">
+        select
+        <include refid="columns"/>
+        from tbl_smsp_record
+        where s_id=#{id}
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+    <!--分页查询 niufw-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_smsp_record
+        where s_id=#{id}
+    </select>
+    <delete id="delete" parameterType="SmspRecordModel">
+        delete from tbl_smsp_record where id = id
+    </delete>
+</mapper>
+
+

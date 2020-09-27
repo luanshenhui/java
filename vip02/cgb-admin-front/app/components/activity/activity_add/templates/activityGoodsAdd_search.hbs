@@ -1,0 +1,29 @@
+<table class="table table-top active-tr-center activity-goods-search-template">
+    <thead>
+    <tr>
+        <th class="width-tr-150">单品编码</th>
+        <th class="width-tr-150">供应商名称</th>
+        <th class="width-tr-200">后台类目</th>
+        <th class="width-tr-150">商品名称</th>
+        <th class="width-tr-100">品牌</th>
+        <th class="width-tr-150" style="display: none">商品编码2</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each this}}
+        <tr data-component="" class="item-tr" data-id="{{id}}">
+            <td width="20%" class="itemCode">
+                <input class="js-check-this" name="checkGoodsItem" type="checkbox" data-code="{{id}}"
+                       data-status="{{json this}}"/>{{itemCode}}
+            </td>
+            <td width="20%" class="venderName">{{vendorName}}</td>
+            <td width="25%" class="backCategoryName" data-category="{{backCategory1Id}},{{backCategory2Id}},{{backCategory3Id}}">{{backCategory1Name}}>{{backCategory2Name}}
+                >{{backCategory3Name}}</td>
+            <td width="20%" class="goodsName"><div style="width: 170px">{{goodsName}}</div></td>
+            <td width="15%" class="goodsBrandName">{{goodsBrandName}}</td>
+            <td width="20%" class="goodsCode" style="display: none">{{goodsCode}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+

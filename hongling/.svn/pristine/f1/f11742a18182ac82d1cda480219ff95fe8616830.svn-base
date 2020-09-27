@@ -1,0 +1,5 @@
+﻿jQuery.csSizeCategory={
+	init:function(){
+		
+	}
+};

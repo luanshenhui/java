@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（中国人民财产保险车主卡旅行交通意外）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF28",
+            "reportCode":"JF28,JF59"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

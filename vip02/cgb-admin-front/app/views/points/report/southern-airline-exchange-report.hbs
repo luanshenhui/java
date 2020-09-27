@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（南航里程）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF13",
+            "reportCode":"JF13,JF49"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

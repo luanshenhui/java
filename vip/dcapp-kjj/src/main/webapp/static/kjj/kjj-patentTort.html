@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据铁笼-企业融合分析-专利侵权</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/model.css" />
+<link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+<script src="js/echarts.min.js"></script>
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/js.js"></script>
+</head>
+
+<body>
+<div class="box">
+    <div class="box-head">
+        <!--<a href="gzw-businessDataVolume.html" class="arrow-back arrow-back2"><i></i>数据融合分析</a>-->
+        <p class="box-title">专利执法</p>
+    </div>
+    <div class="box-container">
+        <div class="box-left">
+            <ul>
+                <li>
+                    <a href="kjj-counterfeitPatent.html">假冒专利分析</a>
+                </li>
+                <li class="on">
+                    <a href="kjj-patentTort.html">专利侵权分析</a>
+                </li>
+                <li>
+                    <a href="kjj-dealCounterfietPatent.html">假冒专利流程分析</a>
+                </li>
+                <li>
+                    <a href="kjj-patentDisputeFlowChart.html">专利侵权流程分析</a>
+                </li>
+            </ul>
+        </div>
+        <div class="box-right">
+            <div class="box-right-title">
+                <p><i></i>专利侵权分析</p>
+            </div>
+            <div class="box-right-form risk-define-statistics">
+
+                <div class="risk-form-main alarm-risk-stat patent-tort-chart">
+                    <div class="form-chart-left">
+                        <!--<div id="main" class="main"></div>-->
+                        <div id="main1" class="main"></div>
+                    </div>
+                    <div id="main2" class="main3-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+   /* var myChart = echarts.init(document.getElementById('main'));
+    var option = {
+
+        color: ['#27a8fd', '#1541b0'],
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        title:{
+            text:'专利侵权执法案件种类分析'
+                ,textStyle:{fontSize:'24',color:'#fff'}
+        },
+        legend: {
+            orient: 'vertical',
+            right:'10%',
+            top:'40%',
+            data:['假冒专利','专利侵权'],
+            itemHeight: '10',
+            padding: [60,0,20,20],
+            textStyle:{fontSize:'20',color:'#fff'}
+        },
+        series: [
+            {
+                name:'专利侵权执法案件种类统计',
+                type:'pie',
+                radius: ['40%', '70%'],
+                center:['40%','60%'],
+                avoidLabelOverlap: false,
+
+                label: {
+                    normal: {
+                        show: true,
+                        position:'inside',
+                        formatter:'{c}',
+                        textStyle: {
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    emphasis: {
+                        show: true,
+                        formatter: function(param) {
+                            return param.percent.toFixed(0) + '%';
+                        },
+                        textStyle: {
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data:[
+                    {value:142, name:'假冒专利'},
+                    {value:37, name:'专利侵权'}
+                ]
+            }
+        ]
+    };
+
+    myChart.setOption(option);*/
+
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    var option1 = {
+
+        color: ['#27a8fd','#15b050', '#ff9000'],
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        title:{
+            text:'处理状态分析'
+            ,textStyle:{fontSize:'18',color:'#fff',fontWeight:'normal'}
+        },
+        legend: {
+            orient: 'horizontal',
+            left:'10%',
+            itemGap: 20,
+            bottom:'1%',
+            data:['受理中','不受理','已结束'],
+            itemHeight: '10',
+            padding: [60,0,20,20],
+            textStyle:{fontSize:'16',color:'#fff',fontWeight:'normal'}
+        },
+        series: [
+            {
+                name:'专利侵权执法案件种类分析',
+                type:'pie',
+                radius: ['40%', '70%'],
+                center:['45%','53%'],
+                avoidLabelOverlap: false,
+
+                label: {
+                    normal: {
+                        show: true,
+                        position:'inside',
+                        formatter:'{c}',
+                        textStyle: {
+                            fontSize: '16',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    emphasis: {
+                        show: true,
+                        formatter: function(param) {
+                            return param.percent.toFixed(0) + '%';
+                        },
+                        textStyle: {
+                            fontSize: '16',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data:[
+                    {value:324, name:'受理中'},
+                    {value:23, name:'不受理'},
+                    {value:318, name:'已结束'}
+                ]
+            }
+        ]
+    };
+    myChart1.setOption(option1);
+
+    var myChart2 = echarts.init(document.getElementById('main2'));
+    var option2 = {
+        title: {
+            text: '案件月别分析',
+            textStyle:{fontSize:'18',color:'#fff',fontWeight:'normal'}
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+            axisLabel:{
+                textStyle:{
+                    color:'#fff',
+                    fontSize:20
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel:{
+                textStyle:{
+                    color:'#fff',
+                    fontSize:16
+                }
+            }
+        },
+        series: [
+            {
+                name:'专利侵权纠纷案件',
+                type:'line',
+                data:[50, 61, 47, 62, 96, 10, 15,37,64,65,46,47],
+                itemStyle: {
+                    normal: {
+                        label: {show: true, position: 'top',textStyle:{color:'#ffc700',fontSize:16}}
+                    }
+                },
+                symbol:'circle',
+                symbolSize:10
+
+            },
+
+        ]
+    };
+
+    myChart2.setOption(option2);
+</script>
+</body>
+</html>

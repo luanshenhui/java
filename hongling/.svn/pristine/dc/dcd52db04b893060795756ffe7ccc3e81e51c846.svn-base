@@ -1,0 +1,94 @@
+<script language= "javascript" src="../orden/common.js"></script>
+<script language= "javascript" src="../orden/view.js"></script>
+<div id="view_orden" class="form_template">
+	<table>
+		<tr>
+			<td colspan="6" class="caption lblBasicInfo"></td>
+		</tr>
+		<tr>
+			<td class="label lblCode"></td>
+			<td id="_view_ordenID"></td>
+			<td class="label lblSysCode"></td>
+			<td id="_view_sysCode"></td>
+			<td class="label lblMemberName"></td>
+			<td id="_view_pubMemberName"></td>
+		</tr>
+		<tr>
+			<td class="label lblPubDate"></td>
+			<td id="_view_ordenPubDate"></td>
+			<td class="label lblStatusName"></td>
+			<td id="_view_statusName"></td>
+			<td class="label lblStyle"></td>
+			<td id="_view_styleName"></td>
+		</tr>
+		<tr>
+			<td colspan="6" class="caption lblCustomer"></td>
+		</tr>
+		<tr>
+			<td class="label lblCustomerNo"></td>
+			<td id="_view_userNo"></td>
+			<td class="label lblName"></td>
+			<td id="_view_name"></td>
+			<td class="label lblGender"></td>
+			<td id="_view_genderName"></td>
+		</tr>
+		<tr>
+			<td class="label lblTel"></td>
+			<td id="_view_tel"></td>
+			<td class="label lblEmail"></td>
+			<td id="_view_email"></td>
+			<td class="label lblWeight"></td>
+			<td id="_view_weight"></td>
+		</tr>
+		<tr>
+			<td class="label lblHeight"></td>
+			<td id="_view_height"></td>
+			<td class="label lblAddress"></td>
+			<td id="_view_address"></td>
+			<td class="label lblLtName"></td>
+			<td id="_view_ltName"></td>
+		</tr>
+		<tr>
+			<td colspan="6" class="caption lblOrdenInfo"></td>
+		</tr>
+		<tr>
+			<td class="label lblClothingCategory"></td>
+			<td id="_view_clothingName"></td>
+			<td class="label lblFabric"></td>
+			<td id="_view_fabricCode"></td>
+			<td class="label"></td>
+			<td ></td>
+		</tr>
+		<tr>
+			<td class="label lblDetail"></td>
+			<td colspan="5" id="_view_detail"></td>
+		</tr>
+		<tr>
+			<td class="label lblEmbroidery"></td>
+			<td colspan="5" id="_view_embroidery"></td>
+		</tr>
+		<tr>
+			<td colspan="6" class="caption lblSizeInfo"></td>
+		</tr>
+		<tr>
+			<td class="label lblSizeCategory"></td>
+			<td id="_view_sizeCategoryName"></td>
+			<td class="label lblUnit"></td>
+			<td id="_view_sizeUnitName"></td>
+			<td id="lblClothingStyle" class="label lblClothingStyle"></td>
+			<td id="_view_clothingStyleName"></td>
+		</tr>
+		<tr>
+			<td class="label lblSizePart"></td>
+			<td colspan="5" id="_view_sizePart"></td>
+		</tr>
+		<tr>
+			<td id="lblBodyType" class="label lblBodyType"></td>
+			<td colspan="5" id="_view_bodyType"></td>
+		</tr>
+		<!-- <tr>
+			<td class="label lblMemo"></td>
+			<td colspan="5" id="_view_memo"></td>
+		</tr> -->
+	</table> 
+</div>

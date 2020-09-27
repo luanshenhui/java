@@ -1,0 +1,350 @@
+/**新增商品详情样式**/
+.item-add {
+  .main-box-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  .image-ul {
+    clear: both;
+    .item-image-li {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #ccc;
+      line-height: 30px;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      &:hover{
+        .icon-icons-product-del{
+          display: block;
+        }
+      }
+    }
+    .icon-icons-product-del{
+      position: absolute;
+      left: 21px;
+      top: -8px;
+      z-index: 2;
+      display: none;
+    }
+    .js-image-upload {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      padding: 0 5px;
+      display: inline-block;
+      vertical-align: middle;
+      i{
+        height: 30px;
+        line-height: 30px;
+      }
+    }
+  }
+  .goods-add-form {
+    position: relative;
+    .main-image {
+      position: absolute;
+      top: 100px;
+      right: 5px;
+      border: 1px solid #CCC;
+      .submit {
+        text-align: center;
+      }
+    }
+  }
+
+  .main-box {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 10px;
+    .form-information {
+      clear: both;
+      min-height: 32px;
+      margin-bottom: 15px;
+
+      .span-line {
+        position: relative;
+        left: 230px;
+        top: -25px;
+        width: 305px;
+      }
+      .selected-category {
+        line-height: 32px;
+      }
+      label {
+        display: block;
+        float: left;
+        line-height: 30px;
+        text-align: right;
+        padding-right: 10px;
+      }
+      select {
+        border: 1px solid #ddd;
+        margin: 0;
+        outline: medium none;
+        padding: 4px;
+        font-size: 14px;
+        width: 185px;
+      }
+      textarea {
+        height: 80px;
+        width: 300px !important;
+      }
+      b {
+        font-weight: normal;
+      }
+
+      .form-contorl {
+        padding: 4px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+      }
+      .order-form {
+        width: 300px;
+      }
+
+    }
+    .recommend-ul {
+      position: relative;
+      top: -10px;
+    }
+    .recommend-li {
+      width: 210px;
+      text-align: center;
+      float: left;
+      .img-width {
+        width: 100px;
+        height: 100px;
+      }
+      .main-item-list-title {
+        font-size: 14px;
+        margin: 3px 10px;
+        text-align: center;
+        line-height: 24px;
+        height: 90px;
+        a {
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+      }
+    }
+
+    .col-left-common {
+      float: left !important;
+    }
+    .main-box-title2 {
+      font-size: 14px;
+      font-weight: normal;
+      margin: 0 0 15px 20px;
+      color: #565656;
+    }
+    .margin-top-20 {
+      margin-top: 20px !important;
+    }
+    .margin-left-20 {
+      margin-left: 20px !important;
+    }
+    .margin-left-10 {
+      margin-left: 10px !important;
+    }
+    .margin-bottom-10 {
+      margin-bottom: 10px !important;
+    }
+    .item-table-list {
+      width: 900px;
+      overflow-x: auto;
+      border: 1px #ccc solid;
+    }
+    .item-table-list:hover {
+      height: 100%;
+    }
+    .table-list {
+      border-collapse: collapse;
+      table-layout: fixed;
+      .text-center {
+        text-align: center;
+        /* padding: 5px;*/
+      }
+      th {
+        width: 115px;
+        font-weight: bold;
+        word-break: break-all;
+        word-wrap: break-word;
+        background: #f8f8f8;
+        border-bottom: 1px solid #eee;
+      }
+      tr:nth-child(even) {
+        background: #f8f8f8;
+      }
+      td {
+        text-align: center;
+        padding: 10px;
+        width: 115px;
+        border-bottom: 1px solid #eee;
+        word-break: break-all;
+        word-wrap: break-word;
+        position: relative;
+        font-size: 12px;
+        input {
+          font-size: 12px;
+        }
+        select {
+          font-size: 12px;
+        }
+        .input-error {
+          position: absolute;
+          left: 0px;
+          top: 50px;
+        }
+      }
+
+    }
+  }
+  .admin-btn {
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 10px;
+  }
+  em {
+    color: red;
+    font-style: normal;
+  }
+  .left {
+    float: left;
+  }
+  .font-color-b {
+    color: #328cff;
+  }
+  .input-required-error {
+    border: solid 1px red;
+  }
+}
+/**关联推荐商品弹框样式开始**/
+.recom-goods-modal {
+  width: 730px;
+  .pro-select {
+    margin-top: 10px;
+    height: 300px;
+    overflow-y: auto;
+  }
+  .recom-table {
+    background-color: #fff;
+    padding: 20px 20px;
+    text-align: left;
+    width: 100%;
+    .td-center {
+      text-align: right;
+    }
+    .td-width-300 {
+      width: 300px;
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+  }
+
+}
+/**关联推荐商品弹框样式结束**/
+.control-attr {
+  height: 40px;
+  .control-label {
+    float: left;
+    padding: 7px 0;
+    width: 70px;
+    text-align: right;
+  }
+  .long-control-label {
+    width: 75px;
+  }
+
+  .controls {
+    float: left;
+    padding-left: 6px;
+    margin-left: 0 !important;
+    .long-text {
+      width: 424px;
+    }
+    #refer-price, #model {
+      padding: 7px 0;
+    }
+    .short-text {
+      width: 110px;
+    }
+    textarea {
+      width: 428px;
+    }
+  }
+  .controls-attr {
+    vertical-align: top;
+    margin-bottom: 10px;
+  }
+}
+
+.main-attr {
+  background: lighten(#ffffff, 2%);
+  border: 1px solid #CCCCCC;
+  .base-attr {
+    .attr-item {
+      width: 220px;
+      float: left;
+      display: inline;
+      padding-top: 12px;
+      padding-bottom: 12px;
+
+      .attr-label {
+        display: inline-block;
+        vertical-align: middle;
+        width: 70px;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .attr-input {
+        width: 114px;
+      }
+    }
+  }
+
+  .attr-full {
+    margin-top: 15px;
+    .attr-label {
+      width: 70px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      text-align: right;
+      float: left;
+      font-size: 12px;
+    }
+    .attr-box {
+      float: left;
+      width: 355px;
+      .sku-list {
+        margin: 0;
+      }
+      .sku-item {
+        float: left;
+        height: 25px;
+        overflow: hidden;
+        vertical-align: middle;
+      }
+      input {
+        float: left;
+        display: inline;
+
+      }
+      .labelname {
+        display: inline;
+        font-size: 12px;
+        padding-left: 3px;
+      }
+    }
+  }
+  table {
+    margin-bottom: 20px;
+  }
+}

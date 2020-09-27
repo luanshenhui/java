@@ -1,0 +1,35 @@
+﻿<script src="../delivery/view.js"></script>
+<div id="view_delivery" class="form_template">
+	<h1></h1>
+	<table>
+		<tr>
+			<td class="label lblMember_Info"></td>
+			<td id="_view_pubMemberName"></td>
+			<td class="label lblDeliveryDate"></td>
+			<td id="_view_planDeliveryDate"></td>
+			<td class="label lblDeliveryAddress"></td>
+			<td id="_view_deliveryAddress"></td>
+		</tr>
+	</table>
+	<div id="DeliveryDetailsResult"></div>
+</div>
+<textarea  id="DeliveryDetailsTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="lblCode"></td>
+			<td class="lblClothingCategory"></td>
+			<td class="lblName"></td>
+			<td class="lblTel"></td>
+			<td class="lblFabric"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ordenID}">
+			<td>{$T.row.ordenID}</td>
+			<td>{$T.row.clothingName}</td>
+			<td>{$T.row.customer.name}</td>
+			<td>{$T.row.customer.tel}</td>
+			<td>{$T.row.fabricCode}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea >

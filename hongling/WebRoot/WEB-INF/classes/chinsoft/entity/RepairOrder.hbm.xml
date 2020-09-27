@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.RepairOrder" table="RepairOrder">
+        <id name="RepairNo" type="string">
+            <column name="Repair_No" length="12" />
+            <generator class="assigned" />
+        </id>
+        <property name="OrderNo" type="string">
+            <column name="Order_No" />
+        </property>
+        <property name="ModifyType" type="string">
+            <column name="Modify_Type" />
+        </property>
+        <property name="BussinesType" type="string">
+            <column name="Bussines_Type"/>
+        </property>
+        <property name="Store" type="string">
+            <column name="Store"/>
+        </property>
+        <property name="CustomerName" type="string">
+            <column name="Customer_Name" />
+        </property>
+        <property name="LTName" type="string">
+            <column name="LTName"/>
+        </property>
+        <property name="Tel" type="string">
+            <column name="Tel"/>
+        </property>
+        <property name="CreateTime" type="string">
+            <column name="Create_Time"/>
+        </property>
+        <property name="SystemNo" type="string">
+            <column name="System_No"/>
+        </property>
+        <property name="Price" type="integer">
+            <column name="Price"/>
+        </property>
+        <property name="Status" type="string">
+            <column name="Status"/>
+        </property>
+        <property name="DeliverDate" type="string">
+            <column name="Deliver_Date"/>
+        </property>
+        <property name="OrderCraft" type="string">
+            <column name="Order_Craft"/>
+        </property>
+        <property name="Cloth" type="string">
+            <column name="Cloth"/>
+        </property>
+        <property name="Memo" type="string">
+            <column name="Memo"/>
+        </property>
+        <property name="MemberID" type="string">
+            <column name="Member_ID"/>
+        </property>
+        <property name="LogisticNo" type="string">
+            <column name="Logistic_No"/>
+        </property>
+        <property name="ShipDate" type="string">
+            <column name="Ship_Date"/>
+        </property>
+        <property name="WaybillNo" type="string">
+            <column name="Waybill_No"/>
+        </property>
+        
+    </class>
+</hibernate-mapping>

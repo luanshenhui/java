@@ -1,0 +1,97 @@
+{{#component "gift_partition js-component"}}
+    <p class="components-title"><strong>- 礼品分区管理 -</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form item-form-search form-inline">
+                <fieldset>
+                    <p class="filter-name">
+                       <span class="span4 span-large">
+                           <label for="name">分区代码:</label>
+                           <input name="areaId" type="text" class="form-control" value="{{areaId}}" maxlength="2"/>
+                       </span>
+                        &nbsp; &nbsp; &nbsp; &nbsp;
+                       <span class="span5 span-large">
+                          <label for="name">分区名称:</label>
+                          <input name="areaName" type="text" class="form-control" value="{{areaName}}" maxlength="50"/>
+                      </span>
+
+                    </p>
+
+                    <p class="filter-name">
+                        <input class="btn btn-success btn-small pull-right margin-right-10" type="submit" value="查询"/>
+                    </p>
+                </fieldset>
+            </form>
+            <div class="add">
+                {{#authorial "giftPart_add"}}
+                    <a href="javascript:void(0)" class="btn btn-info btn-small js-gift-add">+ 新增</a>
+                {{/authorial}}
+            </div>
+            <div class="main-box-table margin-top-10">
+                {{#equals _DATA_.total "0"}}
+                    <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+                {{else}}
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th width="10%">分区代码</th>
+                            <th width="10%">分区名称</th>
+                            <th width="10%">显示顺序</th>
+                            <th width="10%">积分类型</th>
+                            <th width="20%">限第三级卡产品编码</th>
+                            <th width="10%">当前状态</th>
+                            <th width="15%">分区备注</th>
+                            <th width="15%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody data-data="{{_DATA_.data}}">
+                        {{#each _DATA_.data}}
+                            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                                <td class="areaId" title="{{espAreaInfModel.areaId}}">{{espAreaInfModel.areaId}}</td>
+                                <td class="areaName" title="{{espAreaInfModel.areaName}}">{{espAreaInfModel.areaName}}</td>
+                                <td class="areaSeq" title="{{espAreaInfModel.areaSeq}}">{{espAreaInfModel.areaSeq}}</td>
+                                <td class="integraltypeNm" title="{{integraltypeNm}}">{{integraltypeNm}}</td>
+                                <td class="formatId" title="{{espAreaInfModel.formatId}}" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{espAreaInfModel.formatId}}</td>
+                                {{#authorial "giftPart_edit"}}
+                                <td class="curStatus">
+                                    <i {{#equals espAreaInfModel.curStatus "0102"}}class="icon-btn-on btn-on-cur"{{/equals}}></i>
+                                    <i {{#equals espAreaInfModel.curStatus "0101"}}class="icon-btn-off btn-off-cur"{{/equals}}></i>
+                                </td>
+                                {{else}}
+                                <td class="curStatus">
+                                    <i {{#equals espAreaInfModel.curStatus "0102"}}class="icon-btn-on"{{/equals}}></i>
+                                    <i {{#equals espAreaInfModel.curStatus "0101"}}class="icon-btn-off"{{/equals}}></i>
+                                </td>
+                                {{/authorial}}
+                                <td class="areaDesc" title="{{espAreaInfModel.areaDesc}}">{{espAreaInfModel.areaDesc}}</td>
+                                <td>
+                                    {{#equals espAreaInfModel.curStatus "0102"}}  <!--状态为启用-->
+                                        {{#authorial "giftPart_edit"}}
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm js-partition-edit">编辑</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals espAreaInfModel.curStatus "0101"}}<!--状态为停用-->
+                                        {{#authorial "giftPart_edit"}}
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm js-partition-edit">编辑</a>
+                                        {{/authorial}}
+                                        {{#authorial "giftPart_delete"}}
+                                            {{#of espAreaInfModel.areaId "01,02,09" }}
+                                            {{else}}
+                                                <button id="{{espAreaInfModel.id}}" class="btn btn-info btn-sm js-default-term-delete" data-toggle="confirm"
+                                                        data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                                        data-event="confirm:delete-partition">删除
+                                                </button>
+                                            {{/of}}
+                                        {{/authorial}}
+                                    {{/equals}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                {{/equals}}
+            </div>
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+    </div>
+{{/component}}

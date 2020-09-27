@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（中国人寿保险真情卡旅行意外）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF24",
+            "reportCode":"JF24,JF55"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

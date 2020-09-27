@@ -1,0 +1,2796 @@
+package com.dpn.ciqqlc.http;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ws.security.util.UUIDGenerator;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.dpn.ciqqlc.common.util.Constants;
+import com.dpn.ciqqlc.common.util.DateUtil;
+import com.dpn.ciqqlc.common.util.FileUtil;
+import com.dpn.ciqqlc.common.util.FtpUtil;
+import com.dpn.ciqqlc.common.util.WarningEnum;
+import com.dpn.ciqqlc.common.util.LazySingleton;
+import com.dpn.ciqqlc.common.util.WarningEnum;
+import com.dpn.ciqqlc.common.util.ApInterface.SentSmsServiceImpl;
+import com.dpn.ciqqlc.http.form.IntercepeForm;
+import com.dpn.ciqqlc.http.form.LicenseDecForm;
+import com.dpn.ciqqlc.http.form.WarningLinkRuleForm;
+import com.dpn.ciqqlc.http.result.FormPdf;
+import com.dpn.ciqqlc.service.AffirmDb;
+import com.dpn.ciqqlc.service.AppServerDb;
+import com.dpn.ciqqlc.service.Quartn;
+import com.dpn.ciqqlc.service.dto.WarningDto;
+import com.dpn.ciqqlc.standard.model.AppExpFoodProdCheckModel;
+import com.dpn.ciqqlc.standard.model.CheckDocsRcdModel;
+import com.dpn.ciqqlc.standard.model.CheckModel;
+import com.dpn.ciqqlc.standard.model.ChkRckModel;
+import com.dpn.ciqqlc.standard.model.CodeLibraryDTO;
+import com.dpn.ciqqlc.standard.model.CountryDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyCertificationDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyCheckEquDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyEquipmentDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyFileDTO;
+import com.dpn.ciqqlc.standard.model.EfpeApplyModel;
+import com.dpn.ciqqlc.standard.model.EfpeApplyProductDTO;
+import com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckCodeDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdDTO;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdNewCodeDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdReportDto;
+import com.dpn.ciqqlc.standard.model.FileInfoDto;
+import com.dpn.ciqqlc.standard.model.IntercepeModel;
+import com.dpn.ciqqlc.standard.model.LegalPunishModel;
+import com.dpn.ciqqlc.standard.model.LicenseDecDTO;
+import com.dpn.ciqqlc.standard.model.LicenseDecJsonDTO;
+import com.dpn.ciqqlc.standard.model.LocalePunishDTO;
+import com.dpn.ciqqlc.standard.model.MailObjCheckModel;
+import com.dpn.ciqqlc.standard.model.MailSteamerChkDealDTO;
+import com.dpn.ciqqlc.standard.model.MailSteamerChkDealModel;
+import com.dpn.ciqqlc.standard.model.MailSteamerDTO;
+import com.dpn.ciqqlc.standard.model.MailSteamerHlthCheckModel;
+import com.dpn.ciqqlc.standard.model.MailSteamerResultDTO;
+import com.dpn.ciqqlc.standard.model.MailSteamerSampDTO;
+import com.dpn.ciqqlc.standard.model.OrigPlaceDto;
+import com.dpn.ciqqlc.standard.model.ProsasModel;
+import com.dpn.ciqqlc.standard.model.QuartnModel;
+import com.dpn.ciqqlc.standard.model.SelectModel;
+import com.dpn.ciqqlc.standard.model.UserInfoDTO;
+import com.dpn.ciqqlc.standard.model.UsersDTO;
+import com.dpn.ciqqlc.standard.model.UsersModel;
+import com.dpn.ciqqlc.standard.model.VideoEventModel;
+import com.dpn.ciqqlc.standard.model.WarningEventDto;
+import com.dpn.ciqqlc.standard.model.WarningStandardEventDto;
+import com.dpn.ciqqlc.standard.service.BelongingsService;
+import com.dpn.ciqqlc.standard.service.CodeLibraryService;
+import com.dpn.ciqqlc.standard.service.CommonService;
+import com.dpn.ciqqlc.standard.service.ExpFoodPOFService;
+import com.dpn.ciqqlc.standard.service.ExpFoodProdService;
+import com.dpn.ciqqlc.standard.service.LicenseDecDbService;
+import com.dpn.ciqqlc.standard.service.LocalePunishDbService;
+import com.dpn.ciqqlc.standard.service.MailObjCheckDbService;
+import com.dpn.ciqqlc.standard.service.MailSteamerService;
+import com.dpn.ciqqlc.standard.service.OrigPlaceFlowService;
+import com.dpn.ciqqlc.standard.service.UserManageDbService;
+import com.dpn.ciqqlc.standard.service.WarningEventService;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.PdfStamper;
+
+/*********************************************************************************************************************
+ * 移动端访问接口
+ *********************************************************************************************************************/
+@SuppressWarnings("rawtypes")
+@Controller
+@RequestMapping(value = "/apps")
+public class AppServerController extends FormPdf {
+
+	/**
+	 * logger.
+	 * 
+	 * @since 1.0.0
+	 */
+	private final Logger logger_ = LoggerFactory.getLogger(this.getClass());
+	private static Properties properties = new Properties();
+	
+	/**
+	 * DbServ.
+	 * 
+	 * @since 1.0.0
+	 */
+	@Autowired
+	private Quartn quartnService;
+	@Autowired
+	@Qualifier("appServerDbServ")
+	private AppServerDb appServerDbServ = null;
+	@Autowired
+	@Qualifier("expFoodPOFService")
+	private ExpFoodPOFService expFoodPOFService = null;
+	@Autowired
+	private OrigPlaceFlowService origPlaceFlowService;
+	@Autowired
+	private Quartn danDong;
+	@Autowired
+	private CommonService commonServer = null;
+	@Autowired
+	@Qualifier("expFoodProdDb")
+	private ExpFoodProdService dbServ = null;
+	@Autowired
+	@Qualifier("affirmDbServ")
+	private AffirmDb affirmDbServ = null;
+	@Autowired
+	@Qualifier("mailObjCheckServ")
+	private MailObjCheckDbService mailObjCheckServ = null;
+	@Autowired
+	@Qualifier("belongingsService")
+	private BelongingsService belongingsService = null;
+	@Autowired
+	@Qualifier("mailSteamerDbServ")
+	private MailSteamerService mailSteamerService = null;
+	@Autowired
+	@Qualifier("codeLibraryDb")
+	private CodeLibraryService codeLibraryService = null;
+	@Autowired
+	@Qualifier("localePunishDBServ")
+	private LocalePunishDbService localePunishDBServ = null;
+	@Autowired
+	@Qualifier("userManageDbServ")
+	private UserManageDbService userManageDbServ = null;
+	@Autowired
+	@Qualifier("licenseDecDbService")
+	private LicenseDecDbService licenseDecDbService = null;
+	@Autowired
+	private SentSmsServiceImpl sentSmsServiceImpl;
+	@Autowired
+	@Qualifier("warningEventService")
+	private WarningEventService warningEventService = null;
+
+
+	/*********************************************************************************************************************
+	 * 对所有上传数据进行结果记录
+	 * 
+	 * @param main_id
+	 *            ：业务id，proj_code：业务代码
+	 * @return
+	 *********************************************************************************************************************/
+	//自动更新配置文件
+	static  {
+		InputStream is = null;
+		try {
+			is = AppServerController.class.getResourceAsStream("/appOnLineUpdate.properties");
+			properties.load(is);	
+			is.close();
+		} catch (Exception e) {
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+				}
+			}			
+		}		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/test1", method = RequestMethod.GET)
+	public String moreDoc11s() {
+		try {
+			List<WarningLinkRuleForm> list = LazySingleton.getInstance().getList();
+			return "s";
+		} catch (Exception e) {
+			return "f";
+		}
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/test12", method = RequestMethod.POST)
+	public String moreDoc112s(
+			@RequestBody WarningDto dto) {
+		try {
+			List<WarningStandardEventDto> l = warningEventService.calculateStandard(dto);
+			return "s";
+		} catch (Exception e) {
+			return "f";
+		}
+		
+	}
+	
+	
+	/**
+	 * 获取配置文件中的key value
+	 */
+	public static String getProps(String key) {
+		Object obj = properties.get(key);
+		if (null == obj) {
+			return "";
+		}
+		String returnStr = (String) obj;
+		return returnStr.trim();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/results")
+	public Map<String, Object> resultRegister(
+			@RequestBody List<Map<String, String>> list) {
+		Map<String, Object> ajaxResult = new HashMap<String, Object>();
+		try {
+			for (Map<String, String> item : list) {
+				String proc_main_id = item.get("proc_main_id");
+				String proj_code = item.get("proj_code");
+				if (proc_main_id == null || "".equals(proc_main_id)
+						|| "".equals(proj_code) || proj_code == null) {
+					ajaxResult.put("status", "FAIL");
+					ajaxResult.put("results", "参数不能为空");
+					return ajaxResult;
+				} else {
+					Map<String, String> flag = appServerDbServ
+							.selectResults(item); // 判断数据是否存在
+					if (!(flag == null || "".equals(flag))) {
+						ajaxResult.put("status", "FAIL");
+						ajaxResult.put("results", "该记录已存在");
+						return ajaxResult;
+					}
+				}
+			}
+			appServerDbServ.insertResults(list);
+			ajaxResult.put("status", "OK");
+			ajaxResult.put("results", "录入成功");
+		} catch (Exception e) {
+			ajaxResult.put("status", "error");
+			ajaxResult.put("results", "系统错误");
+			logger_.error("***********/apps/results************", e);
+		} finally {
+			list = null;
+		}
+		return ajaxResult;
+	}
+
+	/*********************************************************************************************************************
+	 * 查找code跟name
+	 * 
+	 * @param type
+	 *            字典表Tpye
+	 * @return 证件下拉列表〃
+	 *********************************************************************************************************************/
+	@ResponseBody
+	@RequestMapping(value = "/code")
+	public Map<String, Object> findCode(String type) {
+		Map<String, Object> ajaxResult = new HashMap<String, Object>();
+		try {
+			List<SelectModel> list = appServerDbServ.selectCodes(type);
+			ajaxResult.put("status", "OK");
+			ajaxResult.put("results", list);
+		} catch (Exception e) {
+			ajaxResult.put("status", "error");
+			ajaxResult.put("results", "系统错误");
+			logger_.error("***********/apps/code************", e);
+
+		}
+		return ajaxResult;
+	}
+
+	/*********************************************************************************************************************
+	 * 文件上传
+	 * 
+	 * @param
+	 * @return 〃
+	 *********************************************************************************************************************/
+	@ResponseBody
+	@RequestMapping("/upload")
+	public Map<String, Object> upload(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			FileUtil.uploadFile(request, true);
+			map.put("status", "OK");
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "error");
+			return map;
+		}
+		return map;
+	}
+
+	/*********************************************************************************************************************
+	 * 文件下载
+	 * 
+	 * @param
+	 * @return 〃
+	 *********************************************************************************************************************/
+	@RequestMapping("/download")
+	public void download(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value = "fileName", required = true) String fileName,
+			@RequestParam(value = "isDownload", defaultValue = "false") String isDownload) {
+		try {
+			boolean isDownloadBoolean = Boolean.valueOf(isDownload);
+			fileName = "C:\\xml\\CIQTOR-20170831160519740.xml";
+			FileUtil.downloadFile(fileName, response, isDownloadBoolean);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*********************************************************************************************************************
+	 * 移动端带条件访问访问进出境运输工具检疫（货轮）
+	 * 
+	 * @param 货轮中文名字vsl_en_name
+	 *            货轮英文名vsl_cn_name
+	 * @return
+	 *********************************************************************************************************************/
+	@ResponseBody
+	@RequestMapping("/showtransportsapp")
+	public Map<String, Object> showTransportsApp() {
+		Map<String, String> parameter = new HashMap<String, String>();
+		Map<String, Object> results = new HashMap<String, Object>();
+		try {
+			parameter.put("proj_code", "JC_T_T");
+			List<Map<String, String>> resultData = affirmDbServ
+					.showTransportsApp(parameter); // 获得进出境运输工具检疫（货轮）基本信息
+			List<Map<String, String>> a = new ArrayList<>();
+			for (Map<String, String> map : resultData) {
+				if(map.get("APRV_DATE") != null) a.add(map);
+			}
+			results.put("status", "OK");
+			results.put("results", a.subList(0,200));
+		} catch (Exception e) {
+			logger_.error("***********/apps/showtransportsapp************", e);
+		} finally {
+			parameter = null;
+		}
+		return results;
+	}
+
+	/**
+	 * app查找13菜单 ok http://localhost:7001/ciqs/apps/lookText?check_menu_type=9
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/lookText", method = RequestMethod.GET)
+	public Map<String, Object> lookText(HttpServletRequest request,
+			ExpFoodProdNewCodeDto expFoodProdCheckCodeDto) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<ExpFoodProdCheckCodeDto> list = expFoodPOFService
+					.selectTextList(expFoodProdCheckCodeDto);
+			map.put("status", "OK");
+			map.put("results", list);
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map.put("status", "FAIL");
+		map.put("results", "无数据");
+		return map;
+	}
+
+	/**
+	 * app查找11菜单 ok http://localhost:7001/ciqs/apps/lookText?check_menu_type=9
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/lookTextNew", method = RequestMethod.GET)
+	public Map<String, Object> lookTextNew(HttpServletRequest request,
+			ExpFoodProdNewCodeDto expFoodProdCheckCodeDto) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<ExpFoodProdNewCodeDto> list = expFoodPOFService
+					.selectTextNewList(expFoodProdCheckCodeDto);
+			map.put("status", "OK");
+			map.put("results", list);
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map.put("status", "FAIL");
+		map.put("results", "无数据");
+		return map;
+	}
+
+	/**
+	 * app保存提交13菜单 ok
+	 * http://localhost:7001/ciqs/ExpFoodPOF/saveText?apply_no=apply_no
+	 * &check_code_id
+	 * =check_code_id&check_proc_type=1&check_result=1&check_disc=check_disc
+	 * &check_type=1&chech_psn=校验人员&check_date=1985-09-09
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/saveText")
+	public Map<String, Object> saveText(HttpServletRequest request,
+			@RequestBody List<ExpFoodProdCheckDto> expFoodProdCheckDto) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			for (ExpFoodProdCheckDto dto : expFoodProdCheckDto) {
+				if (null != dto.getApply_no() && null != dto.getCheck_code_id()
+						&& !dto.getApply_no().equals("")
+						&& !dto.getCheck_code_id().equals("")) {
+//					dto.setCheck_proc_type("V_SP_A_C_" + dto.getCheck_code_id());
+					expFoodPOFService.deleteExpFoodProdCheckDto(dto);
+					//删除event表的视频
+					VideoEventModel v=new VideoEventModel();
+					v.setProcMainId(dto.getApply_no());
+					v.setProcType(dto.getCheck_proc_type());
+					commonServer.deleteEvent(v);
+				}
+				expFoodPOFService.saveText(dto);
+			}
+			map.put("status", "OK");
+			map.put("results", "无数据");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map.put("status", "FAIL");
+		map.put("results", "无数据");
+		return map;
+	}
+
+	/**
+	 * app保存提交13菜单 ok
+	 * http://localhost:7001/ciqs/ExpFoodPOF/saveText?apply_no=apply_no
+	 * &check_code_id
+	 * =check_code_id&check_proc_type=1&check_result=1&check_disc=check_disc
+	 * &check_type=1&chech_psn=校验人员&check_date=1985-09-09
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/saveTextNew")
+	public Map<String, Object> saveTextNew(HttpServletRequest request,
+			@RequestBody List<ExpFoodProdCheckDto> expFoodProdCheckDto) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			for (ExpFoodProdCheckDto dto : expFoodProdCheckDto) {
+				if (null != dto.getApply_no() && null != dto.getCheck_code_id()
+						&& !dto.getApply_no().equals("")
+						&& !dto.getCheck_code_id().equals("")) {
+					dto.setCheck_proc_type("V_SP_F_D_" + dto.getCheck_code_id());
+					expFoodPOFService.deleteExpFoodProdCheckDto(dto);
+				}
+				expFoodPOFService.saveTextNew(dto);
+			}
+			map.put("status", "OK");
+			map.put("results", "无数据");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map.put("status", "FAIL");
+		map.put("results", "无数据");
+		return map;
+	}
+
+	/**
+	 * 不符合项跟踪报告接口
+	 * http://localhost:7001/ciqs/apps/appUnPassable?apply_no=111&compName=栾氏集团
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/appUnPassable", method = RequestMethod.GET)
+	public Map<String, Object> appUnPassable(HttpServletRequest request,
+			ExpFoodProdCheckVo expFoodProdCheckVo, String compName) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			expFoodProdCheckVo.setCheck_result("2");
+			expFoodProdCheckVo.setCheck_type("1");
+			List<ExpFoodProdCheckVo> list = expFoodPOFService
+					.getToTextViewNoPass(expFoodProdCheckVo,request);
+			AppExpFoodProdCheckModel vo = new AppExpFoodProdCheckModel();
+			vo.setCompName(compName);
+			vo.setList(list);
+			map.put("status", "OK");
+			map.put("results", vo);
+			return map;
+		} catch (Exception e) {
+			logger_.error("***********/apps/unPassable************", e);
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+	}
+
+	/**
+	 * app查询申请信息 接口   行政许可，行政检查
+	 * http://localhost:7001/ciqs/apps/appExpFoodList?applyNo=111&compName
+	 * =栾氏集团&applyDate1=1999-02-08&applyDate2=2007-08-09
+	 * */
+	// @ResponseBody
+	// @RequestMapping(value = "/appExpFoodList",method=RequestMethod.GET)
+	// public Map<String, Object> appExpFoodList(HttpServletRequest
+	// request,ExpFoodPOFForm expFoodPOFForm){
+	// Map<String, Object> map = new HashMap<String, Object>();
+	// try {
+	// List<ExpFoodPOFDTO> list = expFoodPOFService.selectPOF(expFoodPOFForm);
+	// map.put("status", "OK");
+	// map.put("results", list);
+	// return map;
+	// } catch (Exception e) {
+	// logger_.error("***********/apps/appExpFoodList************",e);
+	// map.put("status", "FAIL");
+	// map.put("results", "无数据");
+	// e.printStackTrace();
+	// return map;
+	// }
+	// }
+	@ResponseBody
+	@RequestMapping(value = "/appExpFoodList", method = RequestMethod.GET)
+	public Map<String, Object> appExpFoodList(HttpServletRequest request,
+			EfpeApplyModel model) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<EfpeApplyModel> list = expFoodPOFService.selectEfpeApplyByAny(model);
+			map.put("status", "OK");
+			map.put("results", list);
+			return map;
+		} catch (Exception e) {
+			logger_.error("***********/apps/appExpFoodList************", e);
+			map.put("status", "FAIL");
+			map.put("results", new ArrayList<>());
+			e.printStackTrace();
+			return map;
+		}
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/appExpFoodListNew", method = RequestMethod.GET)
+	public Map<String, Object> appExpFoodListNew(HttpServletRequest request,
+			/*CompanyPsnModel*/EfpeRegulatoryModel model) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+//			List<CompanyPsnModel> list = expFoodPOFService
+//					.selectCompanyPsn(model);
+			model.setDepname("辽阳局本部");
+			List<EfpeRegulatoryModel> list=expFoodPOFService.selectCompanyPsnNew(model);
+			map.put("status", "OK");
+			map.put("results", list);
+			return map;
+		} catch (Exception e) {
+			logger_.error("***********/apps/appExpFoodList************", e);
+			map.put("status", "FAIL");
+			map.put("results", new ArrayList<>());
+			e.printStackTrace();
+			return map;
+		}
+	}
+
+	/**
+	 * 列表接口 http://localhost:7001/ciqs/apps/appOrigList?dec_org_name=企业名称&
+	 * apply_date=1985-09-09
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/appOrigList")
+	public Map<String, Object> appOrigList(HttpServletRequest request,
+			OrigPlaceDto origPlace) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<OrigPlaceDto> list = origPlaceFlowService
+					.findAppPrigList(origPlace);
+			map.put("status", "OK");
+			map.put("results", list);
+			return map;
+		} catch (Exception e) {
+			logger_.error("***********/apps/appOrigList************", e);
+		}
+		map.put("status", "FAIL");
+		map.put("results", new ArrayList<>());
+		return map;
+	}
+
+	/**
+	 * 隔离，留验 前段插入
+	 * 
+	 * @param quartnModel
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/insert")
+	public Map<String, Object> saveQuartn(@RequestBody QuartnModel quartnModel) {
+		Map<String, Object> ajaxResult = new HashMap<String, Object>();
+		if (quartnModel != null) {
+			if (org.apache.commons.lang.StringUtils.isBlank(quartnModel
+					.getCardNo())
+					|| org.apache.commons.lang.StringUtils.isBlank(quartnModel
+							.getCardType())
+					|| org.apache.commons.lang.StringUtils.isBlank(quartnModel
+							.getDiscoverWay())) {
+				ajaxResult.put("status", "FALL");
+				ajaxResult.put("results", "参数不能为空");
+			}
+		}
+		int i = danDong.save(quartnModel);
+		if (i != 0) {
+			ajaxResult.put("status", "OK");
+			ajaxResult.put("results", "成功");
+		} else {
+			ajaxResult.put("status", "FALL");
+			ajaxResult.put("results", "失败");
+		}
+		return ajaxResult;
+	}
+
+	/**
+	 * 隔离 留验 查询 接口
+	 * 
+	 * @param request
+	 * @param quartnModel
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/findqtList")
+	public Map<String, Object> findqtList(HttpServletRequest request,
+			QuartnModel quartnModel, Model model) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<QuartnModel> list = danDong.findQuartnList(quartnModel);
+			map.put("status", "OK");
+			map.put("results", list);
+			return map;
+		} catch (Exception e) {
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/**
+	 * 隔离 留验 查询 接口
+	 * 
+	 * @param request
+	 * @param quartnModel
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/findqtOne")
+	public Map<String, Object> findqtOne(HttpServletRequest request,
+			QuartnModel quartnModel, Model model) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> maplist = new HashMap<String, Object>();
+		try {
+			List<QuartnModel> list = danDong.findQuartnList(quartnModel);
+			maplist.put("obj", list.size() > 0 ? list.get(0) : null);
+			// //////////////////////////////////
+			Map<String, Object> param = new HashMap<String, Object>();
+			ProsasModel result = quartnService.findById(quartnModel.getId());// 根据主键获取对象里业务主键
+			param.put("ProcMainId", result.getId());
+			param.put("DocType", "D_DD_T_L_3");
+			CheckDocsRcdModel d3 = quartnService.findOnlyDoc(param);
+			maplist.put("D_DD_T_L_3", d3);
+			param.put("DocType", "D_DD_T_L_4");
+			CheckDocsRcdModel d4 = quartnService.findOnlyDoc(param);
+			maplist.put("D_DD_T_L_4", d4);
+			param.put("DocType", "D_DD_T_L_1");
+			// param.put("proj_code", "DD_T_L");
+			CheckDocsRcdModel dddtl1 = quartnService.findOnlyDoc(param);
+			if (null != dddtl1) {
+				dddtl1.setModelDecDate(DateUtil.DateToString(
+						dddtl1.getDecDate(), "yyyy-MM-dd HH:mm"));
+				maplist.put("D_DD_T_L_1", dddtl1);
+			}
+			param.put("DocType", "D_DD_T_L_2");
+			CheckDocsRcdModel dddtl2 = quartnService.findOnlyDoc(param);
+			if (null != dddtl2) {
+				dddtl2.setModelDecDate(DateUtil.DateToString(
+						dddtl2.getDecDate(), "yyyy-MM-dd HH:mm"));
+				maplist.put("D_DD_T_L_2", dddtl2);
+			}
+			map.put("status", "OK");
+			map.put("results", maplist);
+			return map;
+		} catch (Exception e) {
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/**
+	 * 隔离 留验 前端修改 接口
+	 * 
+	 * @param request
+	 * @param quartnModel
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/updateQtList")
+	public Map<String, Object> updateQtList(HttpServletRequest request,
+			QuartnModel quartnModel, Model model) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			danDong.updateQtList(quartnModel);
+			map.put("status", "OK");
+			map.put("results", "");
+			return map;
+		} catch (Exception e) {
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/**
+	 * 查找证件类型
+	 * 
+	 * @return 证件类型下拉菜单
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/findcard")
+	public Map<String, Object> findCard() {
+		Map<String, Object> ajaxResult = new HashMap<String, Object>();
+		List<SelectModel> result = appServerDbServ
+				.findNameAndCode(Constants.CARDTYPE);
+		ajaxResult.put("status", "OK");
+		ajaxResult.put("results", result);
+		return ajaxResult;
+	}
+
+	/**
+	 * 查找发现方式
+	 * 
+	 * @return 查找发现方式
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/findiscover")
+	public Map<String, Object> findDiscoverWay() {
+		Map<String, Object> ajaxResult = new HashMap<String, Object>();
+		List<SelectModel> result = appServerDbServ
+				.findNameAndCode(Constants.DISCOVERWAYTYPE);
+		ajaxResult.put("status", "OK");
+		ajaxResult.put("results", result);
+		return ajaxResult;
+	}
+
+	/**
+	 * 结果保存
+	 * http://localhost:7001/ciqs/apps/confirm?id=1&procMainId=22&projCode=678
+	 * &resultState=1&resultRmk=备注&oprUser=操作人&oprDate=1989-09-08
+	 * 
+	 * @param chkRckModel
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
+	public Map<String, Object> confirm(ChkRckModel chkRckModel) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			commonServer.insertConfirm(chkRckModel);
+			map.put("status", "OK");
+			map.put("results", "无数据");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map.put("status", "FAIL");
+		map.put("results", "无数据");
+		return map;
+	}
+
+	/**
+	 * 离线批量上传图片
+	 * 
+	 * @param VideoEventModel
+	 *            图片对象
+	 * @return "OK"成功，"FALL"失败
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/upphotos")
+	public Map<String, Object> upLoadPhotos(
+			@RequestBody List<VideoEventModel> VideoEventModel,
+			HttpServletRequest request) {
+		Map<String, Object> ajaxResult = new HashMap<String, Object>();
+		try {
+			// 时间转换获取目录文件夹名字
+			long l = System.currentTimeMillis();
+			String s = new SimpleDateFormat("yyyyMM/yyyyMMdd").format(new Date(
+					l));
+			VideoEventModel eventBean = new VideoEventModel();
+			if (VideoEventModel != null) {
+				for (VideoEventModel eventModel : VideoEventModel) {
+					String namePath = s + "/" + eventModel.getFileName();
+					eventBean.setFileName(namePath);
+					eventBean.setFileType(eventModel.getFileType());
+					eventBean.setPortDeptCode(eventModel.getPortDeptCode());
+					eventBean.setPortOrgCode(eventModel.getPortOrgCode());
+					eventBean.setProcMainId(eventModel.getProcMainId());
+					if (com.dpn.ciqqlc.common.util.StringUtils
+							.isNotEmpty(eventModel.getName())) {
+						eventBean.setName(eventModel.getName());
+					}
+					if (null != eventModel.getProcType()) {
+						if (-1 != eventModel.getProcType().indexOf("-V_")) {// 如果环节类型包含“-”，为【邮轮】模块，拆分为【顶层环节类型】/【宿舱名】+【环节类型】
+							eventBean.setTop_proc_type(eventModel.getProcType().substring(0,eventModel.getProcType().lastIndexOf("-")));
+							eventBean.setProcType(eventModel.getProcType().substring(eventModel.getProcType().lastIndexOf("-")+1, eventModel.getProcType().length()));
+						} else {
+							eventBean.setProcType(eventModel.getProcType());
+						}
+					}
+					UserInfoDTO user = (UserInfoDTO) request.getSession()
+							.getAttribute(Constants.USER_KEY);
+					if (null != eventModel.getCreateUser()
+							&& !eventModel.getCreateUser().equals("")
+							&& !eventModel.getCreateUser().equals("游客")) {
+						eventBean.setCreateUser(eventModel.getCreateUser());
+					} else {
+						eventBean.setCreateUser(user.getName());
+					}
+					eventBean.setCreateDate(DateUtil.getNowDateTime());
+					eventBean.setCunnar_flag(eventModel.getCunnar_flag());
+					commonServer.save(eventBean);
+//					this.insertWaringEvent(request,eventBean.getProcType(),eventBean.getProcMainId(),null,eventBean.getPortOrgCode(),true);
+				}
+				this.inserRule(request,VideoEventModel);
+			}
+			ajaxResult.put("status", "OK");
+			ajaxResult.put("results", "成功");
+			return ajaxResult;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ajaxResult.put("status", "FALL");
+			ajaxResult.put("results", "失败");
+		}
+		return ajaxResult;
+	}
+
+	@SuppressWarnings("unused")
+	private void insertWaringEvent(HttpServletRequest request, String procType,String procMainId, String warningNo,String orgCode,boolean isTwo) {
+		// TODO Auto-generated method stub
+		WarningEnum e=WarningEnum.getRuleCode(procType, false);
+		WarningDto dto =new WarningDto();
+		dto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+		dto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+		dto.setWarningId(procMainId);
+		dto.setWarningNo(warningNo);
+		dto.setPartnerCode(orgCode);  
+		List<WarningEventDto> eventDtoList=new ArrayList<WarningEventDto>();
+		WarningEventDto warningEventDto=new WarningEventDto();
+		warningEventDto.setWarningId(dto.getWarningId());
+		warningEventDto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+		warningEventDto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+		warningEventDto.setFirstModuleType(e.getWarningLinkRuleForm().getLinkType());
+		warningEventDto.setFirstModuleName(e.getWarningLinkRuleForm().getLinkName());
+		warningEventDto.setThirdModuleType(e.getWarningLinkRuleForm().getDicType());
+		warningEventDto.setThirdModuleName(e.getWarningLinkRuleForm().getDicName());
+		eventDtoList.add(warningEventDto);
+		dto.setEventDtoList(eventDtoList);
+		warningEventService.updateEvent(dto);
+	}
+
+	private void inserRule(HttpServletRequest request, List<VideoEventModel>  eventBean) {/*
+		//TODO
+		
+		Map<String , List<VideoEventModel>> rules = new HashMap<String , List<VideoEventModel>>();
+		
+		for(VideoEventModel v:eventBean){
+			String type="";
+			if(null!=v.getProcType()){
+				if(v.getProcType().contains("V_OC_C_M_")) type = "V_OC_C_M";
+				//行政检查
+				if(v.getProcType().equals("V_BGSC_JD_QT") || v.getProcType().equals("V_BGSC_JD_ZG")) type = "V_BGSC";
+				if(v.getProcType().equals("V_CF_J_Y_1")) type = "V_CF_J_Y";//简易处罚
+				if(v.getProcType().equals("V_KBQ_C_M_1") //邮寄物
+						|| v.getProcType().equals("V_KB_C_M_1") ||  v.getProcType().equals("V_KB_C_M_2") || v.getProcType().equals("V_KB_C_M_4")
+						|| v.getProcType().equals("V_JL_C_M_3") ||  v.getProcType().equals("V_CYSJ_C_M_1") ||  v.getProcType().equals("V_CYSJ_C_M_2")
+						|| v.getProcType().equals("V_TH_C_M_5") ||  v.getProcType().equals("V_XH_C_M_6") ||  v.getProcType().equals("V_XH_C_M_6")
+						){}
+			}
+			if (rules.containsKey(v.getProcMainId())) rules.get("V_OC_C_M"+"/"+v.getProcMainId()).add(v);
+			else 
+				rules.put("V_OC_C_M"+"/"+v.getProcMainId(), Collections.singletonList(v));
+		}
+		
+		Iterator it = rules.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry) it.next();
+			String key = (String) entry.getKey();
+			@SuppressWarnings("unchecked")
+			List<VideoEventModel> value = (List<VideoEventModel>) entry.getValue();
+			String type = "";
+			if(key.contains("V_OC_C_M")) type = "V_OC_C_M";//原产地业务
+			if(key.contains("V_CF_J_Y")) type = "V_CF_J_Y";//简易处罚
+			if(key.contains("V_JC_T_T")) type = "V_JC_T_T";
+			if(key.contains("V_YJW/")) type = "V_YJW";//进境邮寄物检疫
+			
+			List<OrigPlaceDto> orgList = null;
+
+			WarningEnum we = WarningEnum.getRuleCode(type, true);
+			if(we == null) return;
+			
+			WarningDto dto =new WarningDto();
+			dto.setBusinessType(we.getWarningLinkRuleForm().getBusinessType());
+			dto.setBusinessName(we.getWarningLinkRuleForm().getBusinessName());
+			dto.setPartnerCode(null!=value && value.size()>0 ? value.get(0).getPortOrgCode():"");                //部门
+			List<WarningEventDto> eventDtoList=new ArrayList<WarningEventDto>();
+			
+			if(key.contains("V_OC_C_M")){//原产地特殊处理
+				OrigPlaceDto org=new OrigPlaceDto();
+				org.setMain_id(key.replace(type+"/", ""));
+				orgList=origPlaceFlowService.findOrigByMainId(org);//根据业务主键查询
+				dto.setWarningId(orgList.isEmpty()?"":orgList.get(0).getId());
+				if(!orgList.isEmpty() && orgList.get(0).getFile_date()!=null){        //证书发放及归档,不是手机上传,从业务表查询
+					WarningEventDto warningEventDto=new WarningEventDto();
+					warningEventDto.setWarningId(dto.getWarningId());
+					warningEventDto.setFirstModuleType("ql0504000");
+					warningEventDto.setThirdModuleType("ql0504001");
+					warningEventDto.setBusinessType("ql0500000");
+					warningEventDto.setBusinessName("原产地证书签发");
+					warningEventDto.setThirdModuleName("证书发放及归档");
+					eventDtoList.add(warningEventDto);
+				}
+			}else{
+				dto.setWarningId(key.replace("V_CF_J_Y/", ""));
+			}
+			for(VideoEventModel v:value){
+				WarningEnum e=WarningEnum.getRuleCode(v.getProcType(), false);
+				WarningEventDto warningEventDto=new WarningEventDto();
+				warningEventDto.setWarningId(dto.getWarningId());
+				warningEventDto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+				warningEventDto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+				warningEventDto.setFirstModuleType(e.getWarningLinkRuleForm().getLinkType());
+				warningEventDto.setFirstModuleName(e.getWarningLinkRuleForm().getLinkName());
+				warningEventDto.setThirdModuleType(e.getWarningLinkRuleForm().getDicType());
+				warningEventDto.setThirdModuleName(e.getWarningLinkRuleForm().getDicName());
+				eventDtoList.add(warningEventDto);
+			}
+			dto.setEventDtoList(eventDtoList);
+			warningEventService.updateEvent(dto);
+			
+		}
+	*/}
+
+	/**
+	 * 邮寄物处理状态更新
+	 * http://localhost:8080/ciqs/apps/updateDealStatus?package_no=001&
+	 * deal_type=FX
+	 * 
+	 * @param mailObjCheckModel
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/updateDealStatus", method = RequestMethod.GET)
+	public Map<String, Object> updateDealStatus(
+			MailObjCheckModel mailObjCheckModel) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("package_no", mailObjCheckModel.getPackage_no());
+			String package_no = mailObjCheckModel.getPackage_no();
+			String deal_type = mailObjCheckModel.getDeal_type();
+			if (!StringUtils.isBlank(deal_type)) {
+				updateMailObjCheckStatus(package_no, deal_type);
+			}
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+
+	}
+
+	/**
+	 * 查询销毁列表 http://localhost:8080/ciqs/apps/xhList
+	 * 
+	 * @param mailObjCheckModel
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@RequestMapping(value = "/xhList", method = RequestMethod.GET)
+	public Map<String, Object> xhList(HttpServletRequest request,MailObjCheckModel mailObjCheckModel) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			map.put("startIntrceptDate",request.getParameter("startIntrceptDate"));
+			map.put("endIntrceptDate",request.getParameter("endIntrceptDate"));	
+			List<MailObjCheckModel> newlist = new ArrayList<MailObjCheckModel>();
+			List<MailObjCheckModel> list = (List<MailObjCheckModel>) mailObjCheckServ.ydxhList(map);
+			for (int i = 0; i < list.size(); i++) {
+				MailObjCheckModel dto = (MailObjCheckModel) list.get(i);
+				if (dto.getDeal_type().equals("XH")) {
+					newlist.add(dto);
+				}
+			}
+			for (int i = 0; i < list.size(); i++) {
+				MailObjCheckModel dto = (MailObjCheckModel) list.get(i);
+				if (dto.getDeal_type().equals("CYSJ")) {
+					newlist.add(dto);
+				}
+			}
+			map.put("results", newlist);
+			map.put("status", "OK");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+
+	}
+
+	/**
+	 * 更新销毁列表
+	 * http://localhost:8080/ciqs/apps/xhListUpdateStatus?packageNos=120,130
+	 * 
+	 * @param package_no
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/xhListUpdateStatus", method = RequestMethod.GET)
+	public Map<String, Object> xhListUpdateStatus(String packageNos,String dealTypes) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		String ditroyid = UUIDGenerator.getUUID();
+		try {
+			if (packageNos.indexOf(',') != -1 && dealTypes.indexOf(',') != -1) {
+				String[] packageNoArr = packageNos.split(",");
+				String[] dealTypeArr = dealTypes.split(",");
+				
+				for (int i = 0; i < packageNoArr.length; i++) {
+					// 更新状态
+					updateMailObjCheckStatus(packageNoArr[i], dealTypeArr[i]);
+					// 保存集中销毁id
+					map.put("package_no", packageNoArr[i]);
+					map.put("ditroy_id", ditroyid);
+					mailObjCheckServ.updateMailObjCheckDitroyId(map);
+				}
+			} else {
+				if (packageNos != null && !"".equals(packageNos)
+						&& dealTypes !=null && !"".equals(dealTypes)) {
+					updateMailObjCheckStatus(packageNos, dealTypes);
+					map.put("package_no", packageNos);
+					map.put("ditroy_id", ditroyid);
+					mailObjCheckServ.updateMailObjCheckDitroyId(map);
+				} else {
+					map.put("status", "FAIL");
+					map.put("results", "无数据");
+					return map;
+				}
+			}
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+	}
+
+	/**
+	 * 查询是否有邮寄物
+	 * http://localhost:8080/ciqs/apps/mailExist?packageNos=1
+	 * 
+	 * @param package_no
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/mailExist", method = RequestMethod.GET)
+	public Map<String, Object> xhListUpdateStatus(String packageNos) {
+		Map<String, Object> resultsMap = new HashMap<String, Object>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		try {
+			paramMap.put("package_no", packageNos);
+			Integer count = mailObjCheckServ
+					.selectMailExist(paramMap);
+			if (count != 0) {
+				resultsMap.put("results", "1");
+			} else {
+				resultsMap.put("results", "0");
+			}
+			resultsMap.put("status", "OK");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultsMap.put("status", "FAIL");
+			resultsMap.put("results", "失败");
+		}
+		return resultsMap;
+	}
+	
+	/**
+	 * 根据单号查询是否有视频或图片
+	 * 
+	 * @param package_no
+	 *            单号
+	 * @param deal_type
+	 *            处理方式
+	 * @return
+	 */
+	public void updateMailObjCheckStatus(String package_no, String deal_type) {
+
+		// 若处理方式为放行，放行环节有照片或视频，处理状态变为“已完结”
+		if (deal_type.equals("FX")) {
+			Map<String, Object> fxmap = new HashMap<String, Object>();
+			fxmap.put("proc_type", "V_KB_C_M_4");
+			fxmap.put("package_no", package_no);
+			boolean flag = mailObjCheckServ.getIsImg(fxmap);
+			if (flag) {
+				mailObjCheckServ.updateStatus(fxmap);
+			}
+			// 若处理方式为退回，退回环节有照片或视频，处理状态变为“已完结”
+		} else if (deal_type.equals("TH")) {
+			Map<String, Object> txmap = new HashMap<String, Object>();
+			txmap.put("package_no", package_no);
+			txmap.put("proc_type", "V_TH_C_M_5");
+			boolean flag = mailObjCheckServ.getIsImg(txmap);
+			if (flag) {
+				mailObjCheckServ.updateStatus(txmap);
+			}
+			// 若处理方式为销毁，集中销毁环节有视频，处理状态变为“已完结”
+		} else if (deal_type.equals("XH")) {
+			Map<String, Object> xhmap = new HashMap<String, Object>();
+			xhmap.put("package_no", package_no);
+			xhmap.put("proc_type", "V_XH_C_M_6");
+			xhmap.put("file_type", "2");
+			boolean flag = mailObjCheckServ.getIsImg(xhmap);
+			if (flag) {
+				mailObjCheckServ.updateStatus(xhmap);
+			}
+			// 若处理方式为抽样送检，然后集中销毁环节下有视频，则处理方式变为销毁，处理状态变为“已完结”
+		}
+		if (deal_type.equals("CYSJ")) {
+			Map<String, Object> cysjmap1 = new HashMap<String, Object>();
+			cysjmap1.put("package_no", package_no);
+			cysjmap1.put("proc_type", "V_XH_C_M_6");
+			cysjmap1.put("file_type", "2");
+			cysjmap1.put("deal_type", "XH");
+			boolean flag = mailObjCheckServ.getIsImg(cysjmap1);
+			if (flag) {
+				mailObjCheckServ.updateStatus(cysjmap1);
+			}
+			// 若处理方式为抽样送检，然后退回环节有照片或视频，则处理方式变为退回，处理状态变为“已完结”
+		}
+		if (deal_type.equals("CYSJ")) {
+			Map<String, Object> cysjmap2 = new HashMap<String, Object>();
+			cysjmap2.put("package_no", package_no);
+			cysjmap2.put("proc_type", "V_TH_C_M_5");
+			cysjmap2.put("deal_type", "TH");
+			boolean flag = mailObjCheckServ.getIsImg(cysjmap2);
+			if (flag) {
+				mailObjCheckServ.updateStatus(cysjmap2);
+			}
+			// 若处理方式为抽样送检，然后放行环节有照片或视频，则处理方式变为放行，处理状态变为“已完结”
+		}
+		if (deal_type.equals("CYSJ")) {
+			Map<String, Object> cysjmap3 = new HashMap<String, Object>();
+			cysjmap3.put("package_no", package_no);
+			cysjmap3.put("proc_type", "V_KB_C_M_4");
+			cysjmap3.put("deal_type", "FX");
+			boolean flag = mailObjCheckServ.getIsImg(cysjmap3);
+			if (flag) {
+				mailObjCheckServ.updateStatus(cysjmap3);
+			}
+		}
+
+	}
+
+	/**
+	 * 单据数据存储接口多传 http://localhost:7001/ciqs/apps/moreDocs?procMainId=22
+	 * 
+	 * @param CheckDocsRcdModel
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/moreDocs", method = RequestMethod.POST)
+	public Map<String, Object> moreDocs(HttpServletRequest request,
+			@RequestBody List<CheckDocsRcdModel> checkDocsRcdModel) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			for (int i = 0; i < checkDocsRcdModel.size(); i++) {
+				commonServer.insertDocs(checkDocsRcdModel.get(i));
+			}
+			//TODO
+			this.insertWaringDocList(request,checkDocsRcdModel);
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+
+	}
+
+	private void insertWaringDocList(HttpServletRequest request,List<CheckDocsRcdModel> checkDocsRcdModel) {/*
+		// TODO
+		Map<String, List<CheckDocsRcdModel>> rules = new HashMap<String, List<CheckDocsRcdModel>>();
+		
+		for (CheckDocsRcdModel d : checkDocsRcdModel) {
+			String type = "";
+
+			if (StringUtils.isNotEmpty( d.getDocType())) {
+				// 隔离留验
+				if (d.getDocType().contains("D_DD_T_L")) type = "D_DD_T_L";
+				if (d.getDocType().contains("D_JC_T_T")) type = "D_JC_T_T";
+				if (d.getDocType().contains("D_OC_C_M")) type = "D_OC_C_M";
+				if (d.getDocType().contains("D_PT_H_L")) type = "D_PT_H_L";
+			}
+			
+			if (rules.containsKey(d.getProcMainId())) {
+				rules.get(type + "/" + d.getProcMainId()).add(d);
+			} else {
+				List<CheckDocsRcdModel> list = new ArrayList<CheckDocsRcdModel>();
+				list.add(d);
+				rules.put(type + "/" + d.getProcMainId(), list);
+			}
+
+		}
+
+		Iterator it = rules.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry) it.next();
+			String key = (String) entry.getKey();
+			@SuppressWarnings("unchecked")
+			List<CheckDocsRcdModel> value = (List<CheckDocsRcdModel>) entry.getValue();
+			
+			String type = "";
+			// 隔离留验
+			if (key.contains("D_DD_T_L")) type = "D_DD_T_L";
+			if (key.contains("D_JC_T_T")) type = "D_JC_T_T";
+			if (key.contains("D_OC_C_M")) type = "D_OC_C_M";
+			if (key.contains("D_PT_H_L")) type = "D_PT_H_L";
+			
+			WarningEnum we = WarningEnum.getRuleCode(key, true);
+			if(we == null) return;
+			
+			WarningDto dto = new WarningDto();
+			dto.setBusinessType(we.getWarningLinkRuleForm().getBusinessType());
+			dto.setBusinessName(we.getWarningLinkRuleForm().getBusinessName());
+			dto.setWarningId(key.replace(type+"/", ""));
+			UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(Constants.USER_KEY);
+			dto.setPartnerCode(user.getPort_code()); // 部门
+			
+			List<WarningEventDto> eventDtoList = new ArrayList<WarningEventDto>();
+			for (CheckDocsRcdModel d : value) {
+				WarningEnum e = WarningEnum.getRuleCode(d.getDocType(), false);
+				if(e == null) continue;
+				WarningEventDto warningEventDto = new WarningEventDto();
+				warningEventDto.setWarningId(dto.getWarningId());
+				warningEventDto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+				warningEventDto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+				warningEventDto.setFirstModuleType(e.getWarningLinkRuleForm().getLinkType());
+				warningEventDto.setFirstModuleName(e.getWarningLinkRuleForm().getLinkName());
+				warningEventDto.setThirdModuleType(e.getWarningLinkRuleForm().getDicType());
+				warningEventDto.setThirdModuleName(e.getWarningLinkRuleForm().getDicName());
+				eventDtoList.add(warningEventDto);
+			}
+			dto.setEventDtoList(eventDtoList);
+			warningEventService.updateEvent(dto);
+		}
+	*/}
+
+	private void insertWaringDoc(HttpServletRequest request,CheckDocsRcdModel checkDocsRcdModel) {/*
+		//TODO
+		
+		WarningEnum e = WarningEnum.getRuleCode(checkDocsRcdModel.getDocType(), false);
+		if(e == null) return;
+		
+		UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(Constants.USER_KEY);
+		WarningDto dto =new WarningDto();
+		dto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+		dto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+		dto.setWarningId(checkDocsRcdModel.getProcMainId());//口岸卫生许可证核发
+		dto.setPartnerCode(user.getOrg_code());                //部门
+		
+		if(checkDocsRcdModel.getDocType().equals("D_OC_C_M_1")){//原产地业务实地调查记录单
+			OrigPlaceDto org=new OrigPlaceDto();
+			org.setMain_id(checkDocsRcdModel.getProcMainId());
+			List<OrigPlaceDto> orgList=origPlaceFlowService.findOrigByMainId(org);//根据业务主键查询
+			dto.setWarningId(orgList.isEmpty()?"":orgList.get(0).getId());
+		}
+
+		List<WarningEventDto> eventDtoList=new ArrayList<WarningEventDto>();
+		WarningEventDto warningEventDto=new WarningEventDto();
+		warningEventDto.setWarningId(dto.getWarningId());
+		warningEventDto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+		warningEventDto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+		warningEventDto.setFirstModuleType(e.getWarningLinkRuleForm().getLinkType());
+		warningEventDto.setFirstModuleName(e.getWarningLinkRuleForm().getLinkName());
+		warningEventDto.setThirdModuleType(e.getWarningLinkRuleForm().getDicType());
+		warningEventDto.setThirdModuleName(e.getWarningLinkRuleForm().getDicName());
+		eventDtoList.add(warningEventDto);
+		dto.setEventDtoList(eventDtoList);
+		warningEventService.updateEvent(dto);
+		
+	*/}
+
+	/**
+	 * 单据数据存储接口单传 http://localhost:7001/ciqs/apps/docs?procMainId=22
+	 * 
+	 * @param CheckDocsRcdModel
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/docs", method = RequestMethod.POST)
+	public Map<String, Object> docs(HttpServletRequest request,
+			@RequestBody CheckDocsRcdModel checkDocsRcdModel) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		UserInfoDTO user = (UserInfoDTO) request.getSession()
+				.getAttribute(Constants.USER_KEY);
+		if(StringUtils.isBlank(checkDocsRcdModel.getDecUser())){
+			checkDocsRcdModel.setDecUser(user.getName());
+		}
+		try {
+			if(null != checkDocsRcdModel && com.dpn.ciqqlc.common.util.StringUtils.isNotEmpty(checkDocsRcdModel.getDocType())){//doc 存有视频，保证视频保留,给查出来
+//				commonServer.updateDocsByApplyNo(checkDocsRcdModel);
+				if(checkDocsRcdModel.getDocType().equals("V_SP_F_D_QT") || checkDocsRcdModel.getDocType().equals("V_SP_A_C_QT")
+						|| checkDocsRcdModel.getDocType().equals("V_SP_A_D_QT")){
+					Map<String,Object> param=new HashMap<String, Object>();
+					param.put("ProcMainId", checkDocsRcdModel.getProcMainId());
+					param.put("DocType", checkDocsRcdModel.getDocType());
+					CheckDocsRcdModel d = quartnService.findOnlyDoc(param);
+					commonServer.deleteDocsByDocTypeNProcMainId(checkDocsRcdModel);
+					if(null!=d){
+						if(com.dpn.ciqqlc.common.util.StringUtils.isEmpty(checkDocsRcdModel.getOption1())){
+							checkDocsRcdModel.setOption1(d.getOption1());
+						}
+						if(com.dpn.ciqqlc.common.util.StringUtils.isEmpty(checkDocsRcdModel.getOption2())){
+							checkDocsRcdModel.setOption2(d.getOption2());
+						}
+						if(com.dpn.ciqqlc.common.util.StringUtils.isEmpty(checkDocsRcdModel.getOption3())){
+							checkDocsRcdModel.setOption3(d.getOption3());
+						}
+					}
+					commonServer.insertDocs(checkDocsRcdModel);
+					map.put("status", "OK");
+					map.put("results", "成功");
+				}else{
+					if (null != checkDocsRcdModel) {
+						commonServer.deleteDocsByDocTypeNProcMainId(checkDocsRcdModel);
+					}
+					System.out.println(checkDocsRcdModel.getOption141());
+					System.out.println(checkDocsRcdModel.getOption142());
+					System.out.println(checkDocsRcdModel.getOption143());
+					commonServer.insertDocs(checkDocsRcdModel);
+					//TODO
+					this.insertWaringDoc(request,checkDocsRcdModel);
+					map.put("status", "OK");
+					map.put("results", "成功");
+				}
+			}else{
+				if (null != checkDocsRcdModel) {
+					commonServer.deleteDocsByDocTypeNProcMainId(checkDocsRcdModel);
+				}
+				System.out.println(checkDocsRcdModel.getOption141());
+				System.out.println(checkDocsRcdModel.getOption142());
+				System.out.println(checkDocsRcdModel.getOption143());
+				commonServer.insertDocs(checkDocsRcdModel);
+				map.put("status", "OK");
+				map.put("results", "成功");
+			}
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+	}
+
+	/**
+	 * 单个图片信息上传
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/insertVideoEventModel", method = RequestMethod.POST)
+	public String insertVideoEventModel(HttpServletRequest request,
+			HttpServletResponse response, VideoEventModel videoEvent,
+			@RequestParam(value = "file", required = true) MultipartFile file) {
+		try {
+			List<Map<String, String>> filePathList = FileUtil.uploadFile(
+					request, true);
+			for (Map<String, String> map : filePathList) {
+				// videoEvent.setFileName(map.get("filePath").substring(map.get("filePath").indexOf('/')+1,map.get("filePath").length()));
+				videoEvent.setFileName(map.get("filePath"));
+				UserInfoDTO user = (UserInfoDTO) request.getSession()
+						.getAttribute(Constants.USER_KEY);
+				videoEvent.setCreateUser(user.getId());
+				videoEvent.setCreateDate(DateUtil.getNowDateTime());
+				commonServer.save(videoEvent);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
+		return "success";
+
+	}
+
+	/**
+	 * http://10.10.39.235:7001/ciqs/apps/contoryList 国家列表接口
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/contoryList", method = RequestMethod.GET)
+	public Map<String, Object> contoryList(HttpServletRequest request,
+			HttpServletResponse response) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<CountryDTO> countryList = commonServer
+					.getCountryList(new CountryDTO());
+			map.put("status", "OK");
+			map.put("results", countryList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+
+	}
+
+	/**
+	 * 辽阳局出口商品及企业监督全过程执法记录 - 列表
+	 */
+	@RequestMapping("/expFoodProdList")
+	@ResponseBody
+	public Map<String, Object> expFoodProdList(HttpServletRequest request,
+			/*ExpFoodProdForm*/ EfpeRegulatoryModel form) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+//			int pages = Integer
+//					.parseInt(request.getParameter("page") == null ? "1"
+//							: request.getParameter("page"));
+//			form.setFirstRcd(String.valueOf((pages - 1) * Constants.PAGE_NUM
+//					+ 1));
+//			form.setLastRcd(String.valueOf(pages * Constants.PAGE_NUM + 1));
+//			form.setProj_code("AD_M_C");
+//			resultMap.put("results", dbServ.findListApp(form));
+			form.setEnterprisesname(request.getParameter("orgname"));
+			form.setDepname("辽阳局本部");
+			resultMap.put("results", dbServ.findEfpeRegulatoryAll2(form));
+			resultMap.put("status", "OK");
+			resultMap.put("orgname", form.getOrgName());
+			resultMap.put("plantype", form.getPlanType());
+		} catch (Exception e) {
+			resultMap.put("status", "FAIL");
+			resultMap.put("results", "无数据");
+			logger_.error("***********/expFoodProd/list************", e);
+		}
+		return resultMap;
+	}
+
+	/**
+	 * 辽阳局出口商品及企业监督全过程执法记录 - 详情
+	 */
+	@RequestMapping("/expFoodProdDetail")
+	@ResponseBody
+	public String expFoodProdDetail(HttpServletRequest request,
+			@RequestParam(value = "id", required = true) String id) {
+		String jsonStr = "";
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			resultMap.put("results", dbServ.findById(id));
+			resultMap.put("status", "OK");
+		} catch (Exception e) {
+			resultMap.put("status", "ERROR");
+			logger_.error("***********/expFoodProd/toDetail************", e);
+		} finally {
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				jsonStr = mapper.writeValueAsString(resultMap);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return jsonStr;
+	}
+
+	/**
+	 * 辽阳局出口商品及企业监督全过程执法记录 - 新增
+	 */
+	@RequestMapping("/addExpFoodProd")
+	@ResponseBody
+	public String addExpFoodProd(HttpServletRequest request, ExpFoodProdDTO dto) {
+		String jsonStr = "";
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			resultMap.put("results", dbServ.add(dto));
+			resultMap.put("status", "OK");
+		} catch (Exception e) {
+			resultMap.put("status", "ERROR");
+			logger_.error("***********/expFoodProd/toDetail************", e);
+		} finally {
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				jsonStr = mapper.writeValueAsString(resultMap);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return jsonStr;
+	}
+
+	/**
+	 * 进出境邮寄物全过程执法记录新增接口
+	 * http://localhost:7001/ciqs/apps/createMail?package_no=001
+	 * &consignee_name=张三
+	 * &consignee_tel=18695270145&package_plc=辽宁省大连市沙河口区&consignor_country=052
+	 * &intrcept_date=2017-10-12&cago_type=HDWMD&cago_name=笔记本电脑
+	 * &cago_num=10&cago_weight
+	 * =20&deal_type=FX&insp_user=李四&deal_date=2017-10-12
+	 * &create_user=liuchao&port_org_code=211940&isxgbmys=0
+	 * 
+	 * @param request
+	 * @param mailObjCheckModel
+	 * @return "OK"成功，"FALL"失败
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/createMail", method = RequestMethod.GET)
+	public Map<String, Object> createMail(HttpServletRequest request,
+			MailObjCheckModel mailObjCheckModel) {
+		Map<String, Object> resultsMap = new HashMap<String, Object>();
+		Map<String, Object> createMailMap = new HashMap<String, Object>();
+		try {
+			// 邮件单号
+			createMailMap.put("package_no", mailObjCheckModel.getPackage_no());
+			// 收件人姓名
+			createMailMap.put("consignee_name",
+					mailObjCheckModel.getConsignee_name());
+			// 收件人电话
+			createMailMap.put("consignee_tel",
+					mailObjCheckModel.getConsignee_tel());
+			// 收寄件人地址
+			createMailMap
+					.put("package_plc", mailObjCheckModel.getPackage_plc());
+			// 寄件国/地区
+			createMailMap.put("consignor_country",
+					mailObjCheckModel.getConsignor_country());
+			// 截获时间
+			createMailMap.put("intrcept_date",
+					mailObjCheckModel.getIntrcept_date());// 移动端需传一个带小时分秒的日期
+			// 物品类别
+			createMailMap.put("cago_type", mailObjCheckModel.getCago_type());
+			// 物品名称
+			createMailMap.put("cago_name", mailObjCheckModel.getCago_name());
+			// 物品数量
+			createMailMap.put("cago_num", mailObjCheckModel.getCago_num());
+			// 物品重量
+			createMailMap
+					.put("cago_weight", mailObjCheckModel.getCago_weight());
+			// 处理方式
+			createMailMap.put("deal_type", mailObjCheckModel.getDeal_type());
+			// 处理时间
+			createMailMap.put("deal_date", mailObjCheckModel.getDeal_date());
+			// 检疫人员
+			createMailMap.put("insp_user", mailObjCheckModel.getInsp_user());
+			// 分支局科室
+			// String port_org_code = "211940";
+
+			String org_code = commonServer.getOrg_code(mailObjCheckModel
+					.getCreate_user());
+			String directy_under_org = commonServer
+					.getDirecty_under_org(mailObjCheckModel.getCreate_user());
+			createMailMap.put("port_org_code", org_code);// 分支机构
+			// 直属局
+			createMailMap.put("port_zsorg_code", directy_under_org);// 没做获取系统当前登录人的口岸局信息暂写死
+			// 创建人 改用户登录信息
+			createMailMap
+					.put("create_user", mailObjCheckModel.getCreate_user());// 没做获取系统当前登录人信息暂写死。
+			createMailMap
+					.put("create_date", mailObjCheckModel.getCreate_date());
+			// 处理状态
+			createMailMap.put("deal_status", "0");
+			//相关部门移送
+			createMailMap.put("isxgbmys", mailObjCheckModel.getIsxgbmys());
+			mailObjCheckServ.createMail(createMailMap);
+			resultsMap.put("status", "OK");
+			resultsMap.put("results", "插入数据成功");
+		} catch (Exception e) {
+			resultsMap.put("status", "FAIL");
+			resultsMap.put("results", "插入数据失败");
+			e.printStackTrace();
+		}
+		return resultsMap;
+	}
+
+	/**
+	 * 进出境邮寄物全过程执法记录更新接口
+	 * http://localhost:7001/ciqs/apps/updateMail?package_no=001
+	 * 
+	 * @param request
+	 * @param mailObjCheckModel
+	 * @return "OK"成功，"FALL"失败
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/updateMail", method = RequestMethod.GET)
+	public Map<String, Object> updateMail(HttpServletRequest request,
+			MailObjCheckModel mailObjCheckModel) {
+		Map<String, Object> resultsMap = new HashMap<String, Object>();
+		try {
+			mailObjCheckServ.updateMail(mailObjCheckModel);
+			resultsMap.put("status", "OK");
+			resultsMap.put("results", "更新数据成功");
+		} catch (Exception e) {
+			resultsMap.put("status", "FAIL");
+			resultsMap.put("results", "更新数据失败");
+			e.printStackTrace();
+		}
+		return resultsMap;
+	}
+
+	public String getOrgCode(String orgCode, String defaultOrgCode) {
+		Map<String, Object> orgMap = new HashMap<String, Object>();
+		orgMap.put("org_code", orgCode);
+		if (!StringUtils.isEmpty(orgCode)) {
+			String fzOrgCode = commonServer.getDzOrgName(orgMap);
+			if (!StringUtils.isEmpty(fzOrgCode)) {
+				return fzOrgCode;
+			}
+		}
+		return defaultOrgCode;
+	}
+
+	/**
+	 * 进出境邮寄物全过程执法记录列表查询接口
+	 * http://localhost:7001/ciqs/apps/selectMailList?package_no
+	 * =001&consignee_name=张三
+	 * 
+	 * @param mailObjCheckModel
+	 * @return "OK"成功，"FALL"失败
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/selectMailList", method = RequestMethod.GET)
+	public Map<String, Object> selectMailList(HttpServletRequest request,
+			MailObjCheckModel mailObjCheckModel) {
+		Map<String, Object> resultsMap = new HashMap<String, Object>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		try {
+			paramMap.put("package_no", mailObjCheckModel.getPackage_no());
+			paramMap.put("consignee_name",
+					mailObjCheckModel.getConsignee_name());
+			paramMap.put("startIntrceptDate", request.getParameter("startIntrceptDate"));
+			paramMap.put("endIntrceptDate", request.getParameter("endIntrceptDate"));
+			List<MailObjCheckModel> list = mailObjCheckServ
+					.selectMail(paramMap);
+			resultsMap.put("status", "OK");
+			resultsMap.put("results", list);
+		} catch (Exception e) {
+			resultsMap.put("status", "FAIL");
+			resultsMap.put("results", "失败");
+			e.printStackTrace();
+		}
+		return resultsMap;
+	}
+
+	/**
+	 * 进出境邮寄物全过程执法记录详情信息接口
+	 * http://localhost:7001/ciqs/apps/selectMailDetail?id=56F
+	 * B9794-C836-1CD7-E054-0050568F0235
+	 * 
+	 * @param mailObjCheckModel
+	 * @return "OK"成功，"FALL"失败
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/selectMailDetail", method = RequestMethod.GET)
+	public Map<String, Object> selectMailDetail(HttpServletRequest request,
+			MailObjCheckModel mailObjCheckModel) {
+		Map<String, Object> resultsMap = new HashMap<String, Object>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		try {
+			paramMap.put("id", mailObjCheckModel.getId());
+			List<MailObjCheckModel> list = mailObjCheckServ
+					.selectMailDetail(paramMap);
+			resultsMap.put("status", "OK");
+			resultsMap.put("results", list);
+		} catch (Exception e) {
+			resultsMap.put("status", "FAIL");
+			resultsMap.put("results", "失败");
+			e.printStackTrace();
+		}
+		return resultsMap;
+	}
+
+	/**
+	 * 移动端查询拦截物信息
+	 * http://localhost:7001/ciqs/apps/selectMoveIntercepeByCardNo?cardNo
+	 * =E88928337
+	 * 
+	 * @param DTO
+	 * @return
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/selectMoveIntercepeByCardNo")
+	public Map<String, Object> selectMoveIntercepeByCardNo(
+			HttpServletRequest request, IntercepeForm intercepeForm) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<IntercepeModel> list = belongingsService
+					.selectMoveIntercepeByCardNo(intercepeForm);
+			map.put("status", "OK");
+			map.put("results", list);
+		} catch (Exception e) {
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/**
+	 * 移动端查询拦截物信息
+	 * http://localhost:7001/ciqs/apps/MoveIntercepe?interceptDate1=2017
+	 * -11-01&interceptDate2=2017-11-05&goodsItemName=巴西
+	 * 
+	 * @param DTO
+	 * @return
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/MoveIntercepe")
+	public Map<String, Object> MoveIntercepe(HttpServletRequest request,
+			IntercepeForm intercepeForm) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<IntercepeModel> list = belongingsService
+					.selectMoveIntercepe(intercepeForm);
+			map.put("status", "OK");
+			map.put("results", list);
+		} catch (Exception e) {
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/**
+	 * 移动端查询详细信息 http://localhost:8080/ciqs/apps/MoveDetails?card_no=E88928339
+	 * 
+	 * @param card_no
+	 *            护照号
+	 * @param prod_main_id
+	 *            ECIQ业务单号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/MoveDetails")
+	public Map<String, Object> selectMoveDetails(HttpServletRequest request,
+			@RequestParam("card_no") String card_no) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			map.put("card_no", card_no);
+			// map.put("prod_main_id", prod_main_id);
+			List<IntercepeModel> list = new ArrayList<IntercepeModel>();
+			list = belongingsService.selectMoveDetails(map);
+			map.put("status", "OK");
+			map.put("results", list);
+		} catch (Exception e) {
+			map.put("status", "FAIL");
+			map.put("results", "失败");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/*********************************************************************************************************************
+	 * 移动端带条件访问访问进出境运输工具检疫（邮轮）
+	 * 
+	 * @param 货轮英文名full_vsl_m模糊查询
+	 *            呼号vsl_callsign 申报单位dec_org模糊查询 QLC_MAIL_STEAMER
+	 * @return
+	 *********************************************************************************************************************/
+	@ResponseBody
+	@RequestMapping(value = "/selectMailSteamerList", method = RequestMethod.GET)
+	public Map<String, Object> selectMailSteamerList(
+			HttpServletRequest request, MailSteamerDTO mailsteamer) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<MailSteamerDTO> list = mailSteamerService
+					.findMailSteamerList(mailsteamer);
+			map.put("status", "OK");
+			map.put("results", list);
+			return map;
+		} catch (Exception e) {
+			logger_.error("***********/apps/selectMailSteamerList************",
+					e);
+		}
+		map.put("status", "FAIL");
+		map.put("results", "无数据");
+		return map;
+	}
+
+	/**
+	 * 邮轮结果判定 http://localhost:7001/ciqs/apps/saveMailResult MAIL_STEAMER_RESULT
+	 * 
+	 * @param dto
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/saveMailResult", method = RequestMethod.POST)
+	public Map<String, Object> saveMailResult(
+			@RequestBody List<MailSteamerResultDTO> dto) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			for(MailSteamerResultDTO model:dto){
+				mailSteamerService.insertMailResult(model);
+			}
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+	}
+
+	/**
+	 * 单据数据存储接口多传邮轮业务检疫处理表 http://localhost:7001/ciqs/apps/saveMailChkDeal
+	 * MAIL_STEAMER_CHK_DEAL
+	 * 
+	 * @param mailSteamerChkDealModel
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/saveMailChkDeal", method = RequestMethod.POST)
+	public Map<String, Object> saveMailChkDeal(
+			@RequestBody List<MailSteamerChkDealModel> mailSteamerChkDealModel) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			for (int i = 0; i < mailSteamerChkDealModel.size(); i++) {
+				mailSteamerService.insertMailChkDeal(mailSteamerChkDealModel
+						.get(i));
+			}
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+	}
+
+	/**
+	 * 单据数据存储接口多传邮轮业务卫生监督表 http://localhost:7001/ciqs/apps/saveMailHlthCheck
+	 * QLC_MAIL_STEAMER_HLTH_CHECK
+	 * 
+	 * @param mailSteamerHlthCheckModel
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/saveMailHlthCheck", method = RequestMethod.POST)
+	public Map<String, Object> saveMailHlthCheck(
+			@RequestBody List<MailSteamerHlthCheckModel> mailSteamerHlthCheckModel) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			for (int i = 0; i < mailSteamerHlthCheckModel.size(); i++) {
+				mailSteamerService
+						.insertMailHlthCheck(mailSteamerHlthCheckModel.get(i));
+			}
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+	}
+
+	/**
+	 * 单据数据存储接口多传邮轮业务检疫处理表 http://localhost:7001/ciqs/apps/saveMailSamp
+	 * MAIL_STEAMER_CHK_DEAL
+	 * 
+	 * @param mailSteamerSampDTO
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/saveMailSamp", method = RequestMethod.POST)
+	public Map<String, Object> saveMailSamp(HttpServletRequest request,
+			@RequestBody List<MailSteamerSampDTO> mailSteamerSampDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(
+				Constants.USER_KEY);
+		try {
+			for (int i = 0; i < mailSteamerSampDTO.size(); i++) {
+				if(StringUtils.isBlank(mailSteamerSampDTO.get(i).getSamp_psn())){
+					mailSteamerSampDTO.get(i).setSamp_psn(user.getName());
+				}
+				mailSteamerService.insertMailSamp(mailSteamerSampDTO.get(i));
+			}
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+	}
+
+	/**
+	 * 接口文档3.27 - 邮轮检疫处理查询列表
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/findMailSteamerChkDealList", method = RequestMethod.GET)
+	public Map<String, Object> findMailSteamerChkDealList(
+			HttpServletRequest request, String dec_master_id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<MailSteamerChkDealDTO> list = mailSteamerService
+					.findMailSteamerChkDealList(dec_master_id);
+			map.put("status", "OK");
+			map.put("results", list);
+			return map;
+		} catch (Exception e) {
+			logger_.error("***********/apps/selectMailSteamerList************",
+					e);
+		}
+		map.put("status", "FAIL");
+		map.put("results", "无数据");
+		return map;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/saveMailChkDealSingle", method = RequestMethod.POST)
+	public Map<String, Object> saveMailChkDealSingle(
+			@RequestBody MailSteamerChkDealDTO mailSteamerChkDealDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			mailSteamerService.insertMailChkDealSingle(mailSteamerChkDealDTO);
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+	}
+
+	/**
+	 * 新增接口 - 移动端根据type查询qlc_code_library列表
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/findCodeLibraryList", method = RequestMethod.GET)
+	public Map<String, Object> findCodeLibraryList(HttpServletRequest request,
+			String type) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<CodeLibraryDTO> list = codeLibraryService
+					.findCodeLibraryList(type);
+			map.put("status", "OK");
+			map.put("results", list);
+			return map;
+		} catch (Exception e) {
+			logger_.error("***********/apps/findCodeLibraryList************", e);
+		}
+		map.put("status", "FAIL");
+		map.put("results", "无数据");
+		return map;
+	}
+
+	/**
+	 * 转换前台数据转换器
+	 * 
+	 * @param binder
+	 */
+	@InitBinder
+	public void InitBinder(WebDataBinder binder) {
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			dateFormat.setLenient(false);
+			binder.registerCustomEditor(Date.class, new CustomDateEditor(
+					dateFormat, true));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 新增接口 - 邮轮出境检疫查询 cn_vsl_m 中文船名 full_vsl_m 英文船名 exp_voyage_no 航次
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/findMailSteamerExp", method = RequestMethod.GET)
+	public Map<String, Object> findMailSteamerExp(HttpServletRequest request,
+			String cn_vsl_m, String full_vsl_m, String exp_voyage_no) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			MailSteamerDTO paramDTO = new MailSteamerDTO();
+			paramDTO.setCn_vsl_m(cn_vsl_m);
+			paramDTO.setFull_vsl_m(full_vsl_m);
+			paramDTO.setExp_voyage_no(exp_voyage_no);
+			MailSteamerDTO resultDTO = mailSteamerService
+					.findMailSteamerOne(paramDTO);
+			if (resultDTO != null) {
+				resultMap.put("dec_master_id", resultDTO.getDec_master_id());
+				resultMap.put("cn_vsl_m", resultDTO.getCn_vsl_m());
+				resultMap.put("full_vsl_m", resultDTO.getFull_vsl_m());
+				resultMap.put("exp_voyage_no", resultDTO.getExp_voyage_no());
+				resultMap.put("vsl_callsign", resultDTO.getVsl_callsign());
+				resultMap.put("vsl_no", resultDTO.getVsl_no());
+				resultMap.put("vsl_imo_no", resultDTO.getVsl_imo_no());
+				resultMap
+						.put("vsl_registry_cn", resultDTO.getVsl_registry_cn());
+			}
+			map.put("status", "OK");
+			map.put("results", resultMap);
+		} catch (Exception e) {
+			logger_.error("***********/apps/findMailSteamerExp************", e);
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+		}
+		return map;
+	}
+
+	/**
+	 * 检疫处罚 保存
+	 * 
+	 * @param request
+	 * @param response
+	 * @param dto
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/saveLocalePunish")
+	public Map<String, Object> saveLocalePunish(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody LocalePunishDTO dto) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(
+				Constants.USER_KEY);
+//		dto.setPort_dept_code(user.getDept_code());
+//		dto.setPort_org_code(user.getOrg_code());
+		try {
+			int count = localePunishDBServ.findLocaleCount(dto.getPunish_id());
+			if (count > 0) {
+				localePunishDBServ.updateLocalePunish(dto);
+			} else {
+				localePunishDBServ.insertLocalePunish(dto);
+//				warningEventService.updateEvent(dto);
+				WarningDto wd = new WarningDto();
+				WarningLinkRuleForm wf = WarningEnum.ql1202001.getWarningLinkRuleForm();
+				wd.setBusinessName(wf.getBusinessName());
+				wd.setBusinessType(wf.getBusinessType());
+				wd.setWarningId(dto.getPunish_id());
+				wd.setPartnerCode(((UserInfoDTO) request.getSession()
+						.getAttribute(Constants.USER_KEY)).getOrg_code());  
+				
+				WarningEventDto warningEventDto=new WarningEventDto();
+				warningEventDto.setWarningId(dto.getPunish_id());
+				warningEventDto.setBusinessType(wf.getBusinessType());
+				warningEventDto.setBusinessName(wf.getBusinessName());
+				warningEventDto.setFirstModuleType(wf.getLinkType());
+				warningEventDto.setFirstModuleName(wf.getLinkName());
+				warningEventDto.setThirdModuleType(wf.getDicType());
+				warningEventDto.setThirdModuleName(wf.getDicName());
+
+				wd.setEventDtoList(Arrays.asList(warningEventDto));
+				warningEventService.updateEvent(wd);
+			}
+			map.put("status", "OK");
+			map.put("results", "无数据");
+			return map;
+		} catch (Exception e) {
+			map.put("status", "FALL");
+			map.put("results", "失败");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/**
+	 * 检疫处罚 pdf 下载
+	 * 
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @param dto
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/downPunish")
+	public void downPunish(HttpServletRequest request,
+			HttpServletResponse response, Model model, LocalePunishDTO dto) {
+		try {
+			LegalPunishModel d = localePunishDBServ.findPunishList(dto);
+			this.toPrintPlanNote(request, response, d, Constants.JYCF, null,
+					true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void formSet(HttpServletRequest request,PdfStamper stamper,AcroFields acroform, Object t, String actionType) {
+		try {
+			LegalPunishModel l = (LegalPunishModel) t;
+//			LegalPunishModel l2 = (LegalPunishModel) myInvoke(l);
+//			System.out.println(l2);
+			acroform.setField("PUNISH_TIME",
+					DateUtil.DateToString(l.getPunish_time(), "yyyy-MM-dd"));
+			acroform.setField("PARTY_NAME", l.getParty_name());
+			acroform.setField("IDENTIFI_STYLE", l.getIdentifi_style());
+			acroform.setField("IDENTIFI_NUMBER", l.getIdentifi_number());
+			acroform.setField("LEGAL_REPRESENT", l.getLegal_represent());
+			acroform.setField("LEGAL_REPRESENT_PHONE",
+					l.getLegal_represent_phone());
+			acroform.setField("ILLEGAL_OBJECT", l.getIllegal_object());
+			acroform.setField("ILLEGAL_ADDRESS", l.getIllegal_address());
+			acroform.setField("ILLEGAL_TIME",
+					DateUtil.DateToString(l.getIllegal_time(), "yyyy-MM-dd"));
+			acroform.setField("PARTY_REPRESENT", l.getParty_represent());
+			acroform.setField("PARTY_REPRESENT_PHONE",
+					l.getParty_represent_phone());
+			acroform.setField("SURVEY_CONTENT", l.getSurvey_content());
+			acroform.setField("PARTY_ASSIGN", l.getParty_assign());
+			acroform.setField("ILLEGAL_BASIS", l.getIllegal_basis());
+			acroform.setField("PUNISH_BASIS", l.getPunish_basis());
+			if (null != l.getPunish_style() && l.getPunish_style().equals("0")) {
+				acroform.setField("PUNISH_STYLE_0", "√");
+			}
+			if (null != l.getPunish_style() && l.getPunish_style().equals("1")) {
+				acroform.setField("PUNISH_STYLE_1", "√");
+			}
+			acroform.setField("WARNNING_CONTENT", l.getWarnning_content());
+			acroform.setField("PUNISH_MONEY", l.getPunish_money());
+			acroform.setField("FORFEIT_PAY_STYLE", l.getForfeit_pay_style());
+			acroform.setField("FORFEIT_STATUS", l.getForfeit_status());
+			acroform.setField("PAY_TIME",
+					DateUtil.DateToString(l.getPay_time(), "yyyy-MM-dd"));
+			acroform.setField("BANK_CARD", l.getBank_card());
+			acroform.setField("RECONSIDER", l.getReconsider());
+			acroform.setField("LAW_EXECUTOR", l.getLaw_executor());
+			acroform.setField("PORT_ORG_CODE", l.getPort_org());
+			acroform.setField("PORT_DEPT_CODE", l.getPort_dept());
+			acroform.setField("ADDRESS", l.getAddress());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@SuppressWarnings("unused")
+	private Object myInvoke(Object o) {
+		try {
+			Field[] field = o.getClass().getDeclaredFields();
+			for (int j = 0; j < field.length; j++) { //
+				String name = field[j].getName(); // 获取属性的名字
+				name = name.substring(0, 1).toUpperCase() + name.substring(1); // 将属性的首字符大写，方便构造get，set方法
+				String type = field[j].getGenericType().toString(); // 获取属性的类型
+				if (type.equals("class java.lang.String")) { // 如果type是类类型，则前面包含"class "，后面跟类名
+					Method m = o.getClass().getMethod("get" + name);
+					String value = (String) m.invoke(o); // 调用getter方法获取属性值
+					if (value == null) {
+						m = o.getClass().getMethod("set" + name, String.class);
+						m.invoke(o, "");
+					}
+				}
+				if (type.equals("class java.lang.Integer")) {
+					Method m = o.getClass().getMethod("get" + name);
+					Integer value = (Integer) m.invoke(o);
+					if (value == null) {
+						m = o.getClass().getMethod("set" + name, Integer.class);
+						m.invoke(o, 0);
+					}
+				}
+				if (type.equals("class java.lang.Boolean")) {
+					Method m = o.getClass().getMethod("get" + name);
+					Boolean value = (Boolean) m.invoke(o);
+					if (value == null) {
+						m = o.getClass().getMethod("set" + name, Boolean.class);
+						m.invoke(o, false);
+					}
+				}
+				if (type.equals("class java.util.Date")) {
+					Method m = o.getClass().getMethod("get" + name);
+					Date value = (Date) m.invoke(o);
+					if (value == null) {
+						m = o.getClass().getMethod("set" + name, Date.class);
+						m.invoke(o, new Date());
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return o;
+
+	}
+
+	/**
+	 * 移动端登录
+	 * 
+	 * @param request
+	 * @param userId
+	 * @param password
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/login")
+	public Map<String, Object> login(HttpServletRequest request,
+			@RequestParam(value = "userId", required = true) String userId,
+			@RequestParam(value = "password", required = true) String password) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			UsersDTO usersDTO = userManageDbServ.findUsersByCodeLogin(userId);
+			if (null != usersDTO) {
+				if (password.equals(usersDTO.getPassword())) {
+					UsersModel user = new UsersModel();
+					user.setId(usersDTO.getId());
+					user.setDept_code(usersDTO.getDept_code());
+					user.setFlag_op(usersDTO.getFlag_op());
+					user.setName(usersDTO.getName());
+					user.setOrg_code(usersDTO.getOrg_code());
+					user.setOrg_name(usersDTO.getOrg_name());
+					request.getSession().setAttribute("login_user",user);
+					user.setPassword(password);
+					user.setDirecty_under_org(usersDTO.getDirecty_under_org());
+					resultMap.put("status", "OK");
+					resultMap.put("results", user);
+					return resultMap;
+				}
+			} else {
+				resultMap.put("status", "FALL");
+				resultMap.put("results", "无数据");
+				return resultMap;
+			}
+		} catch (Exception e) {
+			resultMap.put("status", "FALL");
+			resultMap.put("results", "失败");
+			e.printStackTrace();
+		}
+		return resultMap;
+	}
+
+	/**
+	 * 移动端接口 http://localhost:7001/ciqs/apps/licenseDecsInfo?comp_name=明日科技&
+	 * startDeclare_date=2016-10-20
+	 * &endDeclare_date=2017-10-20&admissible_org_code=CIQLN
+	 * 
+	 * @param mapping
+	 * @param request
+	 * @param response
+	 * @return "OK"成功，"FALL"失败
+	 */
+	@ResponseBody
+	@RequestMapping("/licenseDecsInfo")
+	public Map<String, Object> selectlicenseDecsInfo(
+			LicenseDecForm licenseDecForm, HttpServletRequest request,
+			HttpServletResponse response) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		String status = null;
+		List list = null;
+		List<LicenseDecJsonDTO> newlist = new ArrayList<LicenseDecJsonDTO>();
+		try {
+			String comp_name = request.getParameter("comp_name");
+			String startDeclare_date = request.getParameter("startDeclare_date");
+			String endDeclare_date = request.getParameter("endDeclare_date");
+			String admissible_org_code = request.getParameter("admissible_org_code");
+			String review_result = request.getParameter("review_result");
+			String uname = request.getParameter("uname");
+			if (!StringUtils.isBlank(review_result) && "0".equals(review_result)) {
+				review_result = "";
+			}
+			Map<String, String> paramrMap = new HashMap<String, String>();
+			paramrMap.put("comp_name", comp_name);
+			paramrMap.put("startDeclare_date", startDeclare_date);
+			paramrMap.put("endDeclare_date", endDeclare_date);
+			paramrMap.put("admissible_org_code", admissible_org_code);
+			paramrMap.put("review_result", review_result);
+			list = this.licenseDecDbService.licenseDecsInfo(paramrMap);
+			
+			for (int i = 0; i < list.size(); i++) {
+				LicenseDecDTO dto = (LicenseDecDTO) list.get(i);
+				LicenseDecJsonDTO dtojson = new LicenseDecJsonDTO();
+				dtojson.setId(dto.getId());
+				dtojson.setLicense_dno(dto.getLicense_dno());
+				dtojson.setComp_name(dto.getComp_name());
+				dtojson.setComp_addr(dto.getComp_addr());
+				dtojson.setManagement_addr(dto.getManagement_addr());
+				dtojson.setManagement_area(dto.getManagement_area());
+				dtojson.setLegal_name(dto.getLegal_name());
+				dtojson.setContacts_name(dto.getContacts_name());
+				dtojson.setContacts_phone(dto.getContacts_phone());
+				dtojson.setMailbox(dto.getMailbox());
+				dtojson.setFax(dto.getFax());
+				dtojson.setEmployee_num(dto.getEmployee_num());
+				dtojson.setApply_scope(dto.getApply_scope());
+				dtojson.setHygiene_license_number(dto.getHygiene_license_number());
+				dtojson.setDeclare_user(dto.getDeclare_user());
+				dtojson.setApproval_result(dto.getApproval_result());
+				dtojson.setStatus(dto.getStatus());
+				dtojson.setAdmissible_org_code(dto.getAdmissible_org_code());
+
+				if (dto.getApproval_users_name() != null
+						&& !"".equals(dto.getApproval_users_name())) {
+					String approval_users_name = dto.getApproval_users_name();
+					approval_users_name = approval_users_name.substring(1,
+							approval_users_name.length());
+					dtojson.setApproval_users_name(approval_users_name);
+				}
+
+				dtojson.setReview_result(dto.getReview_result());
+				if (dto.getDeclare_date() != null) {
+					dtojson.setDeclare_dateLong(dto.getDeclare_date().getTime());
+				}
+				if (dto.getApproval_date() != null) {
+					dtojson.setApproval_dateLong(dto.getApproval_date()
+							.getTime());
+				}
+				if(dto.getManagement_type() != null ){ 
+					if(dto.getManagement_type().indexOf(",") !=-1){
+							String[] arr = dto.getManagement_type().split(",");
+							String users ="";
+							for (int j = 0; j < arr.length; j++) {
+								if(j!=0){
+									users+=",";
+								}
+								if (dto.getManagement_type() != null && arr[j].equals("1")) {
+									users +="食品生产";
+				                }else if(dto.getManagement_type()!=null && arr[j].equals("2")){
+				                	users +="食品流通";
+				                }else if(dto.getManagement_type()!=null && arr[j].equals("3")){
+				                	users +="餐饮服务";
+				                }else if(dto.getManagement_type()!=null && arr[j].equals("4")){
+				                	users +="饮用水供应";
+				                }else {
+				                	users +="公共场所";
+				                }
+							}
+							dtojson.setManagement_type(users);
+					}else{
+						String users ="";
+						if (dto.getManagement_type().equals("1")) {
+							users ="食品生产";
+		                }else if(dto.getManagement_type().equals("2")){
+		                	users ="食品流通";
+		                }else if(dto.getManagement_type().equals("3")){
+		                	users ="餐饮服务";
+		                }else if(dto.getManagement_type().equals("4")){
+		                	users ="饮用水供应";
+		                }else {
+		                	users ="公共场所";
+		                }
+						dtojson.setManagement_type(users);
+					}					
+				}
+                if(dto.getApply_type()!=null && dto.getApply_type().equals("1")){
+                	dtojson.setApply_type("初次");
+                }else if(dto.getApply_type()!=null && dto.getApply_type().equals("2")){
+                	dtojson.setApply_type("变更");
+                }else if(dto.getApply_type()!=null && dto.getApply_type().equals("3")){
+                	dtojson.setApply_type("延续");
+                }else {
+                	dtojson.setApply_type("临时经营");
+                }
+                if(dto.getCertificate_numver()!=null && dto.getCertificate_numver().equals("1")){
+                	dtojson.setCertificate_numver("是");
+                }else{
+                	dtojson.setCertificate_numver("否");
+                }
+                if(dto.getApproval_users_name()!=null&&!"".equals(dto.getApproval_users_name())){
+					String approval_users_name = dto.getApproval_users_name();
+					//approval_users_name = approval_users_name.substring(1, approval_users_name.length());
+					dtojson.setApproval_users_name(approval_users_name);
+					String[] array = approval_users_name.split(",");
+					for (int j = 0; j < array.length; j++) {
+						if(uname.equals(array[j])){
+							 newlist.add(dtojson);
+						}
+					}
+				}
+			}
+			status = "OK";
+			resultMap.put("status", status);
+			resultMap.put("results", newlist);
+		} catch (Exception ex) {
+			resultMap.put("status", "FALL");
+			resultMap.put("results", "失败");
+			ex.printStackTrace();
+		}
+		return resultMap;
+	}
+
+	@ResponseBody
+	@RequestMapping("/findRadmPeson")
+	public Map<String, Object> findRadmPeson(ExpFoodProdPsnRdmDTO dto,
+			HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			map.put("status", "OK");
+			map.put("results", dbServ.findRadmPeson(dto));
+			// int counts = dbServ.findPersonCount(dto);
+			return map;
+		} catch (Exception e) {
+			map.put("status", "FALL");
+			map.put("results", "失败");
+		}
+		return map;
+	}
+
+	/**
+	 * 更新携带物应检物拍照或伴侣动物拍照是否合格
+	 * http://localhost:8080/ciqs/apps/updateisImgStatus?card_no
+	 * =E88928337&status=1&type=1
+	 * 
+	 * @param card_no
+	 *            单号
+	 * @param status
+	 *            0不合格 1合格
+	 * @param type
+	 *            1应检物拍照 2伴侣动物拍照
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/updateisImgStatus")
+	public Map<String, Object> updateisImgStatus(HttpServletRequest request,
+			@RequestParam("card_no") String card_no,
+			@RequestParam("status") String status,
+			@RequestParam("type") String type) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			map.put("card_no", card_no);
+			map.put("status", status);
+			// 应检物拍照
+			if (type.equals("1")) {
+				belongingsService.updateImgYjwStatus(map);
+				// 伴侣动物拍照
+			} else {
+				belongingsService.updateImgBldwStatus(map);
+			}
+			map.put("status", "OK");
+			map.put("results", "成功");
+		} catch (Exception e) {
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/**
+	 * 新增携带物电子签名
+	 * http://localhost:8080/ciqs/apps/insertDzqm?card_no=E88928337&doc_type
+	 * =V_DD_P_C_6&fileName=QM_20171115105038065.jpg
+	 * 
+	 * @param card_no
+	 *            单号
+	 * @param doc_type
+	 *            环节
+	 * @param fileName
+	 *            文件名
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/insertDzqm")
+	public Map<String, Object> insertDzqm(HttpServletRequest request,
+			@RequestParam("card_no") String card_no,
+			@RequestParam("doc_type") String doc_type,
+			@RequestParam("fileName") String fileName) {
+		long l = System.currentTimeMillis();
+		// String s = new SimpleDateFormat("yyyyMM/yyyyMMdd").format(new
+		// Date(l));
+		String path = fileName;
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		try {
+			paramMap.put("proc_main_id", card_no);
+			paramMap.put("doc_type", doc_type);
+			paramMap.put("option_1", path);
+			belongingsService.insertDzqm(paramMap);
+			map.put("status", "OK");
+			map.put("results", "成功");
+		} catch (Exception e) {
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	/**
+	 * 出口食品查看详情
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getDetailsListData")
+	public Map<String,Object> getDetailsListData(HttpServletRequest request,EfpeApplyModel model){
+		Map<String,Object> map=new HashMap<String,Object>();
+		try {
+			List<EfpeApplyCertificationDTO> certificationList = expFoodPOFService.selectCertificationList(model);
+			List<EfpeApplyCheckEquDTO> checkEquList = expFoodPOFService.selectCheckEquList (model);
+			List<EfpeApplyEquipmentDTO> equipmentList = expFoodPOFService.selectEquipmentList(model);
+			List<EfpeApplyFileDTO> fileList = expFoodPOFService.selectFileList(model);
+			List<EfpeApplyProductDTO> productList = expFoodPOFService.selectProductList(model);
+			model= expFoodPOFService.selectOneEfpeApply(model);
+			map.put("obj", model);
+			map.put("certificationList", certificationList);
+			map.put("checkEquList", checkEquList);
+			map.put("equipmentList", equipmentList);
+			map.put("fileList", fileList);
+			map.put("productList", productList);
+			map.put("status", "OK");
+			map.put("results", "成功");
+		} catch (Exception e) {
+			map.put("status", "FAIL");
+			map.put("results", "无数据");
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	
+	/**
+	 * 移动端在线升级
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/onLineUpdate")
+	public Map<String,String> onLineUpdate(HttpServletRequest request){
+		Map<String,String> map=new HashMap<String,String>();
+		map.put("versionCode", getProps("versionCode"));
+		map.put("isForceUpdate", getProps("isForceUpdate"));
+		map.put("downUrl", getProps("downUrl"));
+		map.put("updateInfo", getProps("updateInfo"));
+		map.put("versionName", getProps("versionName"));
+		return  map;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "updateMenu")
+	public Map<String,Object>  updateMenu(@RequestBody List<CheckModel> list) {
+		Map<String,Object> map=new HashMap<String,Object>();
+		try {
+			for(CheckModel c:list){
+				expFoodPOFService.updateChklist(c);
+			}
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", e.getMessage());
+		}
+		return map;
+	}
+	
+	/**
+	 * http://localhost:8080/ciqs/apps/sentSMS?mobilephone=18640825022&content=内容
+	 * 邮寄物短信接口
+	 * @param mobilephone 手机号
+	 * @param content 短信内容
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "sentSMS")
+	public Map<String,Object>  sentSMS(HttpServletRequest request) {
+		Map<String,Object> map=new HashMap<String,Object>();
+		try {
+			String mobilephone = request.getParameter("mobilephone");
+			String content = request.getParameter("content");
+			logger_.info("sentSMS:mobilephone:"+mobilephone+"content:"+content);
+			String res = sentSmsServiceImpl.SentSMS(mobilephone, content);
+			map.put("status", "OK");
+			map.put("results", "成功");
+			logger_.info("sentSMS:"+res);
+		} catch (Exception e) {
+			logger_.info("sentSMS:mobilephone:"+e.getMessage());
+			map.put("status", "FAIL");
+			map.put("results", e.getMessage());
+		}
+		return map;
+	}
+	
+	/**
+	 *年度检查报告
+	 * 
+	 * 
+	 */
+	@ResponseBody
+	@RequestMapping("/jumpText")
+	public Map<String, Object> jumpText(HttpServletRequest request,
+			ExpFoodProdReportDto expFoodProdReport,@RequestParam(value="applyid", required=true)String applyid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+//			List<ExpFoodProdReportDto> exp= dbServ.findFoodProdReport(expFoodProdReport);
+//			map.put("status", "OK");
+//			map.put("results", exp.isEmpty()?null:exp.get(0));
+			FileInfoDto f=new FileInfoDto();
+			f.setMain_id(applyid);
+			f.setRemark("XZJC");
+			FileInfoDto file=dbServ.selectReport(f);
+			if(null!=file){
+				map.put("status", "OK");
+				map.put("results", "true");
+				map.put("file", file);
+				return map;
+			}else{
+				map.put("status", "FAIL");
+				map.put("results", "false");
+				return map;
+			}
+		} catch (Exception e) {
+			logger_.error("***********/apps/jumpText************", e);
+			map.put("status", "FAIL");
+			map.put("results", e.getMessage());
+		}
+		return map;
+	}
+	
+    @RequestMapping("/commondown")
+    public void commondown(HttpServletRequest request,HttpServletResponse response,@RequestParam(value="filePath", required=true)String filePath){
+    	try {
+			this.noDeleteDownLoad(filePath, response);
+    	} catch (Exception e) {
+			logger_.error("***********/apps/commondown************",e);
+		}
+	}
+	
+	
+	/**
+	 * 口岸卫生许可证局端接收企业端上传文件接口
+	 * @param request 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/saveUpload")
+	public Map<String, Object> saveUpload(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			FileUtil.appsUpXkloadFile(request,false);
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			logger_.error("***********/apps/saveUpload************", e);
+			map.put("status", "FAIL");
+			map.put("results", e.getMessage());
+		}
+		return map;
+	}
+
+	@ResponseBody
+	@RequestMapping("/updateRadmPerson")
+	public Map<String, Object> updateRadmPerson(HttpServletRequest request,ExpFoodProdPsnRdmDTO ePsnRdm ) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			appServerDbServ.updateRadmPerson(ePsnRdm);//修改状态
+			map.put("status", "OK");
+			map.put("results", "成功");
+			return map;
+		} catch (Exception e) {
+			logger_.error("***********/apps/updateRadmPerson************", e);
+			map.put("status", "FAIL");
+			map.put("results", e.getMessage());
+		}
+		return map;
+	}
+	
+	/**
+	 * 行政许可 附件列表
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getFileList")
+	public Map<String,Object> getFileList(HttpServletRequest request,EfpeApplyModel model){
+		Map<String,Object> map=new HashMap<String,Object>();
+		try {
+			List<EfpeApplyFileDTO> fileList = expFoodPOFService.selectFileList(model);
+			map.put("status", "OK");
+			map.put("results", fileList);
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", e.getMessage());
+		}
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/fileIsHave")
+	public  Map<String,Object>  fileIsHave(HttpServletRequest request,HttpServletResponse response){
+		Map<String,Object> map=new HashMap<String,Object>();
+		try {
+			String path=request.getParameter("path");
+			String accessoryid=request.getParameter("accessoryid");
+			String filetype=request.getParameter("filetype");
+			String	filename=request.getParameter("filename");
+			String year=path.split("/")[0];
+			String month=path.split("/")[1];
+			Boolean b = FtpUtil.downloadFile(
+				Constants.FTP_HOST,
+				Constants.FTP_HOST_PORT,
+				Constants.FTP_HOST_USERNAME,
+				Constants.FTP_HOST_PASSWORD,
+				Constants.FTP_HOST_FILE+path,
+				accessoryid+"."+filetype,
+				Constants.UP_LOAD_PATH + "/"+path,
+				filename, year, month);
+			if(b){
+				map.put("status", "OK");
+				map.put("results", "true");
+				return map;
+			}else{
+				map.put("status", "FAIL");
+				map.put("results", "false");
+				return map;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("status", "FAIL");
+			map.put("results", "false");
+			return map;
+		}
+	}
+	
+	
+	@RequestMapping("/downFileInList")
+	public void downFileInList(HttpServletRequest request,HttpServletResponse response){
+		try {
+			String path=request.getParameter("path");
+			String	filename=request.getParameter("filename");
+				this.newDownLoad(
+						Constants.UP_LOAD_PATH +"/"+ path+filename , response);
+//			this.newDownLoad(
+//					Constants.UP_LOAD_PATH + "/2018/1/重新备案申请单.jpg" , response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

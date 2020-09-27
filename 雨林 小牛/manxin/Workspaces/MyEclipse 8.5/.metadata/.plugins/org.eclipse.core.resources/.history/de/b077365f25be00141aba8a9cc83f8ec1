@@ -1,0 +1,35 @@
+package com.manxin.service;
+
+import com.manxin.dao.DAO;
+import com.manxin.dao.DAOImpl;
+
+public class ServiceImpl implements Service{
+
+	//以前实现的方法
+//	private DAO dao = new DAOImpl();
+	
+	//依赖注入
+	private DAO dao;
+	
+	
+	public DAO getDao() {
+		return dao;
+	}
+
+	public void setDao(DAO dao) {
+		this.dao = dao;
+	}
+
+	@Override
+	public void add() {
+		// TODO Auto-generated method stub
+		dao.add();
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		dao.update();
+	}
+
+}

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PromBatch">
+    <resultMap id="PromotionPeriodMap" type="cn.com.cgbchina.batch.model.PromotionPeriodBatchModel">
+        <result property="id" column="id"/>
+        <result property="promotionId" column="promotion_id"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+    </resultMap>
+    <resultMap id="PromotionMap" type="cn.com.cgbchina.batch.model.PromotionBatchModel">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="shortName" column="short_name"/>
+        <result property="promType" column="prom_type"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="loopType" column="loopType"/>
+        <result property="ruleDiscountRate" column="ruleDiscountRate"/>
+        <result property="ruleLimitBuyCount" column="ruleLimitBuyCount"/>
+        <result property="ruleLimitBuyType" column="ruleLimitBuyType"/>
+        <result property="ruleFrequency" column="ruleFrequency"/>
+        <result property="ruleLimitTicket" column="ruleLimitTicket"/>
+        <result property="ruleGroupCount" column="ruleGroupCount"/>
+        <result property="ruleMinPay1" column="ruleMinPay1"/>
+        <result property="ruleMinPay2" column="ruleMinPay2"/>
+        <result property="ruleMinPay3" column="ruleMinPay3"/>
+        <result property="ruleMinPay4" column="ruleMinPay4"/>
+        <result property="ruleMinPay5" column="ruleMinPay5"/>
+        <result property="ruleMinPay6" column="ruleMinPay6"/>
+        <result property="ruleMinPay7" column="ruleMinPay7"/>
+        <result property="ruleMinPay8" column="ruleMinPay8"/>
+        <result property="ruleMinPay9" column="ruleMinPay9"/>
+        <result property="ruleMinPay10" column="ruleMinPay10"/>
+        <result property="ruleFee1" column="ruleFee1"/>
+        <result property="ruleFee2" column="ruleFee2"/>
+        <result property="ruleFee3" column="ruleFee3"/>
+        <result property="ruleFee4" column="ruleFee4"/>
+        <result property="ruleFee5" column="ruleFee5"/>
+        <result property="ruleFee6" column="ruleFee6"/>
+        <result property="ruleFee7" column="ruleFee7"/>
+        <result property="ruleFee8" column="ruleFee8"/>
+        <result property="ruleFee9" column="ruleFee9"/>
+        <result property="ruleFee10" column="ruleFee10"/>
+        <result property="sourceId" column="source_id"/>
+    </resultMap>
+    <sql id="columns">
+        id,ordertype_id,range_count,audit_range_count,prom_code,name,short_name,prom_type,is_signup,begin_date,end_date,loopType,loopData,loopBeginTime1,loopEndTime1,loopBeginTime2,loopEndTime2,ruleDiscountRate,ruleLimitBuyCount,ruleLimitBuyType,ruleFrequency,ruleLimitTicket,ruleGroupCount,ruleMinPay1,ruleMinPay2,ruleMinPay3,ruleMinPay4,ruleMinPay5,ruleMinPay6,ruleMinPay7,ruleMinPay8,ruleMinPay9,ruleMinPay10,ruleFee1,ruleFee2,ruleFee3,ruleFee4,ruleFee5,ruleFee6,ruleFee7,ruleFee8,ruleFee9,ruleFee10,source_id,description,fee_rule,check_status,begin_entry_date,end_entry_date,create_oper_type,modify_oper_type,audit_log,audit_oper,audit_date,is_valid,create_oper,create_time,modify_oper,modify_time
+    </sql>
+    <select id="getForBatch" resultMap="PromotionPeriodMap" parameterType="Map">
+        SELECT id,promotion_id,begin_date,end_date FROM tbl_promotion_period
+        <where>
+            begin_date    <![CDATA[ > ]]> #{startTime} AND begin_date <![CDATA[ < ]]> #{endTime}
+        </where>
+    </select>
+    <select id="findPromotionByIds" parameterType="List" resultMap="PromotionMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_promotion WHERE id IN
+        <foreach collection="list" open="(" close=")" separator="," item="idItem">
+            #{idItem}
+        </foreach>
+    </select>
+    <select id="getItemByPromoBatch" parameterType="Map" resultType="String">
+        select DISTINCT select_code from tbl_promotion_range
+        where
+        tbl_promotion_range.check_status = '1'
+        and is_valid = 1
+        and promotion_id in
+        (
+        select id from tbl_promotion
+        where
+        (tbl_promotion.check_status = '7'
+        or tbl_promotion.check_status = '8')
+        and is_valid = 1
+        )
+    </select>
+    <resultMap id="promItemEntryMap" type="cn.com.cgbchina.batch.model.PromEntry">
+        <result column="id" property="id"/>
+        <result column="begin_date" property="beginDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="prom_type" property="promType"/>
+        <result column="period_id" property="periodId"/>
+    </resultMap>
+    <select id="getPromByItem" resultMap="promItemEntryMap" parameterType="Map">
+        SELECT
+          tbl_promotion.id,
+          tbl_promotion_period.begin_date,
+          tbl_promotion_period.end_date,
+          tbl_promotion_period.id AS period_id
+        FROM tbl_promotion
+        INNER JOIN tbl_promotion_range
+				ON tbl_promotion_range.promotion_id = tbl_promotion.id
+
+        INNER JOIN tbl_promotion_period
+        ON tbl_promotion.id = tbl_promotion_period.promotion_id
+        AND
+        ((
+        tbl_promotion_period.begin_date <![CDATA[>=]]> #{beginDate}
+        AND
+        tbl_promotion_period.begin_date <![CDATA[<=]]> #{endDate}
+        )
+        OR
+        (
+        tbl_promotion_period.end_date <![CDATA[>=]]>  #{beginDate}
+        AND
+        tbl_promotion_period.end_date <![CDATA[<=]]> #{endDate}
+        )
+        OR
+        (
+        tbl_promotion.begin_date  <![CDATA[<]]> #{beginDate}
+        AND
+        tbl_promotion.end_date   <![CDATA[>]]> #{endDate}
+        ))
+        WHERE
+        tbl_promotion.is_valid = 1
+        AND
+        (tbl_promotion.check_status = 7 OR tbl_promotion.check_status = 8)
+        AND tbl_promotion_range.select_code = #{selectCode}
+        ORDER BY tbl_promotion_period.begin_date ASC
+    </select>
+    <select id="getPromotionForBatch" parameterType="Map" resultMap="PromotionMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_promotion
+        <where>
+            <!-- 审核状态（全部通过，部分通过）-->
+            check_status IN ('7', '8')
+            <!-- 开始时间在 期间内-->
+            AND ((
+            <!-- 活动开始时间 >= 次日 00：00：00-->
+            begin_date <![CDATA[>=]]> #{startTime}
+            <!-- 活动开始时间 <= 指定日期 23：59：59 -->
+            AND begin_date  <![CDATA[<= ]]> #{endTime}
+            ) <!-- 结束时间在 期间内-->
+            OR (
+            end_date <![CDATA[>=]]> #{startTime}
+            <!-- 活动开始时间<= 指定日期 23：59：59 -->
+            AND end_date<![CDATA[<= ]]> #{endTime}
+            ) <!-- 开始结束时间包含 整个期间-->
+            OR (
+            begin_date <![CDATA[ <= ]]> #{startTime}
+            <!-- 活动开始时间<= 指定日期 23：59：59-->
+            AND end_date <![CDATA[ >= ]]>#{endTime}
+            )
+            )
+            <!-- 广发商城活动-->
+            AND ordertype_id = 'yg' <!-- 有效-->
+            AND is_valid = '1'
+        </where>
+    </select>
+    <select id="getYesterExpire" resultType="String" parameterType="Map">
+        SELECT id FROM tbl_promotion
+        WHERE end_date <![CDATA[>=]]> #{yesterdayStart} AND end_date <![CDATA[<=]]> #{yesterdayEnd}
+    </select>
+    <update id="updatePromStatus" parameterType="map">
+        UPDATE tbl_promotion SET check_status =#{status} WHERE id IN
+        <foreach collection="promIds" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+    <resultMap id="PromotionRangeBatchMap" type="cn.com.cgbchina.batch.model.PromotionRangeBatchModel">
+        <result property="id" column="id"/>
+        <result property="promotionId" column="promotion_id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="rangeType" column="range_type"/>
+        <result property="selectId" column="select_id"/>
+        <result property="selectCode" column="select_code"/>
+        <result property="selectName" column="select_name"/>
+        <result property="backCategory1Id" column="back_category1_id"/>
+        <result property="backCategory2Id" column="back_category2_id"/>
+        <result property="backCategory3Id" column="back_category3_id"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="seq" column="seq"/>
+        <result property="price" column="price"/>
+        <result property="stock" column="stock"/>
+        <result property="costBy" column="costBy"/>
+        <result property="couponEnable" column="couponEnable"/>
+        <result property="levelMinCount" column="levelMinCount"/>
+        <result property="levelPrice" column="levelPrice"/>
+        <result property="startPrice" column="startPrice"/>
+        <result property="minPrice" column="minPrice"/>
+        <result property="feeRange" column="feeRange"/>
+        <result property="createOperType" column="create_oper_type"/>
+        <result property="modifyOperType" column="modify_oper_type"/>
+        <result property="auditLog" column="audit_log"/>
+        <result property="auditOper" column="audit_oper"/>
+        <result property="auditDate" column="audit_date"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="perStock" column="perStock"/>
+    </resultMap>
+    <sql id="PromotionRangeBatchColumns">
+        id,promotion_id,vendor_id,range_type,select_id,select_code,select_name,back_category1_id,back_category2_id,back_category3_id,check_status,is_valid,seq,price,stock,costBy,couponEnable,levelMinCount,levelPrice,startPrice,minPrice,feeRange,create_oper_type,modify_oper_type,audit_log,audit_oper,audit_date,create_oper,create_time,modify_oper,modify_time,perStock
+    </sql>
+    <select id="findPromRangeByPromId" parameterType="Integer" resultMap="PromotionRangeBatchMap">
+        select
+        <include refid="PromotionRangeBatchColumns"/>
+        from tbl_promotion_range
+        where promotion_id = #{_parameter} and is_valid=1
+    </select>
+    <select id="findPromRangeById" parameterType="Integer" resultMap="PromotionRangeBatchMap">
+        SELECT id,
+        <include refid="PromotionRangeBatchColumns"/>
+        from tbl_promotion_range
+        where id=#{id}
+    </select>
+    <select id="promOfDay" parameterType="Map" resultMap="promItemEntryMap">
+        SELECT
+          tbl_promotion.id,
+          tbl_promotion.prom_type,
+          tbl_promotion_period.begin_date,
+          tbl_promotion_period.end_date,
+          tbl_promotion_period.id AS period_id
+        FROM tbl_promotion
+        INNER JOIN tbl_promotion_period
+        ON tbl_promotion.id = tbl_promotion_period.promotion_id
+        AND
+        ((
+        tbl_promotion_period.begin_date <![CDATA[>=]]> #{startTime}
+        AND
+        tbl_promotion_period.begin_date <![CDATA[<=]]> #{endTime}
+        )
+        OR
+        (
+        tbl_promotion_period.end_date <![CDATA[>=]]>  #{startTime}
+        AND
+        tbl_promotion_period.end_date <![CDATA[<=]]> #{endTime}
+        )
+        OR
+        (
+        tbl_promotion_period.begin_date  <![CDATA[<]]> #{startTime}
+        AND
+        tbl_promotion_period.end_date   <![CDATA[>]]> #{endTime}
+        ))
+        WHERE
+        tbl_promotion.is_valid = 1
+        AND
+        (tbl_promotion.check_status = 7 OR tbl_promotion.check_status = 8)
+        ORDER BY tbl_promotion.prom_type ASC,tbl_promotion_period.begin_date ASC
+    </select>
+
+    <!-- 荷兰拍拍卖记录 add by geshuo 20160726 -->
+    <resultMap id="AuctionRecordMap" type="cn.com.cgbchina.batch.model.AuctionRecordBatchModel">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="cell" column="cell"/>
+        <result property="cardno" column="cardno"/>
+        <result property="orderId" column="order_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="goodsNm" column="goods_nm"/>
+        <result property="goodsPaywayId" column="goods_payway_id"/>
+        <result property="auctionPrice" column="auction_price"/>
+        <result property="auctionTime" column="auction_time"/>
+        <result property="auctionId" column="auction_id"/>
+        <result property="periodId" column="period_id" />
+        <result property="isBacklock" column="is_backlock"/>
+        <result property="payFlag" column="pay_flag"/>
+        <result property="beginPayTime" column="begin_pay_time"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="auction_record_columns">
+        id,cust_id,cell,cardno,order_id,item_id,goods_nm,goods_payway_id,auction_price,auction_time,auction_id,period_id,is_backlock,pay_flag,begin_pay_time,release_time,modify_time
+    </sql>
+
+    <!-- 获取数据库当前时间 add by geshuo 20160726 -->
+    <select id="findCurrentDate" resultType="Date">
+        select now()
+    </select>
+
+    <!-- 获取荷兰拍需要释放的记录总数 add by geshuo 20160726 -->
+    <select id="findOvertimeRecordCount" resultType="Integer" parameterType="Date">
+        select count(1)
+        from tbl_auction_record
+        <include refid="overtime_conditions" />
+    </select>
+
+    <!-- 获取荷兰拍需要释放的记录(每次取指定数量,循环取) add by geshuo 20160726 -->
+    <select id="findOvertimeRecord" parameterType="Map" resultMap="AuctionRecordMap">
+        select id,cust_id,order_id,item_id,auction_id,period_id
+        from tbl_auction_record r
+        <include refid="overtime_conditions" />
+        order by id
+        limit #{offset},#{limit}
+    </select>
+
+    <sql id="overtime_conditions">
+        where auction_time <![CDATA[ <= ]]> #{overTime}
+        and order_id is null
+        and is_backlock = '1'
+        and pay_flag = '0'
+    </sql>
+
+    <!-- 更新对应拍卖记录状态，标识已经释放库存，不能再生成订单 add by geshuo 20160726 -->
+    <update id="updateRecordReleased" parameterType="Map">
+        update tbl_auction_record
+        set is_backlock = '0',
+        release_time = now(),
+        modify_time = now()
+        where  id =#{id}
+        <if test="orderId == null">
+            and order_id is null
+        </if>
+        <if test="orderId != null">
+            and order_id = #{orderId}
+        </if>
+        and is_backlock = '1'
+    </update>
+    <update id="updateRecordReleasedByOrderId" parameterType="Map">
+        update tbl_auction_record
+        set is_backlock = '0',
+        release_time = now(),
+        modify_time = now()
+        where  order_id =#{orderId}
+        and is_backlock = '1'
+    </update>
+
+    <sql id="order_overtime_conditions">
+        where r.order_id = o.order_id
+        and ( o.cur_status_id = '0301' or o.cur_status_id = '0316')
+        and r.auction_time <![CDATA[ <= ]]> #{overTime}
+        and (r.begin_pay_time <![CDATA[ <= ]]> #{afterPayTime} or r.begin_pay_time is null)
+        and r.is_backlock = '1'
+        and r.pay_flag = '0'
+    </sql>
+
+    <!-- 获取已经生成订单的,需要释放的记录总数 add by geshuo 20160726 -->
+    <select id="findOrderOvertimeRecordCount" parameterType="Map" resultType="Integer">
+        select count(1)
+        from tbl_auction_record r, tbl_order o
+        <include refid="order_overtime_conditions" />
+    </select>
+
+    <select id="findOrderOvertimeRecord" parameterType="Map" resultMap="AuctionRecordMap">
+        select r.id,  r.order_id, r.item_id, r.auction_id, r.period_id, r.cust_id
+        from tbl_auction_record r, tbl_order o
+        <include refid="order_overtime_conditions" />
+        order by r.id
+        limit #{offset},#{limit}
+    </select>
+
+    <!-- 订单Map add by geshuo 20160726 -->
+    <resultMap id="OrderMap" type="cn.com.cgbchina.batch.model.BatchOrderModel">
+        <result property="orderId" column="order_id"/>
+        <result property="cashAuthType" column="cash_auth_type"/>
+        <result property="merId" column="mer_id"/>
+        <result property="curStatusId" column="cur_status_id"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="orderMainId" column="ordermain_id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="ordertypeNm" column="ordertype_nm"/>
+        <result property="goodsNum" column="goods_num"/>
+        <result property="goodsPaywayId" column="goods_payway_id"/>
+        <result property="actType" column="act_type"/>
+        <result property="memberLevel" column="member_level"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="bonusTotalvalue" column="bonus_totalvalue"></result>
+        <result property="createTime" column="create_time"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="actId" column="act_id"/>
+        <result property="periodId" column="period_id"/>
+    </resultMap>
+
+    <select id="findOrderById" parameterType="String" resultMap="OrderMap">
+        select order_id,cash_auth_type,mer_id,cur_status_id,source_id,ordermain_id,ordertype_id,ordertype_nm,
+        goods_num,goods_payway_id,act_type,member_level,goods_id,bonus_totalvalue,create_time,create_oper,act_id,period_id
+        from tbl_order
+        where order_id=#{orderId}
+        and del_flag=0
+    </select>
+
+    <select id="findSaleOverByRangIds" parameterType="Map" resultMap="PromotionRangeBatchMap">
+        select
+        <include refid="PromotionRangeBatchColumns"/>
+        from tbl_promotion_range
+        where is_valid=1
+        and promotion_id=#{promotionId}
+        and id not in
+        <foreach collection="rangeList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="findPeriodsByPromIds" parameterType="List" resultMap="PromotionPeriodMap">
+        SELECT  id,promotion_id
+        FROM tbl_promotion_period
+        WHERE promotion_id IN
+        <foreach collection="list" open="(" close=")" separator="," item="promId">
+            #{promId}
+        </foreach>
+    </select>
+</mapper>
+
+

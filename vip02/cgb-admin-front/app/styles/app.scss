@@ -1,0 +1,71 @@
+@import "_variables";
+@import "base-layout";
+@import "../components/sidebar/_sidebar";
+@import "../components/components_config/view";
+@import "../components/index/view";
+@import "../components/popup/_popup.scss";
+@import "../components/popup/_theme.scss";
+
+ul li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.navbar {
+  background-color: #fff !important;
+  border-bottom: 2px solid #af0a0a;
+  .company {
+    color: #d01f2f;
+  }
+}
+.navbar-collapse {
+  width: 1180px !important;
+}
+
+.header .header-box {
+  width: 1180px !important;
+}
+.breadcrumb {
+  padding-left: 0px !important;
+}
+.sidebar {
+  width:198px;
+  height: 100%;
+  margin-left: 0px !important;
+}
+.navbar .company {
+  margin-left: 0px !important;
+}
+.sidebar .sidebar-ul {
+  width: 200px !important;
+}
+.body-outer {
+  background-color: #F2F2F2;
+}
+
+.pagination {
+  float: right;
+  margin: 10px 0 20px 0;
+}
+
+.form {
+  background: #fff;
+  margin-bottom: 10px;
+}
+.main-box-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.tab ul {
+  background: #fff;
+}
+.margin-top-10{
+  margin-top: 10px;
+}
+.float-left{
+  float:left;
+}

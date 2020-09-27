@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Vendor">
+    <resultMap id="VendorMap" type="VendorModel">
+        <result property="id" column="id"/>
+        <result property="shopType" column="shop_type"/>
+        <result property="name" column="name"/>
+        <result property="mobile" column="mobile"/>
+        <result property="pwfirst" column="pwfirst"/>
+        <result property="pwsecond" column="pwsecond"/>
+        <result property="phone" column="phone"/>
+        <result property="fax" column="fax"/>
+        <result property="password" column="password"/>
+        <result property="papersType" column="papers_type"/>
+        <result property="papersNum" column="papers_num"/>
+        <result property="isFirst" column="is_first"/>
+        <result property="address" column="address"/>
+        <result property="email" column="email"/>
+        <result property="status" column="status"/>
+        <result property="descript" column="descript"/>
+        <result property="rightCode" column="right_code"/>
+        <result property="level" column="level"/>
+        <result property="loginTime" column="login_time"/>
+        <result property="loginCount" column="login_count"/>
+        <result property="errorCount" column="error_count"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="refuseDesc" column="refuse_desc"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="editPwTime" column="edit_pw_time"/>
+        <result property="isSub" column="is_sub"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="simpleName" column="simple_name"/>
+        <result property="code" column="code"/>
+    </resultMap>
+    <sql id="columns">
+        id,shop_type,name,mobile,pwfirst,pwsecond,phone,fax,password,papers_type,papers_num,is_first,address,email,status,descript,right_code,level,login_time,login_count,error_count,check_status,refuse_desc,create_oper,modify_oper,create_time,modify_time,edit_pw_time,is_sub,del_flag,parent_id,vendor_id,simple_name,code
+    </sql>
+
+    <insert id="insert" parameterType="VendorModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_vendor_user
+        (shop_type
+        ,name
+        ,mobile
+        ,pwfirst
+        ,pwsecond
+        ,phone
+        ,fax
+        ,password
+        ,papers_type
+        ,papers_num
+        ,is_first
+        ,address
+        ,email
+        ,status
+        ,descript
+        ,right_code
+        ,level
+        ,login_time
+        ,login_count
+        ,error_count
+        ,check_status
+        ,refuse_desc
+        ,create_oper
+        ,modify_oper
+        ,create_time
+        ,modify_time
+        ,edit_pw_time
+        ,is_sub
+        ,del_flag
+        ,parent_id
+        ,vendor_id
+        ,simple_name
+        ,code)
+        values(#{shopType}
+        ,#{name}
+        ,#{mobile}
+        ,#{pwfirst}
+        ,#{pwsecond}
+        ,#{phone}
+        ,#{fax}
+        ,#{password}
+        ,#{papersType}
+        ,#{papersNum}
+        ,'0'
+        ,#{address}
+        ,#{email}
+        ,#{status}
+        ,#{descript}
+        ,#{rightCode}
+        ,#{level}
+        ,#{loginTime}
+        ,#{loginCount}
+        ,#{errorCount}
+        ,#{checkStatus}
+        ,#{refuseDesc}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,now()
+        ,#{modifyTime}
+        ,#{editPwTime}
+        ,#{isSub}
+        ,'0'
+        ,#{parentId}
+        ,#{vendorId}
+        ,#{simpleName}
+        ,#{code})
+    </insert>
+
+    <update id="update" parameterType="VendorModel">
+        update tbl_vendor_user set
+        <if test="shopType !=null">shop_type = #{shopType}
+            ,
+        </if>
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="mobile !=null">mobile = #{mobile}
+            ,
+        </if>
+        <if test="pwfirst !=null">pwfirst = #{pwfirst}
+            ,
+        </if>
+        <if test="pwsecond !=null">pwsecond = #{pwsecond}
+            ,
+        </if>
+        <if test="phone !=null">phone = #{phone}
+            ,
+        </if>
+        <if test="fax !=null">fax = #{fax}
+            ,
+        </if>
+        <if test="password !=null">password = #{password}
+            ,
+        </if>
+        <if test="papersType !=null">papers_type = #{papersType}
+            ,
+        </if>
+        <if test="papersNum !=null">papers_num = #{papersNum}
+            ,
+        </if>
+        <if test="isFirst !=null">is_first = #{isFirst}
+            ,
+        </if>
+        <if test="address !=null">address = #{address}
+            ,
+        </if>
+        <if test="email !=null">email = #{email}
+            ,
+        </if>
+        <if test="status !=null">status = #{status}
+            ,
+        </if>
+        <if test="descript !=null">descript = #{descript}
+            ,
+        </if>
+        <if test="rightCode !=null">right_code = #{rightCode}
+            ,
+        </if>
+        <if test="level !=null">level = #{level}
+            ,
+        </if>
+        <if test="loginTime !=null">login_time = #{loginTime}
+            ,
+        </if>
+        <if test="loginCount !=null">login_count = #{loginCount}
+            ,
+        </if>
+        <if test="errorCount !=null">error_count = #{errorCount}
+            ,
+        </if>
+        <if test="checkStatus !=null">check_status = #{checkStatus}
+            ,
+        </if>
+        <if test="refuseDesc !=null">refuse_desc = #{refuseDesc}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        modify_time = now()
+        ,
+        <if test="editPwTime !=null">edit_pw_time = #{editPwTime}
+            ,
+        </if>
+        <if test="isSub !=null">is_sub = #{isSub}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="parentId !=null">parent_id = #{parentId}
+            ,
+        </if>
+        <if test="simpleName !=null">simple_name = #{simpleName}
+            ,
+        </if>
+        <if test="code !=null">code = #{code}
+        </if>
+        where vendor_id = #{vendorId} and is_sub = '0'
+    </update>
+
+    <update id="updateAll" parameterType="VendorModel">
+        update tbl_vendor_user set
+        <if test="shopType !=null">shop_type = #{shopType}
+            ,
+        </if>
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="mobile !=null">mobile = #{mobile}
+            ,
+        </if>
+        <if test="pwfirst !=null">pwfirst = #{pwfirst}
+            ,
+        </if>
+        <if test="pwsecond !=null">pwsecond = #{pwsecond}
+            ,
+        </if>
+        <if test="phone !=null">phone = #{phone}
+            ,
+        </if>
+        <if test="fax !=null">fax = #{fax}
+            ,
+        </if>
+        <if test="password !=null">password = #{password}
+            ,
+        </if>
+        <if test="papersType !=null">papers_type = #{papersType}
+            ,
+        </if>
+        <if test="papersNum !=null">papers_num = #{papersNum}
+            ,
+        </if>
+        <if test="isFirst !=null">is_first = #{isFirst}
+            ,
+        </if>
+        <if test="address !=null">address = #{address}
+            ,
+        </if>
+        <if test="email !=null">email = #{email}
+            ,
+        </if>
+        <if test="status !=null">status = #{status}
+            ,
+        </if>
+        <if test="descript !=null">descript = #{descript}
+            ,
+        </if>
+        <if test="rightCode !=null">right_code = #{rightCode}
+            ,
+        </if>
+        <if test="level !=null">level = #{level}
+            ,
+        </if>
+        <if test="loginTime !=null">login_time = #{loginTime}
+            ,
+        </if>
+        <if test="loginCount !=null">login_count = #{loginCount}
+            ,
+        </if>
+        <if test="errorCount !=null">error_count = #{errorCount}
+            ,
+        </if>
+        <if test="checkStatus !=null">check_status = #{checkStatus}
+            ,
+        </if>
+        <if test="refuseDesc !=null">refuse_desc = #{refuseDesc}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+
+        <if test="editPwTime !=null">edit_pw_time = #{editPwTime}
+            ,
+        </if>
+        <if test="isSub !=null">is_sub = #{isSub}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="parentId !=null">parent_id = #{parentId}
+            ,
+        </if>
+        <if test="simpleName !=null">simple_name = #{simpleName}
+            ,
+        </if>
+        <if test="code !=null">code = #{code}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag = '0'
+            <if test="id !=null">and id = #{id}</if>
+            <if test="shopType !=null">and shop_type = #{shopType}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="mobile !=null">and mobile = #{mobile}</if>
+            <if test="pwfirst !=null">and pwfirst = #{pwfirst}</if>
+            <if test="pwsecond !=null">and pwsecond = #{pwsecond}</if>
+            <if test="phone !=null">and phone = #{phone}</if>
+            <if test="fax !=null">and fax = #{fax}</if>
+            <if test="password !=null">and password = #{password}</if>
+            <if test="papersType !=null">and papers_type = #{papersType}</if>
+            <if test="papersNum !=null">and papers_num = #{papersNum}</if>
+            <if test="isFirst !=null">and is_first = #{isFirst}</if>
+            <if test="address !=null">and address = #{address}</if>
+            <if test="email !=null">and email = #{email}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="descript !=null">and descript = #{descript}</if>
+            <if test="rightCode !=null">and right_code = #{rightCode}</if>
+            <if test="level !=null">and level = #{level}</if>
+            <if test="loginTime !=null">and login_time = #{loginTime}</if>
+            <if test="loginCount !=null">and login_count = #{loginCount}</if>
+            <if test="errorCount !=null">and error_count = #{errorCount}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="refuseDesc !=null">and refuse_desc = #{refuseDesc}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="editPwTime !=null">and edit_pw_time = #{editPwTime}</if>
+            <if test="isSub !=null">and is_sub = #{isSub}</if>
+            <if test="parentId !=null">and parent_id = #{parentId}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="simpleName !=null">and simple_name = #{simpleName}</if>
+            <if test="code !=null">and code = #{code}</if>
+        </where>
+    </sql>
+    <!--模糊查询-->
+    <sql id="conditionsLike">
+        <where>
+            del_flag = '0'
+            <if test="type ==2">and (check_status = '0' or check_status = '2')</if>
+            <if test="vendorId !=null">and vendor_id like concat(concat('%',#{vendorId}),'%')</if>
+            <if test="simpleName !=null">and simple_name like concat(concat('%',#{simpleName}),'%')</if>
+            <if test="shopType !=null">and shop_type = #{shopType}</if>
+            <if test="isSub !=null">and is_sub = #{isSub}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="code !=null">and code like concat(concat('%',#{code}),'%')</if>
+            <if test="name !=null">and name like concat(concat('%',#{name}),'%')</if>
+            <if test="roleName !=null">and id in
+                <foreach collection="roleName" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="VendorMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_vendor_user
+        where id=#{id}
+    </select>
+
+    <!-- 根据供应商ID停用该供应商下所有子帐号 -->
+    <update id="updateByParentId" parameterType="String">
+        UPDATE tbl_vendor_user SET
+        status = '0101'
+        WHERE
+        vendor_id = #{vendorId} and is_sub = '1'
+    </update>
+
+    <!--根据供应商Id删除子帐号-->
+    <update id="deleteByParentId" parameterType="String">
+        UPDATE tbl_vendor_user SET
+        del_flag = '1'
+        WHERE
+        vendor_id = #{vendorId} and is_sub = '1'
+    </update>
+
+    <select id="findByVendorId" parameterType="Map" resultMap="VendorMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_vendor_user
+        where vendor_id=#{vendorId} and is_sub='0'
+    </select>
+
+    <select id="findByVendorCode" parameterType="Map" resultMap="VendorMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_vendor_user
+        where code=#{code} and del_flag = 0
+    </select>
+
+    <select id="findAll" resultMap="VendorMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_user
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="VendorMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_user
+        <include refid="conditionsLike"/>
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="countLike" resultType="Long">
+        select count(1)
+        from tbl_vendor_user
+        <include refid="conditionsLike"/>
+    </select>
+
+    <!-- 首次登录更新密码 -->
+    <update id="updatePwdByCode" parameterType="VendorModel">
+        UPDATE tbl_vendor_user SET
+        <if test="password !=null">password = #{password},</if>
+        is_first = '1',modify_time = now(),edit_pw_time = now()
+        WHERE
+        code = #{code}
+    </update>
+
+    <!--根据供应商id查询父id-->
+    <select id="findParIdByVenId" parameterType="java.lang.String" resultType="Long">
+        SELECT id
+        from tbl_vendor_user
+        where vendor_id = #{vendorId} and is_sub = '0'
+    </select>
+    <!--供应商帐号管理分页查询-->
+    <select id="findByParentId" parameterType="Map" resultMap="VendorMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_user
+        where parent_id = #{parentId}
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="accountTotal" parameterType="Map" resultType="Long">
+        select count(1)
+        from tbl_vendor_user
+        where parent_id = #{parentId}
+    </select>
+    <!--逻辑删除-->
+    <update id="updateById" parameterType="java.lang.String">
+        update tbl_vendor_user set
+        del_flag
+        = '1'
+        where vendor_id = #{vendorId} and is_sub = '0'
+    </update>
+    <!--审核状态-->
+    <update id="vendorCheck" parameterType="java.lang.String">
+        update tbl_vendor_user set
+        check_status
+        = '1'
+        where vendor_id = #{vendorId} and is_sub = '0'
+    </update>
+    <!--根据code查找-->
+    <select id="checkByCode" parameterType="String" resultMap="VendorMap">
+        select * from tbl_vendor_user
+        where code = #{vendorCode}
+    </select>
+    <!--供应商用户账号管理 启用未启用状态修改-->
+    <update id="changeStatus" parameterType="VendorModel">
+        update tbl_vendor_user set
+        status = #{status}
+        where code = #{code}
+    </update>
+
+    <select id="findVendor" parameterType="VendorModel" resultMap="VendorMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_vendor_user
+        where vendor_id=#{vendorId} AND is_sub=#{isSub}
+    </select>
+
+    <select id="findVendorByListId" parameterType="List" resultMap="VendorMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_user
+        where del_flag = 0
+        <if test="list.size != 0">
+            and vendor_id in
+            <foreach collection="list" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+</mapper>
+
+

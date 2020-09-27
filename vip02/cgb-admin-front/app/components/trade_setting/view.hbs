@@ -1,0 +1,26 @@
+{{#component "tradeSettings js-component"}}
+    <p class="main-box-title"><strong>交易设置</strong></p>
+    <form class="setting-form">
+        <div class="main-box-padding main-box-table-detail">
+            <table>
+                {{#with _DATA_}}
+                    <tr>
+                        <th width="20%">支付开关</th>
+                        <td width="70%">
+                            <input type="radio" id="tradeOpen" name="tradeOpen" data-id="{{tradeId}}"
+                                   {{#equals tradeOpen "0"}}checked{{/equals}}  value="0"> 开
+                            <input type="radio" name="tradeOpen" value="1"  {{#equals tradeOpen "1"}}checked{{/equals}}>
+                            关
+                        </td>
+                    </tr>
+                {{/with}}
+            </table>
+            {{#authorial "trade_switch"}}
+                <div class="admin-btn">
+                    <a type="submit" class="send-btn btn-size js-setting-save" href="">保存</a>
+                </div>
+            {{/authorial}}
+
+        </div>
+    </form>
+{{/component}}

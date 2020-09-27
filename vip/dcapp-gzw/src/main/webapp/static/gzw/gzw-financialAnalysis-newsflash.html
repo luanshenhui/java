@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>财务分析</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/model.css" />
+    <link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+    <link rel="stylesheet" href="css/three-important1.css"/>
+    <link rel="stylesheet" href="css/personal.css"/>
+    <script src="js/echarts.min.js"></script>
+    <script src="js/jquery-1.8.3.js"></script>
+    <!--<script src="js/financialAnalysis.js"></script>-->
+    <script src="js/module/gzw-financialAnalysis-newsflash.js"></script>
+    <script src="js/js.js"></script>
+</head>
+<body>
+<div class="box">
+    <div class="box-head">
+        <p class="box-title">财务分析</p>
+        <!--<a href="javascript:void(0)" class="arrow-left"><i></i></a>
+        <a href="javascript:void(0)" class="arrow-right"><i></i></a>-->
+    </div>
+    <div class="box-container">
+        <div class="box-left">
+            <ul>
+                <li >
+                    <a href="gzw-financialAnalysis-statistics.html">财务基本状况分析</a>
+                </li>
+                <li class="on">
+                    <a href="gzw-financialAnalysis-newsflash.html">财务监督铁笼应用</a>
+                </li>
+                <li>
+                    <a href="gzw-financialAnalysis-annual.html">财务数据年度分析</a>
+                </li>
+            </ul>
+        </div>
+        <div class="box-right">
+            <div class="box-right-title">
+                <p><i></i>财务监督铁笼应用</p>
+            </div>
+            <div class="box-right-form  three-important1">
+                <div class="risk-form-main financial-chart">
+                    <div class="financial-tree financial-month">
+                        <ul class="btn-group">
+                            <li class="on"><a href="javascript:void(0);" class="btn-cm">1月</a><i class="start-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">2月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">3月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">4月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">5月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">6月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">7月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">8月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">9月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">10月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">11月</a><i class="middle-pot"></i></li>
+                            <li><a href="javascript:void(0);" class="btn-cm">12月</a><i class="end-pot"></i></li>
+                        </ul>
+                        <p class="clear"></p>
+                    </div>
+                    <div id="chart1" style="width:900px;height: 560px;"></div>
+                    <div style="display: none;width:900px;height: 560px;" id="nonechart">暂无数据</div>
+                    <div class="financial-table">
+                        <table class="style-table" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>企业名称</th><th>提交时间<br>（企业）</th><th>审批时间<br>（财监处）</th>
+                            </tr>
+                            </thead>
+                            <tbody id="labelbody"></tbody>
+                            <tr id="nonebody" style="display: none;"><td>暂无数据</td></tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script>
+
+
+</script>
+</body>
+</html>

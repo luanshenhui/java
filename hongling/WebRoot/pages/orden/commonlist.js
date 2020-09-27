@@ -1,0 +1,67 @@
+﻿jQuery.csOrdenCommon={
+	bindLabel:function (){
+		$.csCore.getValue($.csCore.getDictResourceName(DICT_BACKEND_MENU_ORDEN_MANAGER),null,".list_search h1");
+//		$.csCore.getValue("Common_View","Orden_Moduler","#view_orden h1");
+//		$.csCore.getValue("Orden_BasicInfo",null,".lblBasicInfo");
+//		$.csCore.getValue("Orden_Detail",null,".lblDetail");
+//		$.csCore.getValue("Orden_Embroidery",null,".lblEmbroidery");
+//		$.csCore.getValue("Size_Part",null,".lblSizePart");
+//		$.csCore.getValue("Size_BodyType",null,".lblBodyType");
+//		$.csCore.getValue("Common_Keyword",null,".lblKeyword");
+//		$.csCore.getValue("Orden_PubDate",null,".lblPubDate");
+//		$.csCore.getValue("Member_Username",null,".lblMemberName");
+//		$.csCore.getValue("Common_Status",null,".lblStatusName");
+//		$.csCore.getValue("Customer_Info",null,".lblCustomer");
+//		$.csCore.getValue("Customer_Name",null,".lblName");
+//		$.csCore.getValue("Common_Gender",null,".lblGender");
+//		$.csCore.getValue("Common_Tel",null,".lblTel");
+//		$.csCore.getValue("Customer_Email",null,".lblEmail");
+//		$.csCore.getValue("Customer_Weight",null,".lblWeight");
+//		$.csCore.getValue("Customer_Height",null,".lblHeight");
+//		$.csCore.getValue("Customer_Address",null,".lblAddress");
+//		$.csCore.getValue("Customer_LtName",null,".lblLtName");
+//		$.csCore.getValue("Orden_StopCause",null,".lblStopCause");
+//		$.csCore.getValue("Fabric_Moduler",null,".lblFabric");
+//		$.csCore.getValue("Orden_ClothingInfo",null,".lblClothingInfo");
+//		$.csCore.getValue("Fabric_Info",null,".lblFabricInfo");
+//		$.csCore.getValue("Orden_Info",null,".lblOrdenInfo");
+//		$.csCore.getValue("Orden_Number",null,".lblNumber");
+//		$.csCore.getValue("Orden_Code",null,".lblCode");
+//		$.csCore.getValue("Orden_SysCode",null,".lblSysCode");
+//		$.csCore.getValue("Common_Unit",null,".lblUnit");
+//		$.csCore.getValue("Orden_ClothingCategory",null,".lblClothingCategory");
+//		$.csCore.getValue("Size_Info",null,".lblSizeInfo");
+//		$.csCore.getValue("Embroid_Info",null,".lblEmbroid");
+//		$.csCore.getValue("Size_Category",null,".lblSizeCategory");
+//		$.csCore.getValue("Common_Status",null,".lblStatus");
+//		$.csCore.getValue("Delivery_Address",null,".lblDeliveryAddress");
+//		$.csCore.getValue("Delivery_Date",null,".lblDeliveryDate");
+//		$.csCore.getValue("Delivery_Status",null,".lblDeliveryStatus");
+//		$.csCore.getValue("Orden_Style",null,".lblStyle");
+//		$.csCore.getValue("Delivery_Info",null,"#delivery_form h1");
+//		$.csCore.getValue("Button_Do",null,".lblDo");
+//		$.csCore.getValue("Button_Search",null,"#btnSearch");
+//		$.csCore.getValue("Button_FastSubmitOrden",null,"#btnCreateOrden");
+//		$.csCore.getValue("Common_Save",null,"#btnSaveOrden");
+//		$.csCore.getValue("Button_Submit",null,"#btnSubmitOrden");
+//		$.csCore.getValue("Button_Export",null,"#btnExportOrdens");
+//		$.csCore.getValue("Button_Submit",null,"#btnSaveDelivery");
+//		$.csCore.getValue("Button_Cancel",null,"#btnCancelDelivery");
+//		$.csCore.getValue("Button_Statement",null,"#DeliveryDetails");
+//		$.csCore.getValue("Delivery_Details",null,"#btnStatement");
+//		$.csCore.getValue("Button_Cancel",null,"#btnCancelOrden");
+//		$.csCore.getValue("Orden_Statistic",null,"#btnOrdenStatistic");
+//		$.csCore.getValue("Orden_Memo",null,".lblMemo");
+//		$.csCore.getValue("Orden_DealDate",null,".lblDealDate");
+//		$.csCore.getValue("Customer_No",null,".lblCustomerNo");
+//		$.csCore.getValue("Clothing_Style",null,".lblClothingStyle");
+//		$.csCore.getValue("Dict_10310",null,".lblDeliveryExpressCom");
+//		$.csCore.getValue("Pay_Title",null,".pay_title");
+//		$.csCore.getValue("Pay_Zfb",null,".pay_zfb");
+//		$.csCore.getValue("Pay_Paypail",null,".pay_paypail");
+	},
+	getOrdenByID:function(id){
+		var param = $.csControl.appendKeyValue("","id",id);
+		return $.csCore.invoke($.csCore.buildServicePath('/service/orden/getordenbyid'),param);
+	}
+};

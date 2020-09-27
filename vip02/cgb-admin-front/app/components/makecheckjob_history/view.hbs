@@ -1,0 +1,76 @@
+{{#component "makecheckjob_history js-component"}}
+    <p class="components-title"><strong>对账文件历史查询</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+
+            <form class="form item-form-search form-inline business-form">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span-makecheckjob span-large business-weight">
+                            <label for="parametersType">日期:</label>
+                            <input class="form-control authorize_date js-date-start" id="startOpedate" type="text"
+                                   name="startOpedate" value="{{startOpedate}}">
+                                   <em>-</em>
+                              <input class="form-control authorize_date js-date-end" id="endOpedate" type="text"
+                                     name="endOpedate" value="{{endOpedate}}">
+                        </span>
+                    </p>
+
+                    <p class="p">
+                        <input class="button btn-success btn-small pull-right margin-right-10" type="submit"
+                               value="查询"/>
+                    </p>
+                </fieldset>
+            </form>
+
+            <table class="table table-top">
+                <thead>
+                <tr>
+                    <th width="8%">id</th>
+                    <th width="15%">操作员</th>
+                    <th width="15%">操作日期</th>
+                    <th width="15%">操作时间</th>
+                    <th width="15%">ip</th>
+                    <th width="10%">对账文件日期</th>
+                    <th width="10%">操作结果</th>
+                    <th width="10%">是否手动</th>
+                </tr>
+                </thead>
+                <tbody data-content="{{_DATA_}}">
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                        <td class="id">{{id}}</td>
+                        <td class="ope">{{ope}}</td>
+                        <td class="opedate">{{formatDate opedate "day"}}</td>
+                        <td class="opetimeStr">
+                            {{opetimeStr}}
+                        </td>
+                        <td class="ip">{{ip}}</td>
+                        <td class="date">{{formatDate date "day"}}</td>
+                        <td class="result">
+                            {{#equals result "0"}}
+                                成功
+                            {{else}}
+                                {{#equals result "1"}}
+                                    失败
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                        <td class="isshoudong">
+                            {{#equals isshoudong "0"}}
+                                手动
+                            {{else}}
+                                {{#equals isshoudong "1"}}
+                                    自动
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+
+    </div>
+{{/component}}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <util:properties id="app" location="classpath:app.properties"/>
+    <!-- Application name -->
+    <dubbo:application name="cgb-mall-batch" logger="slf4j"/>
+    <!-- registry address, used for service to register itself -->
+    <dubbo:registry address="#{app.dubboRegistry}"/>
+
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.BatchOrderService" id="batchOrderService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.ClearQueryService" id="clearQueryService" timeout="1800000"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.DealBestRateService" id="dealBestRateService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.InitPointPoolService" id="initPointPoolService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.IvrRankService" id="ivrRankService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.MakeCheckAccCheckErrService" id="makeCheckAccCheckErrService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.MakeCheckAccRenewService" id="makeCheckAccRenewService" timeout="600000"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.MakeCheckAccService" id="makeCheckAccService" timeout="600000"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.OpsOrderProgressSearchService" id="opsOrderProgressSearchService" timeout="1800000"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.OrderStatusQueryService" id="orderStatusQueryService" timeout="600000"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.PromotionSyncService" id="promotionSyncService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.SendOutSystemService" id="sendOutSystemService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.SynBonusService" id="synBonusService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.BatchDayReportService" id="batchDayReportService" timeout="3600000" />
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.BatchWeekReportService" id="batchWeekReportService" timeout="3600000" />
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.BatchMonthReportService" id="batchMonthReportService" timeout="3600000" />
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.BatchGoodsDownService" id="batchGoodsDownService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.HotRankService" id="hotRankService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.DataTransferFlowService" id="dataTransferFlowService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.ClearOrderOutSysService" id="clearOrderOutSysService"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.RepairReportService" id="repairReportService" timeout="600000"/>
+    <dubbo:reference interface="cn.com.cgbchina.batch.service.BatchEspActRemindService" id="batchEspActRemindService" timeout="600000"/>
+
+    <!-- 服务消费端配置 -->
+    <dubbo:consumer timeout="600000" loadbalance="leastactive" check="false" />
+
+</beans>

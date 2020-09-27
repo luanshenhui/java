@@ -1,0 +1,131 @@
+.top_goods {
+
+}
+
+/**新增置顶商品样式**/
+.top-goods-modal {
+  .modal-header {
+    //    width: 960px;
+  }
+  .modal-body {
+    width: 900px;
+    height: 450px !important;
+    .admin-cat-box2 {
+      float: left;
+      width: 15%;
+      border-right: 1px solid #eee;
+      margin-top: 10px;
+      position: relative;
+      height: 400px;
+
+      .admin-cat-box-title {
+        font-size: 14px;
+        margin: 0 auto;
+        margin-bottom: 15px;
+        width: 100px;
+        font-weight: bold;
+      }
+
+      .admin-cat-box-list {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 20px;
+        overflow-y: auto;
+        height: 300px !important;
+        li {
+          width: 95%;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          position: relative;
+          a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-align: left;
+            &:hover {
+              background-color: #f0f0f0;
+            }
+          }
+        }
+      }
+
+      .search-item {
+        //height: 40px;
+        margin: 5px;
+        .search-item-group {
+          padding: 8px 0 0 4px;
+          position: relative;
+          i {
+            position: absolute;
+            //top: 18px;
+            //left: 25px;
+            color: #CCCCCC;
+          }
+          input {
+            width: 202px;
+            padding: 4px 4px 4px 32px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 2px;
+          }
+        }
+      }
+
+      //.admin-cat-box-search {
+      //  .form-control-admin-search {
+      //    padding: 4px;
+      //    font-size: 14px;
+      //    border: 1px solid #ccc;
+      //    float: left;
+      //    width: 120px;
+      //    margin-left: 10px;
+      //    margin-right: 10px;
+      //    margin-top: 2px;
+      //  }
+      //  .form-width-80{
+      //    width: 80px;
+      //  }
+      //  .form-width-185 {
+      //    width: 185px;
+      //  }
+      //  .admin-cat-search {
+      //    border: none;
+      //    width: 40px;
+      //    height: 30px;
+      //    cursor: pointer;
+      //  }
+      //}
+      .js-item-search-result {
+        overflow-y: auto;
+        height: 300px !important;
+      }
+      .pro-rg {
+        text-align: left;
+        padding-left: 10px;
+        line-height: 30px;
+      }
+      .margin-bottom-0 {
+        margin-bottom: 0px !important;
+      }
+    }
+    .border-right-none {
+      border: none !important;
+      width: 30%;
+      padding-left: 10px;
+    }
+  }
+  .clickon {
+    background-color: #ccc;
+  }
+}
+
+.top-goods-edit-modal {
+  width: 730px;
+  .modal-topgoods {
+    min-height: 0px;
+  }
+
+}

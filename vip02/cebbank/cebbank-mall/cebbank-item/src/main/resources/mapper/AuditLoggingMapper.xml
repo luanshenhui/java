@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AuditLoggingModel">
+    <resultMap id="AuditLoggingMap" type="AuditLoggingModel">
+        <result property="id" column="id"/>
+        <result property="outerId" column="outer_id"/>
+        <result property="presenter" column="presenter"/>
+        <result property="presenterMemo" column="presenter_memo"/>
+        <result property="presenterDatetime" column="presenter_datetime"/>
+        <result property="auditor" column="auditor"/>
+        <result property="auditorMemo" column="auditor_memo"/>
+        <result property="auditorDatetime" column="auditor_datetime"/>
+        <result property="ext" column="ext"/>
+        <result property="businessType" column="business_type"/>
+        <result property="approveType" column="approve_type"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,outer_id,presenter,presenter_memo,presenter_datetime,auditor,auditor_memo,auditor_datetime,ext,business_type,approve_type,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="AuditLoggingModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_audit_logging
+        (outer_id
+        ,presenter
+        ,presenter_memo
+        ,presenter_datetime
+        ,auditor
+        ,auditor_memo
+        ,auditor_datetime
+        ,ext
+        ,business_type
+        ,approve_type
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{outerId}
+        ,#{presenter}
+        ,#{presenterMemo}
+        ,now()
+        ,#{auditor}
+        ,#{auditorMemo}
+        ,now()
+        ,#{ext}
+        ,#{businessType}
+        ,#{approveType}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="AuditLoggingModel">
+        update tbl_audit_logging set
+        outer_id
+        = #{outerId},presenter
+        = #{presenter},presenter_memo
+        = #{presenterMemo},presenter_datetime
+        = #{presenterDatetime},auditor
+        = #{auditor},auditor_memo
+        = #{auditorMemo},auditor_datetime
+        = #{auditorDatetime},ext
+        = #{ext},business_type
+        = #{businessType},approve_type
+        = #{approveType},create_oper
+        = #{createOper},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="outerId !=null">and outerId = #{outerId}</if>
+            <if test="presenter !=null">and presenter = #{presenter}</if>
+            <if test="presenterMemo !=null">and presenterMemo = #{presenterMemo}</if>
+            <if test="presenterDatetime !=null">and presenterDatetime = #{presenterDatetime}</if>
+            <if test="auditor !=null">and auditor = #{auditor}</if>
+            <if test="auditorMemo !=null">and auditorMemo = #{auditorMemo}</if>
+            <if test="auditorDatetime !=null">and auditorDatetime = #{auditorDatetime}</if>
+            <if test="ext !=null">and ext = #{ext}</if>
+            <if test="businessType !=null">and businessType = #{businessType}</if>
+            <if test="approveType !=null">and approveType = #{approveType}</if>
+            <if test="createOper !=null">and createOper = #{createOper}</if>
+            <if test="createTime !=null">and createTime = #{createTime}</if>
+            <if test="modifyOper !=null">and modifyOper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modifyTime = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="AuditLoggingMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_audit_logging
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="AuditLoggingMap">
+        select <include refid="columns"/>
+        from tbl_audit_logging
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="AuditLoggingMap">
+        select<include refid="columns"/>
+        from tbl_audit_logging
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="AuditLoggingModel">
+        delete from tbl_audit_logging where id = id
+    </delete>
+
+    <!--根据外部id进行查询  add by chenle -->
+    <select id="findByOuterId" parameterType="String" resultMap="AuditLoggingMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_audit_logging
+        where outer_id=#{outerId} order by create_time
+    </select>
+</mapper>
+
+

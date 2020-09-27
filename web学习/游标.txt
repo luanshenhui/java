@@ -1,0 +1,94 @@
+create or replace procedure PRO_EFPE_WF_COMMENT_TASK is
+--声明显式游标
+ CURSOR MYCUR IS 
+       SELECT
+          T.COMMENTID,
+          T.WFNOTEID,
+          T.ACTIVITYID,
+          T.DUALTYPE,
+          T.DUALCONTENT,
+          T.CREATEDATE,
+          T.USERNAME,
+          T.BELONGORG,
+          T.ATTID,
+          T.ATTTITLE,
+          T.APPLYTYPE,
+          T.APPLYNOTE,
+          T.STATUS,
+          T.SENDDATE
+        FROM 
+          EFPE_WF_COMMENT T
+        INNER JOIN (
+               SELECT
+                   ACTIVITYID,
+                   MAX(CREATEDATE) C_DATE
+               FROM 
+                   EFPE_WF_COMMENT
+               GROUP BY ACTIVITYID
+        ) C ON C.ACTIVITYID = T.ACTIVITYID AND C.C_DATE = T.CREATEDATE;
+        
+        MYCUR_ROW MYCUR%ROWTYPE; --定义游标变量，该变量的类型为基于游标C_EMP的记录
+ BEGIN
+   --测试打印用 
+    --DBMS_OUTPUT.ENABLE(buffer_size => null);
+  --For 循环
+  FOR MYCUR_ROW IN MYCUR LOOP
+   UPDATE 
+          EFPE_WF_COMMENT_JOB T 
+      SET
+          T.COMMENTID = MYCUR_ROW.COMMENTID,
+          T.WFNOTEID = MYCUR_ROW.WFNOTEID,
+          T.ACTIVITYID = MYCUR_ROW.ACTIVITYID,
+          T.DUALTYPE = MYCUR_ROW.DUALTYPE,
+          T.DUALCONTENT = MYCUR_ROW.DUALCONTENT,
+          T.CREATEDATE = MYCUR_ROW.CREATEDATE,
+          T.USERNAME = MYCUR_ROW.USERNAME,
+          T.BELONGORG = MYCUR_ROW.BELONGORG,
+          T.ATTID = MYCUR_ROW.ATTID,
+          T.ATTTITLE = MYCUR_ROW.ATTTITLE,
+          T.APPLYTYPE = MYCUR_ROW.APPLYTYPE,
+          T.APPLYNOTE = MYCUR_ROW.APPLYNOTE,
+          T.STATUS = MYCUR_ROW.STATUS,
+          T.SENDDATE = MYCUR_ROW.SENDDATE
+       WHERE T.ACTIVITYID = MYCUR_ROW.ACTIVITYID;
+       If sql%rowcount = 0 then
+         insert into EFPE_WF_COMMENT_JOB(
+            COMMENTID,
+            WFNOTEID,
+            ACTIVITYID,
+            DUALTYPE,
+            DUALCONTENT,
+            CREATEDATE,
+            USERNAME,
+            BELONGORG,
+            ATTID,
+            ATTTITLE,
+            APPLYTYPE,
+            APPLYNOTE,
+            STATUS,
+            SENDDATE
+         )
+         values(
+          MYCUR_ROW.COMMENTID,
+          MYCUR_ROW.WFNOTEID,
+          MYCUR_ROW.ACTIVITYID,
+          MYCUR_ROW.DUALTYPE,
+          MYCUR_ROW.DUALCONTENT,
+          MYCUR_ROW.CREATEDATE,
+          MYCUR_ROW.USERNAME,
+          MYCUR_ROW.BELONGORG,
+          MYCUR_ROW.ATTID,
+          MYCUR_ROW.ATTTITLE,
+          MYCUR_ROW.APPLYTYPE,
+          MYCUR_ROW.APPLYNOTE,
+          MYCUR_ROW.STATUS,
+          MYCUR_ROW.SENDDATE
+         );
+      end if;
+      commit;
+      --测试输出用
+    --DBMS_OUTPUT.PUT_LINE( MYCUR_ROW.USERNAME);
+  END LOOP;
+  
+end PRO_EFPE_WF_COMMENT_TASK;
+

@@ -1,0 +1,367 @@
+{{#component "points-cooperation-edit js-component"}}
+    <script src="/static/scripts/encrypt/pwdObject_.js"></script>
+    <div class="modal-header">
+        <div class="main-box-title h1-title">编辑供应商信息</div>
+    </div>
+
+    <form id="cooperationEditForm" class="form form-aligned cooperation-edit-form">
+        <input type="hidden" id="businessTypeId" name="businessTypeId" value="JF">
+        <!--隐藏传递平台类型 YG：广发商城，JF：积分商城-->
+        {{#with _DATA_}}
+            <div class="navContent">
+                <p class="components-title title"><strong>- 基本信息 -</strong></p>
+
+                <div class="control-group pull-left">
+                    <label for="vendorId"><span class="required">*</span>供应商编码:</label>
+                    <input id="vendorId" name="vendorId" value="{{vendorId}}" type="text" class="form-control" required
+                           maxlength="6" readonly="readonly"/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="merId"><span class="required">*</span>商户号:</label>
+                    <input id="merId" name="merId" value="{{merId}}" type="text" class="form-control" maxlength="20" required/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="fullName"><span class="required">*</span>供应商名称:</label>
+                    <input id="fullName" name="fullName" value="{{fullName}}" type="text" class="form-control" required
+                           maxlength="100"/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="simpleName"><span class="required">*</span>供应商简称:</label>
+                    <input id="simpleName" name="simpleName" value="{{simpleName}}" type="text" class="form-control" required
+                           maxlength="20"/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="taxCode">纳税登记号:</label>
+                    <input id="taxCode" name="taxCode" value="{{taxCode}}" type="text" class="form-control" maxlength="20"/>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="vendorType">类型:</label>
+                    <input id="vendorType" name="vendorType" type="text" value="{{vendorType}}" class="form-control"
+                            maxlength="2"/>
+                </div>
+                <p class="components-title title"><strong>- 付款信息 -</strong></p>
+
+                <div class="control-group pull-left">
+                    <label for="payCondition">付款条件:</label>
+                    <input id="payCondition" name="payCondition" type="text" value="{{payCondition}}" class="form-control"
+                           maxlength="20"/>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="payGroup">支付组:</label>
+                    <input id="payGroup" name="payGroup" type="text" value="{{payGroup}}" class="form-control" maxlength="20"/>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="payWay">付款方法:</label>
+                    <input id="payWay" name="payWay" type="text" value="{{payWay}}" class="form-control" maxlength="20"/>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="payCurrency">付款币种:</label>
+                    <input id="payCurrency" name="payCurrency" type="text" value="{{payCurrency}}" class="form-control"
+                           maxlength="20"/>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="freightTip">运费条款:</label>
+                    <input id="freightTip" name="freightTip" type="text" value="{{freightTip}}" class="form-control"
+                           maxlength="200"/>
+                </div>
+
+                <div class="control-group pull-left">
+                    <!--收取方式  1：按月收取  2：按季收取  3：按年收取  4：一次性收取-->
+                    <label for="feeType" class="label-width">接收方式:</label>
+                    <select id="feeType" name="feeType">
+                        <option value="1" {{#equals feeType "1" }} selected {{/equals}}>按月收取</option>
+                        <option value="2" {{#equals feeType "2" }} selected {{/equals}}>按季收取</option>
+                        <option value="3" {{#equals feeType "3" }} selected {{/equals}}>按年收取</option>
+                        <option value="4" {{#equals feeType "4" }} selected {{/equals}}>一次性收取</option>
+                    </select>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="provinceId" class="label-width"><span class="required">*</span>省份:</label>
+                    <input type="hidden" id="provinces" name="provinces" value="{{provinceId}}">
+                    <select name="provinceId" id="provinceId" class="js-cooperation-selectCity">
+                    </select>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="cityId" class="label-width"><span class="required">*</span>城市:</label>
+                    <input type="hidden" id="citys" name="citys" value="{{cityId}}">
+                    <select name="cityId" id="cityId" class="js-cooperation-selectDistrict">
+                    </select>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="areaId" class="label-width"><span class="required">*</span>区:</label>
+                    <input type="hidden" id="areas" name="areas" value="{{areaId}}">
+                    <select name="areaId" id="areaId">
+                    </select>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="cooperAddress"><span class="required">*</span>供应商地点:</label>
+                    <input id="cooperAddress" name="cooperAddress" type="text" value="{{cooperAddress}}" class="form-control"
+                           maxlength="200" required/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="enterpriseAddress"><span class="required">*</span>企业地址:</label>
+                    <input id="enterpriseAddress" name="enterpriseAddress" type="text" value="{{enterpriseAddress}}"
+                           class="form-control"
+                           maxlength="200" required/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="postCode"><span class="required">*</span>邮政编码:</label>
+                    <input id="postCode" name="postCode" value="{{postCode}}" type="text" class="form-control" required
+                           maxlength="6"/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="payAddress">用于支付地点:</label>
+                    <input id="payAddress" name="payAddress" value="{{payAddress}}" type="text" class="form-control"
+                           maxlength="200"/>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="buyAddress"><span class="required">*</span>用于采购地点:</label>
+                    <input id="buyAddress" name="buyAddress" value="{{buyAddress}}" type="text" class="form-control" required
+                           maxlength="200"/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="payConditionAddress">付款条件地点:</label>
+                    <input id="payConditionAddress" name="payConditionAddress" value="{{payConditionAddress}}" type="text"
+                           class="form-control" maxlength="200"/>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="payGroupAddress">支付组地点:</label>
+                    <input id="payGroupAddress" name="payGroupAddress" value="{{payGroupAddress}}" type="text"
+                           class="form-control" maxlength="200"/>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="address">收货地点:</label>
+                    <input id="address" name="address" value="{{address}}" type="text" class="form-control" maxlength="80"/>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="debtAccount">负债账户:</label>
+                    <input id="debtAccount" name="debtAccount" value="{{debtAccount}}" type="text" class="form-control"
+                           maxlength="20"/>
+                </div>
+                <div class="control-group pull-left only-one">
+                    <label for="prepayAccount">预付款账户:</label>
+                    <input id="prepayAccount" name="prepayAccount" value="{{prepayAccount}}" type="text" class="form-control"
+                           maxlength="20"/>
+                </div>
+                <p class="components-title title"><strong>联系人信息</strong></p>
+
+                <div class="control-group pull-left">
+                    <label for="contact">联系人名称:</label>
+                    <input id="contact" name="contact" value="{{contact}}" type="text" class="form-control" maxlength="30"/>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="phone">联系人电话:</label>
+                    <input id="phone" name="phone" value="{{phone}}" type="text" class="form-control" maxlength="20"/>
+                    <span class="note">区号-电话/手机</span>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="contactTax">联系人传真:</label>
+                    <input id="contactTax" name="contactTax" value="{{contactTax}}" type="text" class="form-control"
+                           maxlength="20"/>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="email">电子信箱:</label>
+                    <input id="email" name="email" value="{{email}}" type="text" class="form-control" maxlength="300"/>
+                </div>
+
+                <div class="control-group pull-left only-one">
+                    <label for="invoice"><span class="required">*</span>发票匹配选项:</label>
+                    <input id="invoice" name="invoice" value="{{invoice}}" type="text" class="form-control" required
+                           maxlength="20"/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <p class="components-title title"><strong>- 银行方信息 -</strong></p>
+
+                <div class="control-group pull-left">
+                    <label for="accBank">收款银行名称:</label>
+                    <input id="accBank" name="accBank" value="{{accBank}}" type="text" class="form-control" maxlength="80"/>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="accNo">银行帐号:</label>
+                    <input id="accNo" name="accNo" value="{{accNo}}" type="text" class="form-control" maxlength="40"/>
+                </div>
+                <p class="components-title title"><strong>- 其他信息 -</strong></p>
+
+                <div class="control-group pull-left">
+                    <!--当前状态  0101：未启用  0102：已启用-->
+                    <!--此处逻辑：如果审核状态是0-待审核新增，不可用，其余情况状态可用-->
+                    <label for="status">当前状态:</label>
+                    {{#equals 0 vendorModel.checkStatus}}
+                        <select id="status" name="status" disabled>
+                            <option value="0101">未启用</option>
+                            <option value="0102">已启用</option>
+                        </select>
+                        <input name="status" value="0101" type="hidden" class="form-control"/>
+                    {{else}}
+                        <select id="status" name="status">
+                            <option value="0101" {{#equals status "0101" }} selected {{/equals}}>未启用</option>
+                            <option value="0102" {{#equals status "0102" }} selected {{/equals}}>已启用</option>
+                        </select>
+                    {{/equals}}
+                </div>
+                <div class="control-group pull-left">
+                    <label for="vendorRole"><span class="required">*</span>供应商角色:</label>
+                    <select id="vendorRole" name="vendorRole">
+                        <option value="0" {{#equals vendorRole "0" }} selected {{/equals}}>VMI合作商</option>
+                        <option value="1" {{#equals vendorRole "1" }} selected {{/equals}}>VMI物流商</option>
+                        <option value="2" {{#equals vendorRole "2" }} selected {{/equals}}>高级供应商</option>
+                        <option value="3" {{#equals vendorRole "3" }} selected {{/equals}}>O2O供应商</option>
+                    </select>
+                </div>
+
+                <div class="control-group pull-left only-one">
+                    <label for="unionPayNo"><span class="required">*</span>银联商户号:</label>
+                    <input id="unionPayNo" name="unionPayNo" value="{{unionPayNo}}" type="text" class="form-control"
+                           maxlength="15" required/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+
+                <p class="components-title title"><strong>- 用户信息 -</strong></p>
+
+                <div class="control-group pull-left">
+                    <label for="vendorModel.code"><span class="required">*</span>用户编号:</label>
+                    <input id="vendorModel.code" name="vendorModel.code" value="{{vendorModel.code}}" type="text"
+                           class="form-control vMCode" required maxlength="30" readonly="readonly"/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="vendorModel.name"><span class="required">*</span>用户姓名:</label>
+                    <input id="vendorModel.name" name="vendorModel.name" value="{{vendorModel.name}}" type="text"
+                           class="form-control vName" required maxlength="20"/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <!--密码控件开始-->
+                <div class="control-group pull-left modify-password-div">
+                    <label for="passwordNew" class="password-div password-right label-width">一次密码:</label>
+                    <div id="passwordNew" class="password-div"><script type="text/javascript">
+                        createPwdObjectNew("passwordNew-div","164","28","4","4","E","222");
+                    </script></div>
+                </div>
+
+                <div class="control-group pull-left modify-password-div">
+                    <label for="passwordConfirm" class="password-div password-right label-width">确认密码:</label>
+                    <div id="passwordConfirm" class="password-div"><script type="text/javascript">
+                        createPwdObjectNew("passwordConfirm-div","164","28","4","4","E","222");
+                    </script></div>
+                </div>
+                <!--密码控件结束-->
+
+                <div class="control-group pull-left">
+                    <label for="vendorModel.mobile">手机号码:</label>
+                    <input id="vendorModel.mobile" name="vendorModel.mobile" value="{{vendorModel.mobile}}" type="text"
+                           class="form-control vmobile" maxlength="20"/>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="vendorModel.phone">联系电话:</label>
+                    <input id="vendorModel.phone" name="vendorModel.phone" value="{{vendorModel.phone}}" type="text"
+                           class="form-control vphone"
+                           maxlength="20"/>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="vendorModel.fax">传真电话:</label>
+                    <input id="vendorModel.fax" name="vendorModel.fax" value="{{vendorModel.fax}}" type="text"
+                           class="form-control vfax" maxlength="20"/>
+                </div>
+                <div class="control-group pull-left">
+                    <label for="vendorModel.address">通讯地址:</label>
+                    <input id="vendorModel.address" name="vendorModel.address" value="{{vendorModel.address}}" type="text"
+                           type="text"
+                           class="form-control vAddress" maxlength="80"/>
+                </div>
+
+                <div class="control-group pull-left">
+                    <label for="vendorModel.email"><span class="required">*</span>邮件地址:</label>
+                    <input id="vendorModel.email" name="vendorModel.email" value="{{vendorModel.email}}" type="text"
+                           class="form-control vmail" required maxlength="100"/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group pull-left">
+                    <!--当前状态0101未启用0102已启用-->
+                    <!--此处逻辑：如果审核状态是0-待审核新增，不可用，其余情况状态可用-->
+                    <label for="vendorModel.status">当前状态:</label>
+                    {{#equals 0 vendorModel.checkStatus}}
+                        <select name="vendorModel.status" disabled>
+                            <option value="0101">未启用</option>
+                            <option value="0102">已启用</option>
+                        </select>
+                        <input name="vendorModel.status" value="0101" type="hidden" class="form-control"/>
+                    {{else}}
+                        <select id="vendorModel.status" name="vendorModel.status">
+                            <option value="0101" {{#equals vendorModel.status "0101" }} selected {{/equals}}>未启用
+                            </option>
+                            <option value="0102" {{#equals vendorModel.status "0102" }} selected {{/equals}}>已启用
+                            </option>
+                        </select>
+                    {{/equals}}
+                </div>
+
+                <div class="control-group pull-left only-one">
+                    <label for="descript">用户描述:</label>
+                    <input name="vendorModel.descript" value="{{vendorModel.descript}}" type="text" class="form-control vDescript"
+                           maxlength="200"/>
+                </div>
+            </div>
+
+            <!--隐藏传递审核状态 0-待审核（新增）2-待审核（编辑）1-已审核 3-已拒绝（新增）4-已拒绝（编辑）-->
+            {{#equals "1" vendorModel.checkStatus }}
+                <input name="vendorModel.checkStatus" value="2" type="hidden" class="form-control"/>
+            {{else}}
+                {{#equals "0" vendorModel.checkStatus}}
+                    <input name="vendorModel.checkStatus" value="0" type="hidden" class="form-control"/>
+                {{else}}
+                    {{#equals "2" vendorModel.checkStatus }}
+                        <input name="vendorModel.checkStatus" value="2" type="hidden" class="form-control"/>
+                    {{else}}
+                        {{#equals "3" vendorModel.checkStatus}}
+                            <input name="vendorModel.checkStatus" value="0" type="hidden" class="form-control"/>
+                        {{else}}
+                            {{#equals "4" vendorModel.checkStatus}}
+                                <input name="vendorModel.checkStatus" value="2" type="hidden" class="form-control"/>
+                            {{else}}
+                                <input name="vendorModel.checkStatus" value="0" type="hidden" class="form-control"/>
+                            {{/equals}}
+                        {{/equals}}
+                    {{/equals}}
+                {{/equals}}
+            {{/equals}}
+        {{/with}}
+
+        <div class="control-group submit m-t-10">
+            <input class="btn btn-success btn-medium js-update" type="submit" data-id="{{vendorId}}" id="submitForUpdate"
+                   value="提交审核"/>
+            <a class="btn btn-success btn-medium" href="{{_HREF_.mainContext}}/points/cooperation/cooperation_all"/>取消</a>
+        </div>
+    </form>
+{{/component}}

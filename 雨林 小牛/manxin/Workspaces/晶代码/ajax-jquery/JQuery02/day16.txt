@@ -1,0 +1,57 @@
+1、jQuery对ajax编程的支持
+	(1)load     order.jsp
+		1)作用：向服务器发送异步请求，并且将服务器
+	返回的数据直接添加到符合要求的节点之上。
+		2)语法:
+			$obj.load(请求地址,[请求参数]);
+			请求参数有两种形式:
+				第一种: 请求字符串
+					比如 "flight=ca1234&dest=bj"
+				第二种:对象
+					比如: {'flight':'ca1234','dest':'bj'}
+			load方法如果没有请求参数，会发送get请求，
+			如果有请求参数，则会发送post请求。
+	(2)$.get      stock.jsp
+		1)作用：向服务器发送异步请求，请求方式是get方式。
+		2)语法:
+			$.get(请求地址,[data],[callback],[type]);
+			data:请求参数
+			callback:用来处理服务器返回的数据，格式:
+					function(data,statusText),其中,data
+					是服务器返回的数据，statusText是一个
+					状态描述。
+			type:服务器返回的数据类型，可以是:
+					text : 普通的文本
+					html :  html文档
+					json :   json字符串
+					xml :   xml文档
+					script: javascript脚本
+		$.post: 用法同$.get,只不过发送的是post请求。
+	(3)$.ajax   autoComplete.jsp
+		1)语法:
+			$.ajax({'':'','':''});
+		属性名用来设订一些选项：
+			url: 请求地址
+			type: 请求方式(get post)
+			data: 请求参数
+			dataType: 服务器返回的数据类型(text,html,
+			json,xml,script)
+			success: 成功以后调用的函数:
+						function(data,statusText),其中,data
+					是服务器返回的数据，statusText是一个
+					状态描述。
+			error:失败以后调用的函数:
+					function(xhr,status,errorThrown),其中，
+					xhr表示XMLHttpRequest对象,status,error
+					Thrown其中有一个可以获得错误信息。
+			async: 当值为true(缺省值)，表示发送异步请求。
+			当值为false,表示发送同步请求。
+	
+	练习：
+		点击“查看所有票价”，则显示该航班对应的所有的票价，
+	并且链接上的文字变成"显示经济舱价格"；
+	再次点击"显示经济舱价格“，则隐藏所有票价，并且
+	链接上的文字变成"查看所有票价"。
+	
+	www.jquery.com
+	

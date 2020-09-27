@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblMakecheckjobHistoryModel">
+    <resultMap id="TblMakecheckjobHistoryMap" type="TblMakecheckjobHistoryModel">
+        <result property="id" column="id"/>
+        <result property="ope" column="ope"/>
+        <result property="opedate" column="opedate"/>
+        <result property="opetime" column="opetime"/>
+        <result property="ip" column="ip"/>
+        <result property="date" column="date"/>
+        <result property="result" column="result"/>
+        <result property="resultdesc" column="resultdesc"/>
+        <result property="desc" column="desc"/>
+        <result property="isshoudong" column="isshoudong"/>
+        <result property="isrenew" column="isrenew"/>
+        <result property="opedate" column="opedate"/>
+        <result property="opetime" column="opetime"/>
+        <result property="date" column="date"/>
+    </resultMap>
+    <sql id="columns">
+        id,ope,opedate,opetime,ip,tbl_makecheckjob_history.date,result,resultdesc,tbl_makecheckjob_history.desc,isshoudong,isrenew
+    </sql>
+
+    <insert id="insert" parameterType="TblMakecheckjobHistoryModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_makecheckjob_history
+        (ope
+        ,opedate
+        ,opetime
+        ,ip
+        ,tbl_makecheckjob_history.date
+        ,result
+        ,resultdesc
+        ,tbl_makecheckjob_history.desc
+        ,isshoudong
+        ,isrenew)
+        values(#{ope}
+        ,#{opedate}
+        ,#{opetime}
+        ,#{ip}
+        ,#{date}
+        ,#{result}
+        ,#{resultdesc}
+        ,#{desc}
+        ,#{isshoudong}
+        ,#{isrenew})
+    </insert>
+
+    <update id="update" parameterType="TblMakecheckjobHistoryModel">
+        update tbl_makecheckjob_history set
+        <if test="ope !=null">ope = #{ope}
+            ,
+        </if>
+        <if test="opedate !=null">opedate = #{opedate}
+            ,
+        </if>
+        <if test="opetime !=null">opetime = #{opetime}
+            ,
+        </if>
+        <if test="ip !=null">ip = #{ip}
+            ,
+        </if>
+        <if test="date !=null">date = #{date}
+            ,
+        </if>
+        <if test="result !=null">result = #{result}
+            ,
+        </if>
+        <if test="resultdesc !=null">resultdesc = #{resultdesc}
+            ,
+        </if>
+        <if test="desc !=null">desc = #{desc}
+            ,
+        </if>
+        <if test="isshoudong !=null">isshoudong = #{isshoudong}
+            ,
+        </if>
+        <if test="isrenew !=null">isrenew = #{isrenew}
+            ,
+        </if>
+        <if test="opedate !=null">opedate = #{opedate}
+            ,
+        </if>
+        <if test="opetime !=null">opetime = #{opetime}
+            ,
+        </if>
+        <if test="date !=null">date = #{date}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ope !=null">and ope = #{ope}</if>
+            <if test="opedate !=null">and opedate = #{opedate}</if>
+            <if test="opetime !=null">and opetime = #{opetime}</if>
+            <if test="ip !=null">and ip = #{ip}</if>
+            <if test="date !=null">and date = #{date}</if>
+            <if test="result !=null">and result = #{result}</if>
+            <if test="resultdesc !=null">and resultdesc = #{resultdesc}</if>
+            <if test="desc !=null">and desc = #{desc}</if>
+            <if test="isshoudong !=null">and isshoudong = #{isshoudong}</if>
+            <if test="isrenew !=null">and isrenew = #{isrenew}</if>
+            <if test="opedate !=null">and opedate = #{opedate}</if>
+            <if test="opetime !=null">and opetime = #{opetime}</if>
+            <if test="date !=null">and date = #{date}</if>
+        </where>
+    </sql>
+    <sql id="conditionsQuery">
+        <where>
+            <if test="startOpedate !=null">
+                and date_format(opedate,'%Y-%m-%d') &gt;= date_format(#{startOpedate},'%Y-%m-%d')
+            </if>
+            <if test="endOpedate !=null">
+                and date_format(opedate,'%Y-%m-%d') &lt;= date_format(#{endOpedate},'%Y-%m-%d')
+            </if>
+
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ope !=null">and ope = #{ope}</if>
+            <if test="opedate !=null">and opedate = #{opedate}</if>
+            <if test="opetime !=null">and opetime = #{opetime}</if>
+            <if test="ip !=null">and ip = #{ip}</if>
+            <if test="date !=null">and date = #{date}</if>
+            <if test="result !=null">and result = #{result}</if>
+            <if test="resultdesc !=null">and resultdesc = #{resultdesc}</if>
+            <if test="desc !=null">and desc = #{desc}</if>
+            <if test="isshoudong !=null">and isshoudong = #{isshoudong}</if>
+            <if test="isrenew !=null">and isrenew = #{isrenew}</if>
+            <if test="opedate !=null">and opedate = #{opedate}</if>
+            <if test="opetime !=null">and opetime = #{opetime}</if>
+            <if test="date !=null">and date = #{date}</if>
+        </where>
+    </sql>
+    <sql id="conditionsQueryError">
+        <where>
+            and result = '1'
+            <if test="startOpedate !=null">
+                and date_format(opedate,'%Y-%m-%d') &gt;= date_format(#{startOpedate},'%Y-%m-%d')
+            </if>
+            <if test="endOpedate !=null">
+                and date_format(opedate,'%Y-%m-%d') &lt;= date_format(#{endOpedate},'%Y-%m-%d')
+            </if>
+
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ope !=null">and ope = #{ope}</if>
+            <if test="opedate !=null">and opedate = #{opedate}</if>
+            <if test="opetime !=null">and opetime = #{opetime}</if>
+            <if test="ip !=null">and ip = #{ip}</if>
+            <if test="date !=null">and date = #{date}</if>
+            <if test="resultdesc !=null">and resultdesc = #{resultdesc}</if>
+            <if test="desc !=null">and desc = #{desc}</if>
+            <if test="isshoudong !=null">and isshoudong = #{isshoudong}</if>
+            <if test="isrenew !=null">and isrenew = #{isrenew}</if>
+            <if test="opedate !=null">and opedate = #{opedate}</if>
+            <if test="opetime !=null">and opetime = #{opetime}</if>
+            <if test="date !=null">and date = #{date}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblMakecheckjobHistoryMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_makecheckjob_history
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="TblMakecheckjobHistoryMap">
+        select
+        <include refid="columns"/>
+        from tbl_makecheckjob_history
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblMakecheckjobHistoryMap">
+        select
+        <include refid="columns"/>
+        from tbl_makecheckjob_history
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblMakecheckjobHistoryModel">
+        delete from tbl_makecheckjob_history where id = id
+    </delete>
+
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_makecheckjob_history
+        <include refid="conditionsQuery"/>
+    </select>
+    <select id="countError" resultType="Long">
+        select count(1)
+        from tbl_makecheckjob_history
+        <include refid="conditionsQueryError"/>
+    </select>
+    <select id="pagerQuery" parameterType="Map" resultMap="TblMakecheckjobHistoryMap">
+        select
+        <include refid="columns"/>
+        from tbl_makecheckjob_history
+        <include refid="conditionsQuery"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="pagerQueryError" parameterType="Map" resultMap="TblMakecheckjobHistoryMap">
+        select
+        <include refid="columns"/>
+        from tbl_makecheckjob_history
+        <include refid="conditionsQueryError"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+</mapper>
+
+

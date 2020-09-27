@@ -1,0 +1,130 @@
+1)model :java类或者容器管理的java类(比如，
+ejb,spring容器管理的javabean，这些容器会为
+java类提供很多基础服务，比如事务、安全等等，
+这样，在编写业务处理逻辑时，会更加的方便)。
+2)view: jsp或者模板技术、jsf。
+3)controller: servlet或者filter
+
+(3)mvc的优缺点
+	1)优点
+		a,可以实现模型的复用
+		b,代码很容易维护：
+			视图或者模型发生改变，不会彼此影响。
+		c,方便测试：
+			比如，将业务逻辑处理代码直接写在servlet
+		里面，需要部署到服务器上然后使用浏览器发请求
+		才能测试；而将业务逻辑写在java类里面，可以
+		直接测试。
+	2)缺点
+		按照mvc来开发一个软件，会增加设计的难度，也
+	会增加代码量，相应的开发成本也会增加。
+
+1、ajax(asynchronous javascript and xml)是什么?
+		ajax是一种用来改善用户体验的技术，其实质是利用
+	浏览器内置的一个特殊的对象(XMLHttpRequest对象，
+	一般称之为ajax对象)异步地(当ajax对象发请求时，
+	浏览器不会销毁当前页面，用户仍然可以对当前页面
+	做其它的操作)向服务器发请求，服务器送回部分数据(
+	并不是一个完整的页面)，利用这些数据更新当前页面。
+	整个过程，页面无刷新，不打断用户的操作。
+2、如何获得ajax对象?
+	因为XMLHttpRequest没有标准化，所以要区分浏览器
+	来获得这个对象：
+	function getXhr(){
+		var xhr = null;
+		if(window.XMLHttpRequest){
+			//非ie浏览器
+			xhr = new XMLHttpRequest();
+		}else{
+			xhr = new ActiveXObject('Microsoft.XMLHttp');
+		}
+		return xhr;
+	}
+
+3、ajax对象的重要属性
+	1)onreadystatechange:
+		用于绑订事件(readystatechange)函数。
+	当ajax对象的readyState属性值发生了改变(
+	比如，从0变成了1),则会产生readystatechange事件。
+	2)responseText:获得服务器返回的文本。
+	3)responseXML:获得服务器返回的xml文档。
+	4)status:状态码
+	5)readyState: readyState有5个值,分别是0,1,2,3,4,
+	表示ajax对象与服务器进行通信时的状态。比如，
+	值为4时，表示ajax对象已经成功地获得了服务器
+	返回的所有的数据。只有当readyState的值等于4
+	时，才能使用responseText,responseXML属性获得
+	服务器返回的数据。
+
+4、编程步骤
+	step1,获得ajax对象:
+	比如:
+			var xhr = getXhr();
+	step2,发请求:
+		方式一: get请求
+		xhr.open('get',
+			'check_username.do?username=zs',true);
+			注意:
+				a,get请求必须将请求参数添加到请求资源路径的
+				后面。
+				b,true表示异步请求，false表示同步请求。
+				异步请求：发请求时，浏览器不会销毁当前页面，
+				用户可以对当前页面做其它的操作。
+				同步请求：发请求时，浏览器不会销毁当前页面，
+				浏览器会锁订当前页面，用户不能够对当前页面
+				做其它的操作。
+		xhr.onreadystatechange=f1;	
+		xhr.send(null);
+		方式二: post请求
+	step3,编写服务器端的处理程序，一般服务器
+	只需要返回部分的数据。
+	step4, 编写事件处理函数
+			function f1(){
+				if(xhr.readyState == 4){
+					var txt = xhr.responseText;
+					使用txt更新当前页面...
+				}
+			}
+		
+5、prototype的简单使用
+	1) $(id)   相当于  document.getElementById(id);
+	2) $F(id)  相当于$(id).value;
+	3) $(id1,id2,...)  依据id1,id2...查找对应的节点，然后
+	将这些节点放到一个数组里面返回。
+	4) strip()   除掉字符串两端的空格。
+	5)  evalJSON()   将符合json语法格式的字符串转换成
+	一个javascript对象。
+	
+练习：
+		用ajax方式验证用户名是否存在。
+	先不用考虑中文问题。
+	
+练习：
+		对上一个案例，
+		a,模拟服务器在进行一个
+		比较耗时的操作时，	提示用户“正在检查..."。
+		b,模拟服务器出现系统异常，
+		提示“检查出错”。
+6、编码问题
+	(1)发送get请求
+		a,产生乱码问题的原因:
+			ie内置的ajax对象会使用"gbk"对中文进行编码,
+		其它浏览器内置的ajax对象会使用"utf-8"对中文
+		进行编码；服务器默认情况下，对于get请求发送
+		过来的数据，会使用"iso-8859-1"进行解码。
+		b,解决方式
+			step1, 让服务器使用指定的编码格式进行解码：
+		比如，可以修改tomcat的配置文件 conf/server.xml
+		，添加  URIEncoding="utf-8"。
+			step2,使用encodeURI函数对请求地址进行编码。
+			encodeURI函数会使用utf-8对中文参数进行编码。
+	(2)发送post请求		
+	
+	练习：
+			使用ajax技术实现一个级联下拉列表:
+		yy,岳阳;cs,长沙;株州
+
+		
+	
+	
+	

@@ -1,0 +1,128 @@
+package cn.rkylin.oms.system.logistics.service;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.github.pagehelper.PageInfo;
+import cn.rkylin.core.exception.BusinessException;
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.logistics.dao.ILogisticsDAO;
+import cn.rkylin.oms.system.logistics.domain.OMS_LGST;
+import cn.rkylin.oms.system.logistics.vo.LogisticsVO;
+
+@Service("LgstService")
+public class LogisticsServiceImple extends ApolloService implements ILogisticsService {
+	
+	/**
+	 * 物流公司数据访问对象
+	 */
+	@Autowired
+	private ILogisticsDAO ilgstDAO;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据条件获取物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	public PageInfo<LogisticsVO> findByWhere(int page, int rows, LogisticsVO lgstVo) throws Exception {
+		PageInfo<LogisticsVO> lgstVOList = findPage(page, rows, "getLgstByCondition", lgstVo);
+		return lgstVOList;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Transactional
+	public void delete(String lgstId) throws Exception {
+		try {
+			List<String> listid = Arrays.asList(lgstId.split(","));
+			for (int i = 0; i < listid.size(); i++) {
+				ilgstDAO.delete("deleteLgst", listid.get(i));
+			}
+		} catch (BusinessException ex) {
+			ex.printStackTrace();
+			throw new Exception("仓库已被使用,不能删除！");
+		}
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述:获取物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public List getLgstByCondition(LogisticsVO lgstVO) throws Exception {
+		try {
+			return ilgstDAO.getLgstByCondition(lgstVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 添加物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public void insert(LogisticsVO lgstVO) throws Exception {
+		ilgstDAO.insert(lgstVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取选中物流公司信息
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public OMS_LGST selectLgstDetail(String lgstId) throws Exception {
+		OMS_LGST lgstModel = ilgstDAO.findByid(lgstId);
+		return lgstModel;
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 修改物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	@Override
+	public void update(LogisticsVO lgstVO) throws Exception {
+		ilgstDAO.update(lgstVO);
+	}
+}

@@ -1,0 +1,92 @@
+package cn.rkylin.oms.system.user.dao;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import cn.rkylin.oms.system.config.BizTypeDefine;
+import cn.rkylin.oms.system.config.ElementDefine;
+import cn.rkylin.oms.system.config.OrgnizationConfig;
+import cn.rkylin.oms.system.user.vo.UserVO;
+
+@Repository(value = "userDAO")
+public class UserDAOImpl implements IUserDAO{
+	@Autowired
+	private SqlSession sqlSession;
+	@Override
+	public List<UserVO> getUserByCondition(UserVO userVo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map getExtInfo(String bizType, String idColumnValue) throws Exception{
+		// 扩展表的表名
+				String extTableName = "";
+				// 扩展表的主键字段名
+				String idColumnName = "";
+				Connection conn = null;
+				Statement stmt = null;
+
+				Map returnMap = new HashMap();
+				Map temp = new HashMap();
+				try {
+					// 确定tableName和idColumnName
+					BizTypeDefine bizTypeDefine = OrgnizationConfig.getBizTypeDefine(bizType);
+					extTableName = bizTypeDefine.getTable();
+					if (bizTypeDefine.getElementList() != null || bizTypeDefine.getElementList().size() > 0) {
+						for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+							ElementDefine ed = (ElementDefine) bizTypeDefine.getElementList().get(j);
+							if (ed.getName().equalsIgnoreCase("id")) {
+								idColumnName = ed.getColumn();
+								break;
+							}
+						}
+					} else {
+						return new HashMap();
+					}
+
+					String selectSQL = "SELECT * FROM " + extTableName + " WHERE " + idColumnName + " = '" + idColumnValue
+							+ "'";
+					conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+					stmt = conn.createStatement();
+					// System.out.println(selectSQL);
+					ResultSet rs = stmt.executeQuery(selectSQL);
+					if (rs.next()) {
+						for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+							temp.put(rs.getMetaData().getColumnName(i), rs.getString(i));
+						}
+						if (bizTypeDefine.getElementList() != null || bizTypeDefine.getElementList().size() > 0) {
+							for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+								ElementDefine ed = (ElementDefine) bizTypeDefine.getElementList().get(j);
+								if (ed.getName().equalsIgnoreCase("id")) {
+									idColumnName = ed.getColumn();
+									continue;
+								}
+								returnMap.put(ed.getName(), temp.get(ed.getColumn()) == null ? "" : temp.get(ed.getColumn()));
+							}
+						}
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						if (stmt != null)
+							stmt.close();
+						if (conn != null)
+							conn.close();
+					} catch (Exception ex) {
+					}
+				}
+				return returnMap;
+	}
+
+}

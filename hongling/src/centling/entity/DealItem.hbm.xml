@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="centling.entity.DealItem" table="DealItem">
+        <id name="ID" type="integer">
+            <column name="ID"/>
+            <generator class="sequence">
+            	<param name="sequence">seq_dealitem</param>
+            </generator>
+        </id>
+        <property name="Memo" type="string">
+            <column name="Memo" />
+        </property>
+        <property name="Name" type="string">
+            <column name="Name" />
+        </property>
+        <property name="IoFlag" type="integer">
+            <column name="IoFlag" />
+        </property>
+        <property name="En" type="string">
+            <column name="en" />
+        </property>
+    </class>
+</hibernate-mapping>

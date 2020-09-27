@@ -1,0 +1,34 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>jsw-zip</id>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>target/jsw/scheduler-service/lib</directory>
+            <outputDirectory>/scheduler-service/lib</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>target/jsw/scheduler-service/bin</directory>
+            <outputDirectory>/scheduler-service/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>target/jsw/scheduler-service/etc</directory>
+            <outputDirectory>/scheduler-service/etc</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>target/jsw/scheduler-service/logs</directory>
+            <outputDirectory>/scheduler-service/logs</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/shell</directory>
+            <outputDirectory>/scheduler-service/</outputDirectory>
+            <fileMode>0755</fileMode>
+            <!--<lineEnding>unix</lineEnding>-->
+        </fileSet>
+    </fileSets>
+</assembly>

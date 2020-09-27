@@ -1,0 +1,180 @@
+.three-important1 .form-left .flow-tree.flow-tree-ul-3{
+    width: 290px;
+    float: left;
+    margin-left: 42px;
+}
+.flow-tree .flow-point{
+    margin-top: 60px;
+    position: relative;
+}
+.flow-tree .flow-point a{
+    position: relative;
+    display: block;
+    height: 48px;
+    text-align: center;
+    line-height: 48px;
+    color: #fff;
+    font-size: 20px;
+    background: url(../image/btn-blue-line.png);
+}
+.flow-tree .flow-point.flow-red a{ background: url(../image/btn-red-line.png);}
+.flow-tree .flow-point.flow-green a{ background: url(../image/btn-green-line.png);}
+.flow-tree .flow-point.flow-point-xs a{
+    width: 180px;
+    margin: auto;
+}
+.flow-tree .flow-point.flow-point-md a{
+    width: 280px;
+    margin: auto;
+}
+.flow-tree .flow-point.flow-point-lg a{
+    width: 480px;
+    margin: auto;
+}
+.flow-tree .flow-point a:before,
+.flow-tree .flow-point a:after,
+.flow-tree .flow-point.flow-red a:before,
+.flow-tree .flow-point.flow-red a:after,
+.flow-tree .flow-point.flow-green a:before,
+.flow-tree .flow-point.flow-green a:after
+{
+    position: absolute;
+    top: 0;
+    width: 5px;
+    height: 48px;
+    content: '';
+}
+/*蓝色结点*/
+.flow-tree .flow-point a:before{
+    left: 0;
+    background: url(../image/btn-blue-left.png);
+}
+.flow-tree .flow-point a:after{
+    right: 0;
+    background: url(../image/btn-blue-right.png);
+}
+/*绿色结点*/
+.flow-tree .flow-point.flow-green a:before{
+    left: 0;
+    background: url(../image/btn-green-left.png);
+}
+.flow-tree .flow-point.flow-green a:after{
+    right: 0;
+    background: url(../image/btn-green-right.png);
+}
+/*红色结点*/
+.flow-tree .flow-point.flow-red a:before{
+    left: 0;
+    background: url(../image/btn-red-left.png);
+}
+.flow-tree .flow-point.flow-red a:after{
+    right: 0;
+    background: url(../image/btn-red-right.png);
+}
+/*流程图flow-line-down竖线，和flow-head-arrow头顶的箭头 flow-line-left向右横线*/
+.flow-tree .flow-line-down:after,
+.flow-tree .flow-head-arrow:before,
+.flow-tree .flow-line-up:after,
+.flow-tree .flow-head-arrow-up:before,
+.flow-tree .flow-line-right:after,
+.flow-tree .flow-head-arrow-right:before
+{
+    position: absolute;
+    display: block;
+    content:'';
+}
+.flow-tree .flow-line-down:after,.flow-tree .flow-line-up:after{
+    height: 55px;
+    width: 3px;
+    background: #898989;
+    left: 50%;
+    top: 48px;
+}
+.flow-tree .flow-head-arrow:before,.flow-tree .flow-head-arrow-up:before{
+    width: 15px;
+    height: 16px;
+    left: 419px;
+    background: url(../image/flow-arrow.png);
+    top: -16px;
+}
+.flow-tree.flow-tree-ul-3 .flow-head-arrow:before{
+    left: 139px;
+}
+
+/*三列向右横线*/
+.flow-tree.flow-tree-ul-3 .flow-line-right:after{
+    height: 3px;
+    width: 96px;
+    background: #898989;
+    right: -92px;
+    top: 25px;
+}
+/*向右箭头*/
+.flow-tree .flow-head-arrow-right:before{
+    width: 16px;
+    height: 15px;
+    left: 40px;
+    background: url(../image/flow-arrow-right.png);
+    top: 19px;
+}
+.flow-tree .flow-head-arrow-right-xs:before{
+    left: -9px;
+}
+/*结点上的对话框*/
+.three-important1 .flow-point a span {
+    position: absolute;
+    width: 200px;
+    height: 79px;
+    padding: 3px;
+    background: url(../image/tree-bubble.png) no-repeat;
+    top: -60px;
+    right: -120px;
+    line-height: 25px;
+    font-style: normal;
+    font-size: 14px!important;
+    text-align: left;
+}
+
+/*流程分三列*/
+
+.flow-tree.flow-tree-ul-3{margin-top: 150px;padding: 75px 0 0;}
+.flow-tree.flow-tree-ul-3 .flow-point{margin-top: 80px;}
+.flow-tree.flow-tree-ul-3 .flow-line-down:after,.flow-tree.flow-tree-ul-3 .flow-line-up:after{
+    height: 74px;
+}
+/*流程图flow-line-down竖线，和flow-head-arrow头顶的箭头*/
+.flow-tree.flow-tree-ul-3 .flow-head-arrow-up:before{
+    background: url(../image/flow-arrow-up.png);
+    left: 139px;
+}
+.flow-tree.flow-tree-ul-3 .flow-line-up:after{
+    top: -74px;
+}
+.flow-tree.flow-tree-ul-3 .flow-head-arrow-up:before{
+    top: 49px;
+}
+/* 流程图分两列 */
+.flow-tree .flow-2ul-step4:before{
+    left:-15px;
+}
+.flow-tree-ul-2{
+    margin-left: 104px!important;
+    padding-top: 40px!important;
+}
+/* 专利侵权流程 */
+.patent-dispute-tree ul.flow-tree-ul-3{
+    padding-top: 30px!important;
+}
+.m-l-30{
+    margin-left: 30px;
+}
+.m-l-29-min{
+    margin-left: -29px;
+}
+.m-l-20{
+    margin-left: 20px!important;
+}
+.m-t-127{
+    margin-top:127px!important;
+}
+

@@ -1,0 +1,32 @@
+package cn.rkylin.oms.system.messageDefine.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE;
+
+@Repository(value = "messageDefineDao")
+public class MessageDefineDaoImpl implements IMessageDefineDao{
+	
+	@Autowired
+	protected IDataBaseFactory dao;
+
+	@Override
+	public void saveMessage(OMS_MESSAGE message) throws Exception {
+		dao.insert("saveMessage_insert", message);
+		
+	}
+
+	@Override
+	public void delete(String stationParam, String string) throws Exception {
+		dao.delete(stationParam, string);
+	}
+
+	@Override
+	public void doEnable(String msgEnable,String string) throws Exception {
+		
+		
+	}
+
+}

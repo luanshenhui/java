@@ -1,0 +1,41 @@
+{{#component "collocation js-component"}}
+    <div class="modal">
+        <div class="modal-header">
+            <h2>搭销详情</h2>
+        </div>
+        <form class="collocation-form" data-id="{{id}}">
+            <div class="collocation-new modal-body">
+                <div class="control-group">
+                    <label for="id"><span class="required">*</span>ID:</label>
+                    <span>{{id}}</span>
+                </div>
+                <div class="control-group">
+                    <label for="goodsName">商品名:</label>
+                    <span>{{goodsName}}</span>
+                </div>
+                <div class="control-group">
+                    <label for="orderCode">订单编号:</label>
+                    <span>{{orderCode}}</span>
+                </div>
+                <div class="control-group">
+                    <label for="count">购买数量:</label>
+                    <span>{{count}}</span>
+                </div>
+                <div class="control-group">
+                    <label for="count">订单编号:</label>
+                    <span>{{count}}</span>
+                </div>
+                <div class="control-group">
+                    <label for="auditType">订单编号:</label>
+                    <span>{{auditType}}</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-success btn-sm js-item-create" value="确定">
+                <button class="btn btn-info btn-sm close">取消</button>
+            </div>
+        </form>
+    </div>
+    <div class="pagination" data-total="{{_DATA_.total}}">
+    </div>
+{{/component}}

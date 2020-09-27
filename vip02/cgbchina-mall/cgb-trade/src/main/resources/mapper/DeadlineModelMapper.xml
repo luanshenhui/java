@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DeadlineModel">
+    <resultMap id="DeadlineModelMap" type="DeadlineModel">
+        <result property="id" column="id"/>
+        <result property="status" column="status"/>
+        <result property="end" column="end"/>
+        <result property="rule" column="rule"/>
+        <result property="warn" column="warn"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="creatOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateOper" column="update_oper"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,status,end,rule,warn,del_flag,create_oper,create_time,update_oper,update_time
+    </sql>
+
+    <insert id="insert" parameterType="DeadlineModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_deadline_role
+        (status
+        ,end
+        ,rule
+        ,warn
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,update_oper
+        ,update_time)
+        values(#{status}
+        ,#{end}
+        ,#{rule}
+        ,#{warn}
+        ,#{delFlag}
+        ,#{creatOper}
+        ,#{createTime}
+        ,#{updateOper}
+        ,#{updateTime})
+    </insert>
+
+    <update id="update" parameterType="DeadlineModel">
+        update tbl_order_deadline_role set
+        <if test="end !=null">
+            end = #{end},
+        </if>
+        <if test="warn !=null">
+            warn = #{warn},
+        </if>
+        <if test="update_oper !=null">
+            update_oper = #{updateOper},
+        </if>
+        update_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="status == null">and status != 2</if>
+            <if test="end !=null">and end = #{end}</if>
+            <if test="rule !=null">and rule = #{rule}</if>
+            <if test="warn !=null">and warn = #{warn}</if>
+            <if test="delFlag !=null">and delFlag = #{delFlag}</if>
+            <if test="creatOper !=null">and creatOper = #{creatOper}</if>
+            <if test="createTime !=null">and createTime = #{createTime}</if>
+            <if test="updateOper !=null">and updateOper = #{updateOper}</if>
+            <if test="updateTime !=null">and updateTime = #{updateTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="DeadlineModelMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_order_deadline_role
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="DeadlineModelMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_deadline_role
+    </select>
+
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_order_deadline_role
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="DeadlineModelMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_deadline_role
+        <include refid="conditions"/>
+        <![CDATA[ order by id asc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="DeadlineModel">
+        delete from tbl_order_deadline_role where id = id
+    </delete>
+    <update id="updateAll" parameterType="DeadlineModel">
+        update tbl_order_deadline_role set
+        end = #{end},
+        warn = #{warn},
+        update_oper = #{updateOper},
+        update_time = now()
+        where id = #{id}
+    </update>
+</mapper>
+
+

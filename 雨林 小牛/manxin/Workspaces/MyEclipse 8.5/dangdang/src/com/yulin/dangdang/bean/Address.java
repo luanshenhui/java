@@ -1,0 +1,74 @@
+package com.yulin.dangdang.bean;
+
+public class Address {
+	private int id;
+	private int user_id;
+	private String receive_name;
+	private String full_address;
+	private String postal_code;
+	private String mobile;
+	private String phone;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(int userId) {
+		user_id = userId;
+	}
+	public String getReceive_name() {
+		return receive_name;
+	}
+	public void setReceive_name(String receiveName) {
+		receive_name = receiveName;
+	}
+	public String getFull_address() {
+		return full_address;
+	}
+	public void setFull_address(String fullAddress) {
+		full_address = fullAddress;
+	}
+	public String getPostal_code() {
+		return postal_code;
+	}
+	public void setPostal_code(String postalCode) {
+		postal_code = postalCode;
+	}
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public Address() {
+		super();
+	}
+	public Address(int id, int userId, String receiveName, String fullAddress,
+			String postalCode, String mobile, String phone) {
+		super();
+		this.id = id;
+		user_id = userId;
+		receive_name = receiveName;
+		full_address = fullAddress;
+		postal_code = postalCode;
+		this.mobile = mobile;
+		this.phone = phone;
+	}
+	@Override
+	public String toString() {
+		return "Address [full_address=" + full_address + ", id=" + id
+				+ ", mobile=" + mobile + ", phone=" + phone + ", postal_code="
+				+ postal_code + ", receive_name=" + receive_name + ", user_id="
+				+ user_id + "]";
+	}
+}

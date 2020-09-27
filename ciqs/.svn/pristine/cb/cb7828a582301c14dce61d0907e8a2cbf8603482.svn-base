@@ -1,0 +1,1091 @@
+package com.dpn.ciqqlc.http;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
+import com.dpn.ciqqlc.common.util.Constants;
+import com.dpn.ciqqlc.common.util.DateUtil;
+import com.dpn.ciqqlc.common.util.FileUtil;
+import com.dpn.ciqqlc.common.util.PageBean;
+import com.dpn.ciqqlc.common.util.StringUtils;
+import com.dpn.ciqqlc.service.Quartn;
+import com.dpn.ciqqlc.standard.model.CheckDocModel;
+import com.dpn.ciqqlc.standard.model.CheckDocsRcdModel;
+import com.dpn.ciqqlc.standard.model.CodeLibraryDTO;
+import com.dpn.ciqqlc.standard.model.CompanyPsnDto;
+import com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdNewCodeDto;
+import com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO;
+import com.dpn.ciqqlc.standard.model.PersonModel;
+import com.dpn.ciqqlc.standard.model.QlcEfpePsnDto;
+import com.dpn.ciqqlc.standard.model.UserInfoDTO;
+import com.dpn.ciqqlc.standard.model.VideoEventModel;
+import com.dpn.ciqqlc.standard.service.CommonService;
+import com.dpn.ciqqlc.standard.service.ExpFoodPOFService;
+import com.dpn.ciqqlc.standard.service.ExpFoodProdService;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+@Controller
+@RequestMapping(value = "/extxz")
+public class ExXzController {
+	
+	private final Logger logger_ = LoggerFactory.getLogger(this.getClass());
+	@Autowired
+	@Qualifier("expFoodPOFService")
+	private ExpFoodPOFService expFoodPOFService = null;
+	@Autowired
+	private CommonService commonServer = null; 
+	@Autowired
+	@Qualifier("expFoodProdDb")
+	private ExpFoodProdService dbServ = null;
+	@Autowired
+    private Quartn quartnService;
+	
+	private List<EfpeRegulatoryModel> efpeRegulatoryModelList;
+	
+	  @InitBinder
+		public void InitBinder(WebDataBinder binder) {
+			try {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+				dateFormat.setLenient(false);  
+				binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	/**
+	 * 
+	 *搜索 随机人员列表
+	 * @param dto 随机人员对象
+	 * @param model Model对象
+	 * @param no 企业编号
+	 * @return list
+	 */
+	@RequestMapping("/peson")
+	public String searchPeson(ExpFoodProdPsnRdmDTO dto,HttpServletRequest request,String apply_time_begin,String apply_time_over){
+		 int pages = 1;
+	        if(request.getParameter("page") != null && !"".equals(request.getParameter("page"))) {
+	            pages = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
+	        }
+	        PageBean page_bean = new PageBean(pages, String.valueOf(Constants.PAGE_NUM));
+	        dto.setFirstRcd(String.valueOf((pages-1)*Constants.PAGE_NUM+1));
+	        dto.setLastRcd(String.valueOf(pages*Constants.PAGE_NUM+1));
+	        String type=request.getParameter("type");
+	        dto.setType(type);
+	        request.setAttribute("list", dbServ.findByPseon(dto));
+			int counts = dbServ.findPersonCount(dto);
+			
+			int page =0;
+			if(counts%5>0){
+				page=counts/5;
+				page+=1;
+			}else{
+				page=counts/5;
+			}
+			request.setAttribute("obj",dto);
+			request.setAttribute("apply_time_begin",apply_time_begin);
+			request.setAttribute("apply_time_over",apply_time_over);
+			//企业申请编号号
+			//request.getSession().setAttribute("no", dto.getApply_no());
+			request.setAttribute("pages", Integer.toString(pages));// 当前页码
+	        request.setAttribute("itemInPage", page_bean.getPageSize());// 每页显示的记录数
+            request.setAttribute("counts",counts);
+            request.setAttribute("page",page);
+            request.setAttribute("allPage", counts % page_bean.getPageSize()==0 ? (counts/page_bean.getPageSize()) : (counts/page_bean.getPageSize())+1);
+		return "expFoodProd/peson2";
+	}
+	
+	
+	/**
+	 * 添加随机人员初始化页面
+	 * @param dto 随机人员对象
+	 * @param model Model对象
+	 * @return list
+	 */
+	@RequestMapping("/pesoninit")
+	public String pesoninit(HttpServletRequest request,ExpFoodProdPsnRdmDTO dto,Model model,String apply_no){
+		request.setAttribute("apply_no",dto.getApply_no());
+		request.setAttribute("psnTypeCode", expFoodPOFService.psnTypeCode());//分类
+		request.setAttribute("psnLevelCode",expFoodPOFService.psnLevelCode());//级别
+//		request.setAttribute("psnLevelDept_1Code",expFoodPOFService.psnLevelDept_1Code());//一级部门
+//		request.setAttribute("psnLevelDept_2Code",expFoodPOFService.psnLevelDept_2Code());//二级部门
+		List<CodeLibraryDTO> listmodel=expFoodPOFService.gelDept_3Code();
+		List<CodeLibraryDTO> listmodel2=new ArrayList<CodeLibraryDTO>();
+		for(CodeLibraryDTO s:listmodel){
+			if(s.getCode().equals("2119200104") || s.getCode().equals("210000010102")){
+				listmodel2.add(s);
+			}
+		}
+		request.setAttribute("psnLevelDept_3Code",listmodel2);//三级部门
+		request.setAttribute("expertiseCode1", expFoodPOFService.expertise_code1());//专长
+		request.setAttribute("expertiseCode2", expFoodPOFService.expertise_code2());//专长
+		request.setAttribute("expertiseCode3", expFoodPOFService.expertise_code3());//专长
+		request.setAttribute("expertiseCode4", expFoodPOFService.expertise_code4());//专长
+		request.setAttribute("expertiseCode5", expFoodPOFService.expertise_code5());//专长
+		return "expFoodProd/addpeson2";
+	}
+	
+	@RequestMapping(value = "/downExcel",method=RequestMethod.GET)
+	public void downExcel(ExpFoodProdPsnRdmDTO dto,HttpServletRequest request,HttpServletResponse response){
+	    	 ByteArrayOutputStream os = new ByteArrayOutputStream();
+		        try {
+		        	String columnNames[]={"企业名称","企业地址","备案产品","时间","组长","组员"};//列名
+				    String keys[]    =     {"enterprisesname","address","productname","month","lader","person"};//map中的key
+				    List<Map<String, Object>> mlist=createListRecord(efpeRegulatoryModelList);
+		        	FileUtil.createWorkBook(mlist,keys,columnNames).write(os);
+		        	FileUtil.outPutExcel(os,response,"随机人员"+DateUtil.DateToString(new Date(), "yyyyMMddHHmmss"));
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		}
+	    
+	@SuppressWarnings("unchecked")
+	private List<Map<String, Object>> createListRecord(List<EfpeRegulatoryModel> list) {
+			  List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+		        Map<String, Object> map = new HashMap<String, Object>();
+		        map.put("sheetName", "sheet1");
+		        listmap.add(map);
+		        EfpeRegulatoryModel dto=null;
+		        for (int j = 0; j < list.size(); j++) {
+		            dto=list.get(j);
+		            Map<String, Object> mapValue = new HashMap<String, Object>();
+//		            mapValue.put("blno", dto.getBlno()==null?"":dto.getBlno());
+		            mapValue.put("enterprisesname", dto.getEnterprisesname()==null?"":dto.getEnterprisesname());
+		            mapValue.put("address", dto.getAddress()==null?"":dto.getAddress());
+//		            mapValue.put("headname", dto.getHeadname()==null?"":dto.getHeadname());
+		            mapValue.put("productname", dto.getProductname()==null?"":dto.getProductname());
+		            
+		            mapValue.put("month", dto.getMonth()==null?"":dto.getMonth()+"月");
+		            mapValue.put("lader", null==dto.getLader()?"":dto.getLader().getPsnName());
+		            String name="";
+		            List<QlcEfpePsnDto> plist= dto.getPerson();
+		            if(!plist.isEmpty()){
+		            	for(QlcEfpePsnDto p:plist){
+		            		name+=p.getPsnName()+"  ";
+		            	}
+		            }
+		            mapValue.put("person", name);
+		            listmap.add(mapValue);
+		        }
+		        return listmap;
+		}
+	
+	@RequestMapping("/addpeson")
+	public String addPeson(QlcEfpePsnDto dto, Model model,HttpServletRequest request, String personNum,EfpeRegulatoryModel efpmodel) {
+		try {
+			// List<CompanyPsnDto> list =expFoodPOFService.findCompanyPsnDto(new CompanyPsnDto());
+			efpmodel.setDepname("辽阳局本部");
+			List<EfpeRegulatoryModel> list = dbServ.findEfpeRegulatory(efpmodel);
+			this.getRadomList(request, list, dto, personNum);
+			request.setAttribute("list", list);// 分类
+			efpeRegulatoryModelList = list;
+			// search
+			request.setAttribute("psnTypeCode", expFoodPOFService.psnTypeCode());// 分类
+			request.setAttribute("psnLevelCode",expFoodPOFService.psnLevelCode());// 级别
+			// request.setAttribute("psnLevelDept_1Code",expFoodPOFService.psnLevelDept_1Code());//一级部门
+			// request.setAttribute("psnLevelDept_2Code",expFoodPOFService.psnLevelDept_2Code());//二级部门
+			List<CodeLibraryDTO> listmodel = expFoodPOFService.gelDept_3Code();
+			List<CodeLibraryDTO> listmodel2 = new ArrayList<CodeLibraryDTO>();
+			for (CodeLibraryDTO s : listmodel) {
+				if(s.getCode().equals("2119200104") || s.getCode().equals("210000010102")){
+					listmodel2.add(s);
+				}
+			}
+			request.setAttribute("psnLevelDept_3Code", listmodel2);// 三级部门
+			request.setAttribute("expertiseCode1",expFoodPOFService.expertise_code1());// 专长
+			request.setAttribute("expertiseCode2",expFoodPOFService.expertise_code2());// 专长
+			request.setAttribute("expertiseCode3",expFoodPOFService.expertise_code3());// 专长
+			request.setAttribute("expertiseCode4",expFoodPOFService.expertise_code4());// 专长
+			request.setAttribute("expertiseCode5",expFoodPOFService.expertise_code5());// 专长
+			request.setAttribute("personNum", personNum);
+			// ******************回显********************//
+			request.setAttribute("psnType", request.getParameter("psnType"));
+			request.setAttribute("psnExpertise",request.getParameter("psnExpertise"));
+			request.setAttribute("psnLevel", request.getParameter("psnLevel"));
+			request.setAttribute("in_post", request.getParameter("in_post"));
+			request.setAttribute("levelDept_1",request.getParameter("levelDept_1"));
+			request.setAttribute("levelDept_2",request.getParameter("levelDept_2"));
+			request.setAttribute("levelDept_3",request.getParameter("levelDept_3"));
+
+			request.setAttribute("z_psnType", request.getParameter("z_psnType"));
+			request.setAttribute("z_psnExpertise",request.getParameter("z_psnExpertise"));
+			request.setAttribute("z_psnLevel",request.getParameter("z_psnLevel"));
+			request.setAttribute("z_in_post", request.getParameter("z_in_post"));
+			request.setAttribute("z_levelDept_1",request.getParameter("z_levelDept_1"));
+			request.setAttribute("z_levelDept_2",request.getParameter("z_levelDept_2"));
+			request.setAttribute("z_levelDept_3",request.getParameter("z_levelDept_3"));
+			request.setAttribute("randomTime",request.getParameter("randomTime"));
+			request.setAttribute("planType", efpmodel.getPlanType());
+			request.setAttribute("overTime", request.getParameter("overTime"));
+			request.setAttribute("apply_no", request.getParameter("apply_no"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "expFoodProd/addpeson2";
+	}
+		 /**
+		  * 随机
+		  * @param request
+		  * @param list
+		  * @param dto
+		  * @param personNum 几个
+		 * @throws Exception 
+		  */
+		@SuppressWarnings({ "unchecked", "static-access" })
+		private void getRadomList(HttpServletRequest request,List<EfpeRegulatoryModel> list, QlcEfpePsnDto dto, String personNum) throws Exception {
+			if(StringUtils.isNotEmpty(dto.getLevelDept_3())){
+				dto.setLevelDept_3("'"+dto.getLevelDept_3()+"'");
+			}
+			String laderPsnExpertiseS = "";
+			String laderPsnExpertise = dto.getPsnExpertise();
+			if(laderPsnExpertise!=null && laderPsnExpertise!="" ){
+				String [] laderPsnExpertiseStr = laderPsnExpertise.split(",");
+				for(int i=0;i<laderPsnExpertiseStr.length;i++){
+					laderPsnExpertiseS += " or instr (p.psn_goodat,'"+laderPsnExpertiseStr[i]+"')>0";
+				}
+			}
+			String laderPsnExpertiseOther = dto.getPsnExpertise_order();
+			if(laderPsnExpertiseOther!=null && laderPsnExpertiseOther!="" ){
+				String [] laderPsnExpertiseOtherStr = laderPsnExpertiseOther.split(",");
+				for(int i=0;i<laderPsnExpertiseOtherStr.length;i++){
+					laderPsnExpertiseS += " or instr (p.psn_other_goodat,'"+laderPsnExpertiseOtherStr[i]+"')>0";
+				}
+			}
+			if(!laderPsnExpertiseS.equals("")){
+				laderPsnExpertiseS = laderPsnExpertiseS.substring(3);
+				dto.setPsnExpertise("("+laderPsnExpertiseS+")");
+			}
+			List<QlcEfpePsnDto> laderList = expFoodPOFService.selectBasePsn(dto);//人员表组长
+			for(EfpeRegulatoryModel c:list){
+				c.setMonth(this.radomMonth(request.getParameter("randomTime"),request.getParameter("overTime")));
+				List<QlcEfpePsnDto>	lList=this.createRandomList(laderList, 1);
+				List<QlcEfpePsnDto> personList = this.myBasePsn(request,lList);//人员表成员
+				if(!lList.isEmpty()){
+					c.setLader(lList.get(0));
+				}
+				List<QlcEfpePsnDto>	qlist=this.createRandomList(personList, Integer.parseInt(personNum)-1);
+				c.setPerson(qlist);
+			}
+		
+		}
+
+
+	private List<QlcEfpePsnDto> myBasePsn(HttpServletRequest request,List<QlcEfpePsnDto> laderList) throws Exception {
+		QlcEfpePsnDto qlcEfpepsnDto = new QlcEfpePsnDto();
+		String psnType = request.getParameter("z_psnType");
+		String psnExpertise = request.getParameter("z_psnExpertise");
+		String psnExpertiseS = "";
+		if(psnExpertise!=null && psnExpertise!="" ){
+		String [] psnExpertiseStr = psnExpertise.split(",");
+			for(int i=0;i<psnExpertiseStr.length;i++){
+				psnExpertiseS += "or instr (p.psn_goodat,'"+psnExpertiseStr[i]+"')>0";
+			}
+		}
+		String z_psnExpertise_order = request.getParameter("z_psnExpertise_order");
+		if(z_psnExpertise_order!=null && z_psnExpertise_order!="" ){
+			String [] z_psnExpertise_orderStr = z_psnExpertise_order.split(",");
+			for(int i=0;i<z_psnExpertise_orderStr.length;i++){
+				psnExpertiseS += "or instr (p.psn_other_goodat,'"+z_psnExpertise_orderStr[i]+"')>0";
+			}
+		}
+		if(!psnExpertiseS.equals("")){
+			psnExpertiseS = psnExpertiseS.substring(3);
+			qlcEfpepsnDto.setPsnExpertise("("+psnExpertiseS+")");
+		}
+		String psnLevel = request.getParameter("z_psnLevel");
+		String in_post = request.getParameter("z_in_post");
+		String levelDept_3 = request.getParameter("z_levelDept_3");
+		qlcEfpepsnDto.setPsnType(psnType);
+		qlcEfpepsnDto.setPsnLevel(psnLevel);
+		qlcEfpepsnDto.setIn_post(in_post);
+		qlcEfpepsnDto.setLevelDept_3(levelDept_3);
+		qlcEfpepsnDto.setType("2");
+		if(!laderList.isEmpty()){
+			qlcEfpepsnDto.setPsnId(laderList.get(0).getPsnId());
+		}
+		if(StringUtils.isNotEmpty(qlcEfpepsnDto.getLevelDept_3())){
+			qlcEfpepsnDto.setLevelDept_3("'"+qlcEfpepsnDto.getLevelDept_3()+"'");
+		}
+		return expFoodPOFService.selectBasePsnNoOne(qlcEfpepsnDto);
+	}
+
+		/**
+		 * 
+		 * 保存到本地随机人员库
+		 * @param learId 队长选中的id
+		 * @param merId 组员选中的id
+		 * @param num 选中的人数
+		 * @param applyNo 企业申请的号
+		 * @param submitType 提交方式 1是默认提交，0是人为选中的提交
+		 * @return ajaxResult
+		 */
+		@ResponseBody
+		@RequestMapping("/insert")
+		public Map<String,Object> insertPeson(HttpServletRequest request,String learId,String merId,String num,String applyNo,String submitType){
+			Map<String,Object> ajaxResult = new HashMap<String, Object>();
+			int result = 0 ;
+			System.out.println(learId);
+			try {
+				String allId= merId;
+				String[] all = allId.split(",");
+				if(all !=null && all !=null){
+					for(int i=0; i<all.length;i++){
+						result = this.savePerson1(request,all[i], applyNo, submitType);
+						if(result==0){
+							ajaxResult.put("status", "FALL");
+							ajaxResult.put("results","失败");
+							return ajaxResult;
+						}
+					}
+				}
+				if(learId != null && learId != ""){
+					result = this.savePerson2(request,learId, applyNo, submitType);
+					if(result==0){
+						ajaxResult.put("status", "FALL");
+						ajaxResult.put("results","失败");
+						return ajaxResult;
+					}
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+				ajaxResult.put("status", "FALL");
+				ajaxResult.put("results","失败");
+				return ajaxResult;	
+			}
+			ajaxResult.put("status", "OK");
+			ajaxResult.put("results","成功");
+			return ajaxResult;		
+		}
+		
+		//insert组长
+		private int savePerson1(HttpServletRequest request,String id,String applyNo,String month) throws Exception{
+			ExpFoodProdPsnRdmDTO dto = new ExpFoodProdPsnRdmDTO();
+			dto.setId(id);
+			//遍历出随机集合内的所有id
+			List<QlcEfpePsnDto> ist =null;	
+			ist = expFoodPOFService.findBasePsn(id);
+			System.out.println(ist.size());
+			if(ist!=null && ist.size()>0){
+				dto.setApply_no(applyNo);
+				dto.setPsn_id(ist.get(0).getPsnId());
+				dto.setPsn_name(ist.get(0).getPsnName());								
+				dto.setPsn_goodat(ist.get(0).getPsnExpertise());
+				dto.setPsn_level(ist.get(0).getPsnLevel());
+				dto.setIn_post(ist.get(0).getIn_post());
+				dto.setPsn_type("0");
+				dto.setType("3");
+				dto.setRdm_date(DateUtil.formatDate(month, "yyyy-MM"));
+				dto.setRdm_type("2");
+				UserInfoDTO user = (UserInfoDTO)request.getSession().getAttribute(Constants.USER_KEY);
+				dto.setRdm_user(user.getId());
+			return expFoodPOFService.insterPersonRdm(dto);							
+			}
+			return 0;
+		}
+		//insert组员
+		private int savePerson2(HttpServletRequest request,String id,String applyNo,String month) throws Exception{
+			ExpFoodProdPsnRdmDTO dto = new ExpFoodProdPsnRdmDTO();
+			dto.setId(id);
+			//遍历出随机集合内的所有id
+			List<QlcEfpePsnDto> ist =null;	
+			ist = expFoodPOFService.findBasePsn(id);
+			System.out.println(ist.size());
+			if(ist!=null && ist.size()>0){
+				dto.setApply_no(applyNo);
+				dto.setPsn_id(ist.get(0).getPsnId());
+				dto.setPsn_name(ist.get(0).getPsnName());								
+				dto.setPsn_goodat(ist.get(0).getPsnExpertise());
+				dto.setPsn_level(ist.get(0).getPsnLevel());
+				dto.setIn_post(ist.get(0).getIn_post());
+				dto.setPsn_type("1");
+				dto.setType("3");
+				dto.setRdm_date(DateUtil.formatDate(month, "yyyy-MM"));
+				dto.setRdm_type("2");
+				UserInfoDTO user = (UserInfoDTO)request.getSession().getAttribute(Constants.USER_KEY);
+				dto.setRdm_user(user.getId());
+			return expFoodPOFService.insterPersonRdm(dto);							
+			}
+			return 0;
+		}
+		
+		  /**
+	     * 跳转企业名录
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("/company")
+	    public String company(HttpServletRequest request){
+	    	try {
+	    		List<CompanyPsnDto> list = expFoodPOFService.findCompanyPsnDto(new CompanyPsnDto());
+				request.setAttribute("list", list);
+			} catch (Exception e) {
+				logger_.error("***********/extxz/company************",e);
+			}
+	    	return "expFoodProd/company/company";
+		}
+	    /**
+	     * 跳转人员名录(行政检查)
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("/personList")
+	    public String personList(HttpServletRequest request){
+	    	QlcEfpePsnDto dto =new QlcEfpePsnDto();
+	    	dto.setType("2");
+	    	try {
+	    		List<QlcEfpePsnDto> list = expFoodPOFService.selectBasePsn(dto);
+				request.setAttribute("list", list);
+			} catch (Exception e) {
+				logger_.error("***********/extxz/personList************",e);
+			}
+	    	return "expFoodProd/company/personList";
+		}
+	    
+	    
+	    
+	   @RequestMapping("/randomInspect")
+	    public String randomInspect(HttpServletRequest request){
+	    	try {
+	    		List<CompanyPsnDto> list = expFoodPOFService.findCompanyPsnDto(new CompanyPsnDto());
+				request.setAttribute("list", list);
+			} catch (Exception e) {
+				logger_.error("***********/extxz/company************",e);
+			}
+	    	return "expFoodProd/company/company";
+		}
+	   
+	   /**
+	    * 随机 月份
+	    * @return
+	    */
+	private String radomMonth(String begin,String over){
+		   List<String> list=new ArrayList<String>(); 
+		   int b=Integer.parseInt(begin);
+		   int o=Integer.parseInt(over);
+		   if(b<=o){
+			   for(int i=b;i<=o;i++){
+				   list.add(String.valueOf(i));
+			   }
+		   }else if(b>o){
+			   for(int i=b;i<=12;i++){
+				   list.add(String.valueOf(i));
+			   }
+			   for(int i=1;i<=o;i++){
+				   list.add(String.valueOf(i));
+			   }
+		   }
+		   Random random = new Random();
+		   int index = random.nextInt(list.size());
+		   return list.get(index);
+	   }
+	   
+	   
+	   /**从list中随机抽取元素
+		 * @return  
+		 * @Title: createRandomList 
+		 * @Description: 
+		 * @param list
+		 * @param i 
+		 * @return void  
+		 * @throws 
+		 */ 
+		@SuppressWarnings({"unchecked", "rawtypes" })
+		private static List createRandomList(List list, int n) {
+			Map map = new HashMap();
+			List listNew = new ArrayList();
+			if(list.size()<=n){
+				return list;
+			}else{
+				while(map.size()<n){
+					int random = (int) (Math.random() * list.size());
+					if (!map.containsKey(random)) {
+						map.put(random, "");
+//						System.out.println(random+"==========="+list.get(random));
+						listNew.add(list.get(random));
+					}
+				}
+				return listNew;
+			}
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "insertRadomPerson")
+		public String save(String strlist, Model model,HttpServletRequest request) {
+			try {
+				List<PersonModel> list=JSON.parseArray(strlist,PersonModel.class);
+				for(PersonModel c:list){
+					this.savePerson1(request, c.getLdId(), c.getApply_no(), c.getMonth());
+					String []arr=c.getMeId().split(",");
+					for(String s:arr){
+						this.savePerson2(request, s, c.getApply_no(), c.getMonth());
+					}
+				}
+				return "sucess";
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "error";
+		}
+		
+		 /**
+	     * 跳转查看11个电子表格列表 之一 详情表格
+	     * http://localhost:7001/ciqs/ExpFoodPOF/toTextList?apply_no=111222
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("/toTextXwjList")
+	    public String toTextXwjList(HttpServletRequest request,ExpFoodProdNewCodeDto expFoodProdNewCodeDto,String apply_no){
+	    	try {
+//	    		List<ExpFoodProdCheckCodeDto> list=expFoodPOFService.getToTextList(expFoodProdCheckCodeDto);
+	    		List<ExpFoodProdNewCodeDto> list=expFoodPOFService.getToTextNewList(expFoodProdNewCodeDto);
+				request.setAttribute("list", list);
+				request.setAttribute("apply_no", apply_no);
+			} catch (Exception e) {
+				logger_.error("***********/ExpFoodPOF/toTextList************",e);
+			}
+	    	return "expFoodProd/titleList2";
+		}
+	    
+	    @RequestMapping("/toTextXwjList2")
+	    public String toTextXwjList2(HttpServletRequest request,ExpFoodProdNewCodeDto expFoodProdNewCodeDto,String apply_no){
+	    	try {
+//	    		List<ExpFoodProdCheckCodeDto> list=expFoodPOFService.getToTextList(expFoodProdCheckCodeDto);
+	    		List<ExpFoodProdNewCodeDto> list=expFoodPOFService.getToTextNewList(expFoodProdNewCodeDto);
+				request.setAttribute("list", list);
+				request.setAttribute("apply_no", apply_no);
+			} catch (Exception e) {
+				logger_.error("***********/ExpFoodPOF/toTextList************",e);
+			}
+	    	return "expFoodProd/titleList3";
+		}
+	    
+	    
+	    @RequestMapping(value = "/toTextView",method=RequestMethod.GET)
+	    public String toTextView(HttpServletRequest request,ExpFoodProdCheckVo expFoodProdCheckVo){
+	    	try {
+	    		List<ExpFoodProdCheckVo> list=expFoodPOFService.getToTextView2(expFoodProdCheckVo,request);
+				request.setAttribute("list", list);
+				if(!list.isEmpty()){
+					request.setAttribute("title", expFoodProdCheckVo.getCheck_menu_type()+": "+list.get(0).getCheck_title());
+				}
+			} catch (Exception e) {
+				logger_.error("***********/ExpFoodPOF/toTextView************",e);
+			}
+	    	return "expFoodProd/oldtext/text";
+		}
+	    
+	    @RequestMapping(value = "/toTextViewQt",method=RequestMethod.GET)
+	    public String toTextViewQt(HttpServletRequest request,ExpFoodProdCheckVo expFoodProdCheckVo){
+	    	Map<String,Object> param = new HashMap<String, Object>();
+	    	try {
+	    		if(StringUtils.isNotEmpty(request.getParameter("type")) && request.getParameter("type").equals("2")){
+	    			param.put("DocType", "V_SP_A_C_QT");
+	    		}else if(StringUtils.isNotEmpty(request.getParameter("type")) && request.getParameter("type").equals("3")){
+	    			param.put("DocType", "V_SP_A_D_QT");
+	    		}else{
+	    			param.put("DocType", "V_SP_F_D_QT");
+	    		}
+	    		param.put("ProcMainId", expFoodProdCheckVo.getApply_no());
+//	    		List<CheckDocsRcdModel> list=expFoodPOFService.getQtOption(param);
+	    		List<CheckDocModel> list=expFoodPOFService.getQtOption(param);
+	    		for(CheckDocModel c:list){
+	    			if(com.dpn.ciqqlc.common.util.StringUtils.isNotEmpty(c.getOption1())){
+	    				c.setOption91(c.getOption1().substring(6, 12)+"/"+c.getOption1().substring(6, 14)+"/"+c.getOption1());
+	    			}
+	    			if(com.dpn.ciqqlc.common.util.StringUtils.isNotEmpty(c.getOption2())){
+	    				c.setOption92(c.getOption2().substring(6, 12)+"/"+c.getOption2().substring(6, 14)+"/"+c.getOption2());
+	    			}
+	    		}
+//	    		doclist=list;
+				request.setAttribute("list", list);
+			} catch (Exception e) {
+				logger_.error("***********/ExpFoodPOF/toTextViewQt************",e);
+			}
+	    	return "expFoodProd/oldtext/textQt";
+		}
+	    
+	    @RequestMapping(value = "/unPassable",method=RequestMethod.GET)
+	    public String unPassable(HttpServletRequest request,ExpFoodProdCheckVo expFoodProdCheckVo,String compName){
+	    	try {
+	    		expFoodProdCheckVo.setCheck_result("2");
+	    		expFoodProdCheckVo.setCheck_type("1");
+	    		List<ExpFoodProdCheckVo> list=expFoodPOFService.getToTextViewNoPassNew(expFoodProdCheckVo);
+//	    		pdflist=list;
+	    		Map<String,Object> map = new HashMap<String, Object>();
+	    		map.put("ProcMainId", expFoodProdCheckVo.getApply_no());
+	    		map.put("DocType", "V_SP_F_D");
+				CheckDocsRcdModel doc  =quartnService.findOnlyDoc(map);
+//				docsRcd=doc;
+				Map<String,Object> param = new HashMap<String, Object>();
+				param.put("DocType", "V_SP_F_D_QT");
+	    		param.put("ProcMainId", expFoodProdCheckVo.getApply_no());
+//	    		List<CheckDocsRcdModel> listQt=expFoodPOFService.getQtOption(param);
+	    		List<CheckDocModel> listQt=expFoodPOFService.getQtOption(param);
+	    		request.setAttribute("listQt", listQt);
+				request.setAttribute("list", list);
+				request.setAttribute("doc", doc);
+				request.setAttribute("apply_no", expFoodProdCheckVo.getApply_no());
+				request.setAttribute("compName", compName);
+			} catch (Exception e) {
+				logger_.error("***********/ExpFoodPOF/unPassable************",e);
+			}
+	    	return "expFoodProd/oldtext/unPassableNew";
+		}
+
+		public List<EfpeRegulatoryModel> getEfpeRegulatoryModelList() {
+			return efpeRegulatoryModelList;
+		}
+
+		public void setEfpeRegulatoryModelList(
+				List<EfpeRegulatoryModel> efpeRegulatoryModelList) {
+			this.efpeRegulatoryModelList = efpeRegulatoryModelList;
+		}
+
+	
+		/**
+		 * 11菜单 pdf 下载
+		 * @param request
+		 * @param response
+		 * @param compName
+		 * @param expFoodProdCheckVo
+		 */
+		@RequestMapping(value = "downPdfVeiw")
+		public void downPdfVeiw(HttpServletRequest request,
+				HttpServletResponse response, String compName,
+				ExpFoodProdCheckVo expFoodProdCheckVo) {
+			try {
+				OutputStream os = response.getOutputStream();
+				response.setContentType("application/pdf");
+				response.setHeader("Content-disposition","attachment; filename=" +"D:\\"+new Date()+".pdf" );
+				Document document = new Document(PageSize.A4.rotate());
+				PdfWriter.getInstance(document, os);
+				document.open();
+				
+//				expFoodProdCheckVo.setCheck_result("2");
+//	    		expFoodProdCheckVo.setCheck_type("1");
+//	    		List<ExpFoodProdCheckVo> pdflist=expFoodPOFService.getToTextViewNoPassNew(expFoodProdCheckVo);
+				List<ExpFoodProdCheckVo> pdflist=expFoodPOFService.getToTextView2(expFoodProdCheckVo,request);
+				if(null!=pdflist && pdflist.size()>0){
+					document.add(createParagraph(pdflist.get(0).getCheck_title(),new Font(BaseFont.createFont("STSong-Light",
+							"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+							Font.NORMAL),Element.ALIGN_LEFT));
+				}
+				PdfPTable pt01 = new PdfPTable(6);
+				int widthpt01[] = { 20, 20, 20, 20, 20, 20 };
+				pt01.setWidths(widthpt01);
+
+				pt01.addCell(createCell(
+						"备案要求",
+						new Font(BaseFont.createFont("STSong-Light",
+								"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+								Font.NORMAL), Element.ALIGN_MIDDLE,
+						Element.ALIGN_CENTER, 1, 1));
+				pt01.addCell(createCell(
+						"审核要点",
+						new Font(BaseFont.createFont("STSong-Light",
+								"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+								Font.NORMAL), Element.ALIGN_MIDDLE,
+						Element.ALIGN_CENTER, 1, 1));
+				pt01.addCell(createCell(
+						"现场检查内容",
+						new Font(BaseFont.createFont("STSong-Light",
+								"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+								Font.NORMAL), Element.ALIGN_MIDDLE,
+						Element.ALIGN_CENTER, 1, 1));
+				pt01.addCell(createCell(
+						"现场查验",
+						new Font(BaseFont.createFont("STSong-Light",
+								"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+								Font.NORMAL), Element.ALIGN_MIDDLE,
+						Element.ALIGN_CENTER, 1, 1));
+				pt01.addCell(createCell(
+						"结果判定",
+						new Font(BaseFont.createFont("STSong-Light",
+								"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+								Font.NORMAL), Element.ALIGN_MIDDLE,
+						Element.ALIGN_CENTER, 1, 1));
+				pt01.addCell(createCell(
+						"说明",
+						new Font(BaseFont.createFont("STSong-Light",
+								"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+								Font.NORMAL), Element.ALIGN_MIDDLE,
+						Element.ALIGN_CENTER, 1, 1));
+				for (int i = 0; i < pdflist.size(); i++) {
+					if(null!=pdflist.get(i) && !pdflist.get(i).getTd().equals("0")){
+					pt01.addCell(createCell(
+								pdflist.get(i).getCheck_contents(),
+								new Font(BaseFont.createFont("STSong-Light",
+										"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+										Font.NORMAL), Element.ALIGN_MIDDLE,
+										Element.ALIGN_CENTER, 1, Integer.parseInt(pdflist.get(i).getTd())));
+								
+					}
+					pt01.addCell(createCell(
+							pdflist.get(i).getCheck_req(),
+							new Font(BaseFont.createFont("STSong-Light",
+									"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+									Font.NORMAL), Element.ALIGN_MIDDLE,
+							Element.ALIGN_CENTER, 1, 1));
+					pt01.addCell(createCell(
+							pdflist.get(i).getReq(),
+							new Font(BaseFont.createFont("STSong-Light",
+									"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+									Font.NORMAL), Element.ALIGN_MIDDLE,
+							Element.ALIGN_CENTER, 1, 1));
+					pt01.addCell(createCell(
+							getFime(pdflist.get(i)),
+							new Font(BaseFont.createFont("STSong-Light",
+									"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+									Font.NORMAL), Element.ALIGN_MIDDLE,
+							Element.ALIGN_CENTER, 1, 1));
+					pt01.addCell(createTsCell(//
+							request,
+							getRes(pdflist.get(i).getCheck_result()),
+							new Font(BaseFont.createFont("STSong-Light",
+									"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+									Font.NORMAL), Element.ALIGN_MIDDLE,
+									Element.ALIGN_CENTER, 1, 1));
+					pt01.addCell(createCell(
+							pdflist.get(i).getCheck_disc(),
+							new Font(BaseFont.createFont("STSong-Light",
+									"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+									Font.NORMAL), Element.ALIGN_MIDDLE,
+							Element.ALIGN_CENTER, 1, 1));
+				}
+
+				document.add(pt01);
+				document.close();
+				os.flush();
+				os.close();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		/**
+		 * 为pdf单元格加特殊符号样式
+		 * @param request 
+		 * @param value
+		 * @param font
+		 * @param align_v
+		 * @param align_h
+		 * @param colspan
+		 * @param rowspan
+		 * @return
+		 * @throws DocumentException
+		 * @throws IOException
+		 */
+		@SuppressWarnings("deprecation")
+		private PdfPCell createTsCell(HttpServletRequest request, String value, Font font, int align_v,int align_h, int colspan, int rowspan) throws DocumentException,IOException {
+			String path = request.getRealPath("/static/font/arialuni.ttf");
+			BaseFont bf = BaseFont.createFont(path,BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+			font = new Font(bf, 12, Font.NORMAL);
+			PdfPCell cell = new PdfPCell();
+			cell.setMinimumHeight(50);
+			cell.setVerticalAlignment(align_v);
+			cell.setHorizontalAlignment(align_h);
+			cell.setColspan(colspan);
+			cell.setRowspan(rowspan);
+			cell.setPhrase(new Phrase(value, font));
+			return cell;
+		}
+		
+		/**
+		 * 其他 pdf 下载
+		 * @param request
+		 * @param response
+		 * @param compName
+		 * @param expFoodProdCheckVo
+		 */
+		@RequestMapping(value = "downPdfQt")
+		public void downPdfQt(HttpServletRequest request,
+				HttpServletResponse response, String compName,
+				ExpFoodProdCheckVo expFoodProdCheckVo) {
+				try {
+					OutputStream os = response.getOutputStream();
+					response.setContentType("application/pdf");
+					response.setHeader("Content-disposition","attachment; filename=" +"D:\\"+new Date()+".pdf" );
+					Document document = new Document(PageSize.A4.rotate());
+					PdfWriter.getInstance(document, os);
+					document.open();
+					document.add(createParagraph("其他",new Font(BaseFont.createFont("STSong-Light",
+								"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+								Font.NORMAL),Element.ALIGN_LEFT));
+					PdfPTable pt01 = new PdfPTable(4);
+					int widthpt01[] = { 20, 20, 20, 20};
+					pt01.setWidths(widthpt01);
+					pt01.addCell(createCell(
+							"录入内容",
+							new Font(BaseFont.createFont("STSong-Light",
+									"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+									Font.NORMAL), Element.ALIGN_MIDDLE,
+							Element.ALIGN_CENTER, 1, 1));
+					pt01.addCell(createCell(
+							"现场查验",
+							new Font(BaseFont.createFont("STSong-Light",
+									"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+									Font.NORMAL), Element.ALIGN_MIDDLE,
+							Element.ALIGN_CENTER, 1, 1));
+					pt01.addCell(createCell(
+							"结果判定",
+							new Font(BaseFont.createFont("STSong-Light",
+									"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+									Font.NORMAL), Element.ALIGN_MIDDLE,
+							Element.ALIGN_CENTER, 1, 1));
+					pt01.addCell(createCell(
+							"说明",
+							new Font(BaseFont.createFont("STSong-Light",
+									"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+									Font.NORMAL), Element.ALIGN_MIDDLE,
+							Element.ALIGN_CENTER, 1, 1));
+					
+					Map<String,Object> param = new HashMap<String, Object>();
+			    	param.put("DocType", "V_SP_F_D_QT");
+			    	param.put("ProcMainId", expFoodProdCheckVo.getApply_no());
+//			    	List<CheckDocsRcdModel> doclist=expFoodPOFService.getQtOption(param);
+			    	List<CheckDocModel> doclist=expFoodPOFService.getQtOption(param);
+			    	for(CheckDocModel c:doclist){
+			    		if(com.dpn.ciqqlc.common.util.StringUtils.isNotEmpty(c.getOption1())){
+			    			c.setOption91(c.getOption1().substring(6, 12)+"/"+c.getOption1().substring(6, 14)+"/"+c.getOption1());
+			    		}
+			    		if(com.dpn.ciqqlc.common.util.StringUtils.isNotEmpty(c.getOption2())){
+			    			c.setOption92(c.getOption2().substring(6, 12)+"/"+c.getOption2().substring(6, 14)+"/"+c.getOption2());
+			    		}
+			    	}
+					
+				if (null != doclist) {
+					for (int i = 0; i < doclist.size(); i++) {
+						pt01.addCell(createCell(
+								doclist.get(i).getOption4(),
+								new Font(BaseFont.createFont("STSong-Light",
+										"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+										Font.NORMAL), Element.ALIGN_MIDDLE,
+								Element.ALIGN_CENTER, 1, 1));
+						String name=this.getFile(doclist.get(i));
+						pt01.addCell(createCell(
+									name,
+									new Font(BaseFont.createFont("STSong-Light",
+											"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED),
+											10, Font.NORMAL), Element.ALIGN_MIDDLE,
+									Element.ALIGN_CENTER, 1, 1));
+						pt01.addCell(createTsCell(request,
+								getRes2(doclist.get(i).getOption3()),
+								new Font(BaseFont.createFont("STSong-Light",
+										"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+										Font.NORMAL), Element.ALIGN_MIDDLE,
+								Element.ALIGN_CENTER, 1, 1));
+						pt01.addCell(createCell(
+								doclist.get(i).getOption5(),
+								new Font(BaseFont.createFont("STSong-Light",
+										"UniGB-UCS2-H", BaseFont.NOT_EMBEDDED), 10,
+										Font.NORMAL), Element.ALIGN_MIDDLE,
+								Element.ALIGN_CENTER, 1, 1));
+					}
+				}
+					document.add(pt01);
+					document.close();	
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (DocumentException e) {
+					e.printStackTrace();
+				}
+		}
+		
+		private String getFile(CheckDocModel checkDocsRcdModel) {
+			String fileName="";
+			if (null != checkDocsRcdModel) {
+				if(com.dpn.ciqqlc.common.util.StringUtils.isNotEmpty(checkDocsRcdModel.getOption1())){
+					fileName+="查看图片文件\n";
+				}
+				if(com.dpn.ciqqlc.common.util.StringUtils.isNotEmpty(checkDocsRcdModel.getOption2())){
+					fileName+="\n查看视频文件";
+				}
+			} else{
+				return "无文件";
+			}
+			return fileName;
+		}
+		/**
+		 * 为 pdf 创建段落
+		 * 
+		 * @param value
+		 * @param font
+		 * @param align
+		 * @return
+		 */
+		   public Paragraph createParagraph(String value,Font font,int align){ 
+		        Paragraph paragraph = new Paragraph();
+		        paragraph.add(new Phrase(value,font));
+		        paragraph.setAlignment(align);
+		        return paragraph;
+		    }
+		   
+			
+			/**
+			 * 为pdf 创建图片单元格
+			 * @param border
+			 * @param value
+			 * @param font
+			 * @param alignMiddle
+			 * @param alignCenter
+			 * @param i
+			 * @param j
+			 * @return
+			 * @throws BadElementException
+			 * @throws MalformedURLException
+			 * @throws IOException
+			 */
+			@SuppressWarnings("unused")
+			private PdfPCell createImgCell(int border, String value, Font font, int alignMiddle,
+					int alignCenter, int i, int j) throws BadElementException,
+					MalformedURLException, IOException {
+				PdfPCell cell = new PdfPCell();
+				if(com.dpn.ciqqlc.common.util.StringUtils.isNotEmpty(value)){
+					Image img = Image.getInstance(Constants.UP_LOAD_PATH+"/"+value);
+					img.scaleAbsolute(mmTopx(20), mmTopx(5));// 直接设定显示尺寸
+					// img.setAbsolutePosition(220,680);
+					img.setAbsolutePosition(0, 0);
+					img.setAlignment(Element.ALIGN_CENTER);
+					img.scaleAbsolute(400, 400);
+					img.scalePercent(50);
+					img.scalePercent(50, 50);
+					img.setRotation(0);
+					cell.setImage(img);
+				}
+				cell.setBorder(border);
+				return cell;
+			}
+			
+			/**
+			 * 为pdf 创建单元格
+			 * @param border
+			 * @param value
+			 * @param font
+			 * @param align_v
+			 * @param align_h
+			 * @param colspan
+			 * @param rowspan
+			 * @return
+			 */
+			@SuppressWarnings("unused")
+			private PdfPCell createCell(int border ,String value,Font font,int align_v,int align_h,int colspan,int rowspan) {
+				  	PdfPCell cell = new PdfPCell();   
+			        cell.setMinimumHeight(50);
+			        cell.setVerticalAlignment(align_v);    
+			        cell.setHorizontalAlignment(align_h);
+			        cell.setColspan(colspan); 
+			        cell.setRowspan(rowspan); 
+			        cell.setPhrase(new Phrase(value,font));  
+			        cell.setBorder(border);
+			        return cell;
+			}
+			private float mmTopx(float mm) {
+		    	mm = (float) (mm *3.33) ;
+		        return mm ;
+			}
+			private String getRes(String check_result) {
+				if(com.dpn.ciqqlc.common.util.StringUtils.isEmpty(check_result)){
+					return "□符合\n\n□不符合\n\n□不适用";
+				}else if(check_result.equals("1")){
+					return "☑符合\n\n□不符合\n\n□不适用";
+				}else if(check_result.equals("2")){
+					return "□符合\n\n☑不符合\n\n□不适用";
+				}else{
+					return "□符合\n\n□不符合\n\n☑不适用";
+				}
+			}
+			
+			private String getRes2(String check_result) {
+				if(com.dpn.ciqqlc.common.util.StringUtils.isEmpty(check_result)){
+					return "□符合\n\n□不符合\n\n□不适用";
+				}else if(check_result.equals("0")){
+					return "☑符合\n\n□不符合\n\n□不适用";
+				}else if(check_result.equals("1")){
+					return "□符合\n\n☑不符合\n\n□不适用";
+				}else{
+					return "□符合\n\n□不符合\n\n☑不适用";
+				}
+			}
+			private String getFime(ExpFoodProdCheckVo expFoodProdCheckVo) {
+				String v_str="";
+				String s_str="";
+				if(null!=expFoodProdCheckVo.getEventList() && expFoodProdCheckVo.getEventList().size()>0){
+					for(VideoEventModel v:expFoodProdCheckVo.getEventList()){
+						if(null!=v && v.getFileType().equals("1")){
+							v_str+="查看图片文件\n\n";
+						}
+						if(null!=v && v.getFileType().equals("2")){
+							s_str+="查看视频文件\n\n";
+						}
+					}
+				}else{
+					return "无文件";
+				}
+				return v_str+s_str;
+			}
+			
+			/**
+			 * 为pdf 创建 单元格
+			 * @param value
+			 * @param font
+			 * @param align_v
+			 * @param align_h
+			 * @param colspan
+			 * @param rowspan
+			 * @return
+			 * @throws DocumentException
+			 * @throws IOException
+			 */
+		    public PdfPCell createCell(String value,Font font,int align_v,int align_h,int colspan,int rowspan) throws DocumentException, IOException{
+//		    	BaseFont bf = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+		        PdfPCell cell = new PdfPCell();   
+		        cell.setMinimumHeight(50);
+		        cell.setVerticalAlignment(align_v);    
+		        cell.setHorizontalAlignment(align_h);
+		        cell.setColspan(colspan); 
+		        cell.setRowspan(rowspan); 
+		        cell.setPhrase(new Phrase(value,font));  
+		        return cell;
+		    }
+	    
+}

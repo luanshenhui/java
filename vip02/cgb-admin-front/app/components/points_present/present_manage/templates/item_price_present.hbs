@@ -1,0 +1,48 @@
+<div class="modal item-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>修改价格  （待废除）</h2>
+    </div>
+    <form class="form form-aligned price-form">
+        <div class="modal-body">
+            <p class="main-box-title-popup"><strong>礼品信息</strong></p>
+            <div class="control-group pull-left">
+                <strong><label class="label-width" for="goodsCode">礼品编码:</label></strong>
+                <span class="break">{{goodsCode}}</span>
+                <input class="js-goods-code" type="hidden" name="goodsCode" value="{{goodsCode}}"/>
+            </div>
+            <div class="control-group pull-left">
+                <strong><label class="label-width" for="goodsCode">礼品名称:</label></strong>
+                <span class="break">{{goodsName}}</span>
+            </div>
+            <p class="main-box-title-popup"><strong>价格信息</strong></p>
+            {{#each data.itemDtoList}}
+
+                <div class="clear"></div>
+                <div class="js-item-price-table">
+                    <p class="filter-name"><strong>单品编码：</strong><span>{{this.itemModel.code}}</span></p>
+                    <input class="item-code" type="hidden" name="code" value="{{this.itemModel.code}}"/>
+                    <div class="control-group pull-left">
+                        <strong><label class="label-width" for="marketPice">参考价(元):</label></strong>
+                        <input id="marketPice" name="marketPice" value="{{this.itemModel.marketPrice}}" type="text" class="item-market form-control input-width-120"  maxlength="12">
+                    </div>
+                    <div class="control-group pull-left">
+                        <strong><label class="label-width" for="marketPice">售价(元):</label></strong>
+                        <input id="marketPice" name="marketPice" value="{{this.itemModel.price}}" type="text" class="item-price form-control input-width-120"  required  pattern="^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$" maxlength="12">
+                        <span class="note-error"><i>&times;</i> 请输入正数，且为两位小数</span>
+                        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                    </div>
+                    <div class="control-group pull-left margin-bottom-20">
+                        <strong><label class="label-width" for="fixPoint">固定积分:</label></strong>
+                        <input id="fixPoint" name="fixPoint" value="{{this.itemModel.fixPoint}}" type="text" class="item-point form-control input-width-120" >
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+        <div class="clear"></div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-medium js-stock-submit" value="确定">
+            <button class="btn btn-close btn-medium close">关闭</button>
+        </div>
+    </form>
+</div>

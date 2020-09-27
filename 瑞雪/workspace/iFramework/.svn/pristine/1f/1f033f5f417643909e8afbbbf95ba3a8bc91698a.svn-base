@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>WEB-INF/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="organizationSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation"
+			value="/WEB-INF/conf/organization/ibatis/sqlMapConfig-organization.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="unitDAO"
+		class="com.dhc.organization.unit.dao.ibatis.UnitDAOImpl">
+		<property name="sqlMapClient" ref="organizationSqlMapClient" />
+	</bean>
+	<!-- Organization management End -->
+	<bean id="stationDAO"
+		class="com.dhc.organization.position.dao.ibatis.StationDAOImpl">
+		<property name="sqlMapClient" ref="organizationSqlMapClient" />
+	</bean>
+	<bean id="userDAO"
+		class="com.dhc.organization.user.dao.ibatis.UserDAOImpl">
+		<property name="sqlMapClient" ref="organizationSqlMapClient" />
+	</bean>
+	<bean id="roleDAO"
+		class="com.dhc.organization.role.dao.ibatis.RoleDAOImpl">
+		<property name="sqlMapClient" ref="organizationSqlMapClient" />
+	</bean>
+</beans>

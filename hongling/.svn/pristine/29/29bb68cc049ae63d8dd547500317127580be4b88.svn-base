@@ -1,0 +1,53 @@
+<script src="../member/common.js"></script>
+<script src="../member/list.js"></script>
+<div id="MemberSearch" class="list_search">
+	<h1></h1>
+	<label class="lblKeyword"></label><input type="text" id="searchKeywords" style="width:60px;"/>
+	<label class="lblParentUsername"></label><input type="text" id="searchParent" style="width:70px;"/>
+	<select id="searchGroupID" style="width:85px;"></select>
+    <select id="searchStatusID" ></select>
+	<a id="btnSearch"></a>
+	<a id="btnRemoveMember"></a>
+	<a id="btnCreateMember"></a>
+	<a id="btnExportMember"></a>
+	<a id="changePasswordTwo"></a>
+</div>
+<div id="MemberResult"></div>
+<div id="MemberStatistic"></div>
+<div id="MemberPagination" class="paging"></div>
+<textarea  id="MemberTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="check"><input type="checkbox" onclick="$.csControl.checkAll('chkRow', this.checked);"/></td>
+			<td class="lblName"></td>
+			<td class="lblUsername"></td>
+			<td class="lblGroup"></td>
+			<td class="lblStatus"></td>
+			<td class="lblParentName"></td>
+			<td class="lblSubs"></td>
+			<td class="lblRegistDate"></td>
+			<td class="lblEdit"></td>
+			<td class="lblDiscount"></td>
+			<td class="lblMenus"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ID}">
+			<td class="center check"><input type="checkbox" value="{$T.row.ID}" name="chkRow"/></td>
+			<td class="link" onclick="$.csMemberList.openView('{$T.row.ID}')">{$T.row.name}</td>
+			<td>{$T.row.username}</td>
+			<td>{$T.row.groupName}</td>
+			<td>{$T.row.statusName}</td>
+			<td>{$T.row.parentName}</td>
+			<td class="center">{$T.row.subs}</td>
+			<td class="center">{$.csDate.formatMillisecondDate($T.row.registDate)}</td>
+			<td class="center"><a class="edit" onclick="$.csMemberList.openPost('{$T.row.ID}')"></a></td>
+			<td class="center">
+				{#if $T.row.isDiscount == DICT_YES}
+					<a class="discount" onclick="$.csMemberList.blDiscountList('{$T.row.ID}')"></a>
+				{#/if}
+			</td>
+			<td class="center"><a class="menus" onclick="$.csMemberList.openMenus('{$T.row.ID}','{$T.row.name}')"></a></td>
+		</tr>
+		{#/for}
+	</table>
+</textarea >

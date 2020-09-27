@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.apollo.mapper.projectMapper">
+	<sql id="columns">ID,PROJECT_CODE,PROJECT_NAME,PROJECT_STATUS,PROJECT_TYPE,SIGN_COMPANY,OPERATE_GENRE,AREA,IS_RELATE_ERP,ERP_PROJ_NAME,ERP_PROJ_CODE,CREATE_DT
+	</sql>
+	<sql id="tableName">fm_project_manage</sql>
+
+	<select id="findProject" resultType="java.util.Map">
+		select
+		<include refid="columns" />
+		from
+		<include refid="tableName" />
+		t
+		where 1=1
+		<if test="null != projectName and '' != projectName">
+			and t.project_name like CONCAT('%',#{projectName},'%')
+		</if>
+		<if test="null != projectStatus and '' != projectStatus">
+			and t.project_status = #{projectStatus}
+		</if>
+		<if test="null != signCompany and '' != signCompany">
+			and t.sign_company = #{signCompany}
+		</if>
+		<if test="null != projectType and '' != projectType">
+			and t.project_type = #{projectType}
+		</if>
+		<if test="null != area and '' != area">
+			and t.area = #{area}
+		</if>
+		<if test="null != operateGenre and '' != operateGenre">
+			and t.operate_genre = #{operateGenre}
+		</if>
+	</select>
+
+	<select id="findMaxProjectId" resultType="java.util.Map">
+		select ifnull(max(id)+1,1) as maxId from
+		<include refid="tableName" />
+		t
+	</select>
+
+	<select id="findUserProject" resultType="java.util.Map">
+		SELECT
+		<include refid="columns" />
+		FROM
+		<include refid="tableName" />
+		FPM
+		WHERE EXISTS (SELECT * FROM fm_project_user FPU WHERE FPM.ID=FPU.PROJECT_ID AND FPU.USER_STATUS !=3 AND
+		FPU.USER_ID=
+		#{userId})
+	</select>
+
+	<select id="findProjectByWhere" resultType="java.util.Map">
+		select
+		<include refid="columns" />
+		from
+		<include refid="tableName" />
+		t
+		where 1=1
+		<if test="null != projectName and '' != projectName">
+			and t.project_name like CONCAT('%',#{projectName},'%')
+		</if>
+		<if test="null != projectStatus and '' != projectStatus">
+			and t.project_status = #{projectStatus}
+		</if>
+		<if test="null != area and '' != area">
+			and t.area = #{area}
+		</if>
+		<if test="null != signCompany and '' != signCompany">
+			and t.sign_company = #{signCompany}
+		</if>
+		<if test="null != projectType and '' != projectType">
+			and t.project_type = #{projectType}
+		</if>
+		<if test="null != operateGenre and '' != operateGenre">
+			and t.operate_genre = #{operateGenre}
+		</if>
+	</select>
+
+	<select id="findProjectNameByWhere" resultType="java.util.Map">
+		select
+		<include refid="columns" />
+		from
+		<include refid="tableName" />
+		t
+		where 1=1
+		<if test="null != PROJECT_NAME and '' != PROJECT_NAME">
+			and t.project_name = #{PROJECT_NAME}
+		</if>
+	</select>
+
+	<insert id="insertProject" parameterType="cn.rkylin.core.ApolloMap">
+		insert into fm_project_manage
+		(PROJECT_CODE,PROJECT_NAME,PROJECT_STATUS,PROJECT_TYPE,SIGN_COMPANY,OPERATE_GENRE,AREA,IS_RELATE_ERP,ERP_PROJ_NAME,ERP_PROJ_CODE,CREATE_DT)
+		VALUES(#{PROJECT_CODE},#{PROJECT_NAME},#{PROJECT_STATUS},#{PROJECT_TYPE},#{SIGN_COMPANY},#{OPERATE_GENRE},#{AREA},#{IS_RELATE_ERP},#{ERP_PROJ_NAME},#{ERP_PROJ_CODE},now())
+	</insert>
+
+	<update id="modifyProject" parameterType="cn.rkylin.core.ApolloMap" conn="master">
+		update fm_project_manage set
+		PROJECT_NAME = #{PROJECT_NAME},PROJECT_STATUS = #{PROJECT_STATUS} , PROJECT_TYPE =
+		#{PROJECT_TYPE} , SIGN_COMPANY =
+		#{SIGN_COMPANY} , OPERATE_GENRE =#{OPERATE_GENRE} , AREA = #{AREA} , IS_RELATE_ERP =
+		#{IS_RELATE_ERP} , ERP_PROJ_NAME =
+		#{ERP_PROJ_NAME},
+		ERP_PROJ_CODE = #{ERP_PROJ_CODE} where ID = #{projectId} AND PROJECT_STATUS !='3'
+	</update>
+
+	<update id="incrSeqProjectCode" parameterType="cn.rkylin.core.ApolloMap" conn="master">
+		update fm_seq_project SET
+		seq_project_id=LAST_INSERT_ID(#{seq})
+	</update>
+
+</mapper>

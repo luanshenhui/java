@@ -1,0 +1,21 @@
+package cn.rkylin.oms.system.messageDefine.vo;
+
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE;
+
+public class MessageDefineVo extends OMS_MESSAGE {
+	/**
+	* 序列
+	*/
+	private static final long serialVersionUID = 7261100665980740680L;
+	
+	/**
+	* orderBy子句
+	*/
+	private String orderBy;
+	
+	/**
+	* 搜索条件
+	*/
+	private String searchCondition;
+	
+}

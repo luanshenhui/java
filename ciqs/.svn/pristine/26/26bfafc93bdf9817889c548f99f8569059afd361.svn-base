@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=EDGE;" />
+    <title>H4C2页面样式示例（IFRAME）</title>
+    <link type="text/css" rel="stylesheet" href="../../../styles/dpn.h4c2.css" />
+    <style type="text/css">
+        
+    </style>
+    <script type="text/javascript" src="../../../styles/dpn.h4c2.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+</head>
+<body>
+    <!-- **** head ********************************************************* -->
+
+    <!-- **** menu ********************************************************* -->
+
+    <!-- **** content ****************************************************** -->
+    <div class="dpn-content">
+        <div class="crumb">当前位置&nbsp;:&nbsp;基本组件&nbsp;&gt;&nbsp;表单提交</div>
+        <div class="title">表单提交样式示例</div>
+        <div class="form">
+            <div class="hideshow">
+                <a id="form_table_hide_show" name="hide" href="javascript:void(0);">显示更多(+)</a>
+            </div>
+            <div class="main">
+                <form id="form_form" method="post" action="">
+    	            <table id="form_table">
+    	               <tbody>
+    				        <tr>
+                                <!-- 1000px -->
+    				            <th width="250"><span class="need">*</span>&nbsp;必填项&nbsp;:&nbsp;</th>
+    				            <td width="250"><input class="text" name="validateDemo" type="text" size="15" /><p></p></td>
+    				            <th width="250">选填项&nbsp;:&nbsp;</th>
+    				            <td width="250"><input class="text" name="key2" type="text" size="15" /></td>
+    				        </tr>
+    				        <tr>
+    	                        <th>下拉列表&nbsp;:&nbsp;</th>
+    	                        <td>
+    	                            <select class="select" name="key2">
+    	                                <option>value1</option>
+    	                                <option>value2</option>
+    	                            </select>
+    	                        </td>
+    	                        <th>日期&nbsp;:&nbsp;</th>
+    	                        <td><input class="datepick" name="key3" type="text" size="15" /></td>
+    	                    </tr>
+    				        <tr>
+    				            <th>错误信息&nbsp;:&nbsp;</th>
+    				            <td>
+    				                <input id="key_k" class="text" name="key234" type="text" size="15" />
+                                    <p></p>
+    				            </td>
+    				            <th>附加信息&nbsp;:&nbsp;<br/><span class="pewter">Obama's Victory Speech </span></th>
+    	                        <td>
+    	                            <input class="text" name="key2" type="text" size="15" />
+    	                        </td>
+    				        </tr>
+                            <tr>
+                                <th>身份证号码&nbsp;:&nbsp;</th>
+                                <td>
+                                    <input id="id_no" class="text" name="idNo" type="text" size="15" />
+                                    <p></p>
+                                </td>
+                                <th>手机号码&nbsp;:&nbsp;</th>
+                                <td>
+                                    <input id="mob_no" class="text" name="mobNo" type="text" size="15" />
+                                    <p></p>
+                                </td>
+                            </tr>
+    				        <tr class="hide">
+    	                        <th>下拉列表&nbsp;:&nbsp;</th>
+    	                        <td>
+    	                            <select class="select" name="key2">
+    	                                <option>value1</option>
+    	                                <option>value2</option>
+    	                            </select>
+    	                        </td>
+    	                        <th>日期&nbsp;:&nbsp;</th>
+    	                        <td><input class="datepick" name="key3" type="text" size="15" /></td>
+    	                    </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="100">
+                                    <input class="button" type="submit" value="提&nbsp;交" />
+                                    <input class="button" type="button" value="重&nbsp;置" />
+                                </td>
+                            </tr>
+                        </tfoot>
+    			    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- **** foot ********************************************************* -->
+    
+    <!-- **** javascript *************************************************** -->
+    <script type="text/javascript">
+        jQuery(function () {
+        	jQuery("div.dpn-content input.datepick").attr("readonly", "readonly");
+            jQuery("div.dpn-content input.datepick").datePicker({
+                clickInput : true,
+                createButton : false,
+                startDate : "2000-01-01"
+            });
+            
+            jQuery("#form_table tbody tr.hide").hide();
+            jQuery("#form_table_hide_show").bind("click", function () {
+                var status = jQuery("#form_table_hide_show").attr("name");
+                if ("hide" == status) {
+                    jQuery("#form_table tbody tr.hide").show();
+                    jQuery("#form_table_hide_show").text("隐藏更多(-)");
+                    jQuery("#form_table_hide_show").attr("name", "show");
+                } else {
+                    jQuery("#form_table tbody tr.hide").hide();
+                    jQuery("#form_table_hide_show").text("显示更多(+)");
+                    jQuery("#form_table_hide_show").attr("name", "hide");
+                }
+                return false;
+            });
+            
+            var inputDemoFormValidator = jQuery("#form_form").validate({
+                // debug : false,          // 调试模式取消submit的默认提交功能
+                // validClass : "check",   // 验证成功后的样式，默认字符串valid
+                // focusInvalid : true,    // 表单提交时,焦点会指向第一个没有通过验证的域
+                // focusCleanup : true;    // 焦点指向错误域时，隐藏错误信息，不可与focusInvalid一起使用
+                // errorElement : "label", // 默认添加错误的节点名称：label
+                // errorClass : "error",   // 默认为错误的样式类为：error
+                rules : {
+                    validateDemo : {
+                        required : true,
+                        lettersonly : true
+                    },
+                    key234 : {
+                        required : true,
+                        remote : {
+                            url : "./validate.json",  // 后台处理程序，只能返回“true”或者“false”
+                            type : "get",             // get, post
+                            dataType : "json",        // 接受数据格式
+                            data : {
+                                validateAjaxDemoValue : function () {
+                                    return jQuery("#key_k").val();
+                                }
+                            }
+                        }
+                    },
+                    idNo : {
+                        required : true,
+                        idNoCN : true
+                    },
+                    mobNo : {
+                        required : true,
+                        mobNoCN : true
+                    }
+                },
+                messages : {
+                    validateDemo : {
+                        required : "值必须填写",
+                        lettersonly : "请填写字母"
+                    },
+                    key234 : {
+                        required : "值也必须填写",
+                        remote : "ajax未通过"
+                    },
+                    idNo : {
+                        required : "值也必须填写",
+                        idNoCN : "格式不正确"
+                    },
+                    mobNo : {
+                        required : "值也必须填写",
+                        mobNoCN : "格式不正确"
+                    }
+                },
+                errorPlacement : function (error, element) {
+                    error.appendTo(element.next());
+                },
+                submitHandler : function (form) {
+                    alert("input submit!");
+                    form.submit();
+                }
+            });
+            
+            jQuery("#resetbtn").bind("click", function () {
+                if (inputDemoFormValidator != null) {
+                    inputDemoFormValidator.resetForm();
+                }
+                jQuery("#form_form")[0].reset();
+            });
+        });
+    </script>
+</body>
+</html>

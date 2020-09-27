@@ -1,0 +1,143 @@
+package cn.rkylin.oms.system.user.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.menu.dao.IMenuDAO;
+import cn.rkylin.oms.system.menu.domain.WF_ORG_MENU;
+import cn.rkylin.oms.system.position.dao.IPositionDAO;
+import cn.rkylin.oms.system.position.domain.WF_ORG_STATION;
+import cn.rkylin.oms.system.role.dao.IRoleDAO;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.unit.dao.IUnitDAO;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+import cn.rkylin.oms.system.user.dao.IUserDAO;
+import cn.rkylin.oms.system.user.domain.WF_ORG_USER;
+import cn.rkylin.oms.system.user.vo.UserVO;
+@Service("userService")
+public class UserServiceImple extends ApolloService implements IUserService {
+	
+	@Autowired
+	private IUserDAO userDAO;
+	@Autowired
+	private IMenuDAO imenuDAO;
+	@Autowired
+	private IUnitDAO iunitDAO;
+	@Autowired
+	private IPositionDAO istationDAO;
+	@Autowired
+	private IRoleDAO iroleDAO;
+
+	@SuppressWarnings("unused")
+	@Override
+	public PageInfo<UserVO> findByWhere(int page, int rows, UserVO userVo) throws Exception {
+		PageInfo<UserVO> userVOList = findPage(page, rows, "pageSelectUser", userVo);
+		List<UserVO> returnValue=userVOList.getList();
+		WF_ORG_USER jtUser = new WF_ORG_USER();
+		if (returnValue.size() > 0) {
+			jtUser = (WF_ORG_USER) returnValue.get(0);
+		} else {
+			return userVOList;
+		}
+		@SuppressWarnings("rawtypes")
+		List delegateRoleIdList = null;
+		// 正常的用户管理不需要取委托权限
+		if (false) {
+			WF_ORG_MENU menuItemVO = new WF_ORG_MENU();
+			menuItemVO.setUserID(jtUser.getUserId());
+			// bizRole代表只能获取业务角色，不要获取管理角色。（权限委托不能委托管理角色）
+			menuItemVO.setRoleType("bizRole");
+			// 获取用户被委托的所有角色、组织、岗位
+			delegateRoleIdList = imenuDAO.getUserRolesIncludeDelegates(menuItemVO);
+		}
+		if (true) {
+			for (int i = 0; i < returnValue.size(); i++) {
+				WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+				WF_ORG_UNIT unitParam = new WF_ORG_UNIT();
+				unitParam.setUserId(user.getUserId());
+				// 2011年5月11日 增加对委托权限的提取
+				unitParam.setDelegateUnitIdList(delegateRoleIdList);
+				List unitList = iunitDAO.getUnitByCondition(unitParam);
+				// 获取组织单元的扩展信息
+//				if (unitList != null && unitList.size() > 0) {
+//					for (int j = 0; j < unitList.size(); j++) {
+//						WF_ORG_UNIT unit = (WF_ORG_UNIT) unitList.get(j);
+//						if (unit.getExtInfoMap() == null) {
+//							unit.setExtInfoMap(iunitDAO.getExtInfo("unit", unit.getUnitId()));
+//						}
+//					}
+//				}
+				user.setUserUnitList(unitList);
+			}
+		}
+		// 设置用户岗位
+		if (true) {
+			for (int i = 0; i < returnValue.size(); i++) {
+				WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+				WF_ORG_STATION stationParam = new WF_ORG_STATION();
+				stationParam.setUserId(user.getUserId());
+				// 2011年5月11日 增加对委托权限的提取
+				stationParam.setDelegateStationIdList(delegateRoleIdList);
+				List stationList = istationDAO.getStationByCondition(stationParam);
+				user.setStationList(stationList);
+			}
+		}		
+		// 设置用户角色
+		if (true) {
+			for (int i = 0; i < returnValue.size(); i++) {
+				WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+				WF_ORG_ROLE unitParam = new WF_ORG_ROLE();
+				unitParam.setUserId(user.getUserId());
+				// 2011年5月11日 增加对委托权限的提取
+				unitParam.setDelegateRoleIdList(delegateRoleIdList);
+				// unitParam.setIsAdminrole("否");
+				List roleList = iroleDAO.getRoleByCondition(unitParam,page, rows);
+				user.setUserRoleList(roleList);
+			}
+		}					
+    	// 设置用户扩展信息
+//		if (true) {
+//			for (int i = 0; i < returnValue.size(); i++) {
+//				WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+//				user.setExtInfoMap(userDAO.getExtInfo("user", user.getUserId()));
+//			}
+//		}		
+		
+		for (int i = 0; i < returnValue.size(); i++) {
+			WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+			List unitList = user.getUserUnitList();
+			String unitString = "";
+			if (unitList != null && unitList.size() > 0) {
+				for (int j = 0; j < unitList.size(); j++) {
+					WF_ORG_UNIT unit = (WF_ORG_UNIT) unitList.get(j);
+					unitString += unit.getUnitName();
+					if (j < unitList.size() - 1)
+						unitString += ",";
+				}
+			}
+			user.setUserUnits(unitString);
+		}
+		
+		for (int i = 0; i < returnValue.size(); i++) {
+			WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+			List roleList = user.getUserRoleList();
+			String roleString = "";
+			if (roleList != null && roleList.size() > 0) {
+				for (int j = 0; j < roleList.size(); j++) {
+					WF_ORG_ROLE role = (WF_ORG_ROLE) roleList.get(j);
+					roleString += role.getRoleName();
+					if (j < roleList.size() - 1)
+						roleString += ",";
+				}
+			}
+			user.setUserRoles(roleString);
+		}
+		return userVOList;
+	}
+
+}

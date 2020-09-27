@@ -1,0 +1,32 @@
+package com.cost.service;
+
+import com.cost.Dao.CostDao;
+
+public class ServiceImpl implements Service{
+
+	private CostDao dao;
+	
+	public CostDao getDao() {
+		return dao;
+	}
+
+	public void setDao(CostDao dao) {
+		this.dao = dao;
+	}
+
+	public void addCost() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void delCost() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void updateCost() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

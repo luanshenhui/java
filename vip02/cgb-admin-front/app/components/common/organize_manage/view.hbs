@@ -1,0 +1,79 @@
+{{#component "organize js-component"}}
+    <p class="organize-title"><strong>- 机构管理 -</strong></p>
+    <div class="m-b-10">
+        <form id="form-search" class="form">
+            <fieldset>
+                <div class="span4">
+                  <label for="code">机构代码：</label>
+                  <input id="code" type="text" name="code" class="search-account search-input"
+                          value="{{code}}" maxlength="20">
+                </div>
+                <div class="span3">
+                  <label for="sName">简称：</label>
+                  <input id="sName" type="text" name="sName" class="search-account search-input"
+                          value="{{sName}}" maxlength="30">
+                </div>
+                <div class="span3">
+                  <label for="level">级别：</label>
+                  <input id="level" type="text" name="level" class="search-account search-input"
+                          value="{{level}}" maxlength="1">
+                </div>
+                 <div class="span1">
+                     <input class="btn btn-success btn-small btn-search" type="submit" value="搜索"/>
+                </div>
+            </fieldset>
+        </form>
+        <div class="btn-group">
+            {{#authorial "organize_add"}}
+                <button class="btn btn-info btn-small js-organize-new">添加机构</button>
+            {{/authorial}}
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="5%">机构代码</th>
+            <th width="10%">机构全称</th>
+            <th width="10%">机构简称</th>
+            <th width="5%">机构级别</th>
+            <th width="20%">机构描述</th>
+            <th width="5%">状态</th>
+            <th width="15%">创建时间</th>
+            <th width="10%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{code}}" data-data="{{json this}}">
+                <td>{{code}}</td>
+                <td>{{fullName}}</td>
+                <td>{{simpleName}}</td>
+                <td>{{level}}</td>
+                <td>{{descript}}</td>
+                <td>
+                    {{#equals status 0}} 启用 {{else}}停用{{/equals}}
+                </td>
+                <td>{{formatDate createTime}}</td>
+                <td>
+                    {{#authorial "organize_edit"}}
+                        <button class="btn btn-info btn-sm js-org-edit">编辑</button>
+                    {{/authorial}}
+                    {{#authorial "organize_delete"}}
+                        <button class="btn btn-info btn-sm js-org-del" id="{{code}}" data-toggle="confirm"
+                            data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？" data-event="confirm:delete-org">
+                        删除
+                        </button>
+                    {{/authorial}}
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <!--<div class="pagination" data-total="{{_DATA_.total}}">-->
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    {{/equals}}
+    </div>
+{{/component}}

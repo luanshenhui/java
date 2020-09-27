@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（白金卡换年费）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF17",
+            "reportCode":"JF17,JF51"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

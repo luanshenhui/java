@@ -1,0 +1,231 @@
+package cn.rkylin.oms.system.role.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+import com.github.pagehelper.PageInfo;
+import com.taobao.api.domain.Role;
+
+import cn.rkylin.core.controller.ApolloController;
+import cn.rkylin.oms.system.config.BizTypeDefine;
+import cn.rkylin.oms.system.config.OrgnizationConfig;
+import cn.rkylin.oms.system.role.dao.RoleDAOImpl;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.role.service.IRoleService;
+import cn.rkylin.oms.system.role.vo.RoleVo;
+import cn.rkylin.oms.system.shop.vo.ShopVO;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+import cn.rkylin.oms.system.user.domain.WF_ORG_USER;
+import cn.rkylin.oms.system.user.vo.UserVO;
+import net.sf.json.JSONObject;
+
+
+
+
+
+@Controller
+@RequestMapping("/role")
+public class RoleController extends ApolloController {
+	private static final Log logger = LogFactory.getLog(RoleController.class);
+    // 常量定义
+    private static final String PAGE_SELECT_STATEMENT = "pageSelectShop"; // 分页语句Statement名称
+    private static final String GOTO_ROLE_LIST = "/system/organization/role/RoleList"; // 跳转到店铺列表页
+
+    /**
+     * 店铺服务层
+     */
+    @Autowired
+    private IRoleService roleService;
+//
+//    @Autowired
+//    public ProjectManagerService projectManagerService;
+
+    /**
+     * 构造函数
+     */
+    public RoleController() {
+
+    }
+
+    /**
+     * 跳转到店铺列表
+     */
+    @RequestMapping(value = "/gotoRoleList")
+    public String gotoRoleList() {
+        return GOTO_ROLE_LIST;
+    }
+    
+    /**
+     * 跳转到店铺列表
+     *
+     * @param quickSearch 快速查询条件
+     * @return 返回值JSON格式字符串
+     * @Param start 第几页
+     * @Param length 每页多少行
+     */
+    @ResponseBody
+    @RequestMapping(value = "/roleList", method = RequestMethod.GET)
+    public Map<String, Object> getRoleList(String quickSearch,RoleVo role,
+                                           @RequestParam(required = false, defaultValue = "0") int start,
+                                           @RequestParam(required = false, defaultValue = "10") int length)
+            throws Exception {
+        // 用于返回值的json对象
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        try {
+            // 前台搜索条件，此处只有一个店铺名称
+            quickSearch = URLDecoder.decode(quickSearch, "UTF-8");
+
+            // 处理分页
+            if (length == -1) {
+                length = Integer.MAX_VALUE;
+            }
+            int page = start / length + 1;
+
+            // 处理快速查询条件
+            RoleVo param = new RoleVo();
+            if (StringUtils.isNotEmpty(quickSearch)) {
+                param.setSearchCondition(quickSearch);
+            }
+
+            // 处理转义的字段
+            
+            Map<String, String> replaceFieldsMap = new HashMap<String, String>();
+            replaceFieldsMap.put("validateStatus", "validate");
+            replaceFieldsMap.put("status", "enable");
+
+            // 排序语句生成
+            String orderStatement = getOrderString(RoleDAOImpl.class.getName(), PAGE_SELECT_STATEMENT,
+                    replaceFieldsMap);
+            if (StringUtils.isNotEmpty(orderStatement)) {
+                param.setOrderBy(orderStatement);
+            }
+            
+            // 获取分页数据
+            PageInfo<RoleVo> roleVOList = roleService.findByWhere(page, length, param);
+
+            // 设置返回结果内容
+            returnMap.put(JSON_RESULT, SUCCESS);
+            returnMap.put(RECORDS_FILTERED, roleVOList.getTotal());
+            returnMap.put(RECORDS_TOTAL, roleVOList.getTotal());
+            returnMap.put(RETURN_DATA, roleVOList.getList());
+
+        } catch (Exception ex) {
+            logger.error(ex);
+            returnMap.put(JSON_RESULT, FAILED);
+            returnMap.put(JSON_MSG, ex.getMessage());
+        }
+        // 生成返回结果json串，null内容也需要返回
+        return returnMap;
+    }
+    
+//    @ResponseBody
+//    @RequestMapping(value = "/updateShop")
+//    public Map<String, Object> updateShop(@RequestBody RoleVo RoleVo) throws Exception {
+//        Map<String, Object> returnMap = new HashMap<String, Object>();
+//        try {
+//            shopService.update(shopVO);
+//            returnMap.put(JSON_RESULT, SUCCESS);
+//        } catch (Exception ex) {
+//            logger.error(ex);
+//            returnMap.put(JSON_RESULT, FAILED);
+//            returnMap.put(JSON_MSG, ex.getMessage());
+//        }
+//        return returnMap;
+//    }
+
+    
+//    
+//    @ResponseBody
+//    @RequestMapping(value = "/getRoleDetail", method = RequestMethod.POST)
+//    public void getRoleDetail( HttpServletRequest request,HttpServletResponse response) {
+//
+//    	
+//
+//		String roleID = request.getParameter("roleID");
+//		
+//		PrintWriter writer = null;
+//		JSONObject returnJSON = new JSONObject();
+////		if (roleService == null)
+////			roleService = (RoleService) getBaseService().getServiceFacade("TP_RoleService");
+//		try {
+//			response.setContentType("text/json");
+//			response.setCharacterEncoding("UTF-8");
+//			writer = response.getWriter();
+//			WF_ORG_ROLE roleDetail = roleService.getRoleDetail(roleID);
+////			if (roleDetail == null) {
+////				returnJSON.put("errorMessage", OrgI18nConsts.ROLE_NOT_EXIST);
+////			} else {
+//				// 拼出角色下的人员~~~~~~~~~~~~~~~~~~
+//				String roleManageUnitsKEY = "";
+//				String roleManageUnitsVALUE = "";
+//				if (roleDetail.getRoleManageUnitList() != null && roleDetail.getRoleManageUnitList().size() > 0) {
+//					for (int i = 0; i < roleDetail.getRoleManageUnitList().size(); i++) {
+//						WF_ORG_UNIT unitVO = (WF_ORG_UNIT) roleDetail.getRoleManageUnitList().get(i);
+//						roleManageUnitsKEY += unitVO.getUnitId();
+//						roleManageUnitsVALUE += unitVO.getUnitName();
+//						// 最后一个字符串后面就不要加“,”了
+//						if (i == roleDetail.getRoleManageUnitList().size() - 1)
+//							break;
+//						roleManageUnitsKEY += ",";
+//						roleManageUnitsVALUE += ",";
+//					}
+//				}
+//				returnJSON.put("roleManageUnitsKEY", roleManageUnitsKEY);
+//				returnJSON.put("roleManageUnitsVALUE", roleManageUnitsVALUE);
+//
+//				// 拼出角色可以管理的组织~~~~~~~~~~~~~~~~~~
+//				String roleUsersKEY = "";
+//				String roleUsersVALUE = "";
+//				if (roleDetail.getRoleUsersList() != null && roleDetail.getRoleUsersList().size() > 0) {
+//					for (int i = 0; i < roleDetail.getRoleUsersList().size(); i++) {
+//						WF_ORG_USER UserVO = (WF_ORG_USER) roleDetail.getRoleUsersList().get(i);
+//						roleUsersKEY += UserVO.getUserId();
+//						roleUsersVALUE += UserVO.getUserFullname();
+//						// 最后一个字符串后面就不要加“,”了
+//						if (i == roleDetail.getRoleUsersList().size() - 1)
+//							break;
+//						roleUsersKEY += ",";
+//						roleUsersVALUE += ",";
+//					}
+//				}
+//				returnJSON.put("roleUsersKEY", roleUsersKEY);
+//				returnJSON.put("roleUsersVALUE", roleUsersVALUE);
+//
+//				roleDetail.setRoleManageUnitList(null);
+//				roleDetail.setRoleUsersList(null);
+//				returnJSON.put("roleDetail", JSONObject.fromObject(roleDetail).toString());
+//				
+////			}
+//		} catch (Exception e) {
+//			returnJSON.put("errorMessage", e.getMessage());
+//			e.printStackTrace();
+//		} finally {
+//			writer.println(returnJSON.toString());
+//			writer.flush();
+//			writer.close();
+//		}
+//		
+//	}
+
+    
+    
+}

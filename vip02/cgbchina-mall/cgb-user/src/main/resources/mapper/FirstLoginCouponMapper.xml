@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="FirstLoginCoupon">
+    <resultMap id="FirstLoginCouponMap" type="FirstLoginCouponModel">
+        <result property="id" column="id"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="isStarted" column="is_started"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="createOper" column="create_oper"/>
+    </resultMap>
+    <sql id="columns">
+        id,coupon_id,start_time,end_time,is_started,del_flag,create_time,modify_oper,modify_time,create_oper
+    </sql>
+
+    <insert id="insert" parameterType="FirstLoginCouponModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_first_login_coupon
+        (coupon_id
+        ,start_time
+        ,end_time
+        ,is_started
+        ,del_flag
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,create_oper)
+        values(#{couponId}
+        ,#{startTime}
+        ,#{endTime}
+        ,#{isStarted}
+        ,#{delFlag}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{createOper})
+    </insert>
+
+    <update id="update" parameterType="FirstLoginCouponModel">
+        update tbl_first_login_coupon set
+        coupon_id
+        = #{couponId},start_time
+        = #{startTime},end_time
+        = #{endTime},is_started
+        = #{isStarted},del_flag
+        = #{delFlag},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime},create_oper
+        = #{createOper}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="couponId !=null">and coupon_id = #{couponId}</if>
+            <if test="startTime !=null">and start_time = #{startTime}</if>
+            <if test="endTime !=null">and end_time = #{endTime}</if>
+            <if test="isStarted !=null">and is_started = #{isStarted}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="FirstLoginCouponMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_first_login_coupon
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="FirstLoginCouponMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_first_login_coupon
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="FirstLoginCouponMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_first_login_coupon
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="FirstLoginCouponModel">
+        delete from tbl_first_login_coupon where id = id
+    </delete>
+</mapper>
+
+

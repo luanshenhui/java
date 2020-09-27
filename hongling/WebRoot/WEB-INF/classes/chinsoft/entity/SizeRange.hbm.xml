@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.SizeRange" table="SizeRange">
+        <id name="ID">
+            <column name="ID"/>
+            <generator class="assigned" />
+        </id>
+        <property name="SizeStandardIDs" type="string">
+            <column name="SizeStandardIDs"/>
+        </property>
+        <property name="SizeFrom" type="float">
+            <column name="SizeFrom"/>
+        </property>
+        <property name="SizeTo" type="float">
+            <column name="SizeTo"/>
+        </property>
+        <property name="Sign" type="string">
+            <column name="Sign"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="Shift_JIS"?>
+<project name="drawboard" default="all" basedir=".">
+	<!-- 初期化 -->
+    <target name="init">
+        <property name="zip.drawboard"                  value="drawboard.zip" />
+        <property name="jar.drawboard"                  value="drawboard.jar" />
+        <property name="manifest.drawboard"             value="drawboard.mf" />
+        <property name="class.path"                     value="." />
+        <property name="app.classes.dest.dir"           value="." />
+        <property name="jar.dest.dir"                   value="drawboard" />
+        <property name="app.sources.src.dir"            value="source" />
+        <property name="skin.dest.dir"                  value="skin" />
+        <property name="app.doc.dest.dir"               value="doc" />
+        <property name="debug"                          value="on"/>
+    </target>
+
+	<!-- コンパイル -->
+    <target name="compile" depends="init">
+        <javac srcdir="${app.sources.src.dir}"
+              destdir="${app.classes.dest.dir}"
+                debug="${debug}"
+             optimize="on"
+            classpath="${class.path}"
+          deprecation="on">
+        </javac>
+    </target>
+
+	<!-- JavaBeanとservlet jarファイルの作成 -->
+    <target name="app" depends="compile">
+        <jar jarfile="${jar.drawboard}" manifest="${manifest.drawboard}"
+             basedir="${app.classes.dest.dir}"
+             includes="${jar.dest.dir}/*.class"/>
+    </target>
+
+	<!-- 配布ファイルの作成 -->
+    <target name="all" depends="app">
+        <zip  zipfile="${zip.drawboard}" basedir="."
+             includes="${jar.drawboard},${skin.dest.dir}/*.gif"/>
+    </target>
+
+	<!-- 削除 -->
+    <target name="clean">
+        <delete file="drawboard.zip" />
+        <delete file="drawboard.jar" />
+        <delete dir="drawboard" />
+        <delete dir="doc" />
+    </target>
+
+	<!-- javadocの作成 -->
+    <target name="doc" depends="init">
+        <mkdir dir="${app.doc.dest.dir}"/>
+        <javadoc
+            locale="ja"
+            encoding="Shift_JIS"
+            docencoding="Shift_JIS"
+            sourcepath="${app.sources.src.dir}/*.java"
+            classpath="${class.path}"
+            author="true"
+            version="true"
+            use="true"
+            destdir="${app.doc.dest.dir}">
+        </javadoc>
+    </target>
+</project>
+

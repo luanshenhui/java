@@ -1,0 +1,117 @@
+{{#component "points_activitys js-component"}}
+    <div>
+        <ul id="Tab" class="nav nav-tabs">
+            <li class="active">
+                <a class="js-tab1" data-toggle="tab">
+                    全部活动
+                </a>
+            </li>
+            <li>
+                <a class="js-tab2" data-toggle="tab">
+                    待开始的
+                </a>
+            </li>
+            <li>
+                <a class="js-tab3" data-toggle="tab">
+                    进行中的
+                </a>
+            </li>
+            <li>
+                <a class="js-tab4" data-toggle="tab">
+                    已结束的
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="add-item">
+        <a href="activity_add">新建活动</a>
+    </div>
+    <div>
+        <form class="activity-form-search form-inline">
+            <fieldset>
+                <div class="control-group">
+                    <label for="id">活动简称:</label>
+                    <input name="id" value="{{id}}" type="text" class="form-control" required/>
+                </div>
+                <div class="control-group">
+                    <label for="id">开始时间:</label>
+                    <input class="form-control  js-date-start" id="beginTime" >
+                </div>
+                <div class="control-group">
+                    <label for="id">结束时间:</label>
+                    <input class="form-control js-date-end" id="endTime">
+                </div>
+                <div class="control-group">
+                    <label for="id">活动发起者:</label>
+                    <select>
+                        <option>全部</option>
+                        <option>内管</option>
+                        <option>供应商</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="id">优惠类型:</label>
+                    <select>
+                        <option>请选择</option>
+                        <option>礼品分群</option>
+                        <option>团购</option>
+                        <option>折扣</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="id">活动状态:</label>
+                    <select>
+                        <option>全部</option>
+                        <option>待开始</option>
+                        <option>进行中</option>
+                        <option>已结束</option>
+                    </select>
+                </div>
+                <div class="control-group" >
+                    <input class="btn btn-success btn-sm"type="submit" value="搜索"/>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="10%">活动编号</th>
+            <th width="10%">活动简称</th>
+            <th width="10%">优惠类型</th>
+            <th width="10%">活动发起者</th>
+            <th width="10%">开始时间</th>
+            <th width="10%">结束时间</th>
+            <th width="10%">活动状态</th>
+            <th width="20%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                <td class="activity-id">{{id}}</td>
+                <td class="activity-name">{{activityName}}</td>
+                <td class="activity-type">{{type}}</td>
+                <td class="activity-user">{{user}}</td>
+                <td class="activity-beginTime">{{beginTime}}</td>
+                <td class="activity-endTime">{{endTime}}</td>
+                <td class="activity-state">{{state}}</td>
+                <td>
+                    <a href="">下线</a>
+                    <a href="activity_statistics">统计</a>
+                    <a href="activity_detail">查看</a>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div id="endDiv">
+        <label>
+            <input type="checkbox" id="selectAll2" >
+            全选</label>
+        <button class="btn btn-sm js-activity-edit">下线</button>
+    </div>
+<div class="pagination" data-total="{{_DATA_.total}}">
+</div>
+{{/component}}

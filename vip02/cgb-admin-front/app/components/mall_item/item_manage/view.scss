@@ -1,0 +1,158 @@
+.item{
+  /**搜索条件样式**/
+  .width-120{
+    width: 120px !important;
+  }
+  .channel-ck{
+    margin-left: 25px;
+  }
+  .span5 {
+    padding: 0 5px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: middle;
+    zoom: 1;
+    width: 514px;
+    text-align: right;
+  }
+  /**布局样式**/
+  .goods-name{
+       color: #328cff;
+       display: block;
+       word-wrap: break-word;
+       word-break: break-all;
+     }
+  .font-color-bule{
+    color: #328cff;
+  }
+  /**表格样式**/
+  .main-box-table{
+    background-color: #fff;
+    padding: 10px 0;
+    .table-th{
+      margin: 0 auto;
+      width: 100%;
+      background: #f8f8f8;
+      border-top: 1px solid #eee;
+      border-left: 1px solid #eee;
+      border-right: 1px solid #eee;
+      th {
+        padding: 10px 5px;
+      }
+    }
+    .order-tab{
+     /* width: 100%;*/
+      margin: 0 auto;
+      border: solid 1px #eee;
+      border-bottom: none;
+      .list-detail{
+        width: 100%;
+        height: 40px;
+        line-height: 15px;
+        border-bottom: solid 1px #eee;
+        background: #f8f8f8;
+        p{
+          float: left;
+          padding-left: 20px;
+          font-size: 14px;
+          color: #222;
+          height: 0;
+        }
+      }
+      .list-tabble-con{
+        tr{
+          td{
+            border-bottom: solid 1px #eee;
+            font-size: 14px;
+            color: #333;
+            line-height: 20px;
+            text-align: center;
+            vertical-align: middle;
+            .table-state tr td {
+              border:none !important;
+              color: #333;
+              font-size: 14px;
+              line-height: 20px;
+              padding: 4px;
+              text-align: right;
+              vertical-align: middle;
+            }
+            .table-state-table {
+              width:40%;
+            }
+          }
+        }
+      }
+      .table-list{
+        width: 100%;
+        border-collapse: collapse;
+        tr:hover{
+          background-color: #ffeced;
+        }
+      }
+    }
+  }
+}
+
+
+/**价格、库存Modal框样式**/
+.item-modal{
+  width:800px;
+  .main-box-title-popup{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    color: #333;
+  }
+  .filter-name{
+    margin-left: 50px;
+  }
+  .control-group{
+    width: 50%;
+  }
+
+  .input-required-error{
+    border:solid 1px red;
+  }
+  .break{
+    width: 50%;
+    font-size: 14px;
+    color: #333;
+    word-wrap: break-word;
+    word-break: break-all;
+    display: inline-block;
+  }
+  .margin-bottom-20{
+    margin-bottom: 20px!important;
+  }
+}
+
+.import-modal{
+  width: 600px;
+  .modal-body{
+    min-height: 100px;
+    .upload-btn{
+      width:80px;
+      height:28px;
+      z-index:2;
+    }
+    .upload-file{
+      position:absolute;
+      left:284px;
+      height:31px;
+      width: 83px;
+      opacity:0;
+      z-index:3;
+      filter: alpha(opacity=0);
+      -moz-opacity: 0;
+    }
+    .font-size-12{
+      font-size: 12px;
+    }
+  }
+
+}
+
+
+
+

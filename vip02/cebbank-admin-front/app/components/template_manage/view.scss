@@ -1,0 +1,44 @@
+.shop-template-manage{
+  table{
+    thead{
+      background-color: #f0ad4e;//$default-panel-color;
+    }
+    td{
+      vertical-align: top;
+      &.shop-template-operate,&.shop-template-status,&.template-subdomain{
+        padding-top: 24px;
+      }
+    }
+    .template-info{
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+    .shop-template-logo{
+      margin-top: 2px;
+      float: left;
+      img{
+        width: 148px;
+        height: 112px;
+        padding: 2px;
+      }
+    }
+    .shop-template-name{
+      margin: 10px 0 0 0;
+      .template-name{
+        font-size: 14px;
+      }
+    }
+    .release-template{
+      margin-top: 7px;
+    }
+    .operate-link{
+      margin: 0 8px;
+    }
+    .operate-btn{
+      margin-top: 8px;
+    }
+  }
+  .released{
+    color: #00b7ee;//$font-success-color;
+  }
+}

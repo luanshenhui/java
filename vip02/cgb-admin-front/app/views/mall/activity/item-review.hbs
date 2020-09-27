@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}复审管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "activity/item_review" true}}
+            {
+                "checkStatus":""
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

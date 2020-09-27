@@ -1,0 +1,107 @@
+<!--版本信息 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--整个页面-->
+<html>
+	<!--头元素：包含全局定义-->
+	<head>
+		<title>表单页面</title>
+		<meta http-equiv="content-type" 
+		content="text/html;charset=utf-8" />
+	</head>
+	<!--文档的主体-->
+	<body>
+		<h1>添加管理员</h1>
+		<form action="" method="">
+			<table border="1">
+				<tr>
+					<td width="60">姓名：</td>
+					<td width="200">
+						<input type="text" name="n" value="mm" />
+					</td>
+					<td>10个字符</td>
+				</tr>
+				<tr>
+					<td>密码：</td>
+					<td><input type="password" name="p" /></td>
+					<td>10个字符</td>
+				</tr>
+				<tr>
+					<td>性别：</td>
+					<td>
+						<input type="radio" name="s" checked="checked" value="M" />男生
+						<input type="radio" name="s" value="F" />女生
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>角色：</td>
+					<td>
+		<fieldset>
+			<legend>请选择角色</legend>
+						<input type="checkbox" name="role" checked="checked" value="A" />超级管理员
+						<br />
+						<input type="checkbox" name="role" value="B" id="r2" />
+						<label for="r2">普通管理员</label>
+		</fieldset>
+					</td>
+					<td>请至少选择一个</td>
+				</tr>
+				<tr>
+					<td>头像：</td>
+					<td><input type= "file" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>状态：</td>
+					<td>
+						<select>
+							<option>启用</option>
+							<option>停用</option>
+							<option>删除</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>描述：</td>
+					<td><textarea rows="" cols=""></textarea></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="submit" value="保存" />
+						<input type="reset" value="取消" />
+					</td>
+					<td></td>
+				</tr>
+			</table>
+			演示：
+			<!--<input type="button" value="普通按钮" />
+			<br />
+			aa<input type="hidden" name="id" value="10" />bb
+			<input type="file" />-->
+			<select size="5" name="status">
+				<option value="0">未发货</option>
+				<option value="1">已发货</option>
+				<option value="2">已退款</option>
+			</select>
+			<textarea rows="5" cols="20"></textarea>
+
+			<fieldset>
+				<legend>标题文本</legend>
+				dfjksdjf
+				<br/>
+				jsklfjsdk
+			</fieldset>
+		</form>
+<iframe src="http://www/com.cn"></iframe>
+
+
+	</body>
+</html>
+<!--
+demo.html?s=on&role=on&role=on
+demo.html?s=F&role=B
+demo.html?n=mary&p=123&s=M&role=A&role=B
+-->

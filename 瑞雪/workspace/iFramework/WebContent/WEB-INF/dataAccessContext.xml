@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+	<!-- 数据源配置采用JNDI或者Proxool连接池。正式环境部署都要采用JNDI方式 -->
+	<!--
+		框架数据源JNDI方式 tomcat下必须带前缀java:comp/env/ weblogic或websphere下没有前缀
+	--><!--
+	
+		<bean id="dataSource"
+		class="org.springframework.jndi.JndiObjectFactoryBean"> <property
+		name="jndiName"> <value>java:comp/env/jdbc/iframework</value> </property> </bean>
+	
+
+	-->
+	<!-- 框架数据源连接池proxool-->
+
+	
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="WEB-INF/jdbc.properties" />
+		<property name="fileEncoding" value="UTF-8" />
+	</bean>
+	<bean id="dataSourceFacade" class="org.logicalcobwebs.proxool.ProxoolFacade"
+		destroy-method="shutdown" />
+	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+		<property name="driver">
+			<value>${jdbc-0.driver-class}</value>
+		</property>
+		<property name="driverUrl">
+			<value>${jdbc-0.driver-url}</value>
+		</property>
+		<property name="user">
+			<value>${jdbc-0.user}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc-0.password}</value>
+		</property>
+<!-- 		<property name="alias"> -->
+<!-- 			<value>dhcbase</value> -->
+<!-- 		</property> -->
+		<property name="prototypeCount">
+			<value>1</value>
+		</property>
+		<property name="simultaneousBuildThrottle">
+			<value>1</value>
+		</property>
+		<property name="maximumConnectionCount">
+			<value>5</value>
+		</property>
+		<property name="minimumConnectionCount">
+			<value>1</value>
+		</property>
+		<property name="maximumActiveTime">
+			<value>600000</value>
+		</property>
+		<property name="testBeforeUse">
+			<value>true</value>
+		</property>
+		<property name="trace">
+			<value>true</value>
+		</property>
+		<property name="verbose">
+			<value>true</value>
+		</property>
+		<property name="statistics">
+			<value>10s,1m,1d</value>
+		</property>
+		<property name="statisticsLogLevel">
+			<value>ERROR</value>
+		</property>
+		<property name="houseKeepingTestSql">
+			<value>select 1 from dual</value>
+		</property>
+	</bean>
+	
+	<!-- SqlMap setup for iBATIS Database Layer -->
+	<bean id="securitySqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation"
+			value="WEB-INF/conf/base/ibatis/sql-map-config-base.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- ===========securityManager==================== -->
+	<bean id="securityManager"
+		class="com.dhc.base.security.ibatis.UserDetailManagerImpl">
+		<property name="sqlMapClient" ref="securitySqlMapClient" />
+		<property name="orgFacade" ref="orgFacade" />
+	</bean>
+	
+	<bean id="passwordEncoder"
+		class="org.springframework.security.providers.encoding.MessageDigestPasswordEncoder">
+		<constructor-arg value="MD5" />
+		<property name="encodeHashAsBase64" value="true" />
+	</bean>
+</beans>

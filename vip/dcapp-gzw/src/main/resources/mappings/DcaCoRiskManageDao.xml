@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.gzw.dao.DcaCoRiskManageDao">
+    
+	<!-- 查询各企业风险界定数(首页用) -->
+	<select id="getCoDefineStatusNum" resultType="DcaCoRiskManage">
+		SELECT ss.VALUE AS coId,ss.REMARKS as coName,a.DEFINE_STATUS,a.riskNum 
+		FROM (SELECT VALUE,REMARKS FROM SYS_DICT WHERE TYPE='company_name') ss
+		LEFT JOIN 
+		(SELECT CO_ID,DEFINE_STATUS,count(1) AS riskNum FROM DCA_CO_RISK_MANAGE GROUP BY CO_ID,DEFINE_STATUS) a
+		ON a.CO_ID = SS.VALUE
+		ORDER BY coId,a.DEFINE_STATUS
+	</select>
+	
+	<!-- 查询各企业风险等级数(首页用) -->
+	<select id="getCoRiskLevelNum" resultType="DcaCoRiskManage">
+		SELECT ss.VALUE AS coId,ss.REMARKS as coName,a.RISK_LEVEL,a.riskNum 
+		FROM (SELECT VALUE,REMARKS FROM SYS_DICT WHERE TYPE='company_name') ss
+		LEFT JOIN (SELECT CO_ID,RISK_LEVEL,count(1) AS riskNum FROM DCA_CO_RISK_MANAGE GROUP BY CO_ID,RISK_LEVEL) a
+		ON a.CO_ID = SS.VALUE
+		ORDER BY coId,a.RISK_LEVEL
+	</select>
+	
+	<!-- 风险走势统计(首页用) -->
+	<select id="getCoRiskTrendReport" resultType="DcaCoRiskManage">
+		SELECT D.powerId, D.month, D.powerNum
+		FROM
+		(
+		SELECT SUBSTR(POWER_ID, 0, 2) AS powerId, EXTRACT (MONTH FROM CREATE_DATE) AS month,
+			COUNT (POWER_ID) AS powerNum
+		FROM DCA_CO_RISK_MANAGE
+		WHERE DEL_FLAG = 0 AND TO_CHAR(CREATE_DATE,'YYYY') = #{curYear} AND CO_ID = #{coId}
+		GROUP BY SUBSTR(POWER_ID, 0, 2), EXTRACT (MONTH FROM CREATE_DATE)
+		) D		
+	</select>
+	
+	<!-- 风险界定统计(首页用) -->
+	<select id="getCoRiskDefinedReport" resultType="DcaCoRiskManage">
+		SELECT
+			DEFINE_STATUS,
+			EXTRACT (MONTH FROM UPDATE_DATE) month,
+			COUNT (1) powerNum
+		FROM
+			DCA_CO_RISK_MANAGE
+		WHERE
+			DEL_FLAG = 0 AND CO_ID = #{coId} AND TO_CHAR(UPDATE_DATE,'yyyy') = #{curYear}
+		GROUP BY
+			DEFINE_STATUS,
+			EXTRACT (MONTH FROM UPDATE_DATE)
+	</select>
+	
+	<!-- 根据权利和各专委会查询各12个月的数据 -->
+	<select id="getSpeCommitteeRiskByMonth" resultType="DcaCoRiskManage">
+		SELECT	
+			SUBSTR (POWER_ID, 0, 2) powerId,
+			EXTRACT (MONTH FROM CREATE_DATE) month,
+			COUNT (1) powerNum
+		FROM
+			DCA_CO_RISK_MANAGE 
+		WHERE
+			DEL_FLAG = 0 AND SUBSTR (POWER_ID, 0, 2) = #{powerId} AND SUBSTR (POWER_ID, 3, 1) = #{speCommittee}
+		GROUP BY EXTRACT (MONTH FROM CREATE_DATE),SUBSTR (POWER_ID, 0, 2)		
+	</select>
+	
+			
+	<!-- 根据企业id查询风险统计数据  add by geshuo 20170104 -->
+	<select id="getRiskCountByCoId" resultType="DcaCountByPowerEntity">
+		SELECT
+			r.POWER_ID as powerId,
+			r.riskCount as totalCount,
+			d.LABEL as powerName
+		FROM
+			(
+				SELECT
+					SUBSTR (POWER_ID, 0, 2) AS POWER_ID,
+					COUNT (1) AS riskCount
+				FROM DCA_CO_RISK_MANAGE
+				WHERE CO_ID = #{coId}
+				AND DEL_FLAG=0
+				GROUP BY SUBSTR (POWER_ID, 0, 2)
+			) r
+		LEFT JOIN 
+			(
+				SELECT VALUE, LABEL
+				FROM SYS_DICT
+				WHERE TYPE = 'szyd_class'
+			) d ON d.VALUE = r.POWER_ID
+		ORDER BY r.POWER_ID
+	</select>
+	
+</mapper>

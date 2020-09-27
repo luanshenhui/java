@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HotRank">
+    <!--热销商品销量统计排行的单品信息-->
+    <select id="findItemList" parameterType="Map" resultType="cn.com.cgbchina.batch.model.HotRankModel">
+        select
+        o.goods_id itemCode,
+        o.goods_nm goodsNm,
+        sum(o.goods_num) num ,
+        i.goods_code goodsCode,
+        i.price price,
+        i.installment_number installmentNumber,
+        i.image1 image1
+        from tbl_order o
+        inner join tbl_order_dodetail d on o.order_id = d.order_id and d.status_id = '0308'
+        inner join tbl_item i on i.code = o.goods_id
+        inner join tbl_goods g on i.goods_code = g.code
+        <where>
+            o.del_flag =0
+            <if test="lastDate!=null">
+                <![CDATA[and o.bonus_trn_date >= #{lastDate}]]>
+            </if>
+            <if test="currentDate!=null">
+                <![CDATA[and o.bonus_trn_date <= #{currentDate}]]>
+            </if>
+            <if test="orderTypeIdYg!=null">
+                and o.ordertype_id in ('YG','FQ')
+                and g.channel_mall = '02'
+            </if>
+            <if test="orderTypeIdJf!=null">
+                and o.ordertype_id = 'JF'
+                and g.channel_points = '02'
+            </if>
+        </where>
+        group by o.goods_id order by num desc
+    </select>
+    <!--删除之前的排行信息-->
+    <update id="updateRank" parameterType="Map">
+        update tbl_commend_rank set
+        del_flag = 1
+        <where>
+            stat_type = #{statType}
+            <if test="orderTypeIdYg!=null">
+                and ordertype_id =#{orderTypeIdYg}
+            </if>
+            <if test="orderTypeIdJf!=null">
+                and ordertype_id =#{orderTypeIdJf}
+            </if>
+            <if test="vendorId!=null">
+                and vendorId =#{vendorId}
+            </if>
+        </where>
+    </update>
+    <!--排行数据插入排行表中-->
+    <insert id="insertRank" parameterType="Map">
+        insert into tbl_commend_rank
+        (stat_type
+        ,ordertype_id
+        ,item_code
+        ,goods_name
+        ,vendor_id
+        ,vendor_name
+        ,price
+        ,installment_number
+        ,image1
+        ,rank
+        ,stat_num_01
+        ,rank_date
+        ,rank_time
+        ,del_flag)
+        values(
+        #{statType},
+        #{orderTypeId},
+        #{itemCode},
+        #{goodsName},
+        #{vendorId},
+        #{vendorName},
+        #{price},
+        #{installmentNumber},
+        #{image1},
+        #{rank},
+        #{statNum01},
+        #{rankDate},
+        #{rankTime},
+        0)
+    </insert>
+    <!--热门收藏排行的单品信息查询-->
+    <select id="findItemListForCollection" parameterType="Map" resultType="cn.com.cgbchina.batch.model.HotRankModel">
+        select
+        m.item_code itemCode,
+        m.goods_code goodsCode,
+        count(1) cnt,
+        i.price,
+        i.image1 image1,
+        i.installment_number installmentNumber,
+        g.name goodsNm
+        from tbl_member_goods_favorite m
+        inner join tbl_item i on m.item_code = i.code
+        inner join tbl_goods g on m.goods_code = g.code
+        <where>
+            m.del_flag = 0
+            <if test="lastDate!=null">
+                <![CDATA[and m.create_time >= #{lastDate}]]>
+            </if>
+            <if test="currentDate!=null">
+                <![CDATA[and m.create_time <= #{currentDate}]]>
+            </if>
+            <if test="orderTypeIdYg!=null">
+                and g.ordertype_id =#{orderTypeIdYg}
+                and g.channel_mall = '02'
+            </if>
+            <if test="orderTypeIdJf!=null">
+                and g.ordertype_id =#{orderTypeIdJf}
+                and g.channel_points = '02'
+            </if>
+        </where>
+        group by m.item_code order by cnt desc
+    </select>
+    <!--查询满足条件的供应商Id-->
+    <select id="findValidVendorId" parameterType="Map" resultType="String">
+        select vendor_id
+        from tbl_vendor_user
+        where status='0102'
+        and is_sub='0'
+        and del_flag =0
+        and shop_type = #{shopType}
+    </select>
+    <!--单品销量查询（供应商）-->
+    <select id="findVendorHotSaleItem" parameterType="Map" resultType="cn.com.cgbchina.batch.model.HotRankModel">
+        select
+        o.goods_id itemCode,
+        o.goods_nm goodsNm,
+        sum(o.goods_num) num ,
+        o.vendor_id vendorId,
+        v.full_name fullName,
+        i.goods_code goodsCode,
+        i.price price,
+        i.installment_number installmentNumber,
+        i.image1 image1
+        from tbl_order o
+        inner join tbl_order_dodetail d on o.order_id = d.order_id and d.status_id = '0308'
+        inner join tbl_item i on i.code = o.goods_id
+        inner join tbl_goods g on i.goods_code = g.code
+        inner join tbl_vendor_inf v on o.vendor_id = v.vendor_id
+        <where>
+            o.del_flag =0
+            <if test="lastDate!=null">
+                <![CDATA[and o.bonus_trn_date >= #{lastDate}]]>
+            </if>
+            <if test="currentDate!=null">
+                <![CDATA[and o.bonus_trn_date <= #{currentDate}]]>
+            </if>
+            <if test="orderTypeIdYg!=null">
+                and o.ordertype_id in ('YG','FQ')
+                and g.channel_mall = '02'
+            </if>
+            <if test="orderTypeIdJf!=null">
+                and o.ordertype_id = 'JF'
+                and g.channel_points = '02'
+            </if>
+            and o.vendor_id in
+            <foreach collection="vendorIdList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+        group by o.vendor_id,o.goods_id order by o.vendor_id asc, num desc
+    </select>
+    <!--单品收藏查询（供应商）-->
+    <select id="findVendorHotCollectionItem" parameterType="Map" resultType="cn.com.cgbchina.batch.model.HotRankModel">
+        select
+        m.item_code itemCode,
+        m.goods_code goodsCode,
+        m.vendor_id vendorId,
+        v.full_name fullName,
+        count(1) cnt,
+        i.price,
+        i.image1 image1,
+        i.installment_number installmentNumber,
+        g.name goodsNm
+        from tbl_member_goods_favorite m
+        inner join tbl_item i on m.item_code = i.code
+        inner join tbl_goods g on m.goods_code = g.code
+        inner join tbl_vendor_inf v on m.vendor_id = v.vendor_id
+        <where>
+            m.del_flag = 0
+            <if test="lastDate!=null">
+                <![CDATA[and m.create_time >= #{lastDate}]]>
+            </if>
+            <if test="currentDate!=null">
+                <![CDATA[and m.create_time <= #{currentDate}]]>
+            </if>
+            and m.vendor_id in
+            <foreach collection="vendorIdList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            <if test="orderTypeIdYg!=null">
+                and g.ordertype_id =#{orderTypeIdYg}
+                and g.channel_mall = '02'
+            </if>
+            <if test="orderTypeIdJf!=null">
+                and g.ordertype_id =#{orderTypeIdJf}
+                and g.channel_points = '02'
+            </if>
+        </where>
+        group by m.vendor_id,m.item_code order by m.vendor_id asc, cnt desc
+    </select>
+
+    <!-- add by geshuo 20160902:排行结果map -->
+    <resultMap id="HotRankMap" type="cn.com.cgbchina.batch.model.HotRankModel">
+        <result property="goodsCount" column="goodsCount"/>
+        <result property="backCategory1Id" column="back_category1_id"/>
+        <result property="backCategory1Nm" column="back_category1_nm"/>
+        <result property="vendorId" column="vendor_id"></result>
+        <result property="fullName" column="full_name"></result>
+        <result property="orderCount" column="orderCount"></result>
+        <result property="memberCount" column="memberCount"></result>
+        <result property="doTime" column="do_time"></result>
+        <result property="productId" column="product_id"></result>
+    </resultMap>
+
+    <!-- add by geshuo 20160902:查询热销品类排行 -->
+    <select id="findHotCategory" parameterType="java.util.Map" resultMap="HotRankMap">
+        select sum(o.goods_num) goodsCount,
+        g.product_id
+        from tbl_order o
+        left join tbl_order_dodetail od
+        on o.order_id = od.order_id
+        left join tbl_goods g
+        on o.goods_code = g.code
+        where od.status_id='0308'
+        and od.do_time > #{startDate}
+        <![CDATA[
+          and od.do_time < #{endDate}
+        ]]>
+        <if test="orderTypeIdYg!=null">
+            and o.ordertype_id in ('YG','FQ')
+        </if>
+        <if test="orderTypeIdJf!=null">
+            and o.ordertype_id = 'JF'
+        </if>
+        group by g.product_id
+        order by goodsCount desc
+    </select>
+
+    <!-- add by geshuo 20160902:插入排行表 -->
+    <insert id="insertBatchCommendRank"  parameterType="java.util.List">
+        <selectKey resultType ="java.lang.Long" keyProperty= "id" order= "AFTER">
+            SELECT last_insert_id()
+        </selectKey >
+        insert into tbl_commend_rank
+        (stat_type
+        ,ordertype_id
+        ,item_code
+        ,goods_name
+        ,price
+        ,installment_number
+        ,image1
+        ,back_category1_id
+        ,back_category1_name
+        ,vendor_id
+        ,vendor_name
+        ,rank
+        ,stat_num_01
+        ,stat_num_02
+        ,rank_date
+        ,rank_time
+        ,del_flag
+        ,extend1
+        ,extend2
+        ,extend3)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.statType}
+            ,#{item.ordertypeId}
+            ,#{item.itemCode}
+            ,#{item.goodsName}
+            ,#{item.price}
+            ,#{item.installmentNumber}
+            ,#{item.image1}
+            ,#{item.backCategory1Id}
+            ,#{item.backCategory1Name}
+            ,#{item.vendorId}
+            ,#{item.vendorName}
+            ,#{item.rank}
+            ,#{item.statNum01}
+            ,#{item.statNum02}
+            ,#{item.rankDate}
+            ,#{item.rankTime}
+            ,0
+            ,#{item.extend1}
+            ,#{item.extend2}
+            ,#{item.extend3})
+        </foreach>
+    </insert>
+
+    <!-- add by geshuo 20160902：查询热销供应商排行 -->
+    <select id="findHotVendor" parameterType="java.util.Map" resultMap="HotRankMap">
+        select sum(o.goods_num) goodsCount,
+        o.vendor_id,
+        v.full_name
+        from tbl_order o
+        left join tbl_order_dodetail od
+        on o.order_id = od.order_id
+        left join tbl_vendor_inf v
+        on o.vendor_id = v.vendor_id
+        where od.status_id = '0308'
+        <if test="orderTypeIdYg!=null">
+            and o.ordertype_id in ('YG','FQ')
+        </if>
+        <if test="orderTypeIdJf!=null">
+            and o.ordertype_id = 'JF'
+        </if>
+        and od.do_time > #{startDate}
+        <![CDATA[
+          and od.do_time < #{endDate}
+        ]]>
+        group by o.vendor_id
+        order by goodsCount desc
+        limit 0,5
+    </select>
+
+    <!-- add by geshuo 20160902:查询每个供应商订单成交数 用户数 -->
+    <select id="findVendorCountData" parameterType="java.util.Map" resultMap="HotRankMap">
+        select  count(o.order_id) orderCount,
+        count(distinct(o.create_oper)) memberCount,
+        o.vendor_id,
+        v.full_name,
+        d.do_time,
+        date_format(d.do_time,'%Y-%m-%d') doTimeDay
+        from tbl_order o
+        left join tbl_order_dodetail d
+        on o.order_id = d.order_id
+        left join tbl_vendor_inf v
+        on o.vendor_id = v.vendor_id
+        where d.status_id = '0308'
+        and d.do_time > #{startDate}
+        <![CDATA[
+          and d.do_time < #{endDate}
+        ]]>
+        group by vendor_id, doTimeDay
+        order by doTimeDay desc
+    </select>
+
+    <!-- add by geshuo 20160908:查询已存在的统计数据数量,正常应该为0 -->
+    <select id="checkDataCount" parameterType="java.util.Map" resultType="Long">
+        select  count(1)
+        from tbl_commend_rank
+        where del_flag = 0
+        <if test="statType != null" >
+            and stat_type = #{statType}
+        </if>
+        <if test="startDate != null" >
+            and rank_date > #{startDate}
+        </if>
+        <if test="endDate != null" >
+            <![CDATA[
+             and rank_date < #{endDate}
+            ]]>
+        </if>
+        <if test="todayDate != null" >
+            and rank_date = #{todayDate}
+        </if>
+    </select>
+
+</mapper>
+
+

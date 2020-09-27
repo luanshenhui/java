@@ -1,0 +1,109 @@
+JAVA的异常处理机制
+检查异常必须要处理的 io  jdbc  非检查异常 自己需要多年的编码经验来自己添加异常
+java对于异常的定义的结构是
+
+Throwable类
+派生出两个子类
+Error与Exception
+
+Error：系统级别出现的错误，通常是JVM出现的异常，这类错误是程序不可控的。
+
+Exception:程序级别的错误。通常我们称为叫做异常。这一类问题是可以通过程序解决的。
+
+java中解决异常的步骤:
+发现异常，捕获异常，解决异常。
+
+try语句
+语法格式:
+try{
+   可能出现错误的代码片段
+}
+
+catch语句
+用于捕获try中出现的异常，并实现解决方式
+try{
+
+}catch(Exception_type e){
+   解决异常的代码片段
+}
+
+catch语句可以出现多次。catch中列举的异常类型应本着子类在先父类在后的原则。
+catch语句要出现在try语句之后。
+
+throw语句
+主动抛出异常。
+语法
+//e为某个异常的实例
+throw e; 
+
+使用throw主动抛出异常的情况:
+1:分清责任。当调用该方法去处理问题的过程中出现错误，往往我们会将错误抛出，因为调用方有着决策上的权力。我们应当通知在这个环节出现的错误，以便调用方捕获并解决。
+
+2:执行逻辑的过程中，出现了一个符合语法规则但是不符合业务逻辑要求的情况时，我们也可以当做异常去处理，这时我们也会主动抛出一个异常。
+
+throws声明
+throws用于声明方法要抛出的异常类型。
+调用被throws声明的方法时，需要强制捕获该方法声明的抛出的异常。
+
+通常在方法中，我们使用throw主动抛出的异常类型都要声明在throws中。
+只有RuntimeException及其子类异常在throw抛出时，方法不需要将其异常类型定义在throws中。
+RuntimeException及其子类属于非检查异常，指的是在编译期间，不检查这类异常的捕获。
+常见的RuntimeException的子类
+NullPointerException       空指针
+ArrayIndexOutofBoundsException  数组下标越界
+ClassCastException          类型转换异常
+NumberFormatException       数字格式异常
+参看一下API.
+
+throw与throws的区别？
+
+finally块
+
+finally块的语法:
+finally{
+   代码片段
+}
+finally块可以出现在try语句块之后，或者最后一个catch语句块之后。且只能出现一次。
+
+finally块无论程序是否出错，都会执行其内容。无条件一定执行。
+通常，我们的程序中，无论是否报错，都要执行的代码应该放在finally中，保证可以执行到。
+
+重写方法时的异常处理
+如果在继承一个类时，父类的方法声明了throws抛出指定异常，那么子类在重写该方法是应注意:
+1:可以不指定throws
+2:可以throws父类方法异常的子类异常
+3:可以throws父类throws的部分异常
+
+但是不能：
+1:throws父类方法throws的父类异常
+2:thrwos父类方法中没有throws的异常
+java I/O
+
+java对于操作系统中文件系统的支持。
+
+File类
+用于描述文件系统中的一个文件或目录。
+
+File类的功能:
+我们通过File可以获取文件或目录的名字，大小，修改日期等信息。但是不能对文件内容进行访问。
+
+File的方法:
+String getName()
+获取文件或目录的名字
+
+long length()
+获取文件的大小 以字节为单位
+
+long lastModified()
+获取文件的最后修改时间  毫秒值
+
+String getPath()
+获取当前文件或目录的路径，以字符串形式返回
+
+boolean exists()
+判断当前File对象描述的文件或目录是否存在
+
+
+
+
+

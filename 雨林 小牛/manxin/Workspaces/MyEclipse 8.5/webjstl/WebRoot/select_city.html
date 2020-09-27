@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  	<script type="text/javascript">
+  		var shengFens = ["辽宁","黑龙江","吉林"];
+  		function jiaZaiShengFen(){
+  			/*加载省份，实际上就是给select 标签添加option子节点
+  			*/
+  			var shengFen = document.getElementById("shengFen");
+  			for(var i = 0; i < shengFens.length; i++){//根据数组创建子节点
+  				var sf = document.createElement("option");//创建节点
+  				sf.innerHTML = shengFens[i];//将省份信息放入option标签中
+  				shengFen.appendChild(sf);//插入节点
+  			}
+  		}
+  		
+  		var city1 = ["沈阳","大连","鞍山","锦州"];
+  		var city2 = ["黑龙江","佳木斯","漠河","大庆"];
+  		var city3 = ["吉林","长春","四平","通化"];
+  		
+  		function loadCity(index){//每次更换省份时，更换城市信息(select标签)
+  			var city = eval("city"+index);//eval 以这个字符串为命名的引用
+  			var ct = document.getElementById("city");
+  			var str = "";
+  			for(var i = 0; i < city.length; i++){
+  			  	str += "<option>" + city[i] + "</option>"; 
+  			}
+  			ct.innerHTML = str;
+  		}
+  		
+  		window.onload = function(){
+  			jiaZaiShengFen();
+  		};
+  	</script>
+  </head>
+  
+  <body>
+   省份：
+   <select id="shengFen" onchange="loadCity(this.selectedIndex)">
+   		<option>请选择省份</option>	
+   </select>
+   城市：
+   <select id="city">
+   		<option>请选择城市</option>	
+   </select>
+  </body>
+</html>

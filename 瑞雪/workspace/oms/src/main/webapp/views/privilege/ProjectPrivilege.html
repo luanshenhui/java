@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>项目管理 | Rkylin OMS</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT"/>
+
+    <!-- 加载 bootstrap 样式-->
+    <link type="text/css" rel="stylesheet"
+          href="/Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css"/>
+
+    <!-- 加载本页需要的三方插件样式 -->
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet"
+          href="/Apollo/madmin/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/dataTables.bootstrap.css">
+    <link type="text/css" rel="stylesheet"
+          href="/Apollo/madmin/vendors/jquery-tablesorter/themes/blue/style-custom.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-colorpicker/css/colorpicker.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-clockface/css/clockface.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-switch/css/bootstrap-switch.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/animate.css/animate.css"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/iCheck/skins/all.css"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="/Apollo/madmin/vendors/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
+
+    <!-- 加载主题风格样式 -->
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css"
+          class="default-style"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change"
+          class="style-change color-change"/>
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/style-responsive.css"/>
+
+</head>
+<body class="">
+<!--BEGIN CONTENT-->
+<div class="page-content">
+    <div class="container-fluid">
+<!--         <div class="row"> -->
+<!--             <div class="col-lg-8 col-xs-8 col-sm-8 col-md-8"></div> -->
+<!--             <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4" style="margin-bottom: 10px;"> -->
+<!--                 <div class="input-group"> -->
+<!--                     <input id="quickSearch" type="text" placeholder="项目名称" class="form-control"/> -->
+<!--                     <span class="input-group-btn"> -->
+<!-- 		                        <button id="btnQuickSearch" type="button" class="btn btn-primary"> -->
+<!-- 		                        	<i class="fa fa-search"></i> -->
+<!-- 		                        </button> -->
+<!-- 	                        </span> -->
+<!--                 </div> -->
+<!--             </div> -->
+<!--         </div> -->
+        <div class="row">
+            <div class="col-lg-12">
+<!--                 <div class="portlet box portlet-blue"> -->
+<!--                     <div class="portlet-header"> -->
+<!--                         <div class="caption">项目列表</div> -->
+<!--                         <div class="actions"> -->
+<!--                             <a id="newProjectHref" href="#" class="btn btn-warning btn-xs" data-toggle="modal"><i -->
+<!--                                     class="fa fa-plus"></i>&nbsp;创建项目</a> -->
+<!--                             &nbsp; -->
+<!--                         </div> -->
+<!--                     </div> -->
+                    <div class="portlet-body">
+                        <table id="t_project"
+                               class="table table-hover table-striped table-bordered table-advanced tb-sticky-header"
+                               width="100%">
+                            <thead>
+                            <tr>
+                                <th colValue="prjId">项目ID</th>
+                                <th colValue="prjName">项目名称</th>
+                                <th colValue="entName">所属企业</th>
+                                <th colValue="prjType">项目类型</th>
+                                <th colValue="cons">联系人</th>
+                                <th colValue="tel">电话</th>
+                                <th colValue="createTime">创建时间</th>
+                                <th colValue="expireTime">到期时间</th>
+                                <th colValue="enableStatus">状态</th>
+                                <th colValue="operation">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+<!--                 </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!--END CONTENT-->
+
+<!--新建项目页面-->
+<div id="frmNewProject" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">x</button>
+                <h4 id="modal-header-primary-label" class="modal-title">新建项目</h4>
+            </div>
+            <div class="modal-body">
+                <!--begin form-->
+                <form id="newForm" action="#">
+                    <div class="form-body pal">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="prj_name" class="control-label">项目名称 <span
+                                            class='require'>*</span></label>
+                                    <input id="prj_name" name="prj_name" type="text" placeholder="" minlength="1"
+                                           maxlength="50" class="form-control required" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="ent_name" class="control-label">所属企业 <span
+                                            class='require'>*</span></label>
+                                    <input id="ent_name" name="ent_name" type="text" placeholder="" class="form-control" value="瑞金麟集团"
+                                           readonly="false"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="prj_type" class="control-label">项目类型 <span
+                                            class='require'>*</span></label>
+                                    <select class="form-control" id="prj_type" name="prj_type">
+                                        <option>代销</option>
+                                        <option>经销</option>
+                                        <option>代运营</option>
+                                        <option>独立项目</option>
+                                        <option>客服外包</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="expire_time" class="control-label">到期时间 <span
+                                            class='require'>*</span></label>
+                                    <div class="input-group datetimepicker-default date">
+                                        <input id="expire_time" name="expire_time" type="text" class="form-control"
+                                               placeholder="" data-format="YYYY-MM-DD HH:mm:ss" readonly required/>
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cons" class="control-label">联系人</label>
+                                    <input id="cons" name="cons" type="text" placeholder="" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tel" class="control-label">电话</label>
+                                    <input id="tel" name="tel" type="text" placeholder="" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="remark" class="control-label">备注</label>
+                            <textarea id="remark" name="remark" rows="3" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <!--end form-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
+                <button id="btnSave" type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--修改项目页面-->
+<input id="prj_id_m" name="prj_id_m" type="hidden"/>
+<div id="frmModifyProject" tabindex="-1" role="dialog" aria-labelledby="modal-header-primary-label"
+     data-backdrop="static" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">x</button>
+                <h4 id="modal-header-primary-label" class="modal-title">修改项目</h4>
+            </div>
+            <div class="modal-body">
+                <!--begin form-->
+                <form id="editForm" action="#">
+                    <div class="form-body pal">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="prj_name_m" class="control-label">项目名称 <span
+                                            class='require'>*</span></label>
+                                    <input id="prj_name_m" name="prj_name_m" type="text" placeholder="" minlength="1"
+                                           maxlength="50" class="form-control required" required/>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="ent_name_m" class="control-label">所属企业 <span
+                                            class='require'>*</span></label>
+                                    <input id="ent_name_m" name="ent_name_m" type="text" placeholder="" class="form-control"
+                                           readonly="false"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="prj_type_m" class="control-label">项目类型 <span
+                                            class='require'>*</span></label>
+                                    <select class="form-control" id="prj_type_m" name="prj_type_m">
+                                        <option>代销</option>
+                                        <option>经销</option>
+                                        <option>代运营</option>
+                                        <option>独立项目</option>
+                                        <option>客服外包</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="expire_time_m" class="control-label">到期时间 <span class='require'>*</span></label>
+                                    <div class="input-group datetimepicker-default date">
+                                        <input id="expire_time_m" name="expire_time_m" type="text" class="form-control"
+                                               placeholder="" data-format="YYYY-MM-DD HH:mm:ss" readonly required/>
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cons_m" class="control-label">联系人</label>
+                                    <input id="cons_m" name="cons_m" type="text" placeholder="" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tel_m" class="control-label">电话</label>
+                                    <input id="tel_m" name="tel_m" type="text" placeholder="" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="remark" class="control-label">备注</label>
+                            <textarea id="remark_m" name="remark_m" rows="3" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <!--end form-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
+                <button id="btnSave_m" type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- 导出文件 
+<div id="exportList" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" class="modal fade" aria-labelledby="modal-header-primary-label">
+</div>
+-->
+<!--隐藏元素-->
+<input id="prj_id_enable" type="hidden"/>
+<input id="prj_id_unenable" type="hidden"/>
+<input id="prj_id_delete" type="hidden"/>
+
+<!-- 加载 jquery js-->
+<script src="/Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+<script src="/Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/Apollo/madmin/js/jquery-ui.js"></script>
+
+<!-- 加载 bootstrap 和三方插件 js -->
+<script src="/Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+<script src="/Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+<script src="/Apollo/madmin/js/html5shiv.js"></script>
+<script src="/Apollo/madmin/js/respond.min.js"></script>
+<script src="/Apollo/madmin/vendors/metisMenu/jquery.metisMenu.js"></script>
+<script src="/Apollo/madmin/vendors/slimScroll/jquery.slimscroll.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script>
+<script src="/Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+<script src="/Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-highcharts/highcharts.js"></script>
+<script src="/Apollo/madmin/js/jquery.menu.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-pace/pace.min.js"></script>
+<script src="/Apollo/madmin/vendors/holder/holder.js"></script>
+<script src="/Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-news-ticker/jquery.newsTicker.min.js"></script>
+<script src="/Apollo/madmin/vendors/moment/moment.js"></script>
+<script src="/Apollo/madmin/js/main.js"></script>
+<script src="/Apollo/madmin/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="/Apollo/madmin/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+<script src="/Apollo/madmin/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="/Apollo/madmin/js/table-datatables.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-tablesorter/jquery.tablesorter.js"></script>
+<script src="/Apollo/madmin/js/table-advanced.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-validate/jquery.validate.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-validate/message_zh.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+<script src="/Apollo/madmin/vendors/sco.message/sco.message.js"></script>
+<script src="/Apollo/madmin/vendors/jquery-notific8/notific8.js"></script>
+
+<!-- 加载本页面对应的js -->
+<script src="/views/static/js/export.js"></script>
+<script src="/views/static/js/form.js"></script>
+<script src="ProjectPrivilege.js"></script>
+</body>
+</html>

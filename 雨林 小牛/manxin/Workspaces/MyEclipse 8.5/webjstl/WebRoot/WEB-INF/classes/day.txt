@@ -1,0 +1,11 @@
+el函数
+	1)什么事el函数
+	2)如何使用el函数：跟标签的使用步骤一致
+	3)自定义el函数
+		step1 写一个java类，在该类中，提供public static方法
+		step2 在.tld文件当中，描述函数(参考fn.tld)
+		step3 在jsp文件中，使用taglib导入函数
+3.javaee 5.0(servlet2.5规范)中，使用标签与el表达式
+		servlet2.5之后，默认情况下，会忽略el表达式
+		可以使用<%@page isELIgnored="false"%>,使之不忽略。
+		将jstl-1.2.jar文件放到WEB-INF/lib下

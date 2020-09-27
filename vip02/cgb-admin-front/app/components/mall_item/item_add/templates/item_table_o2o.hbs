@@ -1,0 +1,37 @@
+<table class="table table-striped center-text">
+    <thead>
+    <tr>
+        <th>{{entries.0.key}}</th>
+        <th>{{entries.0.values.0.value.key}}</th>
+        <th class="text-center js-market-th"><em>*</em>参考价（元）1</th>
+        <th class="text-center js-price-th"><em>*</em>售价（元）</th>
+        <th class="text-center js-point-th">固定积分</th>
+        <th class="text-center js-period-th" style="width: 150px"><em>*</em>期数</th>
+        <th class="text-center js-mail-th">一期邮购分期类别码</th>
+        <th class="text-center js-stock-th"><em>*</em>库存</th>
+        <th class="text-center js-warning-th">库存预警值</th>
+        <th class="text-center "><em>*</em>限购</th>
+        <th class="text-center js-picture-th"><em>*</em>商品图片</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    {{#each entries}}
+            <td class="main-column" rowspan="{{values.length}}" data-id="{{id}}" data-name="{{value}}">{{value}}</td>
+        {{#each values}}
+                <td class="column" data-id="{{value.id}}" data-name="{{value.value}}">{{value.value}}</td>
+                <td><input class="input-small is-filled" type="text" name="stock" data-real-id="{{realId}}" min="0"  required/></td>
+                <td><input class="input-small input-price is-filled" type="text" name="price" data-real-id="{{realId}}" min="0" required/></td>
+                <td><input class="input-small input-price is-filled" type="text" name="price" data-real-id="{{realId}}" min="0" required/></td>
+                <td><input class="input-small input-price is-filled" type="text" name="price" data-real-id="{{realId}}" min="0" required/></td>
+                <td></td>
+                <td><input class="input-small input-price is-filled" type="text" name="price" data-real-id="{{realId}}" min="0" required/></td>
+                <td><input class="input-small input-price is-filled" type="text" name="price" data-real-id="{{realId}}" min="0" required/></td>
+                <td><input class="input-small input-price is-filled" type="text" name="price"data-real-id="{{realId}}" min="0" required/></td>
+                <td><img src="" height="30px" width="30px"></td>
+            </tr>
+        {{/each}}
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

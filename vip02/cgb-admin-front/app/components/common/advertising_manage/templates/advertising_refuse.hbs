@@ -1,0 +1,31 @@
+<div class="modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>拒绝理由</h2>
+    </div>
+    <form class="form form-aligned advertising-refuse-form">
+        <div class="modal-body">
+            <div class="advertising-refuse">
+                <!--隐藏传递id编辑的时候传值用-->
+                <input id="refuseId" name="refuseId" type="hidden" value="{{data.id}}"/>
+                <div class="control-group">
+                    <label for="refuseDetail" class="refuse-detail"><span class="required">*</span>拒绝理由:</label>
+                    <textarea id="refuseDetail" name="refuseDetail" class="form-control"
+                              maxlength="200" required></textarea>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group">
+                    <label for="auditLog" class="audit-log">审核履历:</label>
+                    <textarea id="auditLog" name="auditLog" class="form-control"
+                              maxlength="200" readonly>{{data.auditLog}}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" id="submit" class="btn btn-success btn-small" value="确认">
+            <button class="btn btn-close btn-small close">取消</button>
+        </div>
+    </form>
+</div>

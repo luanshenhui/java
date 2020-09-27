@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/logo_name_iv_padding">
+
+    <ImageView
+        android:layout_width="@dimen/logo_name_iv_w"
+        android:layout_height="@dimen/logo_name_iv_w"
+        android:layout_gravity="end"
+        android:src="@mipmap/logo" />
+
+    <ImageView
+        android:layout_width="@dimen/logo_name_logo_w_iv"
+        android:layout_height="@dimen/logo_name_logo_h_iv"
+        android:layout_gravity="center"
+        android:src="@mipmap/lo" />
+</LinearLayout>

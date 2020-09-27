@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <beans>
+
+        <!--消息文言类-->
+        <bean name="sysMessage" class="com.hepowdhc.dcapp.bean.MsgBean">
+            <constructor-arg>
+                <map>
+                    <entry key="DEMO_MSG">
+                        <value>实例消息:{0},{1}</value>
+                    </entry>
+                    <entry key="NODE_SKIP">
+                        <value>跳过本节点，跳过原因：工作流节点未启用。</value>
+                    </entry>
+                    <entry key="NODE_NO_ALARM_RISK">
+                        <value>执行通过，没有预警和风险。</value>
+                    </entry>
+                    <entry key="NODE_PARAM_NO_ALARM_RISK">
+                        <value>{0}执行通过，没有预警和风险。</value>
+                    </entry>
+                    <entry key="NODE_TIME_YELLOW">
+                        <value>产生黄色预警，预警原因：时间约束-节点处理时间过长。</value>
+                    </entry>
+                    <entry key="NODE_TIME_ORANGE">
+                        <value>产生橙色预警，预警原因：时间约束-节点处理时间过长。</value>
+                    </entry>
+                    <entry key="NODE_TIME_RED">
+                        <value>产生红色预警，预警原因：时间约束-节点处理时间过长。</value>
+                    </entry>
+                    <entry key="NODE_TIME_RISK">
+                        <value>产生风险，风险原因：时间约束-节点处理时间超期。</value>
+                    </entry>
+                    <entry key="NODE_TIME_SUM_YELLOW">
+                        <value>产生黄色预警，预警原因：时间约束-流程发起～节点处理完成时间过长。</value>
+                    </entry>
+                    <entry key="NODE_TIME_SUM_ORANGE">
+                        <value>产生橙色预警，预警原因：时间约束-流程发起～节点处理完成时间过长。</value>
+                    </entry>
+                    <entry key="NODE_TIME_SUM_RED">
+                        <value>产生红色预警，预警原因：时间约束-流程发起～节点处理完成时间过长。</value>
+                    </entry>
+                    <entry key="NODE_TIME_SUM_RISK">
+                        <value>产生风险，风险原因：时间约束-流程发起～节点处理完成时间超期。</value>
+                    </entry>
+                    <entry key="NODE_ROLE_ALARM">
+                        <value>产生{0}预警，预警原因：岗位约束-审批人岗位和约束岗位不一致。</value>
+                    </entry>
+                    <entry key="NODE_ROLE_RISK">
+                        <value>产生风险，风险原因：岗位约束-审批人岗位和约束岗位不一致。</value>
+                    </entry>
+                    <entry key="NODE_SQL_ALARM">
+                        <value>产生{0}预警，预警原因：{1}-未通过约束条件验证。</value>
+                    </entry>
+                    <entry key="NODE_SQL_RISK">
+                        <value>产生风险，风险原因：{0}-未通过约束条件验证。</value>
+                    </entry>
+                    <entry key="NODE_RULE_ACTION">
+                        <value>行为约束</value>
+                    </entry>
+                    <entry key="NODE_RULE_BOTH">
+                        <value>互证约束</value>
+                    </entry>
+                    <entry key="NODE_RULE_ROLE">
+                        <value>职能约束</value>
+                    </entry>
+                    <entry key="NODE_RULE_TIME_1">
+                        <value>时间约束-节点处理时间</value>
+                    </entry>
+                    <entry key="NODE_RULE_TIME_2">
+                        <value>时间约束-流程发起～节点处理完成时间</value>
+                    </entry>
+                    <entry key="ALARM_YELLOW">
+                        <value>黄色</value>
+                    </entry>
+                    <entry key="ALARM_ORANGE">
+                        <value>橙色</value>
+                    </entry>
+                    <entry key="ALARM_RED">
+                        <value>红色</value>
+                    </entry>
+                    <entry key="RESULT_EXCEPTION">
+                        <value>解析json数据结果异常</value>
+                    </entry>
+                    <entry key="RULE_NOT_ENABLED">
+                        <value>约束未启用</value>
+                    </entry>
+                </map>
+            </constructor-arg>
+        </bean>
+
+
+        <!-- 查询所有工作流数据 m*n*4 -->
+        <bean name="dca_workflow" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="select">
+                        <value>
+                            <![CDATA[
+                                SELECT w.WF_ID AS dcaWfId,
+                                    w.WF_NAME AS dcaWfName,
+                                    w.POWER_ID AS dcaPowerId,
+                                    w.XML_NAME AS dcaXmlName,
+                                    w.XML_CONTENT AS dcaXmlContent,
+                                    w.IDX_DATA_TYPE AS idxDataType,
+                                    w.CREATE_PERSON AS dcaCreatePerson,
+                                    w.UPDATE_PERSON AS dcaUpdatePerson,
+                                    t.UUID AS dcaTaskId,
+                                    t.TASK_NAME AS dcaTaskName,
+                                    t.BIZ_TASK_ID AS dcaBizTaskId,
+                                    t.BIZ_ROLE_ID AS dcaBizRoleId,
+                                    t.IS_SHOW AS dcaIsShow,
+                                    c.UUID AS dcaContentId,
+                                    c.POST_ID AS dcaPostId,
+                                    c.COMPUTE_RULE AS dcaComputeRule,
+                                    c.ALARM_TYPE AS dcaAlarmType,
+                                    c.ALARM_LEVEL AS dcaAlarmLevel,
+                                    c.ALARM_LEVEL_NEED AS dcaAlarmLevelNeed,
+                                    c.ALARM_LEVEL_SUM AS dcaAlarmLevelSum,
+                                    c.TIME_NEED AS dcaTimeNeed,
+                                    c.TIME_NEED_UNIT AS dcaTimeNeedUnit,
+                                    c.TIME_SUM AS dcaTimeSum,
+                                    c.TIME_SUM_UNIT AS dcaTimeSumUnit,
+                                    c.IS_RISK AS dcaIsRisk,
+                                    c.RISK_ID AS dcaRiskId,
+                                    l.RISK_LEVEL AS dcaRiskLevel,
+                                    c.IS_MANUAL_JUDGE AS dcaIsManualJudge,
+                                    c.IS_EFFECTIVE AS dcaIsEffective
+                                FROM DCA_WORKFLOW w
+                                LEFT JOIN DCA_WORKFLOW_TASK t
+                                    ON (t.WF_ID = w.WF_ID AND t.DEL_FLAG = 0)
+                                LEFT JOIN DCA_WORKFLOW_TASK_CONTENT c
+                                    ON (c.TASK_ID = t.UUID  AND c.DEL_FLAG = 0)
+                                LEFT JOIN DCA_ALARM_RISK_LIST l
+                                    ON c.RISK_ID = l.RISK_ID
+                                WHERE w.DEL_FLAG = 0
+                                AND w.IS_SHOW = 1
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+            <property name="fields">
+                <map>
+                    <!-- dca： 工作流id -->
+                    <entry key="dcaWfId::nvarchar" value="dcaWfId"></entry>
+                    <!-- dca： 工作流名称 -->
+                    <entry key="dcaWfName::nvarchar" value="dcaWfName"></entry>
+                    <!-- dca： 工作流 权利id -->
+                    <entry key="dcaPowerId::nvarchar" value="dcaPowerId"></entry>
+                    <!-- dca： 工作流 xml名称 -->
+                    <entry key="dcaXmlName::nvarchar" value="dcaXmlName"></entry>
+                    <!-- dca： 工作流 xml内容 -->
+                    <entry key="dcaXmlContent::nvarchar" value="dcaXmlContent"></entry>
+                    <!-- dca： 工作流 指标类型 -->
+                    <entry key="idxDataType::nvarchar" value="idxDataType"></entry>
+                    <!-- dca： 节点 创建人 -->
+                    <entry key="dcaCreatePerson::nvarchar" value="dcaCreatePerson"></entry>
+                    <!-- dca： 节点 更新人 -->
+                    <entry key="dcaUpdatePerson::nvarchar" value="dcaUpdatePerson"></entry>
+                    <!-- dca： 节点id -->
+                    <entry key="dcaTaskId::nvarchar" value="dcaTaskId"></entry>
+                    <!-- dca： 节点名称 -->
+                    <entry key="dcaTaskName::nvarchar" value="dcaTaskName"></entry>
+                    <!-- dca： 业务节点id（节点设置时，手动填写） -->
+                    <entry key="dcaBizTaskId::nvarchar" value="dcaBizTaskId"></entry>
+                    <!-- dca： 节点 业务角色ID;多选,逗号隔开 -->
+                    <entry key="dcaBizRoleId::nvarchar" value="dcaBizRoleId"></entry>
+                    <!-- dca： 节点 是否启用.0:停止；1：启用 -->
+                    <entry key="dcaIsShow::nvarchar" value="dcaIsShow"></entry>
+                    <!-- dca： 节点内容 内容id （约束） -->
+                    <entry key="dcaContentId::nvarchar" value="dcaContentId"></entry>
+                    <!-- dca： 节点内容 岗位id （职能约束 用） -->
+                    <entry key="dcaPostId::nvarchar" value="dcaPostId"></entry>
+                    <!-- dca： 节点内容 计算公式，计算SQL（行为约束/互证约束 用） -->
+                    <entry key="dcaComputeRule::nvarchar" value="dcaComputeRule"></entry>
+                    <!-- dca： 节点内容 预警/风险维度（1 2 3 4分别代表四种约束） -->
+                    <entry key="dcaAlarmType::nvarchar" value="dcaAlarmType"></entry>
+                    <!-- dca： 节点内容 预警级别 -->
+                    <entry key="dcaAlarmLevel::nvarchar" value="dcaAlarmLevel"></entry>
+                    <!-- dca： 节点内容 本节点需要时间 预警级别设置 -->
+                    <entry key="dcaAlarmLevelNeed::nvarchar" value="dcaAlarmLevelNeed"></entry>
+                    <!-- dca： 节点内容 至本节点完成所需时间 预警级别设置 -->
+                    <entry key="dcaAlarmLevelSum::nvarchar" value="dcaAlarmLevelSum"></entry>
+                    <!-- dca： 节点内容 本节点需要时间（时间约束）;触发条件（行为约束/互证约束 用） -->
+                    <entry key="dcaTimeNeed::nvarchar" value="dcaTimeNeed"></entry>
+                    <!-- dca： 节点内容 时间单位 -->
+                    <entry key="dcaTimeNeedUnit::nvarchar" value="dcaTimeNeedUnit"></entry>
+                    <!-- dca： 节点内容 至本节点完成所需时间;触发条件 -->
+                    <entry key="dcaTimeSum::nvarchar" value="dcaTimeSum"></entry>
+                    <!-- dca： 节点内容 至本节点完成所需时间的时间单位 -->
+                    <entry key="dcaTimeSumUnit::nvarchar" value="dcaTimeSumUnit"></entry>
+                    <!-- dca： 节点内容 是否为风险 -->
+                    <entry key="dcaIsRisk::nvarchar" value="dcaIsRisk"></entry>
+                    <!-- dca： 节点内容 风险清单ID -->
+                    <entry key="dcaRiskId::nvarchar" value="dcaRiskId"></entry>
+                    <!-- dca： 节点内容 风险级别 -->
+                    <entry key="dcaRiskLevel::nvarchar" value="dcaRiskLevel"></entry>
+                    <!-- dca： 节点内容 是否可以人工界定风险 -->
+                    <entry key="dcaIsManualJudge::nvarchar" value="dcaIsManualJudge"></entry>
+                    <!-- dca： 节点内容 是否有效.0:停止；1：启用 -->
+                    <entry key="dcaIsEffective::nvarchar" value="dcaIsEffective"></entry>
+                </map>
+
+            </property>
+
+        </bean>
+
+        <!-- 根据工作流id查询所有业务数据 1*n(1个实例 × n个步骤)  -->
+        <bean name="extract_oa_data_by_wf_id" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="select">
+                        <value>
+                            <![CDATA[
+                                SELECT
+                                    i.TRACE_INSTANCE_INDEX_ID AS oaInstanceId,
+                                    i.TRACE_TITLE AS oaInstanceName,
+                                    i.TRACE_START_TIME AS oaFlowStartTime,
+                                    i.TRACE_TEMPLATE_DICT_ID AS oaTraceTemplateDictId,
+                                    i.WF_ID AS oaWfId,
+                                    p.TRACE_INSTANCE_PATH_ID AS oaPathId,
+                                    p.PATH_TITLE AS oaDataName,
+                                    p.STEP_ID AS oaStepId,
+                                    p.AWOKE_SET_DATA AS oaAlarmMsg,
+                                    d.TRACE_INSTANCE_DETAIL_ID AS oaDataId,
+                                    d.TRACE_USER_ID AS oaBizOperPersonId,
+                                    d.START_TIME AS oaNodeStartTime,
+                                    d.END_TIME AS oaNodeEndTime,
+                                    u.NAME AS oaBizOperPersonName,
+                                    u.OFFICE_ID AS oaBizOperPost
+                                FROM DCA_PHY_INSTANCE_DETAIL d
+                                LEFT JOIN DCA_PHY_INSTANCE_INDEX i
+                                    ON (d.TRACE_INSTANCE_INDEX_ID = i.TRACE_INSTANCE_INDEX_ID
+                                        AND i.MARK_DONE=0)
+                                LEFT JOIN DCA_PHY_INSTANCE_PATH p
+                                    ON d.TRACE_INSTANCE_PATH_ID = p.TRACE_INSTANCE_PATH_ID
+                                LEFT JOIN SYS_USER u ON u.ID = d.TRACE_USER_ID
+                                WHERE i.WF_ID = :wfId
+                                AND d.MARK_DONE=0
+                            ]]>
+                        </value>
+
+                    </entry>
+                </map>
+            </property>
+            <property name="fields">
+                <map>
+                    <!-- oa： 业务实例id  TRACE_INSTANCE_INDEX_ID index表-->
+                    <entry key="oaInstanceId::nvarchar" value="oaInstanceId"></entry>
+                    <!-- oa： 业务实例名称  TRACE_TITLE index表-->
+                    <entry key="oaInstanceName::nvarchar" value="oaInstanceName"></entry>
+                    <!-- oa： 业务实例 开始时间 TRACE_START_TIME   index表 -->
+                    <entry key="oaFlowStartTime::date" value="oaFlowStartTime"></entry>
+                    <!-- oa： 业务实例 oa模板id   index表 -->
+                    <entry key="oaTraceTemplateDictId::nvarchar" value="oaTraceTemplateDictId"></entry>
+                    <!-- oa： 业务实例 关联dca工作流id   index表 -->
+                    <entry key="oaWfId::nvarchar" value="oaWfId"></entry>
+                    <!-- oa： 业务实例步骤id  TRACE_INSTANCE_PATH_ID -->
+                    <entry key="oaPathId::nvarchar" value="oaPathId"></entry>
+                    <!-- oa： 业务实例步骤名称  PATH_TITLE -->
+                    <entry key="oaDataName::nvarchar" value="oaDataName"></entry>
+                    <!-- oa： 业务实例步骤stepId  （值为 2 3 4 5...） -->
+                    <entry key="oaStepId::int" value="oaStepId"></entry>
+                    <!-- oa： 业务实例步骤 预警信息 AWOKE_SET_DATA   path表 -->
+                    <entry key="oaAlarmMsg::nvarchar" value="oaAlarmMsg"></entry>
+                    <!-- oa： 业务实例步骤数据id  TRACE_INSTANCE_DETAIL_ID -->
+                    <entry key="oaDataId::nvarchar" value="oaDataId"></entry>
+                    <!-- oa： 业务实例步骤数据 操作人 TRACE_USER_ID   detail表 -->
+                    <entry key="oaBizOperPersonId::nvarchar" value="oaBizOperPersonId"></entry>
+                    <!-- oa： 业务实例步骤数据 操作人 NAME   user表 -->
+                    <entry key="oaBizOperPersonName::nvarchar" value="oaBizOperPersonName"></entry>
+                    <!-- oa： 业务实例步骤数据 操作人所属部门   user表 -->
+                    <entry key="oaBizOperPost::nvarchar" value="oaBizOperPost"></entry>
+                    <!-- oa： 业务实例步骤数据 开始时间 START_TIME   detail表 -->
+                    <entry key="oaNodeStartTime::date" value="oaNodeStartTime"></entry>
+                    <!-- oa： 业务实例步骤数据 结束时间 END_TIME   detail表 -->
+                    <entry key="oaNodeEndTime::date" value="oaNodeEndTime"></entry>
+                </map>
+
+            </property>
+        </bean>
+
+        <!-- 根据BIZ_INSTANCE_ID查询实例是否存在  -->
+        <bean name="dca_biz_instance_by_id" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="select">
+                        <value>
+                            <![CDATA[
+                                SELECT i.BIZ_INSTANCE_ID AS oaInstanceId,
+                                       i.BIZ_INSTANCE_NAME AS oaInstanceName,
+                                       i.WF_ID AS oaWfId,
+                                       i.INSTANCE_START_TIME AS oaFlowStartTime,
+                                       i.CREATE_PERSON AS createPerson,
+                                       i.CREATE_DATE AS createDate,
+                                       i.UPDATE_PERSON AS updatePerson,
+                                       i.UPDATE_DATE AS updateDate,
+                                       n.BIZ_DATA_ID AS oaDataId,
+                                       n.BIZ_DATA_NAME AS oaDataName,
+                                       n.STEP_ID AS oaStepId,
+                                       n.BIZ_OPT_PERSON AS oaBizOperPersonId,
+                                       n.BIZ_OPT_PERSON_DEPART AS oaBizOperPost,
+                                       n.START_TIME AS oaNodeStartTime,
+                                       n.END_TIME AS oaNodeEndTime,
+                                       n.MARK_DONE AS markDone
+                                FROM DCA_BIZ_INSTANCE i
+                                LEFT JOIN DCA_BIZ_NODE_LOG n ON n.BIZ_INSTANCE_ID = i.BIZ_INSTANCE_ID
+                                WHERE i.BIZ_INSTANCE_ID = :bizInstanceId
+                                AND i.DEL_FLAG = 0
+                                AND i.MARK_DONE = 0
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+            <property name="fields">
+                <map>
+                    <entry key="oaInstanceId::nvarchar" value="oaInstanceId"></entry>
+                    <entry key="oaInstanceName::nvarchar" value="oaInstanceName"></entry>
+                    <entry key="oaWfId::nvarchar" value="oaWfId"></entry>
+                    <entry key="oaFlowStartTime::date" value="oaFlowStartTime"></entry>
+                    <entry key="createPerson::nvarchar" value="createPerson"></entry>
+                    <entry key="createDate::nvarchar" value="createDate"></entry>
+                    <entry key="updatePerson::nvarchar" value="updatePerson"></entry>
+                    <entry key="updateDate::nvarchar" value="updateDate"></entry>
+                    <entry key="oaDataId::nvarchar" value="oaDataId"></entry>
+                    <entry key="oaDataName::nvarchar" value="oaDataName"></entry>
+                    <entry key="oaStepId::nvarchar" value="oaStepId"></entry>
+                    <entry key="oaBizOperPersonId::nvarchar" value="oaBizOperPersonId"></entry>
+                    <entry key="oaBizOperPost::nvarchar" value="oaBizOperPost"></entry>
+                    <entry key="oaNodeStartTime::date" value="oaNodeStartTime"></entry>
+                    <entry key="oaNodeEndTime::date" value="oaNodeEndTime"></entry>
+                    <entry key="markDone::nvarchar" value="markDone"></entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 插入实例 instance  -->
+        <bean name="dca_biz_instance_insert" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="insertBizInstance">
+                        <value>
+                            <![CDATA[
+                                INSERT INTO DCA_BIZ_INSTANCE
+                                    (UUID, BIZ_INSTANCE_ID, BIZ_INSTANCE_NAME, WF_ID, DEL_FLAG,
+                                     CREATE_PERSON, CREATE_DATE, UPDATE_PERSON, UPDATE_DATE,
+                                     MARK_DONE, POWER_ID, INSTANCE_START_TIME)
+                                values
+                                    (:uuid, :bizInstanceId, :bizInstanceName, :wfId, 0,
+                                     'workflow-engine', sysdate, 'workflow-engine', sysdate,
+                                     '0', :powerId, :instanceStartTime)
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 插入实例节点log  -->
+        <bean name="dca_biz_node_log_insert" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="insertBizNodeLog">
+                        <value>
+                            <![CDATA[
+                                INSERT INTO DCA_BIZ_NODE_LOG
+                                    (UUID, BIZ_INSTANCE_ID, BIZ_DATA_ID, BIZ_DATA_NAME, STEP_ID, BIZ_OPT_PERSON, BIZ_OPT_PERSON_DEPART,
+	                                 START_TIME, END_TIME, DEL_FLAG, CREATE_PERSON, CREATE_DATE, UPDATE_PERSON,
+	                                 UPDATE_DATE, MARK_DONE, RESULT_TYPE, RESULT_MSG)
+                                values
+                                    (:uuid, :bizInstanceId, :bizDataId, :bizDataName, :stepId, :bizOptPerson, :bizOptPersonDepart,
+                                     :startTime, :endTime, 0, 'workflow-engine', sysdate, 'workflow-engine',
+                                     sysdate, :markDone, :resultType, :resultMsg)
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 更新实例处理状态 MARK_DONE  -->
+        <bean name="dca_biz_instance_update" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="updateInstanceById">
+                        <value>
+                            <![CDATA[
+                                UPDATE DCA_BIZ_INSTANCE
+                                SET MARK_DONE = 1
+                                WHERE BIZ_INSTANCE_ID = :bizInstanceId
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 插入预警数据   -->
+        <bean name="dca_alarm_detail" class="com.hepowdhc.dcapp.bean.MapperBean">
+
+            <property name="sqls">
+                <map>
+                    <entry key="insertAlarmList">
+                        <value>
+                            <![CDATA[
+                                INSERT INTO DCA_ALARM_DETAIL
+                                    (ALARM_DETAIL_ID, BIZ_ROLE_ID, POWER_ID, RISK_ID, BIZ_FLOW_ID, BIZ_FLOW_NAME,
+                                    BIZ_OPER_PERSON, BIZ_OPER_POST, BIZ_DATA_ID, BIZ_DATA_NAME, WF_ID, TASK_ID,
+                                    TASK_NAME, ALARM_LEVEL, ALARM_TYPE, CPU_RESULT, ALARM_MSG, ALARM_TIME_1ST,
+                                    ALARM_STATUS,VISUAL_SCOPE, DEL_FLAG, CREATE_PERSON,
+                                    CREATE_DATE, UPDATE_PERSON, UPDATE_DATE, BIZ_OPER_PERSON_ID)
+                                values
+                                    (:alarmDetailId, :bizRoleId, :powerId, :riskId, :bizFlowId, :bizFlowName, :bizOperPerson,
+                                    :bizOperPost, :bizDataId, :bizDataName, :wfId, :taskId,
+                                    :taskName, :alarmLevel, :alarmType, :cpuResult, :alarmMsg, sysdate,
+                                    :alarmStatus,:visualScope, 0, 'workflow-engine',
+                                     sysdate, 'workflow-engine', sysdate, :bizOperPersonId)
+                            ]]>
+                        </value>
+
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 插入风险数据  -->
+        <bean name="dca_risk_manage" class="com.hepowdhc.dcapp.bean.MapperBean">
+
+            <property name="sqls">
+                <map>
+                    <entry key="insertRiskList">
+                        <value>
+                            <![CDATA[
+                                INSERT INTO DCA_RISK_MANAGE
+                                    (RISK_MANAGE_ID, BIZ_ROLE_ID, POWER_ID, RISK_ID, BIZ_FLOW_ID, BIZ_FLOW_NAME,
+                                    BIZ_OPER_PERSON, BIZ_OPER_POST, BIZ_DATA_ID, BIZ_DATA_NAME, INSTANCE_ID,
+                                    TASK_ID, TASK_NAME, ALARM_TYPE, ALARM_LEVEL, RISK_LEVEL, CPU_RESULT, RISK_MSG, RISK_TRANS_FLAG, DEFINE_BY_MANUAL,
+                                    DEFINE_STATUS, DEL_FLAG, CREATE_PERSON, CREATE_DATE, UPDATE_PERSON, UPDATE_DATE,
+                                    BIZ_OPER_PERSON_ID)
+                                values
+                                    (:riskManageId, :bizRoleId, :powerId, :riskId, :bizFlowId, :bizFlowName,
+                                    :bizOperPerson, :bizOperPost, :bizDataId, :bizDataName, :instanceId, :taskId,
+                                    :taskName, :alarmType, :alarmLevel, :riskLevel, :cpuResult, :riskMsg, :riskTransFlag, :isDefineByManual,
+                                    :defineStatus, 0, 'workflow-engine', sysdate, 'workflow-engine', sysdate,
+                                    :bizOperPersonId)
+                            ]]>
+                        </value>
+
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 查询流程图数据 和 业务实例数据 　    add by geshuo 20161219 -->
+        <bean name="extract_data" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="select">
+                        <value>
+                            <![CDATA[
+                                SELECT
+                                    dd.*,
+                                    l.RISK_LEVEL AS dcaRiskLevel
+                                FROM
+                                    (
+                                        SELECT
+                                            f.WF_ID AS dcaWfId,
+                                            f.WF_NAME AS dcaWfName,
+                                            f.XML_NAME AS dcaXmlName,
+                                            f.XML_CONTENT AS dcaXmlContent,
+                                            ta.UUID AS dcaTaskId,
+                                            ta.TASK_NAME AS dcaTaskName,
+                                            ta.BIZ_TASK_ID AS dcaBizTaskId,
+                                            ta.POWER_ID AS dcaPowerId,
+                                            ta.BIZ_ROLE_ID AS dcaBizRoleId,
+                                            ta.IS_SHOW AS dcaIsShow,
+                                            ta.CREATE_PERSON AS dcaCreatePerson,
+                                            ta.UPDATE_PERSON AS dcaUpdatePerson,
+                                            c.UUID AS dcaContentId,
+                                            c.POST_ID AS dcaPostId,
+                                            c.COMPUTE_RULE AS dcaComputeRule,
+                                            c.ALARM_TYPE AS dcaAlarmType,
+                                            c.ALARM_LEVEL AS dcaAlarmLevel,
+                                            c.ALARM_LEVEL_NEED AS dcaAlarmLevelNeed,
+                                            c.ALARM_LEVEL_SUM AS dcaAlarmLevelSum,
+                                            c.TIME_NEED AS dcaTimeNeed,
+                                            c.TIME_NEED_UNIT AS dcaTimeNeedUnit,
+                                            c.TIME_SUM AS dcaTimeSum,
+                                            c.TIME_SUM_UNIT AS dcaTimeSumUnit,
+                                            c.IS_RISK AS dcaIsRisk,
+                                            c.RISK_ID AS dcaRiskId,
+                                            c.IS_MANUAL_JUDGE AS dcaIsManualJudge,
+                                            c.IS_EFFECTIVE AS dcaIsEffective,
+                                            oa.TRACE_INSTANCE_INDEX_ID AS oaInstanceId,
+                                            oa.TRACE_TITLE AS oaInstanceName,
+                                            oa.TRACE_INSTANCE_DETAIL_ID AS oaDataId,
+                                            oa.TRACE_INSTANCE_PATH_ID AS oaPathId,
+                                            oa.PATH_TITLE AS oaDataName,
+                                            oa.STEP_ID as oaStepId,
+                                            oa.TRACE_USER_ID AS oaBizOperPersonId,
+                                            oa.NAME AS oaBizOperPersonName,
+                                            oa.OFFICE_ID AS oaBizOperPost,
+                                            oa.TRACE_START_TIME AS oaFlowStartTime,
+                                            oa.START_TIME AS oaNodeStartTime,
+                                            oa.END_TIME AS oaNodeEndTime,
+                                            oa.AWOKE_SET_DATA AS oaAlarmMsg
+                                        FROM
+                                            DCA_WORKFLOW f,
+                                            DCA_WORKFLOW_TASK ta,
+                                            DCA_WORKFLOW_TASK_CONTENT c,
+                                            (
+                                                SELECT
+                                                    d.TRACE_INSTANCE_DETAIL_ID,
+                                                    d.TRACE_INSTANCE_INDEX_ID,
+                                                    d.TRACE_INSTANCE_PATH_ID,
+                                                    d.TRACE_USER_ID,
+                                                    d.START_TIME,
+                                                    d.END_TIME,
+                                                    p.PATH_TITLE,
+                                                    p.STEP_ID,
+                                                    p.AWOKE_SET_DATA,
+                                                    i.TRACE_TITLE,
+                                                    i.TRACE_START_TIME,
+                                                    i.TRACE_TEMPLATE_DICT_ID,
+                                                    i.WF_ID，
+                                                    u.NAME,
+                                                    u.OFFICE_ID
+                                                FROM DCA_PHY_INSTANCE_DETAIL d
+                                                LEFT JOIN DCA_PHY_INSTANCE_INDEX i ON d.TRACE_INSTANCE_INDEX_ID = i.TRACE_INSTANCE_INDEX_ID
+                                                LEFT JOIN DCA_PHY_INSTANCE_PATH p ON d.TRACE_INSTANCE_PATH_ID = p.TRACE_INSTANCE_PATH_ID
+                                                LEFT JOIN SYS_USER u ON u.ID = d.TRACE_USER_ID
+                                            ) oa
+                                        WHERE oa.WF_ID = f.WF_ID
+                                        AND TA.WF_ID = F.WF_ID
+                                        AND ta.BIZ_TASK_ID IS NOT NULL
+                                        AND TO_CHAR(oa.STEP_ID) = ta.BIZ_TASK_ID
+                                        AND ta.UUID = c.TASK_ID
+                                    ) dd
+                                LEFT JOIN DCA_ALARM_RISK_LIST l ON dd.dcaRiskId = l.RISK_ID
+                            ]]>
+                        </value>
+
+                    </entry>
+                </map>
+            </property>
+            <property name="fields">
+                <map>
+                    <!-- dca： 节点id -->
+                    <entry key="dcaTaskId::nvarchar" value="dcaTaskId"></entry>
+                    <!-- dca： 节点名称 -->
+                    <entry key="dcaTaskName::nvarchar" value="dcaTaskName"></entry>
+                    <!-- dca： 工作流id -->
+                    <entry key="dcaWfId::nvarchar" value="dcaWfId"></entry>
+                    <!-- dca： 工作流名称 -->
+                    <entry key="dcaWfName::nvarchar" value="dcaWfName"></entry>
+                    <!-- dca： 工作流 xml名称 -->
+                    <entry key="dcaXmlName::nvarchar" value="dcaXmlName"></entry>
+                    <!-- dca： 工作流 xml内容 -->
+                    <entry key="dcaXmlContent::nvarchar" value="dcaXmlContent"></entry>
+                    <!-- dca： 业务节点id（节点设置时，手动填写） -->
+                    <entry key="dcaBizTaskId::nvarchar" value="dcaBizTaskId"></entry>
+                    <!-- dca： 工作流 权利id -->
+                    <entry key="dcaPowerId::nvarchar" value="dcaPowerId"></entry>
+                    <!-- dca： 节点 业务角色ID;多选,逗号隔开 -->
+                    <entry key="dcaBizRoleId::nvarchar" value="dcaBizRoleId"></entry>
+                    <!-- dca： 节点 是否启用.0:停止；1：启用 -->
+                    <entry key="dcaIsShow::nvarchar" value="dcaIsShow"></entry>
+                    <!-- dca： 节点 创建人 -->
+                    <entry key="dcaCreatePerson::nvarchar" value="dcaCreatePerson"></entry>
+                    <!-- dca： 节点 更新人 -->
+                    <entry key="dcaUpdatePerson::nvarchar" value="dcaUpdatePerson"></entry>
+                    <!-- dca： 节点内容 内容id （约束） -->
+                    <entry key="dcaContentId::nvarchar" value="dcaContentId"></entry>
+                    <!-- dca： 节点内容 岗位id （职能约束 用） -->
+                    <entry key="dcaPostId::nvarchar" value="dcaPostId"></entry>
+                    <!-- dca： 节点内容 计算公式，计算SQL（行为约束/互证约束 用） -->
+                    <!-- dca： 节点内容 预警/风险维度（1 2 3 4分别代表四种约束） -->
+                    <entry key="dcaAlarmType::nvarchar" value="dcaAlarmType"></entry>
+                    <!-- dca： 节点内容 预警级别 -->
+                    <entry key="dcaAlarmLevel::nvarchar" value="dcaAlarmLevel"></entry>
+                    <!-- dca： 节点内容 本节点需要时间 预警级别设置 -->
+                    <entry key="dcaAlarmLevelNeed::nvarchar" value="dcaAlarmLevelNeed"></entry>
+                    <!-- dca： 节点内容 至本节点完成所需时间 预警级别设置 -->
+                    <entry key="dcaAlarmLevelSum::nvarchar" value="dcaAlarmLevelSum"></entry>
+                    <!-- dca： 节点内容 本节点需要时间（时间约束）;触发条件（行为约束/互证约束 用） -->
+                    <entry key="dcaTimeNeed::nvarchar" value="dcaTimeNeed"></entry>
+                    <!-- dca： 节点内容 时间单位 -->
+                    <entry key="dcaTimeNeedUnit::nvarchar" value="dcaTimeNeedUnit"></entry>
+                    <!-- dca： 节点内容 至本节点完成所需时间;触发条件 -->
+                    <entry key="dcaTimeSum::nvarchar" value="dcaTimeSum"></entry>
+                    <!-- dca： 节点内容 至本节点完成所需时间的时间单位 -->
+                    <entry key="dcaTimeSumUnit::nvarchar" value="dcaTimeSumUnit"></entry>
+                    <!-- dca： 节点内容 是否为风险 -->
+                    <entry key="dcaIsRisk::nvarchar" value="dcaIsRisk"></entry>
+                    <!-- dca： 节点内容 风险清单ID -->
+                    <entry key="dcaRiskId::nvarchar" value="dcaRiskId"></entry>
+                    <!-- dca： 节点内容 风险级别 -->
+                    <entry key="dcaRiskLevel::nvarchar" value="dcaRiskLevel"></entry>
+                    <!-- dca： 节点内容 是否可以人工界定风险 -->
+                    <entry key="dcaIsManualJudge::nvarchar" value="dcaIsManualJudge"></entry>
+                    <!-- dca： 节点内容 是否有效.0:停止；1：启用 -->
+                    <entry key="dcaIsEffective::nvarchar" value="dcaIsEffective"></entry>
+                    <!-- oa： 业务实例步骤数据id  TRACE_INSTANCE_DETAIL_ID -->
+                    <entry key="oaDataId::nvarchar" value="oaDataId"></entry>
+                    <!-- oa： 业务实例id  TRACE_INSTANCE_INDEX_ID -->
+                    <entry key="oaInstanceId::nvarchar" value="oaInstanceId"></entry>
+                    <!-- oa： 业务实例名称  TRACE_TITLE -->
+                    <entry key="oaInstanceName::nvarchar" value="oaInstanceName"></entry>
+                    <!-- oa： 业务实例步骤id  TRACE_INSTANCE_PATH_ID -->
+                    <entry key="oaPathId::nvarchar" value="oaPathId"></entry>
+                    <!-- oa： 业务实例步骤名称  PATH_TITLE -->
+                    <entry key="oaDataName::nvarchar" value="oaDataName"></entry>
+                    <!-- oa： 业务实例步骤stepId  （值为 2 3 4 5...） -->
+                    <entry key="oaStepId::int" value="oaStepId"></entry>
+                    <!-- oa： 业务实例步骤数据 操作人 TRACE_USER_ID   detail表 -->
+                    <entry key="oaBizOperPersonId::nvarchar" value="oaBizOperPersonId"></entry>
+                    <!-- oa： 业务实例步骤数据 操作人 NAME   user表 -->
+                    <entry key="oaBizOperPersonName::nvarchar" value="oaBizOperPersonName"></entry>
+                    <!-- oa： 业务实例步骤数据 操作人所属部门   user表 -->
+                    <entry key="oaBizOperPost::nvarchar" value="oaBizOperPost"></entry>
+                    <!-- oa： 业务实例 开始时间 TRACE_START_TIME   index表 -->
+                    <entry key="oaFlowStartTime::date" value="oaFlowStartTime"></entry>
+                    <!-- oa： 业务实例步骤数据 开始时间 START_TIME   detail表 -->
+                    <entry key="oaNodeStartTime::date" value="oaNodeStartTime"></entry>
+                    <!-- oa： 业务实例步骤数据 结束时间 END_TIME   detail表 -->
+                    <entry key="oaNodeEndTime::date" value="oaNodeEndTime"></entry>
+                    <!-- oa： 业务实例步骤 预警信息 AWOKE_SET_DATA   path表 -->
+                    <entry key="oaAlarmMsg::nvarchar" value="oaAlarmMsg"></entry>
+                </map>
+
+            </property>
+        </bean>
+
+        <!-- 查询用户岗位数据 ，用于设置可视范围 　    add by geshuo 20161221 -->
+        <bean name="find_user_role" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="select">
+                        <value>
+                            <![CDATA[
+                                SELECT r.ROLE_ID,r.USER_ID_LIST
+                                FROM DCA_TRACE_USER_ROLE r
+                                WHERE r.DEL_FLAG = 0
+                            ]]>
+                        </value>
+
+                    </entry>
+                </map>
+            </property>
+            <property name="fields">
+                <map>
+                    <!--  岗位 id -->
+                    <entry key="roleId::nvarchar" value="ROLE_ID"></entry>
+                    <!-- 用户列表 -->
+                    <entry key="userIdList::nvarchar" value="USER_ID_LIST"></entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 插入 权力实例统计表 　    add by geshuo 20161223 -->
+        <bean name="dca_power_instance_count" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="insert">
+                        <value>
+                            <![CDATA[
+                                INSERT INTO DCA_POWER_INSTANCE_COUNT
+                                    (UUID, WF_ID, POWER_ID, INSTANCE_COUNT, INSTANCE_NODE_COUNT,
+                                    DEL_FLAG, CREATE_PERSON, CREATE_DATE, UPDATE_PERSON, UPDATE_DATE)
+                                values
+                                    (:uuid, :wfId, :powerId, :instanceCount, :instanceNodeCount,
+                                     0, 'workflow-engine', :createDate, 'workflow-engine', :updateDate)
+                            ]]>
+                        </value>
+
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 插入 权力业务数据统计表 　    add by geshuo 20161223 -->
+        <bean name="dca_power_biz_data_count" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="insert">
+                        <value>
+                            <![CDATA[
+                                INSERT INTO DCA_POWER_BIZ_DATA_COUNT
+                                    (UUID, WF_ID, POWER_ID, TASK_ID, TASK_NAME, DATA_COUNT,
+                                    DEL_FLAG, CREATE_PERSON, CREATE_DATE, UPDATE_PERSON, UPDATE_DATE)
+                                values
+                                    (:uuid, :wfId, :powerId, :taskId, :taskName, :dataCount,
+                                     0, 'workflow-engine', :createDate, 'workflow-engine', :updateDate)
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 更新oa实例表 　    add by geshuo 20170106 -->
+        <bean name="dca_phy_instance_index_update" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="update">
+                        <value>
+                            <![CDATA[
+                                UPDATE DCA_PHY_INSTANCE_INDEX
+                                SET MARK_DONE=1
+                                WHERE TRACE_INSTANCE_INDEX_ID=:oaInstanceId
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 更新oa实例数据表 　    add by geshuo 20170106 -->
+        <bean name="dca_phy_instance_detail_update" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="update">
+                        <value>
+                            <![CDATA[
+                                UPDATE DCA_PHY_INSTANCE_DETAIL
+                                SET MARK_DONE=1
+                                WHERE TRACE_INSTANCE_DETAIL_ID=:oaDataId
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 更新告警表 告警状态 　    add by geshuo 20170110 -->
+        <bean name="dca_alarm_detail_update" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="update">
+                        <value>
+                            <![CDATA[
+                                UPDATE DCA_ALARM_DETAIL
+								SET ALARM_STATUS=2
+								WHERE BIZ_DATA_ID = :bizDataId
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 查询正常周末休息日 -->
+        <bean name="hr_work_holiday_select" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="select">
+                        <value>
+                            <![CDATA[
+                                SELECT
+                                    HR_WORK_HOLIDAY_ID holidayId,
+                                    HR_WORK_HOLIDAYS_NAME holidayName,
+	                                WEEK_HOLIDAYS holidays
+                                FROM HR_WORK_HOLIDAY
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+            <property name="fields">
+                <map>
+                    <entry key="holidayId::nvarchar" value="holidayId"></entry>
+                    <entry key="holidayName::nvarchar" value="holidayName"></entry>
+                    <!-- 正常周末日期，分号分隔 -->
+                    <entry key="holidays::nvarchar" value="holidays"></entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 查询正常周末休息日 -->
+        <bean name="hr_work_holiday_exception_select" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="select">
+                        <value>
+                            <![CDATA[
+                                SELECT
+                                    HR_WORK_HOLIDAY_EXCEPTION_ID holidayExceptionId,
+                                    HR_WORK_HOLIDAY_ID holidayId,
+                                    SPECIAL_DAY specialDay,
+                                    IS_HOLIDAY isHoliday,
+                                    HOLIDAY_TYPE holidayType
+                                FROM HR_WORK_HOLIDAY_EXCEPTION
+                                WHERE TO_DATE(SPECIAL_DAY,'yyyy-MM-dd') > ADD_MONTHS(SYSDATE, -1)
+                                AND TO_DATE(SPECIAL_DAY,'yyyy-MM-dd') <= ADD_MONTHS(SYSDATE, 1)
+                                AND SPECIAL_DAY IS NOT NULL
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+            <property name="fields">
+                <map>
+                    <entry key="holidayExceptionId::nvarchar" value="holidayExceptionId"></entry>
+                    <entry key="holidayId::nvarchar" value="holidayId"></entry>
+                    <!-- 日期 -->
+                    <entry key="specialDay::nvarchar" value="specialDay"></entry>
+                    <!-- 是否是假日 0：不是 ; 1：是 -->
+                    <entry key="isHoliday::nvarchar" value="isHoliday"></entry>
+                    <!-- 假期类型 1：周末  2：法定假日 -->
+                    <entry key="holidayType::nvarchar" value="holidayType"></entry>
+                </map>
+            </property>
+        </bean>
+
+        <!-- 插入 工作流计算结果表 　    add by geshuo 20170112 -->
+        <bean name="dca_workflow_compute_result" class="com.hepowdhc.dcapp.bean.MapperBean">
+            <property name="sqls">
+                <map>
+                    <entry key="insert">
+                        <value>
+                            <![CDATA[
+                                INSERT INTO DCA_WORKFLOW_COMPUTE_RESULT
+                                    (UUID, WF_ID, TASK_ID, TASK_NAME, BIZ_FLOW_ID, BIZ_DATA_ID,
+                                    ALARM_TYPE, ALARM_LEVEL, COMPUTE_RESULT, IDX_DATA_TYPE, DEL_FLAG,
+                                    CREATE_PERSON, CREATE_DATE, UPDATE_PERSON, UPDATE_DATE)
+                                values
+                                    (:uuid, :wfId, :taskId, :taskName, :bizFlowId, :bizDataId,
+                                    :alarmType, :alarmLevel, :computeResult, :idxDataType, 0,
+                                    'workflow-engine', sysdate, 'workflow-engine', sysdate)
+                            ]]>
+                        </value>
+                    </entry>
+                </map>
+            </property>
+        </bean>
+
+    </beans>
+</beans>

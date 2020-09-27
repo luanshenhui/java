@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MakeCheckAccRenew">
+
+    <select id="getisShouDong" resultType="String">
+        select param_nm from tbl_cfg_sysparam where param_id = '0030'
+    </select>
+
+    <select id="getMakeAccErrDays" parameterType="Map" resultType="String">
+        select
+		distinct date_format(o.create_time,'%Y%m%d') cTime
+        from
+        tbl_order_main o
+        where
+        o.cur_status_id in ('0308','0309','0310','0334','0327','0328','0335','0332','0350','0351',
+        '0311','0333','0352','0001','0002','0003','0380','0381')
+        and o.ordertype_id = 'JF'
+        <![CDATA[
+            and o.check_status <> '1'
+            and o.create_time < #{nowday}
+        ]]>
+        union
+        select
+		distinct date_format(c.cancel_time,'%Y%m%d') cTime
+        from
+        tbl_order a,
+        tbl_order_main b,
+        tbl_order_cancel c
+        where
+        b.ordermain_id = a.ordermain_id
+        and b.ordertype_id = 'JF'
+        and a.order_id = c.order_id
+        and c.cancel_check_status = '0'
+        <![CDATA[
+          and c.cancel_time < #{nowday}
+        ]]>
+        union
+        select distinct
+        oc.do_date cTime
+        from
+        tbl_order_check oc
+        where
+        oc.ispoint = '0'
+        <![CDATA[
+          and oc.do_date <= #{prevDate}
+        ]]>
+    </select>
+
+    <select id="getDbTime" resultType="String">
+        select date_format(now(),'%Y%m%d%H%i%s') from dual
+    </select>
+
+    <select id="getSumCheckAccOrderMain" parameterType="Map" resultType="Integer">
+        select
+        count(ordermain_id)
+        from
+        tbl_order_main
+        where
+        cur_status_id in ('0308','0309','0310','0334','0327','0328','0335','0332','0350',
+        '0351','0311','0333','0352','0001','0002','0003','0380','0381')
+        and ordertype_id = 'JF'
+        and source_id in ('00', '03', '04', '05', '06')
+        and date_format(create_time,'%Y%m%d') = #{createTime}
+        <![CDATA[ and pay_result_time < #{payResultTime} ]]>
+    </select>
+
+    <select id="getCheckAccOrderMain" parameterType="Map" resultType="cn.com.cgbchina.batch.model.OrderMainModel">
+        select
+        om.serial_no as serialNo,
+        om.ordermain_id as ordermainId,
+        om.ismerge as "ismerge",
+        o.integraltype_id as integraltypeId,
+        om.defraytype as "defraytype",
+        om.total_price as totalPrice,
+        om.total_bonus as totalBonus,
+        om.cardno as "cardno",
+        o.order_succ_time as createTime,
+        om.source_id as sourceId
+        from
+        tbl_order_main om
+        inner join
+        (select ordermain_id, create_time, order_succ_time, integraltype_id, min(order_id) as order_id from tbl_order group by ordermain_id, create_time, order_succ_time, integraltype_id) o
+        on
+        o.ordermain_id = om.ordermain_id
+        where
+        om.cur_status_id in ('0308','0309','0310','0334','0327','0328','0335','0332','0350',
+        '0351','0311','0333','0352','0001','0002','0003','0380','0381')
+        and om.ordertype_id = 'JF'
+        and om.source_id in ('00', '03', '04', '05', '06')
+        and date_format(om.create_time,'%Y%m%d') = #{createTime}
+        and <![CDATA[om.pay_result_time < #{payResultTime} ]]>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="getSumCCCheckAccOrder" parameterType="Map" resultType="Long">
+        select
+        count(o.ordermain_id)
+        from
+        tbl_order_card_mapping m,
+        tbl_order_main o
+        where
+        m.ordermain_id = o.ordermain_id
+        and o.cur_status_id in ('0308','0309','0310','0334','0327','0328','0335','0332','0350','0351',
+        '0311','0333','0352','0001','0002','0003','0380','0381')
+        and o.ordertype_id = 'JF'
+        and o.source_id in ('01', '02')
+        and m.bonus_value > 0
+        and date_format(o.create_time,'%Y%m%d') = #{createTime}
+        <![CDATA[ and o.pay_result_time < #{payResultTime} ]]>
+    </select>
+
+    <select id="getCCCheckAccOrder" parameterType="Map" resultType="cn.com.cgbchina.batch.model.CCCheckAccOrderModel">
+        select
+        m.ordermain_id as ordermainId,
+        m.card_no as cardNo,
+        o.serial_no as serialNo,
+        o.defraytype as "defrayType",
+        m.amount as "amount",
+        m.bonus_type as bonusType,
+        m.bonus_value as bonusValue,
+        m.bonus_txn_code as bonusTxnCode,
+        o.ismerge as "ismerge",
+        o.create_time as createTime
+        from
+        tbl_order_main o,
+        tbl_order_card_mapping m
+        where
+        o.ordermain_id = m.ordermain_id
+        and o.cur_status_id in (
+        '0308','0309','0310','0334','0327','0328','0335','0332','0350','0351','0311','0333',
+        '0352','0001','0002','0003','0380','0381')
+        and o.ordertype_id = 'JF'
+        and o.source_id in ('01', '02')
+        and m.bonus_value > 0
+        and date_format(o.create_time,'%Y%m%d') = #{createTime}
+        <![CDATA[ and o.pay_result_time < #{payResultTime} ]]>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="getSumTblOrderCancel" parameterType="String" resultType="String">
+        select order_id from tbl_order_cancel where date_format(cancel_time,'%Y%m%d') = #{cancelTime}
+    </select>
+
+    <select id="getTblOrderCancelList" parameterType="String" resultType="cn.com.cgbchina.batch.model.OrderMainModel">
+        select
+            t.cardno as "cardno",
+            t.order_succ_time as createTime,
+            o.ordermain_id as ordermainId,
+            o.serial_no as serialNo,
+            t.bonus_totalvalue as bonusTotalvalue,
+            t.bonus_type as bonusType,
+            o.source_id as sourceId
+        from
+            tbl_order_main o,
+            tbl_order_cancel cc,
+            tbl_order t
+        where
+            o.ordertype_id = 'JF'
+        and cc.order_id = t.order_id
+        and o.ordermain_id = t.ordermain_id
+        and cc.order_id = #{orderId}
+    </select>
+
+    <select id="getTblOrderPointList2" parameterType="String" resultType="cn.com.cgbchina.batch.model.OrderSubModel">
+        select
+            o.order_id_host as orderIdHost,
+            o.order_succ_time as createTime,
+            o.cardno as "cardno",
+            o.integraltype_id as integraltypeId,
+            o.bonus_totalvalue as bonusTotalvalue,
+            o.source_id as sourceId,
+            oc.cur_status_id as curStatusId,
+            o.ordertype_id as ordertypeId,
+            o.ordermain_id as ordermainId,
+            o.order_id as orderId,
+            oc.id as "id"
+        from
+            tbl_order_check oc,
+            tbl_order o
+        where
+            oc.order_id = o.order_id
+        and oc.ispoint in ('0', '1')
+        and oc.do_date = #{doDate}
+        and oc.cur_status_id in ('0305', '0308')
+        order by
+            oc.id desc
+    </select>
+
+    <select id="getTblOrderPointList3" parameterType="String" resultType="cn.com.cgbchina.batch.model.OrderSubModel">
+        select
+            o.order_id_host as orderIdHost,
+            o.order_succ_time as createTime,
+            o.cardno as "cardno",
+            o.integraltype_id as integraltypeId,
+            o.bonus_totalvalue as bonusTotalvalue,
+            o.source_id as sourceId,
+            oc.cur_status_id as curStatusId,
+            oc.id as "id",
+            o.ordertype_id as ordertypeId,
+            o.ordermain_id as ordermainId,
+            o.order_id as orderId,
+            om.serial_no as serialNo,
+            oc.do_date as doDate,
+            oc.do_time as doTime,
+            oc.jf_refund_serialno as jfRefundSerialno
+        from
+            tbl_order_check oc,
+            tbl_order o,
+            tbl_order_main om
+        where
+            oc.order_id = o.order_id
+        and om.ordermain_id = o.ordermain_id
+        and oc.ispoint in ('0', '1')
+        and oc.do_date = #{doDate}
+        and oc.cur_status_id in ('0312','0327','0307','0380','0381')
+        order by
+            oc.id desc
+    </select>
+
+    <update id="updateCheckStatus" parameterType="Map">
+        update tbl_order_main
+        set check_status = '1'
+        where
+        cur_status_id in (
+        '0308',
+        '0309',
+        '0310',
+        '0334',
+        '0327',
+        '0328',
+        '0335',
+        '0332',
+        '0350',
+        '0351',
+        '0311',
+        '0333',
+        '0352',
+        '0001',
+        '0002',
+        '0003',
+        '0380',
+        '0381'
+        )
+        and ordertype_id = 'JF'
+        and check_status <![CDATA[ <> ]]> '1'
+        and date_format(create_time,'%Y%m%d') = #{createTime}
+        <![CDATA[ and pay_result_time < #{payResultTime} ]]>
+    </update>
+
+    <update id="upDateTblOrderCancel" parameterType="Map">
+        update tbl_order_cancel
+        set cancel_check_status = '1',
+            update_time = #{updateTime}
+        where
+            date_format(cancel_time,'%Y%m%d') = #{cancelTime}
+            and cancel_check_status = '0'
+    </update>
+
+    <update id="updateTblOrderPoint1" parameterType="Map">
+        update tbl_order_check oc
+        set oc.ispoint = '1',
+        oc.modify_time = #{modifyTime}
+        where
+         <![CDATA[ oc.id <= #{id} ]]>
+        and oc.ispoint in ('0', '1')
+        and oc.cur_status_id in ('0305', '0308')
+        and oc.do_date = #{doDate}
+    </update>
+
+    <update id="updateTblOrderPoint2" parameterType="Map">
+        update tbl_order_check
+        set ispoint = '1',
+        modify_time = #{modifyTime}
+        where
+        <![CDATA[ id <= #{id} ]]>
+        and ispoint in ('0', '1')
+        and cur_status_id in (
+        '0312',
+        '0327',
+        '0307',
+        '0380',
+        '0381'
+        )
+        and do_date = #{doDate}
+    </update>
+
+    <insert id="insertTblMakecheckjobHistory" parameterType="cn.com.cgbchina.batch.model.TblMakecheckjobHistoryModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_makecheckjob_history
+        (ope
+        ,opedate
+        ,opetime
+        ,ip
+        ,`date`
+        ,result
+        ,resultdesc
+        ,`desc`
+        ,isshoudong
+        ,isrenew)
+        values(#{ope}
+        ,#{opedate}
+        ,#{opetime}
+        ,#{ip}
+        ,#{date}
+        ,#{result}
+        ,#{resultdesc}
+        ,#{desc}
+        ,#{isshoudong}
+        ,#{isrenew})
+    </insert>
+
+    <select id="findByRefundIntegralByBonus" parameterType="String" resultType="Long">
+        SELECT
+        refund_integral
+        FROM
+        tbl_order_extend2
+        WHERE
+        order_id = #{orderId}
+        AND is_partly_refund_integral = '1'
+    </select>
+</mapper>

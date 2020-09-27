@@ -1,0 +1,30 @@
+package com.yulin.am;
+
+public class Demo1 {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+class Dog{
+	//属性和行为：全局变量和方法
+	private String name;
+	private int age;
+	private char sex;
+	
+	//行为
+	public void jiao(){
+		System.out.println("汪汪汪~！");
+	}
+	public void eat(){
+		System.out.println("吃~！");
+	}
+	public String getName(){
+		
+	}
+}

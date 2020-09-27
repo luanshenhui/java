@@ -1,0 +1,23 @@
+package cn.rkylin.oms.system.unit.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import cn.rkylin.core.service.ApolloService;
+
+@Service("unitService")
+public class UnitServiceImpl extends ApolloService implements IUnitService {
+
+	@Override
+	public List getRootUnit(String userId) {
+		try {
+			List unitTree = iunitDAO.getRootUnit(userId);
+			return unitTree;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception();
+		}
+	}
+
+}

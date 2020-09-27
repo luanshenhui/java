@@ -1,0 +1,30 @@
+<div class="modal white-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>{{#if data.id}}修改白名单{{else}}新增白名单{{/if}}</h2>
+    </div>
+    <form class="form form-aligned white-list-form">
+        <div class="modal-body">
+            <input id="id" name="id" value="{{data.id}}" hidden>
+            <div class="form-information control-group">
+                <label for="type"><span class="required">*</span>类型:</label>
+                <select name="type" id="type" type="text" class="form-control">
+                    <option value="1" {{#equals data.type 1}} selected {{/equals}}>规则</option>
+                    <option value="2" {{#equals data.type 2}} selected {{/equals}}>答疑</option>
+                    <option value="3" {{#equals data.type 3}} selected {{/equals}}>链接</option>
+                </select>
+            </div>
+            <div class="form-information control-group">
+                <label for="linkUrl"><span class="required">*</span>白名单:</label>
+                <input name="linkUrl" id="linkUrl" type="text" class="wh300 form-control js-linkUrl-input" value="{{data.linkUrl}}"
+                       required  maxlength="200">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="确 定">
+            <button class="btn btn-info btn-small close">取 消</button>
+        </div>
+    </form>
+</div>

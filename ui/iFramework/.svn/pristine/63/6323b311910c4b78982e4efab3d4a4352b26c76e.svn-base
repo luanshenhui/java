@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SecurityResource">
+	<resultMap id="securityURLResourceResult" class="com.dhc.base.security.SecurityResource">
+		<result property="resourceId" column="resourceid" columnIndex="1" />
+		<result property="resourceType" column="resourceType" columnIndex="2" />
+		<result property="resourceName" column="resourceName" columnIndex="3" />
+		<result property="resourceValue" column="resourcevalue" columnIndex="4" />
+ </resultMap>     	
+  <select id="sercurity_getURLResources" resultMap="securityURLResourceResult">
+	SELECT 
+       T.MENU_CODE RESOURCEID,
+       T.MENU_TYPE RESOURCETYPE,
+       T.MENU_NAME RESOURCENAME,
+       T.MENU_LOCATION RESOURCEVALUE       
+       FROM WF_ORG_MENU T
+    WHERE T.MENU_LOCATION IS NOT NULL
+     AND T.MENU_LOCATION!='/' 
+	 AND T.MENU_LOCATION!='/**'
+	 AND T.MENU_LOCATION!='/*'
+   </select>
+
+</sqlMap>

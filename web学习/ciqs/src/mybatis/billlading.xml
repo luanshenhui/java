@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SQL.BILLCIQGOOD">
+	<!-- 分页查询列表 -->
+	<select id="findBillList"  parameterType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel"  resultType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel">
+	select * from (
+		select a.*,rownum rid from( 
+			select
+				b.bill_id,
+				b.bill_no,
+				b.book_no,
+				b.ship_name_cn,
+				b.ship_name_en,
+				b.voyage_no,
+				c.decl_no,
+			 	c.decl_date,
+				c.ent_cname,
+				(select name from DEPTMENTS d where d.org_code=b.port_org_code and d.code=b.port_dept_code) as port_dept_code,
+				'new' as type,
+				(select count(i.bill_id) from warning_info i where b.bill_id=i.bill_id) as warning,
+				c.insp_org_name 	
+			from bill_lading b , CIQ_GOODS_DECL c where  b.book_no=c.book_no and b.port_org_code = 'CIQGVDL'
+			<if test="bill_no != null and bill_no != ''" >
+				and b.bill_no like '%'||#{bill_no}||'%'
+			</if>
+			<if test="port_dept_code != null and port_dept_code != ''" >
+				and b.port_dept_code =#{port_dept_code} 
+			</if>
+			<if test="decl_no != null and decl_no != ''" >
+				and c.decl_no like '%'||#{decl_no}
+			</if>
+			<if test="date_begin == null or date_begin == ''">
+				<if test="date_over == null or date_over == ''">
+					<if test="bill_no == null or bill_no == ''" >
+						<if test="decl_no == null or decl_no == ''" >
+							<if test="port_dept_code == null or port_dept_code == ''" >
+							<![CDATA[ and c.decl_date >=  (select trunc(sysdate-1,'DD') from dual) ]]>
+							<![CDATA[ and c.decl_date <= sysdate ]]>
+							</if>
+						</if>
+					</if>
+				</if>
+			</if>
+			<if test="date_begin != null and date_begin != ''">
+				<![CDATA[ and c.decl_date >= to_date(#{date_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="date_over != null and date_over != ''">
+				<![CDATA[ and c.decl_date <= to_date(#{date_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			order by c.decl_date desc,b.bill_no
+	 ) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+		<select id="findOldBillList"  parameterType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel"  resultType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel">
+	select * from (
+		select a.*,rownum rid from( 
+			select
+				b.bill_id,
+				b.bill_no,
+				b.book_no,
+				b.ship_name_cn,
+				b.ship_name_en,
+				b.voyage_no,
+				c.decl_no,
+			 	c.decl_date,
+				c.ent_cname,
+				(select name from DEPTMENTS d where d.org_code=b.port_org_code and d.code=b.port_dept_code) as port_dept_code,
+				'old' as type,
+				(select count(i.bill_id) from warning_info i where b.bill_id=i.bill_id) as warning,
+				c.insp_org_name	
+			from bill_lading_his b , CIQ_GOODS_DECL_HIS c where  b.book_no=c.book_no 
+			<if test="port_dept_code != null and port_dept_code != ''" >
+				<if test="org_code != null and org_code != ''" >
+				and b.port_dept_code =#{port_dept_code} and b.port_org_code =#{org_code}
+				</if>
+			</if>
+			<if test="bill_no != null and bill_no != ''" >
+				and b.bill_no like '%'||#{bill_no}||'%'
+			</if>
+			<if test="decl_no != null and decl_no != ''" >
+				and c.decl_no like '%'||#{decl_no}||'%'
+			</if>
+			<if test="date_begin == null or date_begin == ''">
+				<if test="date_over == null or date_over == ''">
+					<if test="bill_no == null or bill_no == ''" >
+						<if test="decl_no == null or decl_no == ''" >
+							<if test="port_dept_code == null or port_dept_code == ''" >
+							<![CDATA[ and c.decl_date >=  (select trunc(sysdate-1,'DD') from dual) ]]>
+							<![CDATA[ and c.decl_date <= sysdate ]]>
+							</if>
+						</if>
+					</if>
+				</if>
+			</if>
+			<if test="date_begin != null and date_begin != ''">
+				<![CDATA[ and c.decl_date >= to_date(#{date_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="date_over != null and date_over != ''">
+				<![CDATA[ and c.decl_date <= to_date(#{date_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			order by c.decl_date desc,b.bill_no
+	 ) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<select id="findBillCount"  parameterType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel"  resultType="java.lang.Integer">
+		select count(*)
+			from bill_lading b , CIQ_GOODS_DECL c where b.book_no=c.book_no and b.port_org_code = 'CIQGVDL'
+			<if test="port_dept_code != null and port_dept_code != ''" >
+				and b.port_dept_code =#{port_dept_code}
+			</if>
+			<if test="bill_no != null and bill_no != ''" >
+				and b.bill_no like '%'||#{bill_no}||'%'
+			</if>
+			<if test="decl_no != null and decl_no != ''" >
+				and c.decl_no like '%'||#{decl_no}
+			</if>
+			<if test="date_begin == null or date_begin == ''">
+				<if test="date_over == null or date_over == ''">
+					<if test="bill_no == null or bill_no == ''" >
+						<if test="decl_no == null or decl_no == ''" >
+							<if test="port_dept_code == null or port_dept_code == ''" >
+							<![CDATA[ and c.decl_date >=  (select trunc(sysdate-1,'DD') from dual) ]]>
+							<![CDATA[ and c.decl_date <= sysdate ]]>
+							</if>
+						</if>
+					</if>
+				</if>
+			</if>
+			<if test="date_begin != null and date_begin != ''">
+				<![CDATA[ and c.decl_date >= to_date(#{date_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="date_over != null and date_over != ''">
+				<![CDATA[ and c.decl_date <= to_date(#{date_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			order by b.bill_no, c.decl_date desc
+	</select>
+	
+		<select id="findOldBillCount"  parameterType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel"  resultType="java.lang.Integer">
+		select count(*)
+			from bill_lading_his b , CIQ_GOODS_DECL_HIS c where b.book_no=c.book_no 
+			<if test="port_dept_code != null and port_dept_code != ''" >
+				<if test="org_code != null and org_code != ''" >
+				and b.port_dept_code =#{port_dept_code} and b.port_org_code =#{org_code}
+				</if>
+			</if>
+			<if test="bill_no != null and bill_no != ''" >
+				and b.bill_no like '%'||#{bill_no}||'%'
+			</if>
+			<if test="decl_no != null and decl_no != ''" >
+				and c.decl_no like '%'||#{decl_no}||'%'
+			</if>
+			<if test="date_begin == null or date_begin == ''">
+				<if test="date_over == null or date_over == ''">
+					<if test="bill_no == null or bill_no == ''" >
+						<if test="decl_no == null or decl_no == ''" >
+							<if test="port_dept_code == null or port_dept_code == ''" >
+							<![CDATA[ and c.decl_date >=  (select trunc(sysdate-1,'DD') from dual) ]]>
+							<![CDATA[ and c.decl_date <= sysdate ]]>
+							</if>
+						</if>
+					</if>
+				</if>
+			</if>
+			<if test="date_begin != null and date_begin != ''">
+				<![CDATA[ and c.decl_date >= to_date(#{date_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="date_over != null and date_over != ''">
+				<![CDATA[ and c.decl_date <= to_date(#{date_over}, 'yyyy-mm-dd') ]]>
+			</if>
+			order by b.bill_no, c.decl_date desc
+	</select>
+	
+	<select id="getBillladingData"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.BilllingModel">
+		select t.oper_name,t.oper_date from TT_ITF_SYS_PROCESS_LOG t where  t.process_node>='13'
+		and decl_no=#{decl_no}
+		order by t.process_node  desc
+	</select>
+	
+	<select id="getContaEventDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.ContaEventDTO">
+		select t.plan_user,(select name from users u  where t.plan_user = u.id)  as remark,
+		to_char(t.plan_date,'yyyy-mm-dd HH:mi') as plan_date
+ 		from CONTA_EVENT t where t.op_code ='PG' and t.BILL_ID=#{bill_id}
+	</select>
+	
+	<select id="getOldContaEventDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.ContaEventDTO">
+		select t.plan_user,(select name from users u  where t.plan_user = u.id)  as remark,
+		to_char(t.plan_date,'yyyy-mm-dd HH:mi') as plan_date
+ 		from CONTA_EVENT_HIS t where t.op_code ='PG' and t.BILL_ID=#{bill_id}
+	</select>
+	
+	<select id="getCheckJobDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.CheckJobDTO">
+		select t.CHECK_RESULT
+ 		from CHECK_JOB t where t.BILL_ID=#{bill_id}
+	</select>
+	
+	<select id="getVideoEventDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.VideoEventDTO">
+		select t.conta_no, get_username(t.create_user)create_user,
+		to_char(t.create_date,'YYYY-MM-DD HH24:MI:SS')create_date,t.file_name,t.file_type,
+		to_char(t.create_date,'YYYYMM')fileMonth,
+       to_char(t.create_date,'YYYYMMDD') fileDate
+        from VIDEO_EVENT t
+		where t.BILL_ID=#{bill_id}
+		and file_type!='4'
+		order by t.create_date desc
+	</select>
+	
+	<select id="getBillLadingDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.BillLadingDTO">
+		select b.op_date,
+				(select name from users u  where b.op_user= u.id) as op_user,
+				b.bill_id,
+				b.bill_no,
+				b.book_no,
+				b.ship_name_cn,
+				(select d.name from DEPTMENTS d where d.code=b.PORT_DEPT_CODE) as PORT_DEPT_CODE,
+				b.op_code,
+				get_username(b.insp_user)insp_user
+				from bill_lading b 
+				where b.BILL_ID=#{bill_id}
+<!-- 			and b.op_code='RL' -->
+	</select>
+	
+	<select id="getBillLadingBookingDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.BillLadingBookingDTO">
+		select 
+		(select c.name from CODE_LIBRARY c where c.code=t.dest_area  and c.type='DEST_AREA') as dest_area,
+		(select o.name from ORGANIZES o where o.org_code=t.dest_org_code) as dest_org_code, 
+		(select name from users u  where t.approve_user= u.id) as approve_user,
+		t.approve_date
+		from BILL_LADING_BOOKING t
+		where t.trans_flag='1'
+		<if test="book_no != null and book_no != ''">
+			and t.book_no=#{book_no}
+		</if>
+		<if test="book_no == null or book_no == ''">
+			and t.bill_id=#{bill_id}
+		</if>
+	</select>
+	
+	<select id="getOldBillLadingBookingDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.BillLadingBookingDTO">
+		select 
+		(select c.name from CODE_LIBRARY c where c.code=t.dest_area and c.type='DEST_AREA') as dest_area,
+		(select o.name from ORGANIZES o where o.org_code=t.dest_org_code) as dest_org_code,
+		(select name from users u  where t.approve_user= u.id) as approve_user,
+		t.approve_date
+		from BILL_LADING_BOOKING_HIS t
+		where t.trans_flag='1'
+		<if test="book_no != null and book_no != ''">
+			and t.book_no=#{book_no}
+		</if>
+		<if test="book_no == null or book_no == ''">
+			and t.bill_id=#{bill_id}
+		</if>
+	</select>
+	
+	<select id="getCiqGoodsDeclDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.CiqGoodsDeclDTO">
+		select * from CIQ_GOODS_DECL t
+		where t.decl_no=#{decl_no} 
+	</select>
+	
+	<select id="getOldCiqGoodsDeclDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.CiqGoodsDeclDTO">
+		select * from CIQ_GOODS_DECL_HIS t
+		where t.decl_no=#{decl_no} 
+	</select>
+	
+	<select id="findOneBillCiqGood"  parameterType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel"  resultType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel">
+			select
+				b.bill_id,
+				b.bill_no,
+				b.ship_name_cn,
+				b.ship_name_en,
+				b.voyage_no,
+				c.decl_no,
+			 	c.decl_date,
+				c.ent_cname,
+				(select count(i.bill_id) from warning_info i where b.bill_id=i.bill_id) as warning,
+				c.insp_org_name
+			from bill_lading b , CIQ_GOODS_DECL c where  b.book_no=c.book_no 
+			<if test="bill_id != null and bill_id != ''" >
+				and b.bill_id =#{bill_id}
+			</if>
+			<if test="decl_no != null and decl_no != ''" >
+				and c.decl_no = #{decl_no}
+			</if>
+	</select>
+	
+	<select id="findOldOneBillCiqGood"  parameterType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel"  resultType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel">
+			select
+				b.bill_id,
+				b.bill_no,
+				b.ship_name_cn,
+				b.ship_name_en,
+				b.voyage_no,
+				c.decl_no,
+			 	c.decl_date,
+				c.ent_cname,
+				(select count(i.bill_id) from warning_info i where b.bill_id=i.bill_id) as warning,
+				c.insp_org_name	
+			from bill_lading_his b , CIQ_GOODS_DECL_HIS c where  b.book_no=c.book_no 
+			<if test="bill_id != null and bill_id != ''" >
+				and b.bill_id =#{bill_id}
+			</if>
+			<if test="decl_no != null and decl_no != ''" >
+				and c.decl_no = #{decl_no}
+			</if>
+	</select>
+	
+	<select id="getOldBillLadingDTO"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.BillLadingDTO">
+		select b.op_date,
+				(select name from users u  where b.op_user= u.id) as op_user,
+				b.bill_id,
+				b.bill_no,
+				b.book_no,
+				b.ship_name_cn,
+				(select d.name from DEPTMENTS d where d.code=b.PORT_DEPT_CODE) as PORT_DEPT_CODE,
+				b.op_code
+				from bill_lading_his b 
+				where b.BILL_ID=#{bill_id}
+	</select>
+	
+	<select id="findDywUnQualifyRecordList"  parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.DywUnQualifyRecordDto">
+		select b.*,
+		(select name from QLC_CODE_LIBRARY qlc  where qlc.type='UN_QUALIFY_DEAL_RST' and qlc.code=b.un_qualify_deal_rst) as result,
+		(select name from QLC_CODE_LIBRARY qlc  where qlc.type='UN_QUALIFY_DEAL_WAY' and qlc.code=b.deal_way) as deal,
+		(select name from users u  where b.creator= u.id) as create_user
+				from CIQ_DYW_UN_QUALIFY_RECORD b 
+				where 1=1
+				<if test="bill_id != null and bill_id != ''" >
+				and b.BILL_ID=#{bill_id}
+				</if>
+				<if test="book_no != null and book_no != ''" >
+				and b.book_no=#{book_no}
+				</if>
+	</select>
+	
+	<select id="findBillladingBook" parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.BillladingBookModel">
+		select 
+		(select c.name from CODE_LIBRARY c where c.code=t.dest_area and c.type='DEST_AREA') as dest_area,
+		(select o.name from ORGANIZES o where o.org_code=t.dest_org_code) as dest_org_code,
+		(select name from users u  where t.approve_user= u.id) as approve_user,
+		t.approve_date,
+		t.dec_org_name
+		<if test="type == 'new'" >
+			from BILL_LADING_BOOKING t
+		</if>
+		<if test="type != 'new'" >
+			from BILL_LADING_BOOKING_HIS t
+		</if>
+		where book_no=#{book_no}
+	</select>
+	
+	<select id="findGoodsName" parameterType="com.dpn.ciqqlc.standard.model.BilllingModel" resultType="com.dpn.ciqqlc.standard.model.BillladingBookModel">
+		select 
+				decl_no,
+				goods_no,
+				hs_code,
+				goods_cname,
+				goods_ename,
+				goods_model,
+				origin_place_code,
+				origin_country_code,
+				origin_country_name,
+				weight,
+				weight_unit_code,
+				weight_unit_name,
+				qty,
+				qty_unit_code,
+				qty_unit_name,
+				pack_number,
+				pack_type_code,
+				pack_type_name,
+				ccy,
+				ccy_name,
+				goods_values,
+				waste_flag,
+				waste_flag_name,
+				situation_code,
+				situation_level,
+				insp_monitor_cond,
+				book_no,
+				unit_price,
+				assist_package,
+				purpose_code,
+				hs_std_vlm,
+				hs_std_vlm_unit,
+				is_psn_goods,
+				check_cert_req,
+				approve_no,
+				num_weight,
+				cargo_type,
+				get_cargo_mean		
+			from ciq_decl_goods t
+		where book_no=#{book_no}
+	</select>
+	
+	<select id="queryBillDecForPrt_sto" resultType="com.dpn.ciqqlc.standard.model.XunJobDTO">
+			  select t.port_dept_code,
+			       t.dec_id book_no,
+			       (select u.name from organizes u where u.org_code = t.dec_org) dec_org_name,
+			       (select u.name from users u where u.id = t.dec_user) dec_user,
+			       t.vsl_m ship_name_en,
+			       (select f.cnname from country f where f.country_code=d.src_country) origin_country_name,
+			       d.goods_name,
+			       d.num weight,
+			       GET_UNIT(d.unit,'UNIT') weight_unit_name,
+			       GET_UNIT(d.pack_type,'PACK_TYPE') pack_type_name,
+			       (select count(g.dec_id)
+			          from sto_in_goods g
+			         where g.dec_id=t.dec_id
+			           and GET_UNIT(g.pack_type,'PACK_TYPE') like '%木%') wood_count,
+			       (select a.cnname from conta c,area_code a where c.bill_no=t.bill_no and c.land_area_code=a.code and rownum=1) land_area_code,
+			       (select c.land_place from conta c where c.bill_no=t.bill_no and rownum=1) land_place,
+			       (select count(c.conta_model) from conta c where c.bill_no=t.bill_no and c.conta_model like '2%') conta_mode20,
+			       (select count(c.conta_model) from conta c where c.bill_no=t.bill_no and c.conta_model like '4%') conta_mode40
+			  from storage_in t,sto_in_goods d
+			 where t.dec_id = #{bookNo} and t.dec_id = d.dec_id and rownum=1
+		</select>
+	
+		<select id="queryBillDecForPrt_book" resultType="com.dpn.ciqqlc.standard.model.XunJobDTO">
+				select t.port_dept_code,
+			       t.book_no,
+			       t.dec_org_name,
+			       (select u.name from users u where u.id = t.dec_user) dec_user,
+			       t.ship_name_en,
+			       g.origin_country_name,
+			       d.decl_no,
+			       d.telephone,
+		           g.goods_cname,
+			       g.weight,
+			       g.weight_unit_name,
+			       g.qty,
+			       g.qty_unit_name,
+			       g.pack_type_name,
+			       (select count(g.decl_no)
+			          from CIQ_DECL_GOODS g
+			         where g.decl_no=d.decl_no
+			           and g.pack_type_name like '%木%') wood_count,
+			       (select a.cnname from conta c,area_code a where c.bill_id=t.bill_id and c.land_area_code=a.code and rownum=1)  land_area_code,
+			       (select c.land_place from conta c where c.bill_id=t.bill_id and rownum=1) land_place,
+			       (select count(c.conta_model) from conta c where c.bill_id=t.bill_id and c.conta_model like '2%') conta_mode20,
+			       (select count(c.conta_model) from conta c where c.bill_id=t.bill_id and c.conta_model like '4%') conta_mode40
+			  from bill_lading_booking t,ciq_goods_decl d,CIQ_DECL_GOODS g
+			 where t.book_no = #{bookNo} and t.book_no = d.book_no and d.decl_no=g.decl_no and rownum=1
+		</select>
+		
+		<select id="queryXunJob"  resultType="com.dpn.ciqqlc.standard.model.XunJobDTO">
+		        select x.xun_id,
+				       x.conta_id,
+				       x.bill_id,
+				       x.bill_no,
+				       x.conta_no,
+				       x.ship_name_en,
+				       x.voyage_no,
+				       x.port_org_code,
+				       x.port_dept_code,
+				       b.insp_user ciq_check_user,
+				       GET_USERNAME(b.insp_user) ciq_check_user_nm,
+				       x.create_time,
+				       x.deal_rsn,
+				       x.deal_meth,
+				       x.description,
+				       x.deal_medic,
+				       GET_UNIT(x.deal_medic,'XUN_YAO') deal_medic_cn,
+				       x.techno_rqst,
+				       x.xun_time,
+				       x.dosage,
+				       x.o_tmprtu,
+				       x.spread_date,
+				       x.duration,
+				       x.xun_check_time,
+				       x.xun_check_rst,
+				       x.deal_date,
+				       x.xun_finish_date,
+				       x.xun_user,
+				       x.dec_org_name,
+				       x.tel,
+				       (select name from users where id=x.xun_user) xun_user_nm,
+				       x.xun_org,
+				       (select name from organizes where org_code=x.xun_org) xun_org_nm,
+				       x.status,
+				       (select c.conta_model from conta c where c.conta_id=x.conta_id) conta_model,
+				       (select c.goods_volume from conta c where c.conta_id=x.conta_id) goods_volume,
+					   (select name from xun_code where code = x.fb_deal_way) fb_deal_way,
+					   (select name from code_library where code = x.fb_deal_medic and type = 'XUN_YAO') fb_deal_medic,
+					   
+					   x.fb_deal_way       ,
+					   x.fb_deal_medic     ,
+					   x.fb_deal_medic_num ,
+					   x.fb_xun_time       ,
+					   x.fb_operator       ,
+					   x.fb_deal_place     ,
+					   x.fb_deal_start     ,
+					   x.fb_deal_end       ,
+					   x.fb_temp           ,
+					   x.fb_hubility       ,
+					   x.fb_wind           ,
+					   x.fb_chk_rst        ,
+					   x.fb_deal_dosage    ,
+					   x.fb_dilution       ,
+					   x.fb_duration       ,
+					   x.fb_auditor     
+				  from xun_job x,bill_lading b
+				  where x.bill_id=b.bill_id
+				  <if test="xun_id != null and xun_id != ''" >
+					 and x.xun_id=#{xun_id}
+				  </if>
+				  <if test="conta_id != null and conta_id != ''" >
+					 and x.conta_id=#{conta_id}
+				  </if>
+				  <if test="billId != null and billId != ''" >
+					  and x.bill_id=#{billId}
+				  </if>
+				  <if test="xun_id == null or billId == ''" >
+				  	 <if test="conta_id == null or conta_id == ''" >
+				  	 	 <if test="billId == null or billId == ''" >
+							  and rownum=1
+						  </if>
+					  </if>
+				  </if>
+		</select>
+		
+		<select id="getVslDecList"  parameterType="com.dpn.ciqqlc.standard.model.BillCiqGoodModel" resultType="com.dpn.ciqqlc.standard.model.VslDecDto">
+			select vsl_en_name,
+              cur_cargo_sit,
+              to_char(est_arriv_date,'yyyy-mm-dd hh24:mi') est_arriv_date,
+              check_type_aprv 
+           from QLC_VSL_DEC t
+			where VSL_EN_NAME=#{ship_name_en}
+		</select>
+		
+		
+		<select id="contaList" resultType="com.dpn.ciqqlc.standard.model.ContaDTO">
+			select conta_no,bill_no from conta where bill_no=#{bill_no}
+		</select>
+		
+		<select id="queryLims" resultType="com.dpn.ciqqlc.standard.model.LimsDTO">
+			select c.id, to_char(f.start_date,'yyyy-mm-dd hh24:mi:ss') start_date, f.create_dpt
+			  from lims_bab_report t, lims_bab_project f, lims_bab_file c
+			 where t.project_id = f.id
+			   and f.origin_no = #{decl_no}
+			   and t.id = c.id
+		</select>
+		<select id="queryLimsContent" resultType="com.dpn.ciqqlc.standard.model.LimsDTO">
+			select content from lims_bab_file where  id=#{id} and rownum=1
+		</select>
+		
+		<select id="queryLaboratory" resultType="com.dpn.ciqqlc.standard.model.LaboratoryDTO">
+			select 
+				id,chk_place,chk_no,chk_decl_ent,chk_receiver,chk_remark,chk_creator,
+				chk_cre_dt,chk_cre_file_path,chk_conta_no,chk_goods_owner_file_path
+				,chk_goods_owner_cre_dt,chk_video_file_path,
+				to_char(CREATE_DT,'yyyy-mm-dd hh:Mi:dd') as CREATE_DT,
+				to_char(CREATE_DT,'yyyymm') as fileMounth,
+				to_char(CREATE_DT,'yyyymmdd') as fileDate
+			from CIQ_DYW_SAM_CHK_REC where chk_no=#{decl_no}
+		</select>
+		
+		<select id="queryLaboratoryById" resultType="com.dpn.ciqqlc.standard.model.LaboratoryDTO">
+			select id,
+			       chk_place,
+			       chk_no,
+			       chk_decl_ent,
+			       chk_receiver,
+			       chk_remark,
+			       get_username(chk_creator)chk_creator,
+			       chk_cre_dt,
+			       chk_cre_file_path,
+			       chk_conta_no,
+			       chk_goods_owner_file_path,
+			       chk_goods_owner_cre_dt,
+			       chk_video_file_path,
+			       to_char(CREATE_DT, 'yyyy-mm-dd hh:Mi:dd') as CREATE_DT,
+			       to_char(CREATE_DT, 'yyyymm') as fileMounth,
+			       to_char(CREATE_DT, 'yyyymmdd') as fileDate
+			  from CIQ_DYW_SAM_CHK_REC
+			   where id=#{id}
+		</select>
+		
+		<select id="queryLabDtailById" resultType="com.dpn.ciqqlc.standard.model.LabDtailDTO">
+			select * from CIQ_DYW_SAM_CHK_GOODS_INFOS t where t.chk_id=#{id}
+		</select>
+		
+		<select id="queryCertRcd" resultType="com.dpn.ciqqlc.standard.model.TfVsaSignRecordDTO">
+			select 
+		       to_char(COLLECTION_DT,'yyyy-mm-dd hh24:mi:ss')COLLECTION_DT,
+		       COLLECTER_NAME,
+		       to_char(RECHECK_DATE,'yyyy-mm-dd hh24:mi:ss')RECHECK_DATE,
+		       REVIEWER_NAME,
+		       to_char(MAKE_CERT_DATE,'yyyy-mm-dd hh24:mi:ss')MAKE_CERT_DATE,
+		       CERT_MAKER_NAME,
+		       to_char(CERT_ISSUE_DT,'yyyy-mm-dd hh24:mi:ss')CERT_ISSUE_DT,
+		       CERT_LICENSOR_NAME,
+		       CERT_STYLE_NAME
+		  from TF_VSA_SIGN_RECORD
+		 where decl_no = #{decl_no}
+		</select>
+		
+		<select id="findOrg" resultType="java.util.Map">
+			select * from DEPTMENTS t where t.org_code='CIQGVDL'
+		</select>
+		
+		<select id="billDetailByNo" resultType="com.dpn.ciqqlc.standard.model.BillLadingDTO2">
+			select t.bill_id,
+		       t.bill_no,
+		       t.ship_name_en,
+		       t.ship_name_cn,
+		       t.voyage_no,
+		       t.main_g_name,
+		       t.TRANSPORT_ARTICLE,
+		       t.LOADING_PORT,
+		       t.SENDER,
+		       t.RECEIVER,
+		       t.INFORMER,
+		       (case t.FLAG_RF  when '1' then '冷藏' else '非冷藏' end) ||
+		       (case t.FLAG_WOODWRA  when '1' then '，木质包装' else '，非木质包装' end) ||
+		       (case t.FLAG_FV  when '1' then '，果蔬' else '，非果蔬' end) ||
+		       (case t.FLAG_WASTER  when '1' then '，废品' else '，非废品' end) || 
+		       (case t.FLAG_TRAN  when '1' then '，中转' else '，非废品' end) || 
+		       (case t.FLAG_YI  when '1' then '，疫情' else '，非疫情' end) as spacialFlag,
+		       t.FLAG_MONITOR,
+		       t.flag_pin,
+		       (select c.name from code_library c where c.code=t.TERMINAL_CODE_CUR and c.port_org_code='CIQGVDL' and c.type='TERMINAL_CUR') as TERMINAL_CODE_CUR,
+		       to_char(t.Delivery_Date,'yyyy-mm-dd hh:mi:ss') as delivery_date,
+		       (select u.name from users u where u.id=t.INSP_USER ) as INSP_USER,
+		       (select l.NAME from DEPTMENTS l where l.code=t.port_dept_code and l.org_code='CIQGVDL') as port_dept_code,
+		       (select u.name from users u where u.id=t.APPROVE_USER ) as APPROVE_USER,
+		       (select l.NAME from DEPTMENTS l where l.code=t.APPROVE_DEPT and l.org_code='CIQGVDL') as APPROVE_DEPT,
+		       t.APPROVE_RESULT,
+		       (
+		           case t.op_code
+		             when 'RL' then to_char(t.op_date,'yyyy-mm-dd hh:mi:ss')
+		             else ''
+		           end
+		       ) as op_date,
+		       (select u.name from users u where u.id = t.op_user) as op_user,
+		       t.op_code,
+		       t.status
+			from BILL_LADING t where t.bill_no=#{billNo}
+		</select>
+		
+		<select id="getCiq2000DeclByEx" resultType="com.dpn.ciqqlc.standard.model.GoodsDTO">
+			 select 
+				decl_no,
+				book_no,
+				to_char(decl_date,'yyyy-mm-dd hh:mi:ss') as decl_date,
+				trans_means_name,
+				trans_means_code,
+				insp_org_code,
+				insp_org_name,
+				insp_dept_1,
+				getdept(insp_dept_1) insp_dept_1_name,
+				contactor,
+				telephone,
+				ent_cname,
+				ent_ename,
+				consignor_cname,
+				consignor_ename,
+				consignee_cname,
+				consignee_ename,
+				decl_type_code,
+				dest_org_code,
+				dest_code,
+				decl_person_code,
+				decl_reg_no,
+				consignee_code,
+				consignor_code,
+				ent_property,
+				entry_port_code,
+				entry_port_name,
+				desp_port_code,
+				desp_port_name,
+				trade_mode_code,
+				trade_mode_name
+			 from CIQ_GOODS_DECL  
+			 where decl_no=#{declNo}
+		 </select>
+		 
+		 <select id="getCiq2000GoodsByEx" resultType="com.dpn.ciqqlc.standard.model.GoodsDetailDTO">
+			select 
+				decl_no,
+				goods_no,
+				hs_code,
+				goods_cname,
+				goods_ename,
+				goods_model,
+				origin_place_code,
+				origin_country_code,
+				origin_country_name,
+				weight,
+				weight_unit_code,
+				weight_unit_name,
+				qty,
+				qty_unit_code,
+				qty_unit_name,
+				pack_number,
+				pack_type_code,
+				pack_type_name,
+				ccy,
+				ccy_name,
+				goods_values,
+				waste_flag,
+				waste_flag_name,
+				situation_code,
+				situation_level,
+				insp_monitor_cond,
+				book_no,
+				unit_price,
+				assist_package,
+				purpose_code,
+				hs_std_vlm,
+				hs_std_vlm_unit,
+				is_psn_goods,
+				check_cert_req,
+				approve_no,
+				num_weight,
+				cargo_type,
+				get_cargo_mean
+			  from ciq_decl_goods
+			 where decl_no = #{declNo}
+		 </select>
+		 
+		 
+		 <select id="queryContaEventCy" resultType="com.dpn.ciqqlc.standard.model.ContaEventDTO">
+		 	select to_char(t.finish_date, 'yyyy-mm-dd hh24:mi:ss') finish_date,
+			       get_username(t.finish_user) finish_user,
+			       t.remark,
+			       t.conta_no
+			  from CONTA_EVENT t
+			 where t.bill_id = #{bill_id}
+			   and t.op_code = 'CY'
+		 </select>
+	<!-- **** update ******************************************************* -->
+
+	<!-- **** delete ******************************************************* -->
+
+</mapper>

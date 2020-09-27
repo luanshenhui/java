@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblOrderMainHisModel">
+    <resultMap id="TblOrderMainHisMap" type="TblOrderMainHisModel">
+        <result property="hisId" column="his_id"/>
+        <result property="ordermainId" column="ordermain_id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="ordertypeNm" column="ordertype_nm"/>
+        <result property="cardno" column="cardno"/>
+        <result property="contIdType" column="cont_id_type"/>
+        <result property="contIdcard" column="cont_idcard"/>
+        <result property="contNm" column="cont_nm"/>
+        <result property="contNmPy" column="cont_nm_py"/>
+        <result property="contPostcode" column="cont_postcode"/>
+        <result property="contAddress" column="cont_address"/>
+        <result property="contMobPhone" column="cont_mob_phone"/>
+        <result property="contHphone" column="cont_hphone"/>
+        <result property="csgName" column="csg_name"/>
+        <result property="csgIdType" column="csg_id_type"/>
+        <result property="csgIdcard" column="csg_idcard"/>
+        <result property="csgPostcode" column="csg_postcode"/>
+        <result property="csgAddress" column="csg_address"/>
+        <result property="csgPhone1" column="csg_phone1"/>
+        <result property="csgPhone2" column="csg_phone2"/>
+        <result property="csgProvince" column="csg_province"/>
+        <result property="csgCity" column="csg_city"/>
+        <result property="csgBorough" column="csg_borough"/>
+        <result property="curStatusId" column="cur_status_id"/>
+        <result property="curStatusNm" column="cur_status_nm"/>
+        <result property="serialNo" column="serial_no"/>
+        <result property="acceptedNo" column="accepted_no"/>
+        <result property="modifyOrdertypeId" column="modify_ordertype_id"/>
+        <result property="promotors" column="promotors"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        his_id, ordermain_id, ordertype_id, ordertype_nm, cardno, cont_id_type, cont_idcard, cont_nm, cont_nm_py, cont_postcode, cont_address, cont_mob_phone, cont_hphone, csg_name, csg_id_type, csg_idcard, csg_postcode, csg_address, csg_phone1, csg_phone2, csg_province, csg_city, csg_borough, cur_status_id, cur_status_nm, serial_no, accepted_no, modify_ordertype_id, promotors, modify_oper, modify_time
+    </sql>
+
+    <insert id="insert" parameterType="TblOrderMainHisModel" useGeneratedKeys="true"
+            keyProperty="hisId" keyColumn="his_id">
+        insert into tbl_ordermain_his
+        (ordermain_id
+        ,ordertype_id
+        ,ordertype_nm
+        ,cardno
+        ,cont_id_type
+        ,cont_idcard
+        ,cont_nm
+        ,cont_nm_py
+        ,cont_postcode
+        ,cont_address
+        ,cont_mob_phone
+        ,cont_hphone
+        ,csg_name
+        ,csg_id_type
+        ,csg_idcard
+        ,csg_postcode
+        ,csg_address
+        ,csg_phone1
+        ,csg_phone2
+        ,csg_province
+        ,csg_city
+        ,csg_borough
+        ,cur_status_id
+        ,cur_status_nm
+        ,serial_no
+        ,accepted_no
+        ,modify_ordertype_id
+        ,promotors
+        ,modify_oper
+        ,modify_time)
+        values(#{ordermainId}
+        ,#{ordertypeId}
+        ,#{ordertypeNm}
+        ,#{cardno}
+        ,#{contIdType}
+        ,#{contIdcard}
+        ,#{contNm}
+        ,#{contNmPy}
+        ,#{contPostcode}
+        ,#{contAddress}
+        ,#{contMobPhone}
+        ,#{contHphone}
+        ,#{csgName}
+        ,#{csgIdType}
+        ,#{csgIdcard}
+        ,#{csgPostcode}
+        ,#{csgAddress}
+        ,#{csgPhone1}
+        ,#{csgPhone2}
+        ,#{csgProvince}
+        ,#{csgCity}
+        ,#{csgBorough}
+        ,#{curStatusId}
+        ,#{curStatusNm}
+        ,#{serialNo}
+        ,#{acceptedNo}
+        ,#{modifyOrdertypeId}
+        ,#{promotors}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="TblOrderMainHisModel">
+        update tbl_ordermain_his set
+            <if test="ordermainId !=null">ordermain_id = #{ordermainId}
+                ,</if>
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="ordertypeNm !=null">ordertype_nm = #{ordertypeNm}
+                ,</if>
+            <if test="cardno !=null">cardno = #{cardno}
+                ,</if>
+            <if test="contIdType !=null">cont_id_type = #{contIdType}
+                ,</if>
+            <if test="contIdcard !=null">cont_idcard = #{contIdcard}
+                ,</if>
+            <if test="contNm !=null">cont_nm = #{contNm}
+                ,</if>
+            <if test="contNmPy !=null">cont_nm_py = #{contNmPy}
+                ,</if>
+            <if test="contPostcode !=null">cont_postcode = #{contPostcode}
+                ,</if>
+            <if test="contAddress !=null">cont_address = #{contAddress}
+                ,</if>
+            <if test="contMobPhone !=null">cont_mob_phone = #{contMobPhone}
+                ,</if>
+            <if test="contHphone !=null">cont_hphone = #{contHphone}
+                ,</if>
+            <if test="csgName !=null">csg_name = #{csgName}
+                ,</if>
+            <if test="csgIdType !=null">csg_id_type = #{csgIdType}
+                ,</if>
+            <if test="csgIdcard !=null">csg_idcard = #{csgIdcard}
+                ,</if>
+            <if test="csgPostcode !=null">csg_postcode = #{csgPostcode}
+                ,</if>
+            <if test="csgAddress !=null">csg_address = #{csgAddress}
+                ,</if>
+            <if test="csgPhone1 !=null">csg_phone1 = #{csgPhone1}
+                ,</if>
+            <if test="csgPhone2 !=null">csg_phone2 = #{csgPhone2}
+                ,</if>
+            <if test="csgProvince !=null">csg_province = #{csgProvince}
+                ,</if>
+            <if test="csgCity !=null">csg_city = #{csgCity}
+                ,</if>
+            <if test="csgBorough !=null">csg_borough = #{csgBorough}
+                ,</if>
+            <if test="curStatusId !=null">cur_status_id = #{curStatusId}
+                ,</if>
+            <if test="curStatusNm !=null">cur_status_nm = #{curStatusNm}
+                ,</if>
+            <if test="serialNo !=null">serial_no = #{serialNo}
+                ,</if>
+            <if test="acceptedNo !=null">accepted_no = #{acceptedNo}
+                ,</if>
+            <if test="modifyOrdertypeId !=null">modify_ordertype_id = #{modifyOrdertypeId}
+                ,</if>
+            <if test="promotors !=null">promotors = #{promotors}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+                </if>
+        where his_id = #{hisId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="hisId !=null">and his_id = #{hisId}</if>
+            <if test="ordermainId !=null">and ordermain_id = #{ordermainId}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="ordertypeNm !=null">and ordertype_nm = #{ordertypeNm}</if>
+            <if test="cardno !=null">and cardno = #{cardno}</if>
+            <if test="contIdType !=null">and cont_id_type = #{contIdType}</if>
+            <if test="contIdcard !=null">and cont_idcard = #{contIdcard}</if>
+            <if test="contNm !=null">and cont_nm = #{contNm}</if>
+            <if test="contNmPy !=null">and cont_nm_py = #{contNmPy}</if>
+            <if test="contPostcode !=null">and cont_postcode = #{contPostcode}</if>
+            <if test="contAddress !=null">and cont_address = #{contAddress}</if>
+            <if test="contMobPhone !=null">and cont_mob_phone = #{contMobPhone}</if>
+            <if test="contHphone !=null">and cont_hphone = #{contHphone}</if>
+            <if test="csgName !=null">and csg_name = #{csgName}</if>
+            <if test="csgIdType !=null">and csg_id_type = #{csgIdType}</if>
+            <if test="csgIdcard !=null">and csg_idcard = #{csgIdcard}</if>
+            <if test="csgPostcode !=null">and csg_postcode = #{csgPostcode}</if>
+            <if test="csgAddress !=null">and csg_address = #{csgAddress}</if>
+            <if test="csgPhone1 !=null">and csg_phone1 = #{csgPhone1}</if>
+            <if test="csgPhone2 !=null">and csg_phone2 = #{csgPhone2}</if>
+            <if test="csgProvince !=null">and csg_province = #{csgProvince}</if>
+            <if test="csgCity !=null">and csg_city = #{csgCity}</if>
+            <if test="csgBorough !=null">and csg_borough = #{csgBorough}</if>
+            <if test="curStatusId !=null">and cur_status_id = #{curStatusId}</if>
+            <if test="curStatusNm !=null">and cur_status_nm = #{curStatusNm}</if>
+            <if test="serialNo !=null">and serial_no = #{serialNo}</if>
+            <if test="acceptedNo !=null">and accepted_no = #{acceptedNo}</if>
+            <if test="modifyOrdertypeId !=null">and modify_ordertype_id = #{modifyOrdertypeId}</if>
+            <if test="promotors !=null">and promotors = #{promotors}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblOrderMainHisMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_ordermain_his
+       where id=#{hisId}
+    </select>
+    <select id="findAll" resultMap="TblOrderMainHisMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_ordermain_his
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblOrderMainHisMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_ordermain_his
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblOrderMainHisModel">
+        delete from tbl_ordermain_his where id = hisId
+    </delete>
+    <!-- add on 2016/09/03 -->
+    <select id="findByOrderMainId" parameterType="String"  resultMap="TblOrderMainHisMap">
+    	select
+    	<include refid="columns"/>
+        from tbl_ordermain_his
+        where ordermain_id = #{orderMainId}
+    </select>
+</mapper>
+
+

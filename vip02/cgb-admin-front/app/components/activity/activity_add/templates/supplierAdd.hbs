@@ -1,0 +1,30 @@
+<div class="modal activityGoodsAddModal" style="width: 450px; height: auto !important;">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>供应商选择</h2>
+    </div>
+
+    <div class="scroll-style" style="height: 350px">
+        <table class="table table-top active-tr-center">
+            <thead>
+            <tr>
+                <!--<th class="width-tr-50"> </th>-->
+                <th class="width-tr-150">供应商ID</th>
+                <th class="width-tr-150">供应商名称</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each this}}
+                <tr data-component="" class="item-tr" data-id="{{id}}">
+                    <td width="20%" class="vendorId"><input class="js-check-this" name="checkGoodsItem" type="checkbox" data-code="{{id}}" data-status="{{json this}}"/>{{vendorId}}</td>
+                    <td width="25%" class="simpleName">{{simpleName}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-success btn-medium discount-fulldown-supplier-ok" value="确定">
+        <button class="btn btn-info btn-medium close">取消</button>
+    </div>
+</div>

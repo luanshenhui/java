@@ -1,0 +1,26 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function f1(){
+		//获得navigator对象,该对象描述了浏览器的
+		//一些基本的信息
+		var nav = window.navigator;
+		var msg;
+		alert(nav.userAgent);
+		/*
+		for(info in nav){
+			msg += '属性名:' + info + ' 属性值:'
+			 + nav[info];
+		}
+		alert(msg);
+		*/
+		
+	}
+</script>
+</head>
+<body>
+			<a href="javascript:;" onclick="f1();">ClickMe</a>
+</body>
+</html>

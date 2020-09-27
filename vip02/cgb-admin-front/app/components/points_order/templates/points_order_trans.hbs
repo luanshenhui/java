@@ -1,0 +1,58 @@
+<div class="modal orderTrans">
+
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>{{#if flag}}物流信息{{else}}撤单原因查看{{/if}}</h2>
+    </div>
+
+    <div class="modal-body">
+        <table class="modal-body-table">
+            <col width="20%"/>
+            <col width="80%"/>
+            {{#if flag}}
+                {{#equals orderSubModel.goodsType "00"}}
+                    <tr>
+                        <th class="text-rg"><strong>物流公司：</strong></th>
+                        <td>{{orderTransModel.transcorpNm}}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-rg"><strong>物流单号：</strong></th>
+                        <td>{{orderTransModel.mailingNum}}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-rg"><strong>发货时间：</strong></th>
+                        <td>{{#formatDate orderTransModel.doTime}}{{/formatDate}}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-rg"><strong>物流跟踪：</strong></th>
+                        <td><a class="link"  href="{{url}}" target="_blank">物流跟踪</a></td>
+                    </tr>
+                {{/equals}}
+                {{#equals orderSubModel.goodsType "02"}}
+                    <tr>
+                        <th class="text-rg"><strong>O2O商品兑换码：</strong></th>
+                        <td>{{orderSubModel.o2oVoucherCode}}</td>
+                    </tr>
+                {{/equals}}
+            {{else}}
+                {{#each this.orderRrturnTrackDetailModels}}
+                    <tr>
+                        <th class="text-rg"><em>* </em><strong>撤单原因：</strong></th>
+                        <td>{{memo}}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-rg"><strong>撤单时间：</strong></th>
+                        <td>{{#formatDate createTime}}{{/formatDate}}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-rg"><strong>补充说明：</strong></th>
+                        <td>{{memoExt}}</td>
+                    </tr>
+                {{/each}}
+            {{/if}}
+        </table>
+    </div>
+
+    <div class="modal-footer"><a class="btn btn-send btn-small close ">关 闭</a></div>
+</div>

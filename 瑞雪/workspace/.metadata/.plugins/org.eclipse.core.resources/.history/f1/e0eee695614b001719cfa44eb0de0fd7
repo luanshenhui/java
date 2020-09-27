@@ -1,0 +1,28 @@
+package cn.rkylin.oms.system.messageDefine.domain;
+
+import cn.rkylin.oms.common.base.BaseEntity;
+
+public class OMS_MESSAGE extends BaseEntity {
+	/**
+	 * 序列
+	 */
+	private static final long serialVersionUID = 6888637244431821029L;
+
+	private String msgId;
+	
+	private String msgCode;
+	
+	private String msgName;
+	
+	private String sendWay;
+	
+	private String title;
+	
+	private String retryInterval;
+	
+	private String template;
+	
+	private String enabled;
+	
+	private String deleted;
+}

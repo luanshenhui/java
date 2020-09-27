@@ -1,0 +1,36 @@
+<div class="modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>{{#if id}}编辑{{else}}新增{{/if}}</h2>
+    </div>
+    <form class="form form-aligned branch-form">
+        <input type="hidden" name="id" value="{{id}}"/>
+        <div class="modal-body branch-add-edit">
+            <div class="control-group">
+                <label for="code"><span class="required">*</span>分行号：</label>
+                <input id="code" name="code" type="text" maxlength="20" class="form-control" required value="{{code}}"
+                       placeholder="请输入分行号"/>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="name"><span class="required">*</span>分行名称：</label>
+                <input id="name" name="name" type="text" maxlength="30" class="form-control" required value="{{name}}"
+                       placeholder="请输入分行名称"/>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="bankCityNm"><span class="required">*</span>发卡城市：</label>
+                <input id="bankCityNm" name="bankCityNm" type="text" maxlength="30" class="form-control" required value="{{bankCityNm}}"
+                       placeholder="请输入发卡城市"/>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small js-branch-create" value="确定">
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

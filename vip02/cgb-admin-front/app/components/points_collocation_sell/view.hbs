@@ -1,0 +1,153 @@
+{{#component "collocationSellPoints js-component"}}
+    <p class="components-title"><strong>搭销管理</strong></p>
+    <ul class="nav nav-tabs">
+        <li class="active js-tab-li-first"><a href="javascript:void(0)">所有订单</a></li>
+        <li class="js-tab-li-secend"><a href="javascript:void(0)">待处理订单</a></li>
+    </ul>
+
+    <div class="js-tab-first">
+        <form class="collocation-form-search form-inline">
+            <fieldset>
+              <span class="span3">
+                  <label for="id">订单编号:</label>
+                  <input name="id" value="{{id}}" class="form-control" required/>
+              </span>
+             <span class="span3">
+                  <label for="goodsId">商品编码:</label>
+                  <input class="form-control" id="goodsId" required>
+              </span>
+
+                <label for="auditStatic">审核状态:</label>
+                <select type="text" name="type" class="search-collocation search-input">
+                    <option value="" {{#unless type}}selected{{/unless}}>请选择</option>
+                    <option value="0" {{#equals type "0"}}selected{{/equals}}>待处理</option>
+                    <option value="1" {{#equals type "1"}}selected{{/equals}}>审核通过</option>
+                    <option value="2" {{#equals type "2"}}selected{{/equals}}>审核拒绝</option>
+                </select>
+            </fieldset>
+                <span class="span1">
+                  <label>&nbsp;</label>
+                  <input class="btn btn-success btn-sm" type="submit" value="查询"/>
+                </span>
+             <span class="span1">
+                  <label>&nbsp;</label>
+                  <input class="btn btn-success btn-sm" type="button" value="导出"/>
+              </span>
+        </form>
+        <table class="collocation-template-table table table-horizontal center-text">
+            <thead>
+            <tr>
+                <th width="25%">商品名称</th>
+                <th width="15%">单价</th>
+                <th width="5%">数量</th>
+                <th width="15%">售后</th>
+                <th width="15%">订单实付（元）</th>
+                <th width="10%">审核状态</th>
+                <th width="15%">操作</th>
+            </tr>
+            </thead>
+            <tbody data-data="{{_DATA_}}">
+            {{#each _DATA_.data}}
+                <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                    <td class="goods_name">{{goodsName}}</td>
+                    <td class="goods_price">{{goodsPrice}}</td>
+                    <td class="goods_num">{{goodsNum}}</td>
+                    <td class="goods_customer">{{goodsCustomer}}</td>
+                    <td class="goods_pay">{{goodsPay}}</td>
+                    <td class="status  js-order-info">{{status}}订单详情</td>
+                    <td class="edit-button">
+                        <button class="btn btn-sm js-collocation-examine">审核</button>
+                        {{#if auditType}}
+                            {{#equals auditType "1"}}
+                                <button id="{{id}}" class="btn btn-sm js-collocation-delete" data-toggle="confirm"
+                                        data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                        data-event="confirm:delete-collocation">
+                                    删除
+                                </button>
+                            {{/equals}}
+                        {{/if}}
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <div class="pagination" data-total="{{_DATA_.total}}">
+        </div>
+    </div>
+
+    <div class="js-tab-second" style="display: none">
+        <form class="collocation-form-search form-inline">
+            <fieldset>
+              <span class="span3">
+                  <label for="id">订单编号:</label>
+                  <input name="id" value="{{id}}" class="form-control" required/>
+              </span>
+             <span class="span3">
+                  <label for="goodsId">商品编码:</label>
+                  <input class="form-control" id="goodsId" required>
+              </span>
+
+                <label for="auditStatic">审核状态:</label>
+                <select type="text" name="type" class="search-collocation search-input">
+                    <option value="" {{#unless type}}selected{{/unless}}>请选择</option>
+                    <option value="0" {{#equals type "0"}}selected{{/equals}}>待处理</option>
+                    <option value="1" {{#equals type "1"}}selected{{/equals}}>审核通过</option>
+                    <option value="2" {{#equals type "2"}}selected{{/equals}}>审核拒绝</option>
+                </select>
+            </fieldset>
+                <span class="span1">
+                  <label>&nbsp;</label>
+                  <input class="btn btn-success btn-sm" type="submit" value="查询"/>
+                </span>
+             <span class="span1">
+                  <label>&nbsp;</label>
+                  <input class="btn btn-success btn-sm" type="button" value="导出"/>
+              </span>
+        </form>
+        <table class="collocation-template-table table table-horizontal center-text">
+            <thead>
+            <tr>
+                <th width="5%">选择</th>
+                <th width="20%">商品名称</th>
+                <th width="15%">单价</th>
+                <th width="5%">数量</th>
+                <th width="15%">售后</th>
+                <th width="15%">订单实付（元）</th>
+                <th width="10%">审核状态</th>
+                <th width="15%">操作</th>
+            </tr>
+            </thead>
+            <tbody data-data="{{_DATA_}}">
+            {{#each _DATA_.data}}
+                <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                    <td><input type="checkbox" name="checkOther"/></td>
+                    <td class="goods_name">{{goodsName}}</td>
+                    <td class="goods_price">{{goodsPrice}}</td>
+                    <td class="goods_num">{{goodsNum}}</td>
+                    <td class="goods_customer">{{goodsCustomer}}</td>
+                    <td class="goods_pay">{{goodsPay}}</td>
+                    <td class="status js-order-info">{{status}}订单详情</td>
+                    <td class="edit-button">
+                        <button class="btn btn-sm js-collocation-examine">审核</button>
+                        {{#if auditType}}
+                            {{#equals auditType "1"}}
+                                <button id="{{id}}" class="btn btn-sm js-collocation-delete" data-toggle="confirm"
+                                        data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                        data-event="confirm:delete-collocation">
+                                    删除
+                                </button>
+                           {{/equals}}
+                        {{/if}}
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <div class="m-b-10 m-l-10">
+            <input type="checkbox" class="js-other-all-check"/><span>全选</span>
+            <a href="javascript:void(0)" id="{{id}}" class="btn btn-sm js-collocation-delete" data-toggle="confirm"
+                    data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                    data-event="confirm:delete-collocation">删除</a>
+        </div>
+    </div>
+{{/component}}

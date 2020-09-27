@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EspPublishInfModel">
+    <resultMap id="EspPublishInfMap" type="EspPublishInfModel">
+        <result property="id" column="id"/>
+        <result property="orderTypeId" column="ordertype_id"/>
+        <result property="publishType" column="publish_type"/>
+        <result property="publishTitle" column="publish_title"/>
+        <result property="linkHref" column="link_href"/>
+        <result property="groupCode" column="group_code"/>
+        <result property="publishDate" column="publish_date"/>
+        <result property="expireDate" column="expire_date"/>
+        <result property="publishDesc" column="publish_desc"/>
+        <result property="curStatus" column="cur_status"/>
+        <result property="publishStatus" column="publish_status"/>
+        <result property="publishContent" column="publish_content"/>
+        <result property="publishAddr" column="publish_addr"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        id,ordertype_id,publish_type,publish_title,link_href,group_code,publish_date,expire_date,publish_desc,cur_status,publish_status,publish_content,publish_addr,create_oper,create_time,modify_oper,modify_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="EspPublishInfModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_esp_publish_inf
+        (ordertype_id
+        ,publish_type
+        ,publish_title
+        ,link_href
+        ,group_code
+        ,publish_date
+        ,expire_date
+        ,publish_desc
+        ,cur_status
+        ,publish_status
+        ,publish_content
+        ,publish_addr
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag)
+        values(#{orderTypeId}
+        ,#{publishType}
+        ,#{publishTitle}
+        ,#{linkHref}
+        ,#{groupCode}
+        ,#{publishDate}
+        ,#{expireDate}
+        ,#{publishDesc}
+        ,#{curStatus}
+        ,#{publishStatus}
+        ,#{publishContent}
+        ,#{publishAddr}
+        ,#{createOper}
+        ,NOW()
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{delFlag})
+    </insert>
+
+    <update id="update" parameterType="EspPublishInfModel">
+        update tbl_esp_publish_inf set
+        <if test="orderTypeId !=null">ordertype_id = #{orderTypeId}
+            ,
+        </if>
+        <if test="publishType !=null">publish_type = #{publishType}
+            ,
+        </if>
+        <if test="publishTitle !=null">publish_title = #{publishTitle}
+            ,
+        </if>
+        <if test="linkHref !=null">link_href = #{linkHref}
+            ,
+        </if>
+        <if test="groupCode !=null">group_code = #{groupCode}
+            ,
+        </if>
+        <if test="publishDate !=null">publish_date = #{publishDate}
+            ,
+        </if>
+        <if test="expireDate !=null">expire_date = #{expireDate}
+            ,
+        </if>
+        <if test="publishDesc !=null">publish_desc = #{publishDesc}
+            ,
+        </if>
+        <if test="curStatus !=null">cur_status = #{curStatus}
+            ,
+        </if>
+        <if test="publishStatus !=null">publish_status = #{publishStatus}
+            ,
+        </if>
+        <if test="publishContent !=null">publish_content = #{publishContent}
+            ,
+        </if>
+        <if test="publishAddr !=null">publish_addr = #{publishAddr}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag = 0
+            <if test="id !=null">and id = #{id}</if>
+            <if test="orderTypeId !=null">and ordertype_id = #{orderTypeId}</if>
+            <if test="publishType !=null">and publish_type = #{publishType}</if>
+            <if test="publishTitle !=null and publishTitle!=''">and publish_title like
+                concat(concat('%',#{publishTitle}),'%')
+            </if>
+            <if test="linkHref !=null">and link_href = #{linkHref}</if>
+            <if test="groupCode !=null">and group_code = #{groupCode}</if>
+            <if test="startTime !=null">and date_format(publish_date,'%Y-%m-%d') =
+                date_format(#{startTime},'%Y-%m-%d')
+            </if>
+            <if test="expireDate !=null">and expire_date = #{expireDate}</if>
+            <if test="publishDesc !=null">and publish_desc = #{publishDesc}</if>
+            <if test="curStatus !=null">and cur_status = #{curStatus}</if>
+            <if test="publishStatus !=null">and publish_status = #{publishStatus}</if>
+            <if test="publishContent !=null">and publish_content = #{publishContent}</if>
+            <if test="publishAddr !=null">and publish_addr = #{publishAddr}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EspPublishInfMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_publish_inf
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="EspPublishInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_publish_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="EspPublishInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_publish_inf
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="EspPublishInfModel">
+        delete from tbl_esp_publish_inf where id = id
+    </delete>
+
+    <!--查询条数-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_esp_publish_inf
+        <include refid="conditions"/>
+    </select>
+
+    <!--根据公告id列表取得公告列表不排序-->
+    <select id="findByIds" parameterType="java.util.List" resultMap="EspPublishInfMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_esp_publish_inf
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+        order by FIELD(id,<foreach collection="list" item="item" index="index" separator=",">
+        #{item}
+    </foreach>)
+    </select>
+
+
+    <update id="updateStatus" parameterType="EspPublishInfModel">
+        update tbl_esp_publish_inf set
+        cur_status = #{curStatus} ,modify_oper = #{modifyOper} ,modify_time = now()
+        where id = #{id}
+    </update>
+
+    <select id="findPublishIsNow"  resultMap="EspPublishInfMap">
+        select * from tbl_esp_publish_inf
+        where cur_status='0102' and del_flag = 0
+        and  now() BETWEEN publish_date AND expire_date
+    </select>
+</mapper>
+
+

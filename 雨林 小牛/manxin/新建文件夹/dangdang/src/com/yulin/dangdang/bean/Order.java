@@ -1,0 +1,138 @@
+package com.yulin.dangdang.bean;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class Order implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	private int id;
+	private int user_id; 
+	private int status;
+	private long order_time;
+	private String order_desc;
+	private double total_price;
+	
+	private String receive_name;
+	private String full_address;
+	private String postal_code;
+	private String mobile;
+	private String phone;
+	private List<Item> list;
+	private User user;
+	
+	public List<Item> getList() {
+		return list;
+	}
+	public void setList(List<Item> list) {
+		this.list = list;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(int userId) {
+		user_id = userId;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public long getOrder_time() {
+		return order_time;
+	}
+	public void setOrder_time(long orderTime) {
+		order_time = orderTime;
+	}
+	public String getOrder_desc() {
+		return order_desc;
+	}
+	public void setOrder_desc(String orderDesc) {
+		order_desc = orderDesc;
+	}
+	public double getTotal_price() {
+		return total_price;
+	}
+	public void setTotal_price(double totalPrice) {
+		total_price = totalPrice;
+	}
+	public String getReceive_name() {
+		return receive_name;
+	}
+	public void setReceive_name(String receiveName) {
+		receive_name = receiveName;
+	}
+	public String getFull_address() {
+		return full_address;
+	}
+	public void setFull_address(String fullAddress) {
+		full_address = fullAddress;
+	}
+	public String getPostal_code() {
+		return postal_code;
+	}
+	public void setPostal_code(String postalCode) {
+		postal_code = postalCode;
+	}
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public Order() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Order(int id, int userId, int status, long orderTime,
+			String orderDesc, double totalPrice, String receiveName,
+			String fullAddress, String postalCode, String mobile, String phone) {
+		super();
+		this.id = id;
+		user_id = userId;
+		this.status = status;
+		order_time = orderTime;
+		order_desc = orderDesc;
+		total_price = totalPrice;
+		receive_name = receiveName;
+		full_address = fullAddress;
+		postal_code = postalCode;
+		this.mobile = mobile;
+		this.phone = phone;
+		this.list = list;
+		this.user = user;
+	}
+	@Override
+	public String toString() {
+		return "Order [full_address=" + full_address + ", id=" + id + ", list="
+				+ list + ", mobile=" + mobile + ", order_desc=" + order_desc
+				+ ", order_time=" + order_time + ", phone=" + phone
+				+ ", postal_code=" + postal_code + ", receive_name="
+				+ receive_name + ", status=" + status + ", total_price="
+				+ total_price + ", user=" + user + ", user_id=" + user_id + "]";
+	}
+	
+}

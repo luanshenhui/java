@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderExport">
+    <resultMap id="OrderExportMap" type="cn.com.cgbchina.batch.model.OrderExportModel">
+        <result property="productId" column="product_id" />
+        <result property="ordermainId" column="ordermain_id" />
+        <result property="orderId" column="order_id" />
+        <result property="vendorSnm" column="vendor_snm" />
+        <result property="mid" column="mid" />
+        <result property="xid" column="xid" />
+        <result property="goodsNm" column="goods_nm" />
+        <result property="goodsBrandName" column="goods_brand_name" />
+        <result property="promotionName" column="prname" />
+        <result property="actType" column="act_type" />
+        <result property="o2oCode" column="o2o_code" />
+        <result property="o2oVoucherCode" column="o2o_voucher_code" />
+        <result property="totalMoney" column="total_money" />
+        <result property="voucherNm" column="voucher_nm" />
+        <result property="voucherPrice" column="voucher_price" />
+        <result property="singlePrice" column="single_price" />
+        <result property="singleBonus" column="single_bonus" />
+        <result property="uitdrtamt" column="uitdrtamt" />
+        <result property="specShopno" column="spec_shopno" />
+        <result property="curStatusNm" column="cur_status_nm" />
+        <result property="createTime" column="create_time" />
+        <result property="ordernbr" column="ordernbr" />
+        <result property="sinStatusNm" column="sin_status_nm" />
+        <result property="goodsNum" column="goods_num" />
+        <result property="csgProvince" column="csg_province" />
+        <result property="csgCity" column="csg_city" />
+        <result property="csgBorough" column="csg_borough" />
+        <result property="csgAddress" column="csg_address" />
+        <result property="transcorpNm" column="transcorp_nm" />
+        <result property="mailingNum" column="mailing_num" />
+    </resultMap>
+
+    <!--分页时用的总数-->
+    <select id="exportedExcelOrderCount" resultType="Long">
+        select count(1)
+        from tbl_order o
+        <include refid="exportedExcelOrderSql"/>
+    </select>
+
+
+    <!--内管订单导出6个月内-->
+    <select id="exportedExcelOrder" parameterType="Map" resultMap="OrderExportMap">
+        select g.product_id,
+        o.ordermain_id,o.order_id,o.vendor_snm,i.mid,i.xid,o.goods_nm,g.goods_brand_name,
+        pr.name prname,o.act_type,i.o2o_code,i.o2o_voucher_code,o.total_money,o.voucher_nm,o.voucher_price,
+        o.single_price,o.single_bonus,o.uitdrtamt,o.spec_shopno,o.cur_status_nm,
+        o.create_time,oe.ordernbr,o.sin_status_nm,o.goods_num,om.csg_province,
+        om.csg_city,om.csg_borough,om.csg_address,tr.transcorp_nm,
+        tr.mailing_num
+        from tbl_order o
+        left join tbl_promotion pr
+        on o.act_id = pr.id
+        left join tbl_item i
+        on i.code = o.goods_id
+        left join tbl_goods g
+        on g.code = o.goods_code
+        left join tbl_order_extend1 oe
+        on oe.order_id = o.order_id
+        left join tbl_order_main om
+        on om.ordermain_id = o.ordermain_id
+        left join tbl_order_trans tr
+        on tr.order_id = o.order_id
+        <include refid="exportedExcelOrderSql"/>
+        <![CDATA[ order by o.modify_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <!--分页时用的总数-->
+    <select id="exportedExcelOrderOldCount" resultType="Long">
+        select count(1)
+        from tblorder_history o
+        <include refid="exportedExcelOrderSql"/>
+    </select>
+
+    <!--内管订单导出6个月外-->
+    <select id="exportedExcelOrderOld" parameterType="Map" resultMap="OrderExportMap">
+        select g.product_id,
+        o.ordermain_id,o.order_id,o.vendor_snm,i.mid,i.xid,o.goods_nm,g.goods_brand_name,
+        pr.name prname,o.act_type,i.o2o_code,i.o2o_voucher_code,o.total_money,o.voucher_nm,o.voucher_price,
+        o.single_price,o.single_bonus,o.uitdrtamt,o.spec_shopno,o.cur_status_nm,
+        o.create_time,oe.ordernbr,o.sin_status_nm,o.goods_num,om.csg_province,
+        om.csg_city,om.csg_borough,om.csg_address,tr.transcorp_nm,
+        tr.mailing_num
+        from tblorder_history o
+        left join tbl_promotion pr
+        on o.act_id = pr.id
+        left join tbl_item i
+        on i.code = o.goods_id
+        left join tbl_goods g
+        on g.code = o.goods_code
+        left join tbl_order_extend1 oe
+        on oe.order_id = o.order_id
+        left join tblordermain_history om
+        on om.ordermain_id = o.ordermain_id
+        left join tbl_order_trans tr
+        on tr.order_id = o.order_id
+        <include refid="exportedExcelOrderSql"/>
+        <![CDATA[ order by o.modify_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <sql id="exportedExcelOrderSql">
+        <where>
+            <if test="goodsId !=null">and
+                (   o.goods_id = #{goodsId}
+                    or o.goods_id in (
+                    select code from tbl_item where mid =#{goodsId})
+                    or o.goods_id in (
+                    select code from tbl_item where xid =#{goodsId})
+                )
+            </if>
+            <if test="curStatusId !=null">and o.cur_status_id = #{curStatusId}</if>
+            <if test="ordertypeId !=null">and o.ordertype_id = #{ordertypeId}</if>
+            <if test="ordertypeId ==null">and o.ordertype_id in('YG','FQ')</if>
+            <if test="vendorSnm !=null">and o.vendor_snm LIKE concat('%',#{vendorSnm},'%')</if>
+            <if test="sourceId !=null">and o.source_id = #{sourceId}</if>
+            <if test="cardno !=null">and o.cardno LIKE concat('%',#{cardno},'%')</if>
+            <if test="memberName !=null">and o.member_name = #{memberName}</if>
+            <if test="orderId !=null">and o.order_id LIKE concat(#{orderId},'%')</if>
+            <if test="goodsType !=null">and o.goods_type = #{goodsType}</if>
+            <if test="delFlag !=null">and o.del_flag = #{delFlag}</if>
+            <if test="goodsTypeFlag !=null">and o.goods_type != #{goodsTypeFlag}</if>
+            <if test="goodsNm !=null">and o.goods_nm LIKE concat('%',#{goodsNm},'%')</if>
+            <if test="custType">and o.cust_type = #{custType}</if>
+            <if test="startTime !=null">and <![CDATA[ o.create_time >= #{startTime} ]]></if>
+            <if test="endTime !=null">and <![CDATA[ o.create_time <= #{endTime} ]]></if>
+        </where>
+    </sql>
+
+
+    <select id="findDoDetail" parameterType="java.util.List"  resultType="Map">
+        SELECT
+        order_id orderId, do_time doTime, status_id statusId
+        from tbl_order_dodetail
+        where order_id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and do_time is not null and status_id is not null
+        order by order_id DESC , do_time DESC
+    </select>
+
+    <select id="findDoDetailOld" parameterType="java.util.List"  resultType="Map">
+        SELECT
+        order_id orderId, do_time doTime, status_id statusId
+        from tblorderdodetail_history
+        where order_id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and do_time is not null and status_id is not null
+        order by order_id DESC , do_time DESC
+    </select>
+</mapper>
+
+

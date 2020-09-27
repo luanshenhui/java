@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="rcmtm.entity.OrdenBatch" table="OrdenBatch">
+    	<id name="ID" type="integer">
+            <column name="ID"/>
+            <generator class="sequence">
+            	<param name= "sequence">ORDENBATCH_ID</param> 
+            </generator>
+        </id>
+        <property name="BatchNo" type="string">
+            <column name="BatchNo" />
+        </property>
+        <property name="OrdenIDs" type="string">
+            <column name="OrdenIDs" />
+        </property>
+        <property name="SysCodes" type="string">
+            <column name="SysCodes" />
+        </property>
+        <property name="Status" type="integer">
+            <column name="Status" />
+        </property>
+    </class>
+</hibernate-mapping>

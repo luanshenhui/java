@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OPSOrderProgressSearch">
+    <select id="getSumOPSOrderCount" resultType="Integer">
+        select
+            count(1)
+        from tbl_order
+        where
+            cur_status_id in ('0301', '0316', '0305','0360')
+            and ordertype_id = 'FQ'
+            and cash_auth_type = '1'
+            and is_cancel_ops is null
+    </select>
+
+    <select id="getAllOPSOrderByStatus" parameterType="Map" resultType="cn.com.cgbchina.batch.model.OpsOrderModel">
+        select
+        o.order_id as orderId,
+        o.ordermain_id as orderMainId,
+        o.source_id as sourceId,
+        o.vendor_id as vendorId,
+        o.cardno as "cardNo",
+        o.create_time as createTime,
+        e.caseid as "caseId"
+        from
+        tbl_order o,
+        tbl_order_extend1 e
+        where
+        o.cur_status_id in ('0301', '0316', '0305','0360')
+        and o.ordertype_id = 'FQ'
+        and o.cash_auth_type = '1'
+        and o.is_cancel_ops is null
+        and o.order_id = e.order_id
+        <![CDATA[ and (e.extend2 is null or
+         str_to_date(e.extend2,"%Y%m%d%H%i%s") < str_to_date(#{preTime},"%Y-%m-%d %H:%i:%s") or 
+         str_to_date(e.extend2,"%Y-%m-%d %H:%i:%s") < str_to_date(#{preTime},"%Y-%m-%d %H:%i:%s")) ]]> 
+        order by o.order_id desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="findCurStatusIdById" parameterType="String" resultType="String">
+        select cur_status_id
+        from tbl_order
+        where order_id=#{orderId}
+    </select>
+
+    <update id="updateIsCancelOps" parameterType="String">
+        update tbl_order set is_cancel_ops = 1
+        where order_id = #{orderId}
+    </update>
+
+</mapper>

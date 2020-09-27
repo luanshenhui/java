@@ -1,0 +1,25 @@
+<script language= "javascript" src="../fabric/occupylist.js"></script>
+<div id="fabric_occupy_result" class="list_search">
+<h1></h1>
+<div id="FabricOccupyResult"></div>
+<textarea  id="FabricOccupyTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="lblCode"></td>
+			<td class="lblOccupyAmount"></td>
+			<td class="lblMemo"></td>
+			<td class="lblFromDate"></td>
+			<td class="lblToDate"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr>
+			<td>{$T.row.xttxhm}</td>
+			<td>{$T.row.xtzysl}</td>
+			<td>{$T.row.xtzybz}</td>
+			<td>{$T.row.xtzysj}</td>
+			<td>{$T.row.xtsfsj}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>
+</div>

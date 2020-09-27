@@ -1,0 +1,13 @@
+{{#partial "realTitle"}}新增礼品信息{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "points_present/present_add" true}}
+            {
+            "business":"add",
+            "channel":"JF"
+            }
+        {{/inject}}
+
+    </div>
+{{/partial}}
+{{> views/index_layout}}

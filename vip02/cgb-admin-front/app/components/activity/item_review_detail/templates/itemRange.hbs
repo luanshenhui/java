@@ -1,0 +1,72 @@
+<tr>
+    <th scope="col" width="25">序号111</th>
+    <th scope="col" width="70">分类</th>
+    <th scope="col" width="50">品牌</th>
+    <th scope="col" width="70"> 单品编码</th>
+    <th scope="col" width="90">商品名称</th>
+    <th scope="col" width="70">供应商</th>
+    {{#equals promType "50"}}
+        <th scope="col" width="50">起拍价（元）</th>
+        <th scope="col" width="50">最低价（元）</th>
+        <th scope="col" width="50">降价金额</th>
+    {{else}}
+        <th scope="col" width="70">活动价</th>
+    {{/equals}}
+    <th scope="col" width="50">活动商品数量</th>
+    <th width="20">费用承担方</th>
+    <th class="check-status-td" scope="col" width="70">审核状态</th>
+    <th class="option-td" scope="col" width="60">操作</th>
+</tr>
+<tbody class="prom-item-dtos" data-data="{{json ranges}}">
+{{#each ranges}}
+    <tr data-data="{{json this}}">
+        <td>{{id}}</td>
+        {{#equals backCategoryName "null"}}
+            <td>{{backCategory1Name}}>{{backCategory2Name}}>{{backCategory3Name}}</td>
+        {{else}}
+            <td>{{backCategoryName}}</td>
+        {{/equals}}
+        <td>{{goodsBrandName}}</td>
+        <td class="itemCodeTd" data-id="{{itemCode}}">{{itemCode}}</td>
+        <td>{{goodsName}}</td>
+        <td>{{vendor}}</td>
+        {{#equals ../promType "50"}}
+            <td> {{startPrice}}</td>
+            <td> {{minPrice}}</td>
+            <td> {{feeRange}}</td>
+        {{/equals}}
+        {{#equals ../promType "40"}}
+            <td> {{levelPrice}}</td>
+        {{/equals}}
+        {{#equals ../promType "30"}}
+            <td> {{price}}</td>
+        {{/equals}}
+        {{#equals ../promType "20"}}
+            <td> {{price}}</td>
+        {{/equals}}
+        {{#equals ../promType "10"}}
+            <td> {{{price}}}</td>
+        {{/equals}}
+
+        <td>{{perStock}}</td>
+        <td class="activity-state">
+            {{#equals costBy "1"}}
+                供应商
+            {{else}}
+                行方
+            {{/equals}}
+        </td>
+        <td class="check-status-td-value" data-id="item-check-status-{{id}}">
+            {{#equals checkStatus "0"}}待审核{{/equals}}
+            {{#equals checkStatus "1"}}已通过{{/equals}}
+            {{#equals checkStatus "2"}}已拒绝{{/equals}}
+        </td>
+        <td class="option-td-value" data-id="{{id}}" data-auditLog="{{auditLog}}">
+            {{#equals checkStatus "0"}}
+                <a class="margin-right-10 item-passed" href="javascript:void(0);">通过</a>
+                <a class="item-refused" href="javascript:void(0);">拒绝</a>
+            {{/equals}}
+        </td>
+    </tr>
+{{/each}}
+</tbody>

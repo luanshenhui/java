@@ -1,0 +1,230 @@
+package com.dpn.ciqqlc.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.dpn.ciqqlc.common.util.Constants;
+import com.dpn.ciqqlc.common.util.LazySingleton;
+import com.dpn.ciqqlc.http.form.WarningLinkRuleForm;
+import com.dpn.ciqqlc.service.dto.WarningDto;
+import com.dpn.ciqqlc.standard.model.WarningEventDto;
+import com.dpn.ciqqlc.standard.model.WarningStandardEventDto;
+import com.dpn.ciqqlc.standard.service.WarningEventService;
+
+@Repository("warningEventService")
+@Transactional
+public class WarningEventServiceImpl implements WarningEventService{
+	
+	private final Logger logger_ = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	@Qualifier("blankSST")
+	private SqlSession sqlSession;
+	
+	@Override
+	public String updateEvent(WarningDto dto) {
+		//生成批次号,根据日期
+		try {
+			//批量插入event表
+			sqlSession.insert("SQL.WARNING_EVENT.insertEvents", dto.getEventDtoList());
+			//计算需要写入不符合规范表的数据
+			List<WarningStandardEventDto> standardList = calculateStandard(dto);
+			
+			//List<WarningStandardEventDto> dtos = new ArrayList<WarningStandardEventDto>();
+			
+			//写入规范执法记录(记录未规范执法内容)
+			if (standardList != null && standardList.size() != 0) {
+				sqlSession.insert("SQL.WARNING_EVENT.insertStandardEvents", standardList);
+			}
+			return "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "fail";
+		}
+	}
+	
+	
+	//判断环节类型
+	@Override
+	public List<WarningStandardEventDto> calculateStandard(WarningDto dto) {
+		List<WarningStandardEventDto> list = new ArrayList<WarningStandardEventDto>();
+		try {
+			WarningEventDto warningEvent = new WarningEventDto();
+			warningEvent.setBusinessType(dto.getEventDtoList().get(0).getBusinessType());
+			warningEvent.setWarningId(dto.getEventDtoList().get(0).getWarningId());
+			//一般处罚
+			//if (dto.getEventDtoList().get(0).getBusinessType().equalsIgnoreCase(Constants.BUSINESS_TYPE11)) {
+				//查询当前所有该数据的操作记录   根据流程环节降序
+				
+				List<WarningEventDto> warningEventList = sqlSession.selectList("SQL.WARNING_EVENT.selectEventByIdAndBusinessType", warningEvent);
+				//比较数据，需写入Standard
+				if (warningEventList != null && warningEventList.size() != 0) {
+					//获取最后环节
+					WarningEventDto e = warningEventList.get(0);
+					String endModuleType = e.getFirstModuleType();
+					
+					//List<WarningLinkRuleForm> rules = LazySingleton.getInstance().getRules().get(Constants.BUSINESS_TYPE11);
+					List<WarningLinkRuleForm> rules = LazySingleton.getInstance().getRules().get(dto.getBusinessType());
+					//二级环节对应规则（需要的文件）
+					Map<String , List<WarningLinkRuleForm>> ruleMap = toLinkRuleMap(rules);
+					
+					/*
+					 * 需要删除standard  如果补录了信息
+					 */
+					WarningStandardEventDto s1 = new WarningStandardEventDto();
+					s1.setWarningId(dto.getWarningId());
+					//获取当前业务主键id下的standardEvent
+					List<WarningStandardEventDto> sList = sqlSession.selectList("SQL.WARNING_EVENT.selectStandardByWarningId", s1);
+					updateStandard(dto , sList);
+					/*
+					 * 需要删除standard  如果补录了信息 end
+					 */
+					
+					//获取没有event操作记录的 规则 （需写入standard的内容）
+					Map<String , List<WarningLinkRuleForm>> resultMap = calculateLinkRuleMap(ruleMap,warningEventList,endModuleType , sList);
+					
+					//构建standard
+					if (!resultMap.isEmpty()) {
+						Set<String> keys = resultMap.keySet();
+						for (String s : keys) {
+							if (resultMap.get(s) != null && resultMap.get(s).size() != 0) {
+								List<WarningLinkRuleForm> wrList = resultMap.get(s);
+								for (WarningLinkRuleForm w : wrList) {
+									WarningStandardEventDto warningStandardEventDto = new WarningStandardEventDto();
+									warningStandardEventDto.setBusinessName(dto.getBusinessName());
+									warningStandardEventDto.setBusinessType(dto.getBusinessType());
+									//warningStandardEventDto.setContent();
+									warningStandardEventDto.setDepartmentCode(dto.getDepartmentCode());
+									warningStandardEventDto.setDepartmentName(dto.getDepartmentName());
+									warningStandardEventDto.setFirstModuleName(w.getLinkName());
+									warningStandardEventDto.setFirstModuleType(w.getLinkType());
+									warningStandardEventDto.setPartnerCode(dto.getPartnerCode());
+									warningStandardEventDto.setPartnerName(dto.getPartnerName());
+									//warningStandardEventDto.setSourceOtherTime(sourceOtherTime);
+									//warningStandardEventDto.setSourceTime(sourceTime);
+									warningStandardEventDto.setThirdModuleName(w.getDicName());
+									warningStandardEventDto.setThirdModuleType(w.getDicType());
+									//warningStandardEventDto.setUpdateTime(updateTime); sql写当前系统时间
+									//warningStandardEventDto.setUserName(w.getu);
+									//warningStandardEventDto.setWarningBatchId(warningBatchId);
+									warningStandardEventDto.setWarningFlag("0");
+									warningStandardEventDto.setWarningId(dto.getWarningId());
+									warningStandardEventDto.setWarningNo(dto.getWarningNo());
+									warningStandardEventDto.setWarningType("0");
+									
+									list.add(warningStandardEventDto);
+								}
+							}
+						}
+					}
+				}
+			//}
+			return list;
+		} catch (Exception e) {
+			logger_.error(e.getMessage());
+			return list;
+			// TODO: handle exception
+		}
+		
+	}
+	
+	
+	List<WarningStandardEventDto> calculateModule() {
+		return null;
+	}
+	
+	//二级环节对应规则（需要的文件）
+	public Map<String , List<WarningLinkRuleForm>> toLinkRuleMap(List<WarningLinkRuleForm> rules) {
+		if (rules != null && rules.size() != 0) {
+			Map<String , List<WarningLinkRuleForm>> map = new HashMap<String , List<WarningLinkRuleForm>>();
+			for (WarningLinkRuleForm r : rules) {
+				//需要预警
+				if (r.getWarning().equalsIgnoreCase("1")) {
+					if (map.get(r.getLinkType()) != null && map.get(r.getLinkType()).size() != 0) {
+						map.get(r.getLinkType()).add(r);
+					} else {
+						List<WarningLinkRuleForm> list = new ArrayList<WarningLinkRuleForm>();
+						list.add(r);
+						map.put(r.getLinkType(), list);
+					}
+				}
+			}
+			return map;
+		} 
+		return null;
+	}
+	
+	//二级环节对应规则（需要的文件）
+	public Map<String , List<WarningLinkRuleForm>> calculateLinkRuleMap(Map<String , List<WarningLinkRuleForm>> ruleMap , 
+			List<WarningEventDto> warningEventList , String endModuleType,List<WarningStandardEventDto> list) {
+		/*
+		 * 需要看一下 如果流程开始 第三个文件是空 没传的情况  处理了么
+		 */
+		/**
+		 * 如果已经在standard里存在内容 则不需要重复填写
+		 */
+		
+		Set<String> keys = ruleMap.keySet();
+		for (String s : keys) {
+			List<WarningLinkRuleForm> removeList = new ArrayList<WarningLinkRuleForm>();
+			boolean flag = false;
+			if (s.compareTo(endModuleType) > 0) {
+				ruleMap.get(s).clear();
+				continue;
+			} 
+			for (WarningEventDto WarningEventDto : warningEventList) {
+				//如果是之前的流程环节
+				//if (endModuleType.compareTo(WarningEventDto.getFirstModuleType()) == 1) {
+					List<WarningLinkRuleForm> l = ruleMap.get(s);
+					for (WarningLinkRuleForm w :l) {
+						//表示流程已经开始
+						if (w.getLinkType().equals(WarningEventDto.getFirstModuleType())) {
+							flag = true;
+						}
+						//去除 规范文件
+						if (w.getDicType().equals(WarningEventDto.getThirdModuleType())) {
+							removeList.add(w);
+						} 
+					}
+				//}
+			}
+			ruleMap.get(s).removeAll(removeList);
+			//表示流程还未开始
+			if (!flag) {
+				ruleMap.get(s).clear();
+			}
+		}
+		return ruleMap;
+	}
+	
+	//需要更新standard flag未已解除预警  如果补录了信息
+	public void updateStandard(WarningDto dto , List<WarningStandardEventDto> sList) {
+		List<WarningStandardEventDto> updateList = new ArrayList<WarningStandardEventDto>();
+		List<WarningEventDto> wlist = dto.getEventDtoList();
+		if (sList != null && sList.size() != 0) {
+			for (WarningStandardEventDto ss : sList) {
+				for (WarningEventDto ww : wlist) {
+					if (ww.getThirdModuleType() != null && ww.getThirdModuleType().equals(ss.getThirdModuleType())) {
+						updateList.add(ss);
+					}
+				}
+			}
+		}
+		//如果有补录信息，更新flag为已经补录了信息
+		if (updateList != null && updateList.size() != 0) {
+			sqlSession.update("SQL.WARNING_EVENT.updateBatch", updateList);
+		}
+	}
+	
+}

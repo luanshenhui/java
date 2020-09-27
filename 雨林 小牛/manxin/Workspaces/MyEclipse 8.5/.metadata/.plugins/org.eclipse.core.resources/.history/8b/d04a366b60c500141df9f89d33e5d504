@@ -1,0 +1,16 @@
+package com.yulin.dangdang.dao.daoimpl;
+
+import java.util.List;
+
+import com.yulin.dangdang.bean.SearchKey;
+import com.yulin.dangdang.dao.SerachDao;
+
+public class SearchImpl implements SerachDao{
+
+	@Override
+	public List<SearchKey> keyWord(SearchKey search) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}

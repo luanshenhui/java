@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>s4.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script type="text/javascript" src="../js/jquery-1.4.3.js"></script>
+	<script type="text/javascript">
+		function f1(){
+			$('div:contains(吃饭)').css('font-size','60px');
+		}
+		function f2(){
+			$('div:empty').html('你好');
+		}
+		function f3(){
+			$('div:parent').css('font-size','60px');
+		}
+		
+	</script>
+  </head>
+  
+  <body style="font-size: 30px;">
+    <div>吃饭了吗</div>
+    <div></div>
+    <div>
+    	<span>一会要吃了</span>
+    </div>
+    <a href="javascript:;" onclick="f1();">ClickMe</a>
+  </body>
+</html>

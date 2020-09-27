@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Attachment" table="Attachment">
+        <id name="ID" type="string">
+            <column name="ID" length="32" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="FileName" type="string">
+            <column name="FileName" />
+        </property>
+        <property name="FileNameInDisk" type="string">
+            <column name="FileNameInDisk" />
+        </property>
+        <property name="Description" type="string">
+            <column name="Description"/>
+        </property>
+        <property name="ContentType" type="string">
+            <column name="ContentType"/>
+        </property>
+        <property name="FileLength" type="long">
+            <column name="FileLength" />
+        </property>
+        <property name="NeedWaterMark" type="integer">
+            <column name="NeedWaterMark"/>
+        </property>
+        <property name="MemberID" type="string">
+            <column name="MemberID"/>
+        </property>
+    </class>
+</hibernate-mapping>

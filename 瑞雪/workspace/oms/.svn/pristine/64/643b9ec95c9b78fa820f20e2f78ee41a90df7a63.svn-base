@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>集成管控平台</title>
+<link rel="shortcut icon" href="img/naxin.ico" />
+<link rel="stylesheet" type="text/css" href="/easyUi/jquery-easyui-1.4.5/themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="/easyUi/jquery-easyui-1.4.5/themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="/easyUi/jquery-easyui-1.4.5/demo/demo.css" />
+<script type="text/javascript" src="/easyUi/jquery-easyui-1.4.5/jquery.min.js"></script>
+<script type="text/javascript" src="/easyUi/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/easyUi/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript">
+//去掉最小化 和 最大化功能
+/* $(function(){
+	$(".panel-tool").remove();
+}); */
+
+</script>
+<style type="text/css">
+body {
+	/*  background:url(/images/cloud.png) 0 bottom repeat-x  #CFE2F1; */
+	-webkit-animation: animate-cloud 20s linear infinite;
+	-moz-animation: animate-cloud 20s linear infinite;
+	-ms-animation: animate-cloud 20s linear infinite;
+	-o-animation: animate-cloud 20s linear infinite;
+	animation: animate-cloud 20s linear infinite;
+	width: 100%;
+	height: auto;
+}
+
+.signup_container {
+	width: 340px;
+	height: auto;
+	margin: 5% auto 0;
+	padding-bottom: 20px;
+	background: #EDEDED;
+	text-align: center;
+	border-radius: 8px;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.6);
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+</style>
+</head>
+<body>
+
+	<div id="w" class="easyui-window" title="请登录"
+		data-options="modal:true,cache:false,draggable:false,closed:false,iconCls:'Lockgo',closable:false,collapsible:false,minimizable:false,maximizable:false"
+		style="width: 430px; height: 280px; top: 200px; background: #EDEDF2; padding: 20px 70px 20px 70px;">
+		<form method="post" id="loginForm">
+			<input type="hidden" name="type" value="1">
+			<div style="margin-bottom: 10px">
+				<span id="loginTips"></span> <input id="userName" class="easyui-textbox" type="text" name="userid"
+					style="width: 270px; height: 35px; padding: 12px" data-options="prompt:'登录账号',iconCls:'icon-man',iconWidth:38">
+				<br /> <span id="validationNameTips"></span>
+			</div>
+			<div style="margin-bottom: 20px">
+				<input id="password" class="easyui-textbox" type="password" name="password"
+					style="width: 270px; height: 35px; padding: 12px" data-options="prompt:'登录密码',iconCls:'icon-lock',iconWidth:38">
+				<br /> <span id="validationPwdTips"></span>
+			</div>
+			<!--  <div style="margin-bottom:20px;">
+            <input id="logyzm" class="easyui-textbox" type="text" name="captcha" style="width:80px;height:35px;padding:12px;" data-options="prompt:'验证码'"> <a href="javascript:;" class="showcode"><img id="img_captcha" onclick="refreshCaptcha()" title="看不清？换一个" style=" margin:0 0 0 3px ; vertical-align:middle; height:26px;" src="/servlets/CaptchaServlet"></a>
+        	<br/><span id="validationCaptchaTips"></span>
+        </div> -->
+			<!--  <div style="margin-bottom:20px">
+            <input type="checkbox" checked="checked" id="logrem">
+            <span>记住用户名</span>
+        </div> -->
+			<div>
+				<a href="javascript:;" onclick="dologin()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'"
+					style="padding: 5px 0px; width: 240px; height: 40px;"> <span style="font-size: 14px;">登录</span>
+				</a>
+			</div>
+		</form>
+	</div>
+
+	<!--  <div data-options="region:'south'" style="height:50px;padding:10px;">
+		<div  style="text-align: center;">Copyright© 版权所有</div>
+	</div> -->
+</body>
+
+<script type="text/javascript">
+
+	function dologin() {
+		var userName = $("input[name='userid']").val();
+		var userPwd = $("input[name='password']").val();
+		var captcha = $("input[name='captcha']").val();
+		//var userName = $("#name").val();
+		if (userName == "") {
+			$("#validationNameTips").html("<font color='red'>登录名不能为空</font>");
+			return false;
+		} else if (userPwd == "") {
+			$("#validationPwdTips").html("<font color='red'>密码不能为空</font>");
+			return false;
+		} else if (captcha == "") {
+			$("#validationCaptchaTips").html(
+					"<font color='red'>验证码码不能为空</font>");
+			return false;
+		}
+		//easyUI —— 表单的异步提交
+		//$.messager.progress();	// 显示进度条
+		$('#loginForm').form('submit',{
+			url : '/sysUser/ajaxUserLogin.action',
+			onSubmit : function() {
+				/* param.name = userName;        //如果form不包括在页面输入的信息外，比如单独<form method="post" id="ff"></form>则可以利用此方法提交参数到后台
+				param.password = userPwd; */
+				var isValid = $(this).form('validate');
+				if (!isValid) {
+					//$.messager.progress('close');	// 隐藏进度条的形式是无效的 
+				}
+				return isValid; // 返回false将阻止表单提交
+			},
+			success : function(json) {
+				var data = eval('(' + json + ')'); //改变javascript对象的JSON字符串 
+				if(!data.success){
+					$("#loginTips").html("<font color='red'>"+data.message+"</font>");
+				}else{
+					window.location.href="/sysUser/userPage.action";
+				}
+			}
+		});
+
+	}
+	$(function() {
+		$("input").keyup(function() {
+			$("#validationNameTips").empty();
+			$("#validationPwdTips").empty();
+			$("#validationCaptchaTips").empty();
+		});
+	});
+	
+	 function refreshCaptcha(){
+    	document.getElementById('img_captcha').src='/servlets/CaptchaServlet?'+Math.random()+Math.random();
+  	}
+	 
+	 $(document).keypress(function(e) {  
+		 // 回车键事件  
+		if(e.which == 13) {
+			dologin();
+		 }
+	 });
+</script>
+</html>

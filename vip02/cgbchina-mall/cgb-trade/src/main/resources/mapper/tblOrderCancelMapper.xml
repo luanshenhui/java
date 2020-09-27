@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblOrderCancelModel">
+    <resultMap id="TblOrderCancelMap" type="TblOrderCancelModel">
+        <result property="orderCancelId" column="order_cancel_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="cancelCheckStatus" column="cancel_check_status"/>
+        <result property="cancelTime" column="cancel_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="curStatusId" column="cur_status_id"/>
+        <result property="extend1" column="extend1"/>
+        <result property="extend2" column="extend2"/>
+        <result property="extend3" column="extend3"/>
+    </resultMap>
+    <sql id="columns">
+    order_cancel_id,order_id,cancel_check_status,cancel_time,update_time,cur_status_id,extend1,extend2,extend3
+    </sql>
+
+    <insert id="insert" parameterType="TblOrderCancelModel" useGeneratedKeys="true"
+            keyProperty="orderCancelId" keyColumn="order_cancel_id">
+        insert into tbl_order_cancel
+        (order_id
+        ,cancel_check_status
+        ,cancel_time
+        ,update_time
+        ,cur_status_id
+        ,extend1
+        ,extend2
+        ,extend3)
+        values(#{orderId}
+        ,#{cancelCheckStatus}
+        ,#{cancelTime}
+        ,#{updateTime}
+        ,#{curStatusId}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3})
+    </insert>
+
+    <update id="update" parameterType="TblOrderCancelModel">
+        update tbl_order_cancel set
+            <if test="orderId !=null">order_id = #{orderId}
+                ,</if>
+            <if test="cancelCheckStatus !=null">cancel_check_status = #{cancelCheckStatus}
+                ,</if>
+            <if test="cancelTime !=null">cancel_time = #{cancelTime}
+                ,</if>
+            <if test="updateTime !=null">update_time = #{updateTime}
+                ,</if>
+            <if test="curStatusId !=null">cur_status_id = #{curStatusId}
+                ,</if>
+            <if test="extend1 !=null">extend1 = #{extend1}
+                ,</if>
+            <if test="extend2 !=null">extend2 = #{extend2}
+                ,</if>
+            <if test="extend3 !=null">extend3 = #{extend3}
+                </if>
+        where order_cancel_id = #{orderCancelId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="orderCancelId !=null">and order_cancel_id = #{orderCancelId}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="cancelCheckStatus !=null">and cancel_check_status = #{cancelCheckStatus}</if>
+            <if test="cancelTime !=null">and cancel_time = #{cancelTime}</if>
+            <if test="updateTime !=null">and update_time = #{updateTime}</if>
+            <if test="curStatusId !=null">and cur_status_id = #{curStatusId}</if>
+            <if test="extend1 !=null">and extend1 = #{extend1}</if>
+            <if test="extend2 !=null">and extend2 = #{extend2}</if>
+            <if test="extend3 !=null">and extend3 = #{extend3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblOrderCancelMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_order_cancel
+       where id=#{orderCancelId}
+    </select>
+    <select id="findAll" resultMap="TblOrderCancelMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_cancel
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblOrderCancelMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_cancel
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblOrderCancelModel">
+        delete from tbl_order_cancel where id = orderCancelId
+    </delete>
+
+    <select id="findSumTblOrderCancel" parameterType="String" resultMap="TblOrderCancelMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_cancel
+        where
+        <![CDATA[date_format(cancel_time,'%Y-%m-%d') = #{create_date} ]]>
+    </select>
+    <update id="updateTblOrderCancel" parameterType="String">
+        update tbl_order_cancel set
+        cancel_check_status='1',
+        update_time = now()
+        where <![CDATA[date_format(cancel_time,'%Y-%m-%d') = #{create_date} ]]> and
+        cancel_check_status = '0'
+    </update>
+    <select id="findCancelDate" parameterType="Map" resultMap="TblOrderCancelMap">
+        select
+        cancel_time
+        from tbl_order_cancel
+        where cancel_check_status='0' and
+        <![CDATA[date_format(cancel_time,'%Y-%m-%d') != date_format(now(),'%Y-%m-%d')]]> and
+        order_id in
+        <foreach collection="orderIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>
+
+

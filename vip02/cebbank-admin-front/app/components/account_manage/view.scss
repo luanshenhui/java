@@ -1,0 +1,67 @@
+.account-new{
+  padding: 30px 60px 0 50px !important;
+  max-height:400px;
+  overflow-y:scroll;
+  form{
+    .control-group{
+      label{
+        width: 6em;
+      }
+      textarea{
+        width: 172px;
+        height: 100px;
+      }
+      .controls{
+        margin-left: 90px;
+      }
+    }
+  }
+}
+
+.accounts {
+  .btn-search {
+    float: right;
+  }
+}
+
+.mall-account-modal {
+  width:715px;
+  .account-textarea{
+    width: 50%;
+    word-wrap: break-word;
+    word-break: break-all;
+    display: inline-block;
+}
+  .notice{
+    margin-left: 55px;
+  }
+  .password-div{
+    display: inline-block;
+  }
+}
+.password-modal{
+  width:620px;
+  .password-div{
+    display: inline-block;
+  }
+}
+.check-accpunt{
+  width: 570px;
+  .password-div{
+    display: inline-block;
+  }
+}
+.assign-role{
+  width: 700px;
+  .btn-search {
+    float: left;
+  }
+  .role-left{
+    margin-left: 30px;
+  }
+  .role-height{
+    height: 180px;
+    width: 180px;
+    overflow-y: auto;
+  }
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:properties id="app" location="classpath:app.properties"/>
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+	<dubbo:provider retries="0"/>
+    <!-- Application name -->
+    <dubbo:application name="related-provider" logger="slf4j"/>
+    <!-- registry address, used for service to register itself -->
+    <dubbo:registry address="#{app.dubboRegistry}"/>
+    <!-- expose this service through dubbo protocol, through port 20880 -->
+    <dubbo:protocol serialization="nativejava" name="dubbo" port="#{app.dubboPort}" threads="#{app.dubboThreads}"
+                    heartbeat="#{app.dubboHeartBeats}"/>
+
+    <dubbo:service interface="cn.com.cgbchina.related.service.AnnouncementService" ref="announcementServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.CouPonInfService" ref="couPonInfServiceImpl" timeout="30000"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.BusinessService" ref="businessServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.CfgProCodeService" ref="cfgProCodeServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.EspAdvertiseService" ref="espAdvertiseServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.DefaultSearchTermService" ref="defaultSearchTermServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.HotSearchService" ref="hotSearchServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.KeywordSearchService" ref="keywordSearchServiceImpl" timeout="10000"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.MessageSettingService" ref="messageSettingServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.TradeSettingService" ref="tradeSettingServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.AuctionQuestionInfService" ref="auctionQuestionInfServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.HtmlUploadService" ref="htmlUploadServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.AdvertisingManageService" ref="advertisingManageServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.InfoOutSystemService" ref="infoOutSystemServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.RestACardCustToelectronbankService" ref="restACardCustToelectronbankServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.BankService" ref="bankServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.CfgPriceSystemService" ref="cfgPriceSystemServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.ConfigService" ref="configServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.related.service.ReportRegService" ref="reportRegServiceImpl"/>
+    <import resource="related-service-context.xml"/>
+    <import resource="mybatis-context.xml"/>
+    <!-- ID生成规则 -->
+    <import resource="classpath*:/spring/generator-context.xml"/>
+</beans>

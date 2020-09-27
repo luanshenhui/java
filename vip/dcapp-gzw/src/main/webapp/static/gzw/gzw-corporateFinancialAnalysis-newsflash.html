@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>企业财务分析</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/model.css" />
+<link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+<link rel="stylesheet" href="css/three-important1.css"/>
+<link rel="stylesheet" href="css/personal.css"/>
+<script src="js/echarts.min.js"></script>
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/js.js"></script>
+<script src="js/module/corporateFinancialAnalysis-newsflash.js"></script>
+</head>
+<body>
+<div class="box">
+    <div class="box-head">
+        <!--<a href="firstpage.html" class="arrow-back"><i></i>首页</a>-->
+        <p class="box-title">企业财务分析</p>
+    </div>
+    <div class="box-container">
+        <div class="box-left">
+            <ul>
+                <li>
+                    <a href="gzw-corporateFinancialAnalysis-statistics.html">统计分析</a>
+                </li>
+                <li class="on">
+                    <a href="gzw-corporateFinancialAnalysis-newsflash.html">快报分析</a>
+                </li>
+                <li>
+                    <a href="gzw-corporateFinancialAnalysis-annual.html">年报分析</a>
+                </li>
+            </ul>
+        </div>
+        <div class="box-right">
+            <div class="box-right-title">
+                <p><i></i>快报分析</p>
+            </div>
+            <div class="box-right-form  three-important1">
+                <div class="risk-form-main financial-chart corFinancial-chart">
+                    <p class="corFinancial-title">
+                        <!--<span class="on">铁投</span><span>住投</span><span>工投</span>
+                        <span>旅文投</span><span>城投</span><span>农投</span>-->
+                    </p>
+                    <div class="chart-left risk-level">
+                        <div id="chart1" style="width:800px;height: 320px;" class="company-module"></div>
+                        <div id="chart1-nodata" style="width:800px;height: 320px;" class="company-module"></div>
+                        <div id="chart2" style="width:800px;height: 320px;" class="company-module"></div>
+                        <div id="chart2-nodata" style="width:800px;height: 320px;" class="company-module"></div>
+                        <p class="clear"></p>
+                    </div>
+                    <div class="financial-table">
+                        <table class="style-table" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>提交时间<br/>（企业）</th><th>审批时间<br/>（财监处）</th>
+                            </tr>
+                            </thead>
+                            <tbody id="table-data">
+                            </tbody>
+                            <tr id="table-nodata" style="display: none"><td>暂无数据</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+</body>
+</html>

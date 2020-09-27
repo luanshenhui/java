@@ -1,0 +1,158 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>抽样凭证</title>
+<%@ include file="/common/resource_new.jsp"%>
+</head>
+<body>
+<script type="text/javascript">
+
+	$(function(){
+		var package_no = $("#package_no").val();
+		if($("#t_package_no").val() ==""){
+			$("#t_package_no").val(package_no);
+		}
+		var consignee_name = $("#consignee_name").val();
+		if($("#t_comp_name").val() ==""){
+			$("#t_comp_name").val(consignee_name);
+		}
+		var cago_name = $("#cago_name").val();
+		if($("#t_cago_name").val() ==""){
+			$("#t_cago_name").val(cago_name);
+		}
+		var t_cysj = $("#t_cysj").val();
+		if($("#t_cysj").val() ==""){
+			var nowate =new Date();
+            var nowate_text = nowate.getFullYear() +"年"+ (nowate.getMonth()+1) +"月"+ nowate.getDate() +"日";
+			$("#t_cysj").val(nowate_text);
+		}
+		var t_cydd = $("#t_cydd").val();
+		if($("#t_cydd").val() ==""){
+			$("#t_cydd").val("大连国际邮件处理中心");
+		}
+	})
+</script>
+
+<style type="text/css">
+input{
+    border: 0px;
+    outline: none;
+    text-align: center;    
+/*     border-bottom: 1px solid #000; */
+}
+<!--
+.tableLine {
+	border: 1px solid #000;
+}
+.fangxingLine {
+	font-size:10;
+	margin-left:5px;
+	margin-right:5px;
+	border: 2px solid #000;
+	font-weight:900;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+.tableLine2 {
+	border: 1px solid #000;
+	padding-left: 10px; 
+}
+.tableLine_noright {
+	padding-left: 10px;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #000;
+	border-bottom-color: #000;
+	border-left-color: #000;
+}
+.tableLine_noleft {
+	padding-left: 10px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #000;
+	border-right-color: #000;
+	border-bottom-color: #000;
+}
+@media print {
+.noprint{display:none}
+}
+-->
+</style>
+
+<form action="/ciqs/mail/submitDoc?type=1"  method="post">
+	<input type ="hidden" id="consignee_name" value="${dto.consignee_name}" />
+	<input type ="hidden" id="cago_name" value="${dto.cago_name}" />
+	<input type ="hidden" id="package_no" name="ProcMainId" value="${dto.package_no}" />
+	<input type ="hidden" name="DocType" value="D_CYPZ" />
+	<input type ="hidden" name="DocId" value="${doc.docId}" />
+	<div id="content">
+	    <table width="860" align="center">
+	        <tr>
+	          <td colspan="3" align="center" style="height:60px;font-size:25px;font-family:'楷体_GB2312';font-weight: bold;">
+	          	辽宁检验检疫局抽样凭证
+	          </td>
+	        </tr>
+	        <tr>
+	          <td style="text-align:right" colspan="3">邮件单号：<input id="t_package_no" style="text-align:left;padding-left:5px;width:180px" type ="text" value="${doc.option1}" name="option1"/></td>
+	        </tr>
+	    </table>
+	    <table width="860"  border="0" align="center" style="margin-top:5px;font-size: 14px; line-height: 30px; text-align: left;" cellpadding="0" cellspacing="0"   class="tableLine">
+	      <tr>
+	        <td style="width:20%;height:44px" align="center" class="tableLine">单位名称</td>
+	        <td align="left" class="tableLine" style="width:30%;text-align:left;padding-left:10px;">
+	        	<input id="t_comp_name" style="text-align:left;padding-left:5px;width:180px" type ="text" value="${doc.option2}" name="option2"/>
+	        </td>
+	        <td style="width:20%;height:44px" height="44" align="center" class="tableLine">商品名称</td>
+	        <td align="left" class="tableLine" style="width:30%;text-align:left;padding-left:10px;">
+	        	<input id="t_cago_name" style="text-align:left;padding-left:5px;width:180px" type ="text" value="${doc.option3}" name="option3"/>
+	        </td>
+	      </tr>
+     	  <tr>
+	        <td height="44" align="center" class="tableLine">抽样时间</td>
+	        <td align="left" class="tableLine" style="text-align:left;padding-left:10px;">
+	        	<input id="t_cysj" style="text-align:left;padding-left:5px;width:180px" type ="text" value="${doc.option4}" name="option4"/>
+	        </td>
+	        <td height="44" align="center" class="tableLine">抽样地点</td>
+	        <td align="left" class="tableLine" style="text-align:left;padding-left:10px;">
+	        	<input id="t_cydd" style="text-align:left;padding-left:5px;width:180px" type ="text" value="${doc.option5}" name="option5"/>
+	        </td>
+	      </tr>
+     	  <tr>
+	        <td height="44" align="center" class="tableLine">抽样数（重）量</td>
+	        <td align="left" class="tableLine" style="text-align:left;padding-left:10px;">
+	        	<input style="text-align:left;padding-left:5px;width:180px" type ="text" value="${doc.option6}" name="option6"/>
+	        </td>
+	        <td height="44" align="center" class="tableLine">检验检疫项目</td>
+	        <td align="left" class="tableLine" style="text-align:left;padding-left:10px;">
+	        	<input style="text-align:left;padding-left:5px;width:180px" type ="text" value="${doc.option7}" name="option7"/>
+	        </td>
+	      </tr>
+	      <tr>
+	        <td height="44" align="center" class="tableLine">备注</td>
+	        <td align="left" class="tableLine" style="text-align:left;padding:2px" colspan="3">
+	        	<textarea rows="8" cols="92" name="option8">${doc.option8}</textarea>
+	        </td>
+	      </tr>
+      </table>
+		<div style="text-align: center;margin-top:5px" class="noprint">
+		    <span>
+		    	<input type="submit" style="cursor: pointer;margin: 40px 0px 0px 50px; width: 50px;height: 30px;" value="保存" type="button" />
+				<input type="button" style="cursor: pointer;margin: 40px 0px 0px 50px; width: 50px;height: 30px;" value="打印" type="button" onclick="javascript:window.print()" />
+				<input type="button" style="cursor: pointer;margin: 40px 0px 0px 50px; width: 50px;height: 30px;" value="返回" type="button" onclick="javascript:window.close()" />
+		    </span>
+		</div>
+	</div>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+package cn.rkylin.oms.system.logistics.service;
+
+import java.util.List;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.oms.system.logistics.domain.OMS_LGST;
+import cn.rkylin.oms.system.logistics.vo.LogisticsVO;
+
+public interface ILogisticsService {
+	PageInfo<LogisticsVO> findByWhere(int page, int length, LogisticsVO param) throws Exception;
+
+	public void delete(String lgstId) throws Exception;
+	
+	List getStorByCondition(LogisticsVO lgstVO) throws Exception;
+	
+	public void insert(LogisticsVO lgstVO) throws Exception;
+	
+	public OMS_LGST selectStorDetail(String lgstId) throws Exception;
+	
+	public void update(LogisticsVO lgstVO) throws Exception;
+}

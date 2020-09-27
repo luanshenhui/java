@@ -1,0 +1,22 @@
+<div class="bind-new col-left-common margin-top-10">
+</div>
+<div class="clear"></div>
+<table class="table elseTemplate">
+    <thead>
+    <tr>
+        <th width="30%">参数名称</th>
+        <th width="30%">绑定卡板</th>
+        <th width="40%">品类卡板名称</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each list}}
+        <tr data-id="{{cardPro.formatId}}"  data-data="{{json this}}" class="js-table-unbind">
+            <td>{{proNm}}</td>
+            <td>{{cardPro.formatId}}</td>
+            <td>{{cardPro.cardproNm}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+<div class="pagination" data-total="{{data.total}}"></div>

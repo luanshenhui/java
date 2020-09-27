@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblParametersModel">
+    <resultMap id="TblParametersMap" type="TblParametersModel">
+        <result property="parametersId" column="parameters_id"/>
+        <result property="parametersType" column="parameters_type"/>
+        <result property="parametersTypeNm" column="parameters_type_nm"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="ordertypeIdNm" column="ordertype_id_nm"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="sourceIdNm" column="source_id_nm"/>
+        <result property="prompt" column="prompt"/>
+        <result property="openCloseFlag" column="open_close_flag"/>
+        <result property="isPrompt" column="is_prompt"/>
+        <result property="extend1" column="extend1"/>
+        <result property="extend2" column="extend2"/>
+        <result property="extend3" column="extend3"/>
+    </resultMap>
+    <sql id="columns">
+        parameters_id,parameters_type,parameters_type_nm,ordertype_id,ordertype_id_nm,source_id,source_id_nm,prompt,open_close_flag,is_prompt,extend1,extend2,extend3
+    </sql>
+
+    <insert id="insert" parameterType="TblParametersModel" useGeneratedKeys="true"
+            keyProperty="parametersId" keyColumn="parameters_id">
+        insert into tbl_parameters
+        (parameters_type
+        ,parameters_type_nm
+        ,ordertype_id
+        ,ordertype_id_nm
+        ,source_id
+        ,source_id_nm
+        ,prompt
+        ,open_close_flag
+        ,is_prompt
+        ,extend1
+        ,extend2
+        ,extend3)
+        values(#{parametersType}
+        ,#{parametersTypeNm}
+        ,#{ordertypeId}
+        ,#{ordertypeIdNm}
+        ,#{sourceId}
+        ,#{sourceIdNm}
+        ,#{prompt}
+        ,#{openCloseFlag}
+        ,#{isPrompt}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3})
+    </insert>
+
+    <update id="update" parameterType="TblParametersModel">
+        update tbl_parameters set
+        <if test="parametersType !=null">parameters_type = #{parametersType}
+            ,
+        </if>
+        <if test="parametersTypeNm !=null">parameters_type_nm = #{parametersTypeNm}
+            ,
+        </if>
+        <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+            ,
+        </if>
+        <if test="ordertypeIdNm !=null">ordertype_id_nm = #{ordertypeIdNm}
+            ,
+        </if>
+        <if test="sourceId !=null">source_id = #{sourceId}
+            ,
+        </if>
+        <if test="sourceIdNm !=null">source_id_nm = #{sourceIdNm}
+            ,
+        </if>
+        <if test="prompt !=null">prompt = #{prompt}
+            ,
+        </if>
+        <if test="openCloseFlag !=null">open_close_flag = #{openCloseFlag}
+            ,
+        </if>
+        <if test="isPrompt !=null">is_prompt = #{isPrompt}
+            ,
+        </if>
+        <if test="extend1 !=null">extend1 = #{extend1}
+            ,
+        </if>
+        <if test="extend2 !=null">extend2 = #{extend2}
+            ,
+        </if>
+        <if test="extend3 !=null">extend3 = #{extend3}
+        </if>
+        where parameters_id = #{parametersId}
+    </update>
+
+    <update id="updateOpenCloseFlag" parameterType="TblParametersModel">
+        update tbl_parameters set
+        <if test="openCloseFlag !=null">open_close_flag = #{openCloseFlag}
+        </if>
+        where parameters_id = #{parametersId}
+    </update>
+
+    <update id="updatePrompt" parameterType="TblParametersModel">
+        update tbl_parameters set
+        <if test="prompt !=null">prompt = #{prompt}
+        </if>
+        where parameters_id = #{parametersId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="parametersId !=null">and parameters_id = #{parametersId}</if>
+            <if test="parametersType !=null">and parameters_type = #{parametersType}</if>
+            <if test="parametersTypeNm !=null">and parameters_type_nm = #{parametersTypeNm}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="ordertypeIdNm !=null">and ordertype_id_nm = #{ordertypeIdNm}</if>
+            <if test="sourceId !=null">and source_id = #{sourceId}</if>
+            <if test="sourceIdNm !=null">and source_id_nm = #{sourceIdNm}</if>
+            <if test="prompt !=null">and prompt = #{prompt}</if>
+            <if test="openCloseFlag !=null">and open_close_flag = #{openCloseFlag}</if>
+            <if test="isPrompt !=null">and is_prompt = #{isPrompt}</if>
+            <if test="extend1 !=null">and extend1 = #{extend1}</if>
+            <if test="extend2 !=null">and extend2 = #{extend2}</if>
+            <if test="extend3 !=null">and extend3 = #{extend3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblParametersMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_parameters
+        where id=#{parametersId}
+    </select>
+    <select id="findAll" resultMap="TblParametersMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_parameters
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblParametersMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_parameters
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_parameters
+        <include refid="conditions"/>
+    </select>
+    <!--查询所有启停信息 add by liuhan-->
+    <select id="pagerQuery" parameterType="Map" resultMap="TblParametersMap">
+        select
+        <include refid="columns"/>
+        from tbl_parameters
+        <include refid="conditions"/>
+        <![CDATA[ order by parameters_id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblParametersModel">
+        delete from tbl_parameters where id = parametersId
+    </delete>
+    <select id="findByWebLogin" resultMap="TblParametersMap">
+        select
+        <include refid="columns"/>
+        from tbl_parameters
+        where parameters_type = 0 and source_id = '00'
+        order by parameters_id
+    </select>
+    <select id="findJudgeQT" parameterType="Map"  resultMap="TblParametersMap">
+        select
+        <include refid="columns"/>
+        from tbl_parameters
+        where parameters_type=#{parametersType} and ordertype_id=#{ordertypeId} and source_id=#{sourceId}
+    </select>
+</mapper>
+
+

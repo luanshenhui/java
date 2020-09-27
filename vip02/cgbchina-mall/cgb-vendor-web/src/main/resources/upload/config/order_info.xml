@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+    <worksheet idx="0">
+        <!--保留空白位置，保证loop开始读取位置正确-->
+        <section startRow="0" endRow="3">
+        </section>
+        <!-- items:对应Java里面的Map<> bean的key -->
+        <loop startRow="4" endRow="4" items="items" var="orderInfo" varType="cn.com.cgbchina.trade.dto.OrderInputDto">
+            <section startRow="4" endRow="4">
+                <mapping row="4" col="1">orderInfo.orderId</mapping>
+                <mapping row="4" col="2">orderInfo.mailingNum</mapping>
+                <mapping row="4" col="3">orderInfo.doDate</mapping>
+                <mapping row="4" col="4">orderInfo.doTime</mapping>
+                <mapping row="4" col="5">orderInfo.transcorpNm</mapping>
+                <mapping row="4" col="6">orderInfo.servicePhone</mapping>
+                <mapping row="4" col="7">orderInfo.serviceUrl</mapping>
+                <mapping row="4" col="8">orderInfo.mailingMan</mapping>
+                <mapping row="4" col="9">orderInfo.mailingMobile</mapping>
+                <mapping row="4" col="10">orderInfo.doDesc</mapping>
+            </section>
+            <!--循环结束条件 最后离结束内容的偏移-->
+            <loopbreakcondition>
+                <!--offset 行偏移 正数n为读取当前行时先判断往下n行是否符合结束条件 负数测试过，走不通读取数据-->
+                <rowcheck offset="0">
+                    <!--offset 为判断该行那一列(个)单元格内容
+                        下面两个条件必须同时满足即&&-->
+                    <cellcheck offset="0"></cellcheck>
+                    <cellcheck offset="1"></cellcheck>
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>

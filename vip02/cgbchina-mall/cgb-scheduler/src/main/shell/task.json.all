@@ -1,0 +1,322 @@
+[
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.DealBestRateService",
+      "taskName": "executeDealBestRate",
+      "desc": "计算最佳倍率",
+      "taskCron": "0 20 0 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.PromotionSyncService",
+      "taskName": "syncDBtoRedis",
+      "desc": "同步活动数据到redis",
+      "taskCron": "0 0 2 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.PromotionSyncService",
+      "taskName": "batchProm",
+      "desc": "荷兰拍实时",
+      "taskCron": "*/30 * * * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.PromotionSyncService",
+      "taskName": "batchDutchAuctionRelease",
+      "desc": "荷兰拍释放",
+      "taskCron": "0 0/5 * * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.SendOutSystemService",
+      "taskName": "sendOrders2Outsystem",
+      "desc": "O2O定时推送任务",
+      "taskCron": "45 0/10 * * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.InitPointPoolService",
+      "taskName": "executeInitPointPool",
+      "desc": "初始化下一个月的积分池",
+      "taskCron": "0 0 5 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.ClearQueryService",
+      "taskName": "clearQuery",
+      "desc": "分期业务请款数据批次订单请款",
+      "taskCron": "0 10,40 * * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.IvrRankService",
+      "taskName": "rankListWithTxn",
+      "desc": "IVR排行定时任务",
+      "taskCron": "0 25 0 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.MakeCheckAccRenewService",
+      "taskName": "makeCheckAccRenewWithTxn",
+      "desc": "自动补跑对账文件批处理",
+      "taskCron": "0 30 4 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.OpsOrderProgressSearchService",
+      "taskName": "sendOPSOrderToBPS",
+      "desc": "OPS订单状态查询服务",
+      "taskCron": "0 10,40 * * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.OrderStatusQueryService",
+      "taskName": "orderStatusQuery",
+      "desc": "企业网银状态回查",
+      "taskCron": "0 15,45 * * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.ClearOrderOutSysService",
+      "taskName": "clearWithTxn",
+      "desc": "定时清理推送表",
+      "taskCron": "0 30 0 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.HotRankService",
+      "taskName": "hotSaleRank",
+      "desc": "热销商品排行计算",
+      "taskCron": "0 5 2 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.HotRankService",
+      "taskName": "hotCollectionRank",
+      "desc": "热门收藏排行",
+      "taskCron": "0 15 2 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.HotRankService",
+      "taskName": "hotSaleRankForVendor",
+      "desc": "供应商热销统计排行",
+      "taskCron": "0 50 2 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.HotRankService",
+      "taskName": "hotCollectionRankForVendor",
+      "desc": "供应商热门收藏排行",
+      "taskCron": "0 40 2 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.HotRankService",
+      "taskName": "countHotCategory",
+      "desc": "热销品类统计",
+      "taskCron": "0 30 2 ? * MON",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.HotRankService",
+      "taskName": "countHotVendor",
+      "desc": "供应商销量统计",
+      "taskCron": "0 20 2 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.HotRankService",
+      "taskName": "countVendorWeekSale",
+      "desc": "供应商一周数据统计",
+      "taskCron": "0 10 2 ? * MON",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.SynBonusService",
+      "taskName": "synBonusTypeByBPMSWithTxn",
+      "desc": "【集中调度】积分类型同步处理任务",
+      "taskCron": "0 5 0 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.BatchOrderService",
+      "taskName": "overdueOrderProc",
+      "desc": "【集中调度】废单批处理",
+      "taskCron": "0 15 0 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.MakeCheckAccService",
+      "taskName": "makeCheckAccWithTxn",
+      "desc": "【集中调度】积分对账文件批处理任务",
+      "taskCron": "0 35 0 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.MakeCheckAccService",
+      "taskName": "makePrivilegeFileWithTxn",
+      "desc": "【集中调度】优惠券对账文件",
+      "taskCron": "0 50 0 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.MakeCheckAccCheckErrService",
+      "taskName": "allFunctions",
+      "desc": "【集中调度】对账文件异常检查任务",
+      "taskCron": "0 0 4 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.BatchGoodsDownService",
+      "taskName": "goodsDown",
+      "desc": "【集中调度】积分礼品自动下架批处理",
+      "taskCron": "0 10 0 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.BatchDayReportService",
+      "taskName": "runBatchDayReport",
+      "desc": "【集中调度】日报批量任务",
+      "taskCron": "0 55 0 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.BatchMonthReportService",
+      "taskName": "runBatchMonthReport",
+      "desc": "【集中调度】月报批量任务",
+      "taskCron": "0 30 2 1 * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.BatchWeekReportService",
+      "taskName": "runBatchWeekReport",
+      "desc": "【集中调度】周报批量任务",
+      "taskCron": "0 45 1 ? * SUN",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.DataTransferFlowService",
+      "taskName": "dealTableById",
+      "desc": "【集中调度】数据迁移检查任务",
+      "taskCron": "0 30 3 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.DataTransferFlowService",
+      "taskName": "dealAllTable",
+      "desc": "【集中调度】处理表的迁移任务",
+      "taskCron": "0 0 3 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.RepairReportService",
+      "taskName": "repairRunBatchReport",
+      "desc": "[集中调度]报表补跑批量任务",
+      "taskCron": "0 20 4 * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.BatchEspActRemindService",
+      "taskName": "sendRemindMsg",
+      "desc": "【集中调度】发送App提醒短信",
+      "taskCron": "0 0/10 * * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  }
+]

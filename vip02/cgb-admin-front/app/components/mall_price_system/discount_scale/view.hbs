@@ -1,0 +1,62 @@
+{{#component "discount-scale js-component"}}
+    <p class="components-title"><strong class="font-size">折扣比例</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals type "1"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/points-ratio">金普卡积分系数</a>
+            </li>
+            <li {{#equals type "2"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/discount-scale">折扣比例</a>
+            </li>
+            <li {{#equals type "3"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/cash-scale">现金比例</a>
+            </li>
+            <li {{#equals type "4"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/purchase-ratio">采购价上浮系数</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents m-t-20">
+        <div data-role="content" class="tab-content">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="10%">优惠等级代码</th>
+                    <th width="20%">优惠等级名称</th>
+                    <th width="10%">折扣比例</th>
+                    <th width="10%">创建用户</th>
+                    <th width="10%">创建时间</th>
+                    <th width="10%">最近修改用户</th>
+                    <th width="10%">最近修改时间</th>
+                    <th width="20%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                        <td class="pricesystem-id">{{pricesystemId}}</td>
+                        <td class="pricesystem-nm">{{pricesystemNm}}</td>
+                        <td class="argument-other">{{argumentOther}}</td>
+                        <td class="create-oper">{{createOper}}</td>
+                        <td class=create-time">{{#formatDate createTime 'day'}}{{/formatDate}}</td>
+                        <td class="modify-oper">{{modifyOper}}</td>
+                        <td class=modify-time">{{#formatDate modifyTime 'day'}}{{/formatDate}}</td>
+                        <td>
+                            {{#authorial "priceSystem_edit"}}
+                                <button class="btn btn-info btn-sm js-discount-scale-edit">编辑</button>
+                            {{/authorial}}
+                        </td>
+
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            {{#equals _DATA_.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <div class="pagination" data-total="{{_DATA_.total}}"></div>
+            {{/equals}}
+        </div>
+    </div>
+
+{{/component}}

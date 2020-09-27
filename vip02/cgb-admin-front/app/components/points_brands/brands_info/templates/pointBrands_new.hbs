@@ -1,0 +1,43 @@
+<div class="modal points-brands-modal">
+    <div class="modal-header">
+        <a href="javascript:void(0);" class="close">×</a>
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned brands-form">
+        <input type="hidden" name="id" value="{{data.id}}"/>
+        <div class="modal-body js-brand-data" data-data="{{json data}}">
+            <div class="control-group">
+                <label for="brandName"><span class="required">*</span>品牌名称:</label>
+                <input id="brandName" class="form-control js-brands-name" name="brandName" type="text"
+                       placeholder="请输入品牌名称" required pattern="^([\u4e00-\u9fa5]+|[\u4e00-\u9fa5a-zA-Z_0-9]+)$"
+                       maxlength="30" value="{{data.brandName}}" {{#if data.brandName}}readonly{{/if}}>
+                <span class="note-error"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                <span class="brand-hava brand-note-error-empty"><i>&times;</i> 该品牌已存在</span>
+                <span class="brand-hava-new brand-note-error-empty"><i>&times;</i> 品牌已存在被拒绝的请修改！</span>
+            </div>
+            <div class="control-group">
+                <label for="brandImage">品牌图标:</label>
+                <input type="button" class="btn btn-success upload-btn btn-small " value="上传图片"/>
+                <input type="file" class="img-upload js-icon-upload" name="files"/>
+                <input type="hidden" id="brandImage" name="brandImage" value="{{data.brandImage}}">
+            </div>
+            <div class="control-group" style="text-align: center">
+                <span class="font-color-gray">支持格式：PNG、JPEG、BMP，单张图片不超过1M</span>
+            </div>
+            <div class="control-group">
+                <label for="brandImageView">图标预览</label>
+                {{#if data.brandImage}}
+                    <img src="{{data.brandImage}}" class="js-brand-img brand-img"/>
+                {{else}}
+                    <span class="brand-img-none">暂无图片</span>
+                    <img src="{{data.brandImage}}" class="js-brand-img brand-img" style="display: none"/>
+                {{/if}}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="提交审核">
+            <button class="btn btn-close btn-small close">返回</button>
+        </div>
+    </form>
+</div>

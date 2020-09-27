@@ -1,0 +1,27 @@
+package cn.rkylin.oms.system.menu.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.menu.dao.IMenuDAO;
+import cn.rkylin.oms.system.menu.domain.WF_ORG_MENU;
+@Service("menuService")
+public class MenuServiceImpl extends ApolloService implements IMenuService{
+	@Autowired
+	private IMenuDAO menuDAO;
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getFormElementList(String userID, String menuItemID, String authorityType, String menuCategory) throws Exception {
+		WF_ORG_MENU menuItemVO = new WF_ORG_MENU();
+		menuItemVO.setUserID(userID);
+		menuItemVO.setParentMenuCode(menuItemID);
+		menuItemVO.setAuthorityType(authorityType);
+		menuItemVO.setMenuCategory(menuCategory);
+		return menuDAO.getMenuItemsByCondition(menuItemVO, "0");
+	}
+
+}

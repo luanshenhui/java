@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.gzw.dao.DcaCoPowerInstanceCountDao">
+    
+	<!-- 查询业务数据量统计数据 （首页用）add by geshuo 20170103 -->
+	<select id="getBizDataCount" resultType="DcaCoPowerInstanceDataCountEntity">
+		SELECT 
+			c.VALUE AS coId,
+			c.REMARKS as coName,
+			a.powerId,
+			a.instanceCount,
+			b.LABEL as powerName
+		FROM (SELECT VALUE,REMARKS FROM SYS_DICT WHERE TYPE='company_name') c
+		LEFT JOIN
+			(
+			SELECT 
+				CO_ID AS coId,
+				SUBSTR(POWER_ID, 0, 2) AS powerId,
+				SUM(INSTANCE_COUNT) AS instanceCount
+			FROM DCA_CO_POWER_INSTANCE_COUNT
+			WHERE DEL_FLAG=0
+			GROUP BY CO_ID, SUBSTR(POWER_ID, 0, 2)
+			) a
+		ON c.VALUE = a.coId
+		LEFT JOIN (SELECT VALUE,LABEL FROM SYS_DICT WHERE TYPE='szyd_class') b
+		ON a.powerId = b.VALUE
+		ORDER BY coId, a.powerId
+	</select>
+	
+	<!-- 根据企业id查询业务事项统计数据  add by geshuo 20170104 -->
+	<select id="getInstanceCountByCoId" resultType="DcaCountByPowerEntity">
+		SELECT
+			a.POWER_ID as powerId,
+			a.instanceCount as totalCount,
+			d.LABEL as powerName
+		FROM
+			(
+				SELECT
+					SUBSTR (POWER_ID, 0, 2) AS POWER_ID,
+					sum(INSTANCE_COUNT) AS instanceCount
+				FROM DCA_CO_POWER_INSTANCE_COUNT
+				WHERE CO_ID = #{coId}
+				AND DEL_FLAG=0
+				GROUP BY SUBSTR (POWER_ID, 0, 2)
+			) a
+		LEFT JOIN 
+			(
+				SELECT VALUE, LABEL
+				FROM SYS_DICT
+				WHERE TYPE = 'szyd_class'
+			) d ON d.VALUE = a.POWER_ID
+		ORDER BY a.POWER_ID
+	</select>
+	
+</mapper>

@@ -1,0 +1,36 @@
+
+<html>
+  <head>
+    <title>a1.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="js/jquery-1.4.3.js"></script>
+    <script type="text/javascript">
+    	function f1(){
+    		$('#d1').css({'font-size':'90px','color':'yellow'});
+    	}
+    	
+    	//dom对象 ----> JQuery对象
+    	function f2(){
+    		var obj = document.getElementById('d1');
+    		//dom对象 ---- > JQuery对象
+    		var $obj = $(obj);
+    		$obj.css('font-style','italic');
+    	}
+    	
+    	//JQuery对象----> dom对象
+    	function f3(){
+    		var $obj = $('#d1');
+    		
+    		//JQuery对象----> dom对象
+    		var obj = $obj.get()[0];
+    		
+    		obj.innerHTML = 'hello java';c
+    	}
+    </script>
+  </head>
+  
+  <body style="font-size: 30px;">
+  <div id="d1">hello JQuery</div>
+   <a href="javascript:;" onclick="f3();">ClickMe</a>
+  </body>
+</html>

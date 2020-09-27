@@ -1,0 +1,87 @@
+package cn.rkylin.oms.system.appClient.vo;
+
+import org.apache.commons.lang.StringUtils;
+
+import cn.rkylin.oms.system.appClient.domain.AppClient;
+
+public class AppClientVo extends AppClient {
+
+	/**
+	 * 序列号id
+	 */
+	private static final long serialVersionUID = -7687567433954278665L;
+	private static final String STATUS_CHK = "<input id=\"chkItem\" name=\"chkItem\" type=\"checkbox\" appid=\"%s\" /></input>";
+	private static final String OPERATION_BTN_UPDATE = "<button onclick=\"update(\'%s\',this)\" type=\"button\" class=\"btn btn-info btn-xs\"><i class=\"fa fa fa-edit\"></i>&nbsp;修改</button>";
+	private static final String OPERATION_BTN_DELETE = "<button onclick=\"deleteApp(\'%s\',this)\" type=\"button\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash-o\"></i>&nbsp;删除</button>";
+
+	private String chk;
+	private String operation;
+	private String prjId;
+	private String entId;
+	/**
+	 * orderBy子句
+	 */
+	private String orderBy;
+
+	/**
+	 * 搜索条件
+	 */
+	private String searchCondition;
+	
+	public String getChk() {
+		return this.chk;
+	}
+
+	public void setChk(String chk) {
+		this.chk = String.format(STATUS_CHK, this.getAppId()).toString();
+	}
+
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(String operation) {
+		StringBuffer opButton = new StringBuffer();
+		if (StringUtils.isNotEmpty(getAppId())) {
+			opButton.append(String.format(OPERATION_BTN_UPDATE, getAppId()));
+			opButton.append("&nbsp;");
+			opButton.append(String.format(OPERATION_BTN_DELETE, getAppId()));
+			opButton.append("&nbsp;");
+		}
+		this.operation = opButton.toString();
+	}
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
+	public String getPrjId() {
+		return prjId;
+	}
+
+	public void setPrjId(String prjId) {
+		this.prjId = prjId;
+	}
+
+	public String getEntId() {
+		return entId;
+	}
+
+	public void setEntId(String entId) {
+		this.entId = entId;
+	}
+
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
+	}
+	
+	
+}

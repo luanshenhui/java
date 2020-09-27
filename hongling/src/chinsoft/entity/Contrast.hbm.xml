@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Contrast" table="Contrast">
+        <id name="PositionID">
+            <column name="PositionID"/>
+            <generator class="assigned" />
+        </id>
+        <property name="ComponentIDs" type="string" column="ComponentIDs"/>
+        <property name="Memo" type="string" column="Memo"/>
+        <property name="ColorCategoryID" type="integer" column="ColorCategoryID"/>
+    </class>
+</hibernate-mapping>

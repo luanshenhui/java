@@ -1,0 +1,26 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('#b1').click(function(){
+			//产生获得焦点事件
+			//$('#username').focus();
+			$('#username').trigger('focus');
+			
+		});
+	});
+</script>
+</head>
+<body style="font-size:30px;">
+	username:<input name="username" id="username"/><br/>
+	name:<input name="name" id="name"/><br/>
+	<input type="button" id="b1" value="点这儿"/>
+	
+	
+	
+</body>
+</html>

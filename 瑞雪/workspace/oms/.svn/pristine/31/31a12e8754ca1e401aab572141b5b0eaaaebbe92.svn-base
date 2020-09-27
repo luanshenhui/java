@@ -1,0 +1,473 @@
+package cn.rkylin.oms.system.user.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.menu.dao.IMenuDAO;
+import cn.rkylin.oms.system.menu.domain.WF_ORG_MENU;
+import cn.rkylin.oms.system.position.dao.IPositionDAO;
+import cn.rkylin.oms.system.position.domain.WF_ORG_STATION;
+import cn.rkylin.oms.system.privilege.dao.IMenuGrantDAO;
+import cn.rkylin.oms.system.privilege.domain.WF_ORG_RESOURCE_AUTHORITY;
+import cn.rkylin.oms.system.role.dao.IRoleDAO;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.unit.dao.IUnitDAO;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+import cn.rkylin.oms.system.unit.vo.UnitVO;
+import cn.rkylin.oms.system.user.dao.IUserDAO;
+import cn.rkylin.oms.system.user.domain.WF_ORG_USER;
+import cn.rkylin.oms.system.user.vo.UserVO;
+
+/**
+ * Date : 2010/05/06
+ * <p>
+ * Module : 用户管理
+ * </p>
+ * <p>
+ * Description: 用户业务对象
+ * </p>
+ * @author 王潇艺
+ */
+@Service("userService")
+public class UserServiceImple extends ApolloService implements IUserService {
+    /**
+     * 用户数据访问对象
+     */
+    @Autowired
+    private IUserDAO userDAO;
+    /**
+     * 菜单数据访问对象
+     */
+    @Autowired
+    private IMenuDAO imenuDAO;
+    /**
+     * 组织单元数据访问对象
+     */
+    @Autowired
+    private IUnitDAO iunitDAO;
+    /**
+     * 岗位数据访问对象
+     */
+    @Autowired
+    private IPositionDAO istationDAO;
+    /**
+     * 角色数据访问对象
+     */
+    @Autowired
+    private IRoleDAO iroleDAO;
+    /**
+     * 授权管理数据访问对象
+     */
+    @Autowired
+    private IMenuGrantDAO menuGrantDAO;
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 根据条件获取用户
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param userAccount
+     *            - 用户帐号
+     * @param userName
+     *            - 用户名称
+     * @param unitID
+     *            - 组织单元 id
+     * @return 如果找到，返回List<WF_ORG_USER> 如果没有找到，返回null
+     * @throws ServiceException
+     */
+    @SuppressWarnings({ "unused", "unchecked", "rawtypes" })
+	@Override
+	public PageInfo<UserVO> findByWhere(int page, int rows, UserVO userVo,boolean needUserUnits, boolean needUserStation,
+            boolean needUserRoles, boolean needUserExtInfo) throws Exception {
+		PageInfo<UserVO> userVOList = findPage(page, rows, "pageSelectUserList", userVo);
+		List<UserVO> returnValue=userVOList.getList();
+		WF_ORG_USER jtUser = new WF_ORG_USER();
+		if (returnValue.size() > 0) {
+			jtUser = (WF_ORG_USER) returnValue.get(0);
+		} else {
+			return userVOList;
+		}
+		List delegateRoleIdList = null;
+		// 正常的用户管理不需要取委托权限
+		if (false) {
+			WF_ORG_MENU menuItemVO = new WF_ORG_MENU();
+			menuItemVO.setUserID(jtUser.getUserId());
+			// bizRole代表只能获取业务角色，不要获取管理角色。（权限委托不能委托管理角色）
+			menuItemVO.setRoleType("bizRole");
+			// 获取用户被委托的所有角色、组织、岗位
+			delegateRoleIdList = imenuDAO.getUserRolesIncludeDelegates(menuItemVO);
+		}
+		if (needUserUnits) {
+			for (int i = 0; i < returnValue.size(); i++) {
+				WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+				WF_ORG_UNIT unitParam = new WF_ORG_UNIT();
+				unitParam.setUserId(user.getUserId());
+				// 2011年5月11日 增加对委托权限的提取
+				unitParam.setDelegateUnitIdList(delegateRoleIdList);
+				List unitList = iunitDAO.getUnitByCondition(unitParam);
+				// 获取组织单元的扩展信息
+//				if (unitList != null && unitList.size() > 0) {
+//					for (int j = 0; j < unitList.size(); j++) {
+//						WF_ORG_UNIT unit = (WF_ORG_UNIT) unitList.get(j);
+//						if (unit.getExtInfoMap() == null) {
+//							unit.setExtInfoMap(iunitDAO.getExtInfo("unit", unit.getUnitId()));
+//						}
+//					}
+//				}
+				user.setUserUnitList(unitList);
+			}
+		}
+		// 设置用户岗位
+		if (needUserStation) {
+			for (int i = 0; i < returnValue.size(); i++) {
+				WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+				WF_ORG_STATION stationParam = new WF_ORG_STATION();
+				stationParam.setUserId(user.getUserId());
+				// 2011年5月11日 增加对委托权限的提取
+				stationParam.setDelegateStationIdList(delegateRoleIdList);
+				List stationList = istationDAO.getStationByCondition(stationParam);
+				user.setStationList(stationList);
+			}
+		}		
+		// 设置用户角色
+		if (needUserRoles) {
+			for (int i = 0; i < returnValue.size(); i++) {
+				WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+				WF_ORG_ROLE unitParam = new WF_ORG_ROLE();
+				unitParam.setUserId(user.getUserId());
+				// 2011年5月11日 增加对委托权限的提取
+				unitParam.setDelegateRoleIdList(delegateRoleIdList);
+				// unitParam.setIsAdminrole("否");
+				List roleList = iroleDAO.getRoleByCondition(unitParam,page, rows);
+				user.setUserRoleList(roleList);
+			}
+		}					
+    	// 设置用户扩展信息
+//		if (needUserExtInfo) {
+//			for (int i = 0; i < returnValue.size(); i++) {
+//				WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+//				user.setExtInfoMap(userDAO.getExtInfo("user", user.getUserId()));
+//			}
+//		}		
+		
+		for (int i = 0; i < returnValue.size(); i++) {
+			WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+			List unitList = user.getUserUnitList();
+			String unitString = "";
+			if (unitList != null && unitList.size() > 0) {
+				for (int j = 0; j < unitList.size(); j++) {
+					WF_ORG_UNIT unit = (WF_ORG_UNIT) unitList.get(j);
+					unitString += unit.getUnitName();
+					if (j < unitList.size() - 1)
+						unitString += ",";
+				}
+			}
+			user.setUserUnits(unitString);
+		}
+		
+		for (int i = 0; i < returnValue.size(); i++) {
+			WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+			List roleList = user.getUserRoleList();
+			String roleString = "";
+			if (roleList != null && roleList.size() > 0) {
+				for (int j = 0; j < roleList.size(); j++) {
+					WF_ORG_ROLE role = (WF_ORG_ROLE) roleList.get(j);
+					roleString += role.getRoleName();
+					if (j < roleList.size() - 1)
+						roleString += ",";
+				}
+			}
+			user.setUserRoles(roleString);
+		}
+		return userVOList;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据userid数组获取用户
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 * @param userVO
+	 *            - 用户VO
+	 * @return 如果找到，返回ArrayList<WF_ORG_USER> 如果没有找到，返回new ArrayList
+	 * @throws ServiceException
+	 */
+	public List getUserByIDs(WF_ORG_USER userVO) throws Exception {
+		List returnValue = new ArrayList();
+		returnValue = userDAO.getUserByIDs(userVO);
+		return returnValue;
+	}
+	
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 保存用户，包括（人员基本信息、人员扩展信息、人员的组织单元、人员的岗位、人员的角 色）
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param userVO
+     *            - 人员vo，包括（人员基本信息、人员扩展信息、人员的组织单元、人员的岗位、人员的角色 ）
+     * @param saveType
+     *            - 保存类型，0：新增保存，1：修改保存
+     * @param extTableName
+     *            - 扩展表名称
+     * @param idColumnName
+     *            - 扩展表id名称
+     * @return 保存后的WF_ORG_USER
+     * @throws ServiceException
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public void saveUser(WF_ORG_USER userVO, String saveType, String extTableName, String idColumnName)
+            throws Exception {
+
+        // 修改时没有密码，所以不需要加密。
+        if (userVO.getUserPassword() != null) {
+            // String saltKey =
+            // SecurityUserHolder.getCurrentUser().getSaltkey();
+            userVO.setUserPassword(userVO.getUserPassword());// passwordEncoder.encodePassword(userVO.getUserPassword(),
+                                                             // saltKey));
+        }
+        List<UnitVO>list = ifSaveMaxPerson(userVO);
+        if(list.size()>0){
+            String str=""; 
+            for(UnitVO i :list){
+                str+=i.getUnitName()+",";
+            }
+            throw new Exception("操作失败,部门"+str+"中用户已满。");
+        }
+        // 如果是新增保存
+        if (saveType.equals("0")) {
+            // 检测帐户是否已经存在
+            UserVO userParam = new UserVO();
+            userParam.setUserAccount(userVO.getUserAccount());
+            List userListTemp = userDAO.getUserByCondition(userParam);
+            if (userListTemp == null || userListTemp.size() > 0) {
+                throw new Exception("用户帐户已经存在!");
+            }
+            userDAO.createUser(userVO, extTableName, idColumnName);
+        } else {
+            userDAO.updateUser(userVO, extTableName, idColumnName);
+        }
+
+    }
+    
+    /**
+     * 描述: 根据条件获取用户
+     *
+     * @param userAccount
+     *            - 用户帐号
+     * @param userName
+     *            - 用户名称
+     * @param unitID
+     *            - 组织单元 id
+     * @return 如果找到，返回List<WF_ORG_USER> 如果没有找到，返回null
+     * @throws ServiceException
+     */
+    public List getUserByCondition(WF_ORG_USER userVO, boolean needUserUnits, boolean needUserStation,
+            boolean needUserRoles, boolean needUserExtInfo) throws Exception {
+        List returnValue = new ArrayList();
+        returnValue = userDAO.getUserByCondition(userVO);
+
+        // 2011年5月11日 增加对委托权限的提取
+        WF_ORG_USER jtUser = new WF_ORG_USER();
+        if (returnValue.size() > 0) {
+            jtUser = (WF_ORG_USER) returnValue.get(0);
+        } else {
+            return returnValue;
+        }
+        List delegateRoleIdList = null;
+        // 正常的用户管理不需要取委托权限
+//            if (userVO.getStartRow() == 0 && userVO.getEndRow() == 0) {
+            WF_ORG_MENU menuItemVO = new WF_ORG_MENU();
+            menuItemVO.setUserID(jtUser.getUserId());
+            // bizRole代表只能获取业务角色，不要获取管理角色。（权限委托不能委托管理角色）
+            menuItemVO.setRoleType("bizRole");
+            // 获取用户被委托的所有角色、组织、岗位
+            delegateRoleIdList = imenuDAO.getUserRolesIncludeDelegates(menuItemVO);
+//            }
+        // over
+
+        // 设置用户组织单元
+        if (needUserUnits) {
+            for (int i = 0; i < returnValue.size(); i++) {
+                WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+                WF_ORG_UNIT unitParam = new WF_ORG_UNIT();
+                unitParam.setUserId(user.getUserId());
+                // 2011年5月11日 增加对委托权限的提取
+                unitParam.setDelegateUnitIdList(delegateRoleIdList);
+                List unitList = iunitDAO.getUnitByCondition(unitParam);
+                // 获取组织单元的扩展信息
+//                    if (unitList != null && unitList.size() > 0) {
+//                        for (int j = 0; j < unitList.size(); j++) {
+//                            WF_ORG_UNIT unit = (WF_ORG_UNIT) unitList.get(j);
+//                            if (unit.getExtInfoMap() == null) {
+//                                unit.setExtInfoMap(iunitDAO.getExtInfo("unit", unit.getUnitId()));
+//                            }
+//                        }
+//                    }
+                user.setUserUnitList(unitList);
+            }
+        }
+        // 设置用户岗位
+        if (needUserStation) {
+//                for (int i = 0; i < returnValue.size(); i++) {
+//                    WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+//                    WF_ORG_STATION stationParam = new WF_ORG_STATION();
+//                    stationParam.setUserId(user.getUserId());
+//                    // 2011年5月11日 增加对委托权限的提取
+//                    stationParam.setDelegateStationIdList(delegateRoleIdList);
+//                    List stationList = istationDAO.getStationByCondition(stationParam);
+//                    user.setStationList(stationList);
+//                }
+        }
+        // 设置用户角色
+        if (needUserRoles) {
+            for (int i = 0; i < returnValue.size(); i++) {
+                WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+                WF_ORG_ROLE unitParam = new WF_ORG_ROLE();
+                unitParam.setUserId(user.getUserId());
+                // 2011年5月11日 增加对委托权限的提取
+                unitParam.setDelegateRoleIdList(delegateRoleIdList);
+                // unitParam.setIsAdminrole("否");
+                List roleList = iroleDAO.getRoleByCondition(unitParam);
+                user.setUserRoleList(roleList);
+            }
+        }
+        // 设置用户扩展信息
+        if (needUserExtInfo) {
+//                for (int i = 0; i < returnValue.size(); i++) {
+//                    WF_ORG_USER user = (WF_ORG_USER) returnValue.get(i);
+//                    user.setExtInfoMap(iuserDAO.getExtInfo("user", user.getUserId()));
+//                }
+        }
+
+        return returnValue;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 锁定用户
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param userID
+     *            - 用户id
+     * @throws ServiceException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public void lockUser(String userID, String isLocked) throws Exception {
+        WF_ORG_USER userVO = new WF_ORG_USER();
+        userVO.setUserId(userID);
+        List <UnitVO>list=ifSaveMaxPerson(userVO);
+        if(list.size()>0 && isLocked.equals("是")){
+            String str=""; 
+            for(UnitVO i :list){
+                str+=i.getUnitName()+",";
+            }
+            throw new Exception("操作失败,部门"+str+"中用户已满。");
+        }
+        userDAO.lockUser(userID, isLocked);
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 删除人员，如果人员已经被使用则不被删除
+     * </p>-
+     * 
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param userIDs
+     *            - 用户id
+     * @throws ServiceException
+     */
+    @SuppressWarnings("rawtypes")
+    @Override
+    public void deleteUser(List userIDs, String extTableName, String idColumnName) throws Exception {
+        for (int i = 0; i < userIDs.size(); i++) {
+            // userID不为“”
+            if (!userIDs.get(i).toString().equals("")) {
+                userDAO.deleteUser(userIDs.get(i).toString(), extTableName, idColumnName);
+                WF_ORG_RESOURCE_AUTHORITY delParam = new WF_ORG_RESOURCE_AUTHORITY();
+                delParam.setRoleId(userIDs.get(i).toString());
+                menuGrantDAO.deletePrivileges(delParam);
+                menuGrantDAO.deleteUserExclude(userIDs.get(i).toString(), null);
+            }
+        }
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 根据条件获取人员，包括（人员基本信息、人员扩展信息、人员的组织单元、人员的岗位、 人员的角色）
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param userID
+     *            - 人员ID
+     * @return 如果找到，返回WF_ORG_USER 如果没有找到，返回null
+     * @throws ServiceException
+     */
+    @SuppressWarnings("rawtypes")
+    @Override
+    public WF_ORG_USER getUserDetail(String userID) throws Exception {
+        WF_ORG_USER returnUser = null;
+        List userList = new ArrayList();
+        WF_ORG_USER userVO = new WF_ORG_USER();
+        userVO.setUserId(userID);
+        userList = userDAO.getUserByCondition(userVO);
+        if (userList != null && userList.size() > 0) {
+            returnUser = (WF_ORG_USER) userList.get(0);
+            // 设置用户组织
+            WF_ORG_UNIT unitParam = new WF_ORG_UNIT();
+            unitParam.setUserId(userID);
+            List unitList = iunitDAO.getUnitByCondition(unitParam);
+            returnUser.setUnitList(unitList);
+            // 设置用户角色
+            WF_ORG_ROLE roleParam = new WF_ORG_ROLE();
+            roleParam.setUserId(userID);
+            List roleList = iroleDAO.getRoleByCondition(roleParam);
+            returnUser.setRoleList(roleList);
+            // 设置用户岗位
+            WF_ORG_STATION stationParam = new WF_ORG_STATION();
+            stationParam.setUserId(userID);
+            List stationList = istationDAO.getStationByCondition(stationParam);
+            returnUser.setStationList(stationList);
+
+            returnUser.setExtInfoMap(userDAO.getExtInfo("user", userID));
+        }
+        return returnUser;
+
+    }
+
+    private List ifSaveMaxPerson(WF_ORG_USER orgUser) throws Exception {
+         return userDAO.findmaxPerson(orgUser);
+    }
+
+
+}

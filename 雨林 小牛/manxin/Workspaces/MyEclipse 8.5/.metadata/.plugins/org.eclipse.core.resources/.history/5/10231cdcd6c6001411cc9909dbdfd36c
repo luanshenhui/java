@@ -1,0 +1,12 @@
+package com.yulin.dangdang.dao;
+
+import com.yulin.dangdang.bean.Order;
+
+public interface OrderDao {
+	/***
+	 * 
+	 * @param order
+	 * @return
+	 */
+	public boolean insertOrder(Order order);
+}

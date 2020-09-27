@@ -1,0 +1,31 @@
+<div class="menu-panel left" style="display:block;">
+    <div class="properties-edit-panel properties-edit">
+        <ul style="width: 160px;">
+            <li><label class="properties-edit-label" for="">编辑属性</label></li>
+            {{#each data.data}}
+                <li class="attr-value-li" data-attr-value="{{json this}}">
+                  <span class="input-icon">
+                    <input type="text" class="attribute-show" value="{{value}}" readonly="true">
+                    <i class="fa fa-fw fa-trash-o input-right js-attribute-value-delete"></i>
+                  </span>
+                </li>
+            {{/each}}
+            <li class="add-properties-li">
+                <form class="attribute-value properties-edit-form form"
+                      onkeydown="if(event.keyCode==13){return false;}">
+                    <div class="input-group input-group-append">
+                        <input type="text" class="update-category-input" name="data">
+                        <span class="input-group-btn">
+                          <button class="btn btn-success btn-small js-add-attr-value" type="button">添加</button>
+                        </span>
+                    </div>
+                </form>
+            </li>
+            <li>
+                <div class="button-group">
+                    <button type="button" class="btn btn-success btn-small js-menu-cancel">关闭</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

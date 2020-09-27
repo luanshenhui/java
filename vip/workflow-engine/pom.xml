@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--<parent>-->
+    <groupId>com.hepowdhc.dcapp</groupId>
+    <!--        <artifactId>dcapp-parent</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </parent>-->
+
+    <artifactId>workflow-engine</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.2.RELEASE</version>
+    </parent>
+
+    <properties>
+        <commons-lang3.version>3.3.2</commons-lang3.version>
+        <commons-io.version>2.4</commons-io.version>
+        <druid.version>1.0.26</druid.version>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+
+            <groupId>com.dhc.jeesite</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.1.0.7.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.oracle/ojdbc6 -->
+        <!--     <dependency>
+                 <groupId>com.oracle</groupId>
+                 <artifactId>ojdbc6</artifactId>
+                 <version>11.2.0.3</version>
+             </dependency>-->
+
+
+        <!--        <dependency>
+                    <groupId>spark-assembly-1.6.3-hadoop</groupId>
+                    <artifactId>spark-assembly-1.6.3-hadoop2.6.0</artifactId>
+                    <version>2.6.0</version>
+                    <scope>system</scope>
+                    <systemPath>${project.basedir}/lib/spark-assembly-1.6.3-hadoop2.6.0.jar</systemPath>
+                </dependency>-->
+
+        <!--   <dependency>
+               <groupId>Analysis</groupId>
+               <artifactId>Analysis</artifactId>
+               <version>1.0.0</version>
+               <scope>system</scope>
+               <systemPath>${project.basedir}/lib/Analysis.jar</systemPath>
+           </dependency>-->
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>dev_local</id>
+            <properties>
+
+                <pom.db.driver>oracle.jdbc.driver.OracleDriver</pom.db.driver>
+                <pom.db.url>jdbc:oracle:thin:@172.16.75.18:1521:dcapp</pom.db.url>
+                <pom.db.username>dev_liqiang</pom.db.username>
+                <pom.db.password>password</pom.db.password>
+
+                <pom.db.init>5</pom.db.init>
+                <pom.db.minIdle>5</pom.db.minIdle>
+                <pom.db.maxActive>5</pom.db.maxActive>
+                <pom.db.maxWait>5</pom.db.maxWait>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+
+        <finalName>engine</finalName>
+        <plugins>
+            <plugin>
+
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <target>1.8</target>
+                    <source>1.8</source>
+                    <encoding>UTF-8</encoding>
+                    <compilerVersion>1.8</compilerVersion>
+                </configuration>
+            </plugin>
+
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-assembly-plugin</artifactId>-->
+            <!--<version>3.0.0</version>-->
+
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<id>package</id>-->
+            <!--<phase>package</phase>-->
+            <!--<goals>-->
+            <!--<goal>-->
+            <!--single-->
+            <!--</goal>-->
+            <!--</goals>-->
+
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--<configuration>-->
+            <!--<descriptors>-->
+            <!--<descriptor>src/main/resources/assembly.xml</descriptor>-->
+            <!--</descriptors>-->
+
+            <!--</configuration>-->
+            <!--</plugin>-->
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.4.2.RELEASE</version>
+                <configuration>
+                    <mainClass>com.hepowdhc.dcapp.Application</mainClass>
+                    <classifier>exec</classifier>
+                    <addResources>true</addResources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+        </plugins>
+
+
+    </build>
+
+</project>

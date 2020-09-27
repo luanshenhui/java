@@ -1,0 +1,20 @@
+{{#partial "title"}}{{{block "realTitle"}}}{{/partial}}
+{{#partial "body"}}
+    {{inject "header"}}
+    <div class="content">
+        <div class="content-box">
+            <div class="main">
+                {{inject "sidebar"}}
+                {{{block "realBody"}}}
+            </div>
+        </div>
+    </div>
+    <div style="clear:both"></div>
+    <div class="front-footer">
+        <div class="session"></div>
+        <div class="copyright">
+            <span>Copyright © 2016广发银行 版权所有 粤ICP备 05058995 号</span>
+        </div>
+    </div>
+{{/partial}}
+{{> views/layout}}

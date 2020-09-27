@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.apollo.notice.dao.impl.noticeConfigure">
+	<sql id="columns">ID,USER_ID,USER_ACCOUNT,USER_NAME,WECHAT_NAME,EAMIL,MOBILE,STSATE,CREATE_USER,DATE_FORMAT(CREATE_TIME,'%Y-%m-%d
+		%T') AS CREATE_TIME,UPDATE_USER,DATE_FORMAT(UPDATE_TIME,'%Y-%m-%d %T') AS UPDATE_TIME</sql>
+	<sql id="tableName">t_notice_configure</sql>
+
+	<select id="findNoticeConfigureByWhere" resultType="java.util.Map" conn="nm">
+		select
+		<include refid="columns" />
+		from
+		<include refid="tableName" />
+		t
+		where 1=1
+		<if test="null != userAccount and '' != userAccount">
+			and t.USER_ACCOUNT = #{userAccount}
+		</if>
+		<if test="null != userName and '' != userName">
+			and t.USER_NAME = #{userName}
+		</if>
+		<if test="null != id and '' != id">
+			and t.ID = #{id}
+		</if>
+	</select>
+
+	<select id="findWaitManageByWhere" resultType="java.util.Map" conn="oa">
+	<![CDATA[
+		select tu.USER_CODE as APPLICANT_CODE,tu.USER_NAME as APPLICANT_NAME,tfa.APPR_PERN_STRING,vaf.FORM_GUID,
+    	vaf.FORM_NAME,vaf.REQUEST_PERN_GUID,vaf.IMPORTANT_TYPE_CODE,tit.IMPORTANT_TYPE_NAME,vaf.TABLE_NAME,
+		(select us.USER_CODE FROM T_USER us where us.USER_GUID=tfa.APPR_PERN_STRING) as APPROVAL_NAME,
+		(select tbf.NEW_EMP_GUID from T_BECOME_FULL_MEMBER_NEW tbf where tbf.FLOW_NO = vaf.FLOW_NO) as NEW_EMP_GUID
+		from V_ALL_FORMS vaf 
+		inner join T_IMPORTANT_TYPE tit on tit.IMPORTANT_TYPE_CODE = vaf.IMPORTANT_TYPE_CODE AND tit.USE_YN = 'Y'
+		inner join T_USER tu on tu.USER_GUID = vaf.REQUEST_PERN_GUID
+		left JOIN (
+						SELECT tfa2.SOUR_GUID,ORDER_NUM = MIN(tfa2.ORDER_NUM)
+						FROM T_FORM_APPR tfa2 WHERE tfa2.APPR_STUS='N'
+						GROUP BY tfa2.SOUR_GUID
+			) AS MinNum ON MinNum.SOUR_GUID=vaf.D_GUID
+		left JOIN T_FORM_APPR tfa ON tfa.SOUR_GUID = vaf.D_GUID 
+		AND tfa.FORM_GUID=vaf.FORM_GUID 
+		AND tfa.ORDER_NUM=MinNum.ORDER_NUM
+		where vaf.STUS = 'E' 
+		AND CHARINDEX(upper(#{userId}),upper(tfa.APPR_PERN_STRING)) > 0
+		]]>
+	</select>
+
+
+	<insert id="inserNoticeConfigure" parameterType="cn.rkylin.core.ApolloMap" conn="nm">
+		insert into
+		<include refid="tableName" />
+		(USER_ID,USER_ACCOUNT,USER_NAME,WECHAT_NAME,EAMIL,MOBILE,STSATE,CREATE_USER,CREATE_TIME)
+		VALUES(#{userId},#{userAccount},#{userName},#{wechatName},#{eamil},#{mobile},#{stsate},#{createUser},now())
+	</insert>
+
+	<update id="updateNoticeConfigure" parameterType="cn.rkylin.core.ApolloMap" conn="nm">
+		update
+		<include refid="tableName" />
+		set USER_ID = #{userId},USER_ACCOUNT = #{userAccount},
+		USER_NAME = #{userName},WECHAT_NAME = #{wechatName},EAMIL =
+		#{eamil},
+		MOBILE = #{mobile},STSATE = #{stsate},UPDATE_USER = #{updateUser}, UPDATE_TIME = now()
+		where ID = #{id}
+	</update>
+</mapper>

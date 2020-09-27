@@ -1,0 +1,203 @@
+package cn.rkylin.oms.system.privilege.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.core.utils.StringUtil;
+import cn.rkylin.oms.system.privilege.dao.IMenuGrantDAO;
+import cn.rkylin.oms.system.privilege.domain.WF_ORG_RESOURCE_AUTHORITY;
+import cn.rkylin.oms.system.privilege.domain.WF_ORG_ROLE_PRIV;
+@Service("privilegeService")
+public class PrivilegeServiceImpl extends ApolloService implements IPrivilegeService{
+	@Autowired
+	private IMenuGrantDAO menuGrantDAO;
+
+	/**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 根据角色id，菜单项id，获取该菜单项下所有元素 的可用/可分配性。返回的结果Map：key=元素id，值=是否可用
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param roleID
+     *            - 角色id
+     * @param menuID
+     *            - 菜单项id
+     * @param privilegeType
+     *            - 授权类型：assignable，available（可分配，可使用）
+     * @return 如果找到，返回HashMap 如果没有找到，返回null
+     * @throws ServiceException
+     */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Map getElementPrivByMenuIDRoleID(String roleID, String type, String menuID, String privilegeType) throws Exception {
+		Map resultMap = new HashMap();
+		WF_ORG_RESOURCE_AUTHORITY authVO = new WF_ORG_RESOURCE_AUTHORITY();
+		authVO.setAuthorityType(privilegeType);
+		authVO.setRoleId(roleID);
+		// authVO.setMenuId(menuID);
+		authVO.setParentMenuCode(menuID);
+		resultMap = menuGrantDAO.getElementPrivByMenuIDRoleID(authVO, type);	
+		return resultMap;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存权限修改（仅对新增的权限和删除的权限进行处理，需要考虑用户权限调整问题）
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 * @param nodes4Add
+	 *            - 用户要添加的菜单项或元素
+	 * @param nodes4Del
+	 *            - 用户要删除的菜单项或元素
+	 * @param privilegeType
+	 *            - 授权类型：assignable，available
+	 * @throws ServiceException
+	 */
+	@Override
+	public void savePrivileges(String roleID, String roleType, String nodes4Add, String nodes4Del, String privilegeType, String proidString, String shopString)
+			throws Exception {
+	    this.savePriRole(roleID,proidString,shopString);
+		// 删除授权
+		String[] resourceArray4Del = nodes4Del.split(",");
+		for (int i = 0; i < resourceArray4Del.length; i++) {
+			String resourceID = resourceArray4Del[i];
+			if (resourceID.equals(""))
+				continue;
+			WF_ORG_RESOURCE_AUTHORITY delParam = new WF_ORG_RESOURCE_AUTHORITY();
+			delParam.setRoleId(roleID);
+			delParam.setResourceId(resourceID);
+			// Mon Aug 29 11:14:40 2011 删除管理角色的时候不要影响业务角色，反之亦然
+			delParam.setAuthorityType(privilegeType);// 对应改xml文件
+			// Over
+			// 如果roleType是"user"，则需要考虑权限排除问题
+			if (!roleType.equalsIgnoreCase("user")) {
+				menuGrantDAO.deletePrivileges(delParam);
+			} else {
+				// 如果要删除的用户授权在授权表里不存在，则插入到用户授权排除中
+				List authList = menuGrantDAO.getResourceAuthority(delParam);
+				if (authList == null || authList.size() <= 0) {
+					menuGrantDAO.insertUserExclude(roleID, resourceID);
+				} else {
+					menuGrantDAO.deletePrivileges(delParam);
+				}
+			}
+		}
+
+		// 添加授权
+		String[] resourceArray4Add = nodes4Add.split(",");
+		for (int i = 0; i < resourceArray4Add.length; i++) {
+			String resourceID = resourceArray4Add[i];
+			if (resourceID.equals(""))
+				continue;
+			// 如果是用户权限调整，则先删除该用户的“权限排除”
+			if (roleType.equalsIgnoreCase("user")) {
+				menuGrantDAO.deleteUserExclude(roleID, resourceID);
+				// 看看此user的组织、岗位、角色是否具有此“资源”的权限，如果有，就不用加了
+				if (menuGrantDAO.ifUserResourceAvailable(roleID, resourceID))
+					continue;
+			}
+			WF_ORG_RESOURCE_AUTHORITY authVO = new WF_ORG_RESOURCE_AUTHORITY();
+			authVO.setResourceAuthorityId(java.util.UUID.randomUUID().toString().replaceAll("-", ""));
+			authVO.setAuthorityType(privilegeType);
+			authVO.setRoleId(roleID);
+			authVO.setRoleType(roleType);
+			authVO.setResourceId(resourceID);
+			menuGrantDAO.insertPrivilege(authVO);
+		}
+	}
+	
+	private void savePriRole(String roleId, String proidString, String shopString) throws Exception {
+		if(!StringUtil.isEmpty(proidString) && !StringUtil.isEmpty(shopString)){
+			menuGrantDAO.delPriRole(roleId);
+		}
+		if (!StringUtil.isEmpty(proidString)) {
+			String[] proList = proidString.split(",");
+			for (String s : proList) {
+				WF_ORG_ROLE_PRIV entry = new WF_ORG_ROLE_PRIV();
+				entry.setRolePrivId(java.util.UUID.randomUUID().toString().replaceAll("-", ""));
+				entry.setRoleId(roleId);
+				entry.setRolePrivType("0");
+				entry.setPrivId(s.split("/")[0]);
+				entry.setPrivName(s.split("/")[1]);
+				menuGrantDAO.insertPriRole(entry);
+			}
+		}
+		if (!StringUtil.isEmpty(shopString)) {
+			String[] shopList = shopString.split(",");
+			for (String s : shopList) {
+				WF_ORG_ROLE_PRIV entry = new WF_ORG_ROLE_PRIV();
+				entry.setRolePrivId(java.util.UUID.randomUUID().toString().replaceAll("-", ""));
+				entry.setRoleId(roleId);
+				entry.setRolePrivType("1");
+				entry.setPrivId(s.split("/")[0]);
+				entry.setPrivName(s.split("/")[1]);
+				menuGrantDAO.insertPriRole(entry);
+			}
+		}
+
+	}
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 根据帐户，判断url或者menuItem是否可用
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     *
+     * @param userID
+     *            - 帐户，必填
+     * @param queryType
+     *            - 查询类型：RESOURCE_ID、URL，必填
+     * @param value
+     *            - 授权类型：资源id或者url，必填
+     * @throws ServiceException
+     */
+    public boolean isResourceAvailable(String userID, String queryType, String value) throws Exception {
+        boolean returnValue = false;
+        Map queryParamMap = new HashMap();
+        queryParamMap.put("userID", userID);
+        if (queryType.equalsIgnoreCase("RESOURCE_ID"))
+            queryParamMap.put("menuID", value);
+        else
+            queryParamMap.put("strURL", value);
+        try {
+            returnValue = menuGrantDAO.isResourceAvailable(queryParamMap);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new Exception(ex.getMessage());
+        }
+        return returnValue;
+    }
+
+    /**
+     * 根据角色id批量获取wf_org_role_priv表list
+     * 
+     * @param id
+     * 
+     * 角色id
+     */
+    @Override
+    public List getRolePrivList(String id) {
+        try {
+            return menuGrantDAO.getRolePrivList(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+}

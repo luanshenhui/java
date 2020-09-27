@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	function f1(){
+		$('table tr:first')
+		.css('background-color','#cccccc');
+	}
+	
+	function f2(){
+		$('tbody tr:even').css('background-color',
+		'red');
+		$('tbody tr:odd').css('background-color',
+		'yellow');
+	}
+	function f3(){
+		//$('tbody tr:eq(1)').css('background-color',
+		//'yellow');
+		
+		$('tbody tr:eq(1) td:eq(1)').css('background-color',
+		'yellow').css('font-size','60px');
+	}
+	
+	function f4(){
+		$('tbody tr:not(#tr1)').css('background-color',
+		'yellow')
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<table cellpadding="0" cellspacing="0" 
+	width="60%" border="1">
+		<thead>
+			<tr><td>姓名</td><td>年龄</td></tr>
+		</thead>
+		<tbody>
+			<tr><td>zs</td><td>22</td></tr>
+			<tr id="tr1"><td>ww</td><td>23</td></tr>
+			<tr><td>sd</td><td>33</td></tr>
+			<tr><td>ss</td><td>22</td></tr>
+		</tbody>
+	</table>
+	<a href="javascript:;" 
+	onclick="f4();">ClickMe</a>
+	
+	
+	
+</body>
+</html>

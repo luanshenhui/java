@@ -1,0 +1,26 @@
+/login                    :get
+/api/user/.*              :post
+/api/captcha              :get
+
+/api/rest/.*              :post,get
+
+/api/design/.*            :get,post
+/design/.*                :get,post
+/item/search_contain      :get
+/pay/dealPay              :post
+
+
+/call/.*                  :post,get
+/GatewayReceiveServlet    :post
+/debugChange				:post
+/debugLoop					:post
+/OutSystemBackServlet    :post,get
+/debugLoop		:post
+/debugChange		:post
+/changeTime		:get,post
+
+/api/goodsDetail/cardScale :get
+
+/testTransfer				:get,post
+/transfer					:get,post
+/api/cart/count				:get,post

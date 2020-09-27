@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=EDGE;" />
+    <title>H4C2页面样式示例（IFRAME）</title>
+    <link type="text/css" rel="stylesheet" href="../../../styles/dpn.h4c2.css" />
+    <style type="text/css">
+        #map_container 
+        {
+            width      : 999px;
+            height     : 400px;
+            border     : 1px solid #000;
+            text-align : center;
+        }
+    </style>
+    <script type="text/javascript" src="../../../styles/dpn.h4c2.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+</head>
+<body>
+    <!-- **** head ********************************************************* -->
+
+    <!-- **** menu ********************************************************* -->
+
+    <!-- **** content ****************************************************** -->
+    <div class="dpn-content">
+        <div class="crumb">当前位置&nbsp;:&nbsp;地图服务&nbsp;&gt;&nbsp;谷歌地图</div>
+        <div class="title">谷歌地图样式示例</div>
+        <p>缩放&nbsp;:&nbsp;<span id="zoom">0</span></p>
+		<p>中心[纬度,经度]&nbsp;:&nbsp;[<span id="center_w">000.000</span>,<span id="center_j">000.000</span>]</p>
+        <p>边界[纬度,经度]&nbsp;:&nbsp;<br/>西北[<span id="bound_nw_w">000.000</span>,<span id="bound_nw_j">000.000</span>]<br/>东北[<span id="bound_ne_w">000.000</span>,<span id="bound_ne_j">000.000</span>]<br/>西南[<span id="bound_sw_w">000.000</span>,<span id="bound_sw_j">000.000</span>]<br/>东南[<span id="bound_se_w">000.000</span>,<span id="bound_se_j">000.000</span>]</p>
+		<p>&nbsp;</p>
+        <div id="map_container"></div>
+    </div>
+    <p>&nbsp;</p>
+    <!-- **** foot ********************************************************* -->
+
+    <!-- **** javascript *************************************************** -->
+    <script type="text/javascript" src="http://maps.google.cn/maps/api/js?sensor=false"></script>
+    <script type="text/javascript">
+        function showMapValue(googleMap) {
+            if (typeof googleMap == 'undefined') {
+                return;
+            }
+            var centerV = googleMap.getCenter();
+            if (!(typeof centerV == 'undefined')) {
+                jQuery('#center_w').text(centerV.lat());
+                jQuery('#center_j').text(centerV.lng());
+            }
+
+            var boundsV = googleMap.getBounds();
+            if (!(typeof boundsV == 'undefined')) {
+                var northEastV = boundsV.getNorthEast();
+                var southWestV = boundsV.getSouthWest();
+                jQuery('#bound_nw_w').text(northEastV.lat());
+                jQuery('#bound_nw_j').text(southWestV.lng());
+                jQuery('#bound_ne_w').text(northEastV.lat());
+                jQuery('#bound_ne_j').text(northEastV.lng());
+                jQuery('#bound_sw_w').text(southWestV.lat());
+                jQuery('#bound_sw_j').text(southWestV.lng());
+                jQuery('#bound_se_w').text(southWestV.lat());
+                jQuery('#bound_se_j').text(northEastV.lng());
+            }
+
+            jQuery('#zoom').text(googleMap.getZoom());
+        }
+
+        jQuery(function () {
+            jQuery.dpn.showMenu("map");
+            var options = {
+                center: new google.maps.LatLng(39, 121.5),
+                zoom: 4,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                scaleControl: true
+            };
+            var map = new google.maps.Map(jQuery('#map_container')[0], options);
+
+            var markerImage = new google.maps.MarkerImage('../../../images/h4c2/dpn.map.marker.png');
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(39, 121.5),
+                map: map,
+                icon: markerImage,
+                title: '点击我'
+            });
+
+            var infowindow = new google.maps.InfoWindow({
+                content: 'Hello world'
+            });
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+
+            var route = [
+                new google.maps.LatLng(39, 121.5),
+                new google.maps.LatLng(38.95, 121.55)
+            ];
+            var polylineOptions = {
+                path: route,
+                strokeColor: "#ff0000",
+                strokeWeight: 5,
+                strokeOpacity: 0.6
+            };
+            var polyline = new google.maps.Polyline(polylineOptions);
+            polyline.setMap(map);
+
+            google.maps.event.addListener(map, 'bounds_changed', function () {
+                showMapValue(map);
+            });
+        });
+    </script>
+</body>
+</html>

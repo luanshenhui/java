@@ -1,0 +1,59 @@
+package com.yulin.dangdang.dao.daoimpl;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.yulin.dangdang.bean.Address;
+import com.yulin.dangdang.bean.Item;
+import com.yulin.dangdang.bean.Order;
+import com.yulin.dangdang.common.MyBatisUtil;
+import com.yulin.dangdang.dao.OrderDao;
+
+public class OrderDaoImpl implements OrderDao{
+
+	private String namespace = "com.yulin.orderMapping";
+	
+	/**
+	 * 保存Order
+	 */
+	@Override
+	public boolean insertOrder(Order order) {
+		SqlSession session = MyBatisUtil.getSession();
+		int flag = session.insert(namespace + ".insertOrder", order);
+		session.commit();
+		return flag == 1;
+	}
+	/**
+	 * 保存Item
+	 */
+
+	@Override
+	public boolean insertItem(Item item) {
+		SqlSession session = MyBatisUtil.getSession();
+		int flag = session.insert(namespace + ".insertItem", item);
+		session.commit();
+		return flag == 1;
+	}
+	/**
+	 * 保存地址
+	 */
+	@Override
+	public boolean insertAddress(Address address) {
+		SqlSession session = MyBatisUtil.getSession();
+		int flag = session.insert(namespace + ".insertAddress", address);
+		session.commit();
+		return flag == 1;
+	}
+	/**
+	 * 改变订单地址
+	 */
+	@Override
+	public boolean updateAddress(int id) {
+		SqlSession session = MyBatisUtil.getSession();
+		int flag = session.update(namespace + ".updateAddress", order);
+		session.commit();
+		return flag == 1;
+	}
+
+}

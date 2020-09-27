@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hepowdhc.dcapp</groupId>
+        <artifactId>dcapp-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>dcapp-csjs</artifactId>
+    <version>${dcapp.version}</version>
+    <packaging>war</packaging>
+    <name>城市建设投资</name>
+    <description>城市建设投资</description>
+
+    <!-- 项目属性 -->
+    <properties>
+
+
+    </properties>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.hepowdhc.dcapp</groupId>
+            <artifactId>dcapp-core</artifactId>
+            <classifier>classes</classifier>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hepowdhc.dcapp</groupId>
+            <artifactId>dcapp-core</artifactId>
+            <type>war</type>
+
+        </dependency>
+
+
+
+    </dependencies>
+
+
+    <profiles>
+        <profile>
+
+            <id>dev_local</id>
+            <properties>
+
+                <project.app.env>dev</project.app.env>
+
+                <pom.deploy.port>9000</pom.deploy.port>
+
+            </properties>
+
+        </profile>
+
+
+        <!-- 开发测试用-->
+        <profile>
+            <id>dev_test</id>
+            <properties>
+
+                <project.app.env>test</project.app.env>
+
+                <pom.deploy.port>9000</pom.deploy.port>
+
+            </properties>
+
+        </profile>
+
+        <!-- 贵阳测试用 -->
+        <profile>
+            <id>gz_test</id>
+            <properties>
+
+                <project.app.env>gz-test</project.app.env>
+
+                <pom.deploy.port>9000</pom.deploy.port>
+            </properties>
+        </profile>
+
+        <profile>
+
+            <id>gz_dev_test</id>
+
+            <properties>
+                <project.app.env>gz-dev-test</project.app.env>
+                <pom.deploy.port>9000</pom.deploy.port>
+            </properties>
+
+        </profile>
+
+    </profiles>
+
+    <build>
+
+        <finalName>${artifactId}-${version}</finalName>
+        <filters>
+            <filter>src/main/filters/${project.app.env}.properties</filter>
+        </filters>
+        <resources>
+            <resource>
+                <directory>
+                    ${project.basedir}/src/main/resources
+                </directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+        <outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/classes/</outputDirectory>
+
+        <plugins>
+
+            <!-- jetty插件 -->
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <!--suppress MavenModelInspection -->
+                <configuration>
+                    <connectors>
+                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                            <port>${pom.deploy.port}</port>
+                        </connector>
+                    </connectors>
+                    <webAppConfig>
+                        <contextPath>/</contextPath>
+                    </webAppConfig>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>org.mortbay.util.URI.charset</name>
+                            <value>${project.build.sourceEncoding}</value>
+                        </systemProperty>
+                    </systemProperties>
+
+
+                    <webApp>
+
+                    </webApp>
+
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <attachClasses>true</attachClasses>
+                    <webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+</project>

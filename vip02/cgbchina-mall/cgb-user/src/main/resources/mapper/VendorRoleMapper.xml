@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VendorRole">
+    <resultMap id="VendorRoleMap" type="VendorRoleModel">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="descript" column="descript"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="shopType" column="shop_type"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        id,pid,name,type,descript,create_oper,modify_oper,create_time,modify_time,shop_type,vendor_id
+    </sql>
+
+    <insert id="insert" parameterType="VendorRoleModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_vendor_role
+        (`name`
+        ,`type`
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,shop_type
+        ,vendor_id)
+        values(#{name}
+        ,#{type}
+        ,#{delFlag}
+        ,#{createOper}
+        ,NOW()
+        ,#{shopType}
+        ,#{vendorId})
+    </insert>
+
+    <update id="update" parameterType="VendorRoleModel">
+        update tbl_vendor_role set
+        <if test="pid !=null">pid = #{pid}
+            ,
+        </if>
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="type !=null">type = #{type}
+            ,
+        </if>
+        <if test="descript !=null">descript = #{descript}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+            ,
+        </if>
+        <if test="shopType !=null">shop_type = #{shopType}
+            ,
+        </if>
+        <if test="vendorId !=null">vendor_id = #{vendorId}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="pid !=null">and pid = #{pid}</if>
+            <if test="name !=null">and name like concat(concat('%',#{name}),'%')</if>
+            <if test="type !=null">and type = #{type}</if>
+            <if test="descript !=null">and descript = #{descript}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="shopType !=null">and shop_type = #{shopType}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="VendorRoleMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_vendor_role
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="VendorRoleMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_role
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="VendorRoleMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_role
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_vendor_role
+        <include refid="conditions"/>
+    </select>
+    <delete id="delete" parameterType="Long">
+        delete from tbl_vendor_role where id = #{_parameter}
+    </delete>
+    <select id="duplicateCheck" parameterType="Map" resultType="Long">
+        SELECT COUNT(1) FROM tbl_vendor_role WHERE `name`=#{name} AND vendor_id=#{vendorId} AND del_flag=0
+    </select>
+    <update id="updateRole" parameterType="Map">
+        UPDATE tbl_vendor_role SET `modify_oper`=#{modifyOper}
+        ,`modify_time`=NOW() WHERE id=#{id}
+    </update>
+    <resultMap id="vendorRoleDtoMap" type="cn.com.cgbchina.user.dto.VendorRoleDto">
+        <result property="roleId" column="id"/>
+        <result property="roleName" column="name"/>
+    </resultMap>
+    <select id="allEnabledRoleDtos" parameterType="Map" resultMap="vendorRoleDtoMap">
+        SELECT id,`name` FROM tbl_vendor_role WHERE shop_type=#{shopType} AND vendor_id=#{vendorId}
+    </select>
+    <!--add by liuhan-->
+    <select id="getRoleByRoleIds" parameterType="List" resultMap="vendorRoleDtoMap">
+        SELECT id,`name` FROM tbl_vendor_role WHERE id IN
+        <foreach collection="list" open="(" close=")" separator="," item="roleDto">
+            #{roleDto}
+        </foreach>
+    </select>
+
+    <!--add by liuhan-->
+    <select id="findByName" parameterType="String" resultType="String">
+        select id
+        from tbl_vendor_role
+        where name LIKE concat(concat('%',#{name}),'%')
+    </select>
+
+    <delete id="deleteVendorRole" parameterType="Map">
+        DELETE FROM tbl_vendor_role WHERE user_id=#{userId} AND role_id IN
+        <foreach collection="deleteList" separator="," open="(" close=")" item="deleteId">
+            #{deleteId}
+        </foreach>
+    </delete>
+</mapper>
+
+

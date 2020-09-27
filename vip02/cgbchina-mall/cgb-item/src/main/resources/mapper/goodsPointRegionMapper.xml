@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GoodsPointRegionModel">
+    <resultMap id="GoodsPointRegionMap" type="GoodsPointRegionModel">
+        <result property="regionId" column="region_id"/>
+        <result property="minPoint" column="min_point"/>
+        <result property="maxPoint" column="max_point"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="keepField1" column="keep_field1"/>
+        <result property="keepField2" column="keep_field2"/>
+        <result property="keepField3" column="keep_field3"/>
+    </resultMap>
+    <sql id="columns">
+    region_id,min_point,max_point,del_flag,create_oper,create_time,modify_oper,modify_time,keep_field1,keep_field2,keep_field3
+    </sql>
+
+    <insert id="insert" parameterType="GoodsPointRegionModel" useGeneratedKeys="true"
+            keyProperty="regionId" keyColumn="region_id">
+        insert into tbl_goods_point_region
+        (min_point
+        ,max_point
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,keep_field1
+        ,keep_field2
+        ,keep_field3)
+        values(#{minPoint}
+        ,#{maxPoint}
+        ,#{delFlag}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{keepField1}
+        ,#{keepField2}
+        ,#{keepField3})
+    </insert>
+
+    <update id="update" parameterType="GoodsPointRegionModel">
+        update tbl_goods_point_region set
+            <if test="minPoint !=null">min_point = #{minPoint}
+                ,</if>
+            <if test="maxPoint !=null">max_point = #{maxPoint}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+                ,</if>
+            <if test="keepField1 !=null">keep_field1 = #{keepField1}
+                ,</if>
+            <if test="keepField2 !=null">keep_field2 = #{keepField2}
+                ,</if>
+            <if test="keepField3 !=null">keep_field3 = #{keepField3}
+                </if>
+        where region_id = #{regionId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="regionId !=null">and region_id = #{regionId}</if>
+            <if test="minPoint !=null">and min_point = #{minPoint}</if>
+            <if test="maxPoint !=null">and max_point = #{maxPoint}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="keepField1 !=null">and keep_field1 = #{keepField1}</if>
+            <if test="keepField2 !=null">and keep_field2 = #{keepField2}</if>
+            <if test="keepField3 !=null">and keep_field3 = #{keepField3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="GoodsPointRegionMap">
+       SELECT region_id,
+        <include refid="columns"/>
+        from tbl_goods_point_region
+       where region_id=#{regionId}
+    </select>
+    <select id="findAll" resultMap="GoodsPointRegionMap">
+        select region_id,
+        <include refid="columns"/>
+        from tbl_goods_point_region
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="GoodsPointRegionMap">
+        select region_id,
+        <include refid="columns"/>
+        from tbl_goods_point_region
+        <include refid="conditions"/>
+        <![CDATA[ order by region_id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="GoodsPointRegionModel">
+        delete from tbl_goods_point_region where region_id = regionId
+    </delete>
+
+    <select id="findGoodsPointRegionList" resultMap="GoodsPointRegionMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_point_region
+        <include refid="conditions"/>
+        where del_flag=0
+    </select>
+    <!--删除积分区间-->
+    <update id="deletePointsRegion" parameterType="Map">
+        UPDATE tbl_goods_point_region
+        SET del_flag = 1,
+        modify_oper = #{modifyOper},
+        modify_time = now()
+        where region_id IN
+        <foreach collection="regionIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>
+
+

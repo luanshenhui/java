@@ -1,0 +1,72 @@
+{{#component "business_control js-component"}}
+    <p class="components-title"><strong>- 业务启停控制 -</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+
+            <form class="form item-form-search form-inline business-form">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large business-weight">
+                            <label for="parametersType">业务类型:</label>
+                            <select class="select js-select1" id="parametersType" name="parametersType"
+                                    data-approveState="{{parametersType}}">
+                                <option value="" {{#equals parametersType ""}}selected{{/equals}}>请选择</option>
+                                <option value="0" {{#equals parametersType "0"}}selected{{/equals}}>登录</option>
+                                <option value="2" {{#equals parametersType "2"}}selected{{/equals}}>支付</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large business-weight">
+                            <label for="ordertypeId">子业务类型:</label>
+                            <select class="select js-select2" id="ordertypeId" name="ordertypeId"
+                                    data-ordertypeId="{{ordertypeId}}">
+                                <option value="" {{#equals ordertypeId ""}}selected{{/equals}}>请选择</option>
+                                <option value="dq" {{#equals ordertypeId "dq"}}selected{{/equals}}>登录启停</option>
+                                <option value="db" {{#equals ordertypeId "db"}}selected{{/equals}}>登录白名单</option>
+                                <option value="yg" {{#equals ordertypeId "yg"}}selected{{/equals}}>广发商城</option>
+                                <option value="jf" {{#equals ordertypeId "jf"}}selected{{/equals}}>积分商城</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="p">
+
+                        <input class="btn btn-success btn-small pull-right margin-right-10" type="submit"
+                               value="查询"/>
+                    </p>
+                </fieldset>
+            </form>
+
+            <table class="table table-top">
+                <thead>
+                <tr>
+                    <th width="13%">业务类型</th>
+                    <th width="13%">子业务类型</th>
+                    <th width="13%">渠道</th>
+                    <th width="13%">启停状态</th>
+                    <th width="38%">业务话术</th>
+                    <th width="10%">操作</th>
+                </tr>
+                </thead>
+                <tbody data-content="{{_DATA_}}">
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{parametersId}}" data-data="{{json this}}">
+                        <td class="parametersTypeNm">{{parametersTypeNm}}</td>
+                        <td class="ordertypeIdNm">{{ordertypeIdNm}}</td>
+                        <td class="sourceId">{{sourceIdNm}}</td>
+                        <td class="openCloseFlag">{{openCloseFlag}}</td>
+                        <td class="prompt">{{prompt}}</td>
+                        <td class="operate">
+                            <button class="btn btn-sm btn-info js-prompt-update">编辑</button>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            {{#equals _DATA_.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <div class="pagination" data-total="{{_DATA_.total}}"></div>
+            {{/equals}}
+        </div>
+
+    </div>
+{{/component}}

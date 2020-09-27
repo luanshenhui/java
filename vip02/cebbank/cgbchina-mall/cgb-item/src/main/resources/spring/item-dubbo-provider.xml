@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:properties id="app" location="classpath:app.properties"/>
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <import resource="item-service-context.xml"/>
+    <!-- ID生成规则 -->
+    <import resource="classpath*:/spring/generator-context.xml"/>
+    <import resource="mybatis-context.xml"/>
+
+    <!-- Application name -->
+    <dubbo:application name="item-provider" logger="slf4j"/>
+    <!-- registry address, used for service to register itself -->
+    <dubbo:registry address="#{app.dubboRegistry}"/>
+    <!-- expose this service through dubbo protocol, through port 20880 -->
+    <dubbo:protocol serialization="nativejava" name="dubbo" port="#{app.dubboPort}" threads="#{app.dubboThreads}"
+                    heartbeat="#{app.dubboHeartBeats}"/>
+
+    <dubbo:service interface="cn.com.cgbchina.item.service.AttributeKeyService" ref="attributeKeyServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.AttributeValueService" ref="attributeValueServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.AuditLoggingService" ref="auditLoggingServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.BackCategoriesService" ref="backCategoriesServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.BrandService" ref="brandServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.BrowseHistoryService" ref="browseHistoryServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.CategoryMappingService" ref="categoryMappingServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.CouponScaleService" ref="couponScaleServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.FavoriteService" ref="favoriteServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.FrontCategoriesService" ref="frontCategoriesServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.FrontCategoryTreeService" ref="frontCategoryTreeImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.GiftPartitionService" ref="giftPartitionServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.GoodsConsultService" ref="goodsConsultServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.GoodsDetailService" ref="goodsDetailServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.GoodsImportService" ref="goodsImportServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.GoodsOperateDetailService" ref="goodsOperateDetailServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.GoodsRecommendationService" ref="goodsRecommendationServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.GoodsService" ref="goodsServiceImpl" timeout="5000"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.ItemIndexService" ref="itemIndexServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.ItemSearchService" ref="itemSearchServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.ItemService" ref="itemServiceImpl" />
+    <dubbo:service interface="cn.com.cgbchina.item.service.ItemWechatService" ref="itemWechatServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.OrderTieinSaleService" ref="orderTieinSaleServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.PointsPoolService" ref="pointsPoolServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.ProductService" ref="productServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.ServicePromiseService" ref="servicePromiseServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.SpecialPointsRateService" ref="specialPointsRateServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.VendorGoodsService" ref="vendorGoodsServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.item.service.BackCategoriesImportService" ref="backCategoriesImportServiceImpl"/>
+
+    <dubbo:service interface="cn.com.cgbchina.item.service.GoodsPayWayService" ref="goodsPayWayServiceImpl"/>
+
+</beans>

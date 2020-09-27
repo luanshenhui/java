@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GoodsBrandAdvertiseModel">
+    <resultMap id="GoodsBrandAdvertiseMap" type="GoodsBrandAdvertiseModel">
+        <result property="id" column="id"/>
+        <result property="goodsBrandId" column="goods_brand_id"/>
+        <result property="topPic" column="top_pic"/>
+        <result property="slide1Id" column="slide1_id"/>
+        <result property="slide1Pic" column="slide1_pic"/>
+        <result property="slide1Link" column="slide1_link"/>
+        <result property="slide2Id" column="slide2_id"/>
+        <result property="slide2Pic" column="slide2_pic"/>
+        <result property="slide2Link" column="slide2_link"/>
+        <result property="slide3Id" column="slide3_id"/>
+        <result property="slide3Pic" column="slide3_pic"/>
+        <result property="slide3Link" column="slide3_link"/>
+        <result property="slide4Id" column="slide4_id"/>
+        <result property="slide4Pic" column="slide4_pic"/>
+        <result property="slide4Link" column="slide4_link"/>
+        <result property="slide5Id" column="slide5_id"/>
+        <result property="slide5Pic" column="slide5_pic"/>
+        <result property="slide5Link" column="slide5_link"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="brandCategoryId" column="brand_category_id"/>
+    </resultMap>
+    <sql id="columns">
+    id,goods_brand_id,top_pic,slide1_id,slide1_pic,slide1_link,slide2_id,slide2_pic,slide2_link,slide3_id,slide3_pic,slide3_link,slide4_id,slide4_pic,slide4_link,slide5_id,slide5_pic,slide5_link,del_flag,create_oper,create_time,modify_oper,modify_time,brand_category_id
+    </sql>
+
+    <insert id="insert" parameterType="GoodsBrandAdvertiseModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_goods_brand_advertise
+        (goods_brand_id
+        ,top_pic
+        ,slide1_id
+        ,slide1_pic
+        ,slide1_link
+        ,slide2_id
+        ,slide2_pic
+        ,slide2_link
+        ,slide3_id
+        ,slide3_pic
+        ,slide3_link
+        ,slide4_id
+        ,slide4_pic
+        ,slide4_link
+        ,slide5_id
+        ,slide5_pic
+        ,slide5_link
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,brand_category_id)
+        values(#{goodsBrandId}
+        ,#{topPic}
+        ,#{slide1Id}
+        ,#{slide1Pic}
+        ,#{slide1Link}
+        ,#{slide2Id}
+        ,#{slide2Pic}
+        ,#{slide2Link}
+        ,#{slide3Id}
+        ,#{slide3Pic}
+        ,#{slide3Link}
+        ,#{slide4Id}
+        ,#{slide4Pic}
+        ,#{slide4Link}
+        ,#{slide5Id}
+        ,#{slide5Pic}
+        ,#{slide5Link}
+        ,#{delFlag}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{brandCategoryId})
+    </insert>
+
+    <update id="update" parameterType="GoodsBrandAdvertiseModel">
+        update tbl_goods_brand_advertise set
+            <if test="goodsBrandId !=null">goods_brand_id = #{goodsBrandId}
+                ,</if>
+            <if test="topPic !=null">top_pic = #{topPic}
+                ,</if>
+            <if test="slide1Id !=null">slide1_id = #{slide1Id}
+                ,</if>
+            <if test="slide1Pic !=null">slide1_pic = #{slide1Pic}
+                ,</if>
+            <if test="slide1Link !=null">slide1_link = #{slide1Link}
+                ,</if>
+            <if test="slide2Id !=null">slide2_id = #{slide2Id}
+                ,</if>
+            <if test="slide2Pic !=null">slide2_pic = #{slide2Pic}
+                ,</if>
+            <if test="slide2Link !=null">slide2_link = #{slide2Link}
+                ,</if>
+            <if test="slide3Id !=null">slide3_id = #{slide3Id}
+                ,</if>
+            <if test="slide3Pic !=null">slide3_pic = #{slide3Pic}
+                ,</if>
+            <if test="slide3Link !=null">slide3_link = #{slide3Link}
+                ,</if>
+            <if test="slide4Id !=null">slide4_id = #{slide4Id}
+                ,</if>
+            <if test="slide4Pic !=null">slide4_pic = #{slide4Pic}
+                ,</if>
+            <if test="slide4Link !=null">slide4_link = #{slide4Link}
+                ,</if>
+            <if test="slide5Id !=null">slide5_id = #{slide5Id}
+                ,</if>
+            <if test="slide5Pic !=null">slide5_pic = #{slide5Pic}
+                ,</if>
+            <if test="slide5Link !=null">slide5_link = #{slide5Link}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+                ,</if>
+            <if test="brandCategoryId !=null">brand_category_id = #{brandCategoryId}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="goodsBrandId !=null">and goods_brand_id = #{goodsBrandId}</if>
+            <if test="topPic !=null">and top_pic = #{topPic}</if>
+            <if test="slide1Id !=null">and slide1_id = #{slide1Id}</if>
+            <if test="slide1Pic !=null">and slide1_pic = #{slide1Pic}</if>
+            <if test="slide1Link !=null">and slide1_link = #{slide1Link}</if>
+            <if test="slide2Id !=null">and slide2_id = #{slide2Id}</if>
+            <if test="slide2Pic !=null">and slide2_pic = #{slide2Pic}</if>
+            <if test="slide2Link !=null">and slide2_link = #{slide2Link}</if>
+            <if test="slide3Id !=null">and slide3_id = #{slide3Id}</if>
+            <if test="slide3Pic !=null">and slide3_pic = #{slide3Pic}</if>
+            <if test="slide3Link !=null">and slide3_link = #{slide3Link}</if>
+            <if test="slide4Id !=null">and slide4_id = #{slide4Id}</if>
+            <if test="slide4Pic !=null">and slide4_pic = #{slide4Pic}</if>
+            <if test="slide4Link !=null">and slide4_link = #{slide4Link}</if>
+            <if test="slide5Id !=null">and slide5_id = #{slide5Id}</if>
+            <if test="slide5Pic !=null">and slide5_pic = #{slide5Pic}</if>
+            <if test="slide5Link !=null">and slide5_link = #{slide5Link}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="brandCategoryId !=null">and brand_category_id = #{brandCategoryId}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="GoodsBrandAdvertiseMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_goods_brand_advertise
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="GoodsBrandAdvertiseMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_brand_advertise
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="GoodsBrandAdvertiseMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_brand_advertise
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="GoodsBrandAdvertiseModel">
+        delete from tbl_goods_brand_advertise where id = id
+    </delete>
+    <select id="findByBrandId" parameterType="Map" resultMap="GoodsBrandAdvertiseMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_goods_brand_advertise
+        where goods_brand_id=#{id}
+    </select>
+
+    <update id="updateByBrandId" parameterType="GoodsBrandAdvertiseModel">
+        update tbl_goods_brand_advertise set
+        <if test="topPic !=null">top_pic = #{topPic},</if>
+        <if test="slide1Id !=null">slide1_id = #{slide1Id},</if>
+        <if test="slide1Pic !=null">slide1_pic = #{slide1Pic},</if>
+        <if test="slide1Link !=null">slide1_link = #{slide1Link},</if>
+        <if test="slide2Id !=null">slide2_id = #{slide2Id},</if>
+        <if test="slide2Pic !=null">slide2_pic = #{slide2Pic} ,</if>
+        <if test="slide2Link !=null">slide2_link = #{slide2Link},</if>
+        <if test="slide3Id !=null">slide3_id = #{slide3Id},</if>
+        <if test="slide3Pic !=null">slide3_pic = #{slide3Pic},</if>
+        <if test="slide3Link !=null">slide3_link = #{slide3Link},</if>
+        <if test="slide4Id !=null">slide4_id = #{slide4Id} ,</if>
+        <if test="slide4Pic !=null">slide4_pic = #{slide4Pic},</if>
+        <if test="slide4Link !=null">slide4_link = #{slide4Link},</if>
+        <if test="slide5Id !=null">slide5_id = #{slide5Id},</if>
+        <if test="slide5Pic !=null">slide5_pic = #{slide5Pic} ,</if>
+        <if test="slide5Link !=null">slide5_link = #{slide5Link},</if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper},</if>
+        modify_time = now()
+        where goods_brand_id = #{goodsBrandId}
+    </update>
+</mapper>
+
+

@@ -1,0 +1,49 @@
+@charset "utf-8";
+
+td{
+	margin:0;
+	padding:0;
+}
+
+.divBar{
+	height:20px;
+	white-space:nowrap;
+	overflow:hidden;
+	filter:Alpha(Opacity=25);
+	-moz-opacity:0.25;
+}
+
+.bar-Green{
+	height:20px;
+	float:left;
+	color:white;
+	overflow:hidden;
+	text-align:center;
+	font-size:12px;
+	background-color:#339966;
+}
+
+.bar-Yellow{
+	height:20px;
+	float:left;
+	color:white;
+	overflow:hidden;
+	text-align:center;
+	font-size:12px;
+	background-color:#FFCC00;
+}
+
+.bar-Red{
+	height:20px;
+	float:left;
+	color:white;
+	overflow:hidden;
+	text-align:center;
+	font-size:12px;
+	background-color:#FF2626;
+}
+
+.div-TdTextC{
+	overflow:hidden;
+	height:20px;
+}

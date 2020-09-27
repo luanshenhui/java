@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work">
+ 
+
+
+	
+
+	<select id="getSizeWorkDeclareDto" parameterType="map" resultType="int">
+		SELECT COUNT(ROWID) FROM work_declare WHERE  id = #{id}
+	</select>
+
+	
+
+	<update id="updateWorkDeclareDto" parameterType="workDeclareDto">
+		UPDATE work_declare
+			<set>
+				<if test="current_user_id != null">current_user_id = #{current_user_id},</if>
+				<if test="manager_user_id != null">manager_user_id = #{manager_user_id},</if>
+				<if test="verify_status != null">verify_status = #{verify_status},</if>
+				<if test="verify_opinion != null">verify_opinion = #{verify_opinion},</if>
+			</set>
+			WHERE  id = #{id}
+	</update>
+
+	
+	
+	
+	<update id="updateWorkDeclareGoodsDto" parameterType="workDeclareGoodsDto">
+		UPDATE work_declare_goods
+			<set>				<if test="status != null">status = #{status},</if>
+				<if test="verify_user_id != null">verify_user_id = #{verify_user_id},</if>
+				<if test="verify_opinion != null">verify_opinion = #{verify_opinion},</if>
+				gmt_verify = SYSDATE
+			</set>
+			WHERE  id = #{id} AND status != 4
+	</update>
+	
+
+
+	
+
+</mapper>

@@ -1,0 +1,55 @@
+{{#component "announcements js-component"}}
+    <p class="announcement-title"><strong>公告管理</strong>&nbsp;&nbsp;&nbsp;<span>共（{{#if _DATA_.total}}{{_DATA_.total}}{{else}}0{{/if}}）个公告</span></p>
+    <div class="add-announcement">
+        <button class="btn btn-success js-announcement-new">公告发布</button>
+    </div>
+    <div>
+        <form id="form-search" class="form">
+            <fieldset>
+                <span class="span3">
+                  <label for="announcement">公告名称</label>
+                  <input type="text" name="announcement" class="search-announcement search-input"
+                         value="{{announcement}}">
+                </span>
+                &nbsp;&nbsp;
+                <span class="span3">
+                <label for="announcement">发布时间</label>
+                <input class="form-control js-date-start"/>
+                ----<input class="form-control js-date-end"/>
+                </span>
+                &nbsp;&nbsp;
+               <span class="span1">
+                  <label for="searchAnnouncement">
+                      <button type="submit" class="btn btn-success js-announcement-search">搜索</button>
+                  </label>
+                </span>
+            </fieldset>
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="50%">公告名称</th>
+            <th width="30%">发送时间</th>
+            <th width="20%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{announcement}}" data-data="{{json this}}">
+                <td class="announcement-topic">{{topic}}</td>
+                <td class="announcement-time">{{#formatDate time}}{{/formatDate}}</td>
+                <td>
+                    <button id="{{announcementId}}" class="btn btn-sm js-announcement-watch">查看</button>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    {{/equals}}
+    </div>
+{{/component}}

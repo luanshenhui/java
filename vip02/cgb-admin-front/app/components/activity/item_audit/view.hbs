@@ -1,0 +1,124 @@
+{{#component "item-audit js-component"}}
+    <link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <p class="components-title"><strong>- 初审管理 -</strong></p>
+    <div class="tab-contents">
+        <form class="form item-form-search form-inline">
+            <fieldset>
+                <p class="filter-name ">
+                   <span class="span4 span-large">
+                       <label for="shortName">&nbsp;活动简称:</label>
+                      <input class="form-control" name="shortName" type="text" id="shortName" value="{{shortName}}" maxlength="200"/>
+                   </span>
+                    &nbsp;&nbsp;&nbsp;
+                   <span class="span5 span-large">
+                       <label for="id">活动编号:</label>
+                       <input class="form-control" name="id" type="text" value="{{id}}" maxlength="10"/>
+                  </span>
+                    &nbsp;&nbsp;
+                  <span class="span5 span-large">
+                        <label for="promType">活动类型:</label>
+                        <select class="select" name="promType" id="promType" >
+                            <option value="" {{#equals promType ""}}selected{{/equals}}>请选择</option>
+                            <option value="10" {{#equals promType "10"}}selected{{/equals}}>折扣</option>
+                            <option value="20" {{#equals promType "20"}}selected{{/equals}}>满减</option>
+                        </select>
+                    </span>
+                </p>
+                <p class="filter-name">
+                    <span class="span4 span-large">
+                        <label for="checkStatus">活动状态:</label>
+                        <select class="select" name="checkStatus" id="checkStatus">
+                            <option value="" {{#equals checkStatus ""}}selected{{/equals}}>请选择</option>
+                            <option value="2" {{#equals checkStatus "2"}}selected{{/equals}}>待初审</option>
+                            <option value="3" {{#equals checkStatus "3"}}selected{{/equals}}>初审通过</option>
+                            <option value="4" {{#equals checkStatus "4"}}selected{{/equals}}>未通过初审</option>
+                        </select>
+                    </span>
+                    &nbsp;&nbsp;
+                     <span class="span5 span-large">
+                        <label>&nbsp;活动时间:</label>
+                         <input class="form-control application_date input-small-z js-date-start cursor-pointer" name="beginDate"
+                                type="text" id="beginDate" value="{{beginDate}}"/>
+                         -
+                         <input class="form-control end_date input-small-z js-date-end cursor-pointer" name="endDate"
+                                type="text" id="endDate" value="{{endDate}}"/>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span class="span5 span-large">
+                        <label for="sourceId">销售渠道:</label>
+                        <select class="select" name="sourceId" id="sourceId">
+                            <option value="" {{#equals sourceId ""}}selected{{/equals}}>请选择</option>
+                            <option value="00" {{#equals sourceId "00"}}selected{{/equals}}>商城</option>
+                            <option value="01" {{#equals sourceId "01"}}selected{{/equals}}>CC</option>
+                            <option value="02" {{#equals sourceId "02"}}selected{{/equals}}>IVR</option>
+                            <option value="03" {{#equals sourceId "03"}}selected{{/equals}}>手机商城</option>
+                            <option value="04" {{#equals sourceId "04"}}selected{{/equals}}>短信</option>
+                            <option value="05" {{#equals sourceId "05"}}selected{{/equals}}>微信广发银行</option>
+                            <option value="06" {{#equals sourceId "06"}}selected{{/equals}}>微信广发信用卡</option>
+                            <option value="09" {{#equals sourceId "09"}}selected{{/equals}}>APP</option>
+                        </select>
+                    </span>
+                </p>
+            </fieldset>
+            <p class="filter-name">
+                <input class="btn btn-success btn-small pull-right margin-right-10" type="submit" value="查询"/>
+            </p>
+        </form>
+    </div>
+    <div class="main-box-table">
+        {{#equals _DATA_.total "0"}}
+            <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+        {{else}}
+            <table class="table">
+                <thead>
+                <tr>
+                    <!--<th width="5%"></th>-->
+                    <th width="10%">活动编号</th>
+                    <th width="10%">活动简称</th>
+                    <th width="10%">活动类型</th>
+                    <th width="20%">活动时间</th>
+                    <th width="20%">报名时间</th>
+                    <th width="15%">活动状态</th>
+                    <th width="13%">操作</th>
+                </tr>
+                </thead>
+                <tbody data-data="{{json _DATA_}}">
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{id}}">
+                        <!--<td><input type="checkbox" name="check_list"></td>-->
+                        <td class="activity-id">{{id}}</td>
+                        <td class="activity-name">{{shortName}}</td>
+                        <td class="activity-type">
+                            {{#equals promType "10"}}折扣{{/equals}}
+                            {{#equals promType "20"}}满减{{/equals}}
+                            {{#equals promType "30"}}秒杀{{/equals}}
+                            {{#equals promType "40"}}团购{{/equals}}
+                            {{#equals promType "50"}}荷兰拍{{/equals}}
+                        </td>
+                        <td class="activity-beginTime">
+                            {{#formatDate beginDate}}{{/formatDate}}-{{#formatDate endDate}}{{/formatDate}}
+                        </td>
+                        <td class="activity-endTime">
+                            {{#formatDate beginEntryDate}}{{/formatDate}}-{{#formatDate endEntryDate}}{{/formatDate}}
+                        </td>
+                        <td class="activity-state">
+                            {{#equals checkStatus "2"}}已提交(待初审){{/equals}}
+                            {{#equals checkStatus "3"}}已提交(初审通过){{/equals}}
+                            {{#equals checkStatus "4"}}已提交(未审批通过){{/equals}}
+                        </td>
+                        <td>
+                            {{#equals checkStatus 2}}
+                                {{#authorial "activityAudit_audit"}}
+                                    <button class="btn btn-info btn-sm js-item-audit-audit">审核</button>
+                                {{/authorial}}
+                            {{/equals}}
+                            <button class="btn btn-info btn-sm js-item-audit-detail">查看</button>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        {{/equals}}
+    </div>
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+{{/component}}

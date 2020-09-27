@@ -1,0 +1,53 @@
+oracle:关系型数据库
+数据库的基本单位是“表”
+	列：字段、属性。列名不区分大小写
+	行：值、数据。数据区分大小写
+	
+1.建表：
+	create table table_liu(
+		id number(4),
+		name varchar2(10),
+		age number(3),
+		sex varchar(1)
+	);
+2.查看表结构：desc 表名
+	desc table_liu	SQLPLUS客户端的命令，所以没有分号
+	
+3.查询表数据：select * from 表名
+	select * from table_liu;
+	
+4.注意：SQL代码以";"作为结尾
+
+5.插入数据：insert into 表名(字段列表，可以不写) values (对应字段的数据)
+	insert into table_liu(id,name,age,sex) values (101,'JACK',18,'m');
+	
+	insert into table_liu values(102,'TOM',19,'m');
+	
+	注意：没有字段列表时，需要按照表的字段顺序插入所有数据
+			有字段列表时，需要对应字段列表中字段的顺序插入数据
+
+6.SQLPLUS操作，调整视图列宽
+	colum id format 9999	：数字类型的列宽，用9的个数来确定
+	colum name format a6	:字符类型的列宽,用a后面的数字来确定
+	简写：
+	col age for 999
+	
+	注意：只是更改显示的方式，并不会更改数据或表本身。更改只锁定列名，所有表只要有这个列名，宽度都会更改。关闭客户端后失效
+	
+7.事务操作：
+	commit:提交事务
+	rollback:撤销事务,只能撤销还未提交的操作
+	
+8.清理屏幕SQLPLUS ：clear scr
+
+9.删除表：drop table 表名;
+	drop table table_liu;
+	
+10.四种SQL语言：
+	DDL：数据定义语言，操作级别是“表”。对表的增、删和改
+	DML：数据控制语言，操作的级别是“表中的数据”。增、删、改
+	DQL：数据查询语言，select 关键字开头
+	TCL：事务控制语言。commit和rollback
+          
+11.更改数据：update 表名 set 列名 = 数据 where 条件;
+			update emp set salary = 10000 where ename = '猪八戒';

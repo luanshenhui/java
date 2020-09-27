@@ -1,0 +1,33 @@
+{{#component " message_setting js-component"}}
+    <div class="main-box-title">消息设置</div>
+    <form class="form form-aligned message-form">
+        <div class="main-box-padding main-box-table-detail">
+            <table>
+                {{#with _DATA_}}
+                    <tr>
+                        <th width="20%">商城公告显示开关</th>
+                        <td width="70%"><input type="radio" id="mallOpen" name="mallOpen" data-id="{{mallId}}"
+                                               {{#equals mallOpen "0"}}checked{{/equals}}  value="0"> 开
+                            <input type="radio" name="mallOpen" value="1"  {{#equals mallOpen "1"}}checked{{/equals}}>
+                            关
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>短信发送开关</th>
+                        <td><input type="radio" id="messageOpen" name="messageOpen" data-id="{{messageId}}"
+                                   value="0"   {{#equals messageOpen "0"}}checked{{/equals}}> 开
+                            <input
+                                    type="radio" value="1" name="messageOpen"
+                                    {{#equals messageOpen "1"}}checked{{/equals}}> 关
+                        </td>
+                    </tr>
+                {{/with}}
+            </table>
+            <div class="admin-btn">
+                {{#authorial "message_switch"}}
+                    <a class="btn btn-success btn-sm  js-switch-edit">保 存</a>
+                {{/authorial}}
+            </div>
+        </div>
+    </form>
+{{/component}}

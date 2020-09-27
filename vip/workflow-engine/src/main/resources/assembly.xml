@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>distribution</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>${basedir}</directory>
+            <includes>
+                <include>*.md</include>
+            </includes>
+            <excludes>
+            </excludes>
+        </fileSet>
+    </fileSets>
+
+
+    <files>
+        <file>
+            <source>src/main/resources/files/README.md</source>
+            <outputDirectory>/</outputDirectory>
+            <filtered>true</filtered>
+        </file>
+        <file>
+            <source>src/main/resources/files/NOTICE.md</source>
+            <outputDirectory>/</outputDirectory>
+            <filtered>true</filtered>
+        </file>
+
+        <file>
+            <source>target/${build.finalName}-exec.jar</source>
+            <outputDirectory>/lib</outputDirectory>
+            <filtered>true</filtered>
+        </file>
+
+        <file>
+            <source>src/main/resources/bin/</source>
+            <outputDirectory>/</outputDirectory>
+            <filtered>true</filtered>
+        </file>
+
+    </files>
+
+
+</assembly>

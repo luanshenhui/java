@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<global-forwards>
+		<forward name="failure" path="/../view/base/error/Error.jsp"
+			redirect="false" />
+		<forward name="unknown-error" path="/../view/base/error/Error.jsp" />
+		<forward name="unpermitted-character" path="/view/base/error/IllegalArgumentException.jsp"/>		
+	</global-forwards>
+	<action-mappings>
+
+		<!-- 菜单Action start -->
+		<action type="com.dhc.authorization.resource.menu.action.MenuAction"
+			parameter="method" scope="request" path="/MenuAction" >
+		</action>
+		<!-- 菜单Action end -->
+		<!-- 授权Action start -->
+		<action type="com.dhc.authorization.resource.privilege.action.PrivilegeAction"
+			parameter="method" scope="request" path="/PrivilegeAction" >
+		</action>
+		<!-- 授权Action end -->			
+		<!-- 权限委托Action start -->
+		<action type="com.dhc.authorization.delegate.action.DelegateAction"
+			parameter="method" scope="request" path="/DelegateAction" >
+			<forward name="listPage" path="/view/authorization/delegate/DelegateList.jsp" />
+		</action>
+		<!-- 权限委托Action end -->	
+		<action type="com.dhc.base.menu.action.MenuTreeAction" scope="request" path="/MenuTreeAction" parameter="method">
+			<forward name="menuTree" path="/view/demo/treeview/MenuTree.jsp" />
+		</action>		
+	</action-mappings>
+</struts-config>

@@ -1,0 +1,40 @@
+{{#component "service_promise js-component"}}
+    <p><strong>- 服务承诺管理 -</strong></p>
+        <div class="m-b-10">
+            <button class="btn btn-info btn-small  js-promise-new">+ 新增</button>
+        </div>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="20%">服务承诺名称</th>
+            <th width="25%">服务承诺图标</th>
+            <th>更新时间</th>
+            <th width="15%">显示顺序</th>
+            <th width="15%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{code}}" data-data="{{json this}}">
+                <td class="term-name">{{name}}</td>
+                <td class="term-name"><img data-original="{{icon}}" class="promise-icon"></td>
+                <td class="term-name">{{formatDate modifyTime}}</td>
+                <td class="term-status">{{sort}}</td>
+                <td>
+                        <button class="btn btn-sm btn-info js-promise-edit">编辑</button>
+                        <button id="{{code}}" class="btn btn-sm btn-info js-default-term-delete" data-toggle="confirm"
+                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                data-event="confirm:delete-promise">删除
+                        </button>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{/equals}}
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+
+{{/component}}

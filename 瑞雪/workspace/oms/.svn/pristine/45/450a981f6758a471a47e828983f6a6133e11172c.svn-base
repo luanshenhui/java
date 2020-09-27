@@ -1,0 +1,949 @@
+package cn.rkylin.oms.system.menu.controller;
+
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSONObject;
+
+import cn.rkylin.core.controller.ApolloController;
+import cn.rkylin.oms.common.context.CurrentUser;
+import cn.rkylin.oms.common.context.WebContextFactory;
+import cn.rkylin.oms.system.facade.ResourceBean;
+import cn.rkylin.oms.system.menu.domain.WF_ORG_MENU;
+import cn.rkylin.oms.system.menu.service.IMenuService;
+import net.sf.json.JSONArray;
+
+@Controller
+@RequestMapping("/menu")
+public class MenuController extends ApolloController {
+
+    @Autowired
+    private IMenuService menuService;
+    /**
+     * 来自系统环境变量中的菜单分类标识，例如：子系统名作为菜单分类， 可以实现不同的子系统看到的菜单不一样
+     */
+    private String menuCategory = null;
+
+    /**
+     * 构造函数
+     */
+    public MenuController() {
+
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 获取菜单树（所有菜单项）
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getMenuTree", method = RequestMethod.GET)
+    public void getMenuTree(HttpServletRequest request, HttpServletResponse response) {
+        if (menuCategory == null) {
+            Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+            menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals("")) ? null : obj.toString();
+        }
+        List list = null;
+        String showAllMenu = request.getParameter("showAllMenu");
+        showAllMenu = (showAllMenu == null ? "" : showAllMenu);
+        if (showAllMenu.toLowerCase().equals("true")) {
+            showAllMenu = "available"; // 显示全部菜单
+        } else {
+            showAllMenu = "assignable"; // 只显示自己能看到的菜单
+        }
+        // 判断tree是否全部查询的参数。1：全部查询；0：部分查询。
+        String expandAll = request.getParameter("expandAll");
+        expandAll = (expandAll == null ? "" : expandAll);
+        if (expandAll.toLowerCase().equals("true")) {
+            expandAll = "1"; // 全部查询
+        } else {
+            expandAll = "0"; // 部分查询
+        }
+
+        try {
+            String userID = null;
+            if (showAllMenu.equals("true")) {
+                userID = "adminUser";
+            } else {
+                CurrentUser currentUser = WebContextFactory.getWebContext().getCurrentUser();
+                userID = "adminUser";
+            }
+            list = menuService.getMenuTreeData(userID, expandAll, null, menuCategory, showAllMenu);
+            String strStaXml = null;
+            if (expandAll.equals("1")) {
+                strStaXml = this.parseStation2XMLString(list);
+            } else {
+                strStaXml = this.parseMenus2XMLString(list);
+            }
+            response.setContentType("text/xml");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(strStaXml);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String parseStation2XMLString(List wf_org_menu) {
+        // 用于存所有的根组织
+        List rootStaList = new ArrayList();
+        // 用于存所有的子组织
+        List subStaList = new ArrayList();
+        // 用于存组织树的xml内容
+        String StrOrgXML = "";
+        // 把根组织和子组织分开
+        for (int i = 0; i < wf_org_menu.size(); i++) {
+            WF_ORG_MENU menuVO = (WF_ORG_MENU) wf_org_menu.get(i);
+
+            if (menuVO.getParentMenuCode() == null)// .equals("RootMenu@MENU"))
+                                                   // //RootMenu菜单根节点id，为死数据
+                rootStaList.add(menuVO);
+            else {
+                if (!menuVO.getParentMenuCode().equals("@MENU"))
+                    subStaList.add(menuVO);
+            }
+
+        }
+        // 循环每一个根组织，把它的子组织灌满
+        try {
+            Document document = DocumentHelper.createDocument();
+            Element itemsElementRoot = document.addElement("tree");
+            itemsElementRoot.addAttribute("id", "0");
+            // 为父节点套一层节点，以便右键新建菜单的时候能建父节点的同级菜单
+            Element itemsElement = itemsElementRoot.addElement("item");
+            itemsElement.addAttribute("text", "功能菜单");
+            itemsElement.addAttribute("id", "RootMenu"); // 最外层写死的节点id:"RootMenu"。
+            itemsElement.addAttribute("im0", "WF_ORG_MENU.gif");
+            itemsElement.addAttribute("im1", "WF_ORG_MENU.gif");
+            itemsElement.addAttribute("im2", "WF_ORG_MENU.gif");
+            for (int j = 0; j < rootStaList.size(); j++) {
+                WF_ORG_MENU menuVO = (WF_ORG_MENU) rootStaList.get(j);
+                Element pageElement = itemsElement.addElement("item");
+                pageElement.addAttribute("text", menuVO.getMenuName());
+                pageElement.addAttribute("id", menuVO.getMenuCode());
+                pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+                pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+                pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+                // 判断是否是按钮，如果是按钮则显示按钮图片
+                String temp = menuVO.getMenuCode();
+                temp = temp.substring(temp.lastIndexOf("@") + 1, temp.length());
+                if (temp.equals("ELEMENT")) {
+                    pageElement.addAttribute("im0", "WF_ORG_ELEMENT.gif");
+                    pageElement.addAttribute("im1", "WF_ORG_ELEMENT.gif");
+                    pageElement.addAttribute("im2", "WF_ORG_ELEMENT.gif");
+                } else if (temp.equals("MENU")) {
+                    pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+                    pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+                    pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+                } else if (temp.equals("PAGE")) {
+                    pageElement.addAttribute("im0", "WF_ORG_PAGE.gif");
+                    pageElement.addAttribute("im1", "WF_ORG_PAGE.gif");
+                    pageElement.addAttribute("im2", "WF_ORG_PAGE.gif");
+                }
+                String StrunitId = (String) menuVO.getMenuCode();
+                StalistToXML(subStaList, StrunitId, pageElement);
+            }
+            StrOrgXML = document.asXML();
+        } catch (Exception ex) {
+            StrOrgXML = "0";
+        }
+        // System.out.println(StrOrgXML);
+        return StrOrgXML;
+    }
+
+    private void StalistToXML(List orgList, String unitId, Element itemsElements) throws Exception {
+        try {
+            for (int i = 0; i < orgList.size(); i++) {
+                WF_ORG_MENU menuVO = (WF_ORG_MENU) orgList.get(i);
+                if (menuVO.getParentMenuCode().equals(unitId)) {
+                    Element pageElement = itemsElements.addElement("item");
+                    pageElement.addAttribute("text", menuVO.getMenuName());
+                    pageElement.addAttribute("id", menuVO.getMenuCode());
+                    // 判断是否是按钮，如果是按钮则显示按钮图片
+                    String temp = menuVO.getMenuCode();
+                    temp = temp.substring(temp.lastIndexOf("@") + 1, temp.length());
+                    if (temp.equals("ELEMENT")) {
+                        pageElement.addAttribute("im0", "WF_ORG_ELEMENT.gif");
+                        pageElement.addAttribute("im1", "WF_ORG_ELEMENT.gif");
+                        pageElement.addAttribute("im2", "WF_ORG_ELEMENT.gif");
+                    } else if (temp.equals("MENU")) {
+                        pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+                        pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+                        pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+                    } else if (temp.equals("PAGE")) {
+                        pageElement.addAttribute("im0", "WF_ORG_PAGE.gif");
+                        pageElement.addAttribute("im1", "WF_ORG_PAGE.gif");
+                        pageElement.addAttribute("im2", "WF_ORG_PAGE.gif");
+                    }
+                    String StrunitId = (String) menuVO.getMenuCode();
+                    StalistToXML(orgList, StrunitId, pageElement);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // 子节点转化成xml
+    private String parseSubMenus2XMLString(List menuList, String parentId) {
+        // 用于存组织树的xml内容
+        String StrOrgXML = "";
+        // 循环每一个根组织，把它的子组织灌满
+        try {
+            Document document = DocumentHelper.createDocument();
+            Element itemsElement = document.addElement("tree");
+            itemsElement.addAttribute("id", parentId);
+            for (int j = 0; j < menuList.size(); j++) {
+                WF_ORG_MENU menuVO = (WF_ORG_MENU) menuList.get(j);
+                Element pageElement = itemsElement.addElement("item");
+                pageElement.addAttribute("text", menuVO.getMenuName());
+                pageElement.addAttribute("id", menuVO.getMenuCode());
+                // 判断是否是按钮，如果是按钮则显示按钮图片
+                String temp = menuVO.getMenuCode();
+                temp = temp.substring(temp.lastIndexOf("@") + 1, temp.length());
+                if (temp.equals("ELEMENT")) {
+                    pageElement.addAttribute("im0", "WF_ORG_ELEMENT.gif");
+                    pageElement.addAttribute("im1", "WF_ORG_ELEMENT.gif");
+                    pageElement.addAttribute("im2", "WF_ORG_ELEMENT.gif");
+                } else if (temp.equals("MENU")) {
+                    pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+                    pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+                    pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+                } else if (temp.equals("PAGE")) {
+                    pageElement.addAttribute("im0", "WF_ORG_PAGE.gif");
+                    pageElement.addAttribute("im1", "WF_ORG_PAGE.gif");
+                    pageElement.addAttribute("im2", "WF_ORG_PAGE.gif");
+                }
+                StrOrgXML = document.asXML();
+            }
+        } catch (Exception ex) {
+            StrOrgXML = "0";
+        }
+        System.out.println(StrOrgXML);
+        return StrOrgXML;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 根据菜单项id获取菜单项下面的所有页面元素，作为树上的子结点
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getElementsByMenuItemID", method = RequestMethod.GET)
+    public void getElementsByMenuItemID(HttpServletRequest request, HttpServletResponse response) {
+        if (menuCategory == null) {
+            Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+            menuCategory = (obj == null || obj.toString().equalsIgnoreCase("oms") || obj.toString().equals("")) ? null : obj.toString();
+        }
+        String parentMenuCode = request.getParameter("id").toString();
+        parentMenuCode = parentMenuCode.substring(0,
+                (parentMenuCode.lastIndexOf("@") == -1 ? parentMenuCode.length() : parentMenuCode.lastIndexOf("@")));
+        // 判断是否需要显示全部的菜单，不考虑权限问题
+        String showAllMenu = request.getParameter("showAllMenu");
+        showAllMenu = (showAllMenu == null ? "" : showAllMenu);
+        if (showAllMenu.toLowerCase().equals("true")) {
+            showAllMenu = "available"; // 显示全部菜单
+        } else {
+            showAllMenu = "assignable"; // 只显示自己能看到的菜单
+        }
+        try {
+            String userID = null;
+            if (showAllMenu.equalsIgnoreCase("available")) {
+                userID = "adminUser";
+            } else {
+                CurrentUser currentUser = WebContextFactory.getWebContext().getCurrentUser();
+                userID = "adminUser";
+            }
+            List subItem = menuService.getFormElementList(userID, parentMenuCode, showAllMenu, menuCategory);
+            String strXml = null;
+            if (subItem.size() != 0) {
+                strXml = this.parseSubMenus2XMLString(subItem, request.getParameter("id").toString());
+                response.setContentType("text/xml");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(strXml);
+            } else {
+                response.setContentType("text/xml");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 把菜单列表中的数据转换成为xml字符串用于前台显示菜单树
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     * 
+     * @param menuList
+     *            - 菜单列表
+     * @return 菜单树xml字符串
+     * @throws Exception
+     */
+    private String parseMenus2XMLString(List menuList) {
+        List rootStaList = new ArrayList();
+        // 用于存组织树的xml内容
+        String StrOrgXML = "";
+        // 把根组织和子组织分开
+        for (int i = 0; i < menuList.size(); i++) {
+            WF_ORG_MENU menuVO = (WF_ORG_MENU) menuList.get(i);
+            if (menuVO.getParentMenuCode() == null){
+                rootStaList.add(menuVO);
+            }
+        }
+        // 循环每一个根组织，把它的子组织灌满
+        try {
+            Document document = DocumentHelper.createDocument();
+            Element itemsElementRoot = document.addElement("tree");
+            itemsElementRoot.addAttribute("id", "0");
+            // 为父节点套一层节点，以便右键新建菜单的时候能建父节点的同级菜单
+            Element itemsElement = itemsElementRoot.addElement("item");
+            itemsElement.addAttribute("text", "功能菜单");
+            itemsElement.addAttribute("id", "RootMenu"); // 最外层写死的节点id:"RootMenu"。
+            itemsElement.addAttribute("im0", "WF_ORG_MENU.gif");
+            itemsElement.addAttribute("im1", "WF_ORG_MENU.gif");
+            itemsElement.addAttribute("im2", "WF_ORG_MENU.gif");
+            itemsElement.addAttribute("select", "1"); // 设置节点为选中,否则需要选中一个节点双击展开图标才会发起子节点请求
+            for (int j = 0; j < rootStaList.size(); j++) {
+                WF_ORG_MENU menuVO = (WF_ORG_MENU) rootStaList.get(j);
+                Element pageElement = itemsElement.addElement("item");
+                pageElement.addAttribute("text", menuVO.getMenuName());
+                pageElement.addAttribute("id", menuVO.getMenuCode());
+                pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+                pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+                pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+            }
+            StrOrgXML = document.asXML();
+        } catch (Exception ex) {
+            StrOrgXML = "0";
+        }
+        System.out.println(StrOrgXML);
+        return StrOrgXML;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 获取菜单项的明细信息
+     * </p>
+     * <p>
+     * 备注: 详见顺序图
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getMenuItemDetail", method = RequestMethod.POST)
+    public Map<String, Object> getMenuItemDetail(HttpServletRequest request, HttpServletResponse response) {
+
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+
+        String menuCode = request.getParameter("itemId").toString();
+        menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+        try {
+            // 使用adminUser来取菜单项详细信息。
+            WF_ORG_MENU menuVO = menuService.getMenuItemDetail("adminUser", menuCode);
+            if (menuVO != null) {
+                menuVO.setMenuCode(request.getParameter("itemId").toString());
+                String menuDetail = JSONObject.toJSONString(menuVO);
+                returnMap.put("menuDetail", menuVO);
+            }
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 保存菜单项的修改
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/saveMenuItem", method = RequestMethod.POST)
+    public Map<String, Object> saveMenuItem(HttpServletRequest request, HttpServletResponse response) {
+
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        PrintWriter writer = null;
+        String menuCode = request.getParameter("menuCode").toString();
+        // menuItem的类型
+        String menuType = menuCode.substring(menuCode.lastIndexOf("@") + 1, menuCode.length());
+        menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+        String menuName = request.getParameter("menuName").toString();
+        String menuImg = request.getParameter("menuImg").toString();
+        String menuDes = request.getParameter("menuDes").toString();
+        String menuLocal = request.getParameter("menuLocal").toString();
+        String menuDis = request.getParameter("menuDis").toString();
+
+        WF_ORG_MENU menuItemVO = new WF_ORG_MENU();
+        menuItemVO.setMenuName(menuName);
+        menuItemVO.setMenuImgLocation(menuImg);
+        menuItemVO.setMenuDesc(menuDes);
+        menuItemVO.setMenuLocation(menuLocal);
+        menuItemVO.setMenuIsDefault(menuDis);
+        menuItemVO.setMenuCode(menuCode);
+        try {
+            menuService.saveMenuItem(menuItemVO);
+
+            menuItemVO.setMenuCode(request.getParameter("menuCode").toString());
+            String menuDetail = JSONObject.toJSONString(menuItemVO);
+            returnMap.put("menuDetail", menuItemVO);
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 保存菜单项的修改
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/savePageItem", method = RequestMethod.POST)
+    public Map<String, Object> savePageItem(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String menuCode = request.getParameter("menuCode").toString();
+        // menuItem的类型
+        String menuType = menuCode.substring(menuCode.lastIndexOf("@") + 1, menuCode.length());
+        menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+        String pageId = request.getParameter("pageId").toString();
+        String pageName = request.getParameter("pageName").toString();
+        String pageImg = request.getParameter("pageImg").toString();
+        String pageDes = request.getParameter("pageDes").toString();
+        String pageLocal = request.getParameter("pageLocal").toString();
+        // String pageArea = request.getParameter("pageArea").toString();
+        String pageDis = request.getParameter("pageDis").toString();
+
+        WF_ORG_MENU pageItemVO = new WF_ORG_MENU();
+        pageItemVO.setMenuElementId(pageId);
+        pageItemVO.setMenuName(pageName);
+        pageItemVO.setMenuImgLocation(pageImg);
+        pageItemVO.setMenuDesc(pageDes);
+        pageItemVO.setMenuLocation(pageLocal);
+        // pageItemVO.setMenuArea(pageArea);
+        pageItemVO.setMenuIsDefault(pageDis);
+        pageItemVO.setMenuCode(menuCode);
+        // pageItemVO.setMenuType("PAGE");//给MenuType赋值，菜单均为此属性。
+
+        try {
+            menuService.savePageItem(pageItemVO);
+            pageItemVO.setMenuCode(request.getParameter("menuCode").toString());
+            returnMap.put("pageDetail", pageItemVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 保存页面元素的修改
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/savePageElement", method = RequestMethod.POST)
+    public Map<String, Object> savePageElement(HttpServletRequest request, HttpServletResponse response) {
+
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String menuCode = request.getParameter("menuCode").toString();
+        menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+        String eleId = request.getParameter("eleId").toString();
+        String eleName = request.getParameter("eleName").toString();
+        String eleImg = request.getParameter("eleImg").toString();
+        String eleType = request.getParameter("eleType").toString();
+        String eleDes = request.getParameter("eleDes").toString();
+
+        WF_ORG_MENU eleItemVO = new WF_ORG_MENU();
+        eleItemVO.setMenuElementId(eleId);
+        eleItemVO.setMenuName(eleName);
+        eleItemVO.setMenuImgLocation(eleImg);
+        eleItemVO.setMenuElementType(eleType);
+        eleItemVO.setMenuDesc(eleDes);
+        eleItemVO.setMenuCode(menuCode);
+
+        try {
+            menuService.savePageElement(eleItemVO);
+            eleItemVO.setMenuCode(request.getParameter("menuCode").toString());
+            returnMap.put("eleDetail", eleItemVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 创建一个菜单项
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/createMenuItem", method = RequestMethod.POST)
+    public Map<String, Object> createMenuItem(HttpServletRequest request, HttpServletResponse response) {
+
+        if (menuCategory == null) {
+            Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+            menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals("")) ? null : obj.toString();
+        }
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+
+        String parentMenuCode = request.getParameter("itemId").toString();
+        String Level = request.getParameter("level").toString();
+        int menuLevel = Integer.parseInt(Level);
+        WF_ORG_MENU menuVO = new WF_ORG_MENU();
+        if (parentMenuCode.equals("RootMenu")) {
+            menuVO.setParentMenuCode(parentMenuCode);
+        } else {
+            parentMenuCode = parentMenuCode.substring(0, parentMenuCode.lastIndexOf("@"));
+            menuVO.setParentMenuCode(parentMenuCode);
+        }
+        String menuCode = java.util.UUID.randomUUID().toString().replaceAll("-", "");
+        menuVO.setMenuCode(menuCode);
+        menuVO.setMenuName("新建菜单");
+        menuVO.setMenuLevel(menuLevel);
+        menuVO.setMenuArea("content");
+        // menuVO.setMenuLocation("/");
+        menuVO.setMenuType("MENU");
+        menuVO.setMenuIsDefault("0");
+        menuVO.setMenuCategory(menuCategory);
+        try {
+            menuService.createMenuItem(menuVO);
+            menuVO.setParentMenuCode(request.getParameter("itemId").toString());
+            menuVO.setMenuCode(menuCode + "@MENU");
+            returnMap.put("menuDetail", menuVO);
+
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 创建一个页面元素
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/createPageElement", method = RequestMethod.POST)
+    public Map<String, Object> createPageElement(HttpServletRequest request, HttpServletResponse response) {
+
+        if (menuCategory == null) {
+            Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+            menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals("")) ? null : obj.toString();
+        }
+
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String parentMenuCode = request.getParameter("itemId").toString();
+        parentMenuCode = parentMenuCode.substring(0, parentMenuCode.lastIndexOf("@"));
+        String Level = request.getParameter("level").toString();
+        int menuLevel = Integer.parseInt(Level);
+        WF_ORG_MENU menuVO = new WF_ORG_MENU();
+        menuVO.setParentMenuCode(parentMenuCode);
+        String menuCode = java.util.UUID.randomUUID().toString().replaceAll("-", "");
+        menuVO.setMenuCode(menuCode);
+        menuVO.setMenuName("新建元素");
+        menuVO.setMenuLevel(menuLevel);
+        // menuVO.setMenuArea("pagearea");
+        // menuVO.setMenuLocation("/");
+        menuVO.setMenuType("ELEMENT");
+        menuVO.setMenuIsDefault("0");
+        menuVO.setMenuCategory(menuCategory);
+        try {
+            menuService.createPageElement(menuVO);
+            menuVO.setParentMenuCode(request.getParameter("itemId").toString());
+            menuVO.setMenuCode(menuCode + "@ELEMENT");
+            returnMap.put("elementDetail", menuVO);
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 创建一个页面元素
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+
+    @ResponseBody
+    @RequestMapping(value = "/createPage", method = RequestMethod.POST)
+    public Map<String, Object> createPage(HttpServletRequest request, HttpServletResponse response) {
+
+        if (menuCategory == null) {
+            Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+            menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals("")) ? null : obj.toString();
+        }
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+
+        String parentMenuCode = request.getParameter("itemId").toString();
+        parentMenuCode = parentMenuCode.substring(0, parentMenuCode.lastIndexOf("@"));
+        String Level = request.getParameter("level").toString();
+        int menuLevel = Integer.parseInt(Level);
+        WF_ORG_MENU menuVO = new WF_ORG_MENU();
+        menuVO.setParentMenuCode(parentMenuCode);
+        String menuCode = java.util.UUID.randomUUID().toString().replaceAll("-", "");
+        menuVO.setMenuCode(menuCode);
+        menuVO.setMenuName("新建页面");
+        menuVO.setMenuLevel(menuLevel);
+        menuVO.setMenuArea("content");
+        // menuVO.setMenuLocation("/");
+        menuVO.setMenuType("PAGE");
+        menuVO.setMenuIsDefault("0");
+        menuVO.setMenuCategory(menuCategory);
+        try {
+            menuService.createPage(menuVO);
+            menuVO.setParentMenuCode(request.getParameter("itemId").toString());
+            menuVO.setMenuCode(menuCode + "@PAGE");
+            String elementDetail = JSONObject.toJSONString(menuVO);
+            returnMap.put("pageDetail", menuVO);
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 删除菜单树上的某个结点，可能是菜单项，也可能是页面元素
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/deleteNode", method = RequestMethod.POST)
+    public Map<String, Object> deleteNode(HttpServletRequest request, HttpServletResponse response) {
+
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String menuCode = request.getParameter("itemId").toString();
+        // menuItem的类型
+        String menuType = menuCode.substring(menuCode.lastIndexOf("@") + 1, menuCode.length());
+        menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+        try {
+            // 使用adminUser来删除菜单项
+            WF_ORG_MENU deleteItem = menuService.getMenuItemDetail("adminUser", menuCode);
+            if (deleteItem != null) {
+                menuService.deleteNode(menuCode);
+                // 的url权限列表中删除，该功能目前没有作用
+                // if ((menuType.equalsIgnoreCase("MENU") ||
+                // menuType.equalsIgnoreCase("PAGE"))
+                // && deleteItem.getMenuLocation() != null &&
+                // !deleteItem.getMenuLocation().equals("")) {
+                // ServletContext servletContext =request.getServletContext();
+                // Object obj = servletContext.getAttribute("urlAuthorities");
+                // if (obj != null) {
+                // Map<String, String> urlAuthorities = (Map<String, String>)
+                // obj;
+                // if (urlAuthorities.containsKey(deleteItem.getMenuLocation()))
+                // {
+                // urlAuthorities.remove(deleteItem.getMenuLocation());
+                // }
+                // }
+                // }
+                // Over
+                WF_ORG_MENU menuVO = new WF_ORG_MENU();
+                menuVO.setMenuCode(request.getParameter("itemId").toString());
+                returnMap.put("menuDetail", menuVO);
+            } else {
+
+            }
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 节点向上移动方法
+     */
+    @ResponseBody
+    @RequestMapping(value = "/MoveUpNode", method = RequestMethod.POST)
+    public Map<String, Object> MoveUpNode(HttpServletRequest request, HttpServletResponse response) {
+
+        String moveItem = request.getParameter("itemId").toString();
+        moveItem = moveItem.substring(0, moveItem.lastIndexOf("@"));
+        String changeItem = request.getParameter("changeItemId").toString();
+        changeItem = changeItem.substring(0, changeItem.lastIndexOf("@"));
+        try {
+            menuService.upNode(moveItem, changeItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * 节点向下移动方法
+     */
+    @ResponseBody
+    @RequestMapping(value = "/MoveDownNode", method = RequestMethod.POST)
+    public Map<String, Object> MoveDownNode(HttpServletRequest request, HttpServletResponse response) {
+
+        String moveItem = request.getParameter("itemId").toString();
+        moveItem = moveItem.substring(0, moveItem.lastIndexOf("@"));
+        String changeItem = request.getParameter("changeItemId").toString();
+        changeItem = changeItem.substring(0, changeItem.lastIndexOf("@"));
+        try {
+            menuService.downNode(moveItem, changeItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取菜单树
+     * 
+     * @param request
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getUserAvailableMenus", method = RequestMethod.GET)
+    public void getUserAvailableMenus(HttpServletRequest request, HttpServletResponse response) {
+        List userMenus = null;
+        String userId = WebContextFactory.getWebContext().getCurrentUser().getId();
+        try {
+            userMenus = menuService.getUserAvailableMenus(userId, null);
+            String json =  convertoHtml(userMenus);
+            response.setContentType("text/html;charset=utf-8"); 
+            PrintWriter out=response.getWriter();
+            out.write(json.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private String convertoHtml(List rbList){
+        StringBuffer strb = new StringBuffer();
+        for(int i =0;i<rbList.size();i++){
+            ResourceBean tmprb = (ResourceBean) rbList.get(i);
+            String parentId = tmprb.getParentResourceID();
+            String id = tmprb.getResourceID();
+
+            if(StringUtils.isEmpty(parentId) ||parentId.equalsIgnoreCase("RootMenu@MENU")){
+                strb.append("<li><a href='");
+                strb.append(tmprb.getResourceLocation());
+                strb.append("'><i class='fa fa-");
+                strb.append(tmprb.getResourceImgLocation());
+                strb.append(" fa-fw'><div class='icon-bg bg-pink'></div></i><span class='menu-title'>");
+                strb.append(tmprb.getResourceName());
+                strb.append("</span><span class='fa arrow'></span></a>");
+                boolean isfirst = false;
+                for(int j =0;j<rbList.size();j++) {
+                    ResourceBean tmprbsecond = (ResourceBean) rbList.get(j);
+                    String parentIdsecond = tmprbsecond.getParentResourceID();
+                    String secondId = tmprbsecond.getResourceID();
+                    if (id.equalsIgnoreCase(parentIdsecond)) {
+                        if(isfirst){
+                            strb.append(" <li><a href=\"javascript:;");
+                            strb.append("\" onclick=\"menuItemSelected(this,'");
+                            strb.append(tmprbsecond.getResourceLocation());
+                            strb.append("')\"><i class=\"fa fa-angle-right\"></i><span class=\"submenu-title\">");
+                            strb.append(tmprbsecond.getResourceName());
+                            strb.append("</span></a>");
+
+                        }else{
+                            strb.append(" <ul class=\"nav nav-second-level\">");
+                            strb.append(" <li><a href=\"javascript:;");
+                            strb.append("\" onclick=\"menuItemSelected(this,'");
+                            strb.append(tmprbsecond.getResourceLocation());
+                            strb.append("')\"><i class=\"fa fa-angle-right\"></i><span class=\"submenu-title\">");
+                            strb.append(tmprbsecond.getResourceName());
+                            strb.append("</span></a>");
+                            isfirst = true;
+                        }
+                        boolean issecond = false;
+                        for(int w =0;w<rbList.size();w++){
+                            ResourceBean tmprbthrid = (ResourceBean) rbList.get(w);
+                            String parendidthird = tmprbthrid.getParentResourceID();
+                            if (secondId.equalsIgnoreCase(parendidthird)) {
+                                if(issecond){
+                                    strb.append(" <li><a href=\"javascript:;");
+                                    strb.append("\" onclick=\"menuItemSelected(this,'");
+                                    strb.append(tmprbthrid.getResourceLocation());
+                                    strb.append("')\"><i class=\"fa fa-angle-double-right\"></i><span class=\"submenu-title\">");
+                                    strb.append(tmprbthrid.getResourceName());
+                                    strb.append("</span></a></li>");
+                                }
+                                else{
+                                    strb.append(" <ul class=\"nav nav-third-level\">");
+                                    strb.append(" <li><a href=\"javascript:;");
+                                    strb.append("\" onclick=\"menuItemSelected(this,'");
+                                    strb.append(tmprbthrid.getResourceLocation());
+                                    strb.append("')\"><i class=\"fa fa-angle-double-right\"></i><span class=\"submenu-title\">");
+                                    strb.append(tmprbthrid.getResourceName());
+                                    strb.append("</span></a></li>");
+                                    issecond =true;
+                                }
+                            }
+                        }
+                        if(issecond){
+                            strb.append("</ul>");
+                        }
+                    }
+                }if(isfirst){
+                    strb.append("</ul>");
+                }
+                strb.append("</li>");
+            }
+        }
+        return strb.toString();
+    }
+}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserRoleModel">
+    <resultMap id="UserRoleMap" type="UserRoleModel">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="roleId" column="role_id"/>
+    </resultMap>
+    <sql id="columns">
+        id,user_id,role_id
+    </sql>
+
+    <insert id="insert" parameterType="UserRoleModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into local_role_user
+        (user_id
+        ,role_id)
+        values(#{userId}
+        ,#{roleId})
+    </insert>
+
+    <update id="update" parameterType="UserRoleModel">
+        update local_role_user set
+        <if test="userId !=null">user_id = #{userId}
+            ,
+        </if>
+        <if test="roleId !=null">role_id = #{roleId}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="userId !=null">and user_id = #{userId}</if>
+            <if test="roleId !=null">and role_id = #{roleId}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="UserRoleMap">
+        SELECT id,
+        <include refid="columns"/>
+        from local_role_user
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="UserRoleMap">
+        select id,
+        <include refid="columns"/>
+        from local_role_user
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="UserRoleMap">
+        select id,
+        <include refid="columns"/>
+        from local_role_user
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="UserRoleModel">
+        delete from local_role_user where id = id
+    </delete>
+    <!--角色用户关联-->
+    <select id="getRoleIdByUserId" parameterType="String" resultType="Long">
+        SELECT role_id FROM local_role_user WHERE user_id =#{_parameter}
+    </select>
+    <!--add by liuhan-->
+    <select id="findByIdList" parameterType="java.util.List" resultType="String"              >
+        SELECT distinct user_id FROM local_role_user WHERE role_id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <insert id="insertUserRole" parameterType="cn.com.cgbchina.user.dto.UserRoleDto">
+        INSERT INTO local_role_user (user_id,role_id) VALUES
+        <foreach collection="roles" item="roleId" separator=",">
+            (#{userId},#{roleId})
+        </foreach>
+    </insert>
+    <delete id="deleteUserRole" parameterType="Map">
+        DELETE FROM local_role_user WHERE user_id=#{userId} AND role_id IN
+        <foreach collection="deleteList" separator="," open="(" close=")" item="deleteId">
+            #{deleteId}
+        </foreach>
+    </delete>
+    <select id="roleExists" parameterType="Long" resultType="Integer">
+        SELECT COUNT(1) FROM local_role_user WHERE role_id=#{_parameter}
+    </select>
+</mapper>
+
+

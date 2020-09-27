@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Logback config。
+
+@author zhanglin@dpn.com.cn
+@since 1.0.0 zhanglin@dpn.com.cn
+@version 1.0.0 zhanglin@dpn.com.cn
+-->
+<!-- ***************************************************************************
+备忘记录
+-> Logback配置。
+********************************************************************************
+变更履历
+-> 1.0.0 2016-07-07 zhanglin@dpn.com.cn : 初建。
+**************************************************************************** -->
+<configuration scan="false" scanPeriod="30 seconds">
+
+    <!-- **** properties *************************************************** -->
+    <property name="application" value="chinarc" />
+    <property name="log.root.dir" value="/log/${application}" />
+    <property name="log.layout.common" value="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%n[%date{yyyy-MM-dd HH:mm:ss SSS} %-5level]:> %class#%method@%line[%thread][%logger]%n%message%n%ex{full}" />
+    <property name="log.layout.profile" value="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%n%message%n" />
+    <property name="log.file.encoding" value="UTF-8" />
+    <property name="log.file.size" value="5MB" />
+
+    <!-- **** appenders **************************************************** -->
+    <!-- CONSOLE -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="${log.file.encoding}">
+            <pattern>${log.layout.common}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ROOT -->
+    <appender name="ROOT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <encoder charset="${log.file.encoding}">
+            <pattern>${log.layout.common}</pattern>
+        </encoder>
+        <file>${log.root.dir}/${application}.root.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover and keep days' worth of history -->
+            <fileNamePattern>${log.root.dir}/${application}.root.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <!-- hourly rollover and keep hours' worth of history -->
+            <!--
+            <fileNamePattern>${log.root.dir}/${application}.root.%d{yyyy-MM-dd-HH}.%i.log</fileNamePattern>
+            <maxHistory>120</maxHistory>
+            -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${log.file.size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!-- MAIN -->
+    <appender name="MAIN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <encoder charset="${log.file.encoding}">
+            <pattern>${log.layout.common}</pattern>
+        </encoder>
+        <file>${log.root.dir}/${application}.main.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.root.dir}/${application}.main.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${log.file.size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!-- SQL -->
+    <appender name="SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <encoder charset="${log.file.encoding}">
+            <pattern>${log.layout.common}</pattern>
+        </encoder>
+        <file>${log.root.dir}/${application}.sql.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.root.dir}/${application}.sql.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${log.file.size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+    
+    <!-- PROFILE -->
+    <appender name="PROFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <encoder charset="${log.file.encoding}">
+            <pattern>${log.layout.profile}</pattern>
+        </encoder>
+        <file>${log.root.dir}/${application}.profile.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.root.dir}/${application}.profile.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${log.file.size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!-- **** loggers ****************************************************** -->
+    <!-- root -->
+    <root level="error">
+        <appender-ref ref="ROOT" />
+    </root>
+
+    <!-- logger -->
+    <logger level="debug" name="com.lsh.chinarc" additivity="false">
+        <appender-ref ref="MAIN" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <!-- sql -->
+    <logger level="debug" name="SQL" additivity="false">
+        <appender-ref ref="SQL" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger level="debug" name="org.apache.ibatis" additivity="false">
+        <appender-ref ref="SQL" />
+    </logger>
+    <logger level="debug" name="PROFILE" additivity="false">
+        <appender-ref ref="PROFILE" />
+    </logger>
+
+</configuration>

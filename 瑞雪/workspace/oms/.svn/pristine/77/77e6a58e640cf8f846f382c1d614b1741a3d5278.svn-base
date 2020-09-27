@@ -1,0 +1,195 @@
+var tree;
+var isMultiSelect= "";
+var needStation="";
+$(document).ready(function(){
+	$('body').bind('keydown',shieldCommon);
+	//处理传入的参数
+	//obj = window.dialogArguments;// 定义一个对象用于接收对话框参数
+
+	isMultiSelect = (isMultiSelect && isMultiSelect != "" ? isMultiSelect : false);	
+	needStation = (needStation && needStation != "" ? needStation : false);
+
+	//处理树
+	tree =new dhtmlXTreeObject("orgTree","100%","100%",0);
+    tree.setImagePath(webpath+"/view/base/theme/css/redmond/dhtmlxtree/image/DhtxTree/csh_books/");
+    //tree.enableCheckBoxes(true);
+    //tree.attachEvent("onClick",HandleMClk1);
+    if (isMultiSelect == "true"){
+    	tree.enableCheckBoxes(1);
+    	tree.enableThreeStateCheckboxes(false);
+    }
+    if(needStation){
+        tree.setOnOpenEndHandler(checkSubNodes);  //解决节点请求回来无法展开
+    	tree.setOnMouseInHandler(beforeOpenNode);
+    	tree.setXMLAutoLoading(webpath+"/UnitAction.do?method=getSubUnitTree&needStation=true"); 
+    	tree.loadXML(webpath+"/UnitAction.do?method=getUnitTree&needStation=true");
+    }else{
+        tree.setOnOpenEndHandler(checkSubNodes);  //解决节点请求回来无法展开
+    	tree.setOnMouseInHandler(beforeOpenNode);
+    	tree.setXMLAutoLoading(webpath+"/UnitAction.do?method=getSubUnitTree"); 
+    	tree.loadXML(webpath+"/UnitAction.do?method=getUnitTree");
+    }
+    tree.openItem("RootUnit@UNIT");
+	window.setTimeout(function() {
+		//tree.closeAllItems(0);
+	}, 0);
+	getUnitTreeManageable();
+});
+
+function getUnitTreeManageable(){	
+	jQuery.ajax({
+		url:webpath + "/UnitAction.do?method=getUnitTreeManageable",
+		type:"post",
+		async:false,
+		dataType:"json",
+		success:function(data){
+			if(data.errorMessage==null || data.errorMessage==undefined){
+				for(var i=0;i<data.length;i++){
+					if(data[i].MANAGEABLE != 1){
+						tree.showItemCheckbox(data[i].UNIT_ID,false); //隐藏复选框
+						tree.setItemColor(data[i].UNIT_ID,"#aaaaaa","#aaaaaa");//节点字体颜色置灰
+					}
+				}
+			} else {
+				if (data.errorMessage == "session timeout")
+					window.location.href = webpath + "/login.jsp";
+				else
+					alert(data.errorMessage);
+			}
+		}
+	});
+	
+}
+
+/**
+ * 支持单选和多选、带岗位和不带岗位。
+ * @return 如果是单选返回选定的itemId和itemText，如果是多选，返回itemIds和itemTexts
+ * 注意：对于带岗位模式，不管是单选，还是多选，返回的id里，都带@UNIT或者@STATION用以区别类型
+ */
+function save(){
+	var returnObj = new Object();
+	if (isMultiSelect == "true") {
+		//获取所有选中的unit结点的id
+		var itemIds = tree.getAllCheckedBranches();
+		if (itemIds.length <= 0){
+			returnObj.itemIds = "";
+			returnObj.itemTexts = "";
+			window.returnValue = returnObj;
+			//window.close();
+		}
+		console.log(itemIds);
+		//如果最后一个字符是“,”则把它去掉
+		if(itemIds.substring(itemIds.length -1,itemIds.length) == ",")
+			itemIds = itemIds.substring(0,itemIds.length-1);
+
+		//把id字符串转成数组
+		var itemIdArray = itemIds.split(",");
+		var itemTexts = "";
+		for (i=0;i<itemIdArray.length;i++)
+		{
+			if (itemIdArray[i] == "")
+				break;
+			itemTexts += tree.getItemText(itemIdArray[i]);
+			if(i < itemIdArray.length-1)
+				itemTexts += ",";
+		}
+		returnObj.itemIds = itemIds;
+		returnObj.itemTexts = itemTexts;
+	} else {
+		var itemId = tree.getSelectedItemId();
+		var itemText = tree.getItemText(itemId);
+		var itemColor = tree.getItemColor(itemId);
+		if(itemColor.acolor == "#aaaaaa"){
+			returnObj.itemId = "";
+			returnObj.itemText = "";
+		}else{
+			returnObj.itemId = itemId;
+			returnObj.itemText = itemText;
+		}
+	}
+	//如果非岗位模式，则认为所有的id都是unitId
+	if (!needStation){
+		//如果非多选模式
+		if (!isMultiSelect){
+			returnObj.itemId = returnObj.itemId.replaceAll("@UNIT","");
+		} else {
+			returnObj.itemIds = returnObj.itemIds.replaceAll("@UNIT","");
+		}
+	}
+	
+	//window.returnValue = returnObj;
+	var returnValue = returnObj;
+	return returnValue;
+   // window.close();
+}
+
+String.prototype.replaceAll  = function(s1,s2){   
+    return this.replace(new RegExp(s1,"gm"),s2);
+};
+
+//清空
+function empty(){
+	var returnObj = new Object();
+	returnObj.itemId = "";
+	returnObj.itemText = "";
+	window.returnValue = returnObj;
+	window.close();
+}
+
+/*
+ * tree设置节点展开
+ * */
+var nodeClickArray = new ArrayList(); //节点点击数组
+var beforeOpenSubNodes;
+function checkSubNodes(id,state){
+	//记录点击过的节点，第一次单击则请求数据，然后记录；当再次点击后则不再请求数据。
+	if(nodeClickArray.contains(id))
+		return true;
+	else{
+		nodeClickArray.add(id);
+		//2011年4月12日 wangxy
+		//如果父结点是灰的，则需要对子结点的使用状态进行判断
+		//如果父结点不是灰的，则所有子结点是可用状态。
+		var itemColor = tree.getItemColor(id);
+		//通过节点颜色判断是否有操作权限
+		if(itemColor.acolor == "#aaaaaa"){
+			getSubUnitTreeManageable(id);
+		}
+		//over
+	}
+	if(beforeOpenSubNodes>0)
+		return true;
+	if(beforeOpenSubNodes==0 && state == -1){
+		tree.openItem(id);
+	}
+    beforeOpenSubNodes = 1;
+	return true;
+}
+function beforeOpenNode(id){
+	beforeOpenSubNodes = tree.hasChildren(id);
+	return true;
+}
+function getSubUnitTreeManageable(id){
+	jQuery.ajax({
+		url:webpath + "/UnitAction.do?method=getSubUnitTreeManageable",
+		type:"post",
+		async:false,
+		dataType:"json",
+		data:{id:id},
+		success:function(data){
+			if(data.errorMessage==null || data.errorMessage==undefined){
+				for(var i=0;i<data.length;i++){
+					if(data[i].MANAGEABLE != 1){
+						tree.showItemCheckbox(data[i].UNIT_ID,false); //隐藏复选框
+						tree.setItemColor(data[i].UNIT_ID,"#aaaaaa","#aaaaaa");//节点字体颜色置灰
+					}
+				}
+			} else {
+				if (data.errorMessage == "session timeout")
+					window.location.href = webpath + "/login.jsp";
+				else
+					alert(data.errorMessage);
+			}
+		}
+	});
+}

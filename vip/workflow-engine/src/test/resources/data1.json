@@ -1,0 +1,131 @@
+{
+  "title": "我的工作台",
+  "nodes": {
+    "demo_node_1": {
+      "name": "节点_1",
+      "left": 229,
+      "top": 117,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "demo_node_2": {
+      "name": "节点_2",
+      "left": 139,
+      "top": 121,
+      "type": "start round",
+      "width": 50,
+      "height": 50,
+      "alt": true
+    },
+    "demo_node_3": {
+      "name": "节点_3",
+      "left": 1172,
+      "top": 116,
+      "type": "end round",
+      "width": 50,
+      "height": 50,
+      "alt": true
+    },
+    "demo_node_4": {
+      "name": "节点_4",
+      "left": 952,
+      "top": 66,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "demo_node_5": {
+      "name": "节点_5",
+      "left": 213,
+      "top": 344,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "demo_node_6": {
+      "name": "节点_6",
+      "left": 833,
+      "top": 351,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "demo_node_7": {
+      "name": "节点_7",
+      "left": 467,
+      "top": 195,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    }
+  },
+  "lines": {
+    "demo_line_8": {
+      "type": "sl",
+      "from": "demo_node_2",
+      "to": "demo_node_1",
+      "name": "",
+      "alt": true
+    },
+    "demo_line_9": {
+      "type": "sl",
+      "from": "demo_node_1",
+      "to": "demo_node_4",
+      "name": "",
+      "alt": true
+    },
+    "demo_line_10": {
+      "type": "sl",
+      "from": "demo_node_1",
+      "to": "demo_node_5",
+      "name": "",
+      "alt": true
+    },
+    "demo_line_11": {
+      "type": "lr",
+      "from": "demo_node_5",
+      "to": "demo_node_7",
+      "name": "",
+      "alt": true,
+      "M": 585.5
+    },
+    "demo_line_12": {
+      "type": "sl",
+      "from": "demo_node_5",
+      "to": "demo_node_6",
+      "name": "",
+      "alt": true
+    },
+    "demo_line_13": {
+      "type": "lr",
+      "from": "demo_node_7",
+      "to": "demo_node_4",
+      "name": "",
+      "alt": true,
+      "M": 863
+    },
+    "demo_line_14": {
+      "type": "tb",
+      "from": "demo_node_6",
+      "to": "demo_node_4",
+      "name": "",
+      "alt": true,
+      "M": 266.5
+    },
+    "demo_line_15": {
+      "type": "sl",
+      "from": "demo_node_4",
+      "to": "demo_node_3",
+      "name": "",
+      "alt": true
+    }
+  },
+  "areas": {},
+  "initNum": 16
+}

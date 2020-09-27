@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.workflow.dao.DcaWorkflowTaskDao">
+    
+	<sql id="dcaWorkflowTaskColumns">
+		a.uuid AS "uuid",
+		a.task_name AS "taskName",
+		a.wf_id AS "wfId",
+		a.biz_task_id AS "bizTaskId",
+		a.power_id AS "powerId",
+		a.biz_role_id AS "bizRoleId",
+		a.sort AS "sort",
+		a.del_flag AS "delFlag",
+		a.create_person AS "createPerson",
+		a.create_date AS "createDate",
+		a.update_person AS "updatePerson",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.is_show AS "isShow"
+	</sql>
+	
+	<sql id="dcaWorkflowTaskJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaWorkflowTask">
+		SELECT 
+			<include refid="dcaWorkflowTaskColumns"/>
+		FROM DCA_WORKFLOW_TASK a
+		<include refid="dcaWorkflowTaskJoins"/>
+		WHERE a.UUID = #{id}
+	</select>
+	
+	<select id="findList" resultType="DcaWorkflowTask">
+		SELECT 
+			<include refid="dcaWorkflowTaskColumns"/>
+		FROM dca_workflow_task a
+		<include refid="dcaWorkflowTaskJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="powerId != null and powerId != ''">
+				AND a.POWER_ID = #{powerId}
+			</if>
+			<if test="bizRoleId != null and bizRoleId != ''">
+				AND INSTR(a.BIZ_ROLE_ID, #{bizRoleId}) > 0
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.IS_SHOW = #{isShow}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaWorkflowTask">
+		SELECT 
+			<include refid="dcaWorkflowTaskColumns"/>
+		FROM dca_workflow_task a
+		<include refid="dcaWorkflowTaskJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dca_workflow_task(
+			uuid,
+			task_name,
+			wf_id,
+			biz_task_id,
+			power_id,
+			biz_role_id,
+			sort,
+			del_flag,
+			create_person,
+			create_date,
+			update_person,
+			update_date,
+			remarks,
+			is_show,
+			pre_node_id,
+			next_node_id
+		) VALUES (
+			#{uuid},
+			#{taskName},
+			#{wfId},
+			#{bizTaskId},
+			#{powerId},
+			#{bizRoleId},
+			#{sort},
+			#{delFlag},
+			#{createPerson},
+			SYSDATE,
+			#{updatePerson},
+			SYSDATE,
+			#{remarks},
+			#{isShow},
+			#{preNodeId},
+			#{nextNodeId}
+		)
+	</insert>
+	
+	<insert id="insertByFlow">
+		begin
+		<foreach item="item" collection="list" index="index" separator=";">
+		INSERT INTO dca_workflow_task(
+			uuid,
+			task_name,
+			wf_id,
+			biz_task_id,
+			power_id,
+			biz_role_id,
+			sort,
+			del_flag,
+			create_person,
+			create_date,
+			update_person,
+			update_date,
+			remarks,
+			is_show,
+			pre_node_id,
+			next_node_id
+		) VALUES (
+			#{item.uuid},
+			#{item.taskName},
+			#{item.wfId},
+			#{item.bizTaskId},
+			#{item.powerId},
+			#{item.bizRoleId},
+			#{item.sort},
+			#{item.delFlag},
+			#{item.createPerson},
+			SYSDATE,
+			#{item.updatePerson},
+			SYSDATE,
+			#{item.remarks},
+			#{item.isShow},
+			#{item.preNodeId},
+			#{item.nextNodeId}
+		)
+		</foreach>
+		;end;
+	</insert>
+	
+	<update id="update">
+		UPDATE dca_workflow_task SET 	
+			uuid = #{uuid},
+			task_name = #{taskName},
+			wf_id = #{wfId},
+			biz_task_id = #{bizTaskId},
+			power_id = #{powerId},
+			biz_role_id = #{bizRoleId},
+			sort = #{sort},
+			create_person = #{createPerson},
+			update_person = #{updatePerson},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			is_show = #{isShow}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByContent">
+		UPDATE DCA_WORKFLOW_TASK SET 	
+			TASK_NAME = #{taskName},
+			BIZ_TASK_ID = #{bizTaskId},
+			BIZ_ROLE_ID = #{bizRoleId},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = SYSDATE,
+			IS_SHOW = #{isShow}
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<update id="delete">
+		UPDATE dca_workflow_task SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteByFlow">
+		DELETE FROM DCA_WORKFLOW_TASK WHERE WF_ID = #{wfId}
+	</delete>
+	
+	<!-- 根据工作流ID查询节点 -->
+	<select id="findListByWfId" resultType="DcaWorkflowTask">
+		SELECT 
+			<include refid="dcaWorkflowTaskColumns"/>
+		FROM DCA_WORKFLOW_TASK a
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			AND a.WF_ID = #{wfId}
+		</where>
+	</select>
+	
+	<!-- 查询节点名是否重复 -->
+	<select id="findWorkflowTaskByTaskName" resultType="DcaWorkflowTask">
+		SELECT 
+			<include refid="dcaWorkflowTaskColumns"/>
+		FROM DCA_WORKFLOW_TASK a
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			AND a.TASK_NAME = #{taskName}
+			AND a.WF_ID = #{wfId}
+			<![CDATA[AND a.UUID <> #{uuid}]]>
+		</where>
+	</select>
+	
+	<!-- 根据工作流ID删除节点 -->
+	<update id="deleteTaskByWfId">
+		UPDATE DCA_WORKFLOW_TASK SET 
+			DEL_FLAG = '1',
+			UPDATE_DATE = SYSDATE
+		WHERE WF_ID = #{wfId}
+	</update>
+</mapper>

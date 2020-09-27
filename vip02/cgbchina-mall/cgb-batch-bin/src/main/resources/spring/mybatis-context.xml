@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <bean id="dbPasswordCallback" class="cn.com.cgbchina.common.security.DBPasswordCallback">
+        <description>数据库连接回调密码解密</description>
+    </bean>
+    <!--数据源配置, 使用应用中的DBCP数据库连接池-->
+
+    <bean id="writeDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close" init-method="init" lazy-init="true">
+        <description>只写数据库连接</description>
+        <property name="driverClassName" value="com.alibaba.cobar.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://10.200.40.60:3306/cgbmall" />
+        <property name="username" value="develop1" />
+        <property name="password" value="develop1" />
+        <property name="maxActive" value="20" />
+        <property name="defaultAutoCommit" value="false"/>
+        <property name="defaultReadOnly" value="false" />
+        <property name="initialSize" value="3"/>
+        <!-- 连接Idle 30分钟后超时,每10分钟检查一次 -->
+        <property name="timeBetweenEvictionRunsMillis" value="600000"/>
+        <property name="minEvictableIdleTimeMillis" value="1800000"/>
+    </bean>
+    <bean id="dataSource" class="cn.com.cgbchina.common.aspect.ChooseDataSource" lazy-init="true">
+        <description>数据源</description>
+        <property name="targetDataSources">
+            <map key-type="java.lang.String" value-type="javax.sql.DataSource">
+                <!-- write -->
+                <entry key="write" value-ref="writeDataSource" />
+                <!-- read -->
+                <entry key="read" value-ref="writeDataSource" />
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="writeDataSource" />
+    </bean>
+
+    <!-- MyBatis配置 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:spring/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath*:/mapper/*Mapper.xml"/>
+    </bean>
+
+    <!-- 事务管理器配置, 使用jdbc事务 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 使用annotation定义事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!-- 切面 -->
+    <bean class="cn.com.cgbchina.common.aspect.DataSourceAspect" />
+
+    <!--redis 配置-->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="20"/>
+        <property name="maxIdle" value="2"/>
+        <property name="maxWaitMillis" value="100000"/>
+        <property name="testOnBorrow" value="true"/>
+    </bean>
+
+    <bean id="jedisTemplate" class="com.spirit.redis.JedisTemplate">
+        <constructor-arg index="0" ref="jedisPool"/>
+    </bean>
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig"/>
+        <constructor-arg index="1" value="10.200.40.60"/>
+        <constructor-arg index="2" value="6379" type="int"/>
+    </bean>
+    
+
+    <!--
+
+       <bean id="jedisPool" class="redis.clients.jedis.JedisSentinelPool">
+                <constructor-arg index="0" value="mymaster"/>
+                <constructor-arg index="1">
+                    <set>
+                        <value>10.200.40.60:6379</value>
+                    </set>
+                </constructor-arg>
+                <constructor-arg index="2" ref="jedisPoolConfig"/>
+       </bean>
+
+    -->
+</beans>

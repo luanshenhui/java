@@ -1,0 +1,9 @@
+package cn.rkylin.oms.system.menu.service;
+
+import org.springframework.stereotype.Service;
+
+import cn.rkylin.core.service.ApolloService;
+@Service("menuService")
+public class MenuServiceImpl extends ApolloService implements IMenuService{
+
+}

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.OrdenDetail" table="OrdenDetail">
+        <id name="ID" type="string">
+            <column name="ID"/>
+            <generator class="uuid.hex" />
+        </id>
+        <property name="OrdenID" type="string">
+            <column name="OrdenID"/>
+        </property>
+        <property name="SpecChest" type="string">
+            <column name="SpecChest"/>
+        </property>
+        <property name="SpecHeight" type="string">
+            <column name="SpecHeight"/>
+        </property>
+        <property name="SingleClothingID" type="integer">
+            <column name="SingleClothingID"  />
+        </property>
+         <property name="Amount" type="integer">
+            <column name="Amount"  />
+        </property>
+        <property name="CmtPrice" type="double">
+            <column name="CmtPrice"/>
+        </property>
+         <property name="FabricPrice" type="double">
+            <column name="FabricPrice"/>
+        </property>
+         <property name="ProcessPrice" type="double">
+            <column name="ProcessPrice"/>
+        </property>
+        <property name="FabricAmount" type="double">
+            <column name="FabricAmount"/>
+        </property>
+    </class>
+</hibernate-mapping>

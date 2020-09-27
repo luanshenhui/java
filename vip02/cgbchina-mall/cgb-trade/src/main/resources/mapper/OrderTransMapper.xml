@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderTrans">
+    <resultMap id="OrderTransMap" type="OrderTrans">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="transcorpNm" column="transcorp_nm"/>
+        <result property="mailingNum" column="mailing_num"/>
+        <result property="mailingMan" column="mailing_man"/>
+        <result property="mailingMobile" column="mailing_mobile"/>
+        <result property="servicePhone" column="service_phone"/>
+        <result property="serviceUrl" column="service_url"/>
+        <result property="doDesc" column="do_desc"/>
+        <result property="doTime" column="do_time"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="reserved1" column="reserved1"/>
+        <result property="vendorTranscorpId" column="vendor_transcorp_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,order_id,transcorp_nm,mailing_num,mailing_man,mailing_mobile,service_phone,service_url,do_desc,do_time,create_oper,create_time,reserved1,vendor_transcorp_id,del_flag,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="OrderTrans" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_trans
+        (order_id
+        ,transcorp_nm
+        ,mailing_num
+        ,mailing_man
+        ,mailing_mobile
+        ,service_phone
+        ,service_url
+        ,do_desc
+        ,do_time
+        ,create_oper
+        ,create_time
+        ,reserved1
+        ,vendor_transcorp_id
+        ,del_flag
+        ,modify_oper
+        ,modify_time)
+        values(#{orderId}
+        ,#{transcorpNm}
+        ,#{mailingNum}
+        ,#{mailingMan}
+        ,#{mailingMobile}
+        ,#{servicePhone}
+        ,#{serviceUrl}
+        ,#{doDesc}
+        ,#{doTime}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{reserved1}
+        ,#{vendorTranscorpId}
+        ,#{delFlag}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="OrderTrans">
+        update tbl_order_trans set
+        order_id
+        = #{orderId},transcorp_nm
+        = #{transcorpNm},mailing_num
+        = #{mailingNum},mailing_man
+        = #{mailingMan},mailing_mobile
+        = #{mailingMobile},service_phone
+        = #{servicePhone},service_url
+        = #{serviceUrl},do_desc
+        = #{doDesc},do_time
+        = #{doTime},create_oper
+        = #{createOper},create_time
+        = #{createTime},reserved1
+        = #{reserved1},vendor_transcorp_id
+        = #{vendorTranscorpId},del_flag
+        = #{delFlag},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="transcorpNm !=null">and transcorp_nm = #{transcorpNm}</if>
+            <if test="mailingNum !=null">and mailing_num = #{mailingNum}</if>
+            <if test="mailingMan !=null">and mailing_man = #{mailingMan}</if>
+            <if test="mailingMobile !=null">and mailing_mobile = #{mailingMobile}</if>
+            <if test="servicePhone !=null">and service_phone = #{servicePhone}</if>
+            <if test="serviceUrl !=null">and service_url = #{serviceUrl}</if>
+            <if test="doDesc !=null">and do_desc = #{doDesc}</if>
+            <if test="doTime !=null">and do_time = #{doTime}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="reserved1 !=null">and reserved1 = #{reserved1}</if>
+            <if test="vendorTranscorpId !=null">and vendor_transcorp_id = #{vendorTranscorpId}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="OrderTransMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_order_trans
+        where id=#{id}
+    </select>
+    <select id="findByOrderId" parameterType="Map" resultMap="OrderTransMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_order_trans
+        where order_id=#{orderId} AND del_flag= 0
+    </select>
+
+    <select id="findAll" resultMap="OrderTransMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_trans
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="OrderTransMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_trans
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="OrderTrans">
+        delete from tbl_order_trans where id = id
+    </delete>
+    <select id="findByOrderIds" parameterType="java.util.List" resultMap="OrderTransMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_trans
+        where order_id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+   
+    </select>
+
+    <update id="updateDoDesc" parameterType="OrderTrans">
+        update tbl_order_trans set
+        do_desc = #{doDesc}
+        where order_id = #{orderId}
+    </update>
+
+</mapper>
+
+

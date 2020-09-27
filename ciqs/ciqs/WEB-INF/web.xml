@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Web config。
+
+@author zhanglin@dpn.com.cn
+@since 1.0.0 zhanglin@dpn.com.cn
+@version 1.0.0 zhanglin@dpn.com.cn
+-->
+<!-- ***************************************************************************
+备忘记录
+-> Web配置。
+********************************************************************************
+变更履历
+-> 1.0.0 2016-07-07 zhanglin@dpn.com.cn : 初建。
+**************************************************************************** -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://java.sun.com/xml/ns/j2ee" 
+    xmlns:web="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <!-- **** common setting *********************************************** -->
+    <display-name>BLANK</display-name>
+    <description>ver. 1.0.0</description>
+
+    <!-- **** context parameters setting *********************************** -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring.xml</param-value>
+    </context-param>
+
+	<!-- 配置IDS的过滤器、监听器、和 servlet -->
+    <filter>
+       <filter-name>SSOLoginFilter</filter-name>
+       <filter-class>com.trs.idm.client.filter.GeneralSSOFilter</filter-class>
+    </filter> 
+    <filter-mapping>
+       <filter-name>SSOLoginFilter</filter-name>
+       <url-pattern>/*</url-pattern> 
+    </filter-mapping>
+    
+    <listener>
+       <listener-class>com.trs.idm.client.listener.CoSessionListener</listener-class>
+    </listener>
+
+    <servlet>
+       <servlet-name>TRSIdSSSOProxyServlet</servlet-name>
+       <servlet-class>com.trs.idm.client.servlet.LoginProxyServlet</servlet-class> 
+       <load-on-startup>100</load-on-startup>
+   </servlet> 
+   <servlet>
+       <servlet-name>GetLongUrlServlet</servlet-name>
+       <servlet-class>com.trs.idm.client.servlet.GetLongUrlServlet</servlet-class>
+   </servlet>
+   <servlet-mapping>
+       <servlet-name>TRSIdSSSOProxyServlet</servlet-name> 
+       <url-pattern>/TRSIdSSSOProxyServlet</url-pattern>
+   </servlet-mapping> 
+   <servlet-mapping>
+       <servlet-name>GetLongUrlServlet</servlet-name>
+       <url-pattern>/idsAgents/GetLongUrlServlet</url-pattern> 
+   </servlet-mapping>
+	
+  	<listener>   
+         <listener-class>
+             com.sun.xml.ws.transport.http.servlet.WSServletContextListener  
+         </listener-class>
+     </listener>
+     <servlet>
+        <servlet-name>ShipWebService</servlet-name>  
+        <servlet-class>
+            com.sun.xml.ws.transport.http.servlet.WSServlet  
+        </servlet-class>
+    </servlet>  
+    <servlet-mapping>  
+        <servlet-name>ShipWebService</servlet-name>  
+        <url-pattern>/service/vslDecService</url-pattern>  
+    </servlet-mapping>
+    <servlet-mapping>  
+        <servlet-name>ShipWebService</servlet-name>  
+        <url-pattern>/service/vslAprService</url-pattern>  
+    </servlet-mapping> 
+
+    
+    <!-- **** filters setting ********************************************** -->
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>ProfileFilter</filter-name>
+        <filter-class>com.dpn.ciqqlc.common.component.ProfileFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ProfileFilter</filter-name>
+        <url-pattern>/page/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ProfileFilter</filter-name>
+        <url-pattern>/ajax/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ProfileFilter</filter-name>
+        <url-pattern>/rest/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ProfileFilter</filter-name>
+        <url-pattern>/billlading/getData</url-pattern>
+    </filter-mapping>
+    
+    
+    <!-- **** servlets setting ********************************************* -->
+    <servlet>
+		<servlet-name>showVideo</servlet-name>
+		<servlet-class>com.dpn.ciqqlc.common.component.ShowVideoServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+	    <servlet-name>AuthImageServlet</servlet-name>
+	    <servlet-class>com.dpn.ciqqlc.common.component.AuthImageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>AuthImageServlet</servlet-name>
+	    <url-pattern>/login/getRandom</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>loginServlet</servlet-name>
+		<servlet-class>
+			com.dpn.ciqqlc.common.component.LoginServlet
+		</servlet-class>
+	</servlet>	
+	<servlet-mapping>
+		<servlet-name>loginServlet</servlet-name>
+		<url-pattern>/loginServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>showVideo</servlet-name>
+		<url-pattern>/showVideo</url-pattern>
+	</servlet-mapping>
+    <servlet>
+		<servlet-name>videoservlet</servlet-name>
+		<servlet-class>com.dpn.ciqqlc.common.component.Videoservlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>videoservlet</servlet-name>
+		<url-pattern>/videoservlet</url-pattern>
+	</servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Dispatcher</servlet-name>
+        <servlet-class>com.dpn.arch.web.DpnWebDispatcher</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring.dispatcher.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+   <!-- **** AuthenticationFilter ******************************************** -->
+   <filter>
+    	<filter-name>AuthenticationFilter</filter-name>
+    	<filter-class>com.dpn.ciqqlc.common.component.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+    	<filter-name>AuthenticationFilter</filter-name>
+    	<url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- **** listeners setting ******************************************** -->
+    <listener>
+        <listener-class>com.dpn.arch.web.DpnWebLoader</listener-class>
+    </listener>
+    <!-- **** welcome files setting **************************************** -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- **** error files setting ****************************************** -->
+    <error-page>
+        <error-code>400</error-code>
+        <location>/page/error</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/page/error</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/page/error</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/page/error</location>
+    </error-page>
+
+    <!-- **** session timeout setting ************************************** -->
+    <session-config>
+        <!-- the unit is minutes -->
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+</web-app>

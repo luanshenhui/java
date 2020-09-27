@@ -1,0 +1,113 @@
+<%
+'-----------------------------------------------------------------------------
+'		ƒƒ“ƒ^ƒ‹ƒwƒ‹ƒX@‚ ‚È‚½‚ÌŠî–{î•ñƒ`ƒFƒbƒN‰æ–Ê•\Ž¦—p(Ver0.0.1)
+'		AUTHER  : S.Sugie@C's
+'-----------------------------------------------------------------------------
+'inputType‹æ•ª’è”
+Private Const pcRadio = 0
+Private Const pcText = 1
+
+'‰æ–Ê•\Ž¦•¶Œ¾
+Private aryQuestion
+Private aryAnswer(15,15)
+
+aryQuestion = Array("‚PD«•Ê‚ð‘I‚ñ‚Å‚­‚¾‚³‚¢", _
+					"‚QD‚ ‚È‚½‚Ì”N—î‚ð‚²‹L“ü‚­‚¾‚³‚¢", _
+					"‚RDŒ‹¥‚³‚ê‚Ä‚¢‚Ü‚·‚©", _
+					"‚SDŽdŽ–‚ð‚³‚ê‚Ä‚¢‚Ü‚·‚©" , _
+					"‚TDŒ»Ý‚Ì‚¨ŽdŽ–‚ÍŒð‘Ö«‚Å‚·‚©" , _
+					"‚UD¡‚Ì‰ïŽÐ‚Å‚Ì‹Î‘±”N”‚Í‰½”N‚Å‚·‚©" , _
+					"‚VD‚ ‚È‚½‚ÌŒÙ—pŒ`‘Ô‚ÍAŽŸ‚Ì‚Ç‚ê‚É‚ ‚½‚è‚Ü‚·‚©" , _
+					"‚WD‚ ‚È‚½‚Ì‰ïŽÐ‚Ì]‹Æˆõ”‚Í‚Ç‚êˆÊ‚Å‚·‚©" , _
+					"‚XD‚ ‚È‚½‚Ì‹Î–±æ‚ÍAŽŸ‚Ì‚Ç‚ê‚É‚ ‚½‚è‚Ü‚·‚©" , _
+					"‚P‚OD‚ ‚È‚½‚ÌEŽí‚ÍŽŸ‚Ì‚Ç‚ê‚É‚ ‚½‚è‚Ü‚·‚©" , _
+					"‚P‚PD‚ ‚È‚½‚ÌŒ»Ý‚ÌEˆÊ‚ÍŽŸ‚Ì‚Ç‚ê‚É‚ ‚½‚è‚Ü‚·‚©" , _
+					"‚P‚QD‚ ‚È‚½‚Ì’¼‘®‚Ì•”‰º”‚Í‰½l‚Å‚·‚©" , _
+					"‚P‚RD‚PTŠÔ‚ÌŠ’è˜J“­ŽžŠÔ‚Í" , _
+					"‚P‚SD•½‹Ï“I‚È‚PTŠÔ‚ÌŽÀ“­ŽžŠÔ‚Í" , _
+					"‚P‚TD‚Pƒ•ŒŽ•½‹Ï‚ÌŽc‹ÆŽžŠÔ‚Í‚Ç‚Ì‚­‚ç‚¢‚Å‚·‚©" , _
+					"‚P‚UD‰ß‹Ž‚Rƒ•ŒŽ‚ÉA•a‹C‚Å‰½“ú‹x‚Ý‚Ü‚µ‚½‚©" )
+
+aryAnswer(0,0)="‚Pj’j"
+aryAnswer(0,1)="‚Qj—"
+
+aryAnswer(1,0)="Î"
+
+aryAnswer(2,0)="‚PjŠù¥"
+aryAnswer(2,1)="‚Qj“Æg"
+aryAnswer(2,2)="‚RjŽ€•Ê"
+
+aryAnswer(3,0)="‚PjŽdŽ–‚ð‚µ‚Ä‚¢‚é"
+aryAnswer(3,1)="‚QjŽdŽ–‚ð‚µ‚Ä‚¢‚È‚¢"
+
+aryAnswer(4,0)="‚PD’‹ŠÔ‚ÌŽdŽ–‚Å‚ ‚é"
+aryAnswer(4,1)="‚QD–é‹Î‚¾‚¯‚Å‚ ‚é"
+aryAnswer(4,2)="‚RD’‹–éŒð‘Ö‹Î–±‚Å‚ ‚é"
+
+aryAnswer(5,0)="”N"
+
+aryAnswer(6,0)="‚PD³Eˆõ"
+aryAnswer(6,1)="‚QDú‘õ"
+aryAnswer(6,2)="‚RDƒp[ƒg"
+aryAnswer(6,3)="‚SD”hŒ­ŽÐˆõ"
+aryAnswer(6,4)="‚TD‚»‚Ì‘¼"
+
+
+
+aryAnswer(7,0)="‚PD‚P‚O‚Ol–¢–ž"
+aryAnswer(7,1)="‚QD‚P‚O‚O`‚T‚O‚Ol"
+aryAnswer(7,2)="‚RD‚T‚O‚O`‚P‚O‚O‚Ol"
+aryAnswer(7,3)="‚SD‚P‚O‚O‚O`‚T‚O‚O‚Ol"
+aryAnswer(7,4)="‚TD‚T‚O‚O‚OlˆÈã"
+
+aryAnswer(8,0)="‚PD»‘¢‹Æ"
+aryAnswer(8,1)="‚QD‹à—Z‹Æ"
+aryAnswer(8,2)="‚RD•ÛŒ¯‹Æ"
+aryAnswer(8,3)="‚SD—¬’Ê‹Æ"
+aryAnswer(8,4)="‚TD‰^—A‹Æ"
+aryAnswer(8,5)="‚UD‘‰ÆŒö–±ˆõ"
+aryAnswer(8,6)="‚VD’n•ûŒö–±ˆõ"
+aryAnswer(8,7)="‚WDˆã—Ã‹@ŠÖ"
+aryAnswer(8,8)="‚XD‹³ˆç‹@ŠÖ"
+aryAnswer(8,9)="‚P‚OD”_—Ñ…ŽY‹Æ"
+aryAnswer(8,10)="‚P‚PDŒšÝ‹Æ"
+aryAnswer(8,11)="‚P‚QDƒ}ƒXƒRƒ~"
+aryAnswer(8,12)="‚P‚RD¤ŽÐ"
+aryAnswer(8,13)="‚P‚SDŽ©‰c‹Æ"
+aryAnswer(8,14)="‚P‚TDˆùH“X"
+aryAnswer(8,15)="‚P‚UD‚»‚Ì‘¼"
+
+
+aryAnswer(9,0)="‚PD‰c‹Æ"
+aryAnswer(9,1)="‚QD¶ŽY"
+aryAnswer(9,2)="‚RDŠJ”­EŒ¤‹†"
+aryAnswer(9,3)="‚SDˆê”ÊŠÇ—i‘–±EŒo—j"
+aryAnswer(9,4)="‚TDlŽ–E˜J–±"
+aryAnswer(9,5)="‚UDŠé‰æE’²¸"
+aryAnswer(9,6)="‚VD‚»‚Ì‘¼"
+
+aryAnswer(10,0)="‚PD–ðˆõ"
+aryAnswer(10,1)="‚QD•”’·ƒNƒ‰ƒX"
+aryAnswer(10,2)="‚RD‰Û’·ƒNƒ‰ƒX"
+aryAnswer(10,3)="‚SDŒW’·ƒNƒ‰ƒX"
+aryAnswer(10,4)="‚TDˆê”Ê"
+
+
+aryAnswer(11,0)="‚PD‚¢‚È‚¢"
+aryAnswer(11,1)="‚QD‚P‚OlˆÈ‰º"
+aryAnswer(11,2)="‚RD‚P‚P`‚Q‚Ol"
+aryAnswer(11,3)="‚SD‚Q‚P`‚R‚Ol"
+aryAnswer(11,4)="‚TD‚R‚P`‚S‚Ol"
+aryAnswer(11,5)="‚UD‚S‚P`‚T‚Ol"
+aryAnswer(11,6)="‚VD‚T‚P`‚P‚O‚Ol"
+aryAnswer(11,7)="‚WD‚P‚O‚PlˆÈã"
+
+aryAnswer(12,0)="ŽžŠÔ"
+
+aryAnswer(13,0)="ŽžŠÔ"
+
+aryAnswer(14,0)="ŽžŠÔ"
+
+aryAnswer(15,0)="“ú"
+
+%>

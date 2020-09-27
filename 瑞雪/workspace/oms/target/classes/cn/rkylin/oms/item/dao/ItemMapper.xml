@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.item.dao.ItemDAOImpl">
+    <resultMap id="BaseResultMap" type="cn.rkylin.oms.item.vo.ItemVO">
+        <id column="ec_item_id" jdbcType="VARCHAR" property="ecItemId"/>
+        <result column="ec_item_code" jdbcType="VARCHAR" property="ecItemCode"/>
+        <result column="ec_item_name" jdbcType="VARCHAR" property="ecItemName"/>
+        <result column="outer_code" jdbcType="VARCHAR" property="outerCode"/>
+        <result column="prj_id" jdbcType="VARCHAR" property="prjId"/>
+        <result column="prj_name" jdbcType="VARCHAR" property="prjName"/>
+        <result column="shop_id" jdbcType="VARCHAR" property="shopId"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="shop_account" jdbcType="VARCHAR" property="shopAccount"/>
+        <result column="shop_type" jdbcType="VARCHAR" property="shopType"/>
+        <result column="item_url" jdbcType="VARCHAR" property="itemUrl"/>
+        <result column="sale_price" jdbcType="DECIMAL" property="salePrice"/>
+        <result column="post_fee" jdbcType="DECIMAL" property="postFee"/>
+        <result column="ems_post_fee" jdbcType="DECIMAL" property="emsPostFee"/>
+        <result column="lgst_post_fee" jdbcType="DECIMAL" property="lgstPostFee"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="approve_status" jdbcType="VARCHAR" property="approveStatus"/>
+        <result column="list_time" jdbcType="TIMESTAMP" property="listTime"/>
+        <result column="auto_list" jdbcType="CHAR" property="autoList"/>
+        <result column="delist_time" jdbcType="TIMESTAMP" property="delistTime"/>
+        <result column="auto_delist" jdbcType="CHAR" property="autoDelist"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleted" jdbcType="CHAR" property="deleted"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <!--<result column="chk" jdbcType="VARCHAR" property="chk"/>-->
+        <!--<result column="skuShow" jdbcType="VARCHAR" property="skuShow"/>-->
+
+        <!--扩展规格字段 用户高级查询条件和导出-->
+        <result column="ec_sku_code" jdbcType="VARCHAR" property="ecSkuCode"/>
+        <result column="ec_sku_name" jdbcType="VARCHAR" property="ecSkuName"/>
+        <result column="sale_price" jdbcType="DECIMAL" property="salePrice"/>
+        <result column="qty" jdbcType="INTEGER" property="qty"/>
+    </resultMap>
+    <sql id="Base_Column_ListItem">
+		ec_item_id, ec_item_code, ec_item_name, outer_code,
+		prj_id,(select prj.prj_name from oms_project prj where prj.prj_id = item.prj_id) AS prj_name,shop_id, shop_name,shop_account, shop_type,
+		item_url, sale_price, post_fee, ems_post_fee,lgst_post_fee,
+		remark,approve_status, '' as status, list_time, auto_list, delist_time, auto_delist,
+		create_time, update_time, deleted,'' as skuShow,'' as chk
+	</sql>
+
+    <select id="pageSelectItem" parameterType="cn.rkylin.oms.item.vo.ItemVO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_ListItem"/>
+        from oms_ec_item as item
+        where item.deleted = 'n'
+        <if test="searchCondition != null">
+            and (item.ec_item_code like CONCAT('%',#{searchCondition},'%')
+            OR item.ec_item_name like CONCAT('%',#{searchCondition},'%')
+            OR EXISTS (SELECT 1 FROM oms_ec_sku as sku
+            WHERE item.ec_item_id = sku.ec_item_id
+            AND (sku.ec_sku_code like CONCAT('%',#{searchCondition},'%')
+            OR sku.ec_sku_name like CONCAT('%',#{searchCondition},'%') )
+            )
+            )
+        </if>
+        <if test="prjId != null">
+            and item.prj_id = #{prjId}
+        </if>
+        <if test="shopId != null">
+            and item.shop_id = #{shopId}
+        </if>
+        <if test="shopType != null">
+            and item.shop_type = #{shopType}
+        </if>
+        <if test="approveStatus != null">
+            and item.approve_status = #{approveStatus}
+        </if>
+        <if test="ecItemCode != null">
+            and item.ec_item_code = #{ecItemCode}
+        </if>
+        <if test="ecItemName != null">
+            and item.ec_item_name = #{ecItemName}
+        </if>
+        <if test="ecItemId != null">
+            and item.ec_item_id = #{ecItemId}
+        </if>
+        
+        <if test="ecSkuCode != null">
+            and EXISTS (SELECT 1 FROM oms_ec_sku as sku
+            WHERE item.ec_item_id = sku.ec_item_id
+            AND sku.ec_sku_code = #{ecSkuCode}
+            )
+        </if>
+        <if test="ecSkuName != null">
+            and EXISTS (SELECT 1 FROM oms_ec_sku as sku
+            WHERE item.ec_item_id = sku.ec_item_id
+            AND sku.ec_sku_name = #{ecSkuName}
+            )
+        </if>
+
+        <if test="orderBy != null">
+            ORDER BY ${orderBy}
+        </if>
+    </select>
+
+    <!-- 导出功能继承 -->
+    <resultMap id="BaseResultExportMap" type="cn.rkylin.oms.item.vo.ItemExportVO" extends="BaseResultMap">
+    </resultMap>
+    <sql id="Base_Column_ListItemSku">
+        item.ec_item_id, item.ec_item_code, ec_item_name, item.outer_code,
+        prj_id,(select prj.prj_name from oms_project prj where prj.prj_id = item.prj_id) AS prj_name,shop_id, shop_name,shop_account, shop_type,
+        item_url, item.sale_price, item.post_fee, ems_post_fee,lgst_post_fee,
+        remark,approve_status, '' as status, list_time, auto_list, delist_time, auto_delist,
+        item.create_time, item.update_time, item.deleted,'' as skuShow
+        ,ec_sku_code,ec_sku_name,qty
+    </sql>
+    <select id="exportSelectItem" parameterType="cn.rkylin.core.ApolloMap" resultMap="BaseResultExportMap">
+        select
+        <include refid="Base_Column_ListItemSku"/>
+        from oms_ec_item as item INNER JOIN oms_ec_sku sku on item.ec_item_id = sku.ec_item_id
+        where item.deleted = 'n' and sku.deleted = 'n'
+        <if test="value != null">
+            and (item.ec_item_code like CONCAT('%',#{value},'%')
+            OR item.ec_item_name like CONCAT('%',#{value},'%')
+            OR sku.ec_sku_code like CONCAT('%',#{value},'%')
+            OR sku.ec_sku_name like CONCAT('%',#{value},'%')
+            )
+        </if>
+        <if test="selectWhere != null">
+            ${selectWhere}
+        </if>
+        order by CONVERT(prj_name USING gbk)  asc , CONVERT(shop_type USING gbk) asc , 
+                 CONVERT(shop_name USING gbk) asc , ec_item_code asc , ec_sku_code asc
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_ListItem"/>
+        from oms_ec_item
+        where ec_item_id = #{ecItemId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- ==================== 以下是SKU =========================== -->
+    <resultMap id="BaseSkuResultMap" type="cn.rkylin.oms.item.vo.SkuVO">
+        <id column="ec_sku_id" jdbcType="VARCHAR" property="ecSkuId"/>
+        <result column="ec_item_id" jdbcType="VARCHAR" property="ecItemId"/>
+        <result column="ec_sku_code" jdbcType="VARCHAR" property="ecSkuCode"/>
+        <result column="ec_sku_name" jdbcType="VARCHAR" property="ecSkuName"/>
+        <result column="outer_code" jdbcType="VARCHAR" property="outerCode"/>
+        <result column="sale_price" jdbcType="DECIMAL" property="salePrice"/>
+        <result column="weight" jdbcType="DECIMAL" property="weight"/>
+        <result column="qty" jdbcType="INTEGER" property="qty"/>
+        <result column="post_fee" jdbcType="DECIMAL" property="postFee"/>
+        <result column="auto_stock" jdbcType="CHAR" property="autoStock"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleted" jdbcType="CHAR" property="deleted"/>
+    </resultMap>
+    <sql id="Base_Column_ListSku">
+		ec_sku_id, ec_item_id, ec_sku_code, ec_sku_name, outer_code, sale_price, weight,
+		qty, post_fee, auto_stock,
+		create_time, update_time, deleted
+	</sql>
+
+    <select id="pageSelectSku" parameterType="cn.rkylin.oms.item.vo.SkuVO" resultMap="BaseSkuResultMap">
+        select
+        <include refid="Base_Column_ListSku"/>
+        from oms_ec_sku
+        where deleted = 'n'
+        <!--<if test="searchCondition != null">
+            and (ec_sku_code like CONCAT('%',#{searchCondition},'%') OR ec_sku_name like
+            CONCAT('%',#{searchCondition},'%'))
+        </if>-->
+        <if test="ecItemId != null">
+            and ec_item_id = #{ecItemId}
+        </if>
+        
+         <if test="orderBy != null">
+            ORDER BY ${orderBy}
+        </if>
+        
+    </select>
+
+    <select id="selectSkuByPrimaryKey" parameterType="java.lang.String" resultMap="BaseSkuResultMap">
+        select
+        <include refid="Base_Column_ListSku"/>
+        from oms_ec_sku
+        where ec_sku_id = #{ecSkuId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

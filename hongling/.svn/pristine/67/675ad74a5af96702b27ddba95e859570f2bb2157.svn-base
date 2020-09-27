@@ -1,0 +1,15 @@
+<script language= "javascript" src="../orden/stop.js"></script>
+<form id="formStop" class="form_template">
+<input type="hidden" name="ordenID" id="ordenID"/>
+<h1></h1>
+<br><br>
+<table> 
+	<tr> 
+		<td class="label lblOrdenStop"></td> 
+		<td><select id="stopCause" class="cause"></select></td> 
+	</tr> 
+</table><br><br>
+<div class="operation">
+	<a id="btnSubmitConfirm"/> <a id="btnCancelConfirm"/>
+</div>
+</form>

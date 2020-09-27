@@ -1,0 +1,116 @@
+package cn.rkylin.oms.system.privilege.dao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Repository;
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.privilege.domain.WF_ORG_RESOURCE_AUTHORITY;
+@Repository(value = "menuGrantDAO")
+public class MenuGrantDAOImpl implements IMenuGrantDAO {
+	@Autowired
+	protected IDataBaseFactory dao;
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void insertUserExclude(String userID, String resourceID) throws Exception {
+		Map insertMap = new HashMap();
+		insertMap.put("userId", userID);
+		insertMap.put("resourceId", resourceID);
+//		this.getSqlMapClient().insert("WF_ORG_RESOURCE_AUTHORITY.insertUserExclude", insertMap);
+		dao.insert("insertUserExclude", insertMap);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void deleteUserExclude(String userID, String resourceID) throws Exception {
+		Map deleteMap = new HashMap();
+		deleteMap.put("userId", userID);
+		deleteMap.put("resourceId", resourceID);
+//		this.getSqlMapClient().insert("WF_ORG_RESOURCE_AUTHORITY.deleteUserExclude", deleteMap);
+		dao.insert("deleteUserExclude", deleteMap);
+
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public boolean ifUserResourceAvailable(String userID, String resourceID) throws Exception {
+		boolean returnValue = false;
+		Map deleteMap = new HashMap();
+		deleteMap.put("userId", userID);
+		deleteMap.put("resourceId", resourceID);
+//		Object resultObj = this.getSqlMapClient()
+//				.queryForObject("WF_ORG_RESOURCE_AUTHORITY.getUnitStationRoleAvailableResourceCount", deleteMap);
+		Object resultObj = dao.findForList("getUnitStationRoleAvailableResourceCount", deleteMap);
+//		returnValue = Integer.parseInt(resultObj.toString()) > 0 ? true : false;
+		returnValue = (!resultObj.toString().equals("[0]"));
+		return returnValue;
+	}
+
+	@Override
+	public boolean isResourceAvailable(Map paramMap) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List getResourceAuthority(WF_ORG_RESOURCE_AUTHORITY authVO) throws Exception {
+//		resultList = this.getSqlMapClient().queryForList("WF_ORG_RESOURCE_AUTHORITY.select", authVO);
+		return dao.findAllList("select_authority", authVO);
+	}
+
+	@Override
+	public Map getRoleMenuTreePrivileges(String roleID, String privilegeType) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map getStationMenuTreePrivileges(String stationID, String privilegeType) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map getElementPrivByMenuIDRoleID(WF_ORG_RESOURCE_AUTHORITY authVO, String type) throws Exception {
+		Map resultList = null;
+		try {
+			if (type.equals("user"))
+//				resultList = this.getSqlMapClient().queryForMap("WF_ORG_RESOURCE_AUTHORITY.getUserAvailableResource",
+//						authVO, "RESOURCE_ID");
+				resultList = dao.findMapList("getUserAvailableResource", authVO,"RESOURCE_ID");
+			else
+//				resultList = this.getSqlMapClient().queryForMap("WF_ORG_RESOURCE_AUTHORITY.getAvailableResource",
+//						authVO, "RESOURCE_ID");
+				resultList = dao.findMapList("getAvailableResource", authVO,"RESOURCE_ID");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+		return resultList;
+	}
+
+	@Override
+	public Map getElementPrivByMenuIDStationID(WF_ORG_RESOURCE_AUTHORITY authVO) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deletePrivileges(WF_ORG_RESOURCE_AUTHORITY resAuth) throws Exception {
+//		this.getSqlMapClient().delete("WF_ORG_RESOURCE_AUTHORITY.delete", resAuth);
+		dao.delete("delete_authority", resAuth);
+
+	}
+
+	@Override
+	public void insertPrivilege(WF_ORG_RESOURCE_AUTHORITY resAuth) throws Exception {
+//		this.getSqlMapClient().insert("WF_ORG_RESOURCE_AUTHORITY.insert", resAuth);
+		dao.insert("insert_authority", resAuth);
+	}
+
+}

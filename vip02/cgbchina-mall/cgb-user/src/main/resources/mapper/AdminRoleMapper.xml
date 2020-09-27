@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminRole">
+    <resultMap id="RoleMap" type="AdminRoleModel">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="descript" column="descript"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="refuseDesc" column="refuse_desc"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="isMaskSensitive" column="is_mask_sensitive"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        id,pid,`name`,`type`,descript,check_status,refuse_desc,create_oper,modify_oper,create_time,modify_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="AdminRoleModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into local_role
+        (`name`
+        ,create_oper
+        ,create_time
+        )
+        values(#{name}
+        ,#{createOper}
+        ,now()
+        )
+    </insert>
+    <update id="updateRole" parameterType="Map">
+        UPDATE local_role SET `modify_oper`=#{modifyOper}
+        ,`modify_time`=NOW() WHERE id=#{id}
+    </update>
+    <update id="update" parameterType="AdminRoleModel">
+        update local_role set
+        <if test="pid !=null">pid = #{pid}
+            ,
+        </if>
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="type !=null">type = #{type}
+            ,
+        </if>
+        <if test="descript !=null">descript = #{descript}
+            ,
+        </if>
+        <if test="checkStatus !=null">check_status = #{checkStatus}
+            ,
+        </if>
+        <if test="refuseDesc !=null">refuse_desc = #{refuseDesc}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+            ,
+        </if>
+        <if test="isMaskSensitive !=null">is_mask_sensitive = #{isMaskSensitive}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag=0
+            and `type` = '0'
+            <if test="id !=null">and id = #{id}</if>
+            <if test="pid !=null">and pid = #{pid}</if>
+            <if test="name !=null">and name like concat(concat('%',#{name}),'%')</if>
+            <if test="type !=null">and type = #{type}</if>
+            <if test="descript !=null">and descript = #{descript}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="refuseDesc !=null">and refuse_desc = #{refuseDesc}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="isMaskSensitive !=null">and is_mask_sensitive = #{isMaskSensitive}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="RoleMap">
+        SELECT id,
+        <include refid="columns"/>
+        from local_role
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="RoleMap">
+        select id,
+        <include refid="columns"/>
+        from local_role
+        where `type` = '0'
+    </select>
+    <!--add by liuhan-->
+    <select id="findByName" parameterType="String" resultType="String">
+        select id
+        from local_role
+        where name LIKE concat(concat('%',#{name}),'%')
+        AND `type` = '0'
+    </select>
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from local_role
+        <include refid="conditions"/>
+    </select>
+    <select id="pager" parameterType="Map" resultMap="RoleMap">
+        select
+        <include refid="columns"/>
+        from local_role
+        <include refid="conditions"/>
+        ORDER BY create_time DESC
+        <![CDATA[limit #{offset}, #{limit} ]]>
+    </select>
+
+    <delete id="delete" parameterType="AdminRoleModel">
+        delete from local_role where id = #{id}
+    </delete>
+
+    <select id="duplicateCheck" parameterType="String" resultType="Long">
+        SELECT COUNT(1) FROM local_role WHERE `name`=#{_parameter} AND del_flag=0
+    </select>
+    <resultMap id="adminRoleDtoMap" type="cn.com.cgbchina.user.dto.AdminRoleDto">
+        <result property="roleId" column="id"/>
+        <result property="roleName" column="name"/>
+    </resultMap>
+    <select id="getRoleByRoleIds" parameterType="List" resultMap="adminRoleDtoMap">
+        SELECT id,`name` FROM local_role WHERE del_flag=0 AND id IN
+        <foreach collection="list" open="(" close=")" separator="," item="roleDto">
+            #{roleDto}
+        </foreach>
+    </select>
+    <select id="allEnabledRoleDtos" resultMap="adminRoleDtoMap">
+        SELECT id,`name` FROM local_role WHERE del_flag=0 AND `type` = '0'
+    </select>
+    <update id="logicDelete" parameterType="Long">
+        UPDATE local_role SET del_flag=1 WHERE id =#{_parameter}
+    </update>
+</mapper>
+
+

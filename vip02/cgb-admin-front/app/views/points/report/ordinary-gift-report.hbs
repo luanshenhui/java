@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}普通礼品销售报表{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF01",
+            "reportCode":"JF01,JF04,JF06"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

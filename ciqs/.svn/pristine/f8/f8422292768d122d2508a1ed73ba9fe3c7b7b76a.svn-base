@@ -1,0 +1,182 @@
+package com.dpn.ciqqlc.common.util;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.dpn.ciqqlc.http.form.WarningLinkRuleForm;
+
+public enum WarningEnum {
+
+
+	/**一般处罚*/
+	
+	/**线索移送 - 检验检疫涉嫌案件申报单*/
+	ql1101001("GP_AJ_SBD",WarningEnum.fetchRule(Constants.ql1100000, "ql1101001")),
+	
+	
+	/**立案申报 - 行政处罚案件立案审批表*/
+	ql1102001("D_GP_L_S_1",WarningEnum.fetchRule(Constants.ql1100000, "ql1102001")),
+	/**立案申报 - 案件移送函*/
+	ql1102002("D_GP_A_Y_1",WarningEnum.fetchRule(Constants.ql1100000, "ql1102002")),
+	
+	
+	/**调查取证 - 调查询问-调查通知书*/
+	ql1103001("gp_file_dcxw",WarningEnum.fetchRule(Constants.ql1100000, "ql1103001")),
+	/**调查取证 - 调查询问-调查笔录*/
+	ql1103002("gp_file_dcxw",WarningEnum.fetchRule(Constants.ql1100000, "ql1103002")),
+	/**调查取证 - 现场勘验-现场勘验笔录、现场勘验照片、现场勘验音像*/
+	ql1103003("gp_file_xcky",WarningEnum.fetchRule(Constants.ql1100000, "ql1103003")),
+	ql1103004("gp_file_xcky",WarningEnum.fetchRule(Constants.ql1100000, "ql1103004")),
+	ql1103005("gp_file_xcky",WarningEnum.fetchRule(Constants.ql1100000, "ql1103005")),
+	/**调查取证 - 调查报告*/
+	ql1103006("D_GP_DCBG",WarningEnum.fetchRule(Constants.ql1100000, "ql1103006")),
+	/**调查取证 - 延期办理审批表*/
+	ql1103007("D_GP_DCBG_XZCFAJ_SPB",WarningEnum.fetchRule(Constants.ql1100000, "ql1103007")),
+	
+	/**审理决定 - 行政处罚案件办理审批表*/
+	ql1104001("D_GP_XZCFAJ_SPB",WarningEnum.fetchRule(Constants.ql1100000, "ql1104001")),
+	/**审理决定 - 行政处罚报告书*/
+	ql1104002("D_GP_XZCF_GZS",WarningEnum.fetchRule(Constants.ql1100000, "ql1104002")),
+	/**审理决定 - 送达回证*/
+	ql1104003("gp_file_sdhz",WarningEnum.fetchRule(Constants.ql1100000, "ql1104003")),
+	/**审理决定 - 案件移送函*/
+	//TODO D_GP_A_Y_1
+	ql1104004("D_GP_A_Y_1",WarningEnum.fetchRule(Constants.ql1100000, "ql1104004")),
+	
+	/**审理决定 - 听证程序 - 行政处罚听证通知书、行政处罚听证会笔录、听证意见书*/
+	ql1104005("gp_file_tzcx",WarningEnum.fetchRule(Constants.ql1100000, "ql1104005")),
+	ql1104006("gp_file_tzcx",WarningEnum.fetchRule(Constants.ql1100000, "ql1104006")),
+	ql1104007("gp_file_tzcx",WarningEnum.fetchRule(Constants.ql1100000, "ql1104007")),
+	
+	/**送达执行 - 行政处罚决定书*/
+	ql1105001("D_GP_XZCF_JDS",WarningEnum.fetchRule(Constants.ql1100000, "ql1105001")),
+	/**送达执行 - 送达回证*/
+	ql1105002("gp_file_sdhz_sdzx",WarningEnum.fetchRule(Constants.ql1100000, "ql1105002")),
+	
+	/**归档 - 行政处罚结案报告*/
+	ql1106001("D_GP_XZCF_JABG",WarningEnum.fetchRule(Constants.ql1100000, "ql1106001")),
+	ql1106002("D_GP_XZCF_AJFKB",WarningEnum.fetchRule(Constants.ql1100000, "ql1106002")),
+	
+	/**原产地*/
+//	ql0501001("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0501002("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0501003("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0502001("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0502002("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0502003("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+	ql0502004("V_OC_C_M_1",WarningEnum.fetchRule(Constants.ql0500000, "ql0502004")),
+	ql0502005("V_OC_C_M_2",WarningEnum.fetchRule(Constants.ql0500000, "ql0502005")),
+	ql0502006("V_OC_C_M_3",WarningEnum.fetchRule(Constants.ql0500000, "ql0502006")),
+	ql0502007("V_OC_C_M_4",WarningEnum.fetchRule(Constants.ql0500000, "ql0502007")),
+	ql0502008("V_OC_C_M_7",WarningEnum.fetchRule(Constants.ql0500000, "ql0502008")),
+	ql0502009("V_OC_C_M_10",WarningEnum.fetchRule(Constants.ql0500000, "ql0502009")),
+//	ql0503001("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0503002("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+	ql0504001("V_OC_C_M_5",WarningEnum.fetchRule(Constants.ql0500000, "ql0504001")), 
+	ql0502002("V_OC_C_M_11",WarningEnum.fetchRule(Constants.ql0500000, "ql0502002")),
+	;
+
+	private WarningEnum(){}
+	private WarningEnum(String code,WarningLinkRuleForm warningLinkRuleForm){
+		this.code = code;
+		this.warningLinkRuleForm = warningLinkRuleForm;
+		
+	}
+	private WarningEnum(String code,String step){}
+	
+	/**
+	 * old业务code
+	 */
+	private String code;
+	
+	/**
+	 * 环节流程备用 某些系统多个环节用同一个环节类型时需要传递此字段
+	 */
+	private String step;
+	
+	private WarningLinkRuleForm warningLinkRuleForm;
+	
+	
+	
+	public static WarningLinkRuleForm fetchRule(String busType,String dic_type){
+		Map<String, List<WarningLinkRuleForm>> mr = LazySingleton.getInstance().getRules();
+		List<WarningLinkRuleForm> ls = mr.get(busType);
+		for (WarningLinkRuleForm warningLinkRuleForm : ls) {
+			if(warningLinkRuleForm.getDicType().equals(dic_type)) return warningLinkRuleForm;
+			else continue;
+		}
+		return null;
+	}
+	
+	
+    public static WarningEnum getRuleCode(String str){
+
+    	EnumSet<WarningEnum> esSet = EnumSet.allOf(WarningEnum.class);
+    	for (WarningEnum warningEnum : esSet) {
+    		if(str.equals(warningEnum.getCode())){
+    			return warningEnum;
+    		}
+		}
+    	return null;
+    	
+//    	switch (str) {
+//    	
+//			case "V_OC_C_M_1":
+//				b = ql0502004;
+//				break;
+//			case "V_OC_C_M_2":
+//				b = ql0502005;
+//				break;
+//			case "V_OC_C_M_3":
+//				b = ql0502006;
+//				break;
+//			case "V_OC_C_M_4":
+//				b = ql0502007;
+//				break;
+//			case "V_OC_C_M_5":
+//				b = ql0504001;
+//				break;	
+//			case "V_OC_C_M_7":
+//				b = ql0502008;
+//				break;	
+//			case "V_OC_C_M_10":
+//				b = ql0502009;
+//				break;
+//			case "V_OC_C_M_11":
+//				b = ql0502002;
+//				break;
+//				
+//				
+//			default:
+//				break;
+//		}
+    }
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getStep() {
+		return step;
+	}
+
+	public void setStep(String step) {
+		this.step = step;
+	}
+
+	public WarningLinkRuleForm getWarningLinkRuleForm() {
+		return warningLinkRuleForm;
+	}
+
+	public void setWarningLinkRuleForm(WarningLinkRuleForm warningLinkRuleForm) {
+		this.warningLinkRuleForm = warningLinkRuleForm;
+	}
+	
+	
+}

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.storage.dao.StorDAOImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.logistics.vo.LogisticsVO">
+		<id column="stor_id" property="storId" />
+	    <result column="chk" property="chk" />
+	    <result column="stor_code" property="storCode" />
+	    <result column="stor_name" property="storName" />
+	    <result column="prj_id" property="prjId" />
+	    <result column="prj_name" property="prjName" />
+     	<result column="deleted" property="deleted" />
+	    <result column="create_time" property="createtime" />
+	    <result column="update_time" property="updatetime" />
+	    <result column="tel" property="tel" />
+	    <result column="mobile" property="mobile" />
+	    <result column="addr" property="addr" />
+	    <result column="post_code" property="postcode" />
+	    <result column="area_code" property="areacode" />
+	    <result column="remark" property="remark" />
+	</resultMap>
+	
+	<select id="getLgstByCondition" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.logistics.vo.LogisticsVO" >
+    select '' as chk,  stor_id, stor_name,stor_code, prj_id, prj_name, deleted, create_time, update_time , tel,
+     mobile, addr, post_code, area_code , remark 
+    from OMS_STOR 
+	where 1=1
+		<if test="storId != null">
+			and stor_id = #{storId}
+		</if>
+		<choose> 
+			<when test="deleted !=null ">
+			</when>
+			<otherwise>
+				and deleted = 'n'
+			</otherwise>  
+		</choose>
+		<if test="storCode != null">
+			and  stor_code = #{storCode}
+		</if>
+		<if test="storName != null">
+			and stor_name = #{storName}
+		</if>
+		<if test="prjName != null">
+			and prj_name = #{prjName}
+		</if>
+  		<if test="searchCondition != null"> 
+			and stor_name like CONCAT('%',#{searchCondition},'%')  or stor_code like CONCAT('%',#{searchCondition},'%')
+		</if> 
+		<if test="prjId != null">
+			and prj_id = #{prjId}
+		</if>
+		
+		<if test="updatetime != null">
+			and update_time = #{updatetime}
+		</if>
+		<if test="createtime != null">
+			and create_time = #{createtime} 
+		</if>
+		<if test="tel != null">
+			and tel = #{tel} 
+		</if>
+		<if test="mobile != null">
+			and mobile = #{mobile} 
+		</if>
+		<if test="addr != null">
+			and addr = #{addr} 
+		</if>
+		<if test="postcode != null">
+			and post_code = #{postcode} 
+		</if>
+		<if test="areacode != null">
+			and area_code = #{areacode} 
+		</if>
+		<if test="remark != null">
+			and remark = #{remark} 
+		</if> 
+		<if test="orderBy != null">
+			ORDER BY ${orderBy} 
+		</if>
+  </select>
+  
+  
+  <update id="deleteLgst" parameterType="cn.rkylin.oms.system.logistics.vo.LogisticsVO" >
+    update OMS_STOR
+    set deleted = 'y' 
+    WHERE stor_id = #{storId}
+  </update>
+  
+  <insert id="insertLgst" parameterType="cn.rkylin.oms.system.logistics.vo.LogisticsVO" >
+    insert into OMS_STOR (stor_id, stor_code, stor_name, prj_id, prj_name,
+      deleted, create_time, update_time, tel, mobile, addr, post_code, area_code , remark)
+    values (#{storId,jdbcType=VARCHAR},#{storCode,jdbcType=VARCHAR}, #{storName,jdbcType=VARCHAR}, #{prjId,jdbcType=VARCHAR},#{prjName,jdbcType=VARCHAR},#{deleted,jdbcType=VARCHAR},
+    now(), now(), #{tel,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{addr,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, #{areacode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		stor_id,stor_code,stor_name,prj_id,prj_name,deleted, create_time, update_time, tel, mobile, addr, post_code, area_code , remark 
+		from OMS_STOR
+		where stor_id = #{value} AND deleted = 'n'
+  </select>
+  
+  <update id="updateLgst" parameterType="cn.rkylin.oms.system.logistics.vo.LogisticsVO" >
+    update OMS_STOR
+    set stor_name = #{storName,jdbcType=VARCHAR},
+      stor_code = #{storCode,jdbcType=VARCHAR},
+      prj_id = #{prjId,jdbcType=VARCHAR},
+      prj_name = #{prjName,jdbcType=VARCHAR},
+      update_time =  now(),
+      tel =  #{tel,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      addr = #{addr,jdbcType=VARCHAR},
+      post_code = #{postcode,jdbcType=VARCHAR},
+      area_code = #{areacode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}  
+    WHERE stor_id=#{storId} 
+  </update>
+  
+</mapper>

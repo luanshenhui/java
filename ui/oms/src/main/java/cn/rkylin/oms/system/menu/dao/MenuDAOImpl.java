@@ -1,0 +1,130 @@
+package cn.rkylin.oms.system.menu.dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.delegate.domain.WF_ORG_DELEGATE;
+import cn.rkylin.oms.system.menu.domain.WF_ORG_MENU;
+@Repository(value = "menuDAO")
+public class MenuDAOImpl implements IMenuDAO {
+	@Autowired
+	protected IDataBaseFactory dao;
+
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List getUserRolesIncludeDelegates(WF_ORG_MENU menuItemVO) throws SQLException, Exception  {
+		List roleIDList = new ArrayList();
+		Map roleIDTemp = new HashMap();
+		List list1 = new ArrayList();
+		// 1、取自己的角色（带权限排除）
+		list1=dao.findAllList("selectMenuPart1", menuItemVO);
+		for (int i = 0; i < list1.size(); i++) {
+			Map map = (Map) list1.get(i);
+			String str = map.get("ROLE_ID").toString();
+			if (!roleIDTemp.containsKey(str)) {
+				roleIDTemp.put(str, str);
+				roleIDList.add(str);
+			}
+		}
+		// 2、取自己的所有有效权限委托
+		List avialableDelegates = dao.findList("getUserAvailableDelegate",
+				menuItemVO.getUserID());
+		// 3、循环有效委托
+		for (int i = 0; i < avialableDelegates.size(); i++) {
+			WF_ORG_DELEGATE delegate = (WF_ORG_DELEGATE) avialableDelegates.get(i);
+			// 4、 [全部委托]取被委托的角色（全部）
+			if (delegate.getDeleAllPrivil().equals("1")) {
+				// 设置委托人的id
+				menuItemVO.setUserID(delegate.getUserId());
+				// 找委托人的全部角色、权限、组织、岗位
+				list1 = dao.findAllList("selectMenuPart1", menuItemVO);
+				for (int j = 0; j < list1.size(); j++) {
+					Map map = (Map) list1.get(j);
+					String str = map.get("ROLE_ID").toString();
+					if (!roleIDTemp.containsKey(str)) {
+						roleIDTemp.put(str, str);
+						roleIDList.add(str);
+					}
+				}
+			} else {
+				// 5、 [部分委托]取被委托的角色（部分）
+				// 设置委托人的id
+				menuItemVO.setUserID(delegate.getUserId());
+				// 找被委托的所有角色
+				list1 = dao.findList("getUserDelegatedRoles", menuItemVO.getUserID());
+				for (int j = 0; j < list1.size(); j++) {
+					Map map = (Map) list1.get(j);
+					String str = map.get("ROLE_ID").toString();
+					if (!roleIDTemp.containsKey(str)) {
+						roleIDTemp.put(str, str);
+						roleIDList.add(str);
+					}
+				}
+				menuItemVO.setUserIdTemp(roleIDList);
+			}
+		}
+		// 6、循环结束
+		return roleIDList;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public List getMenuItemsByCondition(WF_ORG_MENU menuItemVO, String expandAll) throws Exception {
+//		if (menuItemVO.getUserID() == null) {
+//			SecurityUser securityUser = SecurityUserHoder.getCurrentUser();
+//			menuItemVO.setUserID(securityUser.getUserBean().getId());
+//		}
+		// userID在使用过程中会被修改，所以要提前保存。
+		String oldUserID = menuItemVO.getUserID();
+		List returnList = new ArrayList();
+		if (expandAll.equals("1") || expandAll.equalsIgnoreCase("true")) {// 全部查询
+			List roleIDList = new ArrayList();
+			roleIDList = getUserRolesIncludeDelegates(menuItemVO);
+			// 根据自己具有 的所有角色、组织、岗位来取菜单
+			menuItemVO.setUserIdTemp(roleIDList);
+			menuItemVO.setUserID(oldUserID);
+//			returnList = getSqlMapClient().queryForList("WF_ORG_MENU.selectMenu", menuItemVO);
+			returnList = dao.findAllList("selectMenu", menuItemVO);
+		} else if (expandAll.equals("0") || expandAll.equalsIgnoreCase("false")) {// 部分查询
+			List roleIDList = new ArrayList();
+			roleIDList = getUserRolesIncludeDelegates(menuItemVO);
+			menuItemVO.setUserIdTemp(roleIDList);
+			menuItemVO.setUserID(oldUserID);
+//			returnList = getSqlMapClient().queryForList("WF_ORG_MENU.selectRootorSubMenu", menuItemVO);
+			returnList = dao.findAllList("selectRootorSubMenu", menuItemVO);
+		}	
+		return returnList;
+	}
+
+	@Override
+	public void updateMenuItem(WF_ORG_MENU menuItemVO) throws Exception {
+		// TODO Auto-generated method stub
+		dao.update("updateMenu", menuItemVO);
+	}
+
+	@Override
+	public void updatePageItem(WF_ORG_MENU menuItemVO) throws Exception {
+		// TODO Auto-generated method stub
+		dao.update("updateMenu", menuItemVO);
+	}
+
+	@Override
+	public void updatePageElement(WF_ORG_MENU menuItemVO) throws Exception {
+		// TODO Auto-generated method stub
+		dao.update("updateEle", menuItemVO);
+	}
+
+	@Override
+	public void insertMenuItem(WF_ORG_MENU menuItemVO) throws Exception {
+		// TODO Auto-generated method stub
+		dao.insert("inserttMenuItem", menuItemVO);
+	}
+
+}

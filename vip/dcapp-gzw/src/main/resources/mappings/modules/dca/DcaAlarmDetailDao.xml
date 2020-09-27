@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.alarm.dao.DcaAlarmDetailDao">
+
+	<sql id="dcaAlarmDetailColumns">
+		a.ALARM_DETAIL_ID AS "alarmDetailId",
+		a.BIZ_ROLE_ID AS
+		"bizRoleId",
+		a.POWER_ID AS "powerId",
+		a.RISK_ID AS "riskId",
+		a.BIZ_FLOW_ID AS "bizFlowId",
+		a.BIZ_FLOW_NAME AS "bizFlowName",
+		a.BIZ_OPER_PERSON AS "bizOperPerson",
+		a.BIZ_OPER_POST AS "bizOperPost",
+		a.BIZ_DATA_ID AS "bizDataId",
+		a.BIZ_DATA_NAME AS "bizDataName",
+		a.WF_ID AS "wfId",
+		a.TASK_ID AS "taskId",
+		a.TASK_NAME AS "taskName",
+		a.ALARM_LEVEL AS "alarmLevel",
+		a.ALARM_TYPE AS "alarmType",
+		a.CPU_RESULT AS "cpuResult",
+		a.ALARM_MSG AS "alarmMsg",
+		a.ALARM_TIME_1ST AS "alarmTime1st",
+		a.ALARM_STATUS AS "alarmStatus",
+		a.VISUAL_SCOPE AS "visualScope",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks"
+	</sql>
+
+	<sql id="dcaAlarmDetailColumnsForSelect">
+		a.ALARM_DETAIL_ID AS "alarmDetailId",
+		a.BIZ_ROLE_ID AS "bizRoleId",
+		a.POWER_ID AS "powerId",
+		a.RISK_ID AS "riskId",
+		a.BIZ_FLOW_ID AS "bizFlowId",
+		a.BIZ_FLOW_NAME AS "bizFlowName",
+		a.BIZ_OPER_PERSON AS "bizOperPerson",
+		a.BIZ_OPER_POST AS "bizOperPost",
+		b.NAME AS "bizOperPostName",
+		a.BIZ_DATA_ID AS "bizDataId",
+		a.BIZ_DATA_NAME AS "bizDataName",
+		a.WF_ID AS "wfId",
+		a.TASK_ID AS
+		"taskId",
+		a.TASK_NAME AS "taskName",
+		a.ALARM_LEVEL AS "alarmLevel",
+		a.ALARM_TYPE AS "alarmType",
+		a.CPU_RESULT AS "cpuResult",
+		a.ALARM_MSG AS
+		"alarmMsg",
+		a.ALARM_TIME_1ST AS "alarmTime1st",
+		a.ALARM_STATUS AS
+		"alarmStatus",
+		a.VISUAL_SCOPE AS "visualScope",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks"
+	</sql>
+
+	<sql id="dcaAlarmDetailJoins">
+	</sql>
+
+	<sql id="dcaAlarmDetailJoinsForSelect">
+		LEFT JOIN SYS_OFFICE b ON a.BIZ_OPER_POST = b.ID
+	</sql>
+
+	<select id="get" resultType="DcaAlarmDetail">
+		SELECT
+		<include refid="dcaAlarmDetailColumns" />
+		FROM DCA_ALARM_DETAIL a
+		<include refid="dcaAlarmDetailJoins" />
+		WHERE a.ALARM_DETAIL_ID = #{alarmDetailId}
+	</select>
+
+	<!-- 告警查询 -->
+	<select id="findList" resultType="DcaAlarmDetail">
+		SELECT
+		<include refid="dcaAlarmDetailColumnsForSelect" />
+		FROM DCA_ALARM_DETAIL a
+		<include refid="dcaAlarmDetailJoinsForSelect" />
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="idxDataType != null and idxDataType != ''">
+				AND SUBSTR(a.POWER_ID,0,2) = #{idxDataType}
+			</if>
+			<foreach collection="postList" item="item" index="index" open="AND (" separator="OR" close=")">
+				INSTR(a.VISUAL_SCOPE, #{item.roleId}) > 0
+			</foreach>
+			<if test="bizOperPost != null and bizOperPost != ''">
+				AND a.BIZ_OPER_POST = #{bizOperPost}
+			</if>
+			<if test="bizOperPerson != null and bizOperPerson != ''">
+				AND a.BIZ_OPER_PERSON LIKE
+				<if test="dbName == 'oracle'">'%'||#{bizOperPerson}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{bizOperPerson}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%',#{bizOperPerson},'%')</if>
+			</if>
+			<if test="alarmStatus != null and alarmStatus != '' and alarmStatus != 0">
+				AND a.ALARM_STATUS = #{alarmStatus}
+			</if>
+			<if test="alarmLevel != null and alarmLevel != ''">
+				AND a.ALARM_LEVEL = #{alarmLevel}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DcaAlarmDetail">
+		SELECT
+		<include refid="dcaAlarmDetailColumns" />
+		FROM DCA_ALARM_DETAIL a
+		<include refid="dcaAlarmDetailJoins" />
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO DCA_ALARM_DETAIL(
+		ALARM_DETAIL_ID,
+		BIZ_ROLE_ID,
+		POWER_ID,
+		RISK_ID,
+		BIZ_FLOW_ID,
+		BIZ_FLOW_NAME,
+		BIZ_OPER_PERSON,
+		BIZ_OPER_POST,
+		BIZ_DATA_ID,
+		BIZ_DATA_NAME,
+		WF_ID,
+		TASK_ID,
+		TASK_NAME,
+		ALARM_LEVEL,
+		ALARM_TYPE,
+		CPU_RESULT,
+		ALARM_MSG,
+		ALARM_TIME_1ST,
+		ALARM_STATUS,
+		VISUAL_SCOPE,
+		DEL_FLAG,
+		CREATE_PERSON,
+		CREATE_DATE,
+		UPDATE_PERSON,
+		UPDATE_DATE,
+		REMARKS
+		) VALUES (
+		#{alarmDetailId},
+		#{bizRoleId},
+		#{powerId},
+		#{riskId},
+		#{bizFlowId},
+		#{bizFlowName},
+		#{bizOperPerson},
+		#{bizOperPost},
+		#{bizDataId},
+		#{bizDataName},
+		#{wfId},
+		#{taskId},
+		#{taskName},
+		#{alarmLevel},
+		#{alarmType},
+		#{cpuResult},
+		#{alarmMsg},
+		#{alarmTime1st},
+		#{alarmStatus},
+		#{visualScope},
+		#{delFlag},
+		#{createPerson},
+		#{createDate},
+		#{updatePerson},
+		#{updateDate},
+		#{remarks}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE DCA_ALARM_DETAIL SET
+		ALARM_DETAIL_ID = #{alarmDetailId},
+		BIZ_ROLE_ID = #{bizRoleId},
+		POWER_ID = #{powerId},
+		RISK_ID = #{riskId},
+		BIZ_FLOW_ID = #{bizFlowId},
+		BIZ_FLOW_NAME = #{bizFlowName},
+		BIZ_OPER_PERSON = #{bizOperPerson},
+		BIZ_OPER_POST = #{bizOperPost},
+		BIZ_DATA_ID = #{bizDataId},
+		BIZ_DATA_NAME = #{bizDataName},
+		WF_ID = #{wfId},
+		TASK_ID = #{taskId},
+		TASK_NAME = #{taskName},
+		ALARM_LEVEL = #{alarmLevel},
+		ALARM_TYPE = #{alarmType},
+		CPU_RESULT = #{cpuResult},
+		ALARM_MSG = #{alarmMsg},
+		ALARM_TIME_1ST = #{alarmTime1st},
+		ALARM_STATUS = #{alarmStatus},
+		VISUAL_SCOPE = #{visualScope},
+		CREATE_PERSON = #{createPerson},
+		UPDATE_PERSON = #{updatePerson},
+		UPDATE_DATE = #{updateDate},
+		REMARKS = #{remarks}
+		WHERE ALARM_DETAIL_ID = #{alarmDetailId}
+	</update>
+
+	<update id="delete">
+		UPDATE DCA_ALARM_DETAIL SET
+		DEL_FLAG = #{DEL_FLAG_DELETE}
+		WHERE ALARM_DETAIL_ID = #{alarmDetailId}
+	</update>
+
+	<select id="getAlarmDetailListByUpGrade" resultType="DcaAlarmDetail">
+		SELECT
+		<include refid="dcaAlarmDetailColumns" />
+		FROM DCA_ALARM_DETAIL a
+		WHERE a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		AND a.POWER_ID = #{powerId}
+		AND a.BIZ_ROLE_ID = #{bizRoleId}
+		AND a.ALARM_LEVEL = #{alarmLevel}
+	</select>
+
+	<!-- 告警风险统计(权力):汇总统计 add by geshuo 20161206 -->
+	<select id="findARStatDataForPower" parameterType="DcaAlarmDetail"
+			resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaARStatForPowerEntity">
+		SELECT s.value AS powerId,
+		s.label ,
+		Nvl(a.workCount,0) workCount,
+		Nvl(b.alarmCount,0) alarmCount,
+		Nvl(c.riskCount,0) riskCount
+		FROM SYS_DICT s
+		LEFT JOIN (
+		SELECT SUBSTR(POWER_ID, 0, 2) AS power_id, COUNT (1) AS workCount
+		FROM DCA_WORKFLOW
+		GROUP BY SUBSTR(POWER_ID, 0, 2)
+		) a ON SUBSTR(a.power_id, 0, 2) = s.value
+		LEFT JOIN (
+		SELECT SUBSTR(POWER_ID, 0, 2) AS power_id, COUNT (1) AS alarmCount
+		FROM DCA_ALARM_DETAIL
+		GROUP BY SUBSTR(POWER_ID, 0, 2)
+		) b ON SUBSTR(b.power_id, 0, 2) = s.value
+		LEFT JOIN (
+		SELECT SUBSTR(POWER_ID, 0, 2) AS power_id, COUNT (1) AS riskCount
+		FROM DCA_RISK_MANAGE
+		GROUP BY SUBSTR(POWER_ID, 0, 2)
+		) c ON SUBSTR(c.power_id, 0, 2) = s.value
+		WHERE s.type = 'szyd_class'
+		<if test="idxDataType != null and idxDataType != ''">
+			AND SUBSTR(s.value, 0, 2) = #{idxDataType}
+		</if>
+		ORDER BY s.value
+	</select>
+
+	<!-- 告警统计报表 告警级别:2-黄色 3-橙色 4-红色 add by geshuo 20161207 -->
+	<select id="findAlarmStatData" resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaAlarmStatEntity">
+		SELECT BIZ_FLOW_NAME,BIZ_DATA_NAME,
+		SUM(DECODE(ALARM_LEVEL,2,1,0)) yellowCount,
+		SUM(DECODE(ALARM_LEVEL,3,1,0)) orangeCount,
+		SUM(DECODE(ALARM_LEVEL,4,1,0)) redCount,
+		COUNT(ALARM_LEVEL) totalCount
+		FROM DCA_ALARM_DETAIL
+		<include refid="alarm_stat_conditions"></include>
+		<if test="year != null and year != -999">
+			AND EXTRACT(year FROM UPDATE_DATE) = #{year}
+		</if>
+		<if test="bizOperPerson != null and bizOperPerson != '-999'">
+			AND BIZ_OPER_PERSON = #{bizOperPerson}
+		</if>
+		<if test="bizOperPost != null and bizOperPost != '-999'">
+			AND BIZ_OPER_POST = #{bizOperPost}
+		</if>
+		<if test="idxDataType != null and idxDataType != ''">
+			AND SUBSTR(POWER_ID, 0, 2) = #{idxDataType}
+		</if>
+		GROUP BY BIZ_FLOW_ID,BIZ_FLOW_NAME,BIZ_DATA_ID,BIZ_DATA_NAME
+		ORDER BY BIZ_FLOW_ID, BIZ_DATA_ID
+	</select>
+
+	<!-- 获取告警数据年份 add by geshuo 20161208 -->
+	<select id="findAlarmYear" resultType="Integer">
+		SELECT EXTRACT(year FROM UPDATE_DATE) year
+		FROM DCA_ALARM_DETAIL
+		<include refid="alarm_stat_conditions"></include>
+		<if test="bizOperPerson != null and bizOperPerson != '-999'">
+			AND BIZ_OPER_PERSON = #{bizOperPerson}
+		</if>
+		<if test="bizOperPost != null and bizOperPost != '-999'">
+			AND BIZ_OPER_POST = #{bizOperPost}
+		</if>
+		GROUP BY EXTRACT(year FROM UPDATE_DATE)
+		ORDER BY year DESC
+	</select>
+
+	<!-- 获取操作人信息 add by geshuo 20161208 -->
+	<select id="findOperPerson" resultType="com.thinkgem.jeesite.modules.sys.entity.User">
+		SELECT U.ID,U.NAME
+		FROM (  SELECT BIZ_OPER_PERSON
+		FROM DCA_ALARM_DETAIL
+		<include refid="alarm_stat_conditions"></include>
+		<if test="year != null and year != -999">
+			AND EXTRACT(year FROM UPDATE_DATE) = #{year}
+		</if>
+		<if test="bizOperPost != null and bizOperPost != '-999'">
+			AND BIZ_OPER_POST = #{bizOperPost}
+		</if>
+		GROUP BY BIZ_OPER_PERSON
+		ORDER BY BIZ_OPER_PERSON) a
+		LEFT JOIN SYS_USER u ON a.BIZ_OPER_PERSON = u.ID
+	</select>
+
+	<!-- 获取操作人所属部门信息 add by geshuo 20161208 -->
+	<select id="findOperOffice" resultType="com.thinkgem.jeesite.modules.sys.entity.Office">
+		SELECT o.ID,o.NAME
+		FROM (  SELECT BIZ_OPER_POST
+		FROM DCA_ALARM_DETAIL
+		<include refid="alarm_stat_conditions"></include>
+		<if test="year != null and year != -999">
+			AND EXTRACT(year FROM UPDATE_DATE) = #{year}
+		</if>
+		<if test="bizOperPerson != null and bizOperPerson != '-999'">
+			AND BIZ_OPER_PERSON = #{bizOperPerson}
+		</if>
+		GROUP BY BIZ_OPER_POST
+		ORDER BY BIZ_OPER_POST) a
+		LEFT JOIN SYS_OFFICE o ON o.ID = a.BIZ_OPER_POST
+	</select>
+
+	<!-- 告警统计查询条件 -->
+	<sql id="alarm_stat_conditions">
+		<where>
+			DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<foreach collection="postList" item="item" index="index"
+					 open="AND (" separator="OR" close=")">
+				INSTR(VISUAL_SCOPE, #{item.roleId}) > 0
+			</foreach>
+		</where>
+	</sql>
+
+	<!-- 得到告警查询信息表数据 -->
+	<select id="findAlarmMsgTable" resultType="DcaReportAlarmMsg">
+		SELECT
+		row_number() over (order by t.BIZ_FLOW_ID ASC) AS NO,
+		t.BIZ_FLOW_NAME as flowName,
+		t.BIZ_OPER_PERSON as operPerson,
+		F."NAME" as operPost,
+		t.BIZ_DATA_NAME as dataName,
+		L.LABEL as alarmLevel,
+		S.LABEL as alarmStatus,
+		t.ALARM_MSG as alarmMsg
+
+		FROM DCA_ALARM_DETAIL t, SYS_OFFICE F,
+		( SELECT LABEL,"VALUE" FROM SYS_DICT  WHERE "TYPE" = 'alarm_level' ) L,
+		( SELECT LABEL,"VALUE" FROM SYS_DICT WHERE "TYPE"='alarm_status' ) S
+
+		WHERE t.DEL_FLAG=0
+		<foreach collection="postList" item="item" index="index"
+				 open="AND (" separator="OR" close=")">
+			INSTR(t.VISUAL_SCOPE, #{item.roleId}) > 0
+		</foreach>
+		<if test="idxDataType != null and idxDataType != ''">
+			AND SUBSTR(t.POWER_ID, 0, 2) = #{idxDataType}
+		</if>
+		AND S."VALUE" = t.ALARM_STATUS AND L."VALUE" = t.ALARM_LEVEL
+		AND F."ID" = t.BIZ_OPER_POST
+
+	</select>
+
+	<!-- 获取告警信息相关分类数量（首页使用） add by liuc 20161223 -->
+	<select id="getAlarmDetailCountForHomePage"  resultType="java.lang.Integer">
+		SELECT COUNT(ALARM_STATUS) as count
+		FROM DCA_ALARM_DETAIL
+		WHERE DEL_FLAG = #{DEL_FLAG_NORMAL}
+		AND ALARM_LEVEL = #{alarmLevel}
+		<if test="alarmStatus != null and alarmStatus != ''">
+			AND ALARM_STATUS = #{alarmStatus}
+		</if>
+		<if test="powerId != null and powerId != ''">
+			AND POWER_ID = #{powerId}
+		</if>
+		<if test="updateDate != null and updateDate != ''">
+			AND
+			TRUNC(UPDATE_DATE,'mi') <![CDATA[ <= ]]> #{updateDate}
+		</if>
+	</select>
+
+	<!-- 获取告警和风险项 -->
+	<select id="getAlarmAndRisk" resultType="com.hepowdhc.dcapp.modules.alarm.entity.DcaAlarmDetail">
+		SELECT u.NAME AS operPersonName,t.BIZ_OPER_PERSON AS bizOperPerson,t.ALARM_LEVEL AS alarmLevel,t.UPDATE_DATE AS updateDate,t.TYPE AS type FROM
+		(SELECT BIZ_OPER_PERSON,ALARM_LEVEL,UPDATE_DATE,TYPE FROM
+		(SELECT BIZ_OPER_PERSON,ALARM_LEVEL,ALARM_TIME_1ST AS UPDATE_DATE,1 AS TYPE
+		FROM DCA_ALARM_DETAIL
+		WHERE DEL_FLAG = '0'
+		<if test="powerId != null and powerId != ''">
+			AND POWER_ID = #{powerId}
+		</if>
+		<if test="updateDate != null and updateDate != ''">
+			AND
+			TRUNC(UPDATE_DATE,'mi') <![CDATA[ <= ]]> #{updateDate}
+		</if>
+		UNION
+		SELECT BIZ_OPER_PERSON,ALARM_LEVEL,CREATE_DATE AS UPDATE_DATE,2 AS TYPE
+		FROM DCA_RISK_MANAGE
+		WHERE DEL_FLAG = '0'
+		<if test="powerId != null and powerId != ''">
+			AND POWER_ID = #{powerId}
+		</if>
+		<if test="updateDate != null and updateDate != ''">
+			AND
+			TRUNC(UPDATE_DATE,'mi') <![CDATA[ <= ]]> #{updateDate}
+		</if>
+		) m
+		ORDER BY m.UPDATE_DATE DESC) t
+		LEFT JOIN SYS_USER u on t.BIZ_OPER_PERSON = u.ID
+		WHERE rownum <![CDATA[ <= ]]> 20
+		ORDER BY t.UPDATE_DATE DESC
+	</select>
+
+	<!-- 根据节点名称统计告警数量  add by geshuo 20160105 -->
+	<select id="getAlarmCountByTaskName" resultType="DcaSimpleCountEntity">
+		SELECT
+		TASK_NAME AS name,
+		COUNT(1) AS count
+		FROM DCA_ALARM_DETAIL
+		WHERE DEL_FLAG = 0
+		<if test="list != null">
+			AND TASK_NAME IN
+			<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		GROUP BY TASK_NAME
+	</select>
+
+	<select id="getAlarmQuarterData" resultType="DcaAlarmDetail">
+		SELECT '1' as Quarter,COUNT(*) alarmNumber
+		FROM DCA_ALARM_DETAIL
+		WHERE TO_CHAR(ALARM_TIME_1ST,'mm')<![CDATA[ >= ]]>1
+		AND 3<![CDATA[ >= ]]>TO_CHAR(ALARM_TIME_1ST,'mm')
+		AND TO_CHAR(ALARM_TIME_1ST,'yy') = TO_CHAR(SYSDATE,'yy')
+		UNION
+		SELECT '2' as Quarter, COUNT(*) alarmNumber
+		FROM DCA_ALARM_DETAIL
+		WHERE TO_CHAR(ALARM_TIME_1ST,'mm')<![CDATA[ > ]]>3
+		AND 6<![CDATA[ >= ]]>TO_CHAR(ALARM_TIME_1ST,'mm')
+		AND TO_CHAR(ALARM_TIME_1ST,'yy') = TO_CHAR(SYSDATE,'yy')
+		UNION
+		SELECT '3' as Quarter,COUNT(*) alarmNumber
+		FROM DCA_ALARM_DETAIL
+		WHERE TO_CHAR(ALARM_TIME_1ST,'mm')<![CDATA[ > ]]>6
+		AND 9<![CDATA[ >= ]]>TO_CHAR(ALARM_TIME_1ST,'mm')
+		AND TO_CHAR(ALARM_TIME_1ST,'yy') = TO_CHAR(SYSDATE,'yy')
+		UNION
+		SELECT '4' as quarter, COUNT(*) alarmNumber
+		FROM DCA_ALARM_DETAIL
+		WHERE TO_CHAR(ALARM_TIME_1ST,'mm')<![CDATA[ > ]]>9
+		AND 12<![CDATA[ >= ]]>TO_CHAR(ALARM_TIME_1ST,'mm')
+		AND TO_CHAR(ALARM_TIME_1ST,'yy') = TO_CHAR(SYSDATE,'yy')
+		ORDER BY Quarter
+	</select>
+
+	<!-- 统计节点风险数据详细 add by geshuo  -->
+	<select id="getNodeAlarmDetail" parameterType="Map" resultType="DcaAlarmTypeCountEntity">
+		SELECT
+		'1' as ALARM_TYPE,
+		"NVL"(COUNT(1), '0') AS count
+		FROM DCA_ALARM_DETAIL
+		WHERE SUBSTR(POWER_ID, 0, 2)=#{powerId}
+		AND TASK_NAME=#{taskName}
+		AND ALARM_TYPE = '1'
+		UNION
+		SELECT
+		'2' as ALARM_TYPE,
+		"NVL"(COUNT(1), '0') AS count
+		FROM DCA_ALARM_DETAIL
+		WHERE SUBSTR(POWER_ID, 0, 2)=#{powerId}
+		AND TASK_NAME=#{taskName}
+		AND ALARM_TYPE = '2'
+		UNION
+		SELECT
+		'3' as ALARM_TYPE,
+		"NVL"(COUNT(1), '0') AS count
+		FROM DCA_ALARM_DETAIL
+		WHERE SUBSTR(POWER_ID, 0, 2)=#{powerId}
+		AND TASK_NAME=#{taskName}
+		AND ALARM_TYPE = '3'
+		UNION
+		SELECT
+		'4' as ALARM_TYPE,
+		"NVL"(COUNT(1), '0') AS count
+		FROM DCA_ALARM_DETAIL
+		WHERE SUBSTR(POWER_ID, 0, 2)=#{powerId}
+		AND TASK_NAME=#{taskName}
+		AND ALARM_TYPE = '4'
+	</select>
+
+
+</mapper>

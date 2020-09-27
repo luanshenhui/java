@@ -1,0 +1,73 @@
+{{#component "activitys-statistics js-component"}}
+    <p class="components-title"><strong>- 活动统计 -</strong></p>
+    <div class="tab-contents">
+        <form class="form item-form-search form-inline">
+            <fieldset>
+                <p class="filter-name">
+                    <span class="span4 span-large">
+                        <label for="itemCode">单品编码:</label>
+                        <input name="itemCode" id="itemCode" type="text" class="form-control" value="{{itemCode}}" />
+                    </span>
+                    <span class="span5 span-large">
+                        <label for="itemName">商品名称:</label>
+                        <input name="itemName" id="itemName" type="text" class="form-control" value="{{itemName}}" />
+                    </span>
+                    <span class="span5 span-large" style="display: none">
+                        <input name="promId" id="promId" type="text" class="form-control"/>
+                    </span>
+                </p>
+                <p class="filter-name">
+                    <input class="btn btn-success btn-small pull-right margin-right-10" type="submit" value="搜索"/>
+                </p>
+            </fieldset>
+        </form>
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="7%">活动编号</th>
+            <th width="10%">活动简称</th>
+            <th width="8%">活动类型</th>
+            <th width="10%">活动发起者</th>
+            <th width="10%">单品编码</th>
+            <th width="20%">商品名称</th>
+            <th width="10%">活动时间</th>
+            <th width="10%">活动状态</th>
+            <th width="5%">库存</th>
+            <th width="10%">销量</th>
+        </tr>
+        </thead>
+        <tbody data-url="{{_HREF_.main}}">
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                <td class="activity-id">{{id}}</td>
+                <td class="activity-name" style="cursor: pointer">{{shortName}}</td>
+                <td class="goods-name">
+                    {{#equals promType "10"}}折扣{{/equals}}
+                    {{#equals promType "20"}}满减{{/equals}}
+                    {{#equals promType "30"}}秒杀{{/equals}}
+                    {{#equals promType "40"}}团购{{/equals}}
+                    {{#equals promType "50"}}荷兰拍{{/equals}}
+                </td>
+                <td class="supplier-name">
+                    {{#equals createOperType "0"}}
+                        内管平台
+                    {{else}}
+                        供应商平台
+                    {{/equals}}
+                </td>
+                <td class="activity-beginTime">{{selectCode}}</td>
+                <td class="activity-item" style="cursor: pointer">{{selectName}}</td>
+                <td class="activity-sale">{{#formatDate beginDate}}{{/formatDate}}
+                    -{{#formatDate endDate}}{{/formatDate}}</td>
+                <td class="activity-endTime">已结束</td>
+                <td>{{stock}}</td>
+                <td class="activity-endTime">{{saleCount}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="pagination" data-total="{{_DATA_.total}}">
+    </div>
+{{/component}}

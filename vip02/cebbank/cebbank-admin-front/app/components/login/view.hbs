@@ -1,0 +1,37 @@
+{{#component "login content-login js-component"}}
+    <script src="/static/scripts/encrypt/pwdObject_.js"></script>
+
+    <div class=""><i class="icon-login-img2"></i></div>
+    <div class="login-box-warp">
+        <form class="form-user-login form form-aligned" id="login">
+            <div class="login-title">请登录</div>
+            <div class="login-form">
+                <input type="hidden" name="type" value="3" id="login-type">
+                <div class="control-group">
+                    <label for="userName">用户名:</label>
+                    <input type="text" id="userName" name="userName" value="" class="control-group login" placeholder="请输入用户名" maxlength="30">
+                </div>
+                <div class="control-group password-div" >
+                    <label for="password">密 码:</label>
+                    <script type="text/javascript">
+                        createPwdObjectNew("login-password","230","38","8","12","E","221|212");
+                    </script>
+                    <label class="password-label"><i class="icon-login-pa"></i></label>
+                </div>
+                <div class="control-group">
+                    <label for="code">验证码:</label>
+                    <input id="code" type="text" name="code" placeholder="验证码" class="login" maxlength="4" style="width:80px;">
+                    <span><img src="" class="login-img" width="108px" height="35px"/><a
+                            class="js-img-change" href="javascript:void(0);">换一张</a>
+                        </span>
+                </div>
+                <div class="control-group">
+                    <label for=""></label>
+                    <input type="submit" class="btn btn-success login-btn login-btn-admin" value="登 录">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="clear:both;"></div>
+{{/component}}
+

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SQL.RC">
+	<select id="selectList" parameterType="com.lsh.dlrc.domain.RcDomain" resultType="com.lsh.dlrc.domain.RcDomain">
+		select * from dl_nv t
+		where t.del='1'
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="tel != null and tel != ''" >
+			and t.tel like CONCAT('%', #{tel}, '%')  
+		</if>
+		<if test="address != null and address != ''" >
+			and t.address like CONCAT('%', #{address}, '%')  
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="sex != null and sex != ''" >
+			and t.sex like CONCAT('%', #{sex}, '%')  
+		</if>
+		<if test="sch != null and sch != ''" >
+			and t.sch like CONCAT('%', #{sch}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+		<if test="emil != null and emil != ''" >
+			and t.emil like CONCAT('%', #{emil}, '%')  
+		</if>
+		order by t.borth desc
+		LIMIT 1,1000 
+	</select>
+	
+	<select id="selectCount" parameterType="com.lsh.dlrc.domain.RcDomain" resultType="java.lang.Integer">
+		select count(*) from dl_nv t
+		where t.del='1'
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="tel != null and tel != ''" >
+			and t.tel like CONCAT('%', #{tel}, '%')  
+		</if>
+		<if test="address != null and address != ''" >
+			and t.address like CONCAT('%', #{address}, '%')  
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="sex != null and sex != ''" >
+			and t.sex like CONCAT('%', #{sex}, '%')  
+		</if>
+		<if test="sch != null and sch != ''" >
+			and t.sch like CONCAT('%', #{sch}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+		<if test="emil != null and emil != ''" >
+			and t.emil like CONCAT('%', #{emil}, '%')  
+		</if>
+	</select>
+	
+	<select id="selectListPage" parameterType="com.lsh.dlrc.domain.RcDomain" resultType="com.lsh.dlrc.domain.RcDomain">
+		select * from dl_nv t
+		where t.del='1'
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="tel != null and tel != ''" >
+			and t.tel like CONCAT('%', #{tel}, '%')  
+		</if>
+		<if test="address != null and address != ''" >
+			and t.address like CONCAT('%', #{address}, '%')  
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="sex != null and sex != ''" >
+			and t.sex like CONCAT('%', #{sex}, '%')  
+		</if>
+		<if test="sch != null and sch != ''" >
+			and t.sch like CONCAT('%', #{sch}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+		<if test="emil != null and emil != ''" >
+			and t.emil like CONCAT('%', #{emil}, '%')  
+		</if>
+		order by t.borth desc
+		LIMIT #{beginPage},#{endPage}
+	</select>
+	
+	<select id="selectUserListPage" parameterType="com.lsh.dlrc.domain.User" resultType="com.lsh.dlrc.domain.User">
+		select 
+		  t.id,
+		  t.phone,
+		  t.midetel,
+		  t.xl,
+		  t.borth,
+		  t.name,
+		  t.personName,
+		  t.age,
+		  t.city,
+		  t.hukou,
+		  t.tel,
+		  t.content,
+		  t.zt
+		from users t
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="phone != null and phone != ''" >
+			and t.phone like CONCAT('%', #{phone}, '%')  
+		</if>
+		<if test="zt != null and zt != ''" >
+			and t.zt =#{zt} 
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+		order by t.id,t.borth desc
+		LIMIT #{beginPage},#{endPage}
+	</select>
+	
+	<select id="selectUserCount" parameterType="com.lsh.dlrc.domain.User" resultType="java.lang.Integer">
+		select count(*) from users t
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="phone != null and phone != ''" >
+			and t.phone like CONCAT('%', #{phone}, '%')  
+		</if>
+		<if test="zt != null and zt != ''" >
+			and t.zt =#{zt} 
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+	</select>
+	
+	<select id="selectOneUser" parameterType="com.lsh.dlrc.domain.User" resultType="com.lsh.dlrc.domain.User">
+		select * from users t where t.id=#{id}
+	</select>
+    
+    <update id="updateDomain" parameterType="com.lsh.dlrc.domain.RcDomain">
+    	 UPDATE dl_nv
+       <set>
+       		del = #{del}
+       </set>
+        WHERE tel = #{tel}
+    </update>
+    
+    <update id="updateUser" parameterType="com.lsh.dlrc.domain.User">
+    	 UPDATE users
+       <set>
+       		zt = #{zt}
+       </set>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="updateUserOne" parameterType="com.lsh.dlrc.domain.User">
+    	 UPDATE users
+       <set>
+          <if test="tel != null and tel != ''">tel = #{tel},</if>
+          <if test="xl != null and xl != ''">xl = #{xl},</if>
+          <if test="borth != null and borth != ''">borth = #{borth},</if>
+          <if test="name != null and name != ''">name = #{name},</if>
+          <if test="personName != null and personName != ''">personName = #{personName},</if>
+          <if test="age != null and age != ''">age = #{age},</if>
+          <if test="city != null and city != ''">city = #{city},</if>
+          <if test="hukou != null and hukou != ''">hukou = #{hukou},</if>
+          <if test="phone != null and phone != ''">phone = #{phone},</if>
+          id = #{id}
+       </set>
+        WHERE id = #{id}
+    </update>
+    
+    <insert id="insertDomain"  useGeneratedKeys="true" keyProperty="name"  parameterType="com.lsh.dlrc.domain.RcDomain">
+<!--     	<selectKey keyProperty="name" order="BEFORE" resultType="String"> -->
+<!--             select CreateGUID() as doc_id from DUAL -->
+<!--         </selectKey> -->
+	    insert into dl_nv
+	    	(
+	    	tel,xl,sch,name,sex,age
+	    	)
+	    values 
+			(
+			#{tel},
+			#{xl},
+			#{sch},
+			<choose>
+				<when test="name != null and name != ''">
+					#{name},
+				</when>
+				<otherwise> 
+ 					'auto',
+ 				</otherwise> 
+			</choose>
+			#{sex},
+			#{age}
+			)
+    
+    </insert>
+    
+       <insert id="insertUser"  useGeneratedKeys="true" keyProperty="name"  parameterType="com.lsh.dlrc.domain.User">
+	    insert into users
+	    	(
+	    	 name,      
+	    	 tel,      
+	    	 xl,       
+	    	 midetel,  
+	    	 borth,    
+	    	 age,      
+	    	 personName,
+	    	 hukou,     
+	    	 city      
+	    	)
+	    values 
+			(
+			#{name},
+			#{tel},
+			#{xl},
+			#{midetel},
+			#{borth},
+			#{age},
+			#{personName},
+			#{hukou},
+			#{city}
+			)
+    
+    </insert>
+</mapper>

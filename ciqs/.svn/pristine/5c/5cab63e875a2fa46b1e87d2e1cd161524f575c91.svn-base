@@ -1,0 +1,45 @@
+package com.dpn.ciqqlc.task;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.dpn.ciqqlc.common.util.CacheMap;
+import com.dpn.ciqqlc.standard.service.TgoodsService;
+import com.dpn.ciqqlc.webclient.good.soapXml;
+
+@Component("origGoodsTask")
+public class OrigGoods {
+
+	public static final String orig_good = "orig_good";
+	@Autowired
+	private TgoodsService tgoodsService;
+
+//	@Scheduled(cron = "0/59 * * * * ?")
+	@Scheduled(cron = "0 0 6 * * ?")
+	public void addOrigGood() {
+		
+		Object sid = CacheMap.get(orig_good);
+		
+		if(sid == null){
+			String m_strSessionID = soapXml.fetchInitial();
+			soapXml.fetchUserLogin(m_strSessionID);
+			CacheMap.put(orig_good, m_strSessionID, 1);
+			sid = m_strSessionID;
+		}
+		tgoodsService.addGoodByWebClient(sid.toString());
+    } 
+	
+	@Scheduled(cron = "0 0 12 * * ?")
+	public void editOrigGood(){
+		
+		Object sid = CacheMap.get(orig_good);
+		if(sid == null){
+			String m_strSessionID = soapXml.fetchInitial();
+			soapXml.fetchUserLogin(m_strSessionID);
+			CacheMap.put(orig_good, m_strSessionID, 1);
+			sid = m_strSessionID;
+		}
+		tgoodsService.updateGoodByWebClient(sid.toString());
+	}
+}

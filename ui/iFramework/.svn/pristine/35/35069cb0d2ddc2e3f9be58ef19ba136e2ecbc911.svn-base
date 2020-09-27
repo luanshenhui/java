@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+	<global-forwards>
+		<forward name="failure" path="/../view/base/error/Error.jsp"
+			redirect="false" />
+		<forward name="unknown-error" path="/../view/base/error/Error.jsp" />
+		<forward name="unpermitted-character" path="/view/base/error/IllegalArgumentException.jsp"/>		
+	</global-forwards>
+	<action-mappings>
+		<action
+			type="com.dhc.base.security.action.iFrameworkMainAction"
+			parameter="method" scope="request" path="/MainAction">
+			<forward name="success" path="/view/mainframe/index.jsp" />
+			<forward name="failure" path="/login.jsp" />
+		</action>
+	</action-mappings>
+	
+</struts-config>

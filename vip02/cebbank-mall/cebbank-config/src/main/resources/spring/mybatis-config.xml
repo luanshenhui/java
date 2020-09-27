@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="com.cebbank.ccis.cebmall.user.model.UserInfoModel" alias="UserInfoModel"/>
+        <typeAlias type="com.cebbank.ccis.cebmall.user.model.Address" alias="Address"/>
+        <typeAlias type="com.cebbank.ccis.cebmall.user.model.UserImage" alias="UserImage"/>
+        <typeAlias type="com.cebbank.ccis.cebmall.user.model.TblParametersModel" alias="TblParametersModel"/>
+        <typeAlias type="com.cebbank.ccis.cebmall.user.model.ServicePromiseModel" alias="ServicePromiseModel"/>
+        <typeAlias type="com.cebbank.ccis.cebmall.user.model.EspAdvertiseModel" alias="EspAdvertiseModel"/>
+    </typeAliases>
+</configuration>

@@ -1,0 +1,175 @@
+var messageTable;
+var btnAdvSearchflg= false;
+$(function() {
+	$.extend($.validator.defaults, {ignore : ""}); // 隐藏控件也校验，去掉此行不验证隐藏控件
+	// 初始化表格控件
+
+	
+	
+	messageTable = $('#messageTable').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "dom": '<"bottom"rtflp>',
+        "searching": false,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+        "ajax": {
+            "url": "/messageDefine/messageDefineList.action",
+            "data": function ( d ) {
+                     d.quickSearch = encodeURI($('#quickSearch').val());
+            }
+        },
+        "tableTools": {
+            "sRowSelect": "bootstrap"
+        },
+        "columns": [ {
+                "data": "msgCode"
+            }, {
+                "data": "msgName"
+            }, {
+                "data": "enabled"
+            }, {
+                "data": "title"
+            }, {
+                "data": "sendWay"
+            }, {
+                "data": "operation"
+            }
+        ],
+        "columnDefs": [{
+                "orderable":false,
+                "targets":[2]
+            },{
+                "orderable":false,
+                "targets":[3]
+            },{
+                "orderable":false,
+                "targets":[4]
+            },{
+                "orderable":false,
+                "targets":[5]
+            }
+        ],
+        "order": [[ 0, "desc" ],[ 1, "desc" ],[ 3, "desc" ]]
+    });
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	$("#advSearchPanel").click(function () {
+	    btnAdvSearchflg = true;
+	});
+	
+	//高级查询按钮
+	$("#advSearchSubmit").click(function () {
+	    setHidValue("frmAdvSearch");
+	    logTable.draw();
+	    $("#advSearchPanel").hide();
+	    $("#btnAdvSearch").children("i:eq(0)").removeClass("fa-angle-double-up");
+	    $("#btnAdvSearch").children("i:eq(0)").addClass("fa-angle-double-down");
+	});
+
+	//高级查询隐藏
+	$("#advSearchPanel").hide();
+	$("#btnAdvSearch").click(function () {
+		btnAdvSearchflg = true;
+		if ($("#advSearchPanel").is(":hidden")) {
+			$("#advSearchPanel").show();
+			$(this).children("i:eq(0)").removeClass("fa-angle-double-down");
+			$(this).children("i:eq(0)").addClass("fa-angle-double-up");
+		} else {
+			$("#advSearchPanel").hide();
+			$(this).children("i:eq(0)").removeClass("fa-angle-double-up");
+			$(this).children("i:eq(0)").addClass("fa-angle-double-down");
+		}
+	});
+
+
+	$("body").click(function(e){ 
+	    if(btnAdvSearchflg==true){
+	        btnAdvSearchflg = false;
+	    } else {
+	        $("#advSearchPanel").hide();
+	        $("#btnAdvSearch").children("i:eq(0)").removeClass("fa-angle-double-up");
+	        $("#btnAdvSearch").children("i:eq(0)").addClass("fa-angle-double-down");    
+	    }
+	});
+	
+	$("#FrameMessage").on('hide.bs.modal',function(){
+		window.top.window.returnCustomModalDialog();
+    });
+	
+	$("#FrameShop").on('hide.bs.modal', function() {
+	    window.top.window.returnCustomModalDialog();
+	    window.top.window.borrowCustomModalDialog($("#FrameMessage"));
+	});
+	$("#FrameTempe").on('hide.bs.modal', function() {
+		window.top.window.top.window.returnCustomModalDialog();
+		window.top.window.borrowCustomModalDialog($("#FrameShop"));
+	});
+	
+	$("#addMessagePage").click(function(){
+		addMessagePage();
+	});
+	$("#btnMessageAdd").click(function(){
+		btnMessageAdd();
+	});
+	$("#btnTempeAdd").click(function(){
+		btnTempeAdd();
+	});
+	$("#open").click(function(){
+		$(this).css("background-color","#e74c3c")
+		window.top.window.$("#stop").css("background-color","white")
+		window.top.window.$("#openOrStop").val(1)
+	});
+	$("#stop").click(function(){
+		$(this).css("background-color","#e74c3c")
+		window.top.window.$("#open").css("background-color","white")
+		window.top.window.$("#openOrStop").val(2)
+	});
+	
+	// 快速搜索，点击时提交表格刷新内容
+    $("#btnQuickSearch").click(function () {
+    	
+    });
+	
+	
+	$('#quickSearch').keydown(function(e){
+		if(e.keyCode==13){
+			$("#btnQuickSearch").click();
+		}
+	});	
+	
+});
+
+function addMessagePage(){
+	var editDialog = window.top.window.borrowCustomModalDialog($("#FrameMessage"));
+	editDialog.modal({show:true, backdrop:'static'});
+} 
+
+function btnMessageAdd(){
+	window.top.window.returnCustomModalDialog();
+	var editDialog = window.top.window.borrowCustomModalDialog($("#FrameShop"));
+	editDialog.modal({show:true, backdrop:'static'});
+}
+
+function btnTempeAdd(){
+	window.top.window.returnCustomModalDialog();
+	var editDialog = window.top.window.borrowCustomModalDialog($("#FrameTempe"));
+	editDialog.modal({show:true, backdrop:'static'});
+}

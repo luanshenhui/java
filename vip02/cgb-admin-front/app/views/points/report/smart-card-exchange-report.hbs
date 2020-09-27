@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换日报表（新旧聪明卡兑换签帐额）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF16",
+            "reportCode":"JF16"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

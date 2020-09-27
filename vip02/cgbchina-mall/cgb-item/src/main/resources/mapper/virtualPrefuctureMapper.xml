@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VirtualPrefuctureModel">
+    <resultMap id="VirtualPrefuctureMap" type="VirtualPrefuctureModel">
+        <result property="id" column="id"/>
+        <result property="prefuctureId" column="prefucture_id"/>
+        <result property="prefuctureNm" column="prefucture_nm"/>
+        <result property="prefuctureSeq" column="prefucture_seq"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <sql id="columns">
+      id,prefucture_id,prefucture_nm,prefucture_seq,remark,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="VirtualPrefuctureModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_virtual_prefucture
+        (prefucture_id
+        ,prefucture_nm
+        ,prefucture_seq
+        ,remark
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+         )
+        values(#{prefuctureId}
+        ,#{prefuctureNm}
+        ,#{prefuctureSeq}
+        ,#{remark}
+        ,#{delFlag}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+       )
+    </insert>
+
+    <update id="update" parameterType="VirtualPrefuctureModel">
+        update tbl_virtual_prefucture set
+            <if test="prefuctureId !=null">prefucture_id = #{prefuctureId}
+                ,</if>
+            <if test="prefuctureNm !=null">prefucture_nm = #{prefuctureNm}
+                ,</if>
+            <if test="prefuctureSeq !=null">prefucture_seq = #{prefuctureSeq}
+                ,</if>
+            <if test="remark !=null">remark = #{remark}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="prefuctureId !=null">and prefucture_id = #{prefuctureId}</if>
+            <if test="prefuctureNm !=null">and prefucture_nm = #{prefuctureNm}</if>
+            <if test="prefuctureSeq !=null">and prefucture_seq = #{prefuctureSeq}</if>
+            <if test="remark !=null">and remark = #{remark}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="VirtualPrefuctureMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_virtual_prefucture
+       where id=#{id}
+    </select>
+    <select id="findByPrefuctureId" parameterType="java.lang.String" resultMap="VirtualPrefuctureMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_virtual_prefucture
+        where prefucture_id=#{prefuctureId}
+    </select>
+    <select id="findAll" resultMap="VirtualPrefuctureMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_virtual_prefucture
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="VirtualPrefuctureMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_virtual_prefucture
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="VirtualPrefuctureModel">
+        delete from tbl_virtual_prefucture where id = id
+    </delete>
+</mapper>
+
+

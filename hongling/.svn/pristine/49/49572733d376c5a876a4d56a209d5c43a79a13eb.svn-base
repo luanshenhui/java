@@ -1,0 +1,30 @@
+﻿<script src="../delivery/common.js"></script>
+<script src="../delivery/list.js"></script>
+<div id="DeliverySearch" class="list_search">
+	<h1></h1>
+</div>
+<div id="DeliveryResult"></div>
+<div id="DeliveryStatistic"></div>
+<div id="DeliveryPagination" class="paging"></div>
+<textarea  id="DeliveryTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="lblMember_Info"></td>
+			<td class="lblDeliveryAddress"></td>
+			<td class="lblDeliveryDate"></td>
+			<!--<td class="lblStatus"></td>-->
+			<td class="lblBrowse"></td>
+			<td class="lblExport"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ID}">
+			<td >{$T.row.pubMemberName}</td>
+			<td >{$T.row.deliveryAddress}</td>
+			<td >{$.csDate.formatMillisecondDate($T.row.planDeliveryDate)}</td>
+			<!--<td >{$T.row.statusName}</td>-->
+			<td class='center'><a class="browse" onclick="$.csDeliveryList.openView('{$T.row.ID}')"></a></td>
+			<td class='center'><a class="edit" onclick="$.csDeliveryList.openExport('{$T.row.ID}')"></a></td>
+		</tr>
+		{#/for}
+	</table>
+</textarea >

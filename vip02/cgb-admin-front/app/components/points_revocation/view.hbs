@@ -1,0 +1,52 @@
+{{#component "revocation js-component"}}
+    <p class="components-title"><strong>撤单管理</strong></p>
+    <form>
+        <div class="control-group">
+            <label>撤单类型：</label>
+            <select class="form-control">
+                <option>CC端撤单</option>
+                <option>用户撤单</option>
+                <option>供应商撤单</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>申请撤单时间：</label>
+            <input class="form-control js-date-start"/>
+            ----<input class="form-control js-date-end"/>
+        </div>
+        <input type="submit" value="查询"/>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <td>撤单编号</td>
+            <td>撤单类型</td>
+            <td>订单编号</td>
+            <td>商品名称</td>
+            <td>供应商</td>
+            <td>买家</td>
+            <td>申请时间</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>14275375</td>
+            <td>商城撤单</td>
+            <td>201603230039990701</td>
+            <td>苹果iPhone6Plus</td>
+            <td>上海海牙湾贸易有限公司</td>
+            <td>1372211
+                3445</td>
+            <td>2014/12/25 22:07:53</td>
+            <td><a>查看</a></td>
+        </tr>
+        </tbody>
+
+
+
+    </table>
+
+
+    <div class="pagination" data-total=50></div>
+{{/component}}

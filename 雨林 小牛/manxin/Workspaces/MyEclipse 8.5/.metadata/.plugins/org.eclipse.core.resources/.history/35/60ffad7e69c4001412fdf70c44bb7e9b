@@ -1,0 +1,52 @@
+drop database test;
+create database test;
+use test
+
+drop table t_user;
+
+create table t_user(
+	t_id int(4) primary key auto_increment,
+	t_name varchar(20),
+	t_age int(3)
+);
+
+alter table t_user auto_increment = 1001
+
+insert into t_user values(null,"Monty",18)
+
+select * from t_user
+
+drop table if exists dept;
+create table dept(
+	id int(4) primary key,
+	name varchar(20),
+	location varchar(20)
+);
+
+insert into dept values(101,'DA','DANLIAN');
+insert into dept values(102,'DB','SHENGYANG');
+insert into dept values(103,'DC','PANJIN');
+insert into dept values(104,'DC','PANJIN');
+insert into dept values(105,'DC','PANJIN');
+insert into dept values(106,'DC','PANJIN');
+
+update dept set dname='ANSHAN' where dept_id=102
+select * from dept;
+
+drop table info
+create table info(
+	id int(4) primary key,
+	d_id int(4) references dept(id),
+	info varchar(200)
+);
+
+insert into info values(1,101,'这是一个好部门');
+insert into info values(2,101,'这是一个好部门');
+insert into info values(3,101,'这是一个好部门');
+insert into info values(4,102,'这是一个非常好部门');
+insert into info values(5,102,'这是一个非常好部门');
+insert into info values(6,103,'这是一个相当好部门');
+
+select * from info;
+
+select * from dept d,dept_info di where d.dept_id = di.dept_id;

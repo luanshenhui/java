@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.apollo.mapper.menuInitMapper">
+	<sql id="columns">ID,NAME,TYPE,URL,STATUS,OPEN_TYPE,PID,ORDER,IS_VIEW,DOMAIN</sql>
+	<sql id="tableName">sys_privilege</sql>
+
+	<select id="initMenu" resultType="java.util.Map">
+		select
+		<include refid="columns" />
+		from
+		sys_privilege t
+		where 1=1
+	</select>
+
+	<select id="findMenuByID" resultType="cn.rkylin.core.ApolloRet" parameterType="cn.rkylin.core.ApolloMap">
+		select
+		<include refid="columns" />
+		from
+		sys_privilege t
+		where 1=1
+		<if test="null != id and '' != id">
+			and t.id = #{id}
+		</if>
+	</select>
+
+	<select id="findMenuByName" resultType="cn.rkylin.core.ApolloRet" parameterType="cn.rkylin.core.ApolloMap">
+		select
+		<include refid="columns" />
+		from
+		sys_privilege t
+		where 1=1
+		<if test="null != name and '' != name">
+			and t.name = #{name}
+		</if>
+	</select>
+
+	<select id="findMenuByPid" resultType="cn.rkylin.core.ApolloRet" parameterType="cn.rkylin.core.ApolloMap">
+		select
+		<include refid="columns" />
+		from
+		sys_privilege t
+		where 1=1
+		<if test="null != pid and '' != pid">
+			and t.pid = #{pid}
+		</if>
+	</select>
+
+</mapper>

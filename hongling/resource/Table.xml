@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<database>
+	<rem> =============================================================================================== </rem>
+	<rem> 字段名 name=""                                     值:"字符串"                                   </rem>
+	<rem> 字段名 primaryKey=""                               值:true or false                              </rem>
+	<rem> 字段名 enumValue=""                                值:""                                         </rem>
+	<rem> 字段名 size=""                                     值:"数字"，"数字"    or "数字"                 </rem>
+	<rem> 字段名 default=""                                  值:"字符串"，"字符串" ，....                   </rem>
+	<rem> 字段名 label=""                       			  值:"字符串"                                      </rem>
+	<rem> 字段名 type="NUMERIC" ||"DateTime"||"int"          值:"字符串"                                    </rem>
+	<rem> 字段名 autoIncrement="true"                        值:true or false                               </rem>
+	<rem> 字段名 keyType="Sequence"                          值:"Sequence"||"Guid"||""                      </rem>
+	<rem> 字段名 indexName="true"                            值:"字符串"                                     </rem>
+	<rem> ===============================================================================================   </rem>
+	<table name="Dict" label="字典数据" author="kevin" pubdate="2011-12-05">
+		<column name="ID"              label="序号"  type="int" primaryKey="true" keyType="Sequence" required="true" />
+		<column name="Name"            label="名称"  type="nvarchar" size="200" required="true"  note="根据不同的语言版本需要变换"/>
+		<column name="CategoryID"      label="分类"  type="int" required="true"/>
+		<column name="Code"            label="编码"  type="varchar"  size="40" required="true" note="每四位表示一个级别，最多可分10级"/>
+		<column name="Extension"       label="扩展"  type="nvarchar" size="1000" note="域名，或者Web路径等等" />
+		<column name="SequenceNo"      label="排序"  type="int"/>
+		<column name="ParentID"        label="上级"  type="int" required="true"/>
+		<column name="StatusID"        label="状态"  type="int"/>
+		<column name="ConstDefine"     label="常量"  type="nvarchar" size="200" note="常量定义"/>
+	</table>
+
+	<table name="DictCategory" label="字典分类" author="kevin" pubdate="2011-12-05">
+		<column name="ID"              label="序号"  type="int" primaryKey="true" keyType="Sequence" required="true" />
+		<column name="Name"            label="名称"  type="nvarchar" size="200" required="true"/>
+		<column name="Readonly"        label="只读"  type="int"/>
+		<column name="Levels"          label="级别"  type="int"/>
+		<column name="ConstDefine"     label="常量"  type="nvarchar" size="200" required="true"  note="常量定义"/>
+	</table>
+
+	<table name="Attachment" label="附件" author="kevin" pubdate="2011-12-05">
+		<column name="ID"              label="序号" type="varchar" size="32" primaryKey="true" keyType="guid" required="true" />
+		<column name="FileName"        label="文件实际名称" required="false" type="nvarchar" size="30"  />
+		<column name="FileNameInDisk"  label="文件保存名称" required="false" type="nvarchar" size="1024"  />
+		<column name="Description"     label="描述" required="false" type="nvarchar" size="500"  />
+		<column name="ContentType"     label="文件内容类型" required="false" type="varchar" size="1024"  />
+		<column name="FileLength"      label="文件大小" required="false" type="int" size="4"  />
+		<column name="NeedWaterMark"   label="水印" required="false" type="int" size="1"  />
+		<column name="MemberID"        label="发布人" required="false" type="varchar" size="32"  />
+	</table>
+
+	<table name="Member" label="会员" author="kevin" pubdate="2011-12-05">
+		<column name="ID" primaryKey="true" keyType="guid" required="true" type="varchar" size="32" label="会员表"/>
+		<column name="Code" label="编码"  type="varchar"  size="20" note="每四位表示一个级别，最多可分5级"/>
+		<column name="Password" type="varchar" size="20" label="密码" />
+		<column name="Username" type="varchar" size="50" required="true" label="用户名" />
+		<column name="Name" type="nvarchar" size="50" required="true" label="姓名" />
+		<column name="GroupID" required="true" type="int" size="4" label="组" />
+		<column name="StatusID" required="true" type="int" size="4" label="正常，已禁止" />
+		<column name="ParentID" required="true" type="varchar" size="32" label="上级用户"/>
+		<column name="RegistDate" required="true" type="DateTime" size="8" default="getdate()" label="注册时间" />
+		<column name="LastLoginDate" type="datetime" size="8" label="最后一次登陆时间" />
+		<column name="ClientIP" type="varchar" size="20" label="最后登录IP" />
+	</table>
+
+	<table name="Information" label="资料" author="kevin" pubdate="2011-12-09">
+		<column name="ID" primaryKey="true" keyType="guid" required="true" type="varchar" size="32" label="" />
+		<column name="Title" required="true" type="nvarchar" size="200" label="标题"/>
+		<column name="Content" type="ntext" size="16" label="内容" />
+		<column name="ImageIDs" type="varchar" size="4000" label="图片IDs" />
+		<column name="AttachmentIDs" type="varchar" size="4000" label="附件IDs" />
+		<column name="PubMemberID" required="true" type="varchar" size="32" label="登记人" />
+		<column name="PubDate" required="true" type="datetime" label="登记日期" />
+		<column name="AccessGroupIDs" type="varchar" size="100" label="空为公开，否则按照填写的组显示"/>
+		<column name="CategoryID" required="true" type="int" size="4" label="分类"/>
+		<column name="Views"  type="int" size="4"  label="浏览次数"/>
+	</table>
+</database>

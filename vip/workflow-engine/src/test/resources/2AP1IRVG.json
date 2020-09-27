@@ -1,0 +1,93 @@
+{
+  "flowId": "2AP1IRVG",
+  "title": "重大项目申请",
+  "nodes": {
+    "ec8cb7b5050b388f2796ef92ea17be39": {
+      "name": "开始",
+      "left": 55,
+      "top": 70,
+      "type": "start round",
+      "width": 50,
+      "height": 50,
+      "alt": true
+    },
+    "94b3c57b64e4aeda9371cb177c2f667c": {
+      "name": "结束",
+      "left": 962,
+      "top": 71,
+      "type": "end round",
+      "width": 50,
+      "height": 50,
+      "alt": true
+    },
+    "96478df5645dc8e1a95d54f45156fd74": {
+      "name": "办公室（重大项目判断）",
+      "left": 339,
+      "top": 65,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "ec22e7c9bea48a35ac8a073a8e9f3967": {
+      "name": "行内会议决议（决议）",
+      "left": 541,
+      "top": 63,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "bceaa21c19444e3013f632784a745a16": {
+      "name": "办公室判断是否上报（决策）",
+      "left": 748,
+      "top": 63,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "94f0499c9194a4ec65d9cbff947a4f07": {
+      "name": "申请开始",
+      "left": 144,
+      "top": 63,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    }
+  },
+  "lines": {
+    "workFlowContent_line_9": {
+      "type": "sl",
+      "from": "96478df5645dc8e1a95d54f45156fd74",
+      "to": "ec22e7c9bea48a35ac8a073a8e9f3967",
+      "alt": false
+    },
+    "workFlowContent_line_14": {
+      "type": "sl",
+      "from": "bceaa21c19444e3013f632784a745a16",
+      "to": "94b3c57b64e4aeda9371cb177c2f667c",
+      "alt": false
+    },
+    "workFlowContent_line_19": {
+      "type": "sl",
+      "from": "ec22e7c9bea48a35ac8a073a8e9f3967",
+      "to": "bceaa21c19444e3013f632784a745a16",
+      "alt": false
+    },
+    "workFlowContent_line_22": {
+      "type": "sl",
+      "from": "ec8cb7b5050b388f2796ef92ea17be39",
+      "to": "94f0499c9194a4ec65d9cbff947a4f07",
+      "alt": false
+    },
+    "workFlowContent_line_23": {
+      "type": "sl",
+      "from": "94f0499c9194a4ec65d9cbff947a4f07",
+      "to": "96478df5645dc8e1a95d54f45156fd74",
+      "alt": false
+    }
+  },
+  "initNum": 24
+}

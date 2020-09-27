@@ -1,0 +1,272 @@
+package cn.rkylin.oms.system.role.dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Repository;
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE_UNIT;
+import cn.rkylin.oms.system.role.domain.WF_ORG_USER_ROLE;
+import cn.rkylin.oms.system.role.vo.RoleVo;
+
+/**
+ * <p>
+ * Module : 角色管理
+ * </p>
+ * <p>
+ * Description: 角色业务对象
+ * </p>
+ * <p>
+ * Remark :
+ * </p>
+ */
+@Repository(value = "roleDAO")
+public class RoleDAOImpl implements IRoleDAO {
+	
+	/**
+	 * 自定义baseDao 增删改查方法
+	 */
+	@Autowired
+	protected IDataBaseFactory dao;
+	
+	/**
+	 * 自定义baseDao 增删改查方法
+	 */
+	@Autowired
+	private IDataBaseFactory dataBaseFactory;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取角色
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleVO
+	 *            - 角色vo，包含角色下的人员、角色可管理的组织列表
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getRoleByCondition(WF_ORG_ROLE roleVO, int page, int rows) throws Exception {
+		// List<WF_ORG_ROLE> resultList = new ArrayList();
+		RoleVo vo = new RoleVo();
+		BeanUtils.copyProperties(roleVO, vo);
+		return dataBaseFactory.findPage(page, rows, "getRoleByCondition", vo).getList();
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除角色
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleVO
+	 *            - 角色vo，包含角色下的人员、角色可管理的组织列表
+	 * @return 无
+	 * @throws DataAccessException
+	 */
+	@Override
+	public void delete(String stationParam, String string) throws Exception {
+		dao.delete(stationParam, string);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 新建角色，包括（角色中的人员、角色可管理的组织单元）
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleVO
+	 *            - 角色vo，包含角色下的人员、角色可管理的组织列表
+	 * @return 无
+	 * @throws DataAccessException
+	 */
+	@Override
+	public void insert(String statement, WF_ORG_ROLE role) throws Exception {
+		dao.insert(statement, role);
+		if (role.getRoleManageUnitList() != null && role.getRoleManageUnitList().size() > 0) {
+			for (int i = 0; i < role.getRoleManageUnitList().size(); i++) {
+				String roleUnit = (String) role.getRoleManageUnitList().get(i);
+				WF_ORG_ROLE_UNIT ru = new WF_ORG_ROLE_UNIT();
+				ru.setRoleId(role.getRoleId());
+				ru.setUnitId(roleUnit);
+				if (!roleUnit.equals("")) {
+					dao.insert("insertRoleUnit", ru);
+				}
+			}
+		}
+		// 插角色下的人员
+		if (role.getRoleUsersList() != null && role.getRoleUsersList().size() > 0) {
+			for (int i = 0; i < role.getRoleUsersList().size(); i++) {
+				String roleUser = (String) role.getRoleUsersList().get(i);
+				role.setRoleId(role.getRoleId());
+				role.setUserId(roleUser);
+				dao.insert("insertRoleUser", role);
+			}
+		}
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据条件查找角色
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleVO
+	 *            - 角色vo，包含角色下的人员、角色可管理的组织列表
+	 * @return 无
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getRoleByCondition(WF_ORG_ROLE roleVO) throws Exception {
+		// resultList =
+		// this.getSqlMapClient().queryForList("WF_ORG_ROLE.select", roleVO);
+		return dao.findAllList("select_role", roleVO);
+	}
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据获取人员角色角色
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleVO
+	 *            - 角色vo，包含角色下的人员、角色可管理的组织列表
+	 * @return 无
+	 * @throws Exception
+	 */
+	@Override
+	public void insertUserRole(String sqlId, WF_ORG_USER_ROLE ur) throws Exception {// insertRoleUser
+		dao.insert(sqlId, ur);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 查找
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleVO
+	 *            - 角色vo，包含角色下的人员、角色可管理的组织列表
+	 * @return 无
+	 * @throws DataAccessException
+	 */
+	public WF_ORG_ROLE findByid(String stationParam, String roleId) throws Exception {
+		List<RoleVo> resultList = dao.findList(stationParam, roleId);
+		if (resultList != null && resultList.size() > 0) {
+			return resultList.get(0);
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 修改角色，包括（角色中的人员、角色可管理的组织单元）
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleVO
+	 *            - 角色vo，包含角色下的人员、角色可管理的组织列表
+	 * @return 无
+	 * @throws DataAccessException
+	 */
+	public void update(WF_ORG_ROLE roleParam) throws Exception {
+
+		dao.update("updateRole", roleParam);
+		if (roleParam.getRoleManageUnitList() != null && roleParam.getRoleManageUnitList().size() > 0) {
+			for (int i = 0; i < roleParam.getRoleManageUnitList().size(); i++) {
+				String roleUnit = (String) roleParam.getRoleManageUnitList().get(i);
+				WF_ORG_ROLE_UNIT ru = new WF_ORG_ROLE_UNIT();
+				ru.setRoleId(roleParam.getRoleId());
+				ru.setUnitId(roleUnit);
+				dao.insert("insertRoleUnit", ru);
+			}
+		}
+		// 插角色下的人员
+		if (roleParam.getRoleUsersList() != null && roleParam.getRoleUsersList().size() > 0) {
+			for (int i = 0; i < roleParam.getRoleUsersList().size(); i++) {
+				String roleUser = (String) roleParam.getRoleUsersList().get(i);
+				roleParam.setRoleId(roleParam.getRoleId());
+				roleParam.setUserId(roleUser);
+				dao.insert("insertRoleUser", roleParam);
+			}
+		}
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 查找角色
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleVO
+	 *            - 角色vo，包含角色下的人员、角色可管理的组织列表
+	 * @return 无
+	 * @throws DataAccessException
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getAllRoles(WF_ORG_ROLE roleVO) throws Exception {
+		List resultList = new ArrayList();
+		try {
+			resultList = dao.findAllList("WF_ORG_ROLE_select", roleVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Exception("RoleDAO数据访问错误");
+		}
+		return resultList;
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据多个roleID获取role
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @return 附件条件的角色列表
+	 * @throws Exception 
+	 * @throws ServiceException
+	 */
+	public List getRoleByIDs(WF_ORG_ROLE roleVO) throws Exception {
+		List roleList = new ArrayList();
+		try {
+			roleList=dao.findAllList("selectByIDs", roleVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Exception("根据条件查询角色时发生错误");
+		}
+		return roleList;
+	}
+
+}

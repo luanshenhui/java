@@ -1,0 +1,32 @@
+package com.yulin.am;
+
+import java.util.*;
+public class Celen {
+
+	/**
+	 * @param args
+	 */
+	public void qingJie(){
+		Scanner scan = new Scanner(System.in);//创建扫描仪
+		String name=scan.next();
+		Pet pet = new Pet(name);
+		new Timer().schedule(new TimerTask(){
+			@Override
+			public void run(){
+				Pet.level+=10;
+				Pet.an-=10;
+				if(Pet.level>=100 && Pet.an>0){
+					System.out.println("已经洗的很干净了~！");
+				}
+				else if(Pet.an==0){
+					Pet.eatM();
+				}else
+				{
+					Pet.showM();
+				}
+			}
+		},5000, 1000);
+		
+	} 
+
+}

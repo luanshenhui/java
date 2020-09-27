@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="WF_ORG_DICTIONARY">
+  <resultMap class="com.dhc.organization.unit.domain.WF_ORG_DICTIONARY" id="WF_ORG_DICTIONARYResultMap">
+    <result column="DICT_CODE" jdbcType="VARCHAR" property="dictCode" />
+    <result column="DICT_NAME" jdbcType="VARCHAR" property="dictName" />
+    <result column="DICT_TYPE" jdbcType="VARCHAR" property="dictType" />
+  </resultMap>
+  
+  <select id="select" parameterClass="com.dhc.organization.unit.domain.WF_ORG_DICTIONARY" resultMap="WF_ORG_DICTIONARYResultMap">
+    select DICT_CODE, DICT_NAME, DICT_TYPE
+    from WF_ORG_DICTIONARY
+  </select>
+  <select id="selectUnitType" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+    select DICT_CODE, DICT_NAME
+    from WF_ORG_DICTIONARY where DICT_TYPE =#dictType#
+  </select>
+  <delete id="delete" parameterClass="com.dhc.organization.unit.domain.WF_ORG_DICTIONARY">
+    delete from WF_ORG_DICTIONARY
+  </delete>
+  <insert id="insert" parameterClass="com.dhc.organization.unit.domain.WF_ORG_DICTIONARY">
+    insert into WF_ORG_DICTIONARY (DICT_CODE, DICT_NAME, DICT_TYPE)
+    values (#dictCode#, #dictName#, #dictType#)
+  </insert>
+  <update id="update" parameterClass="com.dhc.organization.unit.domain.WF_ORG_DICTIONARY">
+    update WF_ORG_DICTIONARY
+    set DICT_CODE = #dictCode#,
+      DICT_NAME = #dictName#,
+      DICT_TYPE = #dictType#
+  </update>
+</sqlMap>

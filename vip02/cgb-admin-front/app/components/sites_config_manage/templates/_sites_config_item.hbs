@@ -1,0 +1,10 @@
+<tr data-sites-config="{{pp this}}" id="{{id}}">
+    <td class="sites-config-name">{{name}}</td>
+    <td class="sites-config-domain">{{sites}}</td>
+    <td class="sites-config-createat">{{createat}}</td>
+    <td>
+        <button class="btn btn-small js-sites-config-edit">编辑</button>
+        <button class="btn btn-small js-sites-config-decorate">装修</button>
+        <button class="btn btn-small" id="{{id}}" data-toggle="confirm" data-title="您确定删除吗?" data-content="删除之后无法恢复,确定删除吗?" data-event="confirm:delete-site">删除</button>
+    </td>
+</tr>

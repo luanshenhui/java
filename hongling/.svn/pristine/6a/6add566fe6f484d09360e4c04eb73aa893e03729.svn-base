@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Cash" table="Cash">
+        <id name="ID" type="string">
+            <column name="ID" length="32" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="Memo" type="string">
+            <column name="Memo" />
+        </property>
+        <property name="PubMemberID" type="string">
+            <column name="PubMemberID" />
+        </property>
+        <property name="PubDate" type="date">
+            <column name="PubDate" />
+        </property>
+        <property name="Num" type="double">
+            <column name="Num"/>
+        </property>
+         <property name="IsReconciliation" type="integer">
+            <column name="IsReconciliation"/>
+        </property>
+         <property name="noticeNum" type="integer">
+            <column name="NOTICENUM"/>
+        </property>
+         <property name="stopNum" type="integer">
+            <column name="STOPNUM"/>
+        </property>
+         <property name="StatusId" type="integer">
+            <column name="StatusId"/>
+        </property>
+    </class>
+</hibernate-mapping>

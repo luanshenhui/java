@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for AFFIRM.
+
+@author zhuqb
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 简易处罚
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.PUNISH">
+
+<!-- **** select ******************************************************************************************************************************************* -->
+
+	<select id="searchDetail" resultType="java.util.Map">
+		SELECT 
+           q.ID,
+           q.PUNISH_ID,
+           q.PUNISH_TIME,
+           q.PUNISH_STYLE,
+           q.PARTY_NAME,
+           (select name from organizes_ciq t where t.org_code=q.PORT_ORG_CODE) as PORT_ORG_CODE,
+           (select name from DEPTMENTS t where t.code=q.PORT_DEPT_CODE) as PORT_DEPT_CODE,
+           qlp.ILLEGAL_ACT as ILLEGAL_CONTENT,
+           q.ILLEGAL_OBJECT,
+           q.IDENTIFI_STYLE,
+           q.IDENTIFI_NUMBER,
+           q.ADDRESS,
+           q.LEGAL_REPRESENT,
+           q.LEGAL_REPRESENT_PHONE,
+           q.ILLEGAL_ADDRESS,
+           q.ILLEGAL_TIME,
+           q.PARTY_REPRESENT_PHONE,
+           q.PARTY_ASSIGN,
+           qlp.ILLEGAL_BASIS,
+           qlp.PUNISH_BASIS,
+           q.CUR_PSN_SIGN,
+           q.LAW_EXECUTOR,
+           q.WARNNING_CONTENT,
+           q.PUNISH_STYLE,
+           q.PARTY_REPRESENT,
+           q.BANK_CARD,
+           q.RECONSIDER,
+           q.PUNISH_MONEY,
+           q.FORFEIT_PAY_STYLE
+   		FROM QLC_LOCALE_PUNISH q
+   		LEFT JOIN   
+           QLC_LEGAL_PROVISIONS qlp
+	   	ON
+           qlp.code=q.ILLEGAL_CONTENT
+        AND qlp.punish_type='1'
+   		WHERE 
+   		q.PUNISH_ID=#{punish_id}
+	</select>
+  <!-- 根据传入的搜索条件 查询进出境运输工具检疫（货轮）列表页************************************************************************************ -->
+  <select id="findLocalePunishes" resultType="com.dpn.ciqqlc.standard.model.LocalePunishDTO" >
+   SELECT 
+                * 
+   FROM(
+				SELECT 
+				           a.*,rownum rid 
+				FROM(   
+					       SELECT 
+                                        QLC_LOCALE_PUNISH.ID,
+                                        PUNISH_ID,
+                                        PUNISH_TIME,
+                                        PUNISH_STYLE,
+                                        PARTY_NAME,
+                                        (select name from organizes_ciq t where t.org_code=QLC_LOCALE_PUNISH.PORT_DEPT_CODE) as PORT_DEPT_CODE,
+                                        (select name from QLC_CODE_LIBRARY t where t.code=QLC_LOCALE_PUNISH.PORT_ORG_CODE and t.TYPE='QLC_ORGANIZES') as PORT_ORG_CODE,
+                                        qlp.ILLEGAL_ACT as ILLEGAL_CONTENT
+						   FROM
+							            QLC_LOCALE_PUNISH 
+						   LEFT JOIN   
+									    (SELECT 
+						                          NAME,CODE
+						                 FROM         
+						                          QLC_CODE_LIBRARY
+						                 WHERE
+						                          QLC_CODE_LIBRARY.TYPE='QLC_ORGANIZES'
+						                 ) FIRST
+						   ON
+						                QLC_LOCALE_PUNISH.PORT_ORG_CODE=FIRST.CODE
+						   LEFT JOIN   
+						                (SELECT 
+						                          NAME,CODE
+						                 FROM         
+						                          QLC_CODE_LIBRARY
+						                 WHERE
+						                          QLC_CODE_LIBRARY.TYPE='QLC_DEPTMENTS'
+						                 ) SECOND
+						   ON
+						                QLC_LOCALE_PUNISH.PORT_DEPT_CODE=SECOND.CODE 
+						   LEFT JOIN   
+						                QLC_LEGAL_PROVISIONS qlp
+						   ON
+						                qlp.code=QLC_LOCALE_PUNISH.ILLEGAL_CONTENT and qlp.punish_type='1'
+					       WHERE 
+							            1=1
+							            <if test = "start_date != null and start_date != ''">
+							              <![CDATA[ 
+						   AND               QLC_LOCALE_PUNISH.PUNISH_TIME >= to_date(#{start_date}, 'yyyy-mm-dd')
+						                  ]]>
+										</if>
+										<if test = "end_date != null and end_date != ''">
+										  <![CDATA[
+						   AND               CQLC_LOCALE_PUNISH.PUNISH_TIME &lt;= to_date(#{end_date},'yyyy-mm-dd')
+						                  ]]>
+										</if>
+										<if test = "party_name != null and party_name != ''">
+						   AND          QLC_LOCALE_PUNISH.PARTY_NAME = #{party_name}
+										</if>
+										<if test = "illegal_content != null and illegal_content != ''">
+						   AND          QLC_LOCALE_PUNISH.ILLEGAL_CONTENT = #{illegal_content}
+										</if>
+										<if test = "punish_style != null and punish_style != ''">
+						   AND          QLC_LOCALE_PUNISH.PUNISH_STYLE = #{punish_style}
+							            </if>
+							            <if test = "port_org != null and port_org != ''">
+						   AND          QLC_LOCALE_PUNISH.PORT_ORG_CODE = #{port_org_code}
+							            </if>
+							            <if test = "port_dept_code != null and port_dept_code != ''">
+						   AND          QLC_LOCALE_PUNISH.PORT_DEPT_CODE = #{port_dept_code}
+							            </if>
+						   ORDER BY 
+							           QLC_LOCALE_PUNISH.PUNISH_TIME DESC 
+				  ) a 
+                  WHERE  
+                            rownum &lt;#{lastRcd}
+    )
+    WHERE 
+                  rid>=#{firstRcd}
+	</select>
+	
+	<!-- 分页计数****************************************************************************************************************-->
+	<select id="findLocalePunishesCount" resultType="java.lang.Integer">
+	SELECT 
+	            count(PUNISH_ID) as TOTALPAGES 
+	FROM 
+	            QLC_LOCALE_PUNISH 
+	WHERE 
+	            1=1
+	            <if test = "start_date != null and start_date != ''">
+	              <![CDATA[ 
+    AND               QLC_LOCALE_PUNISH.PUNISH_TIME >= to_date(#{start_date}, 'yyyy-mm-dd')
+                  ]]>
+				</if>
+				<if test = "end_date != null and end_date != ''">
+				  <![CDATA[
+    AND               CQLC_LOCALE_PUNISH.PUNISH_TIME &lt;= to_date(#{end_date},'yyyy-mm-dd')
+                  ]]>
+				</if>
+				<if test = "party_name != null and party_name != ''">
+    AND          QLC_LOCALE_PUNISH.PARTY_NAME = #{party_name}
+				</if>
+				<if test = "illegal_content != null and illegal_content != ''">
+    AND          QLC_LOCALE_PUNISH.ILLEGAL_CONTENT = #{illegal_content}
+				</if>
+				<if test = "punish_style != null and punish_style != ''">
+    AND          QLC_LOCALE_PUNISH.PUNISH_STYLE = #{punish_style}
+	            </if>
+	            <if test = "port_org != null and port_org != ''">
+    AND          QLC_LOCALE_PUNISH.PORT_ORG_CODE = #{port_org_code}
+	            </if>
+	            <if test = "port_dept_code != null and port_dept_code != ''">
+    AND          QLC_LOCALE_PUNISH.PORT_DEPT_CODE = #{port_dept_code}
+	            </if>
+	</select>
+     
+    <!-- 简易处罚详情信息**********************************************************************************************************-->
+    <select id="localepunishInfo" resultType="com.dpn.ciqqlc.standard.model.LocalePunishDTO">
+    SELECT 
+                ID,PUNISH_ID,PUNISH_TIME,PARTY_NAME,IDENTIFI_STYLE,IDENTIFI_NUMBER,ADDRESS,LEGAL_REPRESENT,LEGAL_REPRESENT_PHONE,ILLEGAL_OBJECT,ILLEGAL_ADDRESS,ILLEGAL_TIME,PARTY_REPRESENT,
+                PARTY_REPRESENT_PHONE,SURVEY_CONTENT,PARTY_ASSIGN,ILLEGAL_CONTENT,LEGISLATIVE_AUTHORITY,PUNISH_STYLE,WARNNING_CONTENT,PUNISH_MONEY,FORFEIT_PAY_STYLE,FORFEIT_STATUS,PAY_TIME,
+                BANK_CARD,RECONSIDER,LAW_EXECUTOR,RESULT_STATUS,cur_psn_sign,
+                (select name from QLC_CODE_LIBRARY t where t.code=QLC_LOCALE_PUNISH.PORT_ORG_CODE and t.TYPE='QLC_ORGANIZES') as PORT_ORG_CODE,
+                (select name from organizes_ciq t where t.org_code=QLC_LOCALE_PUNISH.PORT_DEPT_CODE) as PORT_DEPT_CODE,
+                (select illegal_act from QLC_LEGAL_PROVISIONS t where t.code=QLC_LOCALE_PUNISH.ILLEGAL_CONTENT and t.punish_type='1') as ILLEGAL_ACT
+    FROM  
+                QLC_LOCALE_PUNISH
+    LEFT JOIN   
+			    (SELECT 
+                          NAME,CODE
+                 FROM         
+                          QLC_CODE_LIBRARY
+                 WHERE
+                          QLC_CODE_LIBRARY.TYPE='QLC_ORGANIZES'
+                 ) FIRST
+   ON
+                QLC_LOCALE_PUNISH.PORT_ORG_CODE=FIRST.CODE
+   LEFT JOIN   
+                (SELECT 
+                          NAME,CODE
+                 FROM         
+                          QLC_CODE_LIBRARY
+                 WHERE
+                          QLC_CODE_LIBRARY.TYPE='QLC_DEPTMENTS'
+                 ) SECOND
+   ON
+                QLC_LOCALE_PUNISH.PORT_DEPT_CODE=SECOND.CODE             
+    WHERE
+                PUNISH_ID=#{punish_id}  
+                <if test = "port_org_code != null and port_org_code != ''">
+	AND 
+	            QLC_LOCALE_PUNISH.PORT_ORG_CODE = #{port_org_code}
+				</if>
+				<if test = "port_dept_code != null and port_dept_code != ''">
+	AND 
+	            QLC_LOCALE_PUNISH.PORT_DEPT_CODE = #{port_dept_code}
+				</if>                                             
+    </select>
+    
+    <!-- 单条简易处罚所涉及的照片和视频*************************************************************************************************-->
+    <select id="queryPunishFiles" resultType="com.dpn.ciqqlc.standard.model.VideoDTO">
+    SELECT        
+                  QLC_VIDEO_FILE_EVENT.ID,
+                  QLC_VIDEO_FILE_EVENT.FILE_TYPE,
+                  QLC_VIDEO_FILE_EVENT.FILE_NAME,
+                  QLC_VIDEO_FILE_EVENT.PORT_DEPT_CODE,
+                  QLC_VIDEO_FILE_EVENT.PORT_ORG_CODE,
+                  QLC_VIDEO_FILE_EVENT.CREATE_USER,
+                  QLC_VIDEO_FILE_EVENT.CREATE_DATE,
+                  QLC_C_VIDEO_PROC_TYPE.PROC_NAME,
+                  (select name from USERS_CIQ t where t.id=QLC_VIDEO_FILE_EVENT.CREATE_USER) as CREATE_USER_NAME,
+                  to_char(QLC_VIDEO_FILE_EVENT.CREATE_DATE,'yyyy-mm-dd hh:mi:ss') as create_date_str
+    FROM          
+                  QLC_VIDEO_FILE_EVENT 
+    LEFT JOIN  
+                  QLC_C_VIDEO_PROC_TYPE
+    ON
+                  QLC_C_VIDEO_PROC_TYPE.PROC_TYPE= QLC_VIDEO_FILE_EVENT.PROC_TYPE           
+    WHERE         
+                  QLC_VIDEO_FILE_EVENT.PROC_MAIN_ID=#{punish_id}
+                  <if test = "port_org_code != null and port_org_code != ''">
+	AND 
+	              QLC_VIDEO_FILE_EVENT.PORT_ORG_CODE = #{port_org_code}
+				  </if>
+				  <if test = "port_dept_code != null and port_dept_code != ''">
+	AND 
+	              QLC_VIDEO_FILE_EVENT.PORT_DEPT_CODE = #{port_dept_code}
+				  </if>              
+    AND EXISTS (
+	              SELECT 
+	                        PROC_TYPE
+	              FROM 
+	                        QLC_C_VIDEO_PROC_TYPE
+	              WHERE   
+	                        PROJ_CODE=#{proj_code}
+	              AND 
+	                        PROC_TYPE=QLC_VIDEO_FILE_EVENT.PROC_TYPE
+    			)
+    ORDER BY      
+                  QLC_VIDEO_FILE_EVENT.FILE_TYPE,
+                  QLC_VIDEO_FILE_EVENT.CREATE_DATE DESC    
+    </select> 
+    
+    <!-- 分页计数***************************************************************************************************************-->
+    <select id="queryPunishDocs" resultType="com.dpn.ciqqlc.standard.model.DocTypeDTO">
+    SELECT  
+                  QLC_CHECK_DOCS_RCD.*,
+                  QLC_C_CHECK_DOCS_RCD_TYPE_CODE.NAME 
+	FROM    
+	              QLC_CHECK_DOCS_RCD 
+	LEFT JOIN
+	              QLC_C_CHECK_DOCS_RCD_TYPE_CODE
+	ON
+	              QLC_C_CHECK_DOCS_RCD_TYPE_CODE.CODE= QLC_CHECK_DOCS_RCD.DOC_TYPE 
+	LEFT JOIN
+	              QLC_LOCALE_PUNISH
+	ON
+	              QLC_C_CHECK_DOCS_RCD_TYPE_CODE.CODE= QLC_LOCALE_PUNISH.PUNISH_ID               
+	WHERE         
+                  QLC_CHECK_DOCS_RCD.PROC_MAIN_ID=#{punish_id}
+                  <if test = "port_org_code != null and port_org_code != ''">
+	AND 
+	              QLC_LOCALE_PUNISH.PORT_ORG_CODE = #{port_org_code}
+				  </if>
+				  <if test = "port_dept_code != null and port_dept_code != ''">
+	AND 
+	              QLC_LOCALE_PUNISH.PORT_DEPT_CODE = #{port_dept_code}
+				  </if>              
+    AND EXISTS (
+                  SELECT 
+	                        CODE
+	              FROM 
+	                        QLC_C_CHECK_DOCS_RCD_TYPE_CODE
+	              WHERE   
+	                        PROJ_CODE=#{proj_code}
+	              AND 
+	                        CODE=QLC_CHECK_DOCS_RCD.DOC_TYPE
+    )
+    ORDER BY
+                  QLC_CHECK_DOCS_RCD.DEC_DATE DESC                    
+    </select>   
+    
+    <select id="findPunishList" parameterType="com.dpn.ciqqlc.standard.model.LocalePunishDTO" resultType="com.dpn.ciqqlc.standard.model.LegalPunishModel">
+     select  
+     	t.*,p.illegal_basis,p.punish_basis,
+     	(select o.name from ORGANIZES o where o.org_code=t.port_org_code) as port_org, 
+     	(select d.name from DEPTMENTS d where d.code=t.port_dept_code) as port_dept
+     from 
+     	QLC_LOCALE_PUNISH t 
+     left join Qlc_Legal_Provisions p on t.ILLEGAL_CONTENT=p.code and qlp.punish_type='1'
+	 where t.ID=#{id}
+    </select>
+    <!-- **** insert *********************************************************************************************************************************************************************** -->
+    <!--  -->
+    <insert id="insertPunishFiles" parameterType="java.util.Map" statementType="CALLABLE">
+    insert into
+                  QLC_VIDEO_FILE_EVENT
+                  (
+                  ID,
+                  PROC_MAIN_ID,
+                  PROC_TYPE,
+                  FILE_TYPE,
+                  FILE_NAME,
+                  CREATE_USER,
+                  CREATE_DATE
+                  ) 
+    values
+                  (
+                  CreateGUID(),
+                  #{proc_main_id},
+                  #{proc_type},
+                  #{file_type},
+                  #{file_name},
+                  #{create_user},
+                  sysdate
+                  )
+    </insert>
+    
+    <select id="findLocaleCount" resultType="java.lang.Integer">
+    	select count(1) from qlc_locale_punish
+    	where punish_id = #{punish_id}
+    </select>
+    
+    <update id="updateLocalePunish" parameterType="com.dpn.ciqqlc.standard.model.LocalePunishDTO" >
+    	update qlc_locale_punish set
+    		id = #{id}
+    	<if test="punish_id != null and punish_id != ''">
+    		,punish_id = #{punish_id}
+    	</if>
+    	<if test="punish_time_str != null and punish_time_str != ''">
+    		,punish_time = to_date(#{punish_time_str}, 'yyyy-mm-dd HH24:mi:ss')
+    	</if>
+    	<if test="party_name != null and party_name != ''">
+    		,party_name = #{party_name}
+    	</if>
+    	<if test="identifi_style != null and identifi_style != ''">
+    		,identifi_style = #{identifi_style}
+    	</if>
+    	<if test="identifi_number != null and identifi_number != ''">
+    		,identifi_number = #{identifi_number}
+    	</if>
+    	<if test="legal_represent != null and legal_represent != ''">
+    		,legal_represent = #{legal_represent}
+    	</if>
+    	<if test="legal_represent_phone != null and legal_represent_phone != ''">
+    		,legal_represent_phone = #{legal_represent_phone}
+    	</if>
+    	<if test="illegal_object != null and illegal_object != ''">
+    		,illegal_object = #{illegal_object}
+    	</if>
+    	<if test="illegal_address != null and illegal_address != ''">
+    		,illegal_address = #{illegal_address}
+    	</if>
+    	<if test="illegal_time != null and illegal_time != ''">
+    		,illegal_time = #{illegal_time}
+    	</if>
+    	<if test="survey_content != null and survey_content != ''">
+    		,survey_content = #{survey_content}
+    	</if>
+    	<if test="party_assign != null and party_assign != ''">
+    		,party_assign = #{party_assign}
+    	</if>
+    	<if test="illegal_content != null and illegal_content != ''">
+    		,illegal_content = #{illegal_content}
+    	</if>
+    	<if test="legislative_authority != null and legislative_authority != ''" >
+			,legislative_authority = #{legislative_authority}
+		</if>
+		<if test="punish_style != null and punish_style != ''" >
+			,punish_style = #{punish_style}	
+		</if>
+		<if test="warnning_content != null and warnning_content != ''" >
+			,warnning_content = #{warnning_content}	
+		</if>
+		<if test="punish_money != null and punish_money != ''" >
+			,punish_money	= #{punish_money}
+		</if>
+		<if test="forfeit_pay_style != null and forfeit_pay_style != ''" >
+			,forfeit_pay_style	= #{forfeit_pay_style}
+		</if>
+		<if test="forfeit_status != null and forfeit_status != ''" >
+			,forfeit_status = #{forfeit_status}
+		</if>
+		<if test="pay_time != null and pay_time != ''" >
+			,pay_time	= #{pay_time}
+		</if>
+		<if test="bank_card != null and bank_card != ''" >
+			,bank_card	= #{bank_card}
+		</if>
+		<if test="reconsider != null and reconsider != ''" >
+			,reconsider	= #{reconsider}
+		</if>
+		<if test="law_executor != null and law_executor != ''" >
+			,law_executor = #{law_executor}	
+		</if>
+		<if test="port_org_code != null and port_org_code != ''" >
+			,port_org_code = #{port_org_code}		
+		</if>
+		<if test="port_dept_code != null and port_dept_code != ''" >
+			,port_dept_code = #{port_dept_code}	
+		</if>
+		<if test="result_status != null and result_status != ''" >
+			,result_status = #{result_status}		
+		</if>
+		<if test="address != null and address != ''" >
+			,address = #{address}
+		</if>
+		<if test="cur_psn_sign != null and cur_psn_sign != ''" >
+			,cur_psn_sign = #{cur_psn_sign}
+		</if>
+		<if test="party_represent != null and party_represent != ''" >
+			,party_represent = #{party_represent}	
+		</if>
+		<if test="party_represent_phone != null and party_represent_phone != ''" >
+			,party_represent_phone = #{party_represent_phone}	
+		</if>
+		where punish_id = #{punish_id}
+    </update>
+    
+    <insert id="insertLocalePunish" parameterType="com.dpn.ciqqlc.standard.model.LocalePunishDTO" >
+			insert into qlc_locale_punish
+				(
+					punish_id
+					<if test="punish_time_str != null and punish_time_str != ''" >
+					,punish_time
+					</if>
+					<if test="party_name != null and party_name != ''" >
+					,party_name
+					</if>
+					<if test="identifi_style != null and identifi_style != ''" >
+					,identifi_style
+					</if>
+					<if test="identifi_number != null and identifi_number != ''" >
+					,identifi_number	
+					</if>
+					<if test="legal_represent != null and legal_represent != ''" >
+					,legal_represent	
+					</if>
+					<if test="legal_represent_phone != null and legal_represent_phone != ''" >
+					,legal_represent_phone	
+					</if>
+					<if test="illegal_object != null and illegal_object != ''" >
+					,illegal_object	
+					</if>
+					<if test="illegal_address != null and illegal_address != ''" >
+					,illegal_address	
+					</if>
+					<if test="illegal_time != null and illegal_time != ''" >
+					,illegal_time	
+					</if>
+					<if test="party_represent != null and party_represent != ''" >
+					,party_represent	
+					</if>
+					<if test="party_represent_phone != null and party_represent_phone != ''" >
+					,party_represent_phone	
+					</if>
+					<if test="survey_content != null and survey_content != ''" >
+					,survey_content	
+					</if>
+					<if test="party_assign != null and party_assign != ''" >
+					,party_assign	
+					</if>
+					<if test="illegal_content != null and illegal_content != ''" >
+					,illegal_content
+					</if>
+					<if test="legislative_authority != null and legislative_authority != ''" >
+					,legislative_authority
+					</if>
+					<if test="punish_style != null and punish_style != ''" >
+					,punish_style	
+					</if>
+					<if test="warnning_content != null and warnning_content != ''" >
+					,warnning_content	
+					</if>
+					<if test="punish_money != null and punish_money != ''" >
+					,punish_money	
+					</if>
+					<if test="forfeit_pay_style != null and forfeit_pay_style != ''" >
+					,forfeit_pay_style	
+					</if>
+					<if test="forfeit_status != null and forfeit_status != ''" >
+					,forfeit_status
+					</if>
+					<if test="pay_time != null and pay_time != ''" >
+					,pay_time	
+					</if>
+					<if test="bank_card != null and bank_card != ''" >
+					,bank_card	
+					</if>
+					<if test="reconsider != null and reconsider != ''" >
+					,reconsider	
+					</if>
+					<if test="law_executor != null and law_executor != ''" >
+					,law_executor	
+					</if>
+					<if test="port_org_code != null and port_org_code != ''" >
+					,port_org_code	
+					</if>
+					<if test="port_dept_code != null and port_dept_code != ''" >
+					,port_dept_code	
+					</if>
+					<if test="result_status != null and result_status != ''" >
+					,result_status	
+					</if>
+					,id
+					<if test="address != null and address != ''" >
+					,address
+					</if>
+					<if test="cur_psn_sign != null and cur_psn_sign != ''" >
+					,cur_psn_sign
+					</if>
+				)
+			values 
+				(
+					#{punish_id}
+					<if test="punish_time_str != null and punish_time_str != ''" >
+					,to_date(#{punish_time_str}, 'yyyy-mm-dd HH24:mi:ss')
+					</if>
+					<if test="party_name != null and party_name != ''" >
+					,#{party_name}
+					</if>
+					<if test="identifi_style != null and identifi_style != ''" >
+					,#{identifi_style}
+					</if>
+					<if test="identifi_number != null and identifi_number != ''" >
+					,#{identifi_number}	
+					</if>
+					<if test="legal_represent != null and legal_represent != ''" >
+					,#{legal_represent}	
+					</if>
+					<if test="legal_represent_phone != null and legal_represent_phone != ''" >
+					,#{legal_represent_phone}	
+					</if>
+					<if test="illegal_object != null and illegal_object != ''" >
+					,#{illegal_object}	
+					</if>
+					<if test="illegal_address != null and illegal_address != ''" >
+					,#{illegal_address}	
+					</if>
+					<if test="illegal_time != null and illegal_time != ''" >
+					,#{illegal_time}	
+					</if>
+					<if test="party_represent != null and party_represent != ''" >
+					,#{party_represent}	
+					</if>
+					<if test="party_represent_phone != null and party_represent_phone != ''" >
+					,#{party_represent_phone}	
+					</if>
+					<if test="survey_content != null and survey_content != ''" >
+					,#{survey_content}	
+					</if>
+					<if test="party_assign != null and party_assign != ''" >
+					,#{party_assign}	
+					</if>
+					<if test="illegal_content != null and illegal_content != ''" >
+					,#{illegal_content}
+					</if>
+					<if test="legislative_authority != null and legislative_authority != ''" >
+					,#{legislative_authority}
+					</if>
+					<if test="punish_style != null and punish_style != ''" >
+					,#{punish_style}	
+					</if>
+					<if test="warnning_content != null and warnning_content != ''" >
+					,#{warnning_content}	
+					</if>
+					<if test="punish_money != null and punish_money != ''" >
+					,#{punish_money}	
+					</if>
+					<if test="forfeit_pay_style != null and forfeit_pay_style != ''" >
+					,#{forfeit_pay_style}	
+					</if>
+					<if test="forfeit_status != null and forfeit_status != ''" >
+					,#{forfeit_status}
+					</if>
+					<if test="pay_time != null and pay_time != ''" >
+					,#{pay_time}	
+					</if>
+					<if test="bank_card != null and bank_card != ''" >
+					,#{bank_card}	
+					</if>
+					<if test="reconsider != null and reconsider != ''" >
+					,#{reconsider}	
+					</if>
+					<if test="law_executor != null and law_executor != ''" >
+					,#{law_executor}
+					</if>
+					<if test="port_org_code != null and port_org_code != ''" >
+					,#{port_org_code}	
+					</if>
+					<if test="port_dept_code != null and port_dept_code != ''" >
+					,#{port_dept_code}	
+					</if>
+					<if test="result_status != null and result_status != ''" >
+					,#{result_status}	
+					</if>
+					,#{id}
+					<if test="address != null and address != ''" >
+					,#{address}
+					</if>
+					<if test="cur_psn_sign != null and cur_psn_sign != ''" >
+					,#{cur_psn_sign}
+					</if>
+				)
+	</insert>
+    
+    <!-- **** update *********************************************************************************************************************************************************************** -->
+
+    <!-- **** delete *********************************************************************************************************************************************************************** -->
+
+</mapper>

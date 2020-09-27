@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderStatusQuery">
+
+    <resultMap id="OrderStatusQueryMap" type="cn.com.cgbchina.batch.model.OrderStatusQueryModel"></resultMap>
+    <resultMap id="ItemMap" type="cn.com.cgbchina.batch.model.ItemModel"></resultMap>
+    <resultMap id="VendorInfoMap" type="cn.com.cgbchina.batch.model.VendorInfoModel"></resultMap>
+    <resultMap id="OrderMainMap" type="cn.com.cgbchina.batch.model.OrderMainModel"></resultMap>
+    <resultMap id="OrderOutSystemMap" type="cn.com.cgbchina.batch.model.TblOrderOutSystemModel"></resultMap>
+    <resultMap id="TblOrderExtend1Map" type="cn.com.cgbchina.batch.model.TblOrderExtend1Model"></resultMap>
+    <resultMap id="TblVendorRatioMap" type="cn.com.cgbchina.batch.model.TblVendorRatioModel"></resultMap>
+    <resultMap id="VendorPayNoMap" type="cn.com.cgbchina.batch.model.VendorPayNoModel"></resultMap>
+    <resultMap id="TblCfgProCodeMap" type="cn.com.cgbchina.batch.model.TblCfgProCodeModel"></resultMap>
+    <resultMap id="TblGoodsPaywayMap" type="cn.com.cgbchina.batch.model.TblGoodsPaywayModel"></resultMap>
+
+    <select id="findOrderListByParam" parameterType="cn.com.cgbchina.batch.model.OrderStatusQueryModel" resultMap="OrderStatusQueryMap">
+        select
+        order_id as orderId,
+        create_time as createTime,
+        mer_id as merId
+        from
+        tbl_order
+        where
+        cur_status_id in ('0301', '0316', '0360')
+        and is_cancel_netbank is null
+        and ordertype_id = #{paramOrdertypeId}
+        <![CDATA[
+          and create_time >= #{paramPrevDate}
+          and create_time <= #{paramSubdate}
+        ]]>
+    </select>
+
+    <select id="findOrderById" parameterType="String" resultMap="OrderStatusQueryMap">
+        select
+        order_id as orderId,
+        ordermain_id as orderMainId,
+        goods_id as goodsId,
+        goods_num as goodsNum,
+        goods_payway_id as goodsPayweyId,
+        vendor_id as vendorId,
+        cardno as "cardNo",
+        total_money as totalMoney,
+        goods_nm as goodsNm,
+        goods_color as goodsColor,
+        stages_num as stagesNum,
+        inc_take_price as incTakePrice,
+        vendor_snm as vendorSnm,
+        voucher_no as voucherNo,
+        voucher_price as voucherPrice,
+        bonus_totalvalue as bonusTotalValue,
+        uitdrtamt as "uitdrtamt",
+        create_time as createTime,
+        create_oper as createOper,
+        ordertype_id as orderTypeId,
+        cash_auth_type as cashAuthType,
+        act_type as actType,
+        act_id as actId,
+        cust_cart_id as custCartId,
+        cur_status_id as curStatusId,
+        cur_status_nm as curStatusNm,
+        mer_id as merId
+        from tbl_order
+        where order_id=#{orderId}
+    </select>
+
+    <select id="findItemById" parameterType="String" resultMap="ItemMap">
+        select
+        goods_code as goodsCode,
+        stock as "stock"
+        from tbl_item
+        where code=#{code}
+    </select>
+
+    <update id="updateItem" parameterType="Map">
+        update tbl_item set
+        modify_time = now(),
+        stock = stock + #{goodsNum}
+        where code = #{code}
+    </update>
+
+    <select id="findVendorById" parameterType="String" resultMap="VendorInfoMap">
+        select
+        vendor_role as vendorRole,
+        action_flag as actionFlag,
+        virtual_vendor_id as virtualVendorId
+        from tbl_vendor_inf
+        where vendor_id=#{vendorId}
+    </select>
+
+    <select id="findOrderMainById" parameterType="String" resultMap="OrderMainMap">
+        select
+        ordermain_id as orderMainId,
+        cont_idcard as contIdcard,
+        cont_id_type as contIdType,
+        create_oper as createOper,
+        csg_phone1 as csgPhone1,
+        csg_phone2 as csgPhone2,
+        csg_province as csgProvince,
+        csg_city as csgCity,
+        csg_borough as csgBorough,
+        csg_address as csgAddress,
+        csg_postcode as csgPostcode,
+        invoice as "invoice",
+        cont_nm as contNm,
+        cont_nm_py as contNmPy,
+        csg_name as csgName
+        from tbl_order_main
+        where ordermain_id=#{orderMainId}
+    </select>
+
+    <select id="findGoodsPayWayById" parameterType="String" resultMap="TblGoodsPaywayMap">
+         select
+         goods_payway_id as goodsPaywayId,
+         goods_id as goodsId,
+         payway_code as paywayCode,
+         pay_type as payType,
+         inc_code as incCode,
+         stages_code as stagesCode,
+         rule_id as ruleId,
+         auth_flat1 as authFlat1,
+         auth_flat2 as authFlat2,
+         per_stage as perStage,
+         stages_flag_cash as stagesFlagCash,
+         stages_flag_point as stagesFlagPoint,
+         stages_flag_inc as stagesFlagInc,
+         goods_point as goodsPoint,
+         is_action as isAction,
+         is_birth as isBirth,
+         member_level as memberLevel,
+         goods_price as goodsPrice,
+         cal_money as calMoney,
+         goods_payway_desc as goodsPaywayDesc,
+         ischeck as "ischeck",
+         cur_status as curStatus,
+         category_no as categoryNo
+         from tbl_goods_payway
+         where goods_payway_id=#{goodsPaywayId}
+    </select>
+
+    <update id="updateOrderStatusFromMain" parameterType="cn.com.cgbchina.batch.model.OrderStatusQueryModel">
+        update tbl_order
+        <set>
+            <if test="curStatusId !=null">cur_status_id = #{curStatusId}
+                ,</if>
+            <if test="curStatusNm !=null"> cur_status_nm = #{curStatusNm}
+                ,</if>
+            <if test="cardno !=null"> cardno = #{cardno}
+                ,</if>
+            <if test="order_succ_timeStr !=null">order_succ_time = #{order_succ_timeStr}
+                ,</if>
+            <if test="cardtype !=null"> cardtype = #{cardtype}</if>
+        </set>
+        where ordermain_id = #{ordermainId}
+    </update>
+
+    <insert id="insertOrderDoDetail" parameterType="cn.com.cgbchina.batch.model.OrderDoDetailModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_dodetail
+        (order_id
+        ,do_time
+        ,do_userid
+        ,user_type
+        ,status_id
+        ,status_nm
+        ,msg_content
+        ,do_desc
+        ,rule_id
+        ,rule_nm
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag)
+        values(#{orderId}
+        ,now()
+        ,#{doUserid}
+        ,#{userType}
+        ,#{statusId}
+        ,#{statusNm}
+        ,#{msgContent}
+        ,#{doDesc}
+        ,#{ruleId}
+        ,#{ruleNm}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{delFlag})
+    </insert>
+
+    <select id="getUnCommOrderMain" parameterType="Map" resultMap="OrderMainMap">
+        select
+        ordermain_id as ordermainId,
+        create_time as createTime,
+        mer_id as merId,
+        pay_result_time as payResultTime
+        from tbl_order_main
+        where cur_status_id in ('0301','0316')
+        and ordertype_id=#{ordertypeId}
+        <![CDATA[and create_time>=#{prevDate}
+        and create_time<=#{subdate} ]]>
+    </select>
+
+    <insert id="insertOrderOutSystem" parameterType="cn.com.cgbchina.batch.model.OrderOutSystemModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_outsystem
+        (order_main_id
+        ,order_id
+        ,times
+        ,tuisong_flag
+        ,system_role
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{orderMainId}
+        ,#{orderId}
+        ,#{times}
+        ,#{tuisongFlag}
+        ,#{systemRole}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <select id="findByOrderMainId" parameterType="String" resultMap="OrderStatusQueryMap">
+        select
+        order_id as orderId,
+        ordermain_id as orderMainId,
+        goods_id as goodsId,
+        goods_payway_id as goodsPayweyId,
+        vendor_id as vendorId,
+        cardno as "cardNo",
+        total_money as totalMoney,
+        goods_nm as goodsNm,
+        goods_color as goodsColor,
+        stages_num as stagesNum,
+        inc_take_price as incTakePrice,
+        vendor_snm as vendorSnm,
+        voucher_no as voucherNo,
+        voucher_price as voucherPrice,
+        bonus_totalvalue as bonusTotalValue,
+        uitdrtamt as "uitdrtamt",
+        create_time as createTime,
+        ordertype_id as orderTypeId,
+        cash_auth_type as cashAuthType,
+        act_type as actType,
+        cust_cart_id as custCartId,
+        cur_status_id as curStatusId,
+        cur_status_nm as curStatusNm
+        from tbl_order
+        where ordermain_id=#{ordermainId}
+    </select>
+
+    <update id="updateOrderMainStatus" parameterType="cn.com.cgbchina.batch.model.OrderMainModel">
+        update tbl_order_main
+        set cur_status_id = #{curStatusId},
+        cur_status_nm = #{curStatusNm}
+        where
+	    ordermain_id = #{ordermainId}
+    </update>
+
+    <select id="getOrderExtend1ById" parameterType="String" resultMap="TblOrderExtend1Map">
+        select
+        order_extend1_id as orderExtend1Id,
+        order_id as orderId,
+        errorcode as "errorcode",
+        approveresult as "approveresult",
+        followdir as "followdir",
+        caseid AS "caseid",
+        specialcust as "specialcust",
+        releasetype as "releasetype",
+        rejectcode as "rejectcode",
+        aprtcode as "aprtcode",
+        ordernbr as "ordernbr",
+        processstatus as "processstatus",
+        processresult as "processresult",
+        creator as "creator",
+        regulator as "regulator",
+        michelleid as "michelleid",
+        incomingtel as "incomingtel",
+        extend1 as "extend1",
+        extend2 as "extend2",
+        extend3 as "extend3"
+        from tbl_order_extend1
+        where order_id=#{orderId}
+    </select>
+
+    <select id="getSumOrderExtend1ById" parameterType="String" resultType="Long">
+        select count(order_extend1_id) as no
+        from tbl_order_extend1
+        where order_id=#{orderId}
+    </select>
+
+    <insert id="insertTblOrderExtend1" parameterType="cn.com.cgbchina.batch.model.TblOrderExtend1Model" useGeneratedKeys="true"
+            keyProperty="orderExtend1Id" keyColumn="order_extend1_id">
+        insert into tbl_order_extend1
+        (order_id
+        ,errorcode
+        ,approveresult
+        ,followdir
+        ,caseid
+        ,specialcust
+        ,releasetype
+        ,rejectcode
+        ,aprtcode
+        ,ordernbr
+        ,processstatus
+        ,processresult
+        ,creator
+        ,regulator
+        ,michelleid
+        ,incomingtel
+        ,extend1
+        ,extend2
+        ,extend3)
+        values(#{orderId}
+        ,#{errorcode}
+        ,#{approveresult}
+        ,#{followdir}
+        ,#{caseid}
+        ,#{specialcust}
+        ,#{releasetype}
+        ,#{rejectcode}
+        ,#{aprtcode}
+        ,#{ordernbr}
+        ,#{processstatus}
+        ,#{processresult}
+        ,#{creator}
+        ,#{regulator}
+        ,#{michelleid}
+        ,#{incomingtel}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3})
+    </insert>
+
+    <update id="updateTblOrderExtend1ByExtend1" parameterType="cn.com.cgbchina.batch.model.TblOrderExtend1Model">
+        update tbl_order_extend1 set
+        extend1=#{extend1}
+        where order_id = #{orderId}
+    </update>
+
+    <update id="updateOrderSerialNo" parameterType="cn.com.cgbchina.batch.model.OrderStatusQueryModel">
+        update tbl_order set
+        order_id_host  = #{orderIdHost}
+        where order_id = #{orderId}
+    </update>
+
+    <select id="getTblVendorRatio" parameterType="cn.com.cgbchina.batch.model.TblVendorRatioModel" resultMap="TblVendorRatioMap">
+        select
+        id as "id",
+        vendor_id as vendorId,
+        period as "period",
+        fixedfeeht_flag as fixedfeehtFlag,
+        fixedamt_fee as fixedamtFee,
+        feeratio1 as "feeratio1",
+        ratio1_precent as ratio1Precent,
+        feeratio2 as "feeratio2",
+        ratio2_precent as ratio2Precent,
+        feeratio2_bill as feeratio2Bill,
+        feeratio3 as "feeratio3",
+        ratio3_precent as ratio3Precent,
+        feeratio3_bill as feeratio3Bill,
+        reducerate_from as reducerateFrom,
+        reducerate_to as reducerateTo,
+        reducerate as "reducerate",
+        htflag as "htflag",
+        htant as "htant",
+        del_flag as delFlag
+        from tbl_vendor_ratio
+        where vendor_id=#{vendorId}
+        and period=#{period}
+        and del_flag ='0'
+    </select>
+
+    <select id="getTblVendorPayNo" parameterType="cn.com.cgbchina.batch.model.VendorPayNoModel" resultMap="VendorPayNoMap">
+        select
+        id as "id",
+        vendor_id as vendorInfId,
+        period as "period",
+        pay_no as payNo,
+        pay_name as payName,
+        product as "product",
+        create_oper as createOper,
+        create_time as createTime,
+        modify_oper as modifyOper,
+        modify_time as modifyTime,
+        del_flag as delFlag
+        from tbl_vendor_pay_no
+        where vendor_id=#{vendorInfId}
+        and period=#{period}
+        and delFlag!='1'
+    </select>
+
+    <update id="updateOrderIsCancelNetbank" parameterType="cn.com.cgbchina.batch.model.OrderStatusQueryModel">
+        update tbl_order set
+        is_cancel_netbank  = #{isCancelNetbank}
+        where order_id = #{orderId}
+    </update>
+
+    <update id="updateOrderStatus" parameterType="cn.com.cgbchina.batch.model.OrderStatusQueryModel">
+        update tbl_order
+        <set>
+            <if test="curStatusId !=null">cur_status_id = #{curStatusId}
+                ,</if>
+            <if test="curStatusNm !=null">cur_status_nm = #{curStatusNm}
+                ,</if>
+            <if test="errorCode !=null">error_code = #{errorCode}
+                ,</if>
+            <if test="cardno !=null">cardno = #{cardno}
+                ,</if>
+            <if test="cardtype !=null">cardtype = #{cardtype}
+                ,</if>
+            <if test="cashAuthType !=null">cash_auth_type = #{cashAuthType}
+                ,</if>
+            <if test="balanceStatus !=null">balance_status = #{balanceStatus}
+                ,</if>
+            <if test="order_succ_timeStr !=null">order_succ_time = #{order_succ_timeStr}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}</if>
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+    <update id="updateTyingsaleOrder" parameterType="cn.com.cgbchina.batch.model.OrderStatusQueryModel">
+        update tbl_order set
+        balance_status=#{balanceStatus}
+        where order_id = #{orderId}
+        and act_category='1'
+    </update>
+
+    <update id="dealPointPool" parameterType="Map">
+        update tbl_point_pool set
+        used_point = used_point - #{used_point}
+        where cur_month = #{cur_month} and del_flag ='0'
+    </update>
+
+    <update id="updateTblOrderExtend1Model" parameterType="cn.com.cgbchina.batch.model.TblOrderExtend1Model">
+        update tbl_order_extend1
+        <set>
+            <if test="orderId !=null">order_id = #{orderId}
+                ,</if>
+            <if test="errorcode !=null">errorcode = #{errorcode}
+                ,</if>
+            <if test="approveresult !=null">approveresult = #{approveresult}
+                ,</if>
+            <if test="followdir !=null">followdir = #{followdir}
+                ,</if>
+            <if test="caseid !=null">caseid = #{caseid}
+                ,</if>
+            <if test="specialcust !=null">specialcust = #{specialcust}
+                ,</if>
+            <if test="releasetype !=null">releasetype = #{releasetype}
+                ,</if>
+            <if test="rejectcode !=null">rejectcode = #{rejectcode}
+                ,</if>
+            <if test="aprtcode !=null">aprtcode = #{aprtcode}
+                ,</if>
+            <if test="ordernbr !=null">ordernbr = #{ordernbr}
+                ,</if>
+            <if test="processstatus !=null">processstatus = #{processstatus}
+                ,</if>
+            <if test="processresult !=null">processresult = #{processresult}
+                ,</if>
+            <if test="creator !=null">creator = #{creator}
+                ,</if>
+            <if test="regulator !=null">regulator = #{regulator}
+                ,</if>
+            <if test="michelleid !=null">michelleid = #{michelleid}
+                ,</if>
+            <if test="incomingtel !=null">incomingtel = #{incomingtel}
+                ,</if>
+            <if test="extend1 !=null">extend1 = #{extend1}
+                ,</if>
+            <if test="extend2 !=null">extend2 = #{extend2}
+                ,</if>
+            <if test="extend3 !=null">extend3 = #{extend3}
+            </if>
+        </set>
+        where order_extend1_id = #{orderExtend1Id}
+    </update>
+
+    <select id="getBigMachineParam" resultMap="TblCfgProCodeMap">
+        select
+        pro_pri as proPri,
+        pro_nm as proNm,
+        pro_desc as proDesc
+        from tbl_cfg_procode
+        where ordertype_id='YG'
+        and pro_type='BM'
+        and pro_code='big_machine'
+    </select>
+    <select id="findCustCartIdById" parameterType="Map" resultType="List">
+        select o.cust_cart_id from tbl_order o
+        <where>
+            <if test="orderId !=null">o.order_id = #{orderId}</if>
+            <if test="orderMainId !=null">o.ordermain_id = #{orderMainId}</if>
+        </where>
+    </select>
+    <update id="updateTblEspCustCartByOrderId" parameterType="Map">
+        update tbl_esp_cust_cart c
+        set c.pay_flag = #{payFlag}
+        where c.id in
+        <foreach collection="custCartIds" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateTblEspCustCart" parameterType="Map">
+        update tbl_esp_cust_cart c
+        set c.pay_flag = #{payFlag}
+        where c.id in
+        <foreach collection="custCartIds" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <insert id="insertOrderCheckModel" parameterType="cn.com.cgbchina.batch.model.OrderCheckModel"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into tbl_order_check
+        (order_id
+        ,cur_status_id
+        ,cur_status_nm
+        ,do_date
+        ,do_time
+        ,ischeck
+        ,ispoint
+        ,create_oper
+        ,modify_time
+        ,modify_oper
+        ,create_time
+        ,del_flag,jf_refund_serialno)
+        values (#{orderId}
+        ,#{curStatusId}
+        ,#{curStatusNm}
+        ,#{doDate}
+        ,#{doTime}
+        ,#{ischeck}
+        ,#{ispoint}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        ,0,#{jfRefundSerialno})
+    </insert>
+
+    <update id="updateRecordSucc" parameterType="String">
+        update tbl_auction_record set pay_flag = '1' where id= #{auctionId}
+    </update>
+
+    <select id="findCountByOrderMainId" parameterType="String" resultType="Integer">
+        select
+            count(order_id) as no
+        from
+            tbl_order
+        where
+            ordermain_id =#{orderMainId}
+        and member_level ='1'
+        and source_id in ('00', '03', '04')
+    </select>
+
+    <select id="findCustIdByOrderMainId" parameterType="String" resultType="String">
+        select
+        o.create_oper
+        from
+          tbl_order_main o
+        where
+          o.ordermain_id = #{orderMainId}
+    </select>
+
+    <update id="updateBirthUsedCount" parameterType="Map">
+        update tbl_esp_cust_new e
+        set e.birth_used_count = e.birth_used_count - #{sum}
+        where
+            e.cust_id = #{custid}
+    </update>
+
+    <update id="updateAuctionRecord" parameterType="String">
+        update tbl_auction_record
+        set
+        is_backlock = '0',
+        release_time=now()
+        where
+        id = #{id} and
+        order_id is not null and
+        is_backlock='1'
+    </update>
+</mapper>
+
+

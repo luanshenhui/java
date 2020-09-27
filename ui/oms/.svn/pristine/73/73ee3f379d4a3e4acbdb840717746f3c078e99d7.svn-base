@@ -1,0 +1,251 @@
+var roleTable;
+
+jQuery(document).ready(function(){
+	roleTable = $('#roleTable').DataTable({
+    	"processing": true,
+        "serverSide": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "dom": '<"bottom"rtflp>',
+        "searching": false,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+        "ajax": {
+            "url": "/role/roleList.action",
+            "data": function ( d ) {
+                d.quickSearch = encodeURI($('#quickSearch').val());
+            }
+        },
+        "tableTools": {
+            //"sSwfPath": "/js/datatables/tabletools/swf/copy_csv_xls_pdf.swf", // 表格导出，需要flash支持
+            "sRowSelect": "bootstrap"
+        },
+        "columns": [{
+            	"data": "chk"
+        	},{
+                "data": "_0"
+            }, {
+                "data": "roleName"
+            }, {
+                "data": "roleDescription"
+            }, {
+                "data": "isAdminrole"
+            }
+        ],
+        "columnDefs": [{
+	        	"orderable":false,
+	        	"targets":[4]
+        	}
+        ],
+        "order": [[ 0, "asc" ]]
+    });
+	
+	
+});
+$("#btnQuickSearch").click(function () {
+	
+    roleTable.draw();
+});
+
+  // 搜索框的回车事件
+$('#quickSearch').keydown(function(e){
+	if(e.keyCode==13){
+		$("#btnQuickSearch").click();
+	}
+});
+
+$('#creatRole').on('hide.bs.modal', function () {
+	// 父窗体归还本页的编辑对话框
+	window.top.window.returnCustomModalDialog();
+})
+//添加
+function addRole(){
+//	$('#rootwizard-custom-user').bootstrapWizard('show',0);
+	var editDialog = window.top.window.borrowCustomModalDialog($("#creatRole"));
+	editDialog.modal({show:true, backdrop:'static'});
+} 
+
+$('#roleSave').click(function(){
+	insertRole();
+});
+
+function doReset(){
+	$('#roleTable').DataTable().ajax.reload(null, false);
+//	$('#quickSearch').val()="";
+	 
+}
+function deleteRole(){
+	
+	var idString = "";
+	$("input[type='checkbox']:checked").each(function(k,v){
+		if(idString==""){
+			idString=this.getAttribute('roleid')
+		}else if(idString!=""){
+			idString+=","+this.getAttribute('roleid')
+		}
+	});
+
+	if (idString == null || idString==undefined || idString=="" || idString == ","){
+		alert(SELECT_ROLE_TO_DELETE);
+		return;
+	}
+	window.top.window.showModalConfirm( "删除成功", delRole(idString));
+	roleTable.draw();
+}
+
+function delRole(roleIds){
+	var sURL = "/role/deleteRole.action";
+	jQuery.ajax( {
+		url : sURL,
+		type : "post",
+		dataType : "json",
+		data : {
+			roleIds : roleIds
+		},
+		success : function(data) {
+			if(data.errorMessage==null || data.errorMessage==undefined){
+				//删除后重新查询一下，相当于刷新 
+				/*var queryForm=$(queryFormName);
+				var queryPara={
+					"forward" : "userList",
+					"needUserRole" : "1",//只要有此参数，就表示需要提取用户角色
+					"itemId" : queryForm["hidUnitID"].value,
+					"userAccount" : queryForm["txtUserAccount"].value,
+					"userName" : queryForm["txtUserName"].value != "" ? "%"+queryForm["txtRoleName"].value+"%" : ""
+				};
+				ECSideUtil.queryECForm(listFormName,queryPara,true);*/
+				alert(DELETE_OK);
+			} else {
+				if (data.errorMessage == "session timeout")
+					window.location.href = webpath + "/login.jsp";
+				else
+					alert(data.errorMessage);
+			}
+		},
+		error : function(XMLHttpRequest,textStatus,errorThrown){
+			alert(NET_FAILD);
+		}
+	});
+}
+/**
+ * 添加角色
+ * @returns
+ */
+function insertRole() {
+	// 父窗体归还本页的编辑对话框
+	window.top.window.returnCustomModalDialog();
+	
+	var roleName = $("#txtRoleName").val();
+    var roleDescription = $("#txtRoleDesc").val();
+    var txtMax = $("#txtMax").val();
+    var txtRoleUsers =$("#txtRoleUsers").val();
+    var isAdminrole = $("#selIsAdminRole").val();
+    var txtRoleUnits = $("#txtRoleUnits").val();
+    
+    var data = {
+    	"roleName": roleName,
+    	"roleDescription": roleDescription,
+        "userNumbers": txtMax,
+        "isAdminrole": isAdminrole,
+        "txtRoleUsers":txtRoleUsers,
+        "txtRoleUnits": txtRoleUnits
+    };
+    
+    $.ajax({
+        type:"POST",
+        url:"/role/addRole.action",
+        data:JSON.stringify(data),
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        async: false, // 同步
+        success:function(data) {
+            if (data.result == "success") {
+            	$('#creatRole').modal('hide');
+            	window.top.window.showScoMessage('ok', '添加成功');
+            } else{
+            	window.top.window.showModalAlert(data.msg);
+            }
+        },
+        error:function(XMLHttpRequest, textStatus) {
+            if (XMLHttpRequest.status == 500) {
+                var result = eval("(" + XMLHttpRequest.responseText + ")");
+                alert(result.errorObject.errorText);
+            }
+        }
+    });
+	roleTable.draw();
+}
+
+function updateRole(){
+	var sendPara = new Object();
+	var ecsideObj=ECSideUtil.getGridObj("ec");
+	var crow=ecsideObj.selectedRow;
+	if (crow == null || crow.cells[0] == undefined){
+		alert(SELECT_ROLE_TO_EDIT);
+		return;
+	}
+	var selectedRoleID = ECSideUtil.getPropertyValue(crow,"roleId","ec");
+	
+	
+	var sURL = webpath + "/view/organization/role/RoleDetail.jsp?opFlag=1&roleID=" + selectedRoleID;
+	window.parent.dialogPopup_L2(sURL,ROLE_DETAIL,280,400,true,"saveRole");
+	
+	
+	//var sURL = webpath + "/view/organization/role/RoleDetail.jsp?opFlag=1&roleID=" + selectedRoleID;
+	//document.getElementById("roleDetailFrame").src=sURL;
+	//jQuery("#roleDetailDialog").dialog('open');
+	//sendPara.roleID = selectedRoleID;
+	//sendPara.opFlag = 1; // 0 为新增保存；1为修改保存
+	//var returnObj = window.showModalDialog(webpath + '/view/organization/role/RoleDetail.jsp',sendPara,'dialogWidth=450px;status:no;scroll:no;dialogHeight=280px');
+	//if (returnObj){
+		//保存成功不刷新
+	//}
+}
+
+
+
+//选择用户
+function userSelect(){
+	var sURL = webpath + "/UserAction.do?method=getUser&forward=userSelect";
+	document.getElementById("userSelectFrame").src=sURL;
+	jQuery("#userSelectDialog").dialog('open');
+	//var returnObj = window.showModalDialog(webpath + '/UserAction.do?method=getUser&forward=userSelect',null,'dialogWidth=500px;status:no;scroll:no;dialogHeight=380px');
+	//if (returnObj){
+		//alert(returnObj.userIds);
+		//alert(returnObj.userTexts);
+	//	var itemIds = returnObj.itemIds;
+	//	var itemTexts = returnObj.itemTexts;
+	//	jQuery("#txtRoleUsers").val(itemTexts);
+	//	jQuery("#txtRoleUsersValue").val(itemIds);
+	//}
+}
+
+function getRoleDetail(){
+	jQuery.ajax({
+		url:"/user/getRoleDetail.action",
+		type:"post",
+		dataType:"json",
+		async:false,
+		data:{type:"user"}, //给出扩展信息内容类型
+		success:function(data)
+		{
+			var obj = data.BizTypeDefine.elementList;
+			var strHtml = getExtInfo(obj); //获取extInfo
+			jQuery("#dyItem").append(strHtml);
+			//为cobbobox赋值
+			for(var i = 0 ; i<obj.length; i++){				
+				if(obj[i].name !="id"){
+					if(obj[i].type=="ComboBox"){
+						var myOption=document.getElementById(obj[i].name);
+						myOption.options[myOption.options.length]=new Option("","");
+						for(var j in obj[i].storeValueMap){
+							myOption.options[myOption.options.length]=new Option(obj[i].storeValueMap[j],j);
+					    }
+					}
+				}
+			}
+		}
+	});
+}
+
+
+

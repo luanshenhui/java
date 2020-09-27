@@ -1,0 +1,292 @@
+
+.box{
+    padding-bottom: 0;
+}
+.box-head{
+    width: 100%;
+    position: relative;
+    height: 70px;
+}
+.box-head a{
+    position: absolute;
+    display: block;
+
+    top: 0;
+    background: url(../image/header-menu-bg-middle.png) repeat-x;
+    text-align: center;
+    font-size: 20px;
+    line-height: 45px;
+    color: #fff;
+    text-decoration: none;
+}
+.arrow-back{
+    left: 0;
+    width: 100px;
+    height: 45px;
+
+}
+.arrow-back2{
+    width: 180px;
+    left:112px;
+}
+.box-head a:before,.box-head a:after{
+    position: absolute;
+    top: 0;
+    width: 15px;
+    height: 45px;
+    content: '';
+}
+.box-head a:before{
+    left: -2px;
+    background: url(../image/header-menu-bg-left.png) no-repeat;
+}
+.box-head a:after{
+    right: -2px;
+    background: url(../image/header-menu-bg-right.png) no-repeat;
+}
+.arrow-back i{
+   display: inline-block;
+    width: 18px;
+    height: 21px;
+    margin-right: 7px;
+    vertical-align: middle;
+    background:url("../image/homepage-btn.png") no-repeat;
+}
+.box .box-title{
+    position: absolute;
+    display: block;
+    left: 50%;
+    top: -12px;
+    width: 290px;
+    height: 55px;
+    margin-left: -145px;
+    color: #fff;
+    font-size: 25px;
+    text-align: center;
+    line-height: 55px;
+    background: url("../image/box-title-bg.png");
+}
+.box-head .arrow-left {
+    right: 85px;
+
+}
+.box-head  .arrow-right{
+    right: 0;}
+.box-head .arrow-left,.box-head .arrow-right{
+    width: 75px;
+    height: 45px;
+}
+.arrow-left i,.arrow-right i{
+    display: block;
+    width: 75px;
+    height: 45px;
+    vertical-align: middle;
+}
+.arrow-left i{
+    background: url("../image/arrow-left.png") no-repeat center;
+}
+.arrow-right i{
+    background: url("../image/arrow-right.png") no-repeat center;
+}
+.box-container{
+    border: 2px solid #090204;
+    border-radius: 4px;
+    background: #292c2e;
+    height: 825px;
+    box-sizing: content-box;
+}
+.box-container .box-left,.box-container .box-right{
+    float: left;
+}
+.box-container .box-left{
+    width: 305px;
+    height: 100%;
+    padding: 0 25px;
+    background: #171818;
+}
+.box-container .box-left ul li{
+     width: 245px;
+     margin-top: 20px;
+     padding: 4px 5px;
+     height: 38px;
+     text-align: center;
+
+ }
+ a:hover{
+    text-decoration: none;
+}
+.box-container .box-left ul li a{
+    position: relative;
+    display: block;
+    width: 215px;
+    height: 45px;
+    margin-left: 15px;
+    text-align: center;
+    line-height:45px;
+    color: #fff;
+    font-size: 20px;
+    background: url("../image/left-btn-line.png");
+}
+.box-container .box-left ul li a:before,.box-container .box-left ul li a:after{
+    position: absolute;
+    top: 0;
+    width: 15px;
+    height: 45px;
+    content: '';
+}
+.box-container .box-left>ul li a:before{
+     left: -15px;
+    background: url("../image/left-btn-left.png");
+ }
+.box-container .box-left>ul li a:after,.box-container .box-left>ul li a:after{
+    right: -15px;
+    background: url("../image/left-btn-right.png");
+}
+.box-container .box-left>ul li:hover a,.box-container .box-left>ul li.on a{
+    background: url("../image/left-btn-on-line.png");
+}
+.box-container .box-left>ul li:hover a:before,.box-container .box-left>ul li.on a:before{
+    background: url("../image/left-btn-on-left.png");
+}
+.box-container .box-left>ul li:hover a:after,.box-container .box-left>ul li.on a:after{
+    background: url("../image/left-btn-on-right.png");
+}
+
+.box-right{
+    width: 1516px;
+    height: 100%;
+    margin-left: 15px;
+    border: 2px solid #0d0d0d;
+    background: url("../image/right-bg.png");
+}
+
+.box-right-title{
+    width: 1505px;
+    height: 85px;
+    margin:2px  auto;
+    background:url("../image/right-title-bg.png") ;
+    box-shadow: 0 5px 10px #000;
+}
+.box-right-title p{
+	display:inline-block;
+    height: 100%;
+    line-height: 85px;
+    color: #fff;
+    font-size: 24px;
+}
+.box-right-title i{
+    display: inline-block;
+    width: 29px;
+    height: 31px;
+    margin: 0 15px 0 20px;
+    vertical-align: middle;
+    background: url("../image/box-right-title-icon.png");
+}
+.box-right .tab {
+    height: 50px;
+    display: inline-block;
+}
+.box-right-title .tab {
+    float: right;
+    margin:18px  60px;
+}
+.box-right .tab a{
+    position: relative;
+    display: block;
+    float: left;
+    width: 155px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-size: 20px;
+    background: url("../image/tab-line.png");
+}
+.form-right .tab a{
+    width: 95px;
+    text-align: center;
+}
+.form-right .tab a span{
+    font-size: 20px;
+}
+.form-right .tab .title-tab3{
+    width: 115px;
+}
+.box-right .title-tab1:before,.box-right .title-tab1:after,.box-right .title-tab2:after,.box-right .title-tab3:after{
+    position: absolute;
+    top: 0;
+    height: 50px;
+    content: '';
+}
+
+/*tab1选中的时候 左边样式*/
+.box-right .title-tab1.on:before{
+    left: -20px;
+    width: 20px;
+    background: url("../image/tab-on-left.png");
+}
+.box-right .title-tab1:before{
+    left: -20px;
+    width: 20px;
+    background: url("../image/tab-left.png");
+}
+.box-right .title-tab2:after{
+    right: -20px;
+    width: 20px;
+    background: url("../image/tab-right.png");
+}
+.box-right .title-tab2.on:after{
+    right: -20px;
+    width: 20px;
+    background: url("../image/tab-on-right.png");
+}
+
+.box-right .title-tab1:after{
+    right: 0;
+    width:1px;
+    background: url("../image/tab-line-center.png");
+}
+.box-right .title-tab3:after{
+    right: 0;
+    width:1px;
+    background: url("../image/tab-line-center.png");
+}
+.box-right .tab .on{
+    color: #0e6ab0;
+    background: url("../image/tab-on-line.png");
+}
+.box-right .tab .on span{
+    color: #0e6ab0;
+}
+.tab .title-tab1 span{
+    margin-left: -10px;
+}
+.tab .title-tab2 span{
+     margin-left: 10px;
+ }
+.lg-box .tab{
+    margin: 20px 20px 0 20px;
+    width: 350px;
+}
+.footer{
+    font-size: 18px;
+    height: 40px;
+    line-height: 40px;
+}
+
+/*流程说明*/
+.box-container{width: 1840px;}
+.bg-img{
+    text-align: center;
+    background: url("../image/right-bg.png");
+}
+.bg-img .img-box{
+    width: 100%;
+    height:100%;
+    overflow-y: auto;
+}
+.bg-img .img-box img{
+    width: 100%;
+}
+.m-l-365{
+    margin-left: 365px;}

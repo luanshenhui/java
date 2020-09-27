@@ -1,0 +1,72 @@
+{{#component "decoration_goods js-component" }}
+
+    <link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+
+    <p class="components-title"><strong>- 装修选品 -</strong></p>
+    <form id="form-search" class="form form-inline form-aligned">
+        <fieldset>
+            <p class="filter-name">
+                <span class="span4 span-large">
+                    <label>后台类目</label>
+                    <select class="form-control select js-select1" data-level="1" name="back_category1_id">
+                        <option class="select" value="">请选择</option>
+                    </select>
+                </span>
+                <em> > </em>
+                <span class="span2 span-large">
+                    <select class="form-control select js-select2" data-level="2" name="back_category2_id">
+                        <option class="select" value="">请选择</option>
+                    </select>
+                </span>
+                <em> > </em>
+                <span class="span2 span-large">
+                    <select class="form-control select js-select3" data-level="3" name="back_category3_id">
+                        <option class="select" value="">请选择</option>
+                    </select>
+                </span>
+            </p>
+
+            <p class="filter-name">
+                <span class="span4 span-large">
+                    <label for="goodsName">商品名称:</label>
+                    <input id="goodsName" name="name" type="text" class="form-control decoration-goods-name"/>
+                </span>
+                <span class="span1 span-large">
+                    <label>&nbsp;</label>
+                    <input class="btn btn-success btn-small decoration-goods-search" type="button" value="查询"/>
+                </span>
+            </p>
+            <span style="font-size: 14px; margin-left: 65px; color: red;">注：装修选品默认显示50条单品，其他选品请通过搜索查询。根据类目查询请精确到三级类目</span>
+        </fieldset>
+    </form>
+
+    <div class="scroll-style data_div">
+
+        <table class="table table-top active-tr-center">
+            <thead>
+            <tr>
+                <th width="20%">单品编码</th>
+                <th width="60%">商品名称</th>
+                <th width="5%">礼品</th>
+                <th width="15%">操作</th>
+            </tr>
+            </thead>
+            <tbody class="decoration-goods-search-show">
+
+            </tbody>
+        </table>
+    </div>
+    <p style="padding-top: 15px;padding-left: 30px;"><input class="btn btn-success btn-small generate-goods-ids" type="button" value="生成商品IDs"/></p>
+    <table class="table table-top active-tr-center">
+        <thead>
+        <tr>
+            <th width="25%">单品编码</th>
+            <th width="60%">商品名称</th>
+            <th width="15%">操作</th>
+        </tr>
+        </thead>
+        <tbody class="decoration-goods-all">
+        </tbody>
+    </table>
+
+{{/component}}

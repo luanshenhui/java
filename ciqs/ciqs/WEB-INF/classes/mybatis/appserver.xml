@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for APPS.
+
+@author zhuqb
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 移动端访问接口
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.APPS">
+
+   <!-- **** select ********************************************************************************************************************************************** -->
+          <!-- 根据业务ID和系统ID查询录入的结果数据 -->
+		  <select id="selectResults" resultType="java.util.Map">
+		  SELECT 
+			          ID
+		  FROM
+			          QLC_CHK_RCD    
+				       
+	      WHERE 
+			          PROC_MAIN_ID = #{proc_main_id}
+		  AND
+			          PROJ_CODE = #{proj_code}          
+		  </select> 
+	      
+	      <select id="selectCodes" resultType="com.dpn.ciqqlc.standard.model.SelectModel" parameterType="String" >
+		  SELECT
+					  name,
+					  code		
+		  FROM
+			          QLC_CODE_LIBRARY 
+		  WHERE 
+		              type = #{type}
+	     </select> 
+	
+    
+    <!-- **** insert ********************************************************************************************************************************************** -->
+	      <insert id="insertResults">
+		  INSERT  INTO  QLC_CHK_RCD 
+		  (
+					ID
+					<if test="proc_main_id != null and proc_main_id != ''" >
+						,PROC_MAIN_ID
+					</if>
+					<if test="proj_code != null and proj_code != ''" >
+						,PROJ_CODE
+					</if>
+						,RESULT_STATE
+					<if test="opr_user != null and opr_user != ''" >
+						,OPR_USER
+					</if>
+					,OPR_DATE
+		   )
+		   VALUES
+		   (           
+		            CreateGUID()
+		            <if test="proc_main_id != null and proc_main_id != ''" >
+						,#{proc_main_id}
+					</if>
+					<if test="proj_code != null and proj_code != ''" >
+						,#{proj_code}
+					</if>
+						,'1'
+					<if test="opr_user != null and opr_user != ''" >
+						,#{opr_user}
+					</if>
+					,sysdate
+		   )
+		   </insert>
+
+    <!-- **** update ********************************************************************************************************************************************** -->
+
+    <!-- **** delete ********************************************************************************************************************************************** -->
+
+</mapper>

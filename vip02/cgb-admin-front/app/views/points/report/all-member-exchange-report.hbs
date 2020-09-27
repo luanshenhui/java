@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（ALL常旅客会员消费）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF14",
+            "reportCode":"JF14,JF50"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

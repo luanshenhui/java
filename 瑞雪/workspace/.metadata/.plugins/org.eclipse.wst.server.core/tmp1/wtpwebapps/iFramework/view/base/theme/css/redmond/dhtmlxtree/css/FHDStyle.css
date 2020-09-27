@@ -1,0 +1,535 @@
+body{
+	MARGIN: 0px;
+	PADDING: 0px; 
+	FONT-SIZE:12px;
+	LINE-HEIGHT:150%;
+	
+	font-family:sans-serif,'宋体',arial,;
+	background-color:#ffffff;
+}
+
+/*查询列表样式*/
+/* whole table*/
+.fhd_query {
+	border: 1px solid #ccdff0;
+}
+
+/* table title */
+.fhd_query_title {
+	FONT-SIZE: 13px;
+	COLOR: #e27603;
+	FONT-FAMILY: "宋体";
+	HEIGHT: 25px;
+	cursor:default;
+	background-position: left;
+	text-indent: 10px;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: #297bbf;
+	font-weight: bold;
+	vertical-align: bottom;
+}
+
+
+/* table head */
+.fhd_query_head {
+	FONT-SIZE: 12px;
+	BACKGROUND: #edf6fc;
+	COLOR: #000000;
+	FONT-FAMILY: "宋体";
+	text-align: right;
+	text-decoration: none;
+	HEIGHT: 20px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: groove;
+	border-bottom-style: groove;
+	border-right-color: #e8e8e8;
+	border-bottom-color: #e8e8e8;
+}
+
+/* table row */
+.fhd_query_content {
+	FONT-SIZE: 12px;
+	COLOR: #000000;
+	BACKGROUND: #ffffff;
+	FONT-FAMILY: "宋体", Arial;
+	HEIGHT: 20px;
+	text-decoration: none;
+	text-indent: 5px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #ebebeb;
+	border-bottom-color: #ebebeb;
+}
+
+/* table bottom(foot)*/
+.fhd_query_bottom {
+	FONT-SIZE: 12px;
+	COLOR: #000000;
+	FONT-FAMILY: "宋体";
+	text-align: right;
+	HEIGHT: 24px;
+	text-decoration: none;
+	text-indent: 3px;
+	border-right:1px solid #ffffff;
+	border-bottom:1px solid #e8e8e8;
+	background-color: #edf6fc;
+}
+
+/*查询结果列表样式*/
+/* whole table*/
+.fhd_result {
+	border: 1px solid #ccdff0;
+}
+
+
+/* table title center */
+.fhd_result_title_center {
+	FONT-SIZE: 12px;
+	COLOR: #074e8b;
+	FONT-FAMILY: "宋体";
+	HEIGHT: 24px;
+	cursor:default;
+	word-break : break-all;
+	white-space: nowrap; 
+	background-image:url("/erms_service_common/images/table/headercenterbg.gif");
+	background-repeat:repeat-x;
+}
+
+
+/* table title */
+.fhd_result_title td{
+	FONT-SIZE: 13px;
+	COLOR: #e27603;
+	FONT-FAMILY: "宋体";
+	HEIGHT: 25px;
+	cursor:default;
+	background-position: left;
+	text-indent: 10px;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: #297bbf;
+	font-weight: bold;
+	vertical-align: bottom;
+}
+.fhd_result_title_2 {
+	FONT-SIZE: 12px;
+	COLOR: #074e8b;
+	FONT-FAMILY: "宋体";
+	HEIGHT: 24px;
+	cursor:default;
+	background-image:url(../images/table/headerbg1.gif);
+	background-repeat:repeat-x;
+	text-indent: 10px;
+}
+
+/* table head */
+.fhd_result_head td{
+	FONT-SIZE: 12px;
+	COLOR: #000000;
+	FONT-FAMILY: "宋体";
+	cursor:default;
+	text-align: center;
+	text-decoration: none;
+	HEIGHT: 20px;
+	border-bottom-width: 1px;
+	border-bottom-style: groove;
+	border-bottom-color: #CCCCCC;
+	border-right-width: 1px;
+	border-right-style: groove;
+	border-right-color: #CCCCCC;
+	background-image: url(../images/table/contentbg.gif);
+}
+
+.fhd_result_head th{
+	FONT-SIZE: 12px;
+	BACKGROUND: #dddddd;
+	COLOR: #000000;
+	FONT-FAMILY: "宋体";
+	cursor:default;
+	text-align: center;
+	text-decoration: none;
+	HEIGHT: 22px;
+	border-bottom-width: 1px;
+	border-bottom-style: groove;
+	border-bottom-color: #CCCCCC;
+
+	border-right-width: 1px;
+	border-right-style: groove;
+	border-right-color: #CCCCCC;
+}
+
+.fhd_result_content_data{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	text-align: right;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: groove;
+	border-bottom-style: groove;
+	border-right-color: #ebebeb;
+	border-bottom-color: #ebebeb;
+}
+
+/* table odd row */
+.fhd_result_content td{
+	FONT-SIZE: 12px;
+	COLOR: #000000;
+	BACKGROUND: #ffffff;
+	FONT-FAMILY: "宋体", Arial;
+	HEIGHT: 20px;
+	text-indent: 5px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #ebebeb;
+	border-bottom-color: #ebebeb;
+	line-height: 20px;
+}
+
+/* table even row */
+.fhd_result_content_ td{
+	FONT-SIZE: 12px;
+	COLOR: #000000;
+	BACKGROUND: #ffffff;
+	FONT-FAMILY: "宋体", Arial;
+	HEIGHT: 20px;
+	text-indent: 5px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #ebebeb;
+	border-bottom-color: #ebebeb;
+}
+
+/* mouse over row (event class)*/
+.fhd_result_onmouseover td{
+	FONT-SIZE: 12px;
+	BACKGROUND: #fff0af;
+	color:#000000;
+	FONT-FAMILY: "宋体";
+	HEIGHT: 20px;
+	text-decoration: none;
+	border-bottom:1px solid #e8e8e8;
+	text-indent: 5px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #ebebeb;
+	border-bottom-color: #ebebeb;
+}
+
+/* result second title*/
+.fhd_result_second_title {
+	FONT-SIZE: 12px;
+	COLOR: #074e8b;
+	FONT-FAMILY: "宋体";
+	HEIGHT: 24px;
+	cursor:default;
+	background-image:url(../images/table/result_title.gif);
+	background-repeat:repeat-x;
+	text-indent: 10px;
+}
+
+
+/* table bottom(foot)*/
+.fhd_result_bottom {
+	FONT-SIZE: 12px;
+	BACKGROUND: #f3f1f1;
+	COLOR: #000000;
+	FONT-FAMILY: "宋体";
+	text-align: left;
+	HEIGHT: 24px;
+	text-decoration: none;
+	text-indent: 3px;
+	border-right:1px solid #ffffff;
+	border-bottom:1px solid #e8e8e8;
+}
+
+.fhd_result_datacell_pilot {
+	FONT-SIZE: 12px;
+	BACKGROUND: #dddddd;
+	COLOR: #000000;
+	FONT-FAMILY: "宋体";
+	cursor:default;
+	text-align: center;
+	text-decoration: none;
+	HEIGHT: 20px;
+    
+	border-bottom:1px solid #9cc9e7;
+	
+
+}
+
+
+/*增加列表样式*/
+/* whole table*/
+.fhd_add {
+	border: 1px solid #ccdff0;
+}
+
+
+/* table title */
+.fhd_add_title td{
+
+	FONT-SIZE: 13px;
+	COLOR: #e27603;
+	FONT-FAMILY: "宋体";
+	HEIGHT: 25px;
+	cursor:default;
+	background-position: left;
+	text-indent: 10px;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: #297bbf;
+	font-weight: bold;
+	vertical-align: bottom;
+}
+
+
+
+/* table head */
+.fhd_add_head {
+	FONT-SIZE: 12px;
+	BACKGROUND: #edf6fc;
+	COLOR: #000000;
+	FONT-FAMILY: "宋体";
+	text-align: right;
+	text-decoration: none;
+	HEIGHT: 20px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: groove;
+	border-bottom-style: groove;
+	border-right-color: #e8e8e8;
+	border-bottom-color: #e8e8e8;
+}
+
+
+/* table row */
+.fhd_add_content {
+	FONT-SIZE: 12px;
+	COLOR: #000000;
+	BACKGROUND: #ffffff;
+	FONT-FAMILY: "宋体", Arial;
+	HEIGHT: 20px;
+	text-decoration: none;
+	text-indent: 5px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #ebebeb;
+	border-bottom-color: #ebebeb;
+}
+
+/* table bottom(foot)*/
+.fhd_add_bottom {
+	FONT-SIZE: 12px;
+	COLOR: #000000;
+	FONT-FAMILY: "宋体";
+	text-align: left;
+	HEIGHT: 24px;
+	text-decoration: none;
+	text-indent: 3px;
+	border-right:1px solid #ffffff;
+	border-bottom:1px solid #e8e8e8;
+	background-color: #edf6fc;
+}
+
+/*按钮样式*/
+/*功能按钮样式*/
+.fhd_btn{
+	font-size: 12px;
+	color: #2c4674;
+	height: 22px;
+	background-image: url(../images/table/buttonBg.gif);
+	padding-left: 10px;
+	padding-top: 4px;
+	border: 1px solid #90c0e8;
+	vertical-align: top;
+}
+
+/*搜索按钮样式*/
+.fhd_btn_Query{
+	font-size: 12px;
+	color: #2c4674;
+	height: 22px;
+	background-image: url(../images/table/buttonBg2.gif);
+	padding-top: 4px;
+	border: 1px solid #90c0e8;
+}
+
+/*分页按钮样式*/
+/*首页分页按钮样式*/
+.fhd_btn_firstopen{
+	height: 19px;
+	background-image: url(/erms_service_common/images/table/datacell_firstRow2.gif);
+	padding-left: 16px;
+	padding-top: 4px;
+	border: 0px solid #f3f1f1;
+	
+}
+
+.fhd_btn_firstclose{
+	height: 19px;
+	background-image: url(/erms_service_common/images/table/datacell_firstRow3.gif);
+	padding-left: 16px;
+	padding-top: 4px;
+	border: 0px solid #f3f1f1;
+	
+}
+
+/*上页分页按钮样式*/
+.fhd_btn_preopen{
+	height: 19px;
+	background-image: url(/erms_service_common/images/table/datacell_preRow2.gif);
+	padding-left: 16px;
+	padding-top: 4px;
+	border: 0px solid #f3f1f1;
+	
+}
+
+.fhd_btn_preclose{
+	height: 19px;
+	background-image: url(/erms_service_common/images/table/datacell_preRow3.gif);
+	padding-left: 16px;
+	padding-top: 4px;
+	border: 0px solid #f3f1f1;
+	
+}
+
+/*下页分页按钮样式*/
+.fhd_btn_nextopen{
+	height: 19px;
+	background-image: url(/erms_service_common/images/table/datacell_nextRow2.gif);
+	padding-left: 16px;
+	padding-top: 4px;
+	border: 0px solid #f3f1f1;
+	
+}
+.tableHeader {
+	cellspacing:"0";
+	cellpadding:"8";
+	height: 27px;
+	border:1px solid #cccccc;
+	font-family: "宋体";
+	font-size: 12px;
+	color: #1469b4;
+	font-weight: normal;
+	background-image: url(../../%E7%9B%91%E6%8E%A7%E9%A2%84%E8%AD%A6/images/contentbg.gif);
+}
+.fhd_btn_nextclose{
+	height: 19px;
+	background-image: url(/erms_service_common/images/table/datacell_nextRow3.gif);
+	padding-left: 16px;
+	padding-top: 4px;
+	border: 0px solid #f3f1f1;
+	
+}
+
+/*尾页分页按钮样式*/
+.fhd_btn_lastopen{
+	height: 19px;
+	background-image: url(/erms_service_common/images/table/datacell_lastRow2.gif);
+	padding-left: 16px;
+	padding-top: 4px;
+	border: 0px solid #f3f1f1;
+	
+}
+
+.fhd_btn_lastclose{
+	height: 19px;
+	background-image: url(/erms_service_common/images/table/datacell_lastRow3.gif);
+	padding-left: 16px;
+	padding-top: 4px;
+	border: 0px solid #f3f1f1;
+	
+}
+
+/*跳转指定页按钮样式*/
+.fhd_btn_go{
+    width:20px;
+	height: 19px;
+	background-image: url(/erms_service_common/images/table/go.gif);
+	padding-left: 16px;
+	padding-top: 4px;
+	border: 0px solid #f3f1f1;
+}
+
+/*列表按钮样式*/
+.fhd_list_btn{
+	font-size: 12px;
+	color: #2c4674;
+	height: 22px;
+	width:50px;
+	background-image: url(/erms_service_common/images/table/buttonBg2.gif);
+	padding-top: 4px;
+	border: 1px solid #90c0e8;
+}
+
+
+//以下为风险报告菜单样式信息
+div{
+	font-size:12px;
+}
+ul {margin:5px}
+li {margin:2px}
+li.root    
+{    
+	list-style-type:none;    
+    list-style-image:url(/erms_service_common/images/titel.gif); 
+    cursor:hand;  
+    white-space:nowrap;
+    overflow: hidden;
+    padding-left:0px;
+    list-style-position:inside;
+    margin-right:2px;
+} 
+li.plus    
+{    
+    list-style-type:none;    
+    list-style-image:url(/erms_service_common/images/close.gif); /*展开时图片,如"+"*/    
+    cursor:hand;
+    white-space:nowrap;
+    overflow: hidden;
+    padding-left:0px;
+    list-style-position: inside;
+    margin-right:2px;
+}    
+   
+li.minus    
+{    
+    list-style-type:none;    
+    list-style-image:url(/erms_service_common/images/open.gif); /*折叠时图片,如"-"*/    
+    cursor:hand;
+    white-space:nowrap;
+    overflow: hidden;
+    padding-left:0px;
+    list-style-position: inside;
+    margin-right:2px;
+}    
+   
+li.item    
+{    
+    list-style-type:none;    
+    list-style-image:url(/erms_service_common/images/leaf.gif); /*无子项目时图片*/    
+    cursor:hand;
+    white-space:nowrap;
+    overflow: hidden;
+    padding-left:0px;
+    list-style-position: inside;
+    margin-right:2px; 
+}
+
+.ybp{}
+.ybp ul{ margin:0; padding:0; list-style:none;}
+.ybp ul li { width:159px; height:158px; background:url(../../%E7%9B%91%E6%8E%A7%E9%A2%84%E8%AD%A6/images/yibiaopan.gif) no-repeat; float:left; margin-left:10px;position:relative;}
+.ybp ul li a{ width:159px; height:158px; display:block; text-decoration:none;}
+.ybp ul li a span.m{position:absolute;bottom:0; margin:0 0 15px 0; width:100%; text-align:center;}

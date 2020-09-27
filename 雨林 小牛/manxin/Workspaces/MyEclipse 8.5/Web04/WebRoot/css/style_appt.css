@@ -1,0 +1,72 @@
+@CHARSET "UTF-8";
+
+#appt_core{
+	clear:left;
+	width:80%;
+	margin-top:10%;
+	margin-left:20%;
+	color:#f8f;
+}
+.appt_list{
+	margin:5% 5% 3%;
+	float:left;
+	clear:left;
+}
+#appt_table{
+	color: #f8f;
+}
+#appt_detail_unknow1{
+	clear:left;
+	margin-top:10%;
+	margin-left:20%;
+	font-size:20px;
+	text-align: left;
+	background: url(../img/appt_unknow.png) 76% 90% no-repeat;
+}
+#appt_detail_unknow2{
+	clear:left;
+	margin-top:10%;
+	margin-left:20%;
+	font-size:20px;
+	text-align: left;
+	background: url(../img/appt_beg.png) 76% 90% no-repeat;
+}
+#appt_detail_no{
+	clear:left;
+	margin-top:10%;
+	margin-left:20%;
+	font-size:20px;
+	text-align: left;
+	background: url(../img/appt_no.PNG) 76% 90% no-repeat;
+}
+#appt_detail_yes{
+	clear:left;
+	margin-top:10%;
+	margin-left:20%;
+	font-size:20px;
+	text-align: left;
+	background: url(../img/appt_yes.PNG) 76% 90% no-repeat;
+}
+#appt_detail a{
+	font-size:15px;
+	color:#f8f;
+	text-decoration: none;
+}
+.appt_button{
+	color:#ddd;
+	font:bold;
+	width:100px;
+	height:50px;
+	border:0;
+	cursor:pointer;
+	background: url(../img/btn2.png) -20% no-repeat;
+}
+.appt_button:HOVER{
+	color:#fff;
+	font:bold;
+	width:100px;
+	height:50px;
+	border:0;
+	cursor:pointer;
+	background: url(../img/btnl2.png) -20% no-repeat;
+}

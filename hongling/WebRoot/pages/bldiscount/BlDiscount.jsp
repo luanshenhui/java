@@ -1,0 +1,48 @@
+<script src="../bldiscount/commonjsp.js"></script>
+<script src="../bldiscount/BlDiscount.js"></script>
+<form id="BlDiscountForm" class="form_template">
+<input type="hidden" name="ID" id="ID"/>
+<input type="hidden" name="memberId" id="memberId"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label blLblUsername"></td>
+		<td>
+			<input type="text" id="blUsername"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblClothing star"></td>
+		<td>
+			<select id="disClothingId" style="width:153px;"></select>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblFromNum star"></td>
+		<td>
+			<input type="text" id="fromNum"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblToNum star"></td>
+		<td>
+			<input type="text" id="toNum"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblDiscountNum star"></td>
+		<td>
+			<input type="text" id="discountNum"/>%
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblMemo"></td>
+		<td>
+			<input type="text" id="memo"/>
+		</td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="blBtnSaveDiscount"></a> <a id="blBtnCancelDiscount"></a>
+</div>
+</form>

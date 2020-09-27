@@ -1,0 +1,20 @@
+﻿<script language= "javascript" src="../common/changepassword.js"></script>
+<form id="form" class="form_template show">
+<table>
+	<tr>
+		<td id="lblPassword" class="label"></td>
+		<td><input name="password" id="password" type="password"/></td>
+	</tr>
+	<tr>
+		<td id="lblNewPassword" class="label"></td>
+		<td><input name="newPassword" id="newPassword" type="password"/></td>
+	</tr>
+	<tr>
+		<td id="lblVerfyNewPassword" class="label"></td>
+		<td><input name="verfyNewPassword" id="verfyNewPassword" type="password"/></td>
+	</tr>
+</table>
+<div class="operation">
+<a id="btnChangePassword"></a> <a id="btnCancelPassword"></a>
+</div>
+</form>

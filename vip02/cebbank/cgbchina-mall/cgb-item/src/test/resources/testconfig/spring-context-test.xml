@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="cn.com.cgbchina.item"/>
+    <import resource="classpath*:spring/user-service-context.xml"/>
+    <import resource="classpath*:spring/search-spirit-context.xml"/>
+    <import resource="classpath*:testconfig/cgb-mybatis-context.xml"/>
+    <import resource="classpath*:testconfig/redis-context.xml"/>
+    <!-- ID生成规则 -->
+    <import resource="classpath*:/spring/generator-context.xml"/>
+    <util:properties id="app" location="classpath:app_test.properties"/>
+    <!-- AOP support -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+</beans>

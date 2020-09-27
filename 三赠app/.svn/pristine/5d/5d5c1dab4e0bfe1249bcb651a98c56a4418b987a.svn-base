@@ -1,0 +1,76 @@
+// Generated code from Butter Knife. Do not modify!
+package com.sanzeng.hello_watch.ui.activity.register;
+
+import android.view.View;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import butterknife.internal.ViewBinder;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class InputDateActivity$$ViewBinder<T extends InputDateActivity> implements ViewBinder<T> {
+  @Override
+  public Unbinder bind(Finder finder, T target, Object source) {
+    return new InnerUnbinder<>(target, finder, source);
+  }
+
+  protected static class InnerUnbinder<T extends InputDateActivity> implements Unbinder {
+    protected T target;
+
+    private View view2131558502;
+
+    private View view2131558503;
+
+    private View view2131558504;
+
+    protected InnerUnbinder(final T target, Finder finder, Object source) {
+      this.target = target;
+
+      View view;
+      view = finder.findRequiredView(source, 2131558502, "field 'input_birthday' and method 'showDailog'");
+      target.input_birthday = finder.castView(view, 2131558502, "field 'input_birthday'");
+      view2131558502 = view;
+      view.setOnClickListener(new DebouncingOnClickListener() {
+        @Override
+        public void doClick(View p0) {
+          target.showDailog();
+        }
+      });
+      view = finder.findRequiredView(source, 2131558503, "method 'yes'");
+      view2131558503 = view;
+      view.setOnClickListener(new DebouncingOnClickListener() {
+        @Override
+        public void doClick(View p0) {
+          target.yes();
+        }
+      });
+      view = finder.findRequiredView(source, 2131558504, "method 'no'");
+      view2131558504 = view;
+      view.setOnClickListener(new DebouncingOnClickListener() {
+        @Override
+        public void doClick(View p0) {
+          target.no();
+        }
+      });
+    }
+
+    @Override
+    public void unbind() {
+      T target = this.target;
+      if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+      target.input_birthday = null;
+
+      view2131558502.setOnClickListener(null);
+      view2131558502 = null;
+      view2131558503.setOnClickListener(null);
+      view2131558503 = null;
+      view2131558504.setOnClickListener(null);
+      view2131558504 = null;
+
+      this.target = null;
+    }
+  }
+}

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.riskmanage.dao.DcaRiskTransDao">
+    
+	<sql id="dcaRiskTransColumns">
+		a.UUID AS "uuid",
+		a.OFFICE_ID AS "office.id",
+		a.POST_ID AS "postId",
+		a.USER_ID AS "user.id",
+		a.RISK_MANAGE_ID AS "riskManageId",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks",
+		a.IS_DEFINE_POWER AS "isDefinePower",
+		o2.NAME AS "office.name",
+		u4.NAME AS "user.name"
+	</sql>
+	
+	<sql id="dcaRiskTransJoins">
+		LEFT JOIN SYS_OFFICE o2 ON o2.ID = a.OFFICE_ID
+		LEFT JOIN SYS_USER u4 ON u4.ID = a.USER_ID
+	</sql>
+    
+	<select id="get" resultType="DcaRiskTrans">
+		SELECT 
+			<include refid="dcaRiskTransColumns"/>
+		FROM DCA_RISK_TRANS a
+		<include refid="dcaRiskTransJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DcaRiskTrans">
+		SELECT 
+			<include refid="dcaRiskTransColumns"/>
+		FROM DCA_RISK_TRANS a
+		<include refid="dcaRiskTransJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaRiskTrans">
+		SELECT 
+			<include refid="dcaRiskTransColumns"/>
+		FROM DCA_RISK_TRANS a
+		<include refid="dcaRiskTransJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO DCA_RISK_TRANS(
+			UUID,
+			OFFICE_ID,
+			POST_ID,
+			USER_ID,
+			RISK_MANAGE_ID,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS,
+			IS_DEFINE_POWER
+		) VALUES (
+			#{uuid},
+			#{office.id},
+			#{postId},
+			#{user.id},
+			#{riskManageId},
+			#{createPerson},
+			SYSDATE,
+			#{updatePerson},
+			SYSDATE,
+			#{remarks},
+			#{isDefinePower}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE DCA_RISK_TRANS SET 	
+			UUID = #{uuid},
+			OFFICE_ID = #{office.id},
+			POST_ID = #{postId},
+			USER_ID = #{user.id},
+			RISK_MANAGE_ID = #{riskManageId},
+			CREATE_PERSON = #{createPerson},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = SYSDATE,
+			REMARKS = #{remarks},
+			IS_DEFINE_POWER = #{isDefinePower}
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM DCA_RISK_TRANS
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<!-- 批量插入 -->
+	<insert id="insertBatch" parameterType="java.util.List">
+		begin
+		<foreach collection="list" item="item" index="index" separator=";">
+			INSERT INTO DCA_RISK_TRANS(
+				UUID,
+				OFFICE_ID,
+				POST_ID,
+				USER_ID,
+				RISK_MANAGE_ID,
+				CREATE_PERSON,
+				CREATE_DATE,
+				UPDATE_PERSON,
+				UPDATE_DATE,
+				REMARKS,
+				IS_DEFINE_POWER
+			) VALUES (
+				#{item.uuid},
+				#{item.office.id},
+				#{item.postId},
+				#{item.user.id},
+				#{item.riskManageId},
+				#{item.createPerson},
+				SYSDATE,
+				#{item.updatePerson},
+				SYSDATE,
+				#{item.remarks},
+				#{item.isDefinePower}
+			)
+		</foreach>
+		;end;
+	</insert>	
+</mapper>

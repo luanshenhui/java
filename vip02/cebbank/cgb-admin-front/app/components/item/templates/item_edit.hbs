@@ -1,0 +1,25 @@
+<div class="modal" xmlns="http://www.w3.org/1999/html">
+  <div class="modal-header">
+    <h2>商品编辑</h2>
+  </div>
+  <form class="item-form-edit">
+    <div class="item-edit modal-body">
+      <div class="form-group">
+        <label for="id"><span class="required">*</span>ID:</label>
+        <input id="id" name="id"  class="form-control" type="text" placeholder="请输入商品名" required value="{{id}}" readonly>
+      </div>
+      <div class="form-group">
+        <label for="itemName">商品名:</label>
+        <input id="itemName" name="itemName" class="form-control" type="text" placeholder="请输入商品名" value="{{itemName}}">
+      </div>
+      <div class="form-group">
+        <label for="type">商品类型:</label>
+        <input id="type" name="type"  class="form-control" type="text" placeholder="请输入组件描述" value="{{type}}">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-success btn-sm js-item-edit" value="确定">
+      <button class="btn btn-info btn-sm close">取消</button>
+    </div>
+  </form>
+</div>

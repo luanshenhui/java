@@ -1,0 +1,126 @@
+package cn.rkylin.oms.system.role.dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE_UNIT;
+import cn.rkylin.oms.system.role.domain.WF_ORG_USER_ROLE;
+import cn.rkylin.oms.system.role.vo.RoleVo;
+@Repository(value = "roleDAO")
+public class RoleDAOImpl implements IRoleDAO {
+	@Autowired
+	protected IDataBaseFactory dao;
+	@Autowired
+	private IDataBaseFactory dataBaseFactory;
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getRoleByCondition(WF_ORG_ROLE roleVO,int page, int rows) throws Exception {
+//		List<WF_ORG_ROLE> resultList = new ArrayList();
+		RoleVo vo=new RoleVo();
+		BeanUtils.copyProperties(roleVO, vo);
+		return dataBaseFactory.findPage(page, rows, "getRoleByCondition", vo).getList();
+	}
+
+	@Override
+	public void delete(String stationParam,String string)throws Exception{
+		dao.delete(stationParam, string);
+	}
+	
+	@Override
+	public void insert(String stationParam, WF_ORG_ROLE ur) throws Exception {
+		dao.insert(stationParam, ur);
+		if (ur.getRoleManageUnitList() != null && ur.getRoleManageUnitList().size() > 0) {
+//		if (!ur.getRoleManageUnitList().equals("") && ur.getRoleManageUnitList() != null) {
+			for (int i = 0; i < ur.getRoleManageUnitList().size(); i++) {
+				String roleUnit = (String) ur.getRoleManageUnitList().get(i);
+				WF_ORG_ROLE_UNIT ru = new WF_ORG_ROLE_UNIT();
+				ru.setRoleId(ur.getRoleId());
+				ru.setUnitId(roleUnit);
+				if(!roleUnit.equals("")){
+					dao.insert("insertRoleUnit", ru);
+				}
+			}
+		}
+		// 插角色下的人员
+		if (ur.getRoleUsersList() != null && ur.getRoleUsersList().size() > 0) {
+			for (int i = 0; i < ur.getRoleUsersList().size(); i++) {
+				String roleUser = (String) ur.getRoleUsersList().get(i);
+				WF_ORG_USER_ROLE ur1 = new WF_ORG_USER_ROLE();
+				ur.setRoleId(ur.getRoleId());
+				ur.setUserId(roleUser);
+				dao.insert("insertRoleUser", ur);
+			}
+		}
+		
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getRoleByCondition(WF_ORG_ROLE roleVO) throws Exception {
+//		resultList = this.getSqlMapClient().queryForList("WF_ORG_ROLE.select", roleVO);
+		return dao.findAllList("select_role", roleVO);
+	}
+
+	@Override
+	public void insert(String sqlId, WF_ORG_USER_ROLE ur) throws Exception {//insertRoleUser
+		dao.insert(sqlId, ur);
+		
+	}
+	
+	public WF_ORG_ROLE findByid(String stationParam,String roleId) throws Exception{
+		List<RoleVo> resultList = dao.findList(stationParam, roleId);
+		if (resultList != null && resultList.size() > 0) {
+			return resultList.get(0);
+		}
+		return null;
+	}
+	
+	public void update(WF_ORG_ROLE roleParam) throws Exception{
+		
+		dao.update("updateRole", roleParam);
+		if (roleParam.getRoleManageUnitList() != null && roleParam.getRoleManageUnitList().size() > 0) {
+			for (int i = 0; i < roleParam.getRoleManageUnitList().size(); i++) {
+				String roleUnit = (String) roleParam.getRoleManageUnitList().get(i);
+				WF_ORG_ROLE_UNIT ru = new WF_ORG_ROLE_UNIT();
+				ru.setRoleId(roleParam.getRoleId());
+				ru.setUnitId(roleUnit);
+				dao.insert("insertRoleUnit", ru);
+			}
+		}
+		// 插角色下的人员
+		if (roleParam.getRoleUsersList() != null && roleParam.getRoleUsersList().size() > 0) {
+			for (int i = 0; i < roleParam.getRoleUsersList().size(); i++) {
+				String roleUser = (String) roleParam.getRoleUsersList().get(i);
+				WF_ORG_USER_ROLE ur1 = new WF_ORG_USER_ROLE();
+				roleParam.setRoleId(roleParam.getRoleId());
+				roleParam.setUserId(roleUser);
+				dao.insert("insertRoleUser", roleParam);
+			}
+		}
+		
+		
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getAllRoles(WF_ORG_ROLE roleVO) throws Exception {
+		List resultList = new ArrayList();
+		try {
+			resultList = dao.findAllList("WF_ORG_ROLE_select", roleVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Exception("RoleDAO数据访问错误");
+		}
+		return resultList;
+	}
+
+
+}

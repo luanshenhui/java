@@ -1,0 +1,85 @@
+{{#component "publishManage js-component"}}
+    <p class="components-title"><strong>- 公告管理 -</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form logs-form-search form-inline form form-aligned">
+                <fieldset>
+                    <p class="filter-name">
+                            <span class="span4 span-large">
+                            <label for="publishTitle">公告名称:</label>
+                            <input class="form-control js-title" id="publishTitle" type="text" name="publishTitle" value="{{publishTitle}}">
+                        </span>
+                   <span class="span4 span-large">
+                        <label for="startTime">发布日期:</label>
+                        <input class="form-control start_date datepicker" type="text" id="startTime"
+                               name="startTime" value="{{startTime}}"/>
+                    </span>
+                    <span class="span4 span-large">
+                           <label class="js-curStatus">状态:</label>
+                            <select id="curStatus" name="curStatus">
+                                <option value="">全部</option>
+                                <option value="0102" {{#equals "0102" _DATA_.curStatus}}selected{{/equals}}>启用</option>
+                                <option value="0101" {{#equals "0101" _DATA_.curStatus}}selected{{/equals}}>停用</option>
+                            </select>
+                        </span>
+                          <span class="span span-large">
+                            <label>&nbsp;</label>
+                            <input class="btn btn-success btn-small js-publish-check" type="submit" value="查询"/>
+                        </span>
+                    </p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="add-publish m-b-10">
+        {{#authorial "publish_announcement"}}
+            <a  href="{{_HREF_.mainContext}}/admins/publish/publish_add" class="btn btn-success btn-small js-publish-add">发布公告</a>
+        {{/authorial}}
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="10%">公告ID</th>
+            <th width="25%">公告名称</th>
+            <th width="10%">公告类型</th>
+            <th width="15%">发布时间</th>
+            <th width="15%">过期时间</th>
+            <th width="10%">状态</th>
+            <th width="15%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}">
+                <td class="publishID">{{id}}</td>
+                <td class="publishTitle">{{publishTitle}}</td>
+                <td class="publishType">{{publishTypeName}}</td>
+                <td class="publishDate">{{formatDate publishDate "day"}}</td>
+                <td class="expireDate">{{formatDate expireDate "day"}}</td>
+
+                <td class="curStatus" data-state="{{curStatus}}">
+                {{#authorial "publishStatus_control"}}
+                        <i {{#equals curStatus '0101'}}class="icon-btn-off publish-onoff"{{/equals}}
+                            {{#equals curStatus '0102'}}class="icon-btn-on publish-onoff"{{/equals}}></i>
+                {{else}}
+                    <i {{#equals curStatus '0101'}}class="icon-btn-off"{{/equals}}
+                        {{#equals curStatus '0102'}}class="icon-btn-on"{{/equals}}></i>
+                {{/authorial}}
+                </td>
+                <td>
+                    <a href="{{_HREF_.mainContext}}/admins/publish/publish_view?id={{id}}" class="btn btn-info btn-sm js-publish-view">查看</a>
+
+                {{#authorial "publish_edit"}}
+                    <a href="{{_HREF_.mainContext}}/admins/publish/publish_edit?id={{id}}" class="btn btn-info btn-sm js-publish-edit">编辑</a>
+                {{/authorial}}
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    {{/equals}}
+{{/component}}

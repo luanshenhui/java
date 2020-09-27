@@ -1,0 +1,39 @@
+<script src="../orden/common.js"></script>
+<script src="../orden/tempedit.js"></script>
+<form id="form" class="form_template">
+<input type="hidden" name="ordenID" id="ordenID"/>
+<h1></h1>
+<table class="hline">
+	<tr>
+		<td>
+			
+			<div class="label lblClothingInfo"></div>
+			<div id="container_clothings"></div>
+			<div class="label lblCustomer clear"></div>
+			<div id="container_customer"></div>
+			<div class="label clear lblFabricInfo"></div> 
+			<table>
+				<tr>
+					<td class="lblFabric star label" style="width:80px;"></td>
+					<td>
+						<input type="text" id="fabricCode" name="fabricCode" style="width:150px;" class="textbox"/><span></span>
+						<div id="fabric_result"></div>
+						<div id="autoContainer"></div>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td class="padding_left20">
+			<div class="label lblDetail"></div>
+			<div id="container_component">
+			</div>
+		</td>
+	</tr>
+</table>
+<div><div class="label lblEmbroid"/><div id="container_embroid"></div>
+<div class="label lblSizeInfo" style="margin-top:5px;"></div>
+<div id="container_size"></div>
+<div class="operation">
+	<a id="btnSaveOrden"></a> <a id="btnCancelOrden"></a>
+</div>
+</form>

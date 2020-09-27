@@ -1,0 +1,174 @@
+<div class="modal addCardPro">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        {{#equals cardproNm null}}
+            <div class="modal-title"> 新增</div>
+        {{else}}
+            <div class="modal-title"> 修改</div>
+        {{/equals}}
+    </div>
+    <form class="form form-aligned add_card_pro" component-id="{{id}}" data-id="{{id}}">
+        <div class="modal-body">
+            <div class="modal-body-table">
+                <div class="item-tr">
+                    <span class="span-label start">
+                        <label><span class="required">*</span>卡产品名称：</label>
+                    </span>
+                    <span class="span-value control-group">
+                        <input id="cardproNm" class="form-control input-width-150" name="cardproNm" type="text"
+                               placeholder="请输入卡产品名称" required
+                               value="{{cardproNm}}" maxlength="50">
+                        <span class="note"><i>&times;</i> 必填 不得为空</span>
+                        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                    </span>
+                        <span class="span-label start">
+                            <label><span class="required">*</span>卡等级：</label>
+                        </span>
+
+                    <span class="span-value control-group">
+                        <input id="cardLevel" type="text" name="cardLevel" class="form-control input-width-150" required
+                               value="{{cardLevel}}">
+                        <span class="note"><i>&times;</i> 必填 不得为空</span>
+                        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                    </span>
+                </div>
+                <div class="item-tr">
+                    <span class="span-label start">
+                        <label><span class="required">*</span>卡bin：</label>
+                    </span>
+
+                    <span class="span-value control-group">
+                        <input type="text" name="cardBin" class="form-control input-width-150" required
+                               value="{{cardBin}}">
+                        <span class="note"><i>&times;</i> 必填 不得为空</span>
+                        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                    </span>
+                    <span class="span-label">
+                        <label>分行名称：</label>
+                    </span>
+                    <span class="span-value control-group">
+                        <input type="text" name="bankNm" class="form-control input-width-150"
+                               value="{{bankNm}}"><div class="empty-div"></div>
+                    </span>
+                </div>
+                <div class="item-tr">
+                    <span class="span-label">
+                        <label>联名卡代号：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="relacardNo" class="form-control input-width-150"
+                               value="{{relacardNo}}"><div class="empty-div"></div>
+                    </span>
+                    <span class="span-label start">
+                        <label><span class="required">*</span>三级卡产品编号：</label>
+                    </span>
+
+                    <span class="span-value control-group">
+                        <input id="formatId" type="text" name="formatId" class="form-control input-width-150" required maxlength="4"
+                               value="{{formatId}}">
+                        <span class="note"><i>&times;</i> 必填 不得为空</span>
+                        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                    </span>
+                </div>
+                <div class="item-tr">
+                    <span class="span-label start">
+                        <label><span class="required">*</span>卡类：</label>
+                    </span>
+
+                    <span class="span-value control-group">
+                        <input type="text" name="pdtNbr" class="form-control input-width-150" required
+                               value="{{pdtNbr}}">
+                        <span class="note"><i>&times;</i> 必填 不得为空</span>
+                        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                    </span>
+                    <span class="span-label">
+                        <label>分行号 ：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="bankNo" class="form-control input-width-150"
+                               value="{{bankNo}}"><div class="empty-div"></div>
+                    </span>
+                </div>
+                <div class="item-tr">
+                    <span class="span-label">
+                        <label>推广计划1 ：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="plan1" class="form-control input-width-150" value="{{plan1}}">
+                    </span>
+                    <span class="span-label">
+                        <label>推广计划2 ：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="plan2" class="form-control input-width-150" value="{{plan2}}">
+                    </span>
+                </div>
+                <div class="item-tr">
+                    <span class="span-label">
+                        <label>推广计划3 ：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="plan3" class="form-control input-width-150" value="{{plan3}}">
+                    </span>
+                    <span class="span-label">
+                        <label>推广计划4 ：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="plan4" class="form-control input-width-150" value="{{plan4}}">
+                    </span>
+                </div>
+                <div class="item-tr">
+                    <span class="span-label">
+                        <label>推广计划5 ：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="plan5" class="form-control input-width-150" value="{{plan5}}">
+                    </span>
+                    <span class="span-label">
+                        <label>积分类型 ：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="bounsType" class="form-control input-width-150"
+                               value="{{bounsType}}">
+                    </span>
+                </div>
+                <div class="item-tr">
+                    <span class="span-label">
+                        <label>是否合作方积分：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="bounsFlat" class="form-control input-width-150"
+                               value="{{bounsFlat}}">
+                    </span>
+                    <span class="span-label">
+                        <label>联系人 ：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="comPeople" class="form-control input-width-150"
+                               value="{{comPeople}}">
+                    </span>
+                </div>
+                <div class="item-tr">
+                    <span class="span-label">
+                        <label>联系人电话：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="comTel" class="form-control input-width-150"
+                               value="{{comTel}}">
+                    </span>
+                    <span class="span-label">
+                        <label>卡描述：</label>
+                    </span>
+                    <span class="span-value">
+                        <input type="text" name="cardDesc" class="form-control input-width-150"
+                               value="{{cardDesc}}">
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small btn-send" value="保存">
+            <button class="btn btn-close btn-small close">取消</button>
+        </div>
+    </form>
+</div>

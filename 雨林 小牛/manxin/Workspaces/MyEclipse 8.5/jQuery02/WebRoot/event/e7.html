@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="content-type">
+		<script type="text/javascript" src="../js/jquery-1.4.3.js"></script>
+		<style>
+			#d1{
+				width:300px;
+				height:40px;
+				background-color:#fff8dc;
+				display:none;
+			}
+		</style>
+		<script type="text/javascript">
+			$(function(){
+				$('#a1').toggle(function(){
+					$('#d1').show('slow');
+					},function(){
+					$('#d1').hide('slow');
+				}
+				);
+			});
+		</script>
+	</head>
+	<body style="font-size: 30px;">
+		<a href="javascript:;" id="a1">带我长发及腰下一句是什么？</a>
+		<div id="d1" style="display:none;">用来拖地可好</div>
+</html>

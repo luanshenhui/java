@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:cache="http://www.springframework.org/schema/cache"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+     
+    <!-- 应用Bean类或者其方法的注解完成缓存的配置 -->
+    <cache:annotation-driven/>
+    <bean id="service" class="com.lsh.chinarc.service.Service" />
+    
+    <!-- cacheManager使用JDK中的ConcurrentMap作为存储器 -->
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager" >
+    	<property name="caches">
+    		<set>
+    			<bean id="lshh" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"/>
+    		</set>
+    	</property>
+    </bean>
+</beans>

@@ -1,0 +1,46 @@
+一、JavaBean规范：
+	1.必须要有包
+	2.必须要声明无参数构造方法
+	3.需要给私有属性添加getXXX()和setXXX()方法
+	4.需要实现序列化接口
+	
+二、static关键字：静态修饰符
+	1.静态成员变量：所有类的对象的公共属性
+		静态的成员变量可以通过类名直接调用
+		
+	2.静态方法：被所有类的对象所共有，可以通过类名直接调用
+		Arrays类中的方法
+		1.静态方法中只能访问静态的成员变量
+		2.静态方法中只能调用其他的静态方法
+		
+	3.静态修饰的变量、方法、代码块会在程序执行之前执行(优先加载) 并且只会加载一次
+		加载机制：编码 --> 生成.class文件 --> 虚拟机再度编译 --> 加载(把需要执行的东西放入内存) --> 软件运行
+		
+	4.代码块：用{}包括
+		和一行代码一样，是一个基本单位
+		
+	静态代码块：static{}
+		优先加载
+		Foo.static...	//static 加载之前加载	父类
+		Soo.static...	//static 加载之前加载	子类
+		Foo.non-static...	//non-static 执行之前加载	父类
+		Foo...	//执行
+		Soo.non-static...	//non-static执行之前加载 		子类
+		Soo...	//执行
+		
+	static的属性或方法，属于Class级别的。是被所有Object所共有
+	非static得属性或方法，属于Object级别的，只属于某一个Object(对象)
+		
+三、final关键字：
+	1.final修饰的类,无法被继承。例如：String、Integer、Boolean
+	2.final修饰的方法，无法被覆盖(重写)
+	3.final修饰的变量，只能赋值一次
+	4.final static修饰的成员变量，被称为常量
+	
+四、hashcode 和 equals 的区别
+	equals相等，hashcode一定相等；equals不等，hashcode不一定不等
+	
+MVC设计模式：
+M(Model):模型层:数据模型(JavaBean)、模型的操作(Service)、
+V(View)：视图层:看到的页面(HTML、JSP)
+C(Ctroller):控制层:调用对模型的操作。

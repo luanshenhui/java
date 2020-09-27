@@ -1,0 +1,13 @@
+{{#partial "title"}}{{{block "realTitle"}}}{{/partial}}
+{{#partial "body"}}
+    {{inject "v_head_login"}}
+    {{inject "v_head_logo"}}
+
+    <div class="content">
+        <div class="content-box">
+            {{{block "realBody"}}}
+            <div class="clear"></div>
+        </div>
+    </div>
+{{/partial}}
+{{> views/layout}}

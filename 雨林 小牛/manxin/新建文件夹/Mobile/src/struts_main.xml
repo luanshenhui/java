@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    <struts>
+     <!-- 
+                         定义公用的包,将可用的配置都
+                         放到这个包下面
+        -->
+        <package name="yidong" extends="json-default">
+           <interceptors>
+              <!-- 注册登录检查拦截器 -->
+              <interceptor name="loginInter" 
+                class="com.cost.interceptor.LoginInterceptor"></interceptor>
+              <!-- 
+                                             注册登录检查拦截器栈，
+                                             包含了默认的拦截器
+               -->
+               <interceptor-stack name="loginStack">
+                  <interceptor-ref name="loginInter"></interceptor-ref>
+                  <interceptor-ref name="defaultStack"></interceptor-ref>
+               </interceptor-stack>
+           </interceptors>
+           <!-- 定义全局的Result -->
+           <global-results>
+              <!-- 重定向到登陆页面 -->
+              <result name="login" type="redirectAction">
+                <param name="namespace">/login</param>
+                <param name="actionName">toLogin</param>
+              </result>
+           </global-results>
+        </package>
+    </struts>

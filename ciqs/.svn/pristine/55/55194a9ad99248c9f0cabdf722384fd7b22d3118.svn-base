@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for COMMONUTIL.
+
+@author 
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.COMM">
+
+    <!-- **** select ******************************************************* -->
+	
+	<!-- 根据港口代码获取港口信息 -->
+	<select id="findPortCodeAll" resultType="com.dpn.ciqqlc.standard.model.PortCodeDTO">
+		select port_code,port_cname from PORT_CODE where FLAG_OP='A'
+	</select>
+	<select id="findCountryAll" resultType="com.dpn.ciqqlc.standard.model.CountryDTO">
+		select t.country_code ,t.cnname  from country t
+	</select>
+	<select id = "findOrganizeAll" resultType = "com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select t.org_code,t.name,t.type from organizes t 	
+	</select>
+	<!-- ajax获取途经港口 -->
+	<select id="ajaxPsspt" resultType="com.dpn.ciqqlc.standard.model.PortCodeDTO">
+		select port_code,port_cname from PORT_CODE where PORT_CNAME like '%'||#{_parameter}||'%' and rownum &lt; 11
+	</select>
+	<select id="ajaxCountry" resultType="com.dpn.ciqqlc.standard.model.CountryDTO">
+		select cnname, num_code, country_code from country where cnname like '%'||#{name}||'%' and rownum &lt; 11
+	</select>
+	<select id="findPortCodeByCode" resultType="com.dpn.ciqqlc.standard.model.PortCodeDTO">
+		select port_code,port_cname from PORT_CODE where port_code=#{port_code}
+	</select>
+	<!-- ajax获取组织代码 -->
+	<select id="ajaxOrganize" resultType="com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select name,
+               org_code
+        from organizes_ciq
+        where name like '%'||#{_parameter}||'%'
+          and rownum &lt; 10
+	</select>
+	<select id="findAllOrganize" resultType="com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select  ORG_CODE,NAME,TYPE,PORT_CODE,CREATE_DATE,CREATE_USER,MODIFY_DATE,MODIFY_USER,FLAG_OP from organizes 
+	</select>
+	
+	<!-- ajax获取场地企业信息 -->
+	<!-- <select id="ajaxPortPlaceInfo" resultType="com.dpn.ciqqlc.standard.model.PortStoragePlaceDTO">
+		select org_code,name from organizes where name like '%'||#{_parameter}||'%' and rownum &lt; 10
+	</select> -->
+	
+	<!-- 各功能模块获取codelibrary代码公共方法 -->
+	<select id="getCodeLibrary" resultType="com.dpn.ciqqlc.standard.model.CodeLibraryDTO">
+		select code,name from code_library where type=#{type} 
+			<if test = "port_org_code != null and port_org_code != ''">
+				and port_org_code=#{port_org_code}
+			</if>
+	</select>
+	
+	<!-- 各功能模块获取codelibrary代码公共方法 -->
+	<select id="queryCodeLibrary" resultType="com.dpn.ciqqlc.standard.model.CodeLibraryDTO">
+		select * from qlc_code_library where type=#{type} order by code
+	</select>
+	
+	<select id="getDzOrgName" resultType="string">
+		select code from qlc_code_library where type='QLC_DEPTMENTS' and code = #{org_code}
+	</select>
+	
+	<select id="selectDecMasterId"  resultType="java.lang.String">
+		select concat('HECFD',concat(to_char(sysdate,'YYYYMMDD'),substr('0000'||DEC_MASTER_ID_seq.nextval,-4,4))) decMasTerId from dual
+	</select>
+	
+	<select id="getOrg_code"  resultType="java.lang.String">
+		select ORG_CODE from USERS_CIQ where id=#{uid}
+	</select>
+	
+	<select id="getDirecty_under_org"  resultType="java.lang.String">
+		select DIRECTY_UNDER_ORG from USERS_CIQ where id=#{uid}
+	</select>
+	
+	<select id="getCiqsIp"  resultType="java.lang.String">
+		select code from QLC_CODE_LIBRARY where type=#{type}
+	</select>
+	
+	<!-- **** select ******************************************************* -->
+	<select id="listCodeName" resultType="com.dpn.ciqqlc.standard.model.SelectModel" parameterType="String" >
+		select
+		name,
+		code		
+		from
+		qlc_code_library 
+		where type = #{type}
+	</select> 
+	
+	
+	<!-- **** insert ******************************************************* -->
+	<insert id="addEventLog">
+		Insert  into  event_log 
+			(
+				create_time,
+				action_user,
+				action_org_code,
+				action_date,
+				index_value,
+				action_name,
+				action_type,
+				details_1
+				<if test="details_2 != null and details_2 != ''">
+					,details_2
+				</if>
+				<if test="details_3 != null and details_3 != ''">
+					,details_3
+				</if>
+				<if test="details_4 != null and details_4 != ''">
+					,details_4
+				</if>
+				<if test="details_5 != null and details_5 != ''">
+					,details_5
+				</if>
+			)
+			values
+			(
+				sysdate,
+				#{action_user},
+				#{action_org_code},
+				sysdate,
+				#{index_value},
+				#{action_name},
+				#{action_type},
+				#{details_1}
+				<if test="details_2 != null and details_2 != ''">
+					,#{details_2}
+				</if>
+				<if test="details_3 != null and details_3 != ''">
+					,#{details_3}
+				</if>
+				<if test="details_4 != null and details_4 != ''">
+					,#{details_4}
+				</if>
+				<if test="details_5 != null and details_5 != ''">
+					,#{details_5}
+				</if>
+			)
+	</insert>
+	
+	<!-- 查询图片视频列表 -->
+	<select id="queryVideoFileEvent"  resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+		select file_name,
+				file_type,
+				u.name as create_user, 
+				create_date, 
+				to_char(create_date, 'yyyy-mm-dd hh:mi:ss') create_date_str,
+				proc_type,
+				top_proc_type,
+				QLC_VIDEO_FILE_EVENT.name
+		from QLC_VIDEO_FILE_EVENT 
+		left join users_ciq u
+		on create_user = u.id
+		where proc_main_id = #{proc_main_id}
+		<if test="proc_type != null and proc_type != ''">
+			and proc_type = #{proc_type}
+		</if>
+		<if test="top_proc_type != null and top_proc_type != ''">
+			and top_proc_type = #{top_proc_type}
+		</if>
+		<if test="group_id != null and group_id != ''">
+			and QLC_VIDEO_FILE_EVENT.name = #{group_id}
+		</if>
+		order by proc_type, file_type, create_date desc
+	</select>
+	
+	<select id="getMaxDateFileInProcTypes" parameterType="java.util.Map" resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+		select  to_char(max(t1.create_date), 'yyyy-mm-dd hh24:mi') as create_date_str, t2.name as create_user
+		  from  QLC_VIDEO_FILE_EVENT t1
+	 left join	USERS_CIQ t2 on t1.create_user = t2.id
+		 where  t1.proc_main_id = #{proc_main_id}
+		        <if test="proc_type_array != null">
+		        	and t1.proc_type in
+		        	<foreach open="(" close=")" separator="," collection="proc_type_array" item="proc_type">
+		        		#{proc_type}
+		        	</foreach>
+		        </if> 
+		  group by t2.name
+		  order by create_date_str desc
+	</select>
+	
+	<select id="getMaxDateDocInProcTypes" parameterType="java.util.Map" resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+		select  to_char(max(t1.dec_date), 'yyyy-mm-dd hh24:mi') as create_date_str, t2.name as create_user
+		  from  QLC_CHECK_DOCS_RCD t1
+	 left join	USERS_CIQ t2 on t1.dec_user = t2.id
+		 where  t1.proc_main_id = #{proc_main_id}
+		        <if test="proc_type_array != null">
+		        	and t1.doc_type in
+		        	<foreach open="(" close=")" separator="," collection="proc_type_array" item="proc_type">
+		        		#{proc_type}
+		        	</foreach>
+		        </if> 
+		  group by t2.name
+		  order by create_date_str desc
+	</select>
+	
+	<select id="queryDoc" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO">
+		select d.*, u.name as dec_user_cn from QLC_CHECK_DOCS_RCD d
+		left join users_ciq u 
+		on d.dec_user = u.id 
+		where proc_main_id = #{proc_main_id} and doc_type = #{doc_type}
+		<if test="doc_type == 'D_OC_PAGE_2'">
+		and group_id is null
+		</if>
+	</select>
+	
+		<select id="findDeptCode" parameterType="com.dpn.ciqqlc.standard.model.UserInfoDTO" resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+		select code,name  from DEPTMENTS
+		 where 1=1
+			<if test="org_code != null and org_code != ''">
+		 		and org_code=#{org_code}
+		 	</if> 
+		 	<if test="dept_code != null and dept_code!=''">
+		 		and code=#{dept_code}
+		 	</if> 
+	</select>
+	
+</mapper>

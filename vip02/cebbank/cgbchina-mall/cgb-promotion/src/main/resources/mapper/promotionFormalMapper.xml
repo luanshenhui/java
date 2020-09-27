@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PromotionFormalModel">
+    <resultMap id="PromotionFormalMap" type="PromotionFormalModel">
+        <result property="id" column="id"/>
+        <result property="promotionId" column="promotion_id"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="brandId" column="brand_id"/>
+        <result property="backCategoryId" column="back_category_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="channelTypes" column="channel_types"/>
+        <result property="createDate" column="create_date"/>
+        <result property="sales" column="sales"/>
+        <result property="id" column="id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="brandId" column="brand_id"/>
+        <result property="backCategoryId" column="back_category_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="channelTypes" column="channel_types"/>
+    </resultMap>
+    <sql id="columns">
+        id,promotion_id,begin_date,end_date,vendor_id,brand_id,back_category_id,goods_id,item_id,channel_types,create_date,sales,id,vendor_id,brand_id,back_category_id,goods_id,item_id,channel_types
+    </sql>
+
+    <insert id="insert" parameterType="PromotionFormalModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_promotion_formal
+        (promotion_id
+        ,begin_date
+        ,end_date
+        ,vendor_id
+        ,brand_id
+        ,back_category_id
+        ,goods_id
+        ,item_id
+        ,channel_types
+        ,create_date
+        ,sales
+        ,vendor_id
+        ,brand_id
+        ,back_category_id
+        ,goods_id
+        ,item_id
+        ,channel_types)
+        values(#{promotionId}
+        ,#{beginDate}
+        ,#{endDate}
+        ,#{vendorId}
+        ,#{brandId}
+        ,#{backCategoryId}
+        ,#{goodsId}
+        ,#{itemId}
+        ,#{channelTypes}
+        ,#{createDate}
+        ,#{sales}
+        ,#{vendorId}
+        ,#{brandId}
+        ,#{backCategoryId}
+        ,#{goodsId}
+        ,#{itemId}
+        ,#{channelTypes})
+    </insert>
+
+    <update id="update" parameterType="PromotionFormalModel">
+        update tbl_promotion_formal set
+        <if test="promotionId !=null">promotion_id = #{promotionId}
+            ,
+        </if>
+        <if test="beginDate !=null">begin_date = #{beginDate}
+            ,
+        </if>
+        <if test="endDate !=null">end_date = #{endDate}
+            ,
+        </if>
+        <if test="vendorId !=null">vendor_id = #{vendorId}
+            ,
+        </if>
+        <if test="brandId !=null">brand_id = #{brandId}
+            ,
+        </if>
+        <if test="backCategoryId !=null">back_category_id = #{backCategoryId}
+            ,
+        </if>
+        <if test="goodsId !=null">goods_id = #{goodsId}
+            ,
+        </if>
+        <if test="itemId !=null">item_id = #{itemId}
+            ,
+        </if>
+        <if test="channelTypes !=null">channel_types = #{channelTypes}
+            ,
+        </if>
+        <if test="createDate !=null">create_date = #{createDate}
+            ,
+        </if>
+        <if test="sales !=null">sales = #{sales}
+            ,
+        </if>
+        <if test="vendorId !=null">vendor_id = #{vendorId}
+            ,
+        </if>
+        <if test="brandId !=null">brand_id = #{brandId}
+            ,
+        </if>
+        <if test="backCategoryId !=null">back_category_id = #{backCategoryId}
+            ,
+        </if>
+        <if test="goodsId !=null">goods_id = #{goodsId}
+            ,
+        </if>
+        <if test="itemId !=null">item_id = #{itemId}
+            ,
+        </if>
+        <if test="channelTypes !=null">channel_types = #{channelTypes}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="promotionId !=null">and promotion_id = #{promotionId}</if>
+            <if test="beginDate !=null">and begin_date = #{beginDate}</if>
+            <if test="endDate !=null">and end_date = #{endDate}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="brandId !=null">and brand_id = #{brandId}</if>
+            <if test="backCategoryId !=null">and back_category_id = #{backCategoryId}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="itemId !=null">and item_id = #{itemId}</if>
+            <if test="channelTypes !=null">and channel_types = #{channelTypes}</if>
+            <if test="createDate !=null">and create_date = #{createDate}</if>
+            <if test="sales !=null">and sales = #{sales}</if>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="brandId !=null">and brand_id = #{brandId}</if>
+            <if test="backCategoryId !=null">and back_category_id = #{backCategoryId}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="itemId !=null">and item_id = #{itemId}</if>
+            <if test="channelTypes !=null">and channel_types = #{channelTypes}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="PromotionFormalMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_promotion_formal
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="PromotionFormalMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_promotion_formal
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="PromotionFormalMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_promotion_formal
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="PromotionFormalModel">
+        delete from tbl_promotion_formal where id = id
+    </delete>
+</mapper>
+
+

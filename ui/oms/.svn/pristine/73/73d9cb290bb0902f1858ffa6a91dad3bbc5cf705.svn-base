@@ -1,0 +1,11 @@
+package cn.rkylin.oms.system.menu.service;
+
+import java.util.List;
+
+public interface IMenuService {
+
+	List getFormElementList(String userID, String parentMenuCode, String showAllMenu, String menuCategory) throws Exception;
+
+	List getMenuTreeData(String userID, String expandAll, String boo, String menuCategory, String showAllMenu) throws Exception;
+
+}

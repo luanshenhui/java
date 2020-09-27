@@ -1,0 +1,54 @@
+<table class="table table-striped center-text">
+    <thead>
+    <tr>
+        <th>{{entries.0.key}}</th>
+        <th>{{entries.0.values.0.value.key}}</th>
+
+        {{#equals type "02"}}
+            <th class='js-o2oCode-th'><em>*</em>O2O商品编码</th>
+            <th class='js-o2oVoucher-th'><em>*</em>O2O兑换券编码</th>
+        {{/equals}}
+        <th class="text-center js-market-th">参考价（元）</th>
+        <th class="text-center js-price-th"><em>*</em>售价（元）</th>
+        <th class="text-center js-point-th">固定积分</th>
+        <th class="text-center js-period-th" width="10%"><em>*</em>期数</th>
+        <th class="text-center js-mail-th">一期邮购分期类别码</th>
+        <th class="text-center js-stock-th"><em>*</em>库存</th>
+        <th class="text-center js-warning-th">库存预警值</th>
+        <th class="text-center js-picture-th" width="120px"><em>*</em>商品图片</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    {{#each entries}}
+            <td class="main-column" rowspan="{{values.length}}" data-id="{{id}}" data-name="{{value}}">{{value}}</td>
+        {{#each values}}
+                <td class="column" data-id="{{value.id}}" data-name="{{value.value}}">{{value.value}}</td>
+                {{#equals ../../type "02"}}
+                        <td class="js-o2oCode-td control-group">
+                            <input type='text' name=o2oCode class='input-small is-filled js-o2oCode-input js-input-clean'value='' maxlength='30' required/>
+                        </td>
+                        <td class='js-o2oVoucher-td control-group'>
+                            <input type='text' name=voucher class='input-small is-filled  js-o2oVoucher-input js-input-clean' value='' maxlength='30' required/>
+                        </td>
+                {{/equals}}
+                <td><input class="input-small  is-price" type="text" min="0" name="marketPrice"  maxlength="9"/></td>
+                <td><input class="input-small input-price is-filled is-price" type="text" min="0" required name="price" maxlength="9"/></td>
+                <td><input class="input-small is-number" type="text" min="0" name="fixPoint" maxlength="10"/> </td>
+                <td class="input-small js-period-td" data-period="{{entries.installmentNumber}}"></td>
+                <td><select class="js-mail-select input-width-75 js-input-clean font-size-12" name="stagesCode"
+                            data-stage-code="{{entries.stagesCode}}">
+                    <option value="">请选择</option>
+                </select></td>
+                <td><input class="input-small input-price is-filled" type="text" min="0" required name="stock" maxlength="8" data-db-id="{{entries.code}}"/></td>
+                <td><input class="input-small input-price is-number" type="text" min="0"  name="stockWarning" maxlength="8"/>
+                </td>
+                <td>
+                    <ul class="image-ul"></ul>
+                </td>
+            </tr>
+        {{/each}}
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

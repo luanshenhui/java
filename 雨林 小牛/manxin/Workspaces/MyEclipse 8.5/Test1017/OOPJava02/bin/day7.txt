@@ -1,0 +1,31 @@
+一、方法调用中的值和引用
+	Java中只有值传递。但是要区分是地址还是常量
+	
+	练习：
+		1.模拟考试系统
+			a.父类：考题
+				属性：题干、选项、分数
+				方法：显示
+			b.子类：单选题
+				属性：正确答案
+				方法：判断正确
+			      子类：多选题
+				属性：正确答案
+				方法：判断正确
+			c.定义一个类：试卷
+				属性：选择题[5]		用户答案[5]
+				方法：显示、答题、交卷、显示得分
+				
+			生成一个包含多选和单选的试卷，10道题
+			1.答案忽略大小写。
+				String str="abc";
+				str.toUpperCase();//“abc”--->"ABC"
+				str.toLowerCase();//"ABC"--->"abc"
+			2.CBA == ABC
+				String str="CBA";
+				char[] cs = new char[str.length()];
+				for(int i=0;i<str.length();i++){
+					cs[i]=str.charAt[i];	//把字符串切割成字符数组
+				}
+				Arrays.sort(cs);
+				str = new String(cs);	//组装会字符串

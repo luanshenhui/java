@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- **** type aliases ************************************************* -->
+	<typeAliases>
+        
+        
+        <!-- *** work *** -->
+        <typeAlias type="com.dpn.dpows.standard.model.WorkDeclareDto" alias="workDeclareDto"/>
+        <typeAlias type="com.dpn.dpows.standard.model.WorkDeclareGoodsDto" alias="workDeclareGoodsDto"/>
+        <typeAlias type="com.dpn.dpows.standard.model.EventLogDto" alias="eventLogDto"/> 
+        <!-- *** work *** -->
+        
+    </typeAliases>
+
+</configuration>

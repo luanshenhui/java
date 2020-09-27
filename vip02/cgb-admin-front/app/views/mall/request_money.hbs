@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}请款管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "request_money" true}}
+            {
+            "tabNumber":"1"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

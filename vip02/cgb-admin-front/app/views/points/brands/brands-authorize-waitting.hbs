@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}品牌授权管理{{/partial}}
+{{#partial "realBody"}}
+        <div class="container-components">
+            {{#inject "points_brands/brands_authorize" true}}
+                {
+                "type":"2",
+                "orderType":"JF"
+                }
+            {{/inject}}
+        </div>
+{{/partial}}
+{{> views/index_layout}}

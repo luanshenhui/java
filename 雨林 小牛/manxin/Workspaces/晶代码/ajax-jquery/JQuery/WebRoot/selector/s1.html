@@ -1,0 +1,37 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	function f1(){
+		//jQuery选择器如果找到多个节点,仍然
+		//将这些节点封装成一个jQuery对象。
+		//调用jQuery对象的方法或者属性，会同时
+		//作用于底层的节点。
+		var $obj = $('.s1');
+		$obj.css('font-size','80px');
+	}
+	
+	function f2(){
+		$('div').css('font-size','60px');
+	}
+	
+	function f3(){
+		$('#d1,p').css('font-size','60px');
+	}
+	
+	function f4(){
+		$('*').css('font-size','60px');
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<div id="d1">hello jQuery</div>
+	<div class="s1">hello java</div>
+	<p class="s1">hello tom</p>
+	<a href="javascript:;" onclick="f3();">ClickMe</a>
+
+</body>
+</html>

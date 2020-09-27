@@ -1,0 +1,28 @@
+<script src="../blmember/common.js"></script>
+<script src="../blmember/BlMemberPriceList.js"></script>
+<div id="BlMemberPriceListSearch" class="list_search">
+	<h1></h1>
+	<span id="blLblStatistic"></span>
+	<label class="blLblKeyword"></label>
+	<input type="text" id="searchKeywords"/>
+	<a id="blBtnSearchMemberPrice"></a>
+</div>
+<div id="BlMemberPriceListResult"></div>
+<div id="BlMemberPriceListStatistic"></div>
+<div id="BlMemberPriceListPagination" class="paging"></div>
+<textarea  id="BlMemberPriceListTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+		    <td class="lblName"></td>
+			<td class="blLblUsername"></td>
+			<td class="blLblCmtPrice"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr>
+		    <td class="center">{$T.row.name}</td>
+			<td class="center">{$T.row.username}</td>
+			<td class="left">{$T.row.cmtPrice}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

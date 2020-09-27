@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <node id="1" name="A" x="300" y="20" imgUrl="finished" />
+  <node id="2" name="B.1" x="150" y="70" imgUrl="processing" />
+  <node id="3" name="B.2" x="450" y="70" imgUrl="waitting" />
+  <node id="4" name="C.1" x="75" y="120" imgUrl="waitting">test\n测试中文</node>
+  <node id="5" name="C.2" x="225" y="120" imgUrl="waitting"/>
+  <node id="6" name="C.3" x="375" y="120" imgUrl="waitting"/>
+  <node id="7" name="C.4" x="525" y="120" imgUrl="waitting" />
+  
+  
+  <line id="1" fromNode="1" toNode="2" />  
+  <line id="2" fromNode="1" toNode="3" />
+  <line id="3" fromNode="2" toNode="4"/>
+  <line id="4" fromNode="2" toNode="5"/>
+  <line id="5" fromNode="3" toNode="6" />
+  <line id="6" fromNode="3" toNode="7" />
+  <line id="6" fromNode="1" toNode="2" >
+  	<segment x="300" y="40" x2="50" y2="40"/>
+  	<segment x="50" y="40" x2="50" y2="90"/>
+  	<segment x="50" y="90" x2="150" y2="90"/>
+  </line>
+</root>

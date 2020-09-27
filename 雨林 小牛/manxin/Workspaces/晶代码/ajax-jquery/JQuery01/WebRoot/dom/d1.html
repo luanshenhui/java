@@ -1,0 +1,30 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style>
+	.s1{
+		font-size:90px;
+	}
+</style>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('#b1').click(function(){
+			//alert($('#d1').attr('id'));
+			//$('#d1').attr('style','color:red;font-size:60px;');
+			$('#d1').attr({'style':'color:blue;',
+			'class':'s1'});
+			$('#d1').removeAttr('class');
+		});
+	});
+</script>
+</head>
+<body style="font-size:30px;">
+	<div id="d1">hello jQuery</div>
+	<input type="button" value="ClickMe" id="b1"/>
+
+
+</body>
+</html>

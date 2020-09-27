@@ -1,0 +1,720 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<%@ include file="/common/resource_show.jsp"%>
+<link rel="stylesheet" href="${ctx}/static/viewer/assets/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="${ctx}/static/viewer/dist/viewer.css"></link>
+<link rel="stylesheet" href="${ctx}/static/viewer/demo/css/main.css"></link>
+<script src="${ctx}/static/viewer/assets/js/jquery.min.js"></script>
+<script src="${ctx}/static/viewer/assets/js/bootstrap.min.js"></script>
+<script src="${ctx}/static/viewer/dist/viewer.js"></script>
+<script src="${ctx}/static/viewer/demo/js/main.js"></script>
+</head>
+<script language="javascript" type="text/javascript">
+$(function(){
+	$("#imgd1").hide();
+})
+function dayin() {
+	window.print();
+}
+
+/**
+ * 显示图片浏览
+ * path 数据库保存的图片地址 E:/201708/20170823/1B083FEA24D6E00004df8.jpg
+ * wangzhy
+ */
+function toImgDetail(path){
+	url = "/ciqs/showVideo?imgPath="+path;
+	$("#imgd1").attr("src",url);
+	$("#imgd1").click();		
+}
+</script>
+
+<style type="text/css">
+td{padding:5px}
+<!--
+.tableLine {
+	border: 1px solid #000;
+}
+.fangxingLine {
+	font-size:10;
+	margin-left:5px;
+	margin-right:5px;
+	border: 2px solid #000;
+	font-weight:900;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+.tableLine2 {
+	border: 1px solid #000;
+	padding-left: 10px; 
+}
+.tableLine_noright {
+	padding-left: 10px;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #000;
+	border-bottom-color: #000;
+	border-left-color: #000;
+}
+.tableLine_noleft {
+	padding-left: 10px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #000;
+	border-right-color: #000;
+	border-bottom-color: #000;
+}
+@media print {
+.noprint{display:none}
+}
+#content table tr td {
+	text-align: left;
+}
+#content table {
+	text-align: left;
+}
+#content table tr td strong {
+	text-align: center;
+}
+#content table tr td strong {
+	text-align: center;
+}
+#content table tr td strong {
+	text-align: center;
+}
+#content table {
+	text-align: center;
+}
+#content table tr td strong {
+	text-align: center;
+}
+#content .tableLine tr .tableLine {
+	text-align: left;
+}
+#content .tableLine {
+	text-align: center;
+}
+-->
+</style>
+<body>
+	<div id="content">
+    <table width="700px" align="center">
+        <tr>
+          <td style="text-align:center;">
+          	<span style="text-align:center;font-size:30px"><strong > 国境口岸餐饮服务单位卫生许可现场审查表（一）</strong></span>
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align:center;">
+          	<span>（ 适用于特大型餐馆，大型餐馆，供餐人数500人以上食堂）</span><br>
+		  </td>
+        </tr>
+        <tr>
+          <td >
+          	<span style="text-align:left;"><strong>被检查单位：</strong>${cpDto.comp_name}</span>
+            <span style="margin-left:400px;text-align:right;">
+            	结论：<input type="checkbox" disabled="disabled" <c:if test="${dto.option_80==0}">checked="checked"</c:if>/>合格  
+            		<input type="checkbox" disabled="disabled" <c:if test="${dto.option_80==1}">checked="checked"</c:if>/>不合格 
+            </span> 
+          </td>
+        </tr>
+    </table>
+    <table width="700"  border="0" align="center" style="font-size: 14px;line-height: 30px;" cellpadding="0" cellspacing="0"   class="tableLine">
+      <tr>
+        <td width="114" height="43" style="text-align: center" valign="middle" class="tableLine"><p><strong>审查环节</strong></p></td>
+        <td width="508" style="text-align:center" class="tableLine"><p><strong>审查内容</strong></p></td>
+        <td width="23" style="text-align: center" class="tableLine"><strong>分值</strong></td>
+        <td width="24" style="text-align: center" class="tableLine"><strong>得分</strong></td>
+        <td width="29" style="text-align:center" class="tableLine"><strong>小计</strong></td>
+      <td width="24" style="text-align: center" class="tableLine"><strong>查看</strong></td>
+      </tr>
+<tr>
+  <td height="117" style="text-align: center" valign="middle" class="tableLine">选址</td>
+  <td align="center" class="tableLine">1.选择地势干燥、有给排水条件和电力供应的地区，不得设在易受到污染的区域。距离粪坑、污水池、暴露垃圾场（站）、旱厕等污染源25m以上，并设置在粉尘、有害气体、放射性物质和其他扩散性污染源的影响范围之外。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_1}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_1'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_1'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td rowspan="10" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">场所设置、布局、分隔和面积 </p>
+（26分）</td>
+  <td height="103" align="center" class="tableLine">2.设置与食品供应方式和品种相适应的粗加工、切配、烹饪、面点制作、餐用具清洗消毒、备餐等加工操作场所，以及食品库房、更衣室、清洁工具存放场所等。各场所均设在室内。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_2}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="10" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_2'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_2'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">3.粗加工、切配、烹饪、餐用具清洗消毒、特大型餐馆餐用具保洁为独立隔间的场所。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_3}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">4.进行凉菜配制、裱花操作和食堂备餐，分别设置相应操作专间。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_4}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">5.制作现榨果蔬汁和水果拼盘及加工生食海产品，设置相应的专用操作场所。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_5}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">6.各加工操作场所按照原料进入、原料处理、半成品加工、成品供应的顺序合理布局，并能防止食品在存放、操作中产生交叉污染。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_6}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">7.用于原料、半成品、成品的工具、用具和容器，有明显的区分标识，存放区域分开设置。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_7}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">8.食品处理区面积与就餐场所面积之比满足特大型餐馆≥1:3.0，大型餐馆≥1:2.5。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_8}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">9.切配烹饪场所面积≥食品处理区面积50%（全部用半成品烹饪的可适当减少）。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_9}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">10.凉菜间面积≥食品处理区面积10%。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_10}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">11.加工经营场所内无圈养、宰杀活的禽畜类动物的区域（或距离25m以上）。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_11}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="3" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">食品处理区地面与排水 </p>
+（7分）</td>
+  <td align="center" class="tableLine">12.地面用无毒、无异味、不透水、不易积垢、耐腐蚀、防滑的材料铺设，且平整、无裂缝。粗加工、切配、餐用具清洗消毒和烹调等场所的地面易于清洗、防滑，并有排水系统。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_12}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="3" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_3'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_3'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">13.地面和排水沟有排水坡度。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_13}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">14.排水沟出口有网眼孔径小于6mm的金属隔栅或网罩。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_14}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="3" align="center" valign="middle" class="tableLine" style="text-align: center">食品处理区墙壁、门窗（12分）</td>
+  <td align="center" class="tableLine">15.墙壁采用无毒、无异味、不透水、平滑、不易积垢的浅色材料，粗加工、切配、餐用具清洗消毒和烹调等场所有1.5m以上光滑、不吸水、浅色、耐用和易清洗的材料制成的墙裙。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_15}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="3" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_4'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_4'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">16.门、窗装配严密，与外界直接相通的门和窗设有易于拆洗且不生锈的防蝇纱网或设置空气幕，与外界直接相通的门能自动关闭。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_16}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">17.粗加工、切配、餐用具清洗消毒、烹调等场所如设门，采用易清洗、不吸水的坚固材料制作。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_17}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="3" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">食品处理区天花板 </p>
+（9分）</td>
+  <td align="center" class="tableLine">18.天花板采用无毒、无异味、不吸水、表面光洁、耐腐蚀、耐温、浅色材料涂覆或装修。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_18}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="3" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_5'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_5'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">19.清洁操作区、准清洁操作区及其它半成品、成品暴露场所屋顶若为不平整的结构或有管道通过，加设平整、易于清洁的吊顶。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_19}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">20.水蒸气较多的场所的天花板有适当的坡度。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_20}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="3" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">洗手消毒 <br>
+    设施 </p>
+（9分）</td>
+  <td align="center" class="tableLine">21.食品处理区内设置足够数量的洗手设施，其位置设置在方便员工的区域。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_21}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="3" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_6'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_6'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">22.洗手池的材质为不透水材料，结构易于清洗。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_22}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">23.洗手消毒设施附近有相应的清洗、消毒用品和干手用品或设施，员工专用洗手消毒设施附近有洗手消毒方法标识。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_23}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="6" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">餐用具清洗消毒保洁 <br>
+    设施 </p>
+（7分）</td>
+  <td align="center" class="tableLine">24.配备能正常运转的清洗、消毒、保洁设备设施。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_24}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="6" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_7'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_7'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">25.各类清洗消毒方式设专用水池的最低数量：采用化学消毒的，至少设有3个专用水池。采用人工清洗热力消毒的，可设置２个专用水池。各类水池以明显标识标明其用途。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_25}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">26.餐用具清洗消毒水池专用，与食品原料、清洁用具及接触非直接入口食品的工具、容器清洗水池分开。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_26}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">27.餐用具清洗消毒水池使用不锈钢或陶瓷等不透水材料、不易积垢并易于清洗。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_27}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">28.设专供存放消毒后餐用具的保洁设施，标记明显，结构密闭并易于清洁。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_28}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">29.清洗、消毒、保洁设备设施的大小和数量能满足需要。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_29}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="2" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">食品原料、清洁工具清洗水池 </p>
+（10分）</td>
+  <td align="center" class="tableLine">30.粗加工操作场所分别设动物性食品、植物性食品、水产品3类食品原料的清洗水池，水池数量或容量与加工食品的数量相适应。各类水池以明显标识标明其用途。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_30}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="2" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_8'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_8'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">31.设专用于拖把等清洁工具、用具的清洗水池，其位置不会污染食品及其加工制作过程。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_31}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="3" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">设备、工具和容器 </p>
+（9分）</td>
+  <td align="center" class="tableLine">32.接触食品的设备、工具、容器、包装材料等符合食品安全标准或要求。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_32}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="3" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_9'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_9'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">33.接触食品的设备、工具和容器易于清洗消毒。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_33}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">34.所有食品设备、工具和容器不使用木质材料，因工艺要求必须使用除外。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_34}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="2" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">通风排烟 <br>
+    设施 </p>
+（10分）</td>
+  <td align="center" class="tableLine">35.烹调场所采用机械排风。产生油烟的设备上部加设附有机械排风及油烟过滤的排气装置，过滤器便于清洗和更换。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_35}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="2" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_10'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_10'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">36.排气口装有网眼孔径小于6mm的金属网罩。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_36}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">照明设施 </p>
+（2分）</td>
+  <td align="center" class="tableLine">37.加工经营场所光源不改变所观察食品的天然颜色。安装在暴露食品正上方的照明设施使用防护罩。冷冻（藏）库房使用防爆灯。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_37}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_11'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_11'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td rowspan="2" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">废弃物暂存设施 </p>
+（4分）</td>
+  <td align="center" class="tableLine">38.食品处理区设存放废弃物或垃圾的容器。废弃物容器与加工用容器有明显区分的标识。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_38}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="2" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_12'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_12'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">39.废弃物容器配有盖子，以坚固及不透水的材料制造，内壁光滑便于清洗。专间内的废弃物容器盖子为非手动开启式。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_39}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="2" align="center" valign="middle" class="tableLine" style="text-align: center">媒介防控设施（10分）</td>
+  <td align="center" class="tableLine">40.与外界连接的门口和食品仓库等重点场所门口安装防鼠板。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_40}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="2" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_13'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_13'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">41.有充足的蚊、蝇等病媒生物防控设施。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_41}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="4" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">库房和食品贮存场所 </p>
+（9分）</td>
+  <td align="center" class="tableLine">42.食品和非食品（不会导致食品污染的食品容器、包装材料、工具等物品除外）库房分开设置。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_42}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="4" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_14'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_14'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">43.冷藏、冷冻柜（库）数量和结构能使原料、半成品和成品分开存放，有明显区分标识。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_43}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">44.除冷库外的库房有良好的通风、防潮、防鼠设施。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_44}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">45.冷冻（藏）库（冰箱）设可正确指示库内温度的温度计。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_45}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td rowspan="4" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">专间 </p>
+（10分）</td>
+  <td align="center" class="tableLine">46.专间内无明沟，地漏带水封。食品传递窗为开闭式，其他窗封闭。专间墙裙铺设到顶。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_46}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="4" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_15'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_15'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">47.专间门采用易清洗、不吸水的坚固材质，能够自动关闭。</td>
+  <td align="center" class="tableLine" style="text-align: center">5</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_47}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">48.专间内设独立空调设施、专用工具清洗消毒设施和空气消毒设施以及专用冷藏设施。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_48}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">49.专间入口处设置有非手动式洗手、消毒、更衣设施的通过式预进间。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_49}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">更衣室 </p>
+（2分）</td>
+  <td align="center" class="tableLine">50.更衣场所与加工经营场所处于同一建筑物内，有足够大小的空间、足够数量的更衣设施和适当的照明。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_50}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_16'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_16'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td rowspan="2" align="center" valign="middle" class="tableLine" style="text-align: center"><p align="center">厕所 </p>
+（2分）</td>
+  <td align="center" class="tableLine">51.厕所不设在食品处理区。</td>
+  <td align="center" class="tableLine" style="text-align: center">※</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_51}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td rowspan="2" style="text-align:center" class="tableLine" width="80px">
+    <c:forEach items="${volist}" var="items" varStatus="aa">
+    	<c:if test="${items.file_type == 1 && items.proc_type == 'V_PT_H_L_17'}">
+    		<a href="#" onclick="toImgDetail('${items.file_name}')">查看图片</a><br/>
+    	</c:if>
+    	<c:if test="${items.file_type == 2 && items.proc_type == 'V_PT_H_L_17'}">
+    		<a href="#" onclick="showVideo('${items.file_name}')" >查看视频</a><br/>
+    	</c:if>
+    </c:forEach>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="tableLine">52.厕所采用水冲式，在出口附近设置洗手设施。</td>
+  <td align="center" class="tableLine" style="text-align: center">2</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_52}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+<tr>
+  <td height="51" align="center" valign="middle" class="tableLine" style="text-align: center">合计</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_79}</td>
+  <td align="center" class="tableLine" style="text-align: center">${dto.option_53}</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+  <td align="center" class="tableLine">&nbsp;</td>
+</tr>
+</table>
+<table width="700"  border="0" align="center" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>         
+          <p>注： 1. ※是关键监督项目，如果有一项不符合要求，则现场审查不合格。 <br>
+            2. 每项如符合要求，则该项得满分；如不符合要求，则该项不得分。 <br>
+            3. 可以有合理缺项（合理缺项项目用“－”标示），但需标化。标化分=所得的分数除以该单位应得的最高分数×100。 <br>
+          4. 根据得分，做出审查结论，标化分90分以上者，现场审查合格。 </p>
+        
+            <p><span style="margin-right:200px">得分：${dto.option_54}</span><span>检查时间：${dto.option_56}</span><p/>
+            <p>标化分：${dto.option_55}<p/>
+            <p> 
+            	<span style="margin-right:148px">陪同检查人：
+	            <c:if test="${not empty dto.option_59}">
+	      			<img src="/ciqs/showVideo?imgPath=${dto.option_59}" width="50px" height="50px" />
+	      		</c:if> 
+	      		</span>
+	      		<span>
+	      		监督员：
+	      		<c:if test="${not empty dto.option_60}">
+	      			<img src="/ciqs/showVideo?imgPath=${dto.option_60}" width="50px" height="50px" />
+	      		</c:if>  
+	      		</span>           
+      		<p/>
+        </td>
+      </tr>
+</table>
+<c:if test="${clistSize>3 }">
+    <logic:notEmpty name="clist">
+      <logic:iterate indexId="rowIdx" id="paperlessDeclGoodsDTO" name="clist" type="com.dpn.ciq.model.PaperlessDeclGoodsDTO">
+        <bean:write name="paperlessDeclGoodsDTO" property="container_code"/>
+      </logic:iterate>
+    </logic:notEmpty>
+    </c:if>
+    
+    <div style="text-align: center;" class="noprint"><span>
+      <input onClick="javascript:window.close();" type="button" class="btn" value="返回" />
+            <input type="button" value="打印" id="print" class="btn" onClick="dayin()" />
+      </span>
+    </div>
+</div>
+
+<div class="title-cxjg" style="height:400px;"></div>
+<!-- 图片查看 -->
+<div class="row" style="z-index:200000;">
+ 	<div class="col-sm-8 col-md-6" style="z-index:200000;">
+      <div class="docs-galley" style="z-index:200000;">
+        	<ul class="docs-pictures clearfix" style="z-index:200000;">
+          	<li>
+          	<img id="imgd1" style="z-index:200000;" <%-- data-original="${ctx}/static/viewer/assets/img/tibet-1.jpg" --%> 
+          	src="${ctx}/static/viewer/assets/img/thumbnails/tibet-3.jpg" alt="Cuo Na Lake" />
+          	</li>
+        	</ul>
+      </div>
+   	</div>
+</div>
+<%@ include file="/common/player.jsp"%>
+</body>

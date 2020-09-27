@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="wfProcessForm" type="com.dhc.workflow.designer.form.WfProcessForm" />
+	</form-beans>
+	<action-mappings>
+		<!-- 业务分类Action -->
+		<action
+			type="com.dhc.workflow.bizcategory.action.WfBizCategoryAction"
+			parameter="method" scope="request" path="/WfBizCategoryAction">
+			<forward name="listPage"
+				path="/view/workflow/wfbizcategory/WfBizCategoryList.jsp" />
+			<forward name="detailPage"
+				path="/view/workflow/wfbizcategory/WfBizCategoryDetail.jsp" />
+			<forward name="wfbizcategorySelect"
+				path="/view/workflow/wfbizcategory/WfBizCategorySelect.jsp" />
+			<forward name="wfbizcategoryparentSelect"
+				path="/view/workflow/wfbizcategory/WfBizCategoryParentSelect.jsp" />
+		</action>
+
+		<!-- 工作项管理 -->
+		<action path="/WorkitemManagementAction" parameter="method"
+			scope="request" type="com.dhc.workflow.management.action.WorkitemManagementAction">
+			<forward name="workItemList" path="/view/workflow/management/workitem/todo.jsp"></forward>
+			<forward name="historyList"
+				path="/view/workflow/management/workitem/history.jsp"></forward>
+			<forward name="fillRelateData"
+				path="/view/workflow/management/workitem/ModifyRelateData.jsp"></forward>
+			<forward name="addSigner"
+				path="/view/workflow/management/workitem/addSigner.jsp"></forward>
+			<forward name="showAdhoc"
+				path="/view/workflow/management/workitem/SendToAdhoc.jsp"></forward>
+			<forward name="showNormalSend"
+				path="/view/workflow/management/workitem/SendToNormal.jsp"></forward>
+		</action>
+
+		<!-- 应用程序 -->
+		<action path="/WfApplicationAction" parameter="method" scope="request"
+			type="com.dhc.workflow.designer.action.ApplicationAction">
+			<forward name="appEdit"
+				path="/view/workflow/wfapplication/WfApplicationEdit.jsp"></forward>
+		</action>
+		<!-- 锐志，流程定义 -->
+		<action type="com.dhc.workflow.designer.action.ProcessAction" name="wfProcessForm"
+			parameter="method" scope="request" path="/WfProcessAction">
+			<forward name="workflow_design"
+				path="/view/workflow/wfdesign_flex/iLead_Workflow.jsp" />
+			<forward name="displayEventsSuccess"
+				path="/view/workflow/wfprocessevent/WfProcessEvent.jsp" />
+			<forward name="selectAppSuccess"
+				path="/view/workflow/wfapplication/WfApplicationSelect.jsp" />
+			<forward name="listPage" path="/view/workflow/wfprocess/WfProcessList.jsp" />
+			<forward name="editRelData" path="/view/workflow/wfrelatedata/WfRelateDataEdit.jsp" />
+			<forward name="messageTip" path="/view/workflow/wfprocess/errormsg.jsp" />
+		</action>
+
+		<!-- 潇艺，流程设计器相关 -->
+		<action type="com.dhc.workflow.designer.action.ManualActivityAction"
+			parameter="method" scope="request" path="/WfManualActivity">
+			<forward name="manualActDetail" path="/view/workflow/wfactivity/WfManualNode.jsp" />
+			<forward name="displayEventsSuccess" path="/view/workflow/wfactivity/WfEvents.jsp" />
+		</action>
+		<action type="com.dhc.workflow.designer.action.AutomaticActivityAction"
+			parameter="method" scope="request" path="/WfAutomaticActivity">
+			<forward name="autoActDetail" path="/view/workflow/wfactivity/WfAutoNode.jsp" />
+			<forward name="displayEventsSuccess" path="/view/workflow/wfactivity/WfEvents.jsp" />
+		</action>
+		<action type="com.dhc.workflow.designer.action.SubProcessActivityAction"
+			parameter="method" scope="request" path="/WfSubProcessActivity">
+
+		</action>
+		<action type="com.dhc.workflow.designer.action.StartActivityAction"
+			parameter="method" scope="request" path="/WfStartActivity">
+			<forward name="startActDetail" path="/view/workflow/wfactivity/WfStartNode.jsp" />
+		</action>
+		<action type="com.dhc.workflow.designer.action.FinishActivityAction"
+			parameter="method" scope="request" path="/WfFinishActivity">
+			<forward name="finishActDetail" path="/view/workflow/wfactivity/WfEndNode.jsp" />
+		</action>
+		<action type="com.dhc.workflow.designer.action.SplitActivityAction"
+			parameter="method" scope="request" path="/WfSplitActivity">
+			<forward name="splitActDetail" path="/view/workflow/wfactivity/WfBranchNode.jsp" />
+		</action>
+		<action type="com.dhc.workflow.designer.action.ParallelSplitActivityAction"
+			parameter="method" scope="request" path="/WfParallelSplitActivity">
+			<forward name="paraActDetail" path="/view/workflow/wfactivity/WfParallelNode.jsp" />
+		</action>
+		<action type="com.dhc.workflow.designer.action.MergeActivityAction"
+			parameter="method" scope="request" path="/WfMergeActivity">
+			<forward name="mergeActDetail" path="/view/workflow/wfactivity/WfMergeNode.jsp" />
+		</action>
+
+		<!-- 传输线Action start -->
+		<action type="com.dhc.workflow.designer.action.TransitionAction"
+			parameter="method" scope="request" path="/WfTransitionAction">
+		</action>
+
+		<!-- 可视化监控工具 -->
+		<action type="com.dhc.workflow.monitor.MonitorAction"
+			parameter="method" scope="request" path="/MonitorAction">
+			<forward name="showProcInstDetail"
+				path="/view/workflow/monitor/details/ProcInstDetails.jsp" />
+			<forward name="showActInstDetail"
+				path="/view/workflow/monitor/details/ActInstDetails.jsp" />
+		</action>
+
+		<!-- 报表Action -->
+		<action type="com.dhc.workflow.report.action.ReportAction" parameter="method"
+			scope="request" path="/ReportAction">
+			<forward name="processDefineReport" path="/view/workflow/report/processDefineReport.jsp" />
+			<forward name="processInstanceReport"
+				path="/view/workflow/report/processInstanceReport.jsp" />
+			<forward name="peopleReport" path="/view/workflow/report/peopleReport.jsp" />
+		</action>
+		
+		<!-- 流程监控Action -->
+		<action type="com.dhc.workflow.management.action.ProcessInstanceMonitorAction"
+			parameter="method" scope="request" path="/ProcessInstanceMonitorAction">
+			<forward name="ProcInstMonitor" path="/view/workflow/management/monitor/ProcInstMonitor.jsp"/>
+			<forward name="ProcessPopup" path="/view/workflow/management/monitor/ProcessPopup.jsp"/>
+		</action>
+		
+		<!-- 应用程序监控Action -->
+		<action type="com.dhc.workflow.management.action.ApplicationMonitorAction"
+			parameter="method" scope="request" path="/ApplicationMonitorAction">
+			<forward name="ApplicationMonitor" path="/view/workflow/management/monitor/ApplicationMonitor.jsp"/>
+		</action>
+		
+		<!-- 超时监控Action -->
+		<action type="com.dhc.workflow.management.action.OvertimeReminderMonitorAction"
+			parameter="method" scope="request" path="/OvertimeReminderMonitorAction">
+			<forward name="OvertimeReminderMonitor" path="/view/workflow/management/monitor/OvertimeReminderMonitor.jsp"/>
+		</action>
+	</action-mappings>
+
+</struts-config>
+

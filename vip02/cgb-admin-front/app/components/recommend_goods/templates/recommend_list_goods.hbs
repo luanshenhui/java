@@ -1,0 +1,20 @@
+{{#each data}}
+    <div class="admin-big-box-sub-50-d clearfix  list-goods-mouse" data-id="{{this.model.goodsId}}" data-delflag="{{this.model.goodsSeq}}">
+        <div class="code"  title="{{this.model.goodsMid}}">{{this.model.goodsMid}}</div>
+        <div class="name"  title="{{this.model.goodsNm}}"><a href="javascript:void(0)" data-goodscode="{{this.goodsCode}}"
+                                                  class="js-goods-url">{{this.model.goodsNm}}</a></div>
+        <div class="hover-box">
+            <i class="icon-admin-hover">
+                    <i class="icon-admin-hover-up js-recommend-goods-up"></i>
+                    <i class="icon-admin-hover-down js-recommend-goods-down"></i>
+                <div class="col-right-common">
+                        <button id="{{this.model.goodsId}}" class="btn btn-small btn-info" data-toggle="confirm"
+                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                data-event="confirm:delete-recommend">删除
+                        </button>
+                </div>
+                <div class="clear"></div>
+            </i>
+        </div>
+    </div>
+{{/each}}

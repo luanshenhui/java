@@ -1,0 +1,810 @@
+{{#component "cooperation_detail js-component"}}
+    <script src="/static/scripts/encrypt/pwdObject_.js" xmlns="http://www.w3.org/1999/html"></script>
+    <div class="modal-header">
+    <div class="main-box-title h1-title">{{#if flag}}审核供应商信息{{else}}查询供应商信息{{/if}}</div>
+    </div>
+    <form id="cooperationDetailForm" class="form form-aligned cooperation-detail-form">
+    {{#with _DATA_}}
+        <p class="components-title title"><strong>- 基本信息 -</strong></p>
+        <p class="filter-name">
+            <span class="span3 span-large">
+               <label for="vendorId" id="vendorId" data-id="{{vendorId}}">供应商编码</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+               {{vendorId}}
+            </span>
+            <span class="span3 span-large">
+                <label for="merId">商户号</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{merId}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="fullName">供应商名称</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{fullName}}
+            </span>
+            <span class="span3 span-large">
+                <label for="simpleName">供应商简称</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{simpleName}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="taxCode">纳税登记号</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{taxCode}}
+            </span>
+            <span class="span3 span-large">
+                <label for="vendorType">类型</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{vendorType}}
+            </span>
+        </p>
+
+        <p class="components-title title"><strong>- 付款信息 -</strong></p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+               <label for="payCondition">付款条件</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+               {{payCondition}}
+            </span>
+            <span class="span3 span-large">
+                <label for="payGroup">支付组</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{payGroup}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="commision">佣金率</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{commision}}
+            </span>
+            <span class="span3 span-large">
+                <label for="payWay">付款方法</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{payWay}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="payCurrency">付款币种</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{payCurrency}}
+            </span>
+            <span class="span3 span-large">
+                <label for="freightTip">运费条款</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{freightTip}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                 <!--收取方式  1：按月收取  2：按季收取  3：按年收取  4：一次性收取-->
+                    <label for="feeType">接收方式</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{#equals "1" feeType}}
+                    <td class="feeType">按月收取</td>
+                {{/equals}}
+                {{#equals "2" feeType}}
+                    <td class="feeType">按季收取</td>
+                {{/equals}}
+                {{#equals "3" feeType}}
+                    <td class="feeType">按年收取</td>
+                {{/equals}}
+                {{#equals "4" feeType}}
+                    <td class="feeType">一次性收取</td>
+                {{/equals}}
+            </span>
+            <span class="span3 span-large">
+                <label for="province">省份</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{#equals "请选择" province}}
+                {{else}}
+                    {{province}}
+                {{/equals}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="city">城市</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{#equals "请选择" city}}
+                {{else}}
+                    {{city}}
+                {{/equals}}
+            </span>
+
+            <span class="span3 span-large">
+                <label for="area">区</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{#equals "请选择" area}}
+                {{else}}
+                    {{area}}
+                {{/equals}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="cooperAddress">供应商地点</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{cooperAddress}}
+            </span>
+            <span class="span3 span-large">
+                <label for="enterpriseAddress">企业地址</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{enterpriseAddress}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="postCode">邮政编码</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{postCode}}
+            </span>
+            <span class="span3 span-large">
+                <label for="payAddress">用于支付地点</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{payAddress}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="buyAddress">用于采购地点</label>&nbsp;:
+            </span>
+             <span class="span1 span-large">
+                {{buyAddress}}
+            </span>
+            <span class="span3 span-large">
+                <label for="payConditionAddress">付款条件地点</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{payConditionAddress}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="payGroupAddress">支付组地点</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{payGroupAddress}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="address">收货地点</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                 {{address}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="debtAccount">负债账户</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{debtAccount}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="prepayAccount">预付款账户</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                 {{prepayAccount}}
+            </span>
+        </p>
+
+        <p class="components-title title"><strong>- 联系人信息 -</strong></p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="contact">联系人名称</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{contact}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="phone">联系人电话</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                 {{phone}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="contactTax">联系人传真</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{contactTax}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="email">电子信箱</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                 {{email}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="invoice">发票匹配选项</label>&nbsp;:
+            </span>
+             <span class="span1 span-large">
+                {{invoice}}
+            </span>
+        </p>
+
+        <p class="components-title title"><strong>- 银行方信息 -</strong></p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="accBank">收款银行名称</label>&nbsp;:
+            </span>
+             <span class="span1 span-large">
+                {{accBank}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="accNo">银行帐号</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                 {{accNo}}
+            </span>
+        </p>
+
+        <p class="components-title title"><strong>- 其他信息 -</strong></p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="status">当前状态</label>&nbsp;:
+                <input id="status" value="{{status}}" type="hidden" class="form-control"/>
+            </span>
+            <span class="span1 span-large">
+                {{#equals "0101" status}}
+                    <td class="status">未启用</td>
+                {{/equals}}
+                {{#equals "0102" status}}
+                    <td class="status">已启用</td>
+                {{/equals}}
+            </span>
+            <span class="span3 span-large">
+              <label for="vendorRole">供应商角色</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{#equals "0" vendorRole}}
+                    <td class="vendorRole">VMI合作商</td>
+                {{/equals}}
+                {{#equals "1" vendorRole}}
+                    <td class="vendorRole">VMI物流商</td>
+                {{/equals}}
+                {{#equals "2" vendorRole}}
+                    <td class="vendorRole">高级供应商</td>
+                {{/equals}}
+                {{#equals "3" vendorRole}}
+                    <td class="vendorRole">O2O供应商</td>
+                {{/equals}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="qsvendorNo">银联商户号</label>&nbsp;:
+            </span>
+             <span class="span1 span-large">
+                {{unionPayNo}}
+            </span>
+            <span class="span3 span-large">
+                <label for="vendorNo">供应商代码</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{vendorNo}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+              <label for="specShopno">虚拟特店号</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{virtualVendorId}}
+            </span>
+
+            <span class="span3 span-large">
+                <label for="serviceTime">供应商服务时间</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{serviceTime}}
+            </span>
+        </p>
+
+        <p class="components-title title"><strong>- 用户信息 -</strong></p>
+        <!--此处逻辑为当点击审核时且二次密码为空，显示二次密码-->
+        {{#if flag}}
+            {{#equals '' vendorModel.pwsecond}}
+                <p class="filter-name">
+                    <span class="span3 span-large">
+                        <label for="code">用户编号</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.code}}
+                    </span>
+                    <span class="span3 span-large">
+                      <label for="name">用户姓名</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.name}}
+                    </span>
+                </p>
+                <!--密码控件开始-->
+                <div class="filter-name">
+                    <div class="control-group pull-left modify-password-div">
+                        <label for="passwordNew" class="password-div password-right label-width passwordNew"><span class="required">*</span>二次密码&nbsp;:</label>
+                        <div id="passwordNew" class="password-div vfirst">
+                            <script type="text/javascript">
+                                createPwdObjectNew("passwordNew-div","80","28","4","4","E","222");
+                            </script>
+                        </div>
+                    </div>
+
+                    <div class="control-group pull-left modify-password-div">
+                        <label for="passwordConfirm" class="password-div password-right label-width passwordConfirm"><span class="required">*</span>确认密码&nbsp;:</label>
+                        <div id="passwordConfirm" class="password-div">
+                            <script type="text/javascript">
+                                createPwdObjectNew("passwordConfirm-div","80","28","4","4","E","222");
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <!--密码控件结束-->
+                <p class="filter-name">
+                    <span class="span3 span-large">
+                        <label for="mobile">手机号码</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.mobile}}
+                    </span>
+                    <span class="span3 span-large">
+                        <label for="phone">联系电话</label>&nbsp;:
+                    </span>
+                     <span class="span1 span-large">
+                         {{vendorModel.phone}}
+                     </span>
+                </p>
+
+                <p class="filter-name">
+                    <span class="span3 span-large">
+                        <label for="fax">传真电话</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.fax}}
+                    </span>
+                    <span class="span3 span-large">
+                      <label for="address">通讯地址</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.address}}
+                    </span>
+                </p>
+
+                <p class="filter-name">
+                    <span class="span3 span-large">
+                        <label for="cooperationId">邮件地址</label>&nbsp;:
+                    </span>
+                     <span class="span1 span-large">
+                         {{vendorModel.email}}
+                     </span>
+                    <span class="span3 span-large">
+                      <label for="status">当前状态</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                          {{#equals "0101" vendorModel.status}}
+                              <td class="vendorModel.status">未启用</td>
+                          {{/equals}}
+                        {{#equals "0102" vendorModel.status}}
+                            <td class="vendorModel.status">已启用</td>
+                        {{/equals}}
+                    </span>
+                </p>
+
+                <p class="filter-name">
+                    <span class="span3 span-large">
+                        <label for="descript">用户描述</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.descript}}
+                    </span>
+                    </p>
+                    {{else}}
+                    <p class="filter-name">
+                    <span class="span3 span-large">
+                        <label for="code">用户编号</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.code}}
+                    </span>
+                    <span class="span3 span-large">
+                      <label for="name">用户姓名</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.name}}
+                    </span>
+                    </p>
+
+                    <p class="filter-name">
+                    <span class="span3 span-large">
+                        <label for="mobile">手机号码</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.mobile}}
+                    </span>
+
+                    <span class="span3 span-large">
+                        <label for="phone">联系电话</label>&nbsp;:
+                    </span>
+                     <span class="span1 span-large">
+                         {{vendorModel.phone}}
+                     </span>
+                </p>
+
+                <p class="filter-name">
+                    <span class="span3 span-large">
+                        <label for="fax">传真电话</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.fax}}
+                    </span>
+                    <span class="span3 span-large">
+                      <label for="address">通讯地址</label>&nbsp;:
+                    </span>
+                    <span class="span1 span-large">
+                        {{vendorModel.address}}
+                    </span>
+                </p>
+
+                <p class="filter-name">
+                <span class="span3 span-large">
+                    <label for="cooperationId">邮件地址</label>&nbsp;:
+                </span>
+                 <span class="span1 span-large">
+                     {{vendorModel.email}}
+                 </span>
+                <span class="span3 span-large">
+                  <label for="status">当前状态</label>&nbsp;:
+                  <input id="vendorStatus" value="{{vendorModel.status}}" type="hidden" class="form-control"/>
+                </span>
+                <span class="span1 span-large">
+                      {{#equals "0101" vendorModel.status}}
+                          <td class="vendorModel.status">未启用</td>
+                      {{/equals}}
+                    {{#equals "0102" vendorModel.status}}
+                        <td class="vendorModel.status">已启用</td>
+                    {{/equals}}
+                </span>
+                </p>
+
+                <p class="filter-name">
+                <span class="span3 span-large">
+                    <label for="descript">用户描述</label>&nbsp;:
+                </span>
+                <span class="span1 span-large">
+                    {{vendorModel.descript}}
+                </span>
+                </p>
+                {{/equals}}
+        {{else}}
+            <p class="filter-name">
+                <span class="span3 span-large">
+                    <label for="code">用户编号</label>&nbsp;:
+                </span>
+                <span class="span1 span-large">
+                    {{vendorModel.code}}
+                </span>
+                <span class="span3 span-large">
+                  <label for="name">用户姓名</label>&nbsp;:
+                </span>
+                <span class="span1 span-large">
+                    {{vendorModel.name}}
+                </span>
+            </p>
+
+            <p class="filter-name">
+                <span class="span3 span-large">
+                    <label for="mobile">手机号码</label>&nbsp;:
+                </span>
+                <span class="span1 span-large">
+                    {{vendorModel.mobile}}
+                </span>
+
+                <span class="span3 span-large">
+                    <label for="phone">联系电话</label>&nbsp;:
+                </span>
+                 <span class="span1 span-large">
+                     {{vendorModel.phone}}
+                 </span>
+            </p>
+
+            <p class="filter-name">
+                <span class="span3 span-large">
+                    <label for="fax">传真电话</label>&nbsp;:
+                </span>
+                <span class="span1 span-large">
+                    {{vendorModel.fax}}
+                </span>
+                <span class="span3 span-large">
+                  <label for="address">通讯地址</label>&nbsp;:
+                </span>
+                <span class="span1 span-large">
+                    {{vendorModel.address}}
+                </span>
+            </p>
+
+            <p class="filter-name">
+                <span class="span3 span-large">
+                    <label for="cooperationId">邮件地址</label>&nbsp;:
+                </span>
+                 <span class="span1 span-large">
+                     {{vendorModel.email}}
+                 </span>
+                <span class="span3 span-large">
+                  <label for="status">当前状态</label>&nbsp;:
+                </span>
+                <span class="span1 span-large">
+                      {{#equals "0101" vendorModel.status}}
+                          <td class="vendorModel.status">未启用</td>
+                      {{/equals}}
+                    {{#equals "0102" vendorModel.status}}
+                        <td class="vendorModel.status">已启用</td>
+                    {{/equals}}
+                </span>
+            </p>
+
+            <p class="filter-name">
+                <span class="span3 span-large">
+                    <label for="descript">用户描述</label>&nbsp;:
+                </span>
+                <span class="span1 span-large">
+                    {{vendorModel.descript}}
+                </span>
+            </p>
+        {{/if}}
+
+        <p class="components-title title"><strong>- 分期费率 -</strong></p>
+        {{#each tblVendorRatioModelList}}
+            <div class="main-box-title2">{{period}}期费率</div>
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="period">期数</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{period}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="fixFeeSign">手续费首位付标志</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{#equals '1' fixedfeehtFlag}}
+                        E
+                {{else}}
+                    {{#equals '2' fixedfeehtFlag}}
+                        S
+                    {{else}}
+                        {{#equals '3' fixedfeehtFlag}}
+                            W
+                        {{else}}
+                            {{#equals '4' fixedfeehtFlag}}
+                                F
+                            {{else}}
+                                {{#equals '5' fixedfeehtFlag}}
+                                    L
+                                {{/equals}}
+                            {{/equals}}
+                        {{/equals}}
+                    {{/equals}}
+                {{/equals}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="fixedamtFee">固定金额手续费</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{fixedamtFee}}
+            </span>
+            <span class="span3 span-large">
+                <label for="feeratio1">手续费费率1(月费率)</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{feeratio1}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="ratio1Precent">费率1本金百分比</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{ratio1Precent}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="feeratio2">手续费费率2(月费率)</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{feeratio2}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="ratio2Precent">费率2本金百分比</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{ratio2Precent}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="feeratio2Bill">手续费费率2 开机期数</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{feeratio2Bill}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="feeratio3">手续费费率3(月费率)</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{feeratio3}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="ratio3Precent">费率3本金百分比</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{ratio3Precent}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="feeratio3Bill">手续费费率3 开机期数</label>&nbsp;:
+            </span>
+             <span class="span1 span-large">
+                 {{feeratio3Bill}}
+             </span>
+            <span class="span3 span-large">
+                 <label for="reducerateFrom" class="text-div">直接免除手续 费期数FROM</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{reducerateFrom}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="reducerateTo" class="text-div">直接免除手续 费期数TO</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{reducerateTo}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="reducerate">手续费免除期数</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{reducerate}}
+            </span>
+        </p>
+
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="htflag">首尾付标志</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{#equals '1' htflag}}
+                    N
+                {{else}}
+                    {{#equals '2' htflag}}
+                        S
+                    {{else}}
+                        {{#equals '3' htflag}}
+                            W
+                        {{else}}
+                            {{#equals '4' htflag}}
+                                F
+                            {{else}}
+                                {{#equals '5' htflag}}
+                                    L
+                                {{/equals}}
+                            {{/equals}}
+                        {{/equals}}
+                    {{/equals}}
+                {{/equals}}
+            </span>
+            <span class="span3 span-large">
+                 <label for="htant">首尾付本金</label>&nbsp;:
+            </span>
+             <span class="span1 span-large">
+                 {{htant}}
+             </span>
+        </p>
+        {{/each}}
+
+        <p class="components-title title">- 邮购分期 -</p>
+        {{#each mailStagesModelList}}
+        <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="code">邮购分期类别码</label>&nbsp;:
+            </span>
+             <span class="span1 span-large">
+                 {{code}}
+             </span>
+            <span class="span3 span-large">
+                 <label for="name">邮购分期类别名称</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{name}}
+            </span>
+        </p>
+        {{/each}}
+<!--未完成-->
+        <p class="components-title title"><strong>- 审核信息 -</strong></p>
+        {{#if flag}}
+            <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="refuseDesc">审核意见</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                <textarea name="refuseDesc" id="refuseDesc" value="{{vendorModel.refuseDesc}}" class="form-control" maxlength="200"></textarea>
+            </span>
+            </p>
+        {{else}}
+            <p class="filter-name">
+            <span class="span3 span-large">
+                <label for="refuseDesc">审核意见</label>&nbsp;:
+            </span>
+            <span class="span1 span-large">
+                {{vendorModel.refuseDesc}}
+            </span>
+            </p>
+        {{/if}}
+    {{/with}}
+    <div class="control-group submit">
+        {{#if flag}}
+            <input class="btn btn-success btn-medium" type="button" id="pass" value="通过"/>
+            <input class="btn btn-info btn-medium" type="button" id="refuse" value="拒绝"/>
+        {{else}}
+            <input class="btn btn-info btn-medium" type="button" id="return" value="返回"/>
+        {{/if}}
+    </div>
+    </form>
+{{/component}}

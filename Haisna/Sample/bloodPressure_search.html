@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<title>誘導血圧 受診者検索</title>
+<link rel="stylesheet" type="text/css" media="all" href="css/main.css" />
+</head>
+<body>
+	<div class="contents frame_content">
+		<div id="bp_search">
+			<div class="bp_search_box">
+				<form>
+					<dl class="ex_date cf">
+						<dt>受信日</dt>
+						<dd><a href="#"><span class="icon circle_i icon-question"></span></a><input type="search" name="***" value=""></dd>
+          </dl><!--.ex_date end-->
+					<dl class="ex_key cf">
+						<dt>キー</dt>
+						<dd><input type="search" name="***" value=""></dd>
+          </dl><!--.ex_key end-->
+					<dl class="ex_state cf">
+						<dt>状態</dt>
+						<dd>
+							<label><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> 全て</label>
+							<label class="clear"><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> 待ち</label>
+							<label><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> 検査中</label>
+							<label><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> リトライ</label>
+							<label><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> 再検査</label>
+							<label><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> 中止</label>
+							<label><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> 完了</label>
+						</dd>
+					</dl><!--.ex_state end-->
+					<dl class="ex_sort cf">
+						<dt>ソート条件</dt>
+						<dd>
+							<select name="***">
+								<option value="***">検査終了順</option>
+							</select>
+							<button type="submit" class="bgcolor_default">検　索</button>
+						</dd>
+          </dl><!--.ex_sort end-->
+					<div class="ex_option">
+						<label><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> 自動更新</label>
+						<label><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> 次受診者自動選択</label>
+						<label><input type="checkbox" class="checkbox" name="***" value="***"><span class="checkbox_i"></span> 氏名表示</label>
+					</div><!--.ex_option end-->
+					<div class="ex_process_box">
+						<a href="#" class="btn bgcolor_default">再検査</a>
+						<a href="#" class="btn bgcolor_default">次受診者</a>
+					</div><!--.ex_process_box end-->
+				</form>
+			</div><!--.bp_search_box end-->
+			<hr class="dashd_default mar_b_xs" />
+			<div class="bp_search_box bp_search_result">
+				<p class="search_result mar_b_none">検索結果は<span class="search_num"> 1 </span>件ありました。</p>
+				<dl class="cf">
+					<dt>受診者数</dt>
+					<dd>
+						<table>
+							<tr>
+								<th>予定</th>
+								<td>1</td>
+							</tr>
+							<tr>
+								<th>受付済</th>
+								<td>1（済：1／未：0／中止：0）</td>
+							</tr>
+						</table>
+					</dd>
+          </dl>
+				<table class="list_sm bp_search_result_tbl">
+					<thead>
+						<tr>
+							<th>当日ID</th>
+							<th>性別</th>
+							<th>状態</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>201</th>
+							<td>女性</td>
+							<td>完了</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="bp_search_result_nav">
+					<a href="#" class="icon icon-v_rev"></a>
+					<a href="#" class="icon icon-v_back"></a>
+					<span class="num">1</span>
+					<a href="#" class="icon icon-v_play"></a>
+					<a href="#" class="icon icon-v_ff"></a>
+				</div><!--.bp_search_result_nav end-->
+			</div><!--.bp_search_box end-->
+		</div><!--#bp_search end-->
+	</div><!--.contents end-->
+
+<script src="js/jquery-3.2.0.slim.min.js"></script>
+<script src="js/jquery.matchHeight-min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

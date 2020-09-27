@@ -1,0 +1,95 @@
+<script src="../fabric/common.js"></script>
+<script src="../fabric/list.js"></script>
+<div id="FabricSearch" class="list_search">
+	<h1></h1>
+	<label class="lblFabric_Supply"></label>
+	<select id="searchSupplyCategoryID" name="searchSupplyCategoryID" ></select>
+	<label class="lblCommon_Category"></label>
+	<select id="searchCategoryID" name="searchCategoryID" ></select>
+	<label class="lblKeyword"></label><input type="text" id="keyword" style="width:80px;"/>
+	<label class="lblArriveDate"></label><input type="text" id="arriveDate"/>
+	
+	<select id="isValid" name="isValid" ></select>
+	<a id="btnSearch"></a><br/>
+	<a id="btnRemoveFabric"></a>
+	<a id="btnCreateFabric"></a>
+	<a id="btnExportFabric"></a>
+	<a id="btnOccupyView"></a>
+</div>
+<div id="FabricResult"></div>
+<div id="FabricStatistic" class="pagingleft"></div>
+<div id="FabricPagination" class="paging"></div>
+<textarea  id="FabricTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="check"><input type="checkbox" onclick="$.csControl.checkAll('chkRow', this.checked);"/></td>
+			<!--<td class="lblFabricSupplyCategory"></td>-->
+			<!--<td class="lblCategory"></td>-->
+			<td class="lblCode"></td>
+			<!--<td class="lblPrice"></td>-->
+			<!--<td class="lblWeight"></td>-->
+			<!--<td class="lblSeries"></td>-->
+			<td class="lblFlower"></td>
+			<td class="lblColor"></td>
+			<td class="lblComposition"></td>
+			<td class="lblInventory"></td>
+			<td class="lblShaZhi"></td>
+			<td class="lblIsStop"></td>
+			<td class="lblEdit"></td>
+			<td class="lblOccupy"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ID}">
+			<td class="center check"><input type="checkbox" value="{$T.row.ID}" name="chkRow"/></td>
+			<!--<td class="center">{$T.row.fabricSupplyCategoryName}</td>-->
+			<!--<td class="center">{$T.row.categoryName}</td>-->
+			<td class="center">{$T.row.code}</td>
+			<!--<td class="center">{$T.row.price}</td>-->
+			<!--<td class="center">{$T.row.weight}</td>-->
+			<!--<td class="center">{$T.row.seriesName}</td>-->
+			<td class="center">{$T.row.flowerName}</td>
+			<td class="center">{$T.row.colorName}</td>
+			<td class="center">{$T.row.compositionName}</td>
+			<td class="center">{$T.row.inventory}</td>
+			<td class="center">{$T.row.shaZhi}</td>
+			<td class="center {#if $T.row.isStop == DICT_NO}green{#/if}">{$T.row.isStopName}</td>
+			<td class='center'><a class="edit" onclick="$.csFabricList.openPost('{$T.row.ID}')"></a></td>
+			<td class='center'><a class="occupy" onclick="$.csFabricList.openOccupy('{$T.row.code}')"></a></td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>
+
+<div id="FabricPieceResult"></div>
+<div id="FabricPieceStatistic"></div>
+<div id="FabricPiecePagination" class="paging"></div>
+<textarea  id="FabricPieceTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="lblFabric_ename"></td>
+			<td class="lblFabric_ysddh"></td>
+			<td class="lblFabric_ecode"></td>
+			<td class="lblFabric_mlwg"></td>
+			<td class="lblFabric_mdcd"></td>
+			<td class="lblFabric_mlcd"></td>
+			<td class="lblFabric_mlfk"></td>
+			<td class="lblFabric_hgf"></td>
+			<td class="lblFabric_dhrq"></td>
+			<td class="lblFabric_Release"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ID}">
+			<td>{$T.row.ename}</td>
+			<td>{$T.row.ysddh}</td>
+			<td>{$T.row.ecode}</td>
+			<td>{$T.row.mlwg}</td>
+			<td>{$T.row.mdcd}</td>
+			<td>{$T.row.mlcd}</td>
+			<td>{$T.row.mlfk}</td>
+			<td>{$T.row.hgf}</td>
+			<td class="center">{$T.row.dhrq}</td>
+			<td class='center'>{#if $T.row.hgf == 2}<a class="lblFabric_Release" style='color:#f7ca8d;' onclick="$.csFabricList.releaseFabric('{$T.row.code}','{$T.row.ysddh}')"></a>{#/if}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

@@ -1,0 +1,73 @@
+<table class="table table-striped center-text">
+    <thead>
+    <tr>
+        <th>{{entries.0.key}}</th>
+        {{#equals type "00"}}
+        {{/equals}}
+        {{#equals type "01"}}
+            <th class="text-center js-virtualPrice-th"><em>*</em>金额</th>
+            <th class="text-center js-virtualMileage-th">里程</th>
+            <th class="text-center js-property-th"><em>*</em>限购</th>
+            <th class="text-center js-bid-th">礼品代号</th>
+            <th class="text-center js-present-th">上限积分值</th>
+        {{/equals}}
+        {{#equals type "02"}}
+            <th class="text-center js-o2o-th"><em>*</em>O2O礼品编码</th>
+            <th class="text-center js-voucher-th"><em>*</em>O2O兑换券编码</th>
+        {{/equals}}
+        <th class="text-center js-price-th"><em>*</em>采购价（元）</th>
+        <th class="text-center js-stock-th"><em>*</em>库存</th>
+        <th class="text-center js-stock-th">库存预警值</th>
+        <th class="text-center"><em>*</em>礼品图片</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr value="{{json entries}}">
+    {{#each entries}}
+            <td class="column" data-id="{{id}}" data-name="{{value}}">{{value}}</td>
+        {{#equals ../type "00"}}
+        {{/equals}}
+        {{#equals ../type "01"}}
+                <td><input name="virtualPrice" type="text" data-check="^(([1-9]+)|([0-9]+(\.[0-9]{1,2})))$"
+                           class="form-control input-small is-filled is-price  js-virtualPrice-input" maxlength="9"/></td>
+                <td> <input name="virtualMileage" type="text"
+                            class="form-control input-small  is-number js-virtualMileage-input" maxlength="9"/></td>
+                <td>
+                    <select name="prefucture" class="select-limited input-small is-filled ">
+                        <option value=''>请选择</option>
+                        <option value='0'>无</option>
+                        <option value='1'>一年限购一次</option>
+                        <option value='2'>半年限购一次</option>
+                        <option value='3'>一年限购两次</option>
+                    </select></td>
+                <td><input name="bid" type="text" data-check="^[A-Za-z0-9]+$"
+                           class="form-control input-small js-bid-input" maxlength="5"/></td>
+                <td><input name="virtualIntegralLimit" type="text"
+                           class="form-control input-small  is-number  js-virtualIntegralLimit-input" maxlength="10"/></td>
+        {{/equals}}
+        {{#equals ../type "02"}}
+                <td><input name="o2oCode" type="text" data-check="^[A-Za-z0-9]+$"
+                           class="form-control input-small is-filled js-code-input" maxlength="30" /></td>
+                <td><input name="voucher" type="text" data-check="^[A-Za-z0-9]+$"
+                           class="form-control input-small js-voucher-input is-filled" maxlength="30" /></td>
+        {{/equals}}
+            <td>
+                <input name="price" type="text" data-check="^(([1-9]+)|([0-9]+(\.[0-9]{1,2})))$"
+                       class="form-control input-small js-price-input is-filled is-price" maxlength="9"/>
+            </td>
+            <td>
+                <input name="stock" type="text" data-check="^[0-9]\d*$"
+                       class="form-control input-small js-stock-input is-filled is-number" maxlength="8"/>
+            </td>
+            <td>
+                <input name="stockWarning" type="text" data-check="^[0-9]\d*$"
+                       class="form-control input-small js-warning-input  is-number" maxlength="8"/>
+            </td>
+            <td style="width: 160px;">
+                <ul class="image-ul"></ul>
+            </td>
+        </tr>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

@@ -1,0 +1,1211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for MailSteamer
+
+@author 
+@since 1.0.0 
+@version 1.0.0 
+-->
+<mapper namespace="SQL.MailSteamer">
+	<!-- 进出境运输工具检疫（邮轮）执法全过程记录查询 --> 
+	<select id="findEnforcementprocessList"  resultType="com.dpn.ciqqlc.standard.model.MailSteamerDTO">
+		SELECT * FROM ( SELECT A.*,ROWNUM RID FROM( 
+			select 
+				ROWNUM as VSL_INDEX ,
+				t.ID,
+				t.DEC_MASTER_ID,
+				t.CN_VSL_M,
+				t.FULL_VSL_M,
+				t.VSL_CALLSIGN,
+				t.VSL_GUID,
+				t.SIGN_PORT,
+				t.SIGN_DATE,to_char(t.DEC_DATE,'yyyy-MM-dd') as dec_date,t.DEC_ORG,
+				(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.CHK_NOTIFY and qcl.type='QLC_MAIL_STEAMER_CHK_NOTIFY') as chk_notify,
+				(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.CHK_DEC and qcl.type='QLC_MAIL_STEAMER_CHK_NOTIFY') as chk_dec,
+				(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.PORT_ORG_CODE and qcl.type='QLC_ORGANIZES') as org_code,
+				(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.PORT_DEPT_CODE and qcl.type='QLC_DEPTMENTS') as dept_code, 
+				t.LAST_FOUR_PORT,
+				t.SHIP_SANIT_CERT,
+				t.TRAF_CERT,
+				APPROVE_USER,to_char(t.APPROVE_DATE,'yyyy-MM-dd') as approve_date
+		from QLC_MAIL_STEAMER t
+		where 1=1
+		<if test="cnVslm != null and cnVslm != ''">
+			and t.CN_VSL_M =#{cnVslm}
+		</if>
+		<if test="fullVslm != null and fullVslm != ''">
+			and t.FULL_VSL_M=#{fullVslm}
+		</if>
+		<if test="chkNotify != null and chkNotify != ''">
+			and t.CHK_NOTIFY=#{chkNotify}
+		</if>
+		<if test="portOrgcode != null and portOrgcode != ''">
+			and t.PORT_ORG_CODE=#{portOrgcode}
+		</if>
+		<if test="portDeptcode != null and portDeptcode != ''">
+			and t.PORT_DEPT_CODE=#{portDeptcode}
+		</if>
+		<if test="startdate != null and startdate != ''">
+			<![CDATA[ and t.APPROVE_DATE >= to_date(#{startdate}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="enddate != null and enddate != ''">
+			<![CDATA[ and t.APPROVE_DATE <= to_date(#{enddate}, 'yyyy-mm-dd') ]]>
+		</if>
+		order by  t.APPROVE_DATE desc
+		) A WHERE   <![CDATA[ ROWNUM <= #{lastRcd} ]]> ) WHERE RID>=#{firstRcd}
+	</select>
+	
+	<!-- 进出境运输工具检疫（邮轮）执法全过程记录查询记录数 -->
+	<select id="findEnforcementprocessCount"  resultType="java.lang.Integer">
+		select count(t.id) from QLC_MAIL_STEAMER t
+		where 1=1
+		<if test="cnVslm != null and cnVslm != ''">
+			and t.CN_VSL_M =#{cnVslm}
+		</if>
+		<if test="fullVslm != null and fullVslm != ''">
+			and t.FULL_VSL_M=#{fullVslm}
+		</if>
+		<if test="chkNotify != null and chkNotify != ''">
+			and t.CHK_NOTIFY=#{chkNotify}
+		</if>
+		<if test="portOrgcode != null and portOrgcode != ''">
+			and t.PORT_ORG_CODE=#{portOrgcode}
+		</if>
+		<if test="portDeptcode != null and portDeptcode != ''">
+			and t.PORT_DEPT_CODE=#{portDeptcode}
+		</if>
+		<if test="startdate != null and startdate != ''">
+			<![CDATA[ and t.APPROVE_DATE >= to_date(#{startdate}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="enddate != null and enddate != ''">
+			<![CDATA[ and t.APPROVE_DATE <= to_date(#{enddate}, 'yyyy-mm-dd') ]]>
+		</if>
+	</select>
+	
+	<!-- 查询单条数据-->
+	<select id="findEnforcementprocessById"  resultType="java.util.Map">
+		select t.ID,t.DEC_MASTER_ID,t.CN_VSL_M,t.FULL_VSL_M,t.VSL_CALLSIGN,t.VSL_GUID
+		,t.SIGN_PORT,
+		t.SIGN_DATE,to_char(t.DEC_DATE,'yyyy-MM-dd hh24:mi:ss') as dec_date,t.DEC_ORG,
+		(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.CHK_NOTIFY and qcl.type='QLC_MAIL_STEAMER_CHK_NOTIFY') as chk_notify,
+		(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.CHK_DEC and qcl.type='QLC_MAIL_STEAMER_CHK_NOTIFY') as chk_dec,
+		(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.PORT_ORG_CODE and qcl.type='QLC_ORGANIZES') as org_code,
+		(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.PORT_DEPT_CODE and qcl.type='QLC_DEPTMENTS') as dept_code
+		,t.LAST_FOUR_PORT,t.SHIP_SANIT_CERT,t.TRAF_CERT,
+		APPROVE_USER,to_char(t.APPROVE_DATE,'yyyy-MM-dd') as approve_date,
+		(select name from QLC_CODE_LIBRARY qcl where qcl.code=r.warning_level and qcl.type='QLC_MAIL_STEAMER_CENT_WAR_LEVEL') as warning_level_dec,
+		r.CHECK_DEAL_DATE, r.CHECK_DEAL_PSN
+		from  QLC_MAIL_STEAMER t
+		left join QLC_MAIL_STEAMER_RMK r on t.dec_master_id = r.dec_master_id
+		where t.ID=#{processId}
+	</select>
+		<!-- 根据进出境运输工具检疫（邮轮）的业务主键查询该详情页面所涉及的所有照片和视频 -->
+	<select id="getfileList" resultType="java.util.Map" >
+	select 
+	             QLC_VIDEO_FILE_EVENT.ID,QLC_VIDEO_FILE_EVENT.FILE_TYPE,QLC_VIDEO_FILE_EVENT.FILE_NAME,QLC_VIDEO_FILE_EVENT.CREATE_USER,QLC_VIDEO_FILE_EVENT.CREATE_DATE,QLC_C_VIDEO_PROC_TYPE.PROC_NAME
+    from  
+                 QLC_VIDEO_FILE_EVENT
+    LEFT JOIN 
+                 QLC_C_VIDEO_PROC_TYPE  
+    ON         
+                 QLC_VIDEO_FILE_EVENT.PROC_TYPE= QLC_C_VIDEO_PROC_TYPE.PROC_TYPE
+    WHERE 
+                 QLC_VIDEO_FILE_EVENT.PROC_MAIN_ID=#{dec_master_id}
+                 <if test = "port_org_code!= null and port_org_code != ''">
+    AND          
+                 QLC_VIDEO_FILE_EVENT.PORT_ORG_CODE=#{port_org_code}    
+                 </if>
+                 <if test = "port_dept_code != null and port_dept_code != ''">
+    AND           
+                 QLC_VIDEO_FILE_EVENT.PORT_DEPT_CODE=#{port_dept_code}   
+                 </if>               
+    ORDER BY  
+                 QLC_VIDEO_FILE_EVENT.FILE_TYPE,
+                 QLC_VIDEO_FILE_EVENT.CREATE_DATE DESC
+    </select>
+    
+    <!-- 根据进出境运输工具检疫（邮轮）的业务主键查询该详情页面所涉及的文档-->
+	<select id="getDocList" resultType="java.util.Map" >
+	select    
+                 QLC_CHECK_DOCS_RCD.*,QLC_C_CHECK_DOCS_RCD_TYPE_CODE.NAME
+	from 
+	             QLC_CHECK_DOCS_RCD
+	left join    
+	             QLC_C_CHECK_DOCS_RCD_TYPE_CODE
+	on
+	             QLC_C_CHECK_DOCS_RCD_TYPE_CODE.CODE=QLC_CHECK_DOCS_RCD.DOC_TYPE                            
+    WHERE 
+                 QLC_CHECK_DOCS_RCD.PROC_MAIN_ID=#{dec_master_id}
+    ORDER BY  
+                 QLC_CHECK_DOCS_RCD.DEC_DATE DESC
+    </select>
+    
+    <!-- 查询 1.文档类型 2.业务主键 查询doc -->
+	<select id="findDocByTypeNMainId" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO">
+		select 
+		    t.*,
+		    (select u.NAME from USERS_CIQ u where u.id=t.dec_user) as dec_user_cn
+		 from QLC_CHECK_DOCS_RCD t
+		 where t.doc_type = #{doc_type} and t.proc_main_id = #{proc_main_id}
+		 <if test="doc_groupid != null and doc_groupid != ''">
+		 	and t.group_id = #{doc_groupid}
+		 </if>
+		 <if test="doc_groupid == null or doc_groupid == ''">
+		 	and t.group_id is null
+		 </if>
+	</select>
+    
+    <!-- 根据传入的搜索条件 查询进出境运输工具检疫（邮轮）列表页 -->
+    <select id="processtemplate" resultType="java.util.Map" >
+    select 
+                * 
+    from        
+                QLC_CHECK_DOCS_RCD
+    where 
+	           
+			    QLC_CHECK_DOCS_RCD.DOC_ID = #{doc_id}
+	 </select>  
+	 
+	 <!-- 分页查询邮轮入境检疫申报记录列表 --> 
+	<select id="findDeclarationlist"  resultType="com.dpn.ciqqlc.standard.model.DeclarationDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(select  ROWNUM,t.id,t.DEC_MASTER_ID,t.CN_VSL_M,t.FULL_VSL_M,
+		t.VSL_CALLSIGN,t.DEC_ORG,t.DEC_DATE,
+		(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.CIQ_RESAULT and qcl.type='QLC_MAIL_STEAMER_CIQ_RESAULT') as ciq_resault,
+		r.CENT_WAR_LEVEL,r.INSP_TYPE,r.EXPT_ITERM,t.FILE_NAME
+  		from QLC_MAIL_STEAMER t LEFT JOIN QLC_MAIL_STEAMER_RMK r ON t.DEC_MASTER_ID = r.DEC_MASTER_ID
+		where 1=1
+		<if test="cnVslm != null and cnVslm != ''">
+			and t.CN_VSL_M =#{cnVslm}
+		</if>
+		<if test="fullVslm != null and fullVslm != ''">
+			and t.FULL_VSL_M=#{fullVslm}
+		</if>
+		<if test="startdate != null and startdate != ''">
+			<![CDATA[ and t.DEC_DATE >= to_date(#{startdate}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="enddate != null and enddate != ''">
+			<![CDATA[ and t.DEC_DATE <= to_date(#{enddate}, 'yyyy-mm-dd') ]]>
+		</if>
+		order by  t.DEC_DATE desc) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询邮轮入境检疫申报记录数 -->
+	<select id="findDeclarationCount"  resultType="java.lang.Integer">
+		select count(t.id) from QLC_MAIL_STEAMER t LEFT JOIN 
+		QLC_MAIL_STEAMER_RMK r ON t.DEC_MASTER_ID = r.DEC_MASTER_ID
+		where 1=1
+		<if test="cnVslm != null and cnVslm != ''">
+			and t.CN_VSL_M =#{cnVslm}
+		</if>
+		<if test="fullVslm != null and fullVslm != ''">
+			and t.FULL_VSL_M=#{fullVslm}
+		</if>
+		<if test="startdate != null and startdate != ''">
+			<![CDATA[ and t.DEC_DATE >= to_date(#{startdate}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="enddate != null and enddate != ''">
+			<![CDATA[ and t.DEC_DATE <= to_date(#{enddate}, 'yyyy-mm-dd') ]]>
+		</if>
+	</select>
+	<!-- 查询邮轮业务卫生监督表 -->
+	<select id="getHlthcheckList"  resultType="com.dpn.ciqqlc.standard.model.HlthCheckDTO">
+		select t.id,t.DEC_MASTER_ID,
+		t.HLTH_CHECK_TYPE from QLC_MAIL_STEAMER_HLTH_CHECK t
+		where t.DEC_MASTER_ID =#{dec_master_id}
+	</select>
+	
+	 <!-- 分页查询邮轮卫生监督表记录列表 --> 
+	<select id="findHlthchecklist" resultType="com.dpn.ciqqlc.standard.model.HlthCheckDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(select ROWNUM, b.*, qcl1.name as hlth_check_type_name, qcl2.name as table_type_name from(
+    		select t.dec_master_id, t.hun_name, t.table_type, t.hlth_check_type
+			from QLC_MAIL_STEAMER_HLTH_CHECK t
+    		group by table_type, hun_name, hlth_check_type, dec_master_id
+    		) b
+    		left join QLC_CODE_LIBRARY qcl1 on qcl1.code=b.HLTH_CHECK_TYPE and qcl1.type='QLC_MAIL_STEAMER_HLTH_CHECK_TYPE'
+    		left join QLC_CODE_LIBRARY qcl2 on qcl2.code=b.TABLE_TYPE and qcl2.type='QLC_MAIL_STEAMER_HLTH_TABLE_TYPE'
+		where 1=1
+		<if test="dec_master_id != null and dec_master_id != ''">
+				and b.DEC_MASTER_ID  = #{dec_master_id}
+		</if>
+		<if test="hlth_check_type != null and hlth_check_type != ''">
+			and b.HLTH_CHECK_TYPE = #{hlth_check_type}
+		</if>
+		<if test="table_type != null and table_type != ''">
+			and b.TABLE_TYPE =#{table_type}
+		</if>
+		<if test="hun_name != null and hun_name != ''">
+			and b.HUN_NAME like '%' || #{hun_name} || '%'
+		</if>
+		order by  rowNum asc) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询邮轮业务卫生监督表记录数 -->
+	<select id="findHlthcheckCount"  resultType="java.lang.Integer">
+		select count(t.dec_master_id) from 
+		(select t.dec_master_id, t.hun_name, t.table_type, t.hlth_check_type from QLC_MAIL_STEAMER_HLTH_CHECK t
+    	group by table_type, hun_name, hlth_check_type, dec_master_id) t
+		where 1=1
+		<if test="dec_master_id != null and dec_master_id != ''">
+				and t.DEC_MASTER_ID  = #{dec_master_id}
+		</if>
+		<if test="hlth_check_type != null and hlth_check_type != ''">
+			and t.HLTH_CHECK_TYPE = #{hlth_check_type}
+		</if>
+		<if test="table_type != null and table_type != ''">
+			and t.TABLE_TYPE =#{table_type}
+		</if>
+		<if test="hun_name != null and hun_name != ''">
+			and t.HUN_NAME like '%' || #{hun_name} || '%'
+		</if>
+	</select>
+	   <!-- 根据传入的搜索条件 邮轮业务卫生监督表详情 -->
+    <select id="getHlthcheckdetail" resultType="com.dpn.ciqqlc.standard.model.HlthCheckDTO" >
+  		select * from QLC_MAIL_STEAMER_HLTH_CHECK t 
+  		where t.DEC_MASTER_ID = #{dec_master_id} and t.TABLE_TYPE = #{tableType} and t.hlth_check_type = #{hlth_check_type}
+  		order by CHECK_IMPO asc 
+	 </select> 
+	 <!-- 查询邮轮入境检疫申报记录列表记录列表 app端--> 
+	
+	<select id="findMailSteamerList"  parameterType="com.dpn.ciqqlc.standard.model.MailSteamerDTO"  resultType="com.dpn.ciqqlc.standard.model.MailSteamerDTO">
+	 	select t.id,t.DEC_MASTER_ID,ROWNUM as VSL_INDEX,t.CN_VSL_M,t.FULL_VSL_M,
+		t.VSL_CALLSIGN,(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.CHK_NOTIFY and qcl.type='QLC_MAIL_STEAMER_CHK_NOTIFY') as chk_notify,	
+		(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.CHK_DEC and qcl.type='QLC_MAIL_STEAMER_CHK_NOTIFY' ) as chk_dec,
+		t.VSL_REGISTRY_CN,
+		t.VSL_REGISTRY_EN,t.VSL_GRT,
+		t.VSL_NRT,t.VSL_TYPE,t.DEC_ORG,t.PREVIOUS_PORT_CN,t.PREVIOUS_PORT_EN,t.SAILOR_TOTAL_FOREIGN,t.SAILOR_TOTAL_CHINA,
+		t.IMP_TRAVEL_TOTAL_FOREIGN,t.IMP_TRAVEL_TOTAL_CHINA,t.BLWT_LOAD_PLACE,to_char(t.BLWT_LOAD_DATE,'yyyy-MM-dd') as blwt_load_date,
+		t.WATER_LOAD_PORT,to_char(t.WATER_LOAD_DATE,'yyyy-MM-dd') as water_load_date, t.SCC_CERT_SEQ,
+		to_char(t.PREVIOUS_PORT_DATE,'yyyy-MM-dd') as previous_port_date,
+		t.SIGN_PORT,to_char(t.SIGN_DATE,'yyyy-MM-dd') as sign_date,
+		t.TRAF_CERT,t.SCFC_CERT_SEQ,t.IMP_CARGO_NAME,
+		t.IMP_CARGO_TOTAL,t.FOOD_LOAD_PORT,t.VSL_IMO_NO,
+		to_char(t.approve_date,'yyyy-mm-dd hh:mi:ss') as approve_date
+		from QLC_MAIL_STEAMER t 
+		where 1=1
+		and t.dec_master_id not in (select q.proc_main_id from QLC_CHK_RCD q where q.proj_code='JC_T_Y')
+		<if test="full_vsl_m != null and full_vsl_m != ''">
+			and t.FULL_VSL_M like '%' || #{full_vsl_m} || '%'
+		</if>
+		<if test="dec_org != null and dec_org != ''">
+			and t.DEC_ORG like '%' || #{dec_org} || '%'
+		</if>
+		<if test="vsl_callsign != null and vsl_callsign != ''">
+			and t.VSL_CALLSIGN =#{vsl_callsign}
+		</if>
+		<if test="vsl_imo_no != null and vsl_imo_no != ''">
+			and t.VSL_IMO_NO =#{vsl_imo_no}
+		</if>
+		order by  t.APPROVE_DATE desc
+	</select>
+	
+	<select id="findMailSteamerOne"  parameterType="com.dpn.ciqqlc.standard.model.MailSteamerDTO"  resultType="com.dpn.ciqqlc.standard.model.MailSteamerDTO">
+	 	select t.*
+		from QLC_MAIL_STEAMER t 
+		where 1=1
+		<if test="id != null and id != ''">
+			and t.id =#{id}
+		</if>
+		<if test="dec_master_id != null and dec_master_id != ''">
+			and t.dec_master_id =#{dec_master_id}
+		</if>
+		<if test="cn_vsl_m != null and cn_vsl_m != ''">
+			and t.cn_vsl_m like '%' || #{cn_vsl_m} || '%'
+		</if>
+		<if test="full_vsl_m != null and full_vsl_m != ''">
+			and t.full_vsl_m like '%' || #{full_vsl_m} || '%'
+		</if>
+		<if test="exp_voyage_no != null and exp_voyage_no != ''">
+			and t.exp_voyage_no like '%' || #{exp_voyage_no} || '%'
+		</if>
+	</select>
+	
+	 <!-- 根据传入传入id和环节类型查询对应卫生监督表--> 
+	 <select id="getImgeList"  resultType="com.dpn.ciqqlc.standard.model.ImageDTO">
+	 		select t.id,t.PROC_MAIN_ID,t.PROC_TYPE,t.FILE_TYPE,t.FILE_NAME from QLC_VIDEO_FILE_EVENT t
+	 		where t.PROC_MAIN_ID = #{dec_master_id}
+	 		and t.PROC_TYPE = #{procType}
+	 </select>
+	    <!-- 根据传入的搜索条件 邮轮业务卫生监督表详情 -->
+    <select id="findHlthcheckdetail" resultType="java.util.Map" >
+  		select * from QLC_MAIL_STEAMER_HLTH_CHECK t 
+  		where t.DEC_MASTER_ID = #{dec_master_id} and t.TABLE_TYPE = #{tableType}
+  		order by CHECK_IMPO asc 
+	 </select> 
+	 
+	 <!-- **** insert 邮轮业务检疫处理表******************************************************* -->
+	<insert id="insertMailChkDeal" parameterType="com.dpn.ciqqlc.standard.model.MailSteamerChkDealModel" >
+			insert into QLC_MAIL_STEAMER_CHK_DEAL
+				(
+					ID
+					,DEC_MASTER_ID
+					<if test="check_deal_proj != null and check_deal_proj != ''" >
+					,CHECK_DEAL_PROJ
+					</if>
+					<if test="check_deal_pic != null and check_deal_pic != ''" >
+					,CHECK_DEAL_PIC
+					</if>
+					<if test="check_deal_notice != null and check_deal_notice != ''" >
+					,CHECK_DEAL_NOTICE
+					</if>
+					<if test="check_deal_couse != null and check_deal_couse != ''" >
+					,CHECK_DEAL_COUSE
+					</if>
+					<if test="check_deal_method != null and check_deal_method != ''" >
+					,CHECK_DEAL_METHOD
+					</if>
+					<if test="check_deal_finish_st != null and check_deal_finish_st != ''" >
+					,CHECK_DEAL_FINISH_ST
+					</if>
+					<if test="check_deal_company != null and check_deal_company != ''" >
+					,CHECK_DEAL_COMPANY
+					</if>
+					<if test="check_deal_date != null and check_deal_date != ''" >
+					,CHECK_DEAL_DATE
+					</if>
+					<if test="check_deal_psn != null and check_deal_psn != ''" >
+					,CHECK_DEAL_PSN
+					</if>
+					<if test="special_sign != null and special_sign != ''" >
+					,SPECIAL_SIGN
+					</if>
+					<if test="is_commit != null and is_commit != ''" >
+					,is_commit
+					</if>
+					<if test="qualified_flag != null and qualified_flag != ''" >
+					,qualified_flag
+					</if>
+					<if test="check_deal_video != null and check_deal_video != ''" >
+					,check_deal_video
+					</if>
+					<if test="check_deal_notice_video != null and check_deal_notice_video != ''" >
+					,check_deal_notice_video
+					</if>
+					<if test="proc_type != null and proc_type != ''" >
+					,proc_type
+					</if>
+				)
+			values 
+				(
+					#{id}
+					,#{dec_master_id}
+					<if test="check_deal_proj != null and check_deal_proj != ''" >
+					,#{check_deal_proj}
+					</if>
+					<if test="check_deal_pic != null and check_deal_pic != ''" >
+					,#{check_deal_pic}
+					</if>
+					<if test="check_deal_notice != null and check_deal_notice != ''" >
+					,#{check_deal_notice}
+					</if>
+					<if test="check_deal_couse != null and check_deal_couse != ''" >
+					,#{check_deal_couse}
+					</if>
+					<if test="check_deal_method != null and check_deal_method != ''" >
+					,#{check_deal_method}
+					</if>
+					<if test="check_deal_finish_st != null and check_deal_finish_st != ''" >
+					,#{check_deal_finish_st}
+					</if>
+					<if test="check_deal_company != null and check_deal_company != ''" >
+					,#{check_deal_company}
+					</if>
+					<if test="check_deal_date != null and check_deal_date != ''" >
+					,#{check_deal_date}
+					</if>
+					<if test="check_deal_psn != null and check_deal_psn != ''" >
+					,#{check_deal_psn}
+					</if>
+					<if test="special_sign != null and special_sign != ''" >
+					,#{special_sign}
+					</if>
+					<if test="is_commit != null and is_commit != ''" >
+					,#{is_commit}
+					</if>
+					<if test="qualified_flag != null and qualified_flag != ''" >
+					,#{qualified_flag}
+					</if>
+					<if test="check_deal_video != null and check_deal_video != ''" >
+					,#{check_deal_video}
+					</if>
+					<if test="check_deal_notice_video != null and check_deal_notice_video != ''" >
+					,#{check_deal_notice_video}
+					</if>
+					<if test="proc_type != null and proc_type != ''" >
+					,#{proc_type}
+					</if>
+				)
+	</insert>
+	
+	 <!-- **** insert 邮轮业务卫生监督表******************************************************* -->
+	<insert id="insertMailHlthCheck" parameterType="com.dpn.ciqqlc.standard.model.MailSteamerHlthCheckModel" >
+			insert into QLC_MAIL_STEAMER_HLTH_CHECK
+				(
+					ID
+					,DEC_MASTER_ID
+					<if test="hun_name != null and hun_name != ''" >
+					,HUN_NAME
+					</if>
+					<if test="hun_pic != null and hun_pic != ''" >
+					,HUN_PIC
+					</if>
+					<if test="hlth_check_type != null and hlth_check_type != ''" >
+					,HLTH_CHECK_TYPE
+					</if>
+					<if test="table_type != null and table_type != ''" >
+					,TABLE_TYPE
+					</if>
+					<if test="check_impo != null and check_impo != ''" >
+					,CHECK_IMPO
+					</if>
+					<if test="check_result != null and check_result != ''" >
+					,CHECK_RESULT
+					</if>
+					<if test="viwe_evind != null and viwe_evind != ''" >
+					,VIWE_EVIND
+					</if>
+					<if test="samp_check != null and samp_check != ''" >
+					,SAMP_CHECK
+					</if>
+					<if test="check_deal != null and check_deal != ''" >
+					,CHECK_DEAL
+					</if>
+					<if test="check_psn != null and check_psn != ''" >
+					,CHECK_PSN
+					</if>
+					<if test="check_date != null and check_date != ''" >
+					,CHECK_DATE
+					</if>
+					<if test="viwe_discription != null and viwe_discription != ''" >
+					,VIWE_DISCRIPTION
+					</if>
+				)
+			values 
+				(
+					#{id}
+					,#{dec_master_id}
+					<if test="hun_name != null and hun_name != ''" >
+					,#{hun_name}
+					</if>
+					<if test="hun_pic != null and hun_pic != ''" >
+					,#{hun_pic}
+					</if>
+					<if test="hlth_check_type != null and hlth_check_type != ''" >
+					,#{hlth_check_type}
+					</if>
+					<if test="table_type != null and table_type != ''" >
+					,#{table_type}
+					</if>
+					<if test="check_impo != null and check_impo != ''" >
+					,#{check_impo}
+					</if>
+					<if test="check_result != null and check_result != ''" >
+					,#{check_result}
+					</if>
+					<if test="viwe_evind != null and viwe_evind != ''" >
+					,#{viwe_evind}
+					</if>
+					<if test="samp_check != null and samp_check != ''" >
+					,#{samp_check}
+					</if>
+					<if test="check_deal != null and check_deal != ''" >
+					,#{check_deal}
+					</if>
+					<if test="check_psn != null and check_psn != ''" >
+					,#{check_psn}
+					</if>
+					<if test="check_date != null and check_date != ''" >
+					,#{check_date}
+					</if>
+					<if test="viwe_discription != null and viwe_discription != ''" >
+					,#{viwe_discription}
+					</if>
+				)
+	</insert>
+	
+	 <!-- **** insert 邮轮业务检疫处理表******************************************************* -->
+	<insert id="insertMailSamp" parameterType="com.dpn.ciqqlc.standard.model.MailSteamerSampDTO">
+			insert into QLC_MAIL_STEAMER_SAMP  
+				(
+					ID
+					,DEC_MASTER_ID
+					<if test="cn_vsl_m != null and cn_vsl_m != ''" >
+					,CN_VSL_M
+					</if>
+					<if test="full_vsl_m != null and full_vsl_m != ''" >
+					,FULL_VSL_M
+					</if>
+					<if test="samp_proj != null and samp_proj != ''" >
+					,SAMP_PROJ
+					</if>
+					<if test="samp_file != null and samp_file != ''" >
+					,SAMP_FILE
+					</if>
+					<if test="samp_notice != null and samp_notice != ''" >
+					,SAMP_NOTICE
+					</if>
+					<if test="samp_psn != null and samp_psn != ''" >
+					,SAMP_PSN
+					</if>
+					<if test="samp_date != null and samp_date != ''" >
+					,SAMP_DATE
+					</if>
+					<if test="send_samp_comp != null and send_samp_comp != ''" >
+					,SEND_SAMP_COMP
+					</if>
+					<if test="result_cmd != null and result_cmd != ''" >
+					,RESULT_CMD
+					</if>
+					<if test="result_cmd_paper != null and result_cmd_paper != ''" >
+					,RESULT_CMD_PAPER
+					</if>
+					<if test="special_sign != null and special_sign != ''" >
+					,special_sign
+					</if>
+					<if test="is_commit != null and is_commit != ''" >
+					,is_commit
+					</if>
+					<if test="samp_stat != null and samp_stat != ''" >
+					,samp_stat
+					</if>
+					<if test="samp_video != null and samp_video != ''" >
+					,samp_video
+					</if>
+					<if test="samp_notice_video != null and samp_notice_video != ''" >
+					,samp_notice_video
+					</if>
+					<if test="result_cmd_paper_video != null and result_cmd_paper_video != ''" >
+					,result_cmd_paper_video
+					</if>
+					<if test="proc_type != null and proc_type != ''" >
+					,proc_type
+					</if>
+					<if test="create_date != null and create_date != ''">
+					,create_date
+					</if>
+				)
+			values 
+				(
+					#{id}
+					,#{dec_master_id}
+					<if test="cn_vsl_m != null and cn_vsl_m != ''" >
+					,#{cn_vsl_m}
+					</if>
+					<if test="full_vsl_m != null and full_vsl_m != ''" >
+					,#{full_vsl_m}
+					</if>
+					<if test="samp_proj != null and samp_proj != ''" >
+					,#{samp_proj}
+					</if>
+					<if test="samp_file != null and samp_file != ''" >
+					,#{samp_file}
+					</if>
+					<if test="samp_notice != null and samp_notice != ''" >
+					,#{samp_notice}
+					</if>
+					<if test="samp_psn != null and samp_psn != ''" >
+					,#{samp_psn}
+					</if>
+					<if test="samp_date != null and samp_date != ''" >
+					,#{samp_date}
+					</if>
+					<if test="send_samp_comp != null and send_samp_comp != ''" >
+					,#{send_samp_comp}
+					</if>
+					<if test="result_cmd != null and result_cmd != ''" >
+					,#{result_cmd}
+					</if>
+					<if test="result_cmd_paper != null and result_cmd_paper != ''" >
+					,#{result_cmd_paper}
+					</if>
+					<if test="special_sign != null and special_sign != ''" >
+					,#{special_sign}
+					</if>
+					<if test="is_commit != null and is_commit != ''" >
+					,#{is_commit}
+					</if>
+					<if test="samp_stat != null and samp_stat != ''" >
+					,#{samp_stat}
+					</if>
+					<if test="samp_video != null and samp_video != ''" >
+					,#{samp_video}
+					</if>
+					<if test="samp_notice_video != null and samp_notice_video != ''" >
+					,#{samp_notice_video}
+					</if>
+					<if test="result_cmd_paper_video != null and result_cmd_paper_video != ''" >
+					,#{result_cmd_paper_video}
+					</if>
+					<if test="proc_type != null and proc_type != ''" >
+					,#{proc_type}
+					</if>
+					<if test="create_date != null and create_date != ''">
+					,#{create_date}
+					</if>
+				)
+	</insert>
+	<!-- 根据传入传入id邮轮业务表数据 -->
+	<select id="findMailSteamerRmkByDecMasterId" resultType="com.dpn.ciqqlc.standard.model.MailSteamerRmkDTO">
+  		select 
+  			t.*,
+  			m.*
+  		from 
+  			QLC_MAIL_STEAMER_RMK t
+  		left join QLC_MAIL_STEAMER m
+  		on	t.DEC_MASTER_ID = m.DEC_MASTER_ID 
+  		where m.dec_master_id =#{decMasterId}
+	 </select> 		
+	 
+	 <!-- 接口文档3.27 - 邮轮检疫处理查询列表 -->
+	 <select id="findMailSteamerChkDealList" resultType="com.dpn.ciqqlc.standard.model.MailSteamerChkDealDTO" >
+	 	select 
+	 		t1.id,
+	 		t1.dec_master_id,
+	 		t1.check_deal_proj,
+	 		t1.check_deal_pic,
+	 		t1.check_deal_notice,
+	 		t1.check_deal_couse,
+	 		t1.check_deal_method,
+	 		t1.check_deal_finish_st,
+	 		t2.name check_deal_company,
+	 		t1.check_deal_date,
+	 		t1.check_deal_psn,
+	 		t1.check_deal_tgt,
+	 		t1.special_sign,
+	 		t1.is_commit,
+	 		t1.qualified_flag,
+	 		t1.check_deal_video,
+	 		t1.check_deal_notice_video,
+	 		t1.proc_type
+		from QLC_MAIL_STEAMER_CHK_DEAL t1
+		left join QLC_CODE_LIBRARY t2 on t1.check_deal_company = t2.code and t2.type = 'QLC_MAIL_STEAMER_DEAL_CPN'
+		where 1=1
+		<if test="_parameter != null and _parameter != ''" >
+		and t1.dec_master_id = #{dec_master_id}
+		</if>
+		order by t1.check_deal_date desc
+	</select>
+	
+	<!-- **** insert 邮轮业务检疫处理表single******************************************************* -->
+	<insert id="insertMailChkDealSingle" parameterType="com.dpn.ciqqlc.standard.model.MailSteamerChkDealDTO" >
+			insert into QLC_MAIL_STEAMER_CHK_DEAL
+				(
+					ID
+					,DEC_MASTER_ID
+					<if test="check_deal_proj != null and check_deal_proj != ''" >
+					,CHECK_DEAL_PROJ
+					</if>
+					<if test="check_deal_pic != null and check_deal_pic != ''" >
+					,CHECK_DEAL_PIC
+					</if>
+					<if test="check_deal_notice != null and check_deal_notice != ''" >
+					,CHECK_DEAL_NOTICE
+					</if>
+					<if test="check_deal_couse != null and check_deal_couse != ''" >
+					,CHECK_DEAL_COUSE
+					</if>
+					<if test="check_deal_method != null and check_deal_method != ''" >
+					,CHECK_DEAL_METHOD
+					</if>
+					<if test="check_deal_finish_st != null and check_deal_finish_st != ''" >
+					,CHECK_DEAL_FINISH_ST
+					</if>
+					<if test="check_deal_company != null and check_deal_company != ''" >
+					,CHECK_DEAL_COMPANY
+					</if>
+					<if test="check_deal_date != null and check_deal_date != ''" >
+					,CHECK_DEAL_DATE
+					</if>
+					<if test="check_deal_psn != null and check_deal_psn != ''" >
+					,CHECK_DEAL_PSN
+					</if>
+					<if test="check_deal_tgt != null and check_deal_tgt != ''" >
+					,CHECK_DEAL_TGT
+					</if>
+					<if test="special_sign != null and special_sign != ''" >
+					,SPECIAL_SIGN
+					</if>
+					<if test="is_commit != null and is_commit != ''" >
+					,is_commit
+					</if>
+					<if test="qualified_flag != null and qualified_flag != ''" >
+					,qualified_flag
+					</if>
+					<if test="check_deal_video != null and check_deal_video != ''" >
+					,check_deal_video
+					</if>
+					<if test="check_deal_notice_video != null and check_deal_notice_video != ''" >
+					,check_deal_notice_video
+					</if>
+					<if test="proc_type != null and proc_type != ''" >
+					,proc_type
+					</if>
+				)
+			values 
+				(
+					#{id}
+					,#{dec_master_id}
+					<if test="check_deal_proj != null and check_deal_proj != ''" >
+					,#{check_deal_proj}
+					</if>
+					<if test="check_deal_pic != null and check_deal_pic != ''" >
+					,#{check_deal_pic}
+					</if>
+					<if test="check_deal_notice != null and check_deal_notice != ''" >
+					,#{check_deal_notice}
+					</if>
+					<if test="check_deal_couse != null and check_deal_couse != ''" >
+					,#{check_deal_couse}
+					</if>
+					<if test="check_deal_method != null and check_deal_method != ''" >
+					,#{check_deal_method}
+					</if>
+					<if test="check_deal_finish_st != null and check_deal_finish_st != ''" >
+					,#{check_deal_finish_st}
+					</if>
+					<if test="check_deal_company != null and check_deal_company != ''" >
+					,#{check_deal_company}
+					</if>
+					<if test="check_deal_date != null and check_deal_date != ''" >
+					,#{check_deal_date}
+					</if>
+					<if test="check_deal_psn != null and check_deal_psn != ''" >
+					,#{check_deal_psn}
+					</if>
+					<if test="check_deal_tgt != null and check_deal_tgt != ''" >
+					,#{check_deal_tgt}
+					</if>
+					<if test="special_sign != null and special_sign != ''" >
+					,#{special_sign}
+					</if>
+					<if test="is_commit != null and is_commit != ''" >
+					,#{is_commit}
+					</if>
+					<if test="qualified_flag != null and qualified_flag != ''" >
+					,#{qualified_flag}
+					</if>
+					<if test="check_deal_video != null and check_deal_video != ''" >
+					,#{check_deal_video}
+					</if>
+					<if test="check_deal_notice_video != null and check_deal_notice_video != ''" >
+					,#{check_deal_notice_video}
+					</if>
+					<if test="proc_type != null and proc_type != ''" >
+					,#{proc_type}
+					</if>
+				)
+	</insert>
+	
+	<!-- **** insert 邮轮业务表******************************************************* -->
+	<insert id="insertMailSteamerRmk" parameterType="com.dpn.ciqqlc.standard.model.MailSteamerRmkDTO" >
+			insert into QLC_MAIL_STEAMER_RMK
+				(
+					ID
+					,DEC_MASTER_ID
+					<if test="cn_vsl_m != null and cn_vsl_m != ''" >
+					,CN_VSL_M
+					</if>
+					<if test="full_vsl_m != null and full_vsl_m != ''" >
+					,FULL_VSL_M
+					</if>
+					<if test="cent_war_level != null and cent_war_level != ''" >
+					,CENT_WAR_LEVEL
+					</if>
+					<if test="cent_war_notice != null and cent_war_notice != ''" >
+					,CENT_WAR_NOTICE
+					</if>
+					<if test="other_notice != null and other_notice != ''" >
+					,OTHER_NOTICE
+					</if>
+					<if test="insp_type != null and insp_type != ''" >
+					,INSP_TYPE
+					</if>
+					<if test="warning_level != null and warning_level != ''" >
+					,WARNING_LEVEL
+					</if>
+					<if test="expt_iterm != null and expt_iterm != ''" >
+					,EXPT_ITERM
+					</if>
+					<if test="decl_rmk != null and decl_rmk != ''" >
+					,DECL_RMK
+					</if>
+					<if test="decl_insp_date != null" >
+					,DECL_INSP_DATE
+					</if>
+					<if test="decl_insp_psn != null and decl_insp_psn != ''" >
+					,DECL_INSP_PSN
+					</if>
+				)
+			values 
+				(
+					{call CreateGUID()}
+					,#{dec_master_id}
+					<if test="cn_vsl_m != null and cn_vsl_m != ''" >
+					,#{cn_vsl_m}
+					</if>
+					<if test="full_vsl_m != null and full_vsl_m != ''" >
+					,#{full_vsl_m}
+					</if>
+					<if test="cent_war_level != null and cent_war_level != ''" >
+					,#{cent_war_level}
+					</if>
+					<if test="cent_war_notice != null and cent_war_notice != ''" >
+					,#{cent_war_notice}
+					</if>
+					<if test="other_notice != null and other_notice != ''" >
+					,#{other_notice}
+					</if>
+					<if test="insp_type != null and insp_type != ''" >
+					,#{insp_type}
+					</if>
+					<if test="warning_level != null and warning_level != ''" >
+					,#{warning_level}
+					</if>
+					<if test="expt_iterm != null and expt_iterm != ''" >
+					,#{expt_iterm}
+					</if>
+					<if test="decl_rmk != null and decl_rmk != ''" >
+					,#{decl_rmk}
+					</if>
+					<if test="decl_insp_date != null" >
+					,#{decl_insp_date}
+					</if>
+					<if test="decl_insp_psn != null and decl_insp_psn != ''" >
+					,#{decl_insp_psn}
+					</if>
+				)
+	</insert>
+	
+	<!-- **** update 邮轮业务表******************************************************* -->
+	<update id="updateMailSteamerRmkById" parameterType="com.dpn.ciqqlc.standard.model.MailSteamerRmkDTO">
+		update QLC_MAIL_STEAMER_RMK
+		set ID = #{id}
+		<if test="cn_vsl_m != null and cn_vsl_m != ''" >
+		,CN_VSL_M = #{cn_vsl_m}
+		</if>
+		<if test="full_vsl_m != null and full_vsl_m != ''" >
+		,FULL_VSL_M = #{full_vsl_m}
+		</if>
+		<if test="cent_war_level != null and cent_war_level != ''" >
+		,CENT_WAR_LEVEL = #{cent_war_level}
+		</if>
+		<if test="cent_war_notice != null and cent_war_notice != ''" >
+		,CENT_WAR_NOTICE = #{cent_war_notice}
+		</if>
+		<if test="other_notice != null and other_notice != ''" >
+		,OTHER_NOTICE = #{other_notice}
+		</if>
+		<if test="insp_type != null and insp_type != ''" >
+		,INSP_TYPE = #{insp_type}
+		</if>
+		<if test="warning_level != null and warning_level != ''" >
+		,WARNING_LEVEL = #{warning_level}
+		</if>
+		<if test="expt_iterm != null and expt_iterm != ''" >
+		,EXPT_ITERM = #{expt_iterm}
+		</if>
+		<if test="decl_rmk != null and decl_rmk != ''" >
+		,DECL_RMK = #{decl_rmk}
+		</if>
+		<if test="decl_insp_date != null" >
+		,DECL_INSP_DATE = #{decl_insp_date}
+		</if>
+		<if test="decl_insp_psn != null and decl_insp_psn != ''" >
+		,DECL_INSP_PSN = #{decl_insp_psn}
+		</if>
+		where id = #{id}
+	</update>
+	
+	 <!-- 分页查询邮轮采样记录列表 --> 
+	<select id="findSampList" resultType="com.dpn.ciqqlc.standard.model.MailSteamerSampDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(select t.*,
+				(select u.name from USERS_CIQ u where u.id = t.samp_psn) as samp_psn_cn
+		from QLC_MAIL_STEAMER_SAMP t
+		where 1=1
+		<if test="dec_master_id != null and dec_master_id != ''">
+				and t.DEC_MASTER_ID  = #{dec_master_id}
+		</if>
+		order by  rowNum asc) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询邮轮业务采样记录数 -->
+	<select id="findSampCount"  resultType="java.lang.Integer">
+		select count(t.dec_master_id) from 
+		(select * from QLC_MAIL_STEAMER_SAMP) t
+		where 1=1
+		<if test="dec_master_id != null and dec_master_id != ''">
+				and t.DEC_MASTER_ID  = #{dec_master_id}
+		</if>
+	</select>
+	
+	<!-- 分页查询检疫处理表记录列表 --> 
+	<select id="findChkDealList" resultType="com.dpn.ciqqlc.standard.model.MailSteamerChkDealDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+			t.ID,
+			t.DEC_MASTER_ID,
+			t.CHECK_DEAL_PROJ,
+			t.CHECK_DEAL_PIC,
+			t.CHECK_DEAL_NOTICE,
+			(select NAME from QLC_CODE_LIBRARY Q where Q.type='JYCL' AND Q.CODE=t.CHECK_DEAL_COUSE) AS CHECK_DEAL_COUSE,
+			t.CHECK_DEAL_METHOD,
+			t.CHECK_DEAL_FINISH_ST,
+			t.CHECK_DEAL_COMPANY,
+			t.CHECK_DEAL_DATE,
+			t.CHECK_DEAL_PSN,
+			t.CHECK_DEAL_TGT,
+			t.SPECIAL_SIGN,
+			t.QUALIFIED_FLAG,
+			t.CHECK_DEAL_VIDEO,
+			t.CHECK_DEAL_NOTICE_VIDEO,
+			t.PROC_TYPE,
+			t.IS_COMMIT
+		from QLC_MAIL_STEAMER_CHK_DEAL t
+		where 1=1
+		<if test="dec_master_id != null and dec_master_id != ''">
+				and t.DEC_MASTER_ID  = #{dec_master_id}
+		</if>
+		order by  rowNum asc) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询邮轮业务检疫处理表记录数 -->
+	<select id="findChkDealCount"  resultType="java.lang.Integer">
+		select count(t.dec_master_id) from 
+		QLC_MAIL_STEAMER_CHK_DEAL t
+		where 1=1
+		<if test="dec_master_id != null and dec_master_id != ''">
+				and t.DEC_MASTER_ID  = #{dec_master_id}
+		</if>
+	</select>
+	
+	<!-- **** insert 邮轮结果判定******************************************************* -->
+	<insert id="insertMailResult" parameterType="com.dpn.ciqqlc.standard.model.MailSteamerResultDTO" >
+			insert into QLC_MAIL_STEAMER_RESULT
+				(
+					ID
+					,DEC_MASTER_ID
+					<if test="serial_no != null and serial_no != ''" >
+					,serial_no
+					</if>
+					<if test="cn_vsl_m != null and cn_vsl_m != ''" >
+					,cn_vsl_m
+					</if>
+					<if test="full_vsl_m != null and full_vsl_m != ''" >
+					,full_vsl_m
+					</if>
+					<if test="chk_result != null and chk_result != ''" >
+					,chk_result
+					</if>
+					<if test="hlth_result != null and hlth_result != ''" >
+					,hlth_result
+					</if>
+					<if test="samp_result != null and samp_result != ''" >
+					,samp_result
+					</if>
+					<if test="chk_deal != null and chk_deal != ''" >
+					,chk_deal
+					</if>
+					<if test="create_user != null and create_user != ''" >
+					,create_user
+					</if>
+					<if test="create_date != null and create_date != ''" >
+					,create_date
+					</if>
+					<if test="chk_user != null and chk_user != ''" >
+					,chk_user
+					</if>
+					<if test="chk_date != null and chk_date != ''" >
+					,chk_date
+					</if>
+					<if test="hlth_user != null and hlth_user != ''" >
+					,hlth_user
+					</if>
+					<if test="hlth_date != null and hlth_date != ''" >
+					,hlth_date
+					</if>
+					<if test="samp_user != null and samp_user != ''" >
+					,samp_user
+					</if>
+					<if test="samp_date != null and samp_date != ''" >
+					,samp_date
+					</if>
+					<if test="chk_deal_user != null and chk_deal_user != ''" >
+					,chk_deal_user
+					</if>
+					<if test="chk_deal_date != null and chk_deal_date != ''" >
+					,chk_deal_date
+					</if>
+				)
+			values 
+				(
+					CreateGUID()
+					,#{dec_master_id}
+					<if test="serial_no != null and serial_no != ''" >
+					,#{serial_no}
+					</if>
+					<if test="cn_vsl_m != null and cn_vsl_m != ''" >
+					,#{cn_vsl_m}
+					</if>
+					<if test="full_vsl_m != null and full_vsl_m != ''" >
+					,#{full_vsl_m}
+					</if>
+					<if test="chk_result != null and chk_result != ''" >
+					,#{chk_result}
+					</if>
+					<if test="hlth_result != null and hlth_result != ''" >
+					,#{hlth_result}
+					</if>
+					<if test="samp_result != null and samp_result != ''" >
+					,#{samp_result}
+					</if>
+					<if test="chk_deal != null and chk_deal != ''" >
+					,#{chk_deal}
+					</if>
+					<if test="create_user != null and create_user != ''" >
+					,#{create_user}
+					</if>
+					<if test="create_date != null and create_date != ''" >
+					,#{create_date}
+					</if>
+					<if test="chk_user != null and chk_user != ''" >
+					,#{chk_user}
+					</if>
+					<if test="chk_date != null and chk_date != ''" >
+					,#{chk_date}
+					</if>
+					<if test="hlth_user != null and hlth_user != ''" >
+					,#{hlth_user}
+					</if>
+					<if test="hlth_date != null and hlth_date != ''" >
+					,#{hlth_date}
+					</if>
+					<if test="samp_user != null and samp_user != ''" >
+					,#{samp_user}
+					</if>
+					<if test="samp_date != null and samp_date != ''" >
+					,#{samp_date}
+					</if>
+					<if test="chk_deal_user != null and chk_deal_user != ''" >
+					,#{chk_deal_user}
+					</if>
+					<if test="chk_deal_date != null and chk_deal_date != ''" >
+					,#{chk_deal_date}
+					</if>
+				)
+	</insert>
+	
+	<select id="getLatestCheck" resultType="com.dpn.ciqqlc.standard.model.HlthCheckDTO">
+		select max(check_date) check_date, u.name check_psn
+		  from qlc_mail_steamer_hlth_check h
+		  left join users_ciq u
+		    on h.check_psn = u.id
+		 where dec_master_id = #{dec_master_id}
+		 group by u.name
+	</select>
+	
+	<select id="getLatestSamp" resultType="com.dpn.ciqqlc.standard.model.MailSteamerSampDTO">
+		select max(CREATE_DATE) samp_date, u.name samp_psn
+		  from qlc_mail_steamer_samp s
+		  left join users_ciq u
+		    on s.samp_psn = u.id
+		 where dec_master_id = #{dec_master_id}
+		 group by u.name
+	</select>
+	
+	<select id="getLatestDeal" resultType="com.dpn.ciqqlc.standard.model.MailSteamerChkDealDTO">
+		select max(check_deal_date) check_deal_date, u.name check_deal_psn
+		  from qlc_mail_steamer_chk_deal s
+		  inner join users_ciq u
+		    on s.check_deal_psn = u.id
+		 where dec_master_id = #{dec_master_id}
+		 group by u.name
+	</select>
+	
+	<select id="getLastResult" resultType="java.util.Map">
+		select A.* from (select 
+			   to_char(s.CREATE_DATE,'yyyy-mm-dd HH:mi:ss') as CREATE_DATE,
+		       u.name as CHECK_DEAL_PSN,
+		       s.ID,
+		       s.DEC_MASTER_ID,
+		       s.SERIAL_NO,
+		       s.CN_VSL_M,
+		       s.FULL_VSL_M,
+		       s.CHK_RESULT,
+		       s.HLTH_RESULT,
+		       s.SAMP_RESULT,
+		       s.CHK_DEAL,
+		       s.CREATE_USER,
+		       s.CHK_USER,
+		       s.CHK_DATE,
+		       s.HLTH_USER,
+		       s.HLTH_DATE,
+		       s.SAMP_USER,
+		       s.SAMP_DATE,
+		       s.CHK_DEAL_USER,
+		       s.CHK_DEAL_DATE
+		  from QLC_MAIL_STEAMER_RESULT s
+		  left join users_ciq u
+		    on s.CREATE_USER = u.id
+		 where dec_master_id = #{dec_master_id}
+		 order by s.create_date desc
+		) A where rownum='1'
+	</select>
+	
+	<select id="findSamp" resultType="com.dpn.ciqqlc.standard.model.MailSteamerSampDTO">
+		select *
+		from QLC_MAIL_STEAMER_SAMP t 
+		where t.dec_master_id = #{proc_main_id} and t.proc_type=#{doc_type}
+		order by t.samp_date desc
+	</select>
+	
+	<select id="findMailDeal" resultType="com.dpn.ciqqlc.standard.model.MailSteamerChkDealModel">
+		select A.* from 
+			(select
+				t.ID,
+				t.DEC_MASTER_ID,
+				t.CHECK_DEAL_PROJ,
+				t.CHECK_DEAL_PIC,
+				t.CHECK_DEAL_NOTICE,
+				(select name from QLC_CODE_LIBRARY q where q.type='JYCL' and q.code = t.CHECK_DEAL_COUSE and  q.port_org_code='CIQGVDL' ) as CHECK_DEAL_COUSE,
+				t.CHECK_DEAL_METHOD,
+				t.CHECK_DEAL_FINISH_ST,
+				t.CHECK_DEAL_COMPANY,
+				t.CHECK_DEAL_DATE,
+				t.CHECK_DEAL_PSN,
+				t.CHECK_DEAL_TGT,
+				t.SPECIAL_SIGN,
+				t.QUALIFIED_FLAG,
+				t.CHECK_DEAL_VIDEO,
+				t.CHECK_DEAL_NOTICE_VIDEO,
+				t.PROC_TYPE,
+				t.IS_COMMIT
+				from QLC_MAIL_STEAMER_CHK_DEAL t 
+				where t.proc_type=#{proc_type} 
+				and t.dec_master_id=#{proc_main_id} order by t.check_deal_date desc) A
+		where rownum=1
+	</select>
+	
+	<select id="findSampById" resultType="java.util.Map">
+	select * from QLC_MAIL_STEAMER_SAMP t where t.dec_master_id=#{proc_main_id}
+	</select>
+	
+	<select id="findChekDetail" resultType="java.util.Map">
+	select * from QLC_MAIL_STEAMER_CHK_DEAL t 
+	where t.proc_type=#{proc_type} and t.dec_master_id=#{proc_main_id}
+	</select>
+	
+	<select id="findClyj" resultType="java.util.Map">
+		select * from QLC_CODE_LIBRARY t where t.type='JYCL' and t.port_org_code='CIQGVDL'
+	</select>
+</mapper>

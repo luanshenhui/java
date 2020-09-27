@@ -1,0 +1,267 @@
+package com.dpn.ciqqlc.standard.model;
+
+import java.util.Date;
+
+public class WarningStandardEventDto extends PageDto{
+	private String standardId;
+	
+	private String warningId;
+	
+	private String warningNo;
+	//业务类型
+	private String businessType;
+	//业务类型名称
+	private String businessName;
+	//流程类型
+	private String firstModuleType;
+	//流程名称
+	private String firstModuleName;
+	//二级文件类型
+	private String secondModuleType;
+	//二级文件名称
+	private String secondModuleName;
+	//文件类型
+	private String thirdModuleType;
+	//文件名称
+	private String thirdModuleName;
+	//文件内容(地址)
+	private String content;
+	
+	private String warningType;
+	
+	private String warningFlag;
+	
+	private Date createTime;
+	
+	private Date updateTime;
+	
+	private Date sourceTime;
+	
+	private Date sourceOtherTime;
+	
+	private String userName;
+	
+	private String warningBatchId;
+	
+	private String partnerCode;
+	
+	private String partnerName;
+
+	private String departmentCode;
+	
+	private String departmentName;
+
+	public String getStandardId() {
+		return standardId;
+	}
+
+	public void setStandardId(String standardId) {
+		this.standardId = standardId;
+	}
+
+	public String getWarningId() {
+		return warningId;
+	}
+
+	public void setWarningId(String warningId) {
+		this.warningId = warningId;
+	}
+
+	public String getWarningNo() {
+		return warningNo;
+	}
+
+	public void setWarningNo(String warningNo) {
+		this.warningNo = warningNo;
+	}
+
+	public String getBusinessType() {
+		return businessType;
+	}
+
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
+	}
+
+	public String getBusinessName() {
+		return businessName;
+	}
+
+	public void setBusinessName(String businessName) {
+		this.businessName = businessName;
+	}
+
+	public String getFirstModuleType() {
+		return firstModuleType;
+	}
+
+	public void setFirstModuleType(String firstModuleType) {
+		this.firstModuleType = firstModuleType;
+	}
+
+	public String getFirstModuleName() {
+		return firstModuleName;
+	}
+
+	public void setFirstModuleName(String firstModuleName) {
+		this.firstModuleName = firstModuleName;
+	}
+
+	public String getSecondModuleType() {
+		return secondModuleType;
+	}
+
+	public void setSecondModuleType(String secondModuleType) {
+		this.secondModuleType = secondModuleType;
+	}
+
+	public String getSecondModuleName() {
+		return secondModuleName;
+	}
+
+	public void setSecondModuleName(String secondModuleName) {
+		this.secondModuleName = secondModuleName;
+	}
+
+	public String getThirdModuleType() {
+		return thirdModuleType;
+	}
+
+	public void setThirdModuleType(String thirdModuleType) {
+		this.thirdModuleType = thirdModuleType;
+	}
+
+	public String getThirdModuleName() {
+		return thirdModuleName;
+	}
+
+	public void setThirdModuleName(String thirdModuleName) {
+		this.thirdModuleName = thirdModuleName;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getWarningType() {
+		return warningType;
+	}
+
+	public void setWarningType(String warningType) {
+		this.warningType = warningType;
+	}
+
+	public String getWarningFlag() {
+		return warningFlag;
+	}
+
+	public void setWarningFlag(String warningFlag) {
+		this.warningFlag = warningFlag;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getSourceTime() {
+		return sourceTime;
+	}
+
+	public void setSourceTime(Date sourceTime) {
+		this.sourceTime = sourceTime;
+	}
+
+	public Date getSourceOtherTime() {
+		return sourceOtherTime;
+	}
+
+	public void setSourceOtherTime(Date sourceOtherTime) {
+		this.sourceOtherTime = sourceOtherTime;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getWarningBatchId() {
+		return warningBatchId;
+	}
+
+	public void setWarningBatchId(String warningBatchId) {
+		this.warningBatchId = warningBatchId;
+	}
+
+	public String getPartnerCode() {
+		return partnerCode;
+	}
+
+	public void setPartnerCode(String partnerCode) {
+		this.partnerCode = partnerCode;
+	}
+
+	public String getPartnerName() {
+		return partnerName;
+	}
+
+	public void setPartnerName(String partnerName) {
+		this.partnerName = partnerName;
+	}
+
+	public String getDepartmentCode() {
+		return departmentCode;
+	}
+
+	public void setDepartmentCode(String departmentCode) {
+		this.departmentCode = departmentCode;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	private String date_begin;
+	private String date_over;
+
+	public String getDate_begin() {
+		return date_begin;
+	}
+
+	public void setDate_begin(String date_begin) {
+		this.date_begin = date_begin;
+	}
+
+	public String getDate_over() {
+		return date_over;
+	}
+
+	public void setDate_over(String date_over) {
+		this.date_over = date_over;
+	}
+	
+	
+	
+}

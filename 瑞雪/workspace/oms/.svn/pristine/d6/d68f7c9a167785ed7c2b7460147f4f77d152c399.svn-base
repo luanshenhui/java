@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.station.dao.StationDAOImpl" >
+  <resultMap id="WF_ORG_STATIONResultMap" type="cn.rkylin.oms.system.station.domain.WF_ORG_STATION" >
+    <id column="STATION_ID" property="stationId"/>
+    <result column="UNIT_ID" property="unitId"/>
+    <result column="PARENT_STATION_ID" property="parentStationId"/>
+    <result column="STATION_NAME" property="stationName"/>
+    <result column="STATION_DESCRIPTION" property="stationDescription"/>
+    <result column="STATION_TIME_BEGIN" property="stationTimeBegin"/>
+    <result column="STATION_TIME_END" property="stationTimeEnd"/>
+    <result column="USER_NUMBERS" property="userNumbers"/>
+    <result column="MANAGABLE" property="managable"/>
+  </resultMap>
+<!--   <select id="select" resultMap="WF_ORG_STATIONResultMap" parameterClass="com.dhc.organization.position.domain.WF_ORG_STATION" > -->
+<!--     select STATION_ID, UNIT_ID, PARENT_STATION_ID, STATION_NAME, STATION_DESCRIPTION, -->
+<!--       STATION_TIME_BEGIN, STATION_TIME_END, USER_NUMBERS -->
+<!--       <isEqual prepend="," property="managable" compareValue="true"> -->
+<!-- 	      (CASE -->
+<!-- 	         WHEN 'adminUser' = #userId# THEN -->
+<!-- 	          1 -->
+<!-- 	         WHEN STATION_ID IN  -->
+<!-- 	              (SELECT DISTINCT (STATION_ID) -->
+<!-- 	                 FROM WF_ORG_USER_STATION RU -->
+<!-- 	                WHERE RU.STATION_ID IN -->
+<!-- 	                      (SELECT T.STATION_ID -->
+<!-- 	                         FROM WF_ORG_USER_STATION T, WF_ORG_STATION R -->
+<!-- 	                        WHERE R.STATION_ID = T.STATION_ID -->
+<!-- 	                          AND T.USER_ID = #userId#)) THEN -->
+<!-- 	          1 -->
+<!-- 	         ELSE -->
+<!-- 	          0 -->
+<!-- 	      END) as MANAGABLE -->
+<!--       </isEqual> -->
+<!--       <isEqual prepend="," property="managable" compareValue="false"> -->
+<!--       	'1' as MANAGABLE -->
+<!--       </isEqual> -->
+<!--       <isNull prepend="," property="managable"> -->
+<!--       	'1' as MANAGABLE -->
+<!--       </isNull> -->
+<!--     from WF_ORG_STATION STATION -->
+<!-- 	<dynamic prepend="WHERE"> -->
+<!-- 		<isNotNull prepend="AND" property="stationId"> -->
+<!-- 			STATION_ID = #stationId# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull prepend="AND" property="unitId"> -->
+<!-- 			UNIT_ID = #unitId# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull prepend="AND" property="parentStationId"> -->
+<!-- 			PARENT_STATION_ID = #parentStationId# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull prepend="AND" property="stationName"> -->
+<!-- 			STATION_NAME = #stationName# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isEqual prepend="" property="managable" compareValue="false"> -->
+<!-- 			<isNotNull prepend="AND" property="userId"> -->
+<!-- 				STATION.STATION_ID IN -->
+<!-- 		       (SELECT A.STATION_ID -->
+<!-- 		          FROM WF_ORG_USER_STATION A -->
+<!-- 		         WHERE A.USER_ID = #userId#) -->
+<!-- 			</isNotNull> -->
+<!-- 		</isEqual> -->
+<!-- 		<isNull prepend="" property="managable"> -->
+<!-- 			<isNotNull prepend="AND" property="userId"> -->
+<!-- 				STATION.STATION_ID IN -->
+<!-- 		       (SELECT A.STATION_ID -->
+<!-- 		          FROM WF_ORG_USER_STATION A -->
+<!-- 		         WHERE A.USER_ID = #userId#) -->
+<!-- 			</isNotNull> -->
+<!-- 		</isNull> -->
+<!-- 		<isNotNull prepend="OR" property="delegateStationIdList"> -->
+<!-- 			STATION.STATION_ID IN -->
+<!--        			<iterate property="delegateStationIdList" conjunction="," close=")" open="(" >  -->
+<!-- 				  #delegateStationIdList[]:VARCHAR#  -->
+<!-- 				</iterate> -->
+<!-- 		</isNotNull> -->
+<!-- 	</dynamic> -->
+<!--   </select> -->
+<!--   <delete id="delete" parameterClass="com.dhc.organization.position.domain.WF_ORG_STATION" > -->
+<!--     delete from WF_ORG_STATION where STATION_ID = #stationId# -->
+<!--   </delete> -->
+  
+<!--     <delete id="deleteUserStation" parameterClass="com.dhc.organization.position.domain.WF_ORG_STATION" > -->
+<!--     delete from WF_ORG_USER_STATION where STATION_ID = #stationId# -->
+<!--   </delete> -->
+  
+<!--   <insert id="insert" parameterClass="com.dhc.organization.position.domain.WF_ORG_STATION" > -->
+<!--     insert into WF_ORG_STATION (STATION_ID, UNIT_ID, PARENT_STATION_ID, STATION_NAME,STATION_DESCRIPTION, STATION_TIME_BEGIN, STATION_TIME_END, USER_NUMBERS) -->
+<!--     values (#stationId#, #unitId#, #parentStationId:VARCHAR:NULL#, #stationName#, #stationDescription:VARCHAR:NULL#, -->
+<!--       #stationTimeBegin:VARCHAR:NULL#, #stationTimeEnd:VARCHAR:NULL#, #userNumbers:NUMBER#) -->
+<!--   </insert> -->
+  
+<!--     <insert id="insertUserStation" parameterClass="com.dhc.organization.position.domain.WF_ORG_USER_STATION" > -->
+<!--     insert into WF_ORG_USER_STATION (USER_ID,STATION_ID) -->
+<!--     values (#userId#, #stationId# ) -->
+<!--   </insert> -->
+  
+<!--   <update id="update" parameterClass="com.dhc.organization.position.domain.WF_ORG_STATION" > -->
+<!--     update WF_ORG_STATION -->
+<!--     set  -->
+<!--       STATION_NAME = #stationName#, -->
+<!--       STATION_DESCRIPTION = #stationDescription:VARCHAR:NULL#, -->
+<!--       STATION_TIME_BEGIN = #stationTimeBegin:VARCHAR:NULL#, -->
+<!--       STATION_TIME_END = #stationTimeEnd:VARCHAR:NULL#, -->
+<!--       USER_NUMBERS = #userNumbers:NUMBER# -->
+<!--       where STATION_ID = #stationId# -->
+<!--   </update> -->
+</mapper>

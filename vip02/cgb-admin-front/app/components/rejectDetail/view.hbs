@@ -1,0 +1,56 @@
+{{#component "rejectDetail js-component"}}
+    <p class="main-box-title"><strong>退货详情</strong></p>
+    <div class="main-box col-box main-box-table-detail-t">
+        {{#with _DATA_}}
+            <table>
+                <col width="20%"/>
+                <col width="80%"/>
+                <tr>
+                <th><strong class="font-color-red">当前退货状态</strong>：</th>
+                <td>{{#equals curStatusId "0334"}}待处理{{/equals}}
+                    {{#equals curStatusId "0327"}}退货完成{{/equals}}
+                    {{#equals curStatusId "0335"}}退货驳回{{/equals}}</td>
+            </table>
+
+            <div class="main-box-title margin-top-20"><strong>操作记录</strong></div>
+        <ul class="tmtimeline">
+            <li class="line"></li>
+            {{#each _DATA_.orderReturnTrackModelList}}
+                <li class="new">
+
+                    {{#equals @index 0}}
+                        <p><i class="icon-p-new"></i> {{formatDate createTime }} </p>
+                    {{else}} <i class="icon-p-old"></i> {{formatDate createTime }}
+                    {{/equals}}
+
+                    <div class="list" >
+                        {{#equals @index 0}}
+                            <p>{{#equals status "0334"}}待处理{{/equals}}
+                                {{#equals status "0327"}}退货完成{{/equals}}
+                                {{#equals status "0335"}}退货驳回{{/equals}}
+                            </p>
+                            {{#if @last}}<p>退货原因：{{memo}}</p>{{/if}}
+                        {{else}}
+                            <div>{{#equals status "0334"}}待处理{{/equals}}
+                                {{#equals status "0327"}}退货完成{{/equals}}
+                                {{#equals status "0335"}}退货驳回{{/equals}}
+                            </div>
+                            <div>
+                                {{#if @last}}
+                                    <div>退货原因：{{memo}}</div>{{/if}}
+                            </div>
+                        {{/equals}}
+                    </div>
+                    <div style="clear:both;"></div>
+                </li>
+            {{/each}}
+        {{/with}}
+    </ul>
+        <!--<button class="btn-success">关闭</button>-->
+        <div class="admin-btn">
+            <a href="#" class="btn-size send-btn" onClick="window.history.go(-1);">返 回</a>
+        </div>
+    </div>
+
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+{{/component}}

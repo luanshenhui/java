@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（中国人寿保险真情卡重大疾病）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF25",
+            "reportCode":"JF25,JF56"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

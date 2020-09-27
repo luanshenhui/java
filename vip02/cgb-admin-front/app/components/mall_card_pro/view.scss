@@ -1,0 +1,120 @@
+.mall_card_pro {
+  .card-block{
+    td{
+      word-break: break-all;
+    }
+  }
+  .main-box-table{
+    width:100%;
+  }
+  .float-left {
+    float: left;
+  }
+  .magin-left-10 {
+    margin-left: 10px;
+  }
+  .magin-left-20 {
+    margin-left: 20px;
+  }
+  /**表格样式**/
+  .main-box-table{
+    background-color: #fff;
+    padding: 10px 0;
+    .table-th{
+      margin: 0 auto;
+      width: 100%;
+      background: #f8f8f8;
+      border-top: 1px solid #eee;
+      border-left: 1px solid #eee;
+      border-right: 1px solid #eee;
+      th {
+        padding: 10px 5px;
+      }
+    }
+    .order-tab{
+      /* width: 100%;*/
+      margin: 0 auto;
+      border: solid 1px #eee;
+      border-bottom: none;
+      .list-detail{
+        width: 100%;
+        height: 40px;
+        line-height: 15px;
+        border-bottom: solid 1px #eee;
+        background: #f8f8f8;
+        p{
+          float: left;
+          padding-left: 20px;
+          font-size: 14px;
+          color: #222;
+          height: 0;
+        }
+      }
+      .list-tabble-con{
+        tr{
+          td{
+            border-bottom: solid 1px #eee;
+            font-size: 14px;
+            color: #333;
+            line-height: 20px;
+            text-align: center;
+            vertical-align: middle;
+            .table-state tr td {
+              border:none !important;
+              color: #333;
+              font-size: 14px;
+              line-height: 20px;
+              padding: 4px;
+              text-align: right;
+              vertical-align: middle;
+            }
+            .table-state-table {
+              width:40%;
+            }
+          }
+        }
+      }
+      .table-list{
+        width: 100%;
+        border-collapse: collapse;
+        tr:hover{
+          background-color: #ffeced;
+        }
+      }
+    }
+  }
+}
+.addCardPro {
+  width:800px;
+  .modal-body{
+    padding: 20px 0 0 0 !important;
+    height: 350px;
+    overflow: scroll;
+  }
+  .item-tr {
+    width: 100%;
+    //height: 50px;
+    .span-label {
+      width: 18%;
+      text-align: right;
+      display: inline-block;
+    }
+    .span-value {
+      width: 26%;
+      text-align: left;
+      margin-left: 2%;
+      height: 50px;
+      display: inline-block;
+    }
+    .start{
+      vertical-align: top;
+    }
+    .empty-div{
+      width: 30px;
+      height: 19px;
+    }
+    span{
+      vertical-align: top;
+    }
+  }
+}

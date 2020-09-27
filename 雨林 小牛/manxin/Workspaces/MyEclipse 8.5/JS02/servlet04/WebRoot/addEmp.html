@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<!--  模拟一个消息头(content-type),
+		告诉浏览器当前处理的是一个html文档，并且
+		编码格式是utf-8-->
+		<meta http-equiv="content-type" 
+		content="text/html;charset=utf-8">
+	</head>
+	<body style="font-size:30px;font-style:italic;">
+		<form action="add" method="post">
+			<fieldset>
+				<legend>添加员工</legend>
+				姓名:<input name="name"/><br/>
+				薪水:<input name="salary"/><br/>
+				年龄:<input name="age"/><br/>
+				<input type="submit" value="提交"/>
+			</fieldset>
+		</form>
+	</body>
+</html>

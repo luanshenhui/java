@@ -1,0 +1,109 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>表单验证</title>
+	<script type="text/javascript" src="check.js"></script>
+</head>
+<body>
+	<form id="form1" name="form1" action="" style="" onSubmit="return checkForm('form1')">
+	验证按钮：
+	<input type=button value="提交验证" onClick="checkForm('form1')"/><br/><br/>
+	类型定义:<br/><br/>
+	<font style="font-size:20;font-weight:bold;">一、整型(int)</font></font><br/>
+	定义:<br/>
+	valueType="int"<br/>
+	属性:<br/>
+	objName 对象名称(字符串)<br/>
+	mustInput 必输项(true/false)<br/>
+	minInput 最小值(数字)<br/>
+	maxInput 最大值(数字)<br/>
+	举例:<br/>
+	<input type="text" name="test1" valueType="int" objName="总载重吨" mustInput="true" maxInput="10000"><br/><br/>
+	<font style="font-size:20;font-weight:bold;">二、浮点型(float)</font><br/>
+	定义:<br/>
+	valueType="float"<br/>
+	属性:<br/>
+	objName 对象名称(字符串)<br/>
+	mustInput 必输项(true/false)<br/>
+	minInput 最小值(数字)<br/>
+	maxInput 最大值(数字)<br/>
+	decimalLen小数位数(数字)<br/>
+	举例:<br/>
+	<input type="text" name="test2" valueType="float" objName="运价" mustInput="true" maxInput="10000.50" decimalLen="2"><br/><br/>
+	<font style="font-size:20;font-weight:bold;">三、字符串(string)</font><br/>
+	定义:<br/>
+	valueType="string"<br/>
+	属性:<br/>
+	objName 对象名称(字符串)<br/>
+	mustInput 必输项(true/false)<br/>
+	stringLen 字符串长度(数字)<br/>
+	举例:<br/>
+	<input type="text" name="test3" valueType="string" objName="英文船名" mustInput="true" stringLen="100"><br/><br/>
+	<font style="font-size:20;font-weight:bold;">四、日期(date)</font><br/>
+	定义:<br/>
+	valueType="date"<br/>
+	属性:<br/>
+	objName 对象名称(字符串)<br/>
+	mustInput 必输项(true/false)<br/>
+	举例:<br/>
+	<input type="text" name="test4" valueType="date" objName="开始日期" mustInput="true"><br/>
+	备注:<br/>
+	日期现在只能校验的格式为(yyyy-mm-dd)<br/><br/>
+	<font style="font-size:20;font-weight:bold;">五、邮箱(email)</font><br/>
+	定义:<br/>
+	valueType="email"<br/>
+	属性:<br/>
+	objName 对象名称(字符串)<br/>
+	mustInput 必输项(true/false)<br/>
+	举例:<br/>
+	<input type="text" name="test5" valueType="email" objName="邮箱" mustInput="true"><br/><br/>
+	<font style="font-size:20;font-weight:bold;">六、单选(radio)</font><br/>
+	定义:<br/>
+	valueType="radio"<br/>
+	属性:<br/>
+	objName 对象名称(字符串)<br/>
+	mustSelect 必输项(true/false)<br/>
+	举例:<br/>
+	<input type="radio" name="test6" valueType="radio" objName="租船方式" mustSelect="true" unchecked><br/>
+	备注:<br/>
+	对于同一组单选按钮，只需要定义第一个即可。<br/><br/>
+	<font style="font-size:20;font-weight:bold;">七、复选(checkbox)</font><br/>
+	定义:<br/>
+	valueType="checkbox"<br/>
+	属性:<br/>
+	objName 对象名称(字符串)<br/>
+	minSelect 最小选择数(数字)<br/>
+	maxSelect 最大选择数(数字)<br/>
+	举例:<br/>
+	<input type="checkbox" name="test7" valueType="checkbox" objName="爱好" mustSelect="true" minSelect="2" maxSelect="5"><input type="checkbox" name="test7" valueType="checkbox" objName="爱好" mustSelect="true" minSelect="2" maxSelect="5"><br/>
+	备注:<br/>
+	对于同一组复选按钮，只需要定义第一个即可。<br/><br/>
+	<font style="font-size:20;font-weight:bold;">八、下拉列表框(select)</font><br/>
+	定义:<br/>
+	valueType="select"<br/>
+	属性:<br/>
+	objName 对象名称(字符串)<br/>
+	mustSelect 必输项(true/false)<br/>
+	举例:<br/>
+	<select name="test8" valueType="select" objName="租船方式" mustSelect="true">
+		<option value=1>A</option>
+		<option value=2>B</option>
+		<option value=3>C</option>
+	</select><br/><br/>
+	<font style="font-size:20;font-weight:bold;">九、列表框(list)</font><br/>
+	定义:<br/>
+	valueType="list"<br/>
+	属性:<br/>
+	objName 对象名称(字符串)<br/>
+	minSelect 最小选择数(数字)<br/>
+	maxSelect 最大选择数(数字)<br/>
+	举例:<br/>
+	<select name="test9" size="5"  multiple style="" valueType="list" objName="爱好" minSelect="2" maxSelect="5">
+		<option value=1>A</option>
+		<option value=2>B</option>
+		<option value=3>C</option>
+	</select><br/><br/>
+	验证按钮：<input type=button value="提交验证" onClick="checkForm('form1')"/><br/><br/>
+	</form>
+</body>
+</html>

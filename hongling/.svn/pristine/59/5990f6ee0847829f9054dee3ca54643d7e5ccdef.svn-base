@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.RealmName" table="RealmName">
+         <id name="ID" type="string">
+            <column name="ID"/>
+            <generator class="uuid.hex" />
+        </id>
+        <property name="RealmName" type="string">
+            <column name="RealmName"/>
+        </property>
+        <property name="CustomerName" type="string">
+            <column name="CustomerName" />
+        </property>
+        <property name="Title" type="string">
+            <column name="Title"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,71 @@
+
+jQuery(document).ready(function(){
+    
+    
+    ProjectTable = $('#ProjectTable').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "dom": '<"bottom"rtflp>',
+        "searching": false,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+        "ajax": {
+            "url": "/shop/shopList.action",
+            "data": function ( d ) {
+                d.quickSearch = encodeURI($('#quickSearch').val());
+            }
+        },
+        "tableTools": {
+            //"sSwfPath": "/js/datatables/tabletools/swf/copy_csv_xls_pdf.swf", // 表格导出，需要flash支持
+            "sRowSelect": "bootstrap"
+        },
+        "columns": [{
+                "data": "shopName"
+            }, {
+                "data": "shopType"
+            }, {
+                "data": "shopAccount"
+            }, {
+                "data": "validateStatus"
+            }, {
+                "data": "status"
+            }, {
+                "data": "prjName"
+            }, {
+                "data": "parentshopname"
+            }, {
+                "data": "expireTime"
+            }, {
+                "data": "operation"
+            }, {
+                "data": "shopId"
+            }, {
+                "data": "validate"
+            }, {
+                "data": "enable"
+            }
+        ],
+        "columnDefs": [{
+                "orderable":false,
+                "targets":[8]
+            }, {
+                "targets": [9],
+                "visible": false,
+                "searchable": false
+            }, {
+                "targets": [10],
+                "visible": false,
+                "searchable": false
+            }, {
+                "targets": [11],
+                "visible": false,
+                "searchable": false
+            }
+        ],
+        "order": [[ 5, "desc" ],[ 0, "asc" ]]
+    });
+    
+    
+    
+});

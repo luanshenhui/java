@@ -1,0 +1,62 @@
+﻿.inputCalendar {
+  font-family: "Pontano Sans", sans-serif;
+  position: relative;
+}
+
+.calendarOverAll {
+  display: inline-block;
+}
+
+.inputCalendarWrapper {
+  position: absolute;
+  padding: 5px 12px;
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  box-shadow: 0 0 9px 5px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  text-align: center;
+  z-index: 2;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: table;
+}
+
+.inputCalendarField {
+  width: 120px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: "Pontano Sans", sans-serif;
+  font-size: 16px;
+  padding: 2px 8px;
+}
+
+.inputCalendarField:focus {
+  outline: none;
+  border: 1px solid #f39c12;
+}
+
+.icon {
+  cursor: pointer;
+  width: 20px;
+}
+
+.todayBtn {
+  cursor: pointer;
+}
+
+.icon:hover,
+.todayBtn:hover {
+    color: #f39c12;
+}
+
+.iconClose {
+  position: absolute;
+  right: 10px;
+}
+
+.iconClose:hover {
+  fill: #f39c12;
+}

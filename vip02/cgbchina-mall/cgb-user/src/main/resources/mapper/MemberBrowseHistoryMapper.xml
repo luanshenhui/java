@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberBrowseHistoryModel">
+    <resultMap id="MemberBrowseHistoryMap" type="MemberBrowseHistoryModel">
+        <result property="id" column="id"/>
+        <result property="goodsCode" column="goods_code"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="price" column="price"/>
+        <result property="custId" column="cust_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="browseType" column="browse_type"/>
+        <result property="source" column="source"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="installmentNumber" column="installment_number"/>
+        <result property="goodsPoint" column="goods_point"/>
+    </resultMap>
+    <sql id="columns">
+        id,goods_code,item_code,price,cust_id,create_time,browse_type,source,del_flag,installment_number,goods_point
+    </sql>
+
+    <insert id="insert" parameterType="MemberBrowseHistoryModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_member_browse_history
+        (goods_code
+        ,item_code
+        ,price
+        ,cust_id
+        ,create_time
+        ,browse_type
+        ,source
+        ,del_flag
+        ,installment_number
+        ,goods_point)
+        values(#{goodsCode}
+        ,#{itemCode}
+        ,#{price}
+        ,#{custId}
+        ,now()
+        ,#{browseType}
+        ,#{source}
+        ,#{delFlag}
+        ,#{installmentNumber}
+        ,#{goodsPoint})
+    </insert>
+
+    <update id="update" parameterType="MemberBrowseHistoryModel">
+        update tbl_member_browse_history set
+        <if test="goodsCode !=null">goods_code = #{goodsCode}
+            ,
+        </if>
+        <if test="itemCode !=null">item_code = #{itemCode}
+            ,
+        </if>
+        <if test="price !=null">price = #{price}
+            ,
+        </if>
+        <if test="custId !=null">cust_id = #{custId}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="browseType !=null">browse_type = #{browseType}
+            ,
+        </if>
+        <if test="source !=null">source = #{source}
+            ,
+        </if>
+        <if test="installmentNumber !=null">installment_number = #{installmentNumber}
+            ,
+        </if>
+        <if test="goodsPoint !=null">goods_point = #{goodsPoint}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="goodsCode !=null">and goods_code = #{goodsCode}</if>
+            <if test="itemCode !=null">and item_code = #{itemCode}</if>
+            <if test="price !=null">and price = #{price}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="browseType !=null">and browse_type = #{browseType}</if>
+            <if test="source !=null">and source = #{source}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="installmentNumber !=null">and installment_number = #{installmentNumber}</if>
+            <if test="goodsPoint !=null">and goods_point = #{goodsPoint}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="MemberBrowseHistoryMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_member_browse_history
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="MemberBrowseHistoryMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_member_browse_history
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="MemberBrowseHistoryMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_member_browse_history
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="pagerByDate" parameterType="Map" resultMap="MemberBrowseHistoryMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_member_browse_history
+        <include refid="conditions"/>
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_member_browse_history
+        <include refid="conditions"/>
+    </select>
+    <delete id="delete" parameterType="MemberBrowseHistoryModel">
+        delete from tbl_member_browse_history where id = id
+    </delete>
+
+
+    <select id="findBrowseHistoryLimitByNum" resultMap="MemberBrowseHistoryMap" parameterType="String">
+        select
+        <include refid="columns"/>
+        from tbl_member_browse_history
+        <![CDATA[ order by create_time desc limit #{num}  ]]>
+    </select>
+
+    <select id="getUserBrowsHistory" resultMap="MemberBrowseHistoryMap" parameterType="MemberBrowseHistoryModel">
+        select
+        <include refid="columns"/>
+        from tbl_member_browse_history
+        where goods_code=#{goodsCode}
+        and cust_id=#{custId}
+        and del_flag=0
+    </select>
+
+    <update id="updateBrowse" parameterType="MemberBrowseHistoryModel">
+        update tbl_member_browse_history set
+        <if test="goodsCode !=null">goods_code = #{goodsCode}
+            ,
+        </if>
+        <if test="itemCode !=null">item_code = #{itemCode}
+            ,
+        </if>
+        <if test="price !=null">price = #{price}
+            ,
+        </if>
+        <if test="custId !=null">cust_id = #{custId}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = now()
+            ,
+        </if>
+        <if test="browseType !=null">browse_type = #{browseType}
+            ,
+        </if>
+        <if test="source !=null">source = #{source}
+            ,
+        </if>
+        <if test="installmentNumber !=null">installment_number = #{installmentNumber}
+            ,
+        </if>
+        <if test="goodsPoint !=null">goods_point = #{goodsPoint}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+        </if>
+        where id = #{id}
+    </update>
+    <select id="pagerCountHistory" resultMap="MemberBrowseHistoryMap" parameterType="Map">
+		select goods_code,item_code,count(distinct cust_id,date_format(create_time,'%y%m%d')) as source from tbl_member_browse_history where del_flag='0' and
+		<![CDATA[
+		date_format(create_time,'%y%m%d') >= date_format(#{startDate},'%y%m%d')
+		]]>
+		and
+		<![CDATA[
+		date_format(create_time,'%y%m%d') <= date_format(#{endDate},'%y%m%d')
+		]]>
+		group by item_code
+		<![CDATA[ order by source desc limit #{offset}, #{limit} ]]>
+		</select>
+</mapper>
+
+

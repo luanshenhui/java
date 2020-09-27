@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<script type="text/javascript" language="javascript">
+			function firstMethod() 	{
+				//var a1 = "m\'a\"r\ny \u4e00";
+				//alert(a1);
+				/*var s = "a";
+				var n = 1;
+				var b1 = true;
+				var b2 = false;
+				alert(s + n);		//a1
+				alert(n + b1);	//2
+				alert(s + b1);		//atrue
+				alert(b1 + b2);	//1
+				
+				if(0 === "")
+					alert("sss");*/
+				//alert(Math.random());
+
+				var a = 10;
+				var b = "";
+				if(a == b)//值
+					alert("equal");
+				if(a === b)//值和类型
+					alert("same");
+
+			/*	var d = new Date();
+				//得到14天前的日期
+				d.setDate(d.getDate()-14);
+				var year = d.getFullYear();
+				var month = d.getMonth() + 1;
+				var date = d.getDate();
+				alert(year + ":" + month + ":" + date);*/
+			}
+		</script>
+		<script type="text/javascript" src="first.js"></script>
+	</head>
+	<body>
+		<form>
+			<input type="button" value="第一个按钮"
+			onclick="alert('Hello World');" />
+			<input type="button" value="第二个按钮"
+			 onclick="firstMethod();" />
+			 <input type="button" value="第三个按钮"
+			  onclick="methodInFile();"/>
+			  <br />
+			  <input type="text" id="txtNumber" />
+			  <input type="button" value="计算平方"
+				onclick="getSquare();" />
+				<br />
+				<input type="button" value="计算累加到 100 的和"
+				 onclick="getSum();" />
+				 <br />
+				 不允许录入js，录入完毕，替换为*
+				 <input id="txtStr" type="text" onblur="filterString();" />
+				 <br/>
+<input id="txtArray" type="text" value="23,156,4,56,32" />
+<input type="button" value="翻转" onclick="operArray(1);" />
+<input type="button" value="排序（按照字符）" onclick="operArray(2);" />
+<input type="button" value="排序（按照数值）" onclick="operArray(3);" />
+				<br/>
+				<input type="button" value="2-13之间的随机整数" 
+				onclick="randomNumber(2,13);" />
+				<br />
+用户名：<input type="text" id="txtName" onblur="valiName();" />
+密码：<input type="password" id="txtPw" onblur="valiPw();" />
+		</form>
+	</body>
+</html>

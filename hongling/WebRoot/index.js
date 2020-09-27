@@ -1,0 +1,1 @@
+﻿document.location.href="/hongling/pages/common/login.jsp";

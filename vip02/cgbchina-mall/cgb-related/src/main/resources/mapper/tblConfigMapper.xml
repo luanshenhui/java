@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblConfigModel">
+    <resultMap id="TblConfigMap" type="TblConfigModel">
+        <result property="id" column="id"/>
+        <result property="cfgType" column="cfg_type"/>
+        <result property="cfgCode" column="cfg_code"/>
+        <result property="cfgName" column="cfg_name"/>
+        <result property="cfgOrder" column="cfg_order"/>
+        <result property="cfgValue1" column="cfg_value1"/>
+        <result property="cfgValue2" column="cfg_value2"/>
+        <result property="cfgValue3" column="cfg_value3"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,cfg_type,cfg_code,cfg_name,cfg_order,cfg_value1,cfg_value2,cfg_value3,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="TblConfigModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_config
+        (cfg_type
+        ,cfg_code
+        ,cfg_name
+        ,cfg_order
+        ,cfg_value1
+        ,cfg_value2
+        ,cfg_value3
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{cfgType}
+        ,#{cfgCode}
+        ,#{cfgName}
+        ,#{cfgOrder}
+        ,#{cfgValue1}
+        ,#{cfgValue2}
+        ,#{cfgValue3}
+        ,#{delFlag}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="TblConfigModel">
+        update tbl_config set
+        <if test="cfgType !=null">cfg_type = #{cfgType}
+            ,
+        </if>
+        <if test="cfgCode !=null">cfg_code = #{cfgCode}
+            ,
+        </if>
+        <if test="cfgName !=null">cfg_name = #{cfgName}
+            ,
+        </if>
+        <if test="cfgOrder !=null">cfg_order = #{cfgOrder}
+            ,
+        </if>
+        <if test="cfgValue1 !=null">cfg_value1 = #{cfgValue1}
+            ,
+        </if>
+        <if test="cfgValue2 !=null">cfg_value2 = #{cfgValue2}
+            ,
+        </if>
+        <if test="cfgValue3 !=null">cfg_value3 = #{cfgValue3}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="cfgType !=null">and cfg_type = #{cfgType}</if>
+            <if test="cfgCode !=null">and cfg_code = #{cfgCode}</if>
+            <if test="cfgName !=null">and cfg_name = #{cfgName}</if>
+            <if test="cfgOrder !=null">and cfg_order = #{cfgOrder}</if>
+            <if test="cfgValue1 !=null">and cfg_value1 = #{cfgValue1}</if>
+            <if test="cfgValue2 !=null">and cfg_value2 = #{cfgValue2}</if>
+            <if test="cfgValue3 !=null">and cfg_value3 = #{cfgValue3}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblConfigMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_config
+        where id=#{id}
+    </select>
+    <!--采购价上浮系数查询 niufw-->
+    <select id="findByCfgType" parameterType="Map" resultMap="TblConfigMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_config
+        where cfg_type=#{cfgType}
+    </select>
+    <select id="findAll" resultMap="TblConfigMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_config
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblConfigMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_config
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <update id="purchaseUpdate" parameterType="TblConfigModel">
+        update tbl_config set
+            cfg_value1 = #{cfgValue1},
+            modify_oper = #{modifyOper},
+            modify_time =now()
+        where id=#{id}
+    </update>
+</mapper>
+
+

@@ -1,0 +1,349 @@
+package cn.rkylin.oms.system.menu.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.config.OrgI18nConsts;
+import cn.rkylin.oms.system.facade.ResourceBean;
+import cn.rkylin.oms.system.facade.exception.OrgFacadeException;
+import cn.rkylin.oms.system.menu.dao.IMenuDAO;
+import cn.rkylin.oms.system.menu.domain.WF_ORG_MENU;
+import cn.rkylin.oms.system.privilege.dao.IMenuGrantDAO;
+import cn.rkylin.oms.system.privilege.domain.WF_ORG_RESOURCE_AUTHORITY;
+
+/**
+ * Module : 菜单管理
+ * 
+ * @author 王潇艺
+ * @version v1
+ */
+@Service("menuService")
+public class MenuServiceImpl extends ApolloService implements IMenuService {
+	
+	/**
+	 * 菜单访问对象
+	 */
+	@Autowired
+	private IMenuDAO menuDAO;
+	
+	@Autowired
+	/**
+	 * 授权管理数据访问对象
+	 */
+	private IMenuGrantDAO menuGrantDAO;
+	
+    /**
+     * 在获取用户“菜单权限”的时候，是否要一并获取用户的“页面权限”
+     */
+    //private boolean includePages = true;
+    
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据menuItemID获取下面的所有PageElements
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemID
+	 *            - 菜单项id
+	 * @param authorityType
+	 *            - 授权类型
+	 * @return 如果找到，返回List<WF_ORG_MENU> 如果没有找到，返回null
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getFormElementList(String userID, String menuItemID, String authorityType, String menuCategory)
+			throws Exception {
+		WF_ORG_MENU menuItemVO = new WF_ORG_MENU();
+		menuItemVO.setUserID(userID);
+		menuItemVO.setParentMenuCode(menuItemID);
+		menuItemVO.setAuthorityType(authorityType);
+		menuItemVO.setMenuCategory(menuCategory);
+		return menuDAO.getMenuItemsByCondition(menuItemVO, "0");
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取所有的菜单，用于显示MenuTree
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param userID
+	 *            - 用户id
+	 * @param expandAll
+	 *            - 是否获取全部结点
+	 * @param menuType
+	 *            - 需要获取的结点类型
+	 * @param menuCategory
+	 *            - 取菜单时的菜单分类，用于例如不同子系统看到的菜单不一样的问题
+	 * @return 如果找到，返回List<WF_ORG_MENU> 如果没有找到，返回null
+	 * @param authorityType
+	 *            - 授权类型（assignable、available）
+	 * @throws Exception
+	 */
+	@Override
+	public List getMenuTreeData(String userID, String expandAll, String menuType, String menuCategory,
+			String authorityType) throws Exception {
+		WF_ORG_MENU menuItemVO = new WF_ORG_MENU();
+		// menuItemVO.setParentMenuCode(null);
+		if (!expandAll.equalsIgnoreCase("1") && !expandAll.equalsIgnoreCase("true")){
+			menuItemVO.setParentMenuCode("RootMenu");
+		}
+		menuItemVO.setUserID(userID);
+		menuItemVO.setMenuType(menuType);
+		menuItemVO.setMenuCategory(menuCategory);
+		menuItemVO.setAuthorityType(authorityType);
+		return menuDAO.getMenuItemsByCondition(menuItemVO, expandAll);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取菜单项的明细信息
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemID
+	 *            - 菜单项id
+	 * @return 如果找到，返回WF_ORG_MENU 如果没有找到，返回null
+	 * @throws Exception
+	 */
+	public WF_ORG_MENU getMenuItemDetail(String userID, String menuItemID) throws Exception {
+		WF_ORG_MENU menuVO = new WF_ORG_MENU();
+		menuVO.setUserID(userID);
+		menuVO.setMenuCode(menuItemID);
+		List list = null;
+		try {
+			list = menuDAO.getMenuItemsByCondition(menuVO, "1");
+			menuVO = (WF_ORG_MENU) list.get(0);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception(OrgI18nConsts.EXCEPTION_DBACCESS);
+		}
+		return menuVO;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存菜单项的更新
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 要保存的菜单项vo
+	 * @throws Exception
+	 */
+	@Override
+	public void saveMenuItem(WF_ORG_MENU menuItemVO) throws Exception {
+		menuDAO.updateMenuItem(menuItemVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存页面的更新
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 要保存的菜单项vo
+	 * @throws Exception
+	 */
+	@Override
+	public void savePageItem(WF_ORG_MENU pageItemVO) throws Exception {
+		menuDAO.updatePageItem(pageItemVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存页面元素的更新
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 要保存的菜单项vo
+	 * @throws Exception
+	 */
+	@Override
+	public void savePageElement(WF_ORG_MENU menuItemVO) throws Exception {
+		menuDAO.updatePageElement(menuItemVO);
+	}
+
+	/**
+	 * 描述: 创建新的菜单项
+	 * 
+	 * @param menuItemVO
+	 *            - 要保存的菜单项vo
+	 * @throws Exception
+	 */
+	@Override
+	public void createMenuItem(WF_ORG_MENU menuItemVO) throws Exception {
+		menuDAO.insertMenuItem(menuItemVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 创建新的页面元素
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 要保存的菜单项vo
+	 * @throws Exception
+	 */
+	@Override
+	public void createPageElement(WF_ORG_MENU menuItemVO) throws Exception {
+		menuDAO.insertPageElement(menuItemVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 创建新的页面
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 要保存的菜单项vo
+	 * @throws Exception
+	 */
+	@Override
+	public void createPage(WF_ORG_MENU menuItemVO) throws Exception {
+		menuDAO.insertPage(menuItemVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除菜单树上的结点，可能是菜单项，也可能是元素。菜单项下如果存在元素则先删除子菜 单项。
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param nodeID
+	 *            - 结点主键
+	 * @throws Exception
+	 */
+	@Override
+	public void deleteNode(String nodeID) throws Exception {
+		menuDAO.deleteNode(nodeID);
+		WF_ORG_RESOURCE_AUTHORITY delParam = new WF_ORG_RESOURCE_AUTHORITY();
+
+		delParam.setResourceId(nodeID);
+		menuGrantDAO.deletePrivileges(delParam);
+		menuGrantDAO.deleteUserExclude(null, nodeID);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 节点向上移动。
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param nodeID
+	 *            - 结点主键
+	 * @throws Exception
+	 */
+	@Override
+	public void upNode(String itemId, String changeId) throws Exception {
+		menuDAO.upNode(itemId, changeId);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 节点向下移动。
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param nodeID
+	 *            - 结点主键
+	 * @throws Exception
+	 */
+	@Override
+	public void downNode(String itemId, String changeId) throws Exception {
+		menuDAO.downNode(itemId, changeId);
+	}
+
+    /**
+     * 描述: 根据帐户获取菜单权限
+     * 
+     * @param userID
+     *            - 帐户
+     * @param menuCategory
+     *            - 取菜单时的菜单分类，用于例如不同子系统看到的菜单不一样的问题
+     * @return 用户可以访问的菜单列表
+     * @throws Exception
+     */
+    public List<ResourceBean> getUserAvailableMenus(String userID, String menuCategory, boolean includePages)
+            throws Exception {
+        // 帐户和资源类型不可为空
+        if (StringUtils.isEmpty(userID)) {
+            throw new Exception("帐户不可为空");
+        }
+        
+        // menuCategory如果是空串，则置为null
+        menuCategory = (StringUtils.isEmpty(menuCategory) || menuCategory.equalsIgnoreCase("iFramework")) ? null : menuCategory;
+
+        List<ResourceBean> resourceList = new ArrayList<ResourceBean>();
+        try {
+            // 获取整个菜单树，如果传false则只获取一级菜单
+            List tempList = getMenuTreeData(userID, "true", (includePages ? null : "MENU"), // (有时需要判断page的权限，不仅是menu。)
+                    menuCategory, "available");
+            for (int i = 0; i < tempList.size(); i++) {
+                WF_ORG_MENU menu = (WF_ORG_MENU) tempList.get(i);
+                ResourceBean rb = new ResourceBean();
+                rb.setParentResourceID(menu.getParentMenuCode());
+                rb.setResourceArea(menu.getMenuArea());
+                rb.setResourceDesc(menu.getMenuDesc());
+                rb.setResourceElementId(menu.getMenuElementId());
+                rb.setResourceElementType(menu.getMenuElementType());
+                rb.setResourceID(menu.getMenuCode());
+                rb.setResourceImgLocation(menu.getMenuImgLocation());
+                rb.setResourceIsDefault(menu.getMenuIsDefault());
+                rb.setResourceLevel(menu.getMenuLevel());
+                rb.setResourceLocation(menu.getMenuLocation());
+                rb.setResourceName(menu.getMenuName());
+                rb.setResourceType(menu.getMenuType());
+                rb.setResourceOrder(menu.getMenuOrder());
+                resourceList.add(rb);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            new Exception("菜单权限计算异常");
+        }
+        return resourceList;
+    }
+}

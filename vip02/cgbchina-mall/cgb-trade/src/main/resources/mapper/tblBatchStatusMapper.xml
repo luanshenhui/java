@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblBatchStatusModel">
+    <resultMap id="TblBatchStatusMap" type="TblBatchStatusModel">
+        <result property="id" column="id"/>
+        <result property="jobName" column="job_name"/>
+        <result property="jobParam1" column="job_param1"/>
+        <result property="jobParam2" column="job_param2"/>
+        <result property="jobParam3" column="job_param3"/>
+        <result property="isSuccess" column="is_success"/>
+        <result property="runTime" column="run_time"/>
+        <result property="exceptionMsg" column="exception_msg"/>
+    </resultMap>
+    <sql id="columns">
+        id,job_name,job_param1,job_param2,job_param3,is_success,run_date,run_time,exception_msg
+    </sql>
+
+    <insert id="insert" parameterType="TblBatchStatusModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_batch_status
+        (job_name
+        ,job_param1
+        ,job_param2
+        ,job_param3
+        ,is_success
+        ,run_time
+        ,exception_msg)
+        values(#{jobName}
+        ,#{jobParam1}
+        ,#{jobParam2}
+        ,#{jobParam3}
+        ,#{isSuccess}
+        ,#{runTime}
+        ,#{exceptionMsg})
+    </insert>
+
+    <update id="update" parameterType="TblBatchStatusModel">
+        update tbl_batch_status
+        <set>
+            <if test="jobName !=null">job_name = #{jobName}
+                ,</if>
+            <if test="jobParam1 !=null">job_param1 = #{jobParam1}
+                ,</if>
+            <if test="jobParam2 !=null">job_param2 = #{jobParam2}
+                ,</if>
+            <if test="jobParam3 !=null">job_param3 = #{jobParam3}
+                ,</if>
+            <if test="isSuccess !=null">is_success = #{isSuccess}
+                ,</if>
+            <if test="runTime !=null">run_time = #{runTime}
+                ,</if>
+            <if test="exceptionMsg !=null">exception_msg = #{exceptionMsg}
+                ,</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="jobName !=null">and job_name = #{jobName}</if>
+            <if test="jobParam1 !=null">and job_param1 = #{jobParam1}</if>
+            <if test="jobParam2 !=null">and job_param2 = #{jobParam2}</if>
+            <if test="jobParam3 !=null">and job_param3 = #{jobParam3}</if>
+            <if test="isSuccess !=null">and is_success = #{isSuccess}</if>
+            <if test="runTime !=null">and run_time = #{runTime}</if>
+            <if test="exceptionMsg !=null">and exception_msg = #{exceptionMsg}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblBatchStatusMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_batch_status
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="TblBatchStatusMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_batch_status
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblBatchStatusMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_batch_status
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <delete id="delete" parameterType="TblBatchStatusModel">
+        delete from tbl_batch_status where id = id
+    </delete>
+    
+    <update id="updateBatchStatus" parameterType="Map">
+        update tbl_batch_status
+        set is_success = 'N'
+        where
+            (
+              job_name = 'dayreport'
+              and run_time = #{creatDate}
+              and job_param1 in ('YG03','YG04','YG05','YG06','YG07','YG09')
+            )
+        or (
+            job_name = 'weekreport'
+            and run_time = #{creatWeek}
+            and job_param1 in ('YG10', 'YG11', 'YG13')
+           )
+        or (
+            job_name = 'mothreport'
+            and run_time = #{creatMonth}
+            and job_param1 in ('YG14', 'YG15', 'YG17')
+        )
+        and is_success = 'Y'
+    </update>
+</mapper>
+
+

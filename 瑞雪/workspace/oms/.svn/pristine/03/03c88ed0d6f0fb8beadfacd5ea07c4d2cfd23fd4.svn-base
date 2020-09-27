@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.apollo.mapper.projectUserMapper">
+	<sql id="columns">ID,USER_NAME,USER_ID,USER_POSITION,DEPT_ID,DEPT_NAME,USER_STATUS,PROJECT_ID,CREATE_DT,UPDATE_DT</sql>
+	<sql id="tableName">fm_project_user</sql>
+
+	<select id="findProjectUser" resultType="java.util.Map">
+		select
+		<include refid="columns" />
+		from
+		<include refid="tableName" />
+		t
+		where 1=1 and t.user_status = 1
+		<if test="null != projectId and '' != projectId">
+			and t.project_id = #{projectId}
+		</if>
+		<if test="null != userId and '' != userId">
+			and t.user_id = #{userId}
+		</if>
+	</select>
+
+	<api id="queryOAUser" parameterType="cn.rkylin.core.ApolloMap">
+		http://api.ruixuesoft.com/auth/user/selectUserForEasyUI
+	</api>
+
+	<delete id="deleteProjUser" parameterType="cn.rkylin.core.ApolloMap">
+		delete fm_project_user where id= #{uid} and user_id = #{userId} and
+		project_id = #{projectId}
+	</delete>
+
+	<delete id="deleteProjUserbyWhere" parameterType="cn.rkylin.core.ApolloMap">
+		delete from fm_project_user where user_id = #{userId}
+	</delete>
+
+	<update id="updateProjectUserStatus" parameterType="cn.rkylin.core.ApolloMap">
+		update fm_project_user set USER_STATUS =3,UPDATE_DT=now()
+		where id= #{uid} and project_id = #{projectId} and USER_STATUS!=3
+	</update>
+
+	<update id="updateProjectUserByWhere" parameterType="cn.rkylin.core.ApolloMap">
+		update fm_project_user set USER_STATUS =3,UPDATE_DT=now()
+		where user_id = #{userId} and project_id = #{projectId} and user_status!=3
+	</update>
+
+	<insert id="inserProjectUserBatch" useGeneratedKeys="true" parameterType="java.util.List">
+		insert into fm_project_user (user_name,user_id,user_position,dept_id,dept_name,project_id,user_status,CREATE_DT)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.appendUserName},#{item.userId},#{item.postName},#{item.deptId},#{item.deptName},#{item.projectId},1,now())
+		</foreach>
+	</insert>
+
+	<insert id="inserUserProjectRelated" parameterType="cn.rkylin.core.ApolloMap">
+		INSERT INTO fm_project_user
+		(USER_NAME,USER_ID,USER_POSITION,DEPT_ID,DEPT_NAME,USER_STATUS,PROJECT_ID,CREATE_DT)
+		VALUE(#{userName},#{userId},#{position},#{deptId},#{deptName},#{status},#{projectId},now())
+	</insert>
+</mapper>

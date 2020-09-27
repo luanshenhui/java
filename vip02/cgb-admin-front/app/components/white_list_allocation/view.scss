@@ -1,0 +1,147 @@
+.white-list-allocation {
+
+  .margin-top-10 {
+    margin-top: 10px !important;
+  }
+  .main-box-table {
+    background-color: #fff;
+    padding: 10px 0;
+  }
+
+  .col-right-common {
+    float: right !important;
+
+    .search-btn {
+      color: #fff;
+      border: 1px solid #f01919;
+      height: 24px;
+      line-height: 24px;
+      float: right;
+      background-color: #f01919;
+      text-align: center;
+      padding: 0 10px;
+      cursor: pointer;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border-radius: 2px;
+    }
+  }
+
+  .col-left-common {
+    float: left !important;
+
+    a:visited {
+      TEXT-DECORATION: none;
+      outline: none;
+    }
+    a:link {
+      TEXT-DECORATION: none;
+      outline: none;
+    }
+    .add-btn-link {
+      color: #f01919;
+      border: 1px solid #f01919;
+      height: 24px;
+      line-height: 24px;
+      float: left;
+      margin-right: 5px;
+      background-color: #fff;
+      text-align: center;
+      padding: 0 8px;
+      cursor: pointer;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border-radius: 2px;
+    }
+  }
+
+  .main-box {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 10px;
+
+    .column-three {
+      float: left;
+      margin-right: 2px;
+      width: 300px;
+
+      .span {
+        line-height: 32px;
+      }
+
+      .column-title {
+        width: 120px;
+        display: inline-block;
+        padding-right: 2px;
+        text-align: right;
+      }
+
+      .form-width-150 {
+        width: 150px;
+      }
+
+      .form-control {
+         padding: 5px;
+         font-size: 14px;
+         border: 1px solid #ccc;
+       }
+
+      input {
+        outline: none;
+      }
+
+      select {
+        border: 1px solid #ddd;
+        margin: 0;
+        outline: medium none;
+        padding: 4px;
+        font-size: 14px;
+      }
+      .select-width-160 {
+        width: 162px;
+      }
+    }
+  }
+  .text-wrap{
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-all;
+    display: inline-block;
+  }
+}
+
+/**新增弹出框样式**/
+.white-modal{
+  width: 600px;
+  height: 200px;
+
+  .modal-body{
+    height: 100px!important;
+    min-height:100px!important;
+
+    .form-information{
+      margin-bottom: 15px;
+      min-height: 32px;
+      clear: both;
+
+      .linespan{
+        display: block;
+        float: left;
+        line-height: 30px;
+        width: 150px;
+        text-align: right;
+      }
+
+      select{
+        border: 1px solid #ddd;
+        font-size: 14px;
+        margin: 0;
+        outline: medium none;
+      }
+
+      input{
+        width: 260px;
+      }
+    }
+  }
+}

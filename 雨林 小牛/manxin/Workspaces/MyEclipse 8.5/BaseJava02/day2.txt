@@ -1,0 +1,35 @@
+循环结构：
+	while循环：
+		语法：如果小括号中的值为true，则循环进行，每次循环一次后，再次判断小括号中的值,为false则跳出,否则继续
+		while(true or false){
+			被循环的代码;
+			}
+		
+	do while循环：
+		语法:先执行do后面的代码，然后再对while()进行判断
+		do{
+			被循环的代码;
+		}while(true or false)
+		
+	for循环：
+		语法：代码1-->判断-->true:代码2-->代码3-->回到判断
+						 -->false:循环结束
+		for(代码1;逻辑判断;代码3){
+			代码2;
+		}
+		
+数组：一组数据
+	数组的声明、赋值和初始化：
+	声明：int[] arr;
+	赋值：arr=new int[数组的长度];长度无法改变
+		 arr[0]=5;
+	初始化：
+		动态初始化：int[] arr = new int[5];
+		静态初始化：int[] arr = {1,2,3,4,5};
+		
+预习：
+	数组的排序
+	数组的工具类：Arrays
+	函数的声明和调用
+	java中的关键字:public/private/protected/continue/break/return
+	

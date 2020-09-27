@@ -1,0 +1,333 @@
+{{#component "pointsOrderInfo_manage js-component"}}
+    <p class="main-box-title margin-top-10 h1-title"><strong>订单详情</strong></p>
+    {{#if _DATA_}}
+        {{#with _DATA_}}
+            <div class="main-box col-box main-box-table-detail-t">
+                <div class="orderDetail">
+                    <div class="main-box-title">- 订单状态 -</div>
+                    <table>
+                        <tr>
+                            <td class="font-color-red statusTittle">
+                                <strong>{{orderSubModel.curStatusNm}}</strong>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="main-box-title">- 主订单信息 -</div>
+                    <table>
+                        <col width="20%"/>
+                        <col width="30%"/>
+                        <col width="20%"/>
+                        <col width="30%"/>
+                        <tr>
+                            <th>主订单编号 ：</th>
+                            <td>{{orderSubModel.ordermainId}}</td>
+                            <th>礼品总数量 ：</th>
+                            <td>{{orderMainModel.totalNum}}</td>
+                        </tr>
+                        <tr>
+                            <th>礼品总现金 ：</th>
+                            <td>{{#if orderMainModel.totalPrice}}
+                                ￥{{orderMainModel.totalPrice}}
+                            {{else}}
+                                ￥0.00
+                            {{/if}}</td>
+                            <th>礼品总积分 ：</th>
+                            <td>{{#if orderMainModel.totalBonus}}
+                                {{orderMainModel.totalBonus}} 分
+                            {{else}}
+                                0分
+                            {{/if}}</td>
+                        </tr>
+                    </table>
+
+                    <div class="main-box-title">- 订单信息 -</div>
+                    <table>
+                        <col width="20%"/>
+                        <col width="30%"/>
+                        <col width="20%"/>
+                        <col width="30%"/>
+                        <tr>
+                            <th>订单编号 ：</th>
+                            <td> {{orderSubModel.orderId}}</td>
+                            <th>订单渠道 ：</th>
+                            <td>{{orderSubModel.sourceNm}}</td>
+                        </tr>
+                        <tr>
+                            <th>客户姓名 ：</th>
+                            <td>{{orderSubModel.memberName}}</td>
+                            <th>手机号码 ：</th>
+                            <td>{{orderMainModel.contMobPhone}}</td>
+                        </tr>
+                        <tr>
+                            <th>下单时间 ：</th>
+                            <td>{{#formatDate orderSubModel.createTime}}{{/formatDate}}</td>
+                            <th>供应商 ：</th>
+                            <td>{{orderSubModel.vendorSnm}}</td>
+                        </tr>
+                        <tr>
+                            <th>银行订单号 ：</th>
+                            <td>{{tblOrderExtend1Model.ordernbr}}</td>
+                            <th>银行卡号 ：</th>
+                            <td>{{orderMainModel.cardno}}</td>
+                        </tr>
+                    </table>
+
+                    <div class="main-box-title">- 礼品信息 -</div>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="list-tabble-con border">
+                        <tr>
+                            <th scope="col" width="8%">序号</th>
+                            <th width="37%" colspan="2" scope="col">礼品</th>
+                            <th scope="col" width="8%">数量</th>
+                            <th scope="col" width="10%">积分</th>
+                            <th scope="col" width="12%">积分类型</th>
+                            <th scope="col" width="10%">现金</th>
+                            <th scope="col" width="15%">兑换等级</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td width="100">
+                                <a href="{{_HREF_.main}}/mall/goods/{{orderSubModel.goodsCode}}?itemCode={{orderSubModel.goodsId}}"
+                                   target="_blank">
+                                    {{#if orderSubModel.itemSmallPic}}
+                                        <img data-original="{{orderSubModel.itemSmallPic}}"/>
+                                    {{else}}
+                                        <img alt="暂无图片"/>
+                                    {{/if}}
+                                </a>
+                            </td>
+                            <td width="250" class="text-left">
+                                <a href="{{_HREF_.main}}/mall/goods/{{orderSubModel.goodsCode}}?itemCode={{orderSubModel.goodsId}}"
+                                   target="_blank">{{orderSubModel.goodsNm}}</a>
+                                礼品编码:{{xid}}
+                            </td>
+                            <td>{{orderSubModel.goodsNum}}</td>
+                            <td>{{orderSubModel.bonusTotalvalue}}</td>
+                            <td>
+                                {{#equals orderSubModel.bonusType "1"}}
+                                    普通积分
+                                {{/equals}}
+                                {{#equals orderSubModel.bonusType "3"}}
+                                    希望卡积分
+                                {{/equals}}
+                                {{#equals orderSubModel.bonusType "5"}}
+                                    旧聪明卡积分
+                                {{/equals}}
+                                {{#equals orderSubModel.bonusType "7"}}
+                                    新聪明卡积分
+                                {{/equals}}
+                                {{#equals orderSubModel.bonusType "66"}}
+                                    真情卡新客户礼遇积分
+                                {{/equals}}
+                                {{#equals orderSubModel.bonusType "76"}}
+                                    留学生卡新客户礼遇
+                                {{/equals}}
+                            </td>
+                            <td>
+                                {{#if orderSubModel.totalMoney}}
+                                    ￥{{orderSubModel.totalMoney}}
+                                {{else}}
+                                    ￥0.00
+                                {{/if}}
+                            </td>
+                            <td>{{exchangeName}}</td>
+                        </tr>
+                    </table>
+                    {{#equals orderSubModel.goodsType "00"}}
+                        <div class="main-box-title margin-top-40 margin-left-10">- 收货信息 - </div>
+                        <table>
+                            <tr>
+                                <th width="20%">收货人姓名 ：</th>
+                                <td width="30%">{{orderMainModel.csgName}}</td>
+                                <th width="20%">收货人手机号码 ：</th>
+                                <td width="30%">{{orderMainModel.csgPhone1}}</td>
+                            </tr>
+
+                            <tr>
+                                <th width="20%">收货人座机号码 ：</th>
+                                <td width="30%"> {{orderMainModel.csgPhone2}} </td>
+                                <th width="20%">收货人邮编 ：</th>
+                                <td width="30%">  {{orderMainModel.csgPostcode}} </td>
+                            </tr>
+
+                            <tr>
+                                <th width="20%">送货时间要求 ：</th>
+                                <td width="30%">
+                                    {{#equals orderMainModel.bpCustGrp "01"}}
+                                        工作日、双休日与假日均可送货
+                                    {{/equals}}
+                                    {{#equals orderMainModel.bpCustGrp "02"}}
+                                        只有工作日送货（双休日、假日不用送）
+                                    {{/equals}}
+                                    {{#equals orderMainModel.bpCustGrp "03"}}
+                                        只有双休日、假日送货（工作日不用送货）
+                                    {{/equals}}
+                                </td>
+                                <th width="20%">订单留言 ：</th>
+                                <td width="30%">{{orderMainModel.ordermainDesc}}</td>
+                            </tr>
+                            <tr>
+                                <th width="20%">收货人地址 ：</th>
+                                <td width="80%"
+                                    colspan="3"> {{orderMainModel.csgProvince}}{{orderMainModel.csgCity}}{{orderMainModel.csgBorough}}{{orderMainModel.csgAddress}}</td>
+                            </tr>
+
+                        </table>
+                    {{/equals}}
+                    {{#equals orderSubModel.goodsType "00"}}
+                        {{#with orderTransModel}}
+                            <div class="main-box-title margin-top-20">- 物流信息 -</div>
+                            <table>
+                                <col width="20%"/>
+                                <col width="80%"/>
+                                <tr>
+                                    <th>物流公司 ：</th>
+                                    <td>{{transcorpNm}}</td>
+                                </tr>
+                                <tr>
+                                    <th>物流单号 ：</th>
+                                    <td>{{mailingNum}}</td>
+                                </tr>
+                                <tr>
+                                    <th>发货时间 ：</th>
+                                    <td>{{#formatDate doTime}}{{/formatDate}}</td>
+                                </tr>
+                                <tr>
+                                    <th>物流跟踪 ：</th>
+                                    <td><a class="font-color-blue1" href="{{../_HREF_.expressUrl}}"
+                                           target="_blank">物流跟踪</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        {{/with}}
+                    {{else}}
+                        {{#equals orderSubModel.goodsType "02"}}
+                            <div class="main-box-title margin-top-20">- 物流信息 -</div>
+                            <table>
+                                <col width="20%"/>
+                                <col width="80%"/>
+                                <tr>
+                                    <th><strong class="font-color-black">O2O礼品兑换码 ：</strong></th>
+                                    <td>{{verifyCode}}{{#equals validateStatus "00"}}
+                                        (未使用){{/equals}}{{#equals validateStatus "01"}}(已使用){{/equals}}</td>
+                                </tr>
+                            </table>
+                        {{/equals}}
+                    {{/equals}}
+
+                    {{#equals orderSubModel.goodsType "01"}}
+                        {{#if otherFlag}}
+                            {{#with orderVirtualModel}}
+                                <div class="main-box-title margin-top-20">- 其他信息 -</div>
+                                <table>
+                                    <col width="24%"/>
+                                    <col width="76%"/>
+                                    {{#if orderVirtualModel.virtualMemberNm}}
+                                        <tr>
+                                            <th>客户姓名 ：</th>
+                                            <td>{{orderVirtualModel.virtualMemberNm}}</td>
+                                        </tr>
+                                    {{/if}}
+                                    {{#if orderVirtualModel.virtualAviationType}}
+                                        <tr>
+                                            <th>航空类型 ：</th>
+                                            <td>
+                                                {{#equals orderVirtualModel.virtualAviationType "01"}}
+                                                    东航
+                                                {{/equals}}
+                                                {{#equals orderVirtualModel.virtualAviationType "02"}}
+                                                    南航
+                                                {{/equals}}
+                                                {{#equals orderVirtualModel.virtualAviationType "03"}}
+                                                    国航
+                                                {{/equals}}
+                                                {{#equals orderVirtualModel.virtualAviationType "04"}}
+                                                    亚洲万里通
+                                                {{/equals}}
+                                                {{#equals orderVirtualModel.virtualAviationType "05"}}
+                                                    华航
+                                                {{/equals}}
+                                                {{#equals orderVirtualModel.virtualAviationType "06"}}
+                                                    长荣
+                                                {{/equals}}
+                                            </td>
+                                        </tr>
+                                    {{/if}}
+                                    {{#if orderVirtualModel.virtualMemberId}}
+                                        <tr>
+                                            <th>会员号 ：</th>
+                                            <td>{{orderVirtualModel.virtualMemberId}}</td>
+                                        </tr>
+                                    {{/if}}
+                                    {{#if orderVirtualModel.attachName}}
+                                        <tr>
+                                            <th>留学生意外险附属卡姓名 ：</th>
+                                            <td>{{orderVirtualModel.attachName}}</td>
+                                        </tr>
+                                    {{/if}}
+                                    {{#if orderVirtualModel.attachIdentityCard}}
+                                        <tr>
+                                            <th>留学生意外险附属卡证件号码 ：</th>
+                                            <td>{{orderVirtualModel.attachIdentityCard}}</td>
+                                        </tr>
+                                    {{/if}}
+                                    {{#if orderVirtualModel.entryCard}}
+                                        <tr>
+                                            <th>附属卡卡号：</th>
+                                            <td>{{orderVirtualModel.entryCard}}</td>
+                                        </tr>
+                                    {{/if}}
+                                </table>
+                            {{/with}}
+                        {{/if}}
+                    {{/equals}}
+                    <div class="main-box-title margin-top-20">- 操作历史 -</div>
+                    <ul class="tmtimeline js-check-lastChild">
+                        <li class="line"></li>
+                        {{#each this.orderDoDetailModels}}
+                            {{#equals @index 0}}
+                                <li class="new">
+                                    <i class="icon-p-new"></i>
+
+                                    <p class="point">{{#formatDate this.doTime}}{{/formatDate}} 操作者ID:{{doUserid}}</p>
+
+                                    <div class="list">
+                                        <p>{{this.statusNm}}</p>
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </li>
+                            {{else}}
+                                <li>
+                                    <i class="icon-p-old"></i>
+
+                                    <p class="point">{{#formatDate this.doTime}}{{/formatDate}}</p>
+
+                                    <div class="list">
+                                        <p>{{this.statusNm}}</p>
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </li>
+                            {{/equals}}
+                        {{/each}}
+                    </ul>
+
+                    {{#equals requestFlag "1"}}
+                        <div class="main-box-title margin-top-20">- 审核信息 -</div>
+                        <table>
+                            <col width="20%"/>
+                            <tr>
+                                <th><strong class="font-color-black">- 审核意见 -</strong>：</th>
+                                <td>{{orderSubModel.sinApplyMemo}}</td>
+                            </tr>
+                        </table>
+                    {{/equals}}
+                </div>
+                <div class="text-center orderReturn">
+                    <!--<a href="{{!../_HREF_.mainContext}}/points/order/order" class="btn btn-info btn-medium">返 回</a>-->
+                    <a href="javascript:history.back(-1)" class="btn btn-info btn-medium">返 回</a>
+                </div>
+            </div>
+        {{/with}}
+    {{else}}
+        <div class="search-null"><i class="icon-null"></i> 抱歉，没有找到相关的订单</div>
+    {{/if}}
+{{/component}}

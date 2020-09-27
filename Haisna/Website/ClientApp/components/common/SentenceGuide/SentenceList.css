@@ -1,0 +1,26 @@
+﻿.sentenceList {
+  border-collapse: collapse;
+}
+
+.sentenceList thead,
+.sentenceList tbody {
+  display: block;
+}
+
+.sentenceList tbody {
+  overflow-y: scroll;
+  height: 500px;
+}
+
+.sentenceList th,
+.sentenceList td {
+  width: 100px;
+}
+
+.sentenceList .stcCd {
+    width: 100px;
+}
+
+.sentenceList .shortStc {
+    width: 400px;
+}

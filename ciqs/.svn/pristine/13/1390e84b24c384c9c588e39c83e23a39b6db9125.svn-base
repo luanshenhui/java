@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for SYSTEM.
+
+@author zhanglin@dpn.com.cn
+@since 1.0.0 zhanglin@dpn.com.cn
+@version 1.0.0 zhanglin@dpn.com.cn
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 
+********************************************************************************
+变更履历
+-> 1.0.0 2016-07-07 zhanglin@dpn.com.cn : 初建。
+**************************************************************************** -->
+<mapper namespace="SQL.SYS">
+
+    <!-- **** select ******************************************************* -->
+
+    <select id="selectDt" resultType="java.util.Date">
+        <![CDATA[
+        SELECT 
+            SYSDATE 
+        FROM 
+            DUAL
+        ]]>
+    </select>
+
+    <select id="selectGuid" resultType="string">
+        <![CDATA[
+        SELECT 
+            SYS_GUID() 
+        FROM 
+            DUAL
+        ]]>
+    </select>
+
+    <!-- **** insert ******************************************************* -->
+
+    <!-- **** update ******************************************************* -->
+
+    <!-- **** delete ******************************************************* -->
+
+</mapper>

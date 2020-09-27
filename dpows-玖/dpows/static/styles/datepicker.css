@@ -1,0 +1,119 @@
+table.jCalendar {
+	background-color: #FFFFFF;
+
+}
+table.jCalendar th {
+	color: #fff;
+	font-family: "ËÎÌו";
+	font-size: 12px;
+	padding-top: 3px;
+	height: 16px;
+}
+
+table.jCalendar td {
+	color: #000;
+	text-align: center;
+	background-color: #FFFFFF;
+	padding-top: 5px;
+	padding-right: 4px;
+	padding-bottom: 5px;
+	padding-left: 4px;
+}
+table.jCalendar td.other-month {
+	color: #CCCCCC;
+}
+table.jCalendar td.today {
+	color: #fff;
+	background-color: #999999;
+}
+table.jCalendar td.selected {
+	background: #f66;
+	color: #fff;
+}
+table.jCalendar td.dp-hover,
+table.jCalendar tr.activeWeekHover td {
+	color: #FF0000;
+	background-color: #CCCCCC;
+}
+
+
+
+
+div.dp-popup {
+	position: relative;
+	font-size: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	width: 170px;
+	line-height: 1.2em;
+	background-color: #FFFFFF;
+	padding-top: 5px;
+	margin-top: 20px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+}
+div#dp-popup {
+	position: absolute;
+	z-index: 199;
+}
+div.dp-popup h2 {
+	font-size: 12px;
+	text-align: center;
+	margin: 2px 0;
+	padding: 0;
+}
+
+div.dp-popup a {
+	color: #000;
+	text-decoration: none;
+	padding: 3px 2px 0;
+}
+div.dp-popup div.dp-nav-prev {
+	position: absolute;
+	top: 2px;
+	left: 4px;
+	width: 100px;
+}
+div.dp-popup div.dp-nav-prev a {
+	float: left;
+}
+div.dp-popup div.dp-nav-prev a, div.dp-popup div.dp-nav-next a {
+	cursor: pointer;
+}
+div.dp-popup div.dp-nav-prev a.disabled, div.dp-popup div.dp-nav-next a.disabled {
+	cursor: default;
+}
+div.dp-popup div.dp-nav-next {
+	position: absolute;
+	top: 2px;
+	right: 4px;
+	width: 100px;
+}
+div.dp-popup div.dp-nav-next a {
+	float: right;
+}
+div.dp-popup a.disabled {
+	cursor: default;
+	color: #aaa;
+}
+div.dp-popup td {
+	cursor: pointer;
+}
+div.dp-popup td.disabled {
+	cursor: default;
+}
+table.jCalendar th {
+	background-color: #1B5EA8;
+
+}
+div.dp-popup {
+	border-top-color: #013978;
+	border-right-color: #013978;
+	border-bottom-color: #013978;
+	border-left-color: #013978;
+}

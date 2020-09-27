@@ -1,0 +1,14 @@
+package cn.rkylin.oms.system.messageDefine.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.messageDefine.dao.IMessageDefineDao;
+
+@Service("messageDefineService")
+public class MessageDefineServiceImpl extends ApolloService implements IMessageDefineService{
+	@Autowired
+	private IMessageDefineDao messageDefineDao;
+
+}

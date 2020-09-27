@@ -1,0 +1,24 @@
+什么是JDBC?
+	提供了一套所有数据库公用的规范。按照这一套规范，我们可以操作所有的数据。
+	
+使用JDBC操作数据库的步骤
+	1.注册数据库的驱动(不同的数据库会有不同的驱动)
+	2.建立对数据库的连接(url,loginName,loginPWD)
+		url: jdbc:oracle:thin:@127.0.0.1:1521:XE
+			   等同于
+			 jdbc:oracle:thin:@localhost:1521:XE
+	3.利用连接的对象获得statement对象(Statement包含处理数据的各种方法)
+	4.利用statement对象执行SQL语句
+	5.如果是查询，需要处理查询的结果集
+	6.关闭连接
+	
+SQL 注入的问题：
+	用户名为1001 密码为1234
+	String name="1001";
+	String pwd="1234";
+	
+用预编译来代替SQL注入
+	预编译：SQL代码已经完成，利用PreparedStatement进行传参
+	
+PreparedStatement作用：
+	预编译、防止SQL注入、执行效率快

@@ -1,0 +1,63 @@
+package com.yulin.web.entity;
+
+import java.io.Serializable;
+
+public class User implements Serializable{
+	private String u_loginId;
+	private String u_pwd;
+	private String u_name;
+	private int u_salary;
+	private int u_age;
+	
+	/*get set*/
+	public String getLoginId() {
+		return loginId;
+	}
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+	public String getPwd() {
+		return pwd;
+	}
+	public User(String loginId, String pwd, String name) {
+		super();
+		this.loginId = loginId;
+		this.pwd = pwd;
+		this.name = name;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getSalary() {
+		return salary;
+	}
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	/*构造*/
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public User(String loginId, String pwd, String name, int salary, int age) {
+		super();
+		this.loginId = loginId;
+		this.pwd = pwd;
+		this.name = name;
+		this.salary = salary;
+		this.age = age;
+	}
+	
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/v3"
+    android:orientation="vertical"
+    tools:context="com.sanzeng.hello_watch.ui.activity.login.SureRoleActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/layout_logo_name" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/logo_name_iv_padding"
+                android:text="@string/string_role_sure"
+                android:textColor="@color/mainTextColor"
+                android:textSize="@dimen/sure_role_text_size" />
+
+            <com.sanzeng.hello_watch.views.SureRoleGridView
+                android:id="@+id/gridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="2" />
+
+            <ImageView
+                android:id="@+id/family_icon_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/jia" />
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

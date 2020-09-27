@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageTemplate">
+    <resultMap id="MessageTemplateMap" type="MessageTemplateModel">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="memo" column="memo"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="url" column="url"/>
+        <result property="statusType" column="status_type"/>
+    </resultMap>
+    <sql id="columns">
+        id,name,type,memo,create_oper,create_time,modify_oper,modify_time,del_flag,url,status_type
+    </sql>
+
+    <insert id="insert" parameterType="MessageTemplateModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_message_template
+        (name
+        ,type
+        ,memo
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag
+        ,url
+        ,status_type)
+        values(#{name}
+        ,#{type}
+        ,#{memo}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{delFlag}
+        ,#{url}
+        ,#{statusType})
+    </insert>
+
+    <update id="update" parameterType="MessageTemplateModel">
+        update tbl_message_template set
+        name
+        = #{name},type
+        = #{type},memo
+        = #{memo},create_oper
+        = #{createOper},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime},del_flag
+        = #{delFlag},url
+        = #{url},status_type
+        = #{statusType}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="type !=null">and type = #{type}</if>
+            <if test="memo !=null">and memo = #{memo}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="url !=null">and url = #{url}</if>
+            <if test="statusType !=null">and status_type = #{statusType}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="MessageTemplateMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_message_template
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="MessageTemplateMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_message_template
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="MessageTemplateMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_message_template
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="MessageTemplateModel">
+        delete from tbl_message_template where id = id
+    </delete>
+</mapper>
+
+

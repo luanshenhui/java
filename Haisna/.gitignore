@@ -1,0 +1,45 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+
+*.suo
+*.user
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+obj/
+
+*.pdb
+
+# SQL Server files
+*.mdf
+*.ldf
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+# NuGet v3's project.json files produces more ignoreable files
+*.nuget.props
+*.nuget.targets
+*.exe
+*.dll
+*.exe.config
+WebApplication1/logs/
+Website/logs/
+Website/Properties/launchSettings.json
+.vs/
+
+*.vbp
+webHains/Source/FollowRenkei/Main
+webHains/Source/Graph/
+webHains/Source/HainsChart/
+webHains/Source/Order*/
+webHains/Source/Print/
+
+webHains/Source/Create*/
+webHains/Source/CSV*/

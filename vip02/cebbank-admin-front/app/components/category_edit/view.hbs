@@ -1,0 +1,27 @@
+{{#component  "edit-panel admin-cat-box border-right-none disable js-component"}}
+    <ul class="tab">
+        <li class="attribute-manage active manage-li"><a href="#edit-category" class="switch-panel">编辑类目属性</a></li>
+        <li class="spu-manage manage-li"><a href="#spu-manage" class="switch-panel">产品管理</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="edit-category" class="active manage-div">
+            <button type="button" class="btn btn-success btn-small edit-btn js-add-attribute">添加类目属性</button>
+            <ul class="attribute-list">
+            </ul>
+        </div>
+        <div id="spu-manage" class="manage-div">
+            {{#equals _USER_.type "6"}}
+            {{else}}
+                <div class="search-item">
+                    <div class=" search-item-group">
+                        <i class="fa fa-fw fa-search"></i>
+                        <input type="text" class="search-item-input js-search-item-input" placeholder="搜索关键字">
+                    </div>
+                </div>
+                <button class="btn btn-success btn-small edit-btn js-spu-new">新增产品</button>
+            {{/equals}}
+            <ul class="spu-list">
+            </ul>
+        </div>
+    </div>
+{{/component}}

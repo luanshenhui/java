@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderBackupModel">
+    <resultMap id="OrderBackupMap" type="OrderBackupModel">
+        <result property="orderId" column="order_id"/>
+        <result property="ordermainId" column="ordermain_id"/>
+        <result property="operSeq" column="oper_seq"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="ordertypeNm" column="ordertype_nm"/>
+        <result property="paywayCode" column="payway_code"/>
+        <result property="paywayNm" column="payway_nm"/>
+        <result property="cardno" column="cardno"/>
+        <result property="verifyFlag" column="verify_flag"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="vendorSnm" column="vendor_snm"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="sourceNm" column="source_nm"/>
+        <result property="otSourceId" column="ot_source_id"/>
+        <result property="otSourceNm" column="ot_source_nm"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="bankNbr" column="bank_nbr"/>
+        <result property="bonusTotalvalue" column="bonus_totalvalue"/>
+        <result property="calMoney" column="cal_money"/>
+        <result property="origMoney" column="orig_money"/>
+        <result property="totalMoney" column="total_money"/>
+        <result property="actType" column="act_type"/>
+        <result property="voucherId" column="voucher_id"/>
+        <result property="voucherNm" column="voucher_nm"/>
+        <result property="voucherPrice" column="voucher_price"/>
+        <result property="voucherNo" column="voucher_no"/>
+        <result property="actId" column="act_id"/>
+        <result property="acctNo" column="acct_no"/>
+        <result property="singlePrice" column="single_price"/>
+        <result property="singleBonus" column="single_bonus"/>
+        <result property="bonusType" column="bonus_type"/>
+        <result property="bonusTypeNm" column="bonus_type_nm"/>
+        <result property="goodsType" column="goods_type"/>
+        <result property="goodsTypeName" column="goods_type_name"/>
+        <result property="isTieinSale" column="is_tiein_sale"/>
+        <result property="balanceStatus" column="balance_status"/>
+        <result property="batchNo" column="batch_no"/>
+        <result property="eUpdateStatus" column="e_update_status"/>
+        <result property="orderDesc" column="order_desc"/>
+        <result property="cardnoBenefit" column="cardno_benefit"/>
+        <result property="validateCode" column="validate_code"/>
+        <result property="goodsPaywayId" column="goods_payway_id"/>
+        <result property="goodsNum" column="goods_num"/>
+        <result property="goodsNm" column="goods_nm"/>
+        <result property="machCode" column="mach_code"/>
+        <result property="currType" column="curr_type"/>
+        <result property="exchangeRate" column="exchange_rate"/>
+        <result property="typeId" column="type_id"/>
+        <result property="levelNm" column="level_nm"/>
+        <result property="goodsBrand" column="goods_brand"/>
+        <result property="goodsModel" column="goods_model"/>
+        <result property="goodsColor" column="goods_color"/>
+        <result property="goodsPresent" column="goods_present"/>
+        <result property="goodsPresentDesc" column="goods_present_desc"/>
+        <result property="specFlag" column="spec_flag"/>
+        <result property="specDesc" column="spec_desc"/>
+        <result property="goodsRange" column="goods_range"/>
+        <result property="goodsLocal" column="goods_local"/>
+        <result property="goodssendFlag" column="goodssend_flag"/>
+        <result property="goodsaskforFlag" column="goodsaskfor_flag"/>
+        <result property="goodsBill" column="goods_bill"/>
+        <result property="goodsDesc" column="goods_desc"/>
+        <result property="goodsResv1" column="goods_resv1"/>
+        <result property="specShopnoType" column="spec_shopno_type"/>
+        <result property="payTypeNm" column="pay_type_nm"/>
+        <result property="incCode" column="inc_code"/>
+        <result property="incCodeNm" column="inc_code_nm"/>
+        <result property="stagesNum" column="stages_num"/>
+        <result property="commissionType" column="commission_type"/>
+        <result property="commissionRate" column="commission_rate"/>
+        <result property="commission" column="commission"/>
+        <result property="specShopno" column="spec_shopno"/>
+        <result property="bonusBankNbr" column="bonus_bank_nbr"/>
+        <result property="bonusSpecShopno" column="bonus_spec_shopno"/>
+        <result property="payCode" column="pay_code"/>
+        <result property="prodCode" column="prod_code"/>
+        <result property="planCode" column="plan_code"/>
+        <result property="stagesDesc" column="stages_desc"/>
+        <result property="mcc" column="mcc"/>
+        <result property="incWay" column="inc_way"/>
+        <result property="incTakeWay" column="inc_take_way"/>
+        <result property="incType" column="inc_type"/>
+        <result property="incRate" column="inc_rate"/>
+        <result property="incMoney" column="inc_money"/>
+        <result property="incDesc" column="inc_desc"/>
+        <result property="uitopsfee" column="uitopsfee"/>
+        <result property="uitfeeflg" column="uitfeeflg"/>
+        <result property="uitfeedam" column="uitfeedam"/>
+        <result property="uitopsdate" column="uitopsdate"/>
+        <result property="uitdrtuit" column="uitdrtuit"/>
+        <result property="uitdrtamt" column="uitdrtamt"/>
+        <result property="incBackway" column="inc_backway"/>
+        <result property="incBackPrice" column="inc_back_price"/>
+        <result property="incTakePrice" column="inc_take_price"/>
+        <result property="creditFlag" column="credit_flag"/>
+        <result property="cashAuthType" column="cash_auth_type"/>
+        <result property="accreditDate" column="accredit_date"/>
+        <result property="accreditTime" column="accredit_time"/>
+        <result property="authCode" column="auth_code"/>
+        <result property="rtnCode" column="rtn_code"/>
+        <result property="rtnDesc" column="rtn_desc"/>
+        <result property="txnMsg1Desc" column="txn_msg1_desc"/>
+        <result property="txnMsg2Desc" column="txn_msg2_desc"/>
+        <result property="hostAccCode" column="host_acc_code"/>
+        <result property="hostAccDesc" column="host_acc_desc"/>
+        <result property="bonusTrnDate" column="bonus_trn_date"/>
+        <result property="bonusTrnTime" column="bonus_trn_time"/>
+        <result property="bonusTraceNo" column="bonus_trace_no"/>
+        <result property="bonusAuthType" column="bonus_auth_type"/>
+        <result property="bonusAccreditDate" column="bonus_accredit_date"/>
+        <result property="bonusAccreditTime" column="bonus_accredit_time"/>
+        <result property="bonusAuthCode" column="bonus_auth_code"/>
+        <result property="bonusRtnCode" column="bonus_rtn_code"/>
+        <result property="bonusRtnDesc" column="bonus_rtn_desc"/>
+        <result property="bonusTxnMsgDesc" column="bonus_txn_msg_desc"/>
+        <result property="calWay" column="cal_way"/>
+        <result property="lockedFlag" column="locked_flag"/>
+        <result property="vendorOperFlag" column="vendor_oper_flag"/>
+        <result property="msgContent" column="msg_content"/>
+        <result property="tmpStatusId" column="tmp_status_id"/>
+        <result property="curStatusId" column="cur_status_id"/>
+        <result property="curStatusNm" column="cur_status_nm"/>
+        <result property="sinStatusId" column="sin_status_id"/>
+        <result property="sinStatusNm" column="sin_status_nm"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="commDate" column="comm_date"/>
+        <result property="commTime" column="comm_time"/>
+        <result property="versionNum" column="version_num"/>
+        <result property="ext1" column="ext_1"/>
+        <result property="ext2" column="ext_2"/>
+        <result property="ext3" column="ext_3"/>
+        <result property="reserved1" column="reserved1"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="ruleNm" column="rule_nm"/>
+        <result property="limitCode" column="limit_code"/>
+        <result property="custType" column="cust_type"/>
+        <result property="accreditType" column="accredit_type"/>
+        <result property="appFlag" column="app_flag"/>
+        <result property="cashTraceNo1" column="cash_trace_no_1"/>
+        <result property="cashTraceNo2" column="cash_trace_no_2"/>
+        <result property="bankNbr2" column="bank_nbr_2"/>
+        <result property="specShopno2" column="spec_shopno_2"/>
+        <result property="accreditDate2" column="accredit_date_2"/>
+        <result property="accreditTime2" column="accredit_time_2"/>
+        <result property="authCode2" column="auth_code_2"/>
+        <result property="actCategory" column="act_category"/>
+        <result property="actName" column="act_name"/>
+        <result property="userAsscNbr" column="user_assc_nbr"/>
+        <result property="vendorPhone" column="vendor_phone"/>
+        <result property="dfacct" column="dfacct"/>
+        <result property="dfname" column="dfname"/>
+        <result property="dfhnbr" column="dfhnbr"/>
+        <result property="dfhname" column="dfhname"/>
+        <result property="cvv2" column="cvv2"/>
+        <result property="logisticsSynFlag" column="logistics_syn_flag"/>
+        <result property="memberLevel" column="member_level"/>
+        <result property="integraltypeId" column="integraltype_id"/>
+        <result property="merId" column="mer_id"/>
+        <result property="errorCode" column="error_code"/>
+        <result property="cardtype" column="cardtype"/>
+        <result property="receiver" column="receiver"/>
+        <result property="receivedTime" column="received_time"/>
+        <result property="custCartId" column="cust_cart_id"/>
+        <result property="miaoshaActionFlag" column="miaosha_action_flag"/>
+        <result property="referenceNo" column="reference_no"/>
+        <result property="orderIdHost" column="order_id_host"/>
+        <result property="installmentPrice" column="installment_price"/>
+        <result property="memberName" column="member_name"/>
+        <result property="firstRemindeTime" column="first_reminde_time"/>
+        <result property="remindeTimes" column="reminde_times"/>
+        <result property="remindeFlag" column="reminde_flag"/>
+        <result property="o2oVoucherCode" column="o2o_voucher_code"/>
+        <result property="o2oExpireFlag" column="o2o_expire_flag"/>
+        <result property="itemSmallPic" column="item_small_pic"/>
+        <result property="saleAfterStatus" column="sale_after_status"/>
+        <result property="tieinSaleMemo" column="tiein_sale_memo"/>
+        <result property="sinApplyMemo" column="sin_apply_memo"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="goodsAttr2" column="goods_attr2"/>
+        <result property="goodsAttr1" column="goods_attr1"/>
+        <result property="fenefit" column="fenefit"/>
+        <result property="costby" column="costby"/>
+        <result property="periodId" column="period_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="orderSuccTime" column="order_succ_time"/>
+
+    </resultMap>
+    <sql id="columns">
+    order_id,ordermain_id,oper_seq,ordertype_id,ordertype_nm,payway_code,payway_nm,cardno,verify_flag,vendor_id,vendor_snm,source_id,source_nm,ot_source_id,ot_source_nm,goods_id,bank_nbr,bonus_totalvalue,cal_money,orig_money,total_money,act_type,voucher_id,voucher_nm,voucher_price,voucher_no,act_id,acct_no,single_price,single_bonus,bonus_type,bonus_type_nm,goods_type,goods_type_name,is_tiein_sale,balance_status,batch_no,e_update_status,order_desc,cardno_benefit,validate_code,goods_payway_id,goods_num,goods_nm,mach_code,curr_type,exchange_rate,type_id,level_nm,goods_brand,goods_model,goods_color,goods_present,goods_present_desc,spec_flag,spec_desc,goods_range,goods_local,goodssend_flag,goodsaskfor_flag,goods_bill,goods_desc,goods_resv1,spec_shopno_type,pay_type_nm,inc_code,inc_code_nm,stages_num,commission_type,commission_rate,commission,spec_shopno,bonus_bank_nbr,bonus_spec_shopno,pay_code,prod_code,plan_code,stages_desc,mcc,inc_way,inc_take_way,inc_type,inc_rate,inc_money,inc_desc,uitopsfee,uitfeeflg,uitfeedam,uitopsdate,uitdrtuit,uitdrtamt,inc_backway,inc_back_price,inc_take_price,credit_flag,cash_auth_type,accredit_date,accredit_time,auth_code,rtn_code,rtn_desc,txn_msg1_desc,txn_msg2_desc,host_acc_code,host_acc_desc,bonus_trn_date,bonus_trn_time,bonus_trace_no,bonus_auth_type,bonus_accredit_date,bonus_accredit_time,bonus_auth_code,bonus_rtn_code,bonus_rtn_desc,bonus_txn_msg_desc,cal_way,locked_flag,vendor_oper_flag,msg_content,tmp_status_id,cur_status_id,cur_status_nm,sin_status_id,sin_status_nm,create_oper,modify_oper,comm_date,comm_time,version_num,ext_1,ext_2,ext_3,reserved1,rule_id,rule_nm,limit_code,cust_type,accredit_type,app_flag,cash_trace_no_1,cash_trace_no_2,bank_nbr_2,spec_shopno_2,accredit_date_2,accredit_time_2,auth_code_2,act_category,act_name,user_assc_nbr,vendor_phone,dfacct,dfname,dfhnbr,dfhname,cvv2,logistics_syn_flag,member_level,integraltype_id,mer_id,error_code,cardtype,receiver,received_time,cust_cart_id,miaosha_action_flag,reference_no,order_id_host,installment_price,member_name,first_reminde_time,reminde_times,reminde_flag,o2o_voucher_code,o2o_expire_flag,item_small_pic,sale_after_status,tiein_sale_memo,sin_apply_memo,del_flag,goods_attr2,goods_attr1,fenefit,costby,period_id,create_time,modify_time,order_succ_time
+    </sql>
+
+    <insert id="insert" parameterType="OrderBackupModel" useGeneratedKeys="true"
+            keyProperty="orderId" keyColumn="order_id">
+        insert into tblorder_backup
+        (order_id
+        ,ordermain_id
+        ,oper_seq
+        ,ordertype_id
+        ,ordertype_nm
+        ,payway_code
+        ,payway_nm
+        ,cardno
+        ,verify_flag
+        ,vendor_id
+        ,vendor_snm
+        ,source_id
+        ,source_nm
+        ,ot_source_id
+        ,ot_source_nm
+        ,goods_id
+        ,bank_nbr
+        ,bonus_totalvalue
+        ,cal_money
+        ,orig_money
+        ,total_money
+        ,act_type
+        ,voucher_id
+        ,voucher_nm
+        ,voucher_price
+        ,voucher_no
+        ,act_id
+        ,acct_no
+        ,single_price
+        ,single_bonus
+        ,bonus_type
+        ,bonus_type_nm
+        ,goods_type
+        ,goods_type_name
+        ,is_tiein_sale
+        ,balance_status
+        ,batch_no
+        ,e_update_status
+        ,order_desc
+        ,cardno_benefit
+        ,validate_code
+        ,goods_payway_id
+        ,goods_num
+        ,goods_nm
+        ,mach_code
+        ,curr_type
+        ,exchange_rate
+        ,type_id
+        ,level_nm
+        ,goods_brand
+        ,goods_model
+        ,goods_color
+        ,goods_present
+        ,goods_present_desc
+        ,spec_flag
+        ,spec_desc
+        ,goods_range
+        ,goods_local
+        ,goodssend_flag
+        ,goodsaskfor_flag
+        ,goods_bill
+        ,goods_desc
+        ,goods_resv1
+        ,spec_shopno_type
+        ,pay_type_nm
+        ,inc_code
+        ,inc_code_nm
+        ,stages_num
+        ,commission_type
+        ,commission_rate
+        ,commission
+        ,spec_shopno
+        ,bonus_bank_nbr
+        ,bonus_spec_shopno
+        ,pay_code
+        ,prod_code
+        ,plan_code
+        ,stages_desc
+        ,mcc
+        ,inc_way
+        ,inc_take_way
+        ,inc_type
+        ,inc_rate
+        ,inc_money
+        ,inc_desc
+        ,uitopsfee
+        ,uitfeeflg
+        ,uitfeedam
+        ,uitopsdate
+        ,uitdrtuit
+        ,uitdrtamt
+        ,inc_backway
+        ,inc_back_price
+        ,inc_take_price
+        ,credit_flag
+        ,cash_auth_type
+        ,accredit_date
+        ,accredit_time
+        ,auth_code
+        ,rtn_code
+        ,rtn_desc
+        ,txn_msg1_desc
+        ,txn_msg2_desc
+        ,host_acc_code
+        ,host_acc_desc
+        ,bonus_trn_date
+        ,bonus_trn_time
+        ,bonus_trace_no
+        ,bonus_auth_type
+        ,bonus_accredit_date
+        ,bonus_accredit_time
+        ,bonus_auth_code
+        ,bonus_rtn_code
+        ,bonus_rtn_desc
+        ,bonus_txn_msg_desc
+        ,cal_way
+        ,locked_flag
+        ,vendor_oper_flag
+        ,msg_content
+        ,tmp_status_id
+        ,cur_status_id
+        ,cur_status_nm
+        ,sin_status_id
+        ,sin_status_nm
+        ,create_oper
+        ,modify_oper
+        ,comm_date
+        ,comm_time
+        ,version_num
+        ,ext_1
+        ,ext_2
+        ,ext_3
+        ,reserved1
+        ,rule_id
+        ,rule_nm
+        ,limit_code
+        ,cust_type
+        ,accredit_type
+        ,app_flag
+        ,cash_trace_no_1
+        ,cash_trace_no_2
+        ,bank_nbr_2
+        ,spec_shopno_2
+        ,accredit_date_2
+        ,accredit_time_2
+        ,auth_code_2
+        ,act_category
+        ,act_name
+        ,user_assc_nbr
+        ,vendor_phone
+        ,dfacct
+        ,dfname
+        ,dfhnbr
+        ,dfhname
+        ,cvv2
+        ,logistics_syn_flag
+        ,member_level
+        ,integraltype_id
+        ,mer_id
+        ,error_code
+        ,cardtype
+        ,receiver
+        ,received_time
+        ,cust_cart_id
+        ,miaosha_action_flag
+        ,goods_attr1
+        ,goods_attr2
+        ,reference_no
+        ,order_id_host
+        ,installment_price
+        ,member_name
+        ,first_reminde_time
+        ,reminde_times
+        ,reminde_flag
+        ,o2o_voucher_code
+        ,o2o_expire_flag
+        ,item_small_pic
+        ,sale_after_status
+        ,tiein_sale_memo
+        ,sin_apply_memo
+        ,del_flag
+        ,goods_attr2
+        ,goods_attr1
+        ,fenefit
+        ,costby
+        ,period_id
+        ,create_time
+        ,modify_time
+        ,order_succ_time)
+        values(#{orderId}
+        ,#{ordermainId}
+        ,#{operSeq}
+        ,#{ordertypeId}
+        ,#{ordertypeNm}
+        ,#{paywayCode}
+        ,#{paywayNm}
+        ,#{cardno}
+        ,#{verifyFlag}
+        ,#{vendorId}
+        ,#{vendorSnm}
+        ,#{sourceId}
+        ,#{sourceNm}
+        ,#{otSourceId}
+        ,#{otSourceNm}
+        ,#{goodsId}
+        ,#{bankNbr}
+        ,#{bonusTotalvalue}
+        ,#{calMoney}
+        ,#{origMoney}
+        ,#{totalMoney}
+        ,#{actType}
+        ,#{voucherId}
+        ,#{voucherNm}
+        ,#{voucherPrice}
+        ,#{voucherNo}
+        ,#{actId}
+        ,#{acctNo}
+        ,#{singlePrice}
+        ,#{singleBonus}
+        ,#{bonusType}
+        ,#{bonusTypeNm}
+        ,#{goodsType}
+        ,#{goodsTypeName}
+        ,#{isTieinSale}
+        ,#{balanceStatus}
+        ,#{batchNo}
+        ,#{eUpdateStatus}
+        ,#{orderDesc}
+        ,#{cardnoBenefit}
+        ,#{validateCode}
+        ,#{goodsPaywayId}
+        ,#{goodsNum}
+        ,#{goodsNm}
+        ,#{machCode}
+        ,#{currType}
+        ,#{exchangeRate}
+        ,#{typeId}
+        ,#{levelNm}
+        ,#{goodsBrand}
+        ,#{goodsModel}
+        ,#{goodsColor}
+        ,#{goodsPresent}
+        ,#{goodsPresentDesc}
+        ,#{specFlag}
+        ,#{specDesc}
+        ,#{goodsRange}
+        ,#{goodsLocal}
+        ,#{goodssendFlag}
+        ,#{goodsaskforFlag}
+        ,#{goodsBill}
+        ,#{goodsDesc}
+        ,#{goodsResv1}
+        ,#{specShopnoType}
+        ,#{payTypeNm}
+        ,#{incCode}
+        ,#{incCodeNm}
+        ,#{stagesNum}
+        ,#{commissionType}
+        ,#{commissionRate}
+        ,#{commission}
+        ,#{specShopno}
+        ,#{bonusBankNbr}
+        ,#{bonusSpecShopno}
+        ,#{payCode}
+        ,#{prodCode}
+        ,#{planCode}
+        ,#{stagesDesc}
+        ,#{mcc}
+        ,#{incWay}
+        ,#{incTakeWay}
+        ,#{incType}
+        ,#{incRate}
+        ,#{incMoney}
+        ,#{incDesc}
+        ,#{uitopsfee}
+        ,#{uitfeeflg}
+        ,#{uitfeedam}
+        ,#{uitopsdate}
+        ,#{uitdrtuit}
+        ,#{uitdrtamt}
+        ,#{incBackway}
+        ,#{incBackPrice}
+        ,#{incTakePrice}
+        ,#{creditFlag}
+        ,#{cashAuthType}
+        ,#{accreditDate}
+        ,#{accreditTime}
+        ,#{authCode}
+        ,#{rtnCode}
+        ,#{rtnDesc}
+        ,#{txnMsg1Desc}
+        ,#{txnMsg2Desc}
+        ,#{hostAccCode}
+        ,#{hostAccDesc}
+        ,#{bonusTrnDate}
+        ,#{bonusTrnTime}
+        ,#{bonusTraceNo}
+        ,#{bonusAuthType}
+        ,#{bonusAccreditDate}
+        ,#{bonusAccreditTime}
+        ,#{bonusAuthCode}
+        ,#{bonusRtnCode}
+        ,#{bonusRtnDesc}
+        ,#{bonusTxnMsgDesc}
+        ,#{calWay}
+        ,#{lockedFlag}
+        ,#{vendorOperFlag}
+        ,#{msgContent}
+        ,#{tmpStatusId}
+        ,#{curStatusId}
+        ,#{curStatusNm}
+        ,#{sinStatusId}
+        ,#{sinStatusNm}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,#{commDate}
+        ,#{commTime}
+        ,#{versionNum}
+        ,#{ext1}
+        ,#{ext2}
+        ,#{ext3}
+        ,#{reserved1}
+        ,#{ruleId}
+        ,#{ruleNm}
+        ,#{limitCode}
+        ,#{custType}
+        ,#{accreditType}
+        ,#{appFlag}
+        ,#{cashTraceNo1}
+        ,#{cashTraceNo2}
+        ,#{bankNbr2}
+        ,#{specShopno2}
+        ,#{accreditDate2}
+        ,#{accreditTime2}
+        ,#{authCode2}
+        ,#{actCategory}
+        ,#{actName}
+        ,#{userAsscNbr}
+        ,#{vendorPhone}
+        ,#{dfacct}
+        ,#{dfname}
+        ,#{dfhnbr}
+        ,#{dfhname}
+        ,#{cvv2}
+        ,#{logisticsSynFlag}
+        ,#{memberLevel}
+        ,#{integraltypeId}
+        ,#{merId}
+        ,#{errorCode}
+        ,#{cardtype}
+        ,#{receiver}
+        ,#{receivedTime}
+        ,#{custCartId}
+        ,#{miaoshaActionFlag}
+        ,#{goodsAttr1}
+        ,#{goodsAttr2}
+        ,#{referenceNo}
+        ,#{orderIdHost}
+        ,#{installmentPrice}
+        ,#{memberName}
+        ,#{firstRemindeTime}
+        ,#{remindeTimes}
+        ,#{remindeFlag}
+        ,#{o2oVoucherCode}
+        ,#{o2oExpireFlag}
+        ,#{itemSmallPic}
+        ,#{saleAfterStatus}
+        ,#{tieinSaleMemo}
+        ,#{sinApplyMemo}
+        ,#{delFlag}
+        ,#{goodsAttr2}
+        ,#{goodsAttr1}
+        ,#{fenefit}
+        ,#{costby}
+        ,#{periodId}
+        ,#{createTime}
+        ,#{modifyTime}
+        ,#{orderSuccTime})
+    </insert>
+
+    <update id="update" parameterType="OrderBackupModel">
+        update tblorder_backup set
+            <if test="ordermainId !=null">ordermain_id = #{ordermainId}
+                ,</if>
+            <if test="operSeq !=null">oper_seq = #{operSeq}
+                ,</if>
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="ordertypeNm !=null">ordertype_nm = #{ordertypeNm}
+                ,</if>
+            <if test="paywayCode !=null">payway_code = #{paywayCode}
+                ,</if>
+            <if test="paywayNm !=null">payway_nm = #{paywayNm}
+                ,</if>
+            <if test="cardno !=null">cardno = #{cardno}
+                ,</if>
+            <if test="verifyFlag !=null">verify_flag = #{verifyFlag}
+                ,</if>
+            <if test="vendorId !=null">vendor_id = #{vendorId}
+                ,</if>
+            <if test="vendorSnm !=null">vendor_snm = #{vendorSnm}
+                ,</if>
+            <if test="sourceId !=null">source_id = #{sourceId}
+                ,</if>
+            <if test="sourceNm !=null">source_nm = #{sourceNm}
+                ,</if>
+            <if test="otSourceId !=null">ot_source_id = #{otSourceId}
+                ,</if>
+            <if test="otSourceNm !=null">ot_source_nm = #{otSourceNm}
+                ,</if>
+            <if test="goodsId !=null">goods_id = #{goodsId}
+                ,</if>
+            <if test="bankNbr !=null">bank_nbr = #{bankNbr}
+                ,</if>
+            <if test="bonusTotalvalue !=null">bonus_totalvalue = #{bonusTotalvalue}
+                ,</if>
+            <if test="calMoney !=null">cal_money = #{calMoney}
+                ,</if>
+            <if test="origMoney !=null">orig_money = #{origMoney}
+                ,</if>
+            <if test="totalMoney !=null">total_money = #{totalMoney}
+                ,</if>
+            <if test="actType !=null">act_type = #{actType}
+                ,</if>
+            <if test="voucherId !=null">voucher_id = #{voucherId}
+                ,</if>
+            <if test="voucherNm !=null">voucher_nm = #{voucherNm}
+                ,</if>
+            <if test="voucherPrice !=null">voucher_price = #{voucherPrice}
+                ,</if>
+            <if test="voucherNo !=null">voucher_no = #{voucherNo}
+                ,</if>
+            <if test="actId !=null">act_id = #{actId}
+                ,</if>
+            <if test="acctNo !=null">acct_no = #{acctNo}
+                ,</if>
+            <if test="singlePrice !=null">single_price = #{singlePrice}
+                ,</if>
+            <if test="singleBonus !=null">single_bonus = #{singleBonus}
+                ,</if>
+            <if test="bonusType !=null">bonus_type = #{bonusType}
+                ,</if>
+            <if test="bonusTypeNm !=null">bonus_type_nm = #{bonusTypeNm}
+                ,</if>
+            <if test="goodsType !=null">goods_type = #{goodsType}
+                ,</if>
+            <if test="goodsTypeName !=null">goods_type_name = #{goodsTypeName}
+                ,</if>
+            <if test="isTieinSale !=null">is_tiein_sale = #{isTieinSale}
+                ,</if>
+            <if test="balanceStatus !=null">balance_status = #{balanceStatus}
+                ,</if>
+            <if test="batchNo !=null">batch_no = #{batchNo}
+                ,</if>
+            <if test="eUpdateStatus !=null">e_update_status = #{eUpdateStatus}
+                ,</if>
+            <if test="orderDesc !=null">order_desc = #{orderDesc}
+                ,</if>
+            <if test="cardnoBenefit !=null">cardno_benefit = #{cardnoBenefit}
+                ,</if>
+            <if test="validateCode !=null">validate_code = #{validateCode}
+                ,</if>
+            <if test="goodsPaywayId !=null">goods_payway_id = #{goodsPaywayId}
+                ,</if>
+            <if test="goodsNum !=null">goods_num = #{goodsNum}
+                ,</if>
+            <if test="goodsNm !=null">goods_nm = #{goodsNm}
+                ,</if>
+            <if test="machCode !=null">mach_code = #{machCode}
+                ,</if>
+            <if test="currType !=null">curr_type = #{currType}
+                ,</if>
+            <if test="exchangeRate !=null">exchange_rate = #{exchangeRate}
+                ,</if>
+            <if test="typeId !=null">type_id = #{typeId}
+                ,</if>
+            <if test="levelNm !=null">level_nm = #{levelNm}
+                ,</if>
+            <if test="goodsBrand !=null">goods_brand = #{goodsBrand}
+                ,</if>
+            <if test="goodsModel !=null">goods_model = #{goodsModel}
+                ,</if>
+            <if test="goodsColor !=null">goods_color = #{goodsColor}
+                ,</if>
+            <if test="goodsPresent !=null">goods_present = #{goodsPresent}
+                ,</if>
+            <if test="goodsPresentDesc !=null">goods_present_desc = #{goodsPresentDesc}
+                ,</if>
+            <if test="specFlag !=null">spec_flag = #{specFlag}
+                ,</if>
+            <if test="specDesc !=null">spec_desc = #{specDesc}
+                ,</if>
+            <if test="goodsRange !=null">goods_range = #{goodsRange}
+                ,</if>
+            <if test="goodsLocal !=null">goods_local = #{goodsLocal}
+                ,</if>
+            <if test="goodssendFlag !=null">goodssend_flag = #{goodssendFlag}
+                ,</if>
+            <if test="goodsaskforFlag !=null">goodsaskfor_flag = #{goodsaskforFlag}
+                ,</if>
+            <if test="goodsBill !=null">goods_bill = #{goodsBill}
+                ,</if>
+            <if test="goodsDesc !=null">goods_desc = #{goodsDesc}
+                ,</if>
+            <if test="goodsResv1 !=null">goods_resv1 = #{goodsResv1}
+                ,</if>
+            <if test="specShopnoType !=null">spec_shopno_type = #{specShopnoType}
+                ,</if>
+            <if test="payTypeNm !=null">pay_type_nm = #{payTypeNm}
+                ,</if>
+            <if test="incCode !=null">inc_code = #{incCode}
+                ,</if>
+            <if test="incCodeNm !=null">inc_code_nm = #{incCodeNm}
+                ,</if>
+            <if test="stagesNum !=null">stages_num = #{stagesNum}
+                ,</if>
+            <if test="commissionType !=null">commission_type = #{commissionType}
+                ,</if>
+            <if test="commissionRate !=null">commission_rate = #{commissionRate}
+                ,</if>
+            <if test="commission !=null">commission = #{commission}
+                ,</if>
+            <if test="specShopno !=null">spec_shopno = #{specShopno}
+                ,</if>
+            <if test="bonusBankNbr !=null">bonus_bank_nbr = #{bonusBankNbr}
+                ,</if>
+            <if test="bonusSpecShopno !=null">bonus_spec_shopno = #{bonusSpecShopno}
+                ,</if>
+            <if test="payCode !=null">pay_code = #{payCode}
+                ,</if>
+            <if test="prodCode !=null">prod_code = #{prodCode}
+                ,</if>
+            <if test="planCode !=null">plan_code = #{planCode}
+                ,</if>
+            <if test="stagesDesc !=null">stages_desc = #{stagesDesc}
+                ,</if>
+            <if test="mcc !=null">mcc = #{mcc}
+                ,</if>
+            <if test="incWay !=null">inc_way = #{incWay}
+                ,</if>
+            <if test="incTakeWay !=null">inc_take_way = #{incTakeWay}
+                ,</if>
+            <if test="incType !=null">inc_type = #{incType}
+                ,</if>
+            <if test="incRate !=null">inc_rate = #{incRate}
+                ,</if>
+            <if test="incMoney !=null">inc_money = #{incMoney}
+                ,</if>
+            <if test="incDesc !=null">inc_desc = #{incDesc}
+                ,</if>
+            <if test="uitopsfee !=null">uitopsfee = #{uitopsfee}
+                ,</if>
+            <if test="uitfeeflg !=null">uitfeeflg = #{uitfeeflg}
+                ,</if>
+            <if test="uitfeedam !=null">uitfeedam = #{uitfeedam}
+                ,</if>
+            <if test="uitopsdate !=null">uitopsdate = #{uitopsdate}
+                ,</if>
+            <if test="uitdrtuit !=null">uitdrtuit = #{uitdrtuit}
+                ,</if>
+            <if test="uitdrtamt !=null">uitdrtamt = #{uitdrtamt}
+                ,</if>
+            <if test="incBackway !=null">inc_backway = #{incBackway}
+                ,</if>
+            <if test="incBackPrice !=null">inc_back_price = #{incBackPrice}
+                ,</if>
+            <if test="incTakePrice !=null">inc_take_price = #{incTakePrice}
+                ,</if>
+            <if test="creditFlag !=null">credit_flag = #{creditFlag}
+                ,</if>
+            <if test="cashAuthType !=null">cash_auth_type = #{cashAuthType}
+                ,</if>
+            <if test="accreditDate !=null">accredit_date = #{accreditDate}
+                ,</if>
+            <if test="accreditTime !=null">accredit_time = #{accreditTime}
+                ,</if>
+            <if test="authCode !=null">auth_code = #{authCode}
+                ,</if>
+            <if test="rtnCode !=null">rtn_code = #{rtnCode}
+                ,</if>
+            <if test="rtnDesc !=null">rtn_desc = #{rtnDesc}
+                ,</if>
+            <if test="txnMsg1Desc !=null">txn_msg1_desc = #{txnMsg1Desc}
+                ,</if>
+            <if test="txnMsg2Desc !=null">txn_msg2_desc = #{txnMsg2Desc}
+                ,</if>
+            <if test="hostAccCode !=null">host_acc_code = #{hostAccCode}
+                ,</if>
+            <if test="hostAccDesc !=null">host_acc_desc = #{hostAccDesc}
+                ,</if>
+            <if test="bonusTrnDate !=null">bonus_trn_date = #{bonusTrnDate}
+                ,</if>
+            <if test="bonusTrnTime !=null">bonus_trn_time = #{bonusTrnTime}
+                ,</if>
+            <if test="bonusTraceNo !=null">bonus_trace_no = #{bonusTraceNo}
+                ,</if>
+            <if test="bonusAuthType !=null">bonus_auth_type = #{bonusAuthType}
+                ,</if>
+            <if test="bonusAccreditDate !=null">bonus_accredit_date = #{bonusAccreditDate}
+                ,</if>
+            <if test="bonusAccreditTime !=null">bonus_accredit_time = #{bonusAccreditTime}
+                ,</if>
+            <if test="bonusAuthCode !=null">bonus_auth_code = #{bonusAuthCode}
+                ,</if>
+            <if test="bonusRtnCode !=null">bonus_rtn_code = #{bonusRtnCode}
+                ,</if>
+            <if test="bonusRtnDesc !=null">bonus_rtn_desc = #{bonusRtnDesc}
+                ,</if>
+            <if test="bonusTxnMsgDesc !=null">bonus_txn_msg_desc = #{bonusTxnMsgDesc}
+                ,</if>
+            <if test="calWay !=null">cal_way = #{calWay}
+                ,</if>
+            <if test="lockedFlag !=null">locked_flag = #{lockedFlag}
+                ,</if>
+            <if test="vendorOperFlag !=null">vendor_oper_flag = #{vendorOperFlag}
+                ,</if>
+            <if test="msgContent !=null">msg_content = #{msgContent}
+                ,</if>
+            <if test="tmpStatusId !=null">tmp_status_id = #{tmpStatusId}
+                ,</if>
+            <if test="curStatusId !=null">cur_status_id = #{curStatusId}
+                ,</if>
+            <if test="curStatusNm !=null">cur_status_nm = #{curStatusNm}
+                ,</if>
+            <if test="sinStatusId !=null">sin_status_id = #{sinStatusId}
+                ,</if>
+            <if test="sinStatusNm !=null">sin_status_nm = #{sinStatusNm}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="commDate !=null">comm_date = #{commDate}
+                ,</if>
+            <if test="commTime !=null">comm_time = #{commTime}
+                ,</if>
+            <if test="versionNum !=null">version_num = #{versionNum}
+                ,</if>
+            <if test="ext1 !=null">ext_1 = #{ext1}
+                ,</if>
+            <if test="ext2 !=null">ext_2 = #{ext2}
+                ,</if>
+            <if test="ext3 !=null">ext_3 = #{ext3}
+                ,</if>
+            <if test="reserved1 !=null">reserved1 = #{reserved1}
+                ,</if>
+            <if test="ruleId !=null">rule_id = #{ruleId}
+                ,</if>
+            <if test="ruleNm !=null">rule_nm = #{ruleNm}
+                ,</if>
+            <if test="limitCode !=null">limit_code = #{limitCode}
+                ,</if>
+            <if test="custType !=null">cust_type = #{custType}
+                ,</if>
+            <if test="accreditType !=null">accredit_type = #{accreditType}
+                ,</if>
+            <if test="appFlag !=null">app_flag = #{appFlag}
+                ,</if>
+            <if test="cashTraceNo1 !=null">cash_trace_no_1 = #{cashTraceNo1}
+                ,</if>
+            <if test="cashTraceNo2 !=null">cash_trace_no_2 = #{cashTraceNo2}
+                ,</if>
+            <if test="bankNbr2 !=null">bank_nbr_2 = #{bankNbr2}
+                ,</if>
+            <if test="specShopno2 !=null">spec_shopno_2 = #{specShopno2}
+                ,</if>
+            <if test="accreditDate2 !=null">accredit_date_2 = #{accreditDate2}
+                ,</if>
+            <if test="accreditTime2 !=null">accredit_time_2 = #{accreditTime2}
+                ,</if>
+            <if test="authCode2 !=null">auth_code_2 = #{authCode2}
+                ,</if>
+            <if test="actCategory !=null">act_category = #{actCategory}
+                ,</if>
+            <if test="actName !=null">act_name = #{actName}
+                ,</if>
+            <if test="userAsscNbr !=null">user_assc_nbr = #{userAsscNbr}
+                ,</if>
+            <if test="vendorPhone !=null">vendor_phone = #{vendorPhone}
+                ,</if>
+            <if test="dfacct !=null">dfacct = #{dfacct}
+                ,</if>
+            <if test="dfname !=null">dfname = #{dfname}
+                ,</if>
+            <if test="dfhnbr !=null">dfhnbr = #{dfhnbr}
+                ,</if>
+            <if test="dfhname !=null">dfhname = #{dfhname}
+                ,</if>
+            <if test="cvv2 !=null">cvv2 = #{cvv2}
+                ,</if>
+            <if test="logisticsSynFlag !=null">logistics_syn_flag = #{logisticsSynFlag}
+                ,</if>
+            <if test="memberLevel !=null">member_level = #{memberLevel}
+                ,</if>
+            <if test="integraltypeId !=null">integraltype_id = #{integraltypeId}
+                ,</if>
+            <if test="merId !=null">mer_id = #{merId}
+                ,</if>
+            <if test="errorCode !=null">error_code = #{errorCode}
+                ,</if>
+            <if test="cardtype !=null">cardtype = #{cardtype}
+                ,</if>
+            <if test="receiver !=null">receiver = #{receiver}
+                ,</if>
+            <if test="receivedTime !=null">received_time = #{receivedTime}
+                ,</if>
+            <if test="custCartId !=null">cust_cart_id = #{custCartId}
+                ,</if>
+            <if test="miaoshaActionFlag !=null">miaosha_action_flag = #{miaoshaActionFlag}
+                ,</if>
+            <if test="goodsAttr1 !=null">goods_attr1 = #{goodsAttr1}
+                ,</if>
+            <if test="goodsAttr2 !=null">goods_attr2 = #{goodsAttr2}
+                ,</if>
+            <if test="referenceNo !=null">reference_no = #{referenceNo}
+                ,</if>
+            <if test="orderIdHost !=null">order_id_host = #{orderIdHost}
+                ,</if>
+            <if test="installmentPrice !=null">installment_price = #{installmentPrice}
+                ,</if>
+            <if test="memberName !=null">member_name = #{memberName}
+                ,</if>
+            <if test="firstRemindeTime !=null">first_reminde_time = #{firstRemindeTime}
+                ,</if>
+            <if test="remindeTimes !=null">reminde_times = #{remindeTimes}
+                ,</if>
+            <if test="remindeFlag !=null">reminde_flag = #{remindeFlag}
+                ,</if>
+            <if test="o2oVoucherCode !=null">o2o_voucher_code = #{o2oVoucherCode}
+                ,</if>
+            <if test="o2oExpireFlag !=null">o2o_expire_flag = #{o2oExpireFlag}
+                ,</if>
+            <if test="itemSmallPic !=null">item_small_pic = #{itemSmallPic}
+                ,</if>
+            <if test="saleAfterStatus !=null">sale_after_status = #{saleAfterStatus}
+                ,</if>
+            <if test="tieinSaleMemo !=null">tiein_sale_memo = #{tieinSaleMemo}
+                ,</if>
+            <if test="sinApplyMemo !=null">sin_apply_memo = #{sinApplyMemo}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="goodsAttr1 !=null">goods_attr1 = #{goodsAttr1}
+                ,</if>
+            <if test="fenefit !=null">fenefit = #{fenefit}
+                ,</if>
+            <if test="costby !=null">costby = #{costby}
+                ,</if>
+            <if test="periodId !=null">period_id = #{periodId}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+                ,</if>
+            <if test="orderSuccTime !=null">order_succ_time = #{orderSuccTime}
+                </if>
+        where order_id = #{orderId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="ordermainId !=null">and ordermain_id = #{ordermainId}</if>
+            <if test="operSeq !=null">and oper_seq = #{operSeq}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="ordertypeNm !=null">and ordertype_nm = #{ordertypeNm}</if>
+            <if test="paywayCode !=null">and payway_code = #{paywayCode}</if>
+            <if test="paywayNm !=null">and payway_nm = #{paywayNm}</if>
+            <if test="cardno !=null">and cardno = #{cardno}</if>
+            <if test="verifyFlag !=null">and verify_flag = #{verifyFlag}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="vendorSnm !=null">and vendor_snm = #{vendorSnm}</if>
+            <if test="sourceId !=null">and source_id = #{sourceId}</if>
+            <if test="sourceNm !=null">and source_nm = #{sourceNm}</if>
+            <if test="otSourceId !=null">and ot_source_id = #{otSourceId}</if>
+            <if test="otSourceNm !=null">and ot_source_nm = #{otSourceNm}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="bankNbr !=null">and bank_nbr = #{bankNbr}</if>
+            <if test="bonusTotalvalue !=null">and bonus_totalvalue = #{bonusTotalvalue}</if>
+            <if test="calMoney !=null">and cal_money = #{calMoney}</if>
+            <if test="origMoney !=null">and orig_money = #{origMoney}</if>
+            <if test="totalMoney !=null">and total_money = #{totalMoney}</if>
+            <if test="actType !=null">and act_type = #{actType}</if>
+            <if test="voucherId !=null">and voucher_id = #{voucherId}</if>
+            <if test="voucherNm !=null">and voucher_nm = #{voucherNm}</if>
+            <if test="voucherPrice !=null">and voucher_price = #{voucherPrice}</if>
+            <if test="voucherNo !=null">and voucher_no = #{voucherNo}</if>
+            <if test="actId !=null">and act_id = #{actId}</if>
+            <if test="acctNo !=null">and acct_no = #{acctNo}</if>
+            <if test="singlePrice !=null">and single_price = #{singlePrice}</if>
+            <if test="singleBonus !=null">and single_bonus = #{singleBonus}</if>
+            <if test="bonusType !=null">and bonus_type = #{bonusType}</if>
+            <if test="bonusTypeNm !=null">and bonus_type_nm = #{bonusTypeNm}</if>
+            <if test="goodsType !=null">and goods_type = #{goodsType}</if>
+            <if test="goodsTypeName !=null">and goods_type_name = #{goodsTypeName}</if>
+            <if test="isTieinSale !=null">and is_tiein_sale = #{isTieinSale}</if>
+            <if test="balanceStatus !=null">and balance_status = #{balanceStatus}</if>
+            <if test="batchNo !=null">and batch_no = #{batchNo}</if>
+            <if test="eUpdateStatus !=null">and e_update_status = #{eUpdateStatus}</if>
+            <if test="orderDesc !=null">and order_desc = #{orderDesc}</if>
+            <if test="cardnoBenefit !=null">and cardno_benefit = #{cardnoBenefit}</if>
+            <if test="validateCode !=null">and validate_code = #{validateCode}</if>
+            <if test="goodsPaywayId !=null">and goods_payway_id = #{goodsPaywayId}</if>
+            <if test="goodsNum !=null">and goods_num = #{goodsNum}</if>
+            <if test="goodsNm !=null">and goods_nm = #{goodsNm}</if>
+            <if test="machCode !=null">and mach_code = #{machCode}</if>
+            <if test="currType !=null">and curr_type = #{currType}</if>
+            <if test="exchangeRate !=null">and exchange_rate = #{exchangeRate}</if>
+            <if test="typeId !=null">and type_id = #{typeId}</if>
+            <if test="levelNm !=null">and level_nm = #{levelNm}</if>
+            <if test="goodsBrand !=null">and goods_brand = #{goodsBrand}</if>
+            <if test="goodsModel !=null">and goods_model = #{goodsModel}</if>
+            <if test="goodsColor !=null">and goods_color = #{goodsColor}</if>
+            <if test="goodsPresent !=null">and goods_present = #{goodsPresent}</if>
+            <if test="goodsPresentDesc !=null">and goods_present_desc = #{goodsPresentDesc}</if>
+            <if test="specFlag !=null">and spec_flag = #{specFlag}</if>
+            <if test="specDesc !=null">and spec_desc = #{specDesc}</if>
+            <if test="goodsRange !=null">and goods_range = #{goodsRange}</if>
+            <if test="goodsLocal !=null">and goods_local = #{goodsLocal}</if>
+            <if test="goodssendFlag !=null">and goodssend_flag = #{goodssendFlag}</if>
+            <if test="goodsaskforFlag !=null">and goodsaskfor_flag = #{goodsaskforFlag}</if>
+            <if test="goodsBill !=null">and goods_bill = #{goodsBill}</if>
+            <if test="goodsDesc !=null">and goods_desc = #{goodsDesc}</if>
+            <if test="goodsResv1 !=null">and goods_resv1 = #{goodsResv1}</if>
+            <if test="specShopnoType !=null">and spec_shopno_type = #{specShopnoType}</if>
+            <if test="payTypeNm !=null">and pay_type_nm = #{payTypeNm}</if>
+            <if test="incCode !=null">and inc_code = #{incCode}</if>
+            <if test="incCodeNm !=null">and inc_code_nm = #{incCodeNm}</if>
+            <if test="stagesNum !=null">and stages_num = #{stagesNum}</if>
+            <if test="commissionType !=null">and commission_type = #{commissionType}</if>
+            <if test="commissionRate !=null">and commission_rate = #{commissionRate}</if>
+            <if test="commission !=null">and commission = #{commission}</if>
+            <if test="specShopno !=null">and spec_shopno = #{specShopno}</if>
+            <if test="bonusBankNbr !=null">and bonus_bank_nbr = #{bonusBankNbr}</if>
+            <if test="bonusSpecShopno !=null">and bonus_spec_shopno = #{bonusSpecShopno}</if>
+            <if test="payCode !=null">and pay_code = #{payCode}</if>
+            <if test="prodCode !=null">and prod_code = #{prodCode}</if>
+            <if test="planCode !=null">and plan_code = #{planCode}</if>
+            <if test="stagesDesc !=null">and stages_desc = #{stagesDesc}</if>
+            <if test="mcc !=null">and mcc = #{mcc}</if>
+            <if test="incWay !=null">and inc_way = #{incWay}</if>
+            <if test="incTakeWay !=null">and inc_take_way = #{incTakeWay}</if>
+            <if test="incType !=null">and inc_type = #{incType}</if>
+            <if test="incRate !=null">and inc_rate = #{incRate}</if>
+            <if test="incMoney !=null">and inc_money = #{incMoney}</if>
+            <if test="incDesc !=null">and inc_desc = #{incDesc}</if>
+            <if test="uitopsfee !=null">and uitopsfee = #{uitopsfee}</if>
+            <if test="uitfeeflg !=null">and uitfeeflg = #{uitfeeflg}</if>
+            <if test="uitfeedam !=null">and uitfeedam = #{uitfeedam}</if>
+            <if test="uitopsdate !=null">and uitopsdate = #{uitopsdate}</if>
+            <if test="uitdrtuit !=null">and uitdrtuit = #{uitdrtuit}</if>
+            <if test="uitdrtamt !=null">and uitdrtamt = #{uitdrtamt}</if>
+            <if test="incBackway !=null">and inc_backway = #{incBackway}</if>
+            <if test="incBackPrice !=null">and inc_back_price = #{incBackPrice}</if>
+            <if test="incTakePrice !=null">and inc_take_price = #{incTakePrice}</if>
+            <if test="creditFlag !=null">and credit_flag = #{creditFlag}</if>
+            <if test="cashAuthType !=null">and cash_auth_type = #{cashAuthType}</if>
+            <if test="accreditDate !=null">and accredit_date = #{accreditDate}</if>
+            <if test="accreditTime !=null">and accredit_time = #{accreditTime}</if>
+            <if test="authCode !=null">and auth_code = #{authCode}</if>
+            <if test="rtnCode !=null">and rtn_code = #{rtnCode}</if>
+            <if test="rtnDesc !=null">and rtn_desc = #{rtnDesc}</if>
+            <if test="txnMsg1Desc !=null">and txn_msg1_desc = #{txnMsg1Desc}</if>
+            <if test="txnMsg2Desc !=null">and txn_msg2_desc = #{txnMsg2Desc}</if>
+            <if test="hostAccCode !=null">and host_acc_code = #{hostAccCode}</if>
+            <if test="hostAccDesc !=null">and host_acc_desc = #{hostAccDesc}</if>
+            <if test="bonusTrnDate !=null">and bonus_trn_date = #{bonusTrnDate}</if>
+            <if test="bonusTrnTime !=null">and bonus_trn_time = #{bonusTrnTime}</if>
+            <if test="bonusTraceNo !=null">and bonus_trace_no = #{bonusTraceNo}</if>
+            <if test="bonusAuthType !=null">and bonus_auth_type = #{bonusAuthType}</if>
+            <if test="bonusAccreditDate !=null">and bonus_accredit_date = #{bonusAccreditDate}</if>
+            <if test="bonusAccreditTime !=null">and bonus_accredit_time = #{bonusAccreditTime}</if>
+            <if test="bonusAuthCode !=null">and bonus_auth_code = #{bonusAuthCode}</if>
+            <if test="bonusRtnCode !=null">and bonus_rtn_code = #{bonusRtnCode}</if>
+            <if test="bonusRtnDesc !=null">and bonus_rtn_desc = #{bonusRtnDesc}</if>
+            <if test="bonusTxnMsgDesc !=null">and bonus_txn_msg_desc = #{bonusTxnMsgDesc}</if>
+            <if test="calWay !=null">and cal_way = #{calWay}</if>
+            <if test="lockedFlag !=null">and locked_flag = #{lockedFlag}</if>
+            <if test="vendorOperFlag !=null">and vendor_oper_flag = #{vendorOperFlag}</if>
+            <if test="msgContent !=null">and msg_content = #{msgContent}</if>
+            <if test="tmpStatusId !=null">and tmp_status_id = #{tmpStatusId}</if>
+            <if test="curStatusId !=null">and cur_status_id = #{curStatusId}</if>
+            <if test="curStatusNm !=null">and cur_status_nm = #{curStatusNm}</if>
+            <if test="sinStatusId !=null">and sin_status_id = #{sinStatusId}</if>
+            <if test="sinStatusNm !=null">and sin_status_nm = #{sinStatusNm}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="commDate !=null">and comm_date = #{commDate}</if>
+            <if test="commTime !=null">and comm_time = #{commTime}</if>
+            <if test="versionNum !=null">and version_num = #{versionNum}</if>
+            <if test="ext1 !=null">and ext_1 = #{ext1}</if>
+            <if test="ext2 !=null">and ext_2 = #{ext2}</if>
+            <if test="ext3 !=null">and ext_3 = #{ext3}</if>
+            <if test="reserved1 !=null">and reserved1 = #{reserved1}</if>
+            <if test="ruleId !=null">and rule_id = #{ruleId}</if>
+            <if test="ruleNm !=null">and rule_nm = #{ruleNm}</if>
+            <if test="limitCode !=null">and limit_code = #{limitCode}</if>
+            <if test="custType !=null">and cust_type = #{custType}</if>
+            <if test="accreditType !=null">and accredit_type = #{accreditType}</if>
+            <if test="appFlag !=null">and app_flag = #{appFlag}</if>
+            <if test="cashTraceNo1 !=null">and cash_trace_no_1 = #{cashTraceNo1}</if>
+            <if test="cashTraceNo2 !=null">and cash_trace_no_2 = #{cashTraceNo2}</if>
+            <if test="bankNbr2 !=null">and bank_nbr_2 = #{bankNbr2}</if>
+            <if test="specShopno2 !=null">and spec_shopno_2 = #{specShopno2}</if>
+            <if test="accreditDate2 !=null">and accredit_date_2 = #{accreditDate2}</if>
+            <if test="accreditTime2 !=null">and accredit_time_2 = #{accreditTime2}</if>
+            <if test="authCode2 !=null">and auth_code_2 = #{authCode2}</if>
+            <if test="actCategory !=null">and act_category = #{actCategory}</if>
+            <if test="actName !=null">and act_name = #{actName}</if>
+            <if test="userAsscNbr !=null">and user_assc_nbr = #{userAsscNbr}</if>
+            <if test="vendorPhone !=null">and vendor_phone = #{vendorPhone}</if>
+            <if test="dfacct !=null">and dfacct = #{dfacct}</if>
+            <if test="dfname !=null">and dfname = #{dfname}</if>
+            <if test="dfhnbr !=null">and dfhnbr = #{dfhnbr}</if>
+            <if test="dfhname !=null">and dfhname = #{dfhname}</if>
+            <if test="cvv2 !=null">and cvv2 = #{cvv2}</if>
+            <if test="logisticsSynFlag !=null">and logistics_syn_flag = #{logisticsSynFlag}</if>
+            <if test="memberLevel !=null">and member_level = #{memberLevel}</if>
+            <if test="integraltypeId !=null">and integraltype_id = #{integraltypeId}</if>
+            <if test="merId !=null">and mer_id = #{merId}</if>
+            <if test="errorCode !=null">and error_code = #{errorCode}</if>
+            <if test="cardtype !=null">and cardtype = #{cardtype}</if>
+            <if test="receiver !=null">and receiver = #{receiver}</if>
+            <if test="receivedTime !=null">and received_time = #{receivedTime}</if>
+            <if test="custCartId !=null">and cust_cart_id = #{custCartId}</if>
+            <if test="miaoshaActionFlag !=null">and miaosha_action_flag = #{miaoshaActionFlag}</if>
+            <if test="goodsAttr1 !=null">and goods_attr1 = #{goodsAttr1}</if>
+            <if test="goodsAttr2 !=null">and goods_attr2 = #{goodsAttr2}</if>
+            <if test="referenceNo !=null">and reference_no = #{referenceNo}</if>
+            <if test="orderIdHost !=null">and order_id_host = #{orderIdHost}</if>
+            <if test="installmentPrice !=null">and installment_price = #{installmentPrice}</if>
+            <if test="memberName !=null">and member_name = #{memberName}</if>
+            <if test="firstRemindeTime !=null">and first_reminde_time = #{firstRemindeTime}</if>
+            <if test="remindeTimes !=null">and reminde_times = #{remindeTimes}</if>
+            <if test="remindeFlag !=null">and reminde_flag = #{remindeFlag}</if>
+            <if test="o2oVoucherCode !=null">and o2o_voucher_code = #{o2oVoucherCode}</if>
+            <if test="o2oExpireFlag !=null">and o2o_expire_flag = #{o2oExpireFlag}</if>
+            <if test="itemSmallPic !=null">and item_small_pic = #{itemSmallPic}</if>
+            <if test="saleAfterStatus !=null">and sale_after_status = #{saleAfterStatus}</if>
+            <if test="tieinSaleMemo !=null">and tiein_sale_memo = #{tieinSaleMemo}</if>
+            <if test="sinApplyMemo !=null">and sin_apply_memo = #{sinApplyMemo}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="goodsAttr2 !=null">and goods_attr2 = #{goodsAttr2}</if>
+            <if test="goodsAttr1 !=null">and goods_attr1 = #{goodsAttr1}</if>
+            <if test="fenefit !=null">and fenefit = #{fenefit}</if>
+            <if test="costby !=null">and costby = #{costby}</if>
+            <if test="periodId !=null">and period_id = #{periodId}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="orderId != null">and order_id  = #{orderId}</if>
+            <if test="cardno !=null">and cardno = #{cardno}</if>
+            <if test="startDate != null and endDate != null">
+                and (create_time between #{startDate} and #{endDate})
+                and ( miaosha_action_flag!=9999 or miaosha_action_flag is null )
+            	<![CDATA[ and ordertype_id <> 'JF' ]]>
+            </if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="OrderBackupMap">
+       SELECT
+        <include refid="columns"/>
+        from tblorder_backup
+       where order_id=#{orderId}
+    </select>
+    <select id="findAll" resultMap="OrderBackupMap">
+        select
+        <include refid="columns"/>
+        from tblorder_backup
+        <include refid="conditions"/>
+    </select>
+
+	<select id="count" resultType="Long">
+        select count(1)
+        from tblorder_backup
+          <include refid="conditions"/>
+    </select>
+    <select id="pager" parameterType="Map" resultMap="OrderBackupMap">
+        select
+        <include refid="columns"/>
+        from tblorder_backup
+        <include refid="conditions"/>
+        <![CDATA[ order by order_id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="OrderBackupModel">
+        delete from tblorder_backup where order_id = #{orderId}
+    </delete>
+    <!--根据主订单号查询tblorder_backup所有子订单(未删除) niufw-->
+    <select id="findBackupByorderMainId" resultMap="OrderBackupMap">
+        SELECT
+        <include refid="columns"/>
+        from tblorder_backup
+        where ordermain_id=#{ordermainId} and del_flag = 0
+    </select>
+</mapper>
+
+

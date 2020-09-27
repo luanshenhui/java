@@ -1,0 +1,30 @@
+<div class="modal">
+  <div class="modal-header">
+    <h2>优惠券设置</h2>
+  </div>
+    <form class="item-form">
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="10%">优惠券项目编号</th>
+            <th width="10%">优惠券项目名称</th>
+            <th width="10%">优惠券使用商户<input type="button" class="btn btn-success btn-sm js-supplier-new" value="1"></th>
+            <th width="10%">优惠券使用类别<input type="button" class="btn btn-success btn-sm js-type-new" value="2"></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                <td class="coupon-id" id="sid">{{id}}</td>
+                <td class="coupon-name" id="sname">{{couponName}}</td>
+                <td class="coupon-type" id="stype">供货商</td>
+                <td class="coupon-user" id="suer">冰箱</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-success btn-small js-item-create" value="确定">
+        <button class="btn btn-info btn-small close">取消</button>
+    </div>
+    </form>
+</div>

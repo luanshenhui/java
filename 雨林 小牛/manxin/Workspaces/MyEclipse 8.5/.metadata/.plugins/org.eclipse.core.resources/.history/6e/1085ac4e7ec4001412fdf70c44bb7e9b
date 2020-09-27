@@ -1,0 +1,7 @@
+package com.yulin.web.dao;
+
+import java.util.List;
+
+public interface User {
+	public List<User> findAll();
+}

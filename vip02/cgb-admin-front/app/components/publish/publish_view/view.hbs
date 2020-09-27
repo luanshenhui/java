@@ -1,0 +1,67 @@
+{{#component "publishView js-component"}}
+    <link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"
+          xmlns="http://www.w3.org/1999/html">
+    <p class="components-title"><h3>- 公告详情 -</h3></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class=" form form-aligned">
+                <fieldset></fieldset>
+                <fieldset class="margins">
+                    <div class="control-group">
+                        <label class="color">公告名称:</label>
+                        <span class="">
+                            {{_DATA_.publishTitle}}
+                        </span>
+                    </div>
+                    <div class="control-group">
+                        <label class="color">公告类型:</label>
+                        <span class="">
+                            {{_DATA_.publishTypeName}}
+                        </span>
+                    </div>
+                    <div class="control-group">
+                        <label class="color">链接地址:</label>
+                        <span>
+                            {{#if _DATA_.linkHref}}
+                                {{_DATA_.linkHref}}
+                            {{else}}
+                               <span class="grey-color">无</span>
+                            {{/if}}
+                        </span>
+                    </div>
+                    <div class="control-group">
+                        <label class="color">发布时间:</label>
+                        <span class="">
+                            {{formatDate _DATA_.publishDate "day"}}
+                        </span>
+                    </div>
+                    <div class="control-group">
+                        <label class="color">过期时间:</label>
+                        <span class="">
+                            {{formatDate _DATA_.expireDate "day"}}
+                        </span>
+                    </div>
+                    <div class="control-group">
+                        <label class="color">公告状态:</label>
+                        <span class="">
+                            {{_DATA_.curStatusName}}
+                        </span>
+                    </div>
+                    <div class="control-group">
+                        <label class="color">公告内容:</label>
+                        <div class="js-publishContent"
+                             data-publishContent="{{#if _DATA_.publishContent}}{{_DATA_.publishContent}}{{else}}无{{/if}}">
+                        <span class="text-div">
+                        <script type="text/plain" id="myEditor" style="width:870px;height:240px;">
+                        </script>
+                        </span>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="bottom-button">
+                    <a href="{{_HREF_.mainContext}}/admins/publish/publish_manage" class="btn btn-close btn-medium">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{{/component}}

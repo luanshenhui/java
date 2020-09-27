@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+  
+      
+  <description>This is my EL function</description>
+  <display-name>MyEL functions</display-name>
+  <tlib-version>1.0</tlib-version>
+  <short-name>my</short-name>
+  <uri>http://www.yulin.com/myel</uri>
+  
+  <function>
+    <description>
+     This is a qiuhe function
+    </description>
+    <name>sum</name>
+    <function-class>com.yulin.web.MyEL</function-class>
+    <function-signature>int sum(int, int)</function-signature>
+    <example>
+      &lt;fn:sum test="${fn:sum(a, b)}"&gt;
+    </example>
+  </function>
+  
+  <function>
+    <description>
+     This is a String function
+    </description>
+    <name>sub</name>
+    <function-class>com.yulin.web.MyEL</function-class>
+    <function-signature>String sub(java.lang.String, java.lang.String, java.lang.String)</function-signature>
+    <example>
+      &lt;fn:sub test="${fn:sub(str, beginStr, endStr)}"&gt;
+    </example>
+  </function>
+  
+  <function>
+    <description>
+     This is a ArrayList function
+    </description>
+    <name>list</name>
+    <function-class>com.yulin.web.MyEL</function-class>
+    <function-signature>String list(java.util.ArrayList)</function-signature>
+    <example>
+      &lt;fn:sub test="${list(arr)}"&gt;
+    </example>
+  </function>
+  
+ </taglib>

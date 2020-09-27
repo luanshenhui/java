@@ -1,0 +1,517 @@
+@charset "UTF-8";
+html {
+  margin: 0;
+  _padding: 60px 0 40px 0;
+  _border: 0;
+}
+
+*::after, *::before {
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 90%;
+  color: #333;
+  font-family: "Microsoft YaHei", "微软雅黑", "Microsoft Yahei", "simsun";
+}
+
+ul {
+  margin: 0px;
+  padding: 0px;
+  li {
+    margin: 0px;
+    padding: 0px;
+  }
+}
+
+.outer {
+  width: 100%;
+  position: absolute;
+  top: 61px;
+  bottom: 40px;
+  overflow: hidden !important;
+  _position: relative; /**IE6***/
+  _top: 0px;
+  _OVERFLOW-Y: auto;
+  _OVERFLOW-X: auto;
+  *height: 100%;
+}
+
+a:link {
+  TEXT-DECORATION: none;
+  outline: none;
+}
+
+a:visited {
+  TEXT-DECORATION: none;
+  outline: none;
+}
+
+a:hover {
+  TEXT-DECORATION: none;
+  outline: none;
+}
+
+a:active {
+  TEXT-DECORATION: none;
+  outline: none;
+}
+
+.btn {
+  &.btn-info {
+    &:hover {
+      background-color: #f01919;
+      color: #FFFFFF;
+    }
+  }
+
+}
+.main {
+  overflow: hidden;
+  margin: 0 auto;
+  height: 100%;
+  width: auto !important;
+  .category-list {
+    vertical-align: middle;
+    height: 100%;
+    .category-container {
+      float: left;
+      vertical-align: middle;
+      height: 100%;
+    }
+  }
+}
+
+.sidebar-outer {
+  float: left;
+  background-color: #F4F4F4;
+  overflow: hidden;
+}
+
+.body-outer {
+  float: left;
+  width: 1060px;
+  padding-bottom: 50px;
+  margin-right: 10px;
+}
+
+.front-main {
+  background-color: #FFFFFF;
+}
+
+.content {
+  background-color: #FFFFFF;
+  min-height: 600px;
+}
+
+.content-box {
+  width: 1180px;
+  margin: 0 auto;
+}
+
+.get-properties {
+  padding: 0 1em;
+  ul {
+    list-style: none;
+  }
+}
+
+.edit-area {
+  height: 100%;
+  float: right;
+  .back-area {
+    height: 100%;
+  }
+  .front-area {
+    height: 100%;
+  }
+}
+
+.footer {
+  border-top: 1px solid #eeeeee;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 15px;
+  width: 100%;
+  text-align: center;
+  padding: 15px 0 10px 0;
+  overflow: hidden !important; /*FF*/
+  _OVERFLOW-Y: auto; /*IE6*/
+  _OVERFLOW-X: auto;
+
+}
+
+.copyright {
+  width: 100%;
+}
+
+.front-footer {
+  border-top: 1px solid #ccc;
+  height: 35px;
+  line-height: 35px;
+  width: 100%;
+  text-align: center;
+  padding: 15px 0 10px 0;
+  background: #fff;
+}
+
+.span-error {
+  color: #c00031 !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.container-components {
+  float: right;
+  width: 960px;
+  padding-bottom: 50px;
+  table {
+    width: 100%;
+    table-layout: fixed;
+    /*margin-bottom: 10px;*/
+  }
+}
+
+.span4 {
+  padding: 0 5px;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  zoom: 1;
+  width: 300px;
+  text-align: right;
+}
+
+.parent-position {
+  position: relative;
+}
+
+.components-title {
+  font-size: 14px;
+  color: #333;
+  span {
+    font-size: 12px;
+    color: #cccccc;
+  }
+
+}
+
+.btn-group {
+  vertical-align: middle;
+  margin-bottom: 5px;
+  ul {
+    background-color: #fff;
+    list-style-type: none !important;
+    li {
+      background-color: #fff;
+      border: none !important;
+    }
+  }
+}
+
+.font-color-red {
+  color: #ed1a2e !important;
+}
+
+.font-color-green {
+  color: #3cbe8c !important;
+}
+
+.font-color-pink {
+  color: #ff648c !important;
+}
+
+.font-color-orange {
+  color: #ffb43c !important;
+}
+
+.font-color-orange2 {
+  color: #ff7c3c !important;
+}
+
+.font-color-blue {
+  color: #64bef0 !important;
+}
+
+.font-color-blue2 {
+  color: #6473ff !important;
+}
+
+.font-color-purple {
+  color: #b48cff !important;
+}
+
+.font-color-purple2 {
+  color: #f064cd !important;
+}
+
+.font-color-cyan {
+  color: #8cf3ff !important;
+}
+
+.font-color-gray {
+  color: #968c8c !important;
+}
+
+.font-color-black-login {
+  color: #333 !important;
+}
+
+.font-color-black {
+  color: #333 !important;
+}
+
+.font-color-black:hover {
+  color: #ed1a2e !important;
+}
+
+.font-size-12 {
+  font-size: 12px !important;
+}
+
+.bg_red {
+  background: red none repeat scroll 0 0;
+  color: #fff;
+  display: inline-block;
+  line-height: 20px;
+  text-align: center;
+  width: 20px;
+}
+
+.bg_yellow {
+  background: #fc0 none repeat scroll 0 0;
+  color: #fff;
+  display: inline-block;
+  line-height: 20px;
+  text-align: center;
+  width: 20px;
+}
+
+.bg_green {
+  background: #390 none repeat scroll 0 0;
+  color: #fff;
+  display: inline-block;
+  line-height: 20px;
+  text-align: center;
+  width: 20px;
+}
+
+.btn-import {
+  border: medium none;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857;
+  margin-bottom: 0;
+  margin-left: 10px;
+  padding: 5px 12px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  background-color: #f01919;
+  border: 2px solid #f01919;
+  color: #fff;
+  -moz-border-radius: 5px; /* Firefox */
+  -webkit-border-radius: 5px; /* Safari 和 Chrome */
+  border-radius: 5px; /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器 */
+}
+
+.btn-upload {
+  display: inline-block;
+  line-height: normal !important;
+  margin: 0 auto;
+  padding: 5px 20px;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  text-align: center;
+  text-decoration: none;
+  background-color: #f01919;
+  color: #fff;
+}
+
+.ztree-box {
+  display: inline-block;
+}
+
+.clear {
+  font-size: 0px;
+  clear: both;
+  line-height: 0px;
+  height: 1px;
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  min-height: 1px;
+}
+
+* html .clearfix {
+  height: 1px;
+}
+
+img {
+  border: none;
+}
+
+.text-overflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.filter-name {
+  margin: 0 0 5px 0;
+}
+
+.form-aligned {
+  .control-group {
+    margin-bottom: 10px !important;
+  }
+}
+
+.remaining-text {
+  text-align: right;
+  margin: 0;
+  color: #ccc;
+}
+.body-mode{
+  display:none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 999999999;
+  opacity: 0.3;
+  filter:alpha(opacity=30);
+  -moz-opacity:0.3;
+  -khtml-opacity: 0.3;
+
+}
+//添加样式
+h3{
+  font-size: 14px;
+  color: #333;
+}
+.title {
+  font-size: 14px;
+  margin-left: 20px;
+  color: #565656;
+}
+.h1-title{
+  display: inline-block;
+  width: 960px;
+  height: 30px;
+  padding:0 20px;
+  margin-top: 20px;
+  line-height: 30px;
+  font-size: 14px;
+  background: #f2f2f2;
+  color: #565656;
+}
+
+//布局样式
+.right{
+  float: right;
+}
+.left{
+  float: left;
+}
+.padding{
+  padding:5px 10px;
+}
+.m-t-5{
+  margin-top: 5px !important;
+}
+.m-t-10{
+  margin-top: 10px !important;
+}
+.m-t-20{
+  margin-top: 20px !important;
+}
+
+.m-l-20 {
+   margin-left: 20px !important;
+ }
+.m-l-10{
+  margin-left: 10px !important;
+}
+.m-l-24{
+  margin-left: 24px;
+}
+.m-r-8{
+  margin-right: 8px;
+}
+.m-r-10 {
+  margin-right: 10px !important;
+}
+.m-b-5{
+  margin-bottom: 5px !important;
+}
+.m-b-10 {
+  margin-bottom: 10px !important;
+}
+.m-b-20 {
+  margin-bottom: 20px !important;
+}
+
+//菜单间距
+.p-l-30{
+  padding-left: 30px!important;
+}
+.p-l-50{
+  padding-left: 50px!important;
+}
+.input-width-120 {
+  width: 120px !important;
+}
+.input-width-50{
+  width: 50px !important;
+}
+.input-width-75{
+  width: 75px !important;
+}
+.input-width-80{
+  width: 80px!important;
+}
+.input-width-100{
+  width: 100px !important;
+}
+.select-width-100{
+  width: 100px !important;
+}
+
+.input-width-200{
+  width: 200px !important;
+}
+.input-width-270{
+  width: 270px !important;
+}
+.input-width-300{
+  width: 300px !important;
+}
+
+.padding-left-160 {
+  padding-left: 160px !important;
+}
+
+.padding-top-10 {
+  padding-top: 10px !important;
+}
+.padding-left-20 {
+  padding-left: 20px !important;
+}
+.padding-left-65 {
+  padding-left: 65px !important;
+}

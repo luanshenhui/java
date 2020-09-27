@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClearOrderOutSystem">
+
+    <select id="findOrderOutSysList" resultType="cn.com.cgbchina.batch.model.TblOrderOutSystemModel">
+        select id "id",
+        order_main_id orderMainId,
+        order_id orderId,
+        times "times",
+        tuisong_flag tuisongFlag,
+        system_role systemRole,
+        create_oper createOper,
+        create_time createTime,
+        modify_oper modifyOper,
+        modify_time modifyTime
+        from tbl_order_outsystem where tuisong_flag = '1'
+    </select>
+
+    <insert id="insertOrderBkupOutSystem" parameterType="cn.com.cgbchina.batch.model.TblOrderBkupOutSystemModel">
+        insert into tbl_orderbkup_outsystem(
+        order_main_id,
+        order_id,
+        times,
+        tuisong_flag,
+        system_role,
+        create_oper,
+        create_time,
+        modify_oper,
+        modify_time)
+        values(
+        #{orderMainId},
+        #{orderId},
+        #{times},
+        #{tuisongFlag},
+        #{systemRole},
+        #{createOper},
+        #{createTime},
+        #{modifyOper},
+        #{modifyTime})
+    </insert>
+
+    <delete id="deleteOrderOutSystem" parameterType="cn.com.cgbchina.batch.model.TblOrderOutSystemModel">
+        delete from tbl_order_outsystem where id = #{id}
+    </delete>
+
+</mapper>

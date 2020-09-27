@@ -1,0 +1,24 @@
+package com.yulin.am;
+
+public class Pet {
+
+	/**
+	 * @param args
+	 */
+	private String name;
+	private int age;
+	//成长经验、饥饿、清洁、心情、叛逆
+	private int level;//经验 100点长一岁
+	private int an;//饥饿 0~100
+	private int heart;//心情 0~100 小于0 心情叛逆下降
+	private int clene;//清洁 0~100 小于0离家出走
+	private int panni;//叛逆0~100 小于0 咬死
+	
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -1,0 +1,138 @@
+package com.yulin.pm;
+import java.util.*;
+
+public class ShuzuDemo {
+
+	public static void main(String[] args) {
+/*		int[] arr;
+//		arr[0]=5; 赋值前需要先声明长度
+//		int[] arry = new int[5];//默认值是0
+//		for(int i=0;i<5;i++){
+//			System.out.println(arry[i]);
+//			System.out.println(strs[i]);
+//			System.out.println(bo[i]);
+//			System.out.println(chs[i]);
+//		}
+//		char[] chs = new char[5];//默认值是空格
+//		String[] strs = new String[5];//默认值null
+//		boolean[] bo = new boolean[5];//默认值false*/
+		
+		/**定义一个长度为5的数组，用Scanner给其复制
+		 * 升级版：如果输入的整数已经存在，那么再次输入一个
+		 */
+/*		Scanner scan = new Scanner(System.in);
+		int[] arr = new int[5];		
+		System.out.println("请输入一组数字");
+		for(int i=0;i<arr.length;i++){
+			int in=scan.nextInt();
+			arr[i]=in;
+			for(int j=0;j<i;j++){
+				if(in==arr[j]){				
+					System.out.print("输入的数字已经存在，请在此输入：");
+					i--;//*****去掉这次循环 将上一个数字覆盖
+				}
+			}
+		}
+		System.out.print("您输入的数组是：");
+		for(int i=0;i<arr.length;i++){
+			System.out.print(arr[i]+",");
+			
+		}*/
+		
+		/**随机出5个数，存入数组 1~10
+		 * 升级：随机出5个不重复的数，存入数组 1~10
+		 * 升级：1.向控制台输入1~10中不重复的5个数
+		 * 		2.随机出1~10中不重复的5个数
+		 * 		3.输出猜对了多少个
+		 */
+/*		Scanner scan = new Scanner(System.in);//向控制台输入5个数
+		Random ad = new Random();//随机数工具
+		int[] arr = new int[5];
+		int[] arry = new int[5];
+		System.out.println("请输入一组数字");
+		//向控制台输入1~10中不重复的5个数
+		for(int i=0;i<arry.length;i++){
+			int iny=scan.nextInt();
+			arry[i]=iny;
+			if(iny>10 || iny<0){
+				System.out.print("输入的数字范围为1~10，请再次输入：");
+				i--;
+			}else{
+				for(int j=0;j<i;j++){
+					if(iny==arry[j]){
+						System.out.print("输入的数字不能重复，请再次输入：");
+						i--;
+				}
+			}
+			}
+		}
+		System.out.println("输入的数组是：");
+		//随机出1~10中不重复的5个数
+		for(int i=0;i<arry.length;i++){
+			System.out.print(arry[i]+",");
+		}
+		
+		for(int i=0;i<arr.length;i++){
+		int in = ad.nextInt(10)+1;
+		arr[i] = in;
+		for(int j=0;j<i;j++){
+			if(in==arr[j]){
+				i--;
+			}
+		}
+	}
+		System.out.println("随机出的数组是：");
+		for(int i=0;i<arr.length;i++){
+			System.out.print(arr[i]+",");
+		}
+		//输出猜对了多少个
+		
+		int count=0;
+		for(int i=0;i<5;i++){
+			for(int j=0;j<5;j++){
+				if(arr[i]==arry[j]){
+					count++;
+				}
+			}
+		}
+		if(count>0){
+			System.out.println("猜对了："+count+"个");
+		}else{
+			System.out.println("对不起，一个也没有猜对！");
+		}*/
+		
+		//用另一种方法随机出1~10的5个数
+/*		Random rd = new Random();
+		int ins[] = new int[5];
+		boolean[] flag = new boolean[11];//标记
+		for(int i=0;i<ins.length;i++){
+			int in = rd.nextInt(10)+1;
+			if(flag[in]==false){
+				ins[i]=in;
+				flag[in]=true;s
+			}else{
+				i--;
+			}
+		}
+		for(int i=0;i<ins.length;i++){
+			System.out.println("随机出来的数组是:"+ins[i]);
+		}
+	*/		
+		
+		/**输出所有的水仙花数
+		 * 水仙花数：一个三位数，这个数等于它各个位上的数的立方和
+		 */
+		for(int i=100;i<1000;i++){
+			int a=i%10;
+			a/=10;
+			int b=i%10;
+			a/=10;
+			int c=i%10;
+			if(i==a*a*a+b*b*b+c*c*c){
+				System.out.println("水仙花数："+i);
+			}
+		}
+
+	}
+
+}

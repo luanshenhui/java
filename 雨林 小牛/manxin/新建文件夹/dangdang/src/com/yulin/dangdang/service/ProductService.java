@@ -1,0 +1,88 @@
+package com.yulin.dangdang.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import com.yulin.dangdang.bean.Category;
+import com.yulin.dangdang.bean.Product;
+import com.yulin.dangdang.bean.Category.Count;
+import com.yulin.dangdang.dao.ProductDao;
+import com.yulin.dangdang.dao.daoimpl.ProductImpl;
+
+public class ProductService {
+	public List<Product> findProductById(int id, int page){
+		ProductDao pd = new ProductImpl();
+		return pd.findProduct(id, page);
+	}
+	
+	public List<Product> findById(int id){
+		return new ProductImpl().findById(id);
+	}
+	
+	public List<Product> findProductByTime(){
+		return new ProductImpl().findProductByTime();
+	}
+	
+	public List<Product> findProductAll(){
+		List<Product> productList = new ArrayList<Product>();
+		List<Product> list = new ProductImpl().findProductAll();
+		boolean[] flag = new boolean[list.size()];
+		Random rd = new Random();
+		for(int i = 0; i < 2; i++){
+			int index = rd.nextInt(list.size());
+			if(flag[index]){
+				i--;
+			}else{
+				productList.add(list.get(index));
+				flag[index] = true;
+				if(i > list.size()){
+					break;
+				}
+			}
+		}
+		return productList;
+	}
+	
+	public List<Product> findProductByTimeAll(){
+		return new ProductImpl().findProductByTimeAll();
+	}
+	
+	public List<Count> getProCount(int id, CategoryService cs){
+		List<Count> listCount = new ArrayList<Count>();//用来记录类别数量的集合
+		for(Category cate : cs.findByParentId(id)){//获得该类别下面的子类别
+			Count count = new Category().new Count();//记录分数的内部类
+			count.setName(cate.getName());//保存类别名称
+			count.setCount(this.findById(cate.getId()).size());//保存该类别产品的数量
+			count.setId(cate.getId());//保存类别的id
+			listCount.add(count);
+		}
+		return listCount;
+	}
+	
+	public List<Product> findGood(int id){
+		return new ProductImpl().findGood(id);
+	}
+	
+	/* 更多页数 */
+//	public List<Count> getProCountByTime(ProductService ps){
+//		List<Count> listCount = new ArrayList<Count>();//用来记录类别数量的集合
+//		for(Product pro : ps.findProductByTimeAll()){//获得该类别下面的子类别
+//			Count count = new Category().new Count();//记录分数的内部类
+//			count.setName(pro.getProduct_name());//保存类别名称
+//			count.setCount(this.findProductByTimeAll().size());//保存该类别产品的数量
+//			count.setId(pro.getId());//保存类别的id
+//			listCount.add(count);
+//		}
+////		System.out.println(findProductByTimeAll().size());
+//		return listCount;
+//	}
+	
+	public static void main(String[] args) {
+		ProductService ps = new ProductService();
+		List<Product> list = ps.findProductByTimeAll();
+		for(Product ss : list){
+			System.out.println(ss.getProduct_name());
+		}
+	}
+}

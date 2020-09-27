@@ -1,0 +1,59 @@
+<div class="modal check-accpunt">
+    <script src="/static/scripts/encrypt/pwdObject_.js"></script>
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>账号审核</h2>
+    </div>
+    <form class="form form-aligned check-form" data-account-id="{{account}}">
+        <div class="modal-body">
+            <div class="control-group js-checkStatus">
+                <label for="checkStatus">审核状态:</label>
+                <input id="checkStatus" type="radio" value="1" name="checkStatus" checked="checked">审核通过</input>
+                <input id="checkRefuse" type="radio" value="2" name="checkStatus">审核拒绝</input>
+            </div>
+            <div class="js-show-hide">
+                <!--<div class="control-group">-->
+                    <!--<label for="pwsecond"><span class="required">*</span>二次密码:</label>-->
+                    <!--<input id="pwsecond" class="form-control js-password1" name="pwsecond" maxlength="4" type="password"-->
+                           <!--required-->
+                           <!--value=""-->
+                           <!--pattern="^(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![0-9\W]+$)(?![a-z\W]+$)(?![a-zA-Z]+$)(?![A-Z\W]+$)[a-zA-Z0-9\W_]+$">-->
+                    <!--&lt;!&ndash;<span class="note">用户密码</span>&ndash;&gt;-->
+                    <!--<span class="note-error"><i>&times;</i> 必须包含三种类型的字符</span>-->
+                    <!--<span class="note-error-empty"><i>&times;</i> 密码不得为空</span>-->
+                <!--</div>-->
+                <!--<div class="control-group">-->
+                    <!--<label for="confirmPsw"><span class="required">*</span>确认密码:</label>-->
+                    <!--<input id="confirmPsw" class="form-control js-password2" name="confirmPsw" maxlength="4"-->
+                           <!--type="password"-->
+                           <!--required-->
+                           <!--pattern="^(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![0-9\W]+$)(?![a-z\W]+$)(?![a-zA-Z]+$)(?![A-Z\W]+$)[a-zA-Z0-9\W_]+$">-->
+                    <!--<span class="note">再次输入密码</span>-->
+                <!--</div>-->
+                <div class="control-group modify-password-div">
+                    <label for="passwordNew" class="password-div password-right"><span class="required">*</span>二次密码:</label>
+                    <div id="passwordNew" class="password-div"><script type="text/javascript">
+                        createPwdObjectNew("passwordNew-div","164","28","4","4","E","222",null,null,null,"passwordNew");
+                    </script></div>
+                    <span class="note-error-empty"><i>&times;</i> 密码不得为空</span>
+                </div>
+                <div class="control-group modify-password-div">
+                    <label for="passwordConfirm" class="password-div password-right"><span class="required">*</span>确认密码:</label>
+                    <div id="passwordConfirm" class="password-div"><script type="text/javascript">
+                        createPwdObjectNew("passwordConfirm-div","164","28","4","4","E","222",null,null,null,"passwordConfirm");
+                    </script></div>
+                    <span class="note-error-empty"><i>&times;</i> 密码不得为空</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="descript">审核原因:</label>
+                <textarea id="refuseDesc" class="form-control js-descript" name="refuseDesc" type="text"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+                <input type="submit" class="btn btn-small btn-success js-check-status" value="保存">
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

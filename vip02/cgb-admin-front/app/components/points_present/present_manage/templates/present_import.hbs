@@ -1,0 +1,20 @@
+<div class="modal import-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>导入文件</h2>
+    </div>
+    <form class="form form-inline form-aligned js-import-form">
+        <div class="modal-body">
+            <div>
+                <label class="label-width " >导入文件:</label>
+                <input type="text" class="width-330 js-file-name" readonly>
+                <input type="button" class="btn btn-success upload-btn btn-small " value="选择文件"/>
+                <input type="file"  class="img-upload upload-file js-file-select" name="file" />
+                <input type="button" class="btn btn-success btn-small js-import-btn" value="上 传">
+            </div>
+            <p class="font-size-12 font-color-gray">说明1：请先点击选择文件按钮选择您要导入的excel文件，然后再点击上传。</p>
+            <p class="font-size-12 font-color-gray">说明2：上传文件格式必须是excel，请按照下载导入模板格式上传，否则文件录入无效。</p>
+            <p class="font-size-12 font-color-gray">说明3：最多支持1000条数据（单品数据累积和）的上传。</p>
+        </div>
+    </form>
+</div>

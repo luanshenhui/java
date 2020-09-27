@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblOrderExtend2Model">
+    <resultMap id="TblOrderExtend2Map" type="TblOrderExtend2Model">
+        <result property="orderId" column="order_id"/>
+        <result property="isPartlyRefundIntegral" column="is_partly_refund_integral"/>
+        <result property="refundIntegral" column="refund_integral"/>
+    </resultMap>
+    <sql id="columns">
+    order_id,is_partly_refund_integral,refund_integral
+    </sql>
+
+    <insert id="insert" parameterType="TblOrderExtend2Model" useGeneratedKeys="true"
+            keyProperty="orderId" keyColumn="order_id">
+        insert into tbl_order_extend2
+        (order_id
+        ,is_partly_refund_integral
+        ,refund_integral)
+        values(#{orderId}
+        ,#{isPartlyRefundIntegral}
+        ,#{refundIntegral})
+    </insert>
+
+    <update id="update" parameterType="TblOrderExtend2Model">
+        update tbl_order_extend2 set
+            <if test="isPartlyRefundIntegral !=null">is_partly_refund_integral = #{isPartlyRefundIntegral}
+                ,</if>
+            <if test="refundIntegral !=null">refund_integral = #{refundIntegral}
+                </if>
+        where order_id = #{orderId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="isPartlyRefundIntegral !=null">and is_partly_refund_integral = #{isPartlyRefundIntegral}</if>
+            <if test="refundIntegral !=null">and refund_integral = #{refundIntegral}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblOrderExtend2Map">
+       SELECT
+        <include refid="columns"/>
+        from tbl_order_extend2
+       where order_id=#{orderId}
+    </select>
+    <select id="findAll" resultMap="TblOrderExtend2Map">
+        select
+        <include refid="columns"/>
+        from tbl_order_extend2
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblOrderExtend2Map">
+        select
+        <include refid="columns"/>
+        from tbl_order_extend2
+        <include refid="conditions"/>
+        <![CDATA[ order by order_id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblOrderExtend2Model">
+        delete from tbl_order_extend2 where order_id = order_id
+    </delete>
+
+    <select id="findByOrderCancelIds" parameterType="Map" resultMap="TblOrderExtend2Map">
+        select
+        <include refid="columns"/>
+        from tbl_order_extend2
+        where order_id in
+        <foreach collection="orderCancelList" item="item" index="index" open="(" separator="," close=")">
+            #{item.orderId}
+        </foreach>
+    </select>
+</mapper>
+
+

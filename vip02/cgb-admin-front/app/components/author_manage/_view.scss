@@ -1,0 +1,75 @@
+@import "compass/css3/inline-block";
+@import "compass/css3/box-shadow";
+
+.author-manage {
+  .author-pagination {
+    text-align: right;
+    padding:20px 0;
+  }
+}
+
+.form-create-role {
+    .modal-body {
+        min-height: 0;
+    }
+    .control-group {
+        margin: 10px 0;
+    }
+    .role-type-child {
+        display: none;
+    }
+}
+
+.form-edit-role {
+    .modal-body {
+        width: 500px;
+        max-height: 450px;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin: 20px 0;
+        overflow: auto;
+    }
+}
+
+.tree-wrap {
+    height: 1.8em;
+    position: relative;
+    zoom: 1;
+    .tree-content {
+        padding: 10px;
+        min-width: 200px;
+        max-height: 450px;
+        overflow: auto;
+        position: absolute;
+        left: -10px;
+        top: -10px;
+        z-index: 9;
+        background-color: $active-background-color;
+        @include box-shadow(rgba(0, 0, 0, .3) 0 0 3px);
+    }
+}
+.role-tree {
+    line-height: 1.8em;
+    ul {
+        padding-left: 15px;
+        display: none;
+    }
+    li {
+        i {
+            @include inline-block(inherit);
+            margin-right: 5px;
+            cursor: pointer;
+            width: 9px;
+            height: 9px;
+            background: url(/static/images/icons.png) -117px -163px no-repeat;
+            &.active {
+                background-position: -108px -163px;
+            }
+            &.hidden {
+                visibility: hidden;
+            }
+        }
+        li {
+        }
+    }
+}

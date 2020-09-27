@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>cgbchina-mall</artifactId>
+        <groupId>cn.com.cgbchina</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>cgb-restful</artifactId>
+    <packaging>jar</packaging>
+
+    <name>cgb-restful</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.spirit</groupId>
+            <artifactId>spirit-session</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.spirit</groupId>
+            <artifactId>spirit-category</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.spirit</groupId>
+            <artifactId>spirit-category-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.spirit</groupId>
+            <artifactId>spirit-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.cgbchina</groupId>
+            <artifactId>cgb-web-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.cgbchina</groupId>
+            <artifactId>cgb-rest-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.cgbchina</groupId>
+            <artifactId>cgb-trade-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.cgbchina</groupId>
+            <artifactId>cgb-item-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.cgbchina</groupId>
+            <artifactId>cgb-user-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.cgbchina</groupId>
+            <artifactId>cgb-config</artifactId>
+        </dependency>
+         <dependency>
+            <groupId>cn.com.cgbchina</groupId>
+            <artifactId>cgb-log-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+        </dependency>
+    </dependencies>
+</project>

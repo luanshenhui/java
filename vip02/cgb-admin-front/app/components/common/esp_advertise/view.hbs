@@ -1,0 +1,160 @@
+{{#component "esp_advertise js-component"}}
+    <p class="components-title"><strong>- 手机广告管理 -</strong></p>
+    <form class="advertise-form-search form-inline">
+        <fieldset>
+            <p class="filter-name">
+                <span class="span5">
+                   <label>业务类型：</label>
+                    <select type="text" class="form-width-300" id="ordertypeId" name="ordertypeId">
+                        <option value="">请选择</option>
+                        <option value="YG" {{#equals ordertypeId 'YG'}}selected{{/equals}}>广发商城</option>
+                        <option value="JF" {{#equals ordertypeId 'JF'}}selected{{/equals}}>积分商城</option>
+                    </select>
+                 </span>
+                 <span class="span5 m-l-10">
+                  <label>广告类型：</label>
+                    <select type="text" class="form-width-300" id="advertisePos" name="advertisePos">
+                        <option value="">请选择</option>
+                        <option value="10" {{#equals advertisePos '10'}}selected{{/equals}}>文字广告</option>
+                        <option value="11" {{#equals advertisePos '11'}}selected{{/equals}}>首页JS图片广告（300x130）</option>
+                        <option value="12" {{#equals advertisePos '12'}}selected{{/equals}}>底部特惠广告区（300x130）</option>
+                        <option value="13" {{#equals advertisePos '13'}}selected{{/equals}}>首页栏目广告9个（100x100）</option>
+                        <option value="14" {{#equals advertisePos '14'}}selected{{/equals}}>团购广告</option>
+                        <option value="15" {{#equals advertisePos '15'}}selected{{/equals}}>秒杀广告</option>
+                    </select>
+                 </span>
+            </p>
+            <p class="filter-name">
+                <span class="span5">
+                 <label>发布状态：</label>
+                    <select type="text" class="form-width-300" id="publishStatus" name="publishStatus">
+                        <option value="">请选择</option>
+                        <option value="00" {{#equals publishStatus '00'}}selected{{/equals}}>已发布</option>
+                        <option value="10" {{#equals publishStatus '10'}}selected{{/equals}}>未发布</option>
+                    </select>
+                 </span>
+                 <span class="span3 span-large  float-right margin-right-10">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-success btn-small" type="submit">查询</button>
+                 </span>
+            </p>
+        </fieldset>
+    </form>
+    {{#authorial "espadvertise_add"}}
+        <div class="tab-condensed">
+            <button class="btn btn-info btn-small js-advertise-new">+ 新增</button>
+        </div>
+    {{/authorial}}
+    <div class="main-box-table m-t-10">
+        <table class="table">
+            <thead>
+            <th width="8%">业务类型</th>
+            <th width="10%">广告类型</th>
+            <th width="7%">跳转</br>
+                类型
+            </th>
+            <th width="6%">关键字</th>
+            <th width="7%">分区</th>
+            <th width="7%">类别</th>
+            <th width="10%">链接地址</br>/商品</th>
+            <th width="7%">图片上</br>
+                传状态
+            </th>
+            <th width="5%">显示</br>
+                顺序
+            </th>
+            <th width="8%">文字描述</th>
+            <th width="6%">发布</br>
+                状态
+            </th>
+            <th width="6%">启用状态</th>
+            <th>操作</th>
+            </tr>  </thead>
+
+            <tbody>
+            {{#each _DATA_.data}}
+                <tr data-component="" data-id="{{id}}" data-data="{{json this}}" data-value="{{advertiseImage}}">
+                    <td>{{#equals ordertypeId 'YG'}}广发商城{{/equals}}
+                        {{#equals ordertypeId 'JF'}}积分商城{{/equals}}</td>
+                    <td>{{#equals advertisePos '10'}}文字广告{{/equals}}
+                        {{#equals advertisePos '11'}}首页JS图片广告（300x130）{{/equals}}
+                        {{#equals advertisePos '12'}}底部特惠广告区（300x130）{{/equals}}
+                        {{#equals advertisePos '13'}}首页栏目广告9个（100x100）{{/equals}}
+                        {{#equals advertisePos '14'}}团购广告{{/equals}}
+                        {{#equals advertisePos '15'}}秒杀广告{{/equals}}</td>
+                    <td>{{#equals linkType '1'}}关键字{{/equals}}
+                        {{#equals linkType '2'}}页面{{/equals}}
+                        {{#equals linkType '3'}}分区{{/equals}}
+                        {{#equals linkType '4'}}类别{{/equals}}
+                        {{#equals linkType '5'}}超链接{{/equals}}</td>
+                    <td>{{#equals linkType '1'}}{{keyword}}{{/equals}}</td>
+                    <td>{{#equals linkType '3'}}{{#equals keyword '1'}}白金卡专区{{/equals}}{{/equals}}</td>
+                    <td>{{#equals linkType '4'}}{{backCategory1Name}}>{{backCategory2Name}}
+                        >{{backCategory3Name}}{{/equals}}</td>
+                    <td><a href="{{advertiseHref}}" class="font-color-blue3 breakWords">{{advertiseHref}}</a></td>
+                    <td>
+                        {{#if advertiseImage}}
+                            已上传
+                        {{else}}
+                            未上传
+                        {{/if}}
+
+                    </td>
+                    <td>{{advertiseSeq}}</td>
+                    <td class="breakWords">{{advertiseDesc}}</td>
+                    <td>
+                        {{#equals publishStatus '00'}}已发布{{/equals}}
+                        {{#equals publishStatus '01'}}未发布{{/equals}}
+                        {{#equals publishStatus '21'}}未发布{{/equals}}
+                    </td>
+                    <td>
+                        {{#authorial "espadvertise_startStop"}}
+                            {{#equals isStop '1'}}<i data-id="{{id}}" data-type="{{isStop}}" data-value="{{publishStatus}}"
+                                                     class="icon-btn-on js-isStop-update"></i>{{/equals}}
+                            {{#equals isStop '0'}}<i data-id="{{id}}" data-type="{{isStop}}"  data-value="{{publishStatus}}"
+                                                     class="icon-btn-off js-isStop-update"></i>{{/equals}}
+                        {{else}}
+                            {{#equals isStop '1'}}<i class="icon-btn-on"></i>{{/equals}}
+                            {{#equals isStop '0'}}<i class="icon-btn-off"></i>{{/equals}}
+                        {{/authorial}}
+                    </td>
+                    <td>
+                        {{#authorial "espadvertise_edit"}}
+                            <button class="btn btn-sm btn-info js-advertise-edit">编辑</button>
+                        {{/authorial}}
+                        {{#authorial "espadvertise_delete"}}
+                            <button id="{{id}}" class="btn btn-sm btn-info" data-toggle="confirm"
+                                    data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                    data-event="confirm:delete-advertise">删除
+                            </button>
+                        {{/authorial}}
+                        <button class="btn btn-sm btn-info js-image-show" data-img="{{advertiseImage}}">预览</button>
+                        <img src="{{advertiseImage}}" class="brandbigshow" style="display: none"/>
+                        {{#authorial "espadvertise_announcement"}}
+                            <button id="{{id}}" data-id="{{id}}" data-name="{{publishStatus}}"
+                                    onclick="return check(this);"
+                                    class="btn btn-sm btn-info" data-toggle="confirm"
+                                    data-title="您确定发布吗?" data-content=""
+                                    data-event="confirm:update-advertise">发布
+                            </button>
+                        {{/authorial}}
+                    </td>
+
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <input type="hidden" class="publishStatus-name" value=""/>
+
+        {{#equals _DATA_.total "0"}}
+            <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+        {{else}}
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        {{/equals}}
+    </div>
+{{/component}}
+<script type="text/javascript">
+    function check(data) {
+        $(".publishStatus-name").val($(data).data("name"));
+    }
+</script>

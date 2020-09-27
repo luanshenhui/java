@@ -1,0 +1,242 @@
+<div class="modal pendpriced-model">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>定价信息</h2>
+    </div>
+    <form class="form form-aligned pend-priced-form">
+        <div class="modal-body">
+            <table class="modal-body-table goods-table" data-code="{{data.goodsCode}}">
+                <colgroup>
+                    <col width="15%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="35%">
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th class="text-rg"><strong>礼品编码 ：</strong></th>
+                    <td>{{data.goodsCode}}</td>
+                    <th class="text-rg"><strong>礼品名称：</strong></th>
+                    <td>{{data.goodsName}}</td>
+                </tr>
+                </tbody>
+            </table>
+            {{#equals data.goodsType "00"}}
+            {{#each data.data.result}}
+                <table class="modal-body-table margin-top-30 pending-table" data-itemid="{{itemId}}" data-calmoney="{{calMoney}}">
+                    <colgroup>
+                        <col width="15%">
+                        <col width="85%">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th class="text-rg"><strong>单品编码：</strong></th>
+                        <td>{{itemId}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="price-table border check-table" data-value="{{itemId}}">
+                    <thead>
+                    <tr>
+                        <th width="9%">
+                            <input class="js-check-pendPrice" type="checkbox" name="checkAll" id="checkbox" data-value="{{itemId}}">
+                            <label for="checkbox">全选</label>
+                        </th>
+                        <th width="9%">
+                            <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                               id="checkbox2" value="checkbox2"  data-value="{{itemId}}">
+                            <label for="checkbox2">金普</label>
+                        </th>
+                        <th width="18%">
+                            <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                               id="checkbox3" value="checkbox3"  data-value="{{itemId}}">
+                            <label for="checkbox3">钛金/臻享 白金</label>
+                        </th>
+                        <th width="18%">
+                            <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                               id="checkbox4" value="checkbox4" data-value="{{itemId}}">
+                            <label for="checkbox4">顶级/增值 白金</label>
+                        </th>
+                        <th width="9%">
+                            <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                               id="checkbox5" value="checkbox5" data-value="{{itemId}}">
+                            <label for="checkbox5">VIP</label>
+                        </th>
+                        <th width="9%">
+                            <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                               id="checkbox6" value="checkbox6" data-value="{{itemId}}">
+                            <label for="checkbox6">生日</label>
+                        </th>
+                        <th width="28%">
+                            <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                               id="checkbox7" value="checkbox7" data-value="{{itemId}}">
+                            <label for="checkbox7">积分+现金</label>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <input id="checkinput2" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{gold}}" disabled data-value="{{itemId}}" maxlength="20">
+                        </td>
+                        <td>
+                            <input id="checkinput3" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{titanium}}" disabled data-value="{{itemId}}" maxlength="20">
+                        </td>
+                        <td>
+                            <input id="checkinput4" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{topLevel}}" disabled data-value="{{itemId}}" maxlength="20">
+                        </td>
+                        <td>
+                            <input id="checkinput5" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{vip}}" disabled data-value="{{itemId}}" maxlength="20">
+                        </td>
+                        <td>
+                            <input id="checkinput6" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{birthday}}" disabled data-value="{{itemId}}" maxlength="20">
+                        </td>
+                        <td>
+                            <input id="checkinput7" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{points}}" disabled data-value="{{itemId}}" maxlength="20">
+                            + <input id="checkinput8" name="checkinput" type="text" class="form-control input-width-75"
+                                     value="{{price}}" disabled data-value="{{itemId}}" maxlength="10">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {{/each}}
+            {{/equals}}
+            {{#equals data.goodsType "01"}}
+            {{#each data.data.result}}
+                <table class="modal-body-table margin-top-30 pending-table" data-itemid="{{itemId}}" data-calmoney="{{calMoney}}">
+                    <colgroup>
+                        <col width="15%">
+                        <col width="85%">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th class="text-rg"><strong>单品编码 ：</strong></th>
+                        <td>{{itemId}}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-rg">
+                            <strong>纯积分价格 ：</strong>
+                        </th>
+                        <td>
+                            <input id="gold" type="text" class="form-control form－widht－185"
+                                   value="{{gold}}" maxlength="20" required>
+                        </td>
+                    </tr>
+                    <!--<tr>-->
+                        <!--<th class="text-rg">-->
+                            <!--<strong>积分+现金 ：</strong>-->
+                        <!--</th>-->
+                        <!--<td>-->
+                            <!--<input id="points" type="text" class="form-control form－widht－185"-->
+                                   <!--value="{{points}}" maxlength="20">-->
+                            <!--＋-->
+                            <!--<input id="price" type="text" class="form-control form－widht－185"-->
+                                   <!--value="{{price}}" maxlength="10">-->
+                        <!--</td>-->
+                    <!--</tr>-->
+                    </tbody>
+                </table>
+            {{/each}}
+            {{/equals}}
+            {{#equals data.goodsType "02"}}
+                {{#each data.data.result}}
+                    <table class="modal-body-table margin-top-30 pending-table" data-itemid="{{itemId}}" data-calmoney="{{calMoney}}">
+                        <colgroup>
+                            <col width="15%">
+                            <col width="85%">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th class="text-rg"><strong>单品编码 ：</strong></th>
+                            <td>{{itemId}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="price-table border check-table" data-value="{{itemId}}">
+                        <thead>
+                        <tr>
+                            <th width="9%">
+                                <input class="js-check-pendPrice" type="checkbox" name="checkAll" id="checkbox" data-value="{{itemId}}">
+                                <label for="checkbox">全选</label>
+                            </th>
+                            <th width="9%">
+                                <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                       id="checkbox2" value="checkbox2"  data-value="{{itemId}}">
+                                <label for="checkbox2">金普</label>
+                            </th>
+                            <th width="18%">
+                                <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                       id="checkbox3" value="checkbox3"  data-value="{{itemId}}">
+                                <label for="checkbox3">钛金/臻享 白金</label>
+                            </th>
+                            <th width="18%">
+                                <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                       id="checkbox4" value="checkbox4" data-value="{{itemId}}">
+                                <label for="checkbox4">顶级/增值 白金</label>
+                            </th>
+                            <th width="9%">
+                                <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                       id="checkbox5" value="checkbox5" data-value="{{itemId}}">
+                                <label for="checkbox5">VIP</label>
+                            </th>
+                            <th width="9%">
+                                <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                       id="checkbox6" value="checkbox6" data-value="{{itemId}}">
+                                <label for="checkbox6">生日</label>
+                            </th>
+                            <th width="28%">
+                                <input class="js-check-this" type="checkbox" name="checkPendPrice"
+                                       id="checkbox7" value="checkbox7" data-value="{{itemId}}">
+                                <label for="checkbox7">积分+现金</label>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <input id="checkinput2" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{gold}}" disabled data-value="{{itemId}}" maxlength="20">
+                            </td>
+                            <td>
+                                <input id="checkinput3" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{titanium}}" disabled data-value="{{itemId}}" maxlength="20">
+                            </td>
+                            <td>
+                                <input id="checkinput4" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{topLevel}}" disabled data-value="{{itemId}}" maxlength="20">
+                            </td>
+                            <td>
+                                <input id="checkinput5" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{vip}}" disabled data-value="{{itemId}}" maxlength="20">
+                            </td>
+                            <td>
+                                <input id="checkinput6" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{birthday}}" disabled data-value="{{itemId}}" maxlength="20">
+                            </td>
+                            <td>
+                                <input id="checkinput7" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{points}}" disabled data-value="{{itemId}}" maxlength="20">
+                                + <input id="checkinput8" name="checkinput" type="text" class="form-control input-width-75"
+                                         value="{{price}}" disabled data-value="{{itemId}}" maxlength="10">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                {{/each}}
+            {{/equals}}
+        </div>
+        <div class="modal-footer">
+            <input type="button" class="btn btn-success btn-medium price-review" value="提交审核">
+            <button class="btn btn-close btn-medium close">取 消</button>
+        </div>
+        <input type="hidden" class="goods-type" value="{{data.goodsType}}">
+    </form>
+</div>

@@ -1,0 +1,24 @@
+package com.yulin.web.DB;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class DBUtil {
+	private static String user = "root";
+	private static String pwd = "1225";
+	private static String url = "jdbc:mysql://localhost:3306/t_computer?useUnicode=true&characterEncoding=UTF-8";
+	
+	public static Connection getConn(){
+		Connection conn = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(url, user ,pwd);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return conn;
+	}
+	public static void main(String[] args) {
+		System.out.println(DBUtil.getConn());
+	}
+}

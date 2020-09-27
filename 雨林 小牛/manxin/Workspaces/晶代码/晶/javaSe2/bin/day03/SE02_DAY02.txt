@@ -1,0 +1,60 @@
+JAVA I/O
+Input/Output
+
+InputStream 输入流
+OutputStream 输出流
+
+输入流和输出流都是抽象类。本身不能实例化
+
+输出流用于将数据写出
+输入流用于将数据读入
+这里所谓输入输出的参照方向为当前程序。
+
+java将流分为两类
+低级流(节点流)：
+有明确的数据源(data source)。
+
+高级流(处理流，过滤流):
+没有明确的数据源，高级流用于处理其他流，高级流不能独立存在。
+
+流根据读写的数据单位分为:
+字节流:一次读写一个字节
+  
+
+字符流:一次读写一个字符
+
+用于读写文件的输入输出流
+FileInputStream
+文件字节输入流
+
+
+FileOutputStream
+文件字节输出流
+
+FileOutputStream的构造方法
+FileOutputStream(File f)
+打开指定File对象描述的文件的输出流，进行写操作
+
+FileOutputStream(File f,boolean append)
+打开File对象描述的文件的输出流，并在文件末尾进行写操作
+
+FileOutputStream(String path)
+打开path路径指定的文件，并进行写操作
+
+FileOutputStream(String path,boolean ap)
+打开path指定的文件，并在文件末尾进行写操作
+
+BufferedInputStream与BufferedOutputStream
+缓冲字节输入输出流
+
+相比文件字节输入输出流而言，缓冲流的内部维护着一个缓冲区，可以减少读写次数，从而提高读写效率。
+
+这两个流是高级流。
+
+
+
+
+
+
+
+

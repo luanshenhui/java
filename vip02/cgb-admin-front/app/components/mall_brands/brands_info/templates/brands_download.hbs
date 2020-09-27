@@ -1,0 +1,27 @@
+<div class="modal modal-download">
+    <div class="modal-header">
+        导入品牌
+    </div>
+    <form class="form form-aligned brand-form-add" component-id="{{id}}">
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="file">导入文件：</label>
+                <input type="text" name="file" id="js-image-upload" multiple>
+                <input type="button" class="btn btn-success upload-btn btn-small upload-brand-btn" value="选择文件并上传"/>
+                <input type="file"  class="img-upload upload-file upload-brand-btn" name="files"/>
+                <!--<input type="file" class="img-upload js-excel-upload" name="files"/>-->
+            <!--    <input type="button" class="btn btn-success upload-btn btn-small js-excel-download" value="下载导入模板"/>-->
+                <a  class="btn btn-success upload-btn btn-small js-excel-download"  href="{{context}}/api/admin/brand/import-exportExcel">下载导入模板</a>
+                <!--<button class="btn btn-info btn-small">上传文件</button>-->
+                <!--<button class="btn btn-info btn-small">下载导入模板</button>-->
+            </div>
+
+            <label for="file" class="font-color-gray">说明：上传文件格式必须是excel，请按照下载导入模板格式上传，否则文件录入无效。</label>
+            <p class="upload-result"></p>
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-info btn-small close">返回</button>
+        </div>
+    </form>
+</div>

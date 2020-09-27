@@ -1,0 +1,223 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>出口食品生产企业监督检查</title>
+<%@ include file="/common/resource_show.jsp"%>
+<script type="text/javascript"> 
+  	jQuery(document).ready(function () {
+            $("#clearUp").click(function () {
+                $("#mjl").find('input').val('');
+                 $("#mjl").find('select').val('');
+            });
+        });
+
+		function pageUtil(page) {
+			$("#search_form").attr("action", "/ciqs/expFoodProd/list?page="+page);
+			$("#search_form").submit();
+		}
+		function submit() {
+			$("#search_form").submit();
+		}
+		
+		function fileSubmit(e) {
+			if(typeof $(e).parent().children().eq(0).val() == 'undefined' || $(e).parent().children().eq(0).val() == ''){
+				 alert("请选择一个文件!");
+				 return;
+			}
+			$(e).parent().attr("action", "uploadReport");
+			$(e).parent().submit();
+		}
+		
+</script>
+<style type="text/css">
+input.datepick{background:#FFF url(/ciqs/static/dec/images/dpn.date.pick.gif) no-repeat right}
+.box-img-bg {
+	background-image: url(../static/show/disc/bg.png);
+	box-sizing: border-box;
+	width: 1198px;
+	height: 164px;
+	padding: 0 200px;
+	position: absolute;
+	display: none;
+	font-size: 20px;
+	line-height: 35px;
+	color: white;
+}
+
+.box-content-style {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+input[type="file"] {
+/*    color: transparent;  */
+}
+</style>
+
+
+</head>
+
+<body  class="bg-gary">
+<div class="freeze_div_list">
+<div class="title-bg" >
+<div class=" title-position margin-auto white">
+<div class="title"><span class="font-24px" style="color:white;">行政检查/</span><a href="list" style="color:white;">出口食品生产企业监督检查</a></div>
+<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+</div>
+</div>
+<div class="flow-bg" >
+<div class="flow-position margin-auto" >
+
+<ul class="white font-18px flow-height font-weight">
+<li>检查启动</li>
+<li>实施监督检查</li>
+<li>后续处置</li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<ul>
+  <li><img src="${ctx}/static/show/images/expFoodProd/prodA1.png" width="107" height="107" content="备案出口食品生产企业于每年一月底前,通过《中国出口食品生产企业备案管理系统》向检验检疫机构提交上一年年度报告。检查人员根据企业提交的年度报告启动报告审查。记录内容：年度报告。" /></li>
+  <li><img src="${ctx}/static/show/images/expFoodProd/prodA2.png" width="107" height="107" content="在风险评估的基础上对备案企业提交的年度报告实施审查，需进行整改的企业根据审查要求进行整改。审查结果、审查意见及企业整改情况录入《备案管理系统》。记录内容：审查结果、审查意见及企业整改情况。" /></li>
+  <li><img src="${ctx}/static/show/images/expFoodProd/prodA3.png" width="107" height="107" content="在报告审查中发现存在风险隐患的企业可约谈企业负责人。记录内容：《辽阳出入境检验检疫局备案出口食品生产企业约谈审批单》、约谈过程执法记录仪全程记录、《约谈通知书》、《送达回证》及《约谈纪要》。" /></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="blank_div_list">
+</div>
+<div class="margin-auto width-1200 search-box">
+	<div id="alertBoxId" class="box-img-bg"><span class="box-content-style" id="alertContentId"></span></div>
+<form action="/ciqs/expFoodProd/list"  method="post" id="search_form">
+<table width="100%" border="0" class="table-search margin-auto">
+  <tr>
+    <td height="25" align="left" valign="middle">企业名称</td>
+    <td height="25" align="left" valign="middle">实际监管时间（起）</td>
+    <td height="25" align="left" valign="middle">实际监管时间（止）</td>
+    <td height="25" align="left" >监管类型</td>
+    <td height="25" align="left" >实际监管人员</td>
+    <td height="25">&nbsp;</td>
+  </tr>
+  
+  <tr id="mjl">
+    <td width="195" height="50" align="left" valign="middle"><input type="text" name="enterprisesname" id="enterprisesname"size="14" value="${form.enterprisesname}" class="search-input input-175px" /></td>
+    <td width="196" height="50" align="left"><input name="startdate_begin" type="text" class="search-input input-175px datepick" id="startdate_begin" value="${form.startdate_begin}"/></td>
+    <td width="196" height="50" align="left"><input name="startdate_end" type="text" class="search-input input-175px datepick" id="startdate_end" value="${form.startdate_end}"/></td>
+    <td width="195" height="50" align="left">
+	    <select id="planType" class="search-input input-175px" name="planType">
+			<option <c:if test="${empty form.planType }">selected="selected"</c:if> value="">请选择</option>
+			<option <c:if test="${form.planType eq '年度监管' }">selected="selected"</c:if> value="年度监管">年度监管</option>
+			<option <c:if test="${form.planType eq '专项监管' }">selected="selected"</c:if> value="专项监管">专项监管</option>
+		</select>
+    </td>
+    <td width="195" height="50" align="left" valign="middle"><input type="text" name="subName" id="subName"size="14" value="${form.subName}" class="search-input input-175px" /></td>
+  </tr>
+  <tr>
+	<td></td>
+	<td></td>
+	<td style="width:250px">
+		<input type="submit" class="search-btn fo" value="搜索" style="cursor: pointer;" onclick="submit()"/>
+	</td>
+	<td>	
+		<input type="button" class="search-btn fo" value="清空" id="clearUp" style="cursor: pointer;"/>
+	</td>
+	<td>
+	</td>
+  </tr>
+</table>
+</form>
+</div>
+
+<div class="margin-auto width-1200 tips" >共找到<span class="yellow font-18px" >  ${counts}  </span>条记录</div>
+<div class="margin-auto width-1200  data-box">
+<div class="margin-cxjg">
+	<table class="margin-cxjg_table" border="0" cellspacing="0" cellpadding="0">
+ 	<tr class="thead">
+      <td>企业名称</td>
+      <td>监管类型</td>
+      <td>地址</td>
+      <td>计划监管时间</td>
+      <td>监管负责人</td>
+      <td>监管人员</td>
+      <td>实际监管时间</td>
+      <td>实际监管人</td>
+	  <td>是否有违规操作</td>
+	  <td>调查结果</td>
+	  <td>年度报告</td>
+      <td height="35" align="center">操作</td>
+    </tr>
+    <c:if test="${not empty list }">
+		<c:forEach items="${list}" var="row">
+			<tr>
+			  <td width="130" height="90" align="center"><strong> ${row.enterprisesname}</strong></td>
+		      <td width="100" height="90" align="center">${row.planType}</td>
+		      <td width="180" height="90" align="center">${row.address}</td>
+		      <td width="100" height="90" align="center">${row.plansupDate}</td>
+		      <td width="70" height="90" align="center">${row.pesponsible}</td>
+		      <td width="70" height="90" align="center">${row.subName}</td>
+		      <td width="100" height="90" align="center"><fmt:formatDate value="${row.actualDate}" type="both" pattern="yyyy-MM-dd"/></td>
+		      <td width="70" height="90" align="center">${row.practiceName }</td>
+		      <td width="100" height="35" align="center">
+		      </td>
+		      <td width="100" height="90" align="center">${row.liveResult }</td>
+		      <td width="210" align="center">
+		      <c:if test="${row.blno =='0'}">
+		      	<form  method="post" enctype="multipart/form-data">
+			    	<input id="file" type="file" name="file" style="width: 100%;"/></br>
+			    	<input value="${row.subId}" type="hidden" name="apply_no"/>
+			    	<input id="upload"  type="button" onclick="fileSubmit(this)" value="上传"/>
+			    </form>
+			    </c:if>
+			    <c:if test="${row.blno !='0'}">
+			     	<a href="/ciqs/expFoodProd/download?fileName=${row.blno}">
+			      		查看
+			      	</a>
+			    </c:if>
+		      </td>
+		      <td height="90" align="center" valign="middle">
+			      <a href='javascript:jumpPage("/ciqs/expFoodProd/detail?userId=${row.userId}&applycode=${row.subId}");'>
+			      	<span class="data-btn margin-auto">详细+</span>
+			      </a>
+		      </td>
+			</tr>
+		</c:forEach>
+	</c:if>
+  	<tfoot >
+  	  <jsp:include page="/common/pageUtil.jsp" flush="true"/>
+    </tfoot>
+  </table>
+  </div>
+</div>
+<div class="margin-auto width-1200 tips" ></div>
+
+<div style="text-align: center;margin: auto;margin-top: 10px;width:200px;padding-bottom: 10px;">
+			<input type="button" class="search-btn" value="随机"  onclick="JavaScript:jumpPage('/ciqs/extxz/pesoninit?apply_no=111&type=1')"/>
+		</div>
+</body>
+<script type="text/javascript">
+    $("li").mouseenter(function () {
+        var img = this.getElementsByTagName("img")[0];
+        var str = img.getAttribute("content");
+        var alertBox = document.getElementById("alertBoxId");
+        var alertContent = document.getElementById("alertContentId");
+        alertContent.innerText = str;
+        alertBox.style.display = 'table';
+    });
+
+    $("li").mouseleave(function () {
+        var alertBox = document.getElementById("alertBoxId")
+        alertBox.style.display = 'none';
+    });
+</script>
+</html>

@@ -1,0 +1,176 @@
+#all{
+	width:920px;
+} 
+/* *****************************************页面左部分（款式图片）******************************************************* */
+#img_model{
+	height: 750px;
+	width:920px;
+	/* margin-left: 15px; */
+    margin-top: 15px;
+    margin-left: 45px;
+}
+#left_model{
+	float: left;
+    margin-right: 15px;
+    /* width: 480px; */
+    width: 423px;
+}
+#top_model{
+	border: 1px solid #cdcdcd;
+/* 	height: 640px;
+    width: 480px; */
+    height: 605px;
+    width: 423px; 
+}
+
+#bottom_model{
+    margin-top: 10px;
+}
+
+/* *****************************************页面右部分（面料、工艺）******************************************************* */
+#right_model{
+	float:left;
+	height: 773px;
+    width: 410px;
+	background-color: #FFFFFF;
+}
+#right_title{
+	color: #5b0a0a;
+    font-family:微软雅黑;
+    font-size: 20px;
+	margin-left: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+#fabric_title,#process_title{
+	color: #816957;
+    font-family:宋体;
+    font-size: 12px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+#process_img{
+	width: 410px;
+}
+.gy_img{
+	width:97px;
+	height:97px;
+	border: 1px solid #e2e1e3;
+	padding: 1px;
+	cursor:pointer;
+}
+.gys{
+	width:95px;
+	border: 1px solid #e2e1e3;
+	color: #666;
+    font-family:宋体;
+    font-size: 12px;
+	margin-bottom: 5px;
+	margin-left: 20px;
+	cursor:pointer;
+	height: 25px;
+    line-height: 20px;
+}
+#process,#fabric{
+	margin-left: 20px;
+}
+#anniu{
+	width:116px;
+	height:37px;
+	margin-left: 250px;
+	background: url(../../fashionIMG/img/aniu.jpg) no-repeat;
+	padding-top: 5px;
+    text-align: center;
+	font-family:微软雅黑;
+    font-size: 17px;
+	color: #FFFFFF;
+	cursor:pointer;
+}
+/* *******************************************页面下部分（款式描述）******************************************************** */
+#des_model{
+	margin-top: 45px;
+	width:920px;
+	margin-left: 15px;
+	margin-bottom: 150px;
+}
+#theme,#place{
+	background: url(../../fashionIMG/img/bt_bg.gif);
+	height: 28px;
+    width: 919px;
+}
+#theme_title,#place_title{
+	color: #C6C6C6;
+    font-family:微软雅黑;
+    font-size: 18px;
+    padding-left: 25px;
+}
+#des_theme,#des_place{
+	height: 100px;
+	width:850px;
+	white-space: normal;
+	margin-top: 15px;
+	margin-left: 25px;
+	word-break:break-all;
+}
+
+/* *****************************************放大镜******************************************************** */
+.zxx_image_zoom_div{
+	position:absolute; 
+	z-index:1000; 
+	overflow:hidden;
+	border: 1px solid #cc9966;
+}
+
+.zoom_image{
+	height: 640px;
+    width: 480px;
+	border:0px;
+}
+
+/* ********************************************鼠标经过或选中************************************************************** */
+/* 小图 */
+.small{ 
+	border: 1px solid #EDEEEE;
+    cursor: pointer;
+    height: 104px;
+    margin-left: 2px;
+    margin-top: 5px;
+}
+/* 面料 */
+ #fabric_img{
+	padding-right: 5px;
+}
+.ml{
+	background-image: url("../../fashionIMG/img/dh.png");
+    background-position: -65px 0;
+    display: inline-block;
+    height: 12px;
+	margin-left: 24px;
+    margin-top: -13px;
+    text-indent: -99em;
+    width: 12px;
+	display: none;
+	position: relative;
+}
+/* 工艺 */
+.gyimg{
+	background-image: url("../../fashionIMG/img/dh.png");
+    background-position: -65px 0;
+    display: inline-block;
+    height: 12px;
+	margin-left: 85px;
+    text-indent: -99em;
+    width: 12px;
+	display: none;
+	position: relative;
+}
+#gy{
+	width:95px;
+	height: 15px;
+	text-align:center;
+}
+
+/* 突出样式(公用) */
+.commom_class{
+	box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.6);
+}

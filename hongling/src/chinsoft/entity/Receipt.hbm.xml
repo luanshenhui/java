@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="chinsoft.entity.Receipt" table="Receipt">
+        <id name="ID" type="integer">
+			<column name="ID" />
+			<generator class="increment"></generator>
+		</id>
+		<property name="ordenID" type="string">
+            <column name="ORDENID" />
+        </property>
+        <property name="sysCode" type="string">
+            <column name="SYSCODE" />
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" />
+        </property>
+        <property name="identity" type="string">
+            <column name="IDENTITY" />
+        </property>
+        <property name="address" type="string">
+            <column name="ADDRESS" />
+        </property>
+        <property name="phone" type="string">
+			<column name="PHONE" />
+		</property>
+		<property name="bankname" type="string">
+            <column name="BANKNAME" />
+        </property>
+        <property name="bankcardid" type="string">
+            <column name="BANKCARDID" />
+        </property>
+	</class>
+</hibernate-mapping>

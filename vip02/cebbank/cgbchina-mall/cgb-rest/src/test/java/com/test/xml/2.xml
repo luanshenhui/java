@@ -1,0 +1,39 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gateway="http://www.agree.com.cn/GDBGateway">
+    <soapenv:Header>
+        <gateway:HeadType>
+            <gateway:versionNo>1</gateway:versionNo>
+            <gateway:toEncrypt>0</gateway:toEncrypt>
+            <gateway:commCode>500001</gateway:commCode>
+            <gateway:commType>0</gateway:commType>
+            <gateway:receiverId>MALL</gateway:receiverId>
+            <gateway:senderId/>
+            <gateway:senderSN>20160607153050000000001</gateway:senderSN>
+            <gateway:senderDate/>
+            <gateway:senderTime>153050</gateway:senderTime>
+            <gateway:tradeCode>MAL321</gateway:tradeCode>
+            <gateway:gwErrorCode/>
+            <gateway:gwErrorMessage/>
+        </gateway:HeadType>
+    </soapenv:Header>
+    <soapenv:Body>
+        <gateway:NoAS400>
+            <gateway:field name="ID">1QQ6TKA9WK</gateway:field>
+            <gateway:field name="LINKTYPE">7AQGUHFR9Y</gateway:field>
+            <gateway:field name="ADVERTISEDESC">YVBDNUGO8H</gateway:field>
+            <gateway:field name="ADVERTISESEQ">76T6NQBEPX</gateway:field>
+            <gateway:field name="PHONEHREF">4VDNA2834O</gateway:field>
+            <gateway:field name="KEYWORD">E68158MX5N</gateway:field>
+            <gateway:field name="PICTUREURL">GCRKLP3FY0</gateway:field>
+            <gateway:field name="ID">808AQTRVV0</gateway:field>
+            <gateway:field name="LINKTYPE">3KKKXG9K56</gateway:field>
+            <gateway:field name="ADVERTISEDESC">C2O2981UFO</gateway:field>
+            <gateway:field name="ADVERTISESEQ">NV6OS3YWQ0</gateway:field>
+            <gateway:field name="PHONEHREF">XSAQV0VIX3</gateway:field>
+            <gateway:field name="KEYWORD">NRDKFNLYTK</gateway:field>
+            <gateway:field name="PICTUREURL">22MG1MQP6R</gateway:field>
+            <gateway:field name="RETURNCODE">73SDN1FA7D</gateway:field>
+            <gateway:field name="RETURNDES">6GMUPJMPY7</gateway:field>
+        </gateway:NoAS400>
+    </soapenv:Body>
+</soapenv:Envelope>

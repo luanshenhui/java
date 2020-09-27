@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <title>首页 | Rkylin OMS</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
+    <link rel="shortcut icon" href="Apollo/images/icons/favicon.png">
+    <link rel="apple-touch-icon" href="Apollo/images/icons/favicon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="Apollo/images/icons/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="Apollo/images/icons/favicon-114x114.png">
+    <!--Loading bootstrap css-->
+
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css">
+    <!--LOADING STYLESHEET FOR PAGE-->
+    <!--Loading style vendors-->
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/animate.css/animate.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/jquery-pace/pace.css">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/vendors/iCheck/skins/all.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/sco.message/sco.message.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-bootstrap-wizard/custom.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-steps/css/jquery.steps.css">
+    <!--Loading style-->
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/orange-blue.css" class="default-style">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change" class="style-change color-change">
+    <link type="text/css" rel="stylesheet" href="Apollo/madmin/css/style-responsive.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/select2/select2-madmin.css">
+	<link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/multi-select/css/multi-select-madmin.css">
+	<link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/dataTables.bootstrap.css">
+	    
+    <!-- 加载主题风格样式 -->
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" class="default-style" />
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change" class="style-change color-change" />
+    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/style-responsive.css" />
+</head>
+
+<body id="topBody" class=" ">
+    <div>
+        <!--BEGIN BACK TO TOP--><a id="totop" href="#"><i class="fa fa-angle-up"></i></a>
+        <!--END BACK TO TOP-->
+        <!--BEGIN TOPBAR-->
+        <div id="header-topbar-option-demo" class="page-header-topbar">
+            <nav id="topbar" role="navigation" style="margin-bottom: 0; z-index: 2;" class="navbar navbar-default navbar-static-top">
+                <div class="navbar-header">
+                    <button type="button" data-toggle="collapse" data-target=".sidebar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                    </button><a id="logo" href="index.html" class="navbar-brand"><span class="fa fa-rocket"></span><span class="logo-text"><img style="height: 40px;float: left; margin: -11px 0px 0px 0px;" src="/images/LOGO.png"></span><span style="display: none" class="logo-text-icon"><img style="height: 30px;float: left;margin: -4px 0px 0px -4px;" src="/images/LogoOnly.png"></span></a>
+                </div>
+                <div class="topbar-main"><a id="menu-toggle" href="#" class="hidden-xs"><i class="fa fa-bars"></i></a>
+<!--                     <ul class="nav navbar-nav   horizontal-menu hidden-sm hidden-xs"> -->
+<!--                         <li class="active"><a href="index.html">仪表盘</a> -->
+<!--                         </li> -->
+<!--                         <li><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle">订单中心&nbsp;<i class="fa fa-angle-down"></i></a> -->
+<!--                             <ul class="dropdown-menu"> -->
+<!--                                 <li><a href="#">平台订单</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="#">系统订单</a> -->
+<!--                                 </li> -->
+<!--                             </ul> -->
+<!--                         </li> -->
+                        
+<!--                         <li><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle">售后管理&nbsp;<i class="fa fa-angle-down"></i></a> -->
+<!--                             <ul class="dropdown-menu"> -->
+<!--                                 <li><a href="#">平台退款单</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="#">系统退款单</a> -->
+<!--                                 </li> -->
+<!--                             </ul> -->
+<!--                         </li> -->
+                        
+<!--                         <li><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle">商品管理&nbsp;<i class="fa fa-angle-down"></i></a> -->
+<!--                             <ul class="dropdown-menu"> -->
+<!--                                 <li><a href="#">平台商品</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="#">商品类目</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="#">库存分配</a> -->
+<!--                                 </li> -->
+<!--                             </ul> -->
+<!--                         </li> -->
+                        
+<!--                         <li><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle">作业管理&nbsp;<i class="fa fa-angle-down"></i></a> -->
+<!--                             <ul class="dropdown-menu"> -->
+<!--                                 <li><a href="#">进行中作业</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="#">历史作业</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="#">作业规则设置</a> -->
+<!--                                 </li> -->
+<!--                             </ul> -->
+<!--                         </li> -->
+
+<!-- 						<li><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle">系统管理&nbsp;<i class="fa fa-angle-down"></i></a> -->
+<!--                             <ul class="dropdown-menu"> -->
+<!--                                 <li><a href="javascript:;" onclick="menuItemSelected(this)">项目管理</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="javascript:;" onclick="menuItemSelected(this)">店铺管理</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="#">客户端管理</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="#">操作审计</a> -->
+<!--                                 </li> -->
+<!--                                 <li><a href="#">归档管理</a> -->
+<!--                                 </li> -->
+<!--                             </ul> -->
+<!--                         </li> -->
+<!--                     </ul> -->
+                    <form id="topbar-search" action="#" method="GET" class="hidden-xs">
+                        <div class="input-group">
+                            <input type="text" placeholder="订单号" class="form-control" /><span class="input-group-btn"><a href="javascript:;" class="btn submit"><i class="fa fa-search"></i></a></span>
+                        </div>
+                    </form>
+                    <ul class="nav navbar navbar-top-links navbar-right mbn">
+                        <li class="dropdown"><a data-hover="dropdown" href="#" class="dropdown-toggle"><i class="fa fa-tasks fa-fw"></i><span class="badge badge-yellow">8</span></a>
+                            <ul class="dropdown-menu dropdown-tasks">
+                                <li>
+                                    <p>待办任务</p>
+                                </li>
+                                <li>
+                                    <div class="dropdown-slimscroll">
+                                        <ul>
+                                            <li><a href="#"><span class="task-item">商品库存不足<small class="pull-right text-muted">40%</small></span><div class="progress progress-sm"><div role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;" class="progress-bar progress-bar-orange"><span class="sr-only">40% 完成</span></div></div></a>
+                                            </li>
+                                            <li>
+                                                <a href="#"> <span class="task-item">订单审核<small class="pull-right text-muted">60%</small></span>
+                                                    <div class="progress progress-sm">
+                                                        <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;" class="progress-bar progress-bar-blue"><span class="sr-only">60% 完成</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#"> <span class="task-item">财务审核<small class="pull-right text-muted">55%</small></span>
+                                                    <div class="progress progress-sm">
+                                                        <div role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" style="width: 55%;" class="progress-bar progress-bar-green"><span class="sr-only">55% 完成</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#"> <span class="task-item">店铺到期<small class="pull-right text-muted">78%</small></span>
+                                                    <div class="progress progress-sm">
+                                                        <div role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" style="width: 78%;" class="progress-bar progress-bar-yellow"><span class="sr-only">78% 完成</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="last"><a href="#">全部待办</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown topbar-user">
+                            <a data-hover="dropdown" href="#" class="dropdown-toggle"><img src="Apollo/images/user/head.jpg" alt="" class="img-responsive img-circle" />&nbsp;<span class="hidden-xs">个人中心</span>&nbsp;<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user pull-right">
+                                <li><a href="#"><i class="fa fa-user"></i>资料</a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-tasks"></i>任务<span class="badge badge-success">7</span></a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="javascript:void(0)" class="btn-fullscreen"><i class="fa fa-arrows"></i>全屏</a>
+                                </li>
+                                <li><a href="lock-screen.html"><i class="fa fa-lock"></i>锁屏</a>
+                                </li>
+                                <li><a href="/"><i class="fa fa-key"></i>退出</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown hidden-xs">
+                            <!--BEGIN THEME SETTING--><a id="theme-setting" href="javascript:;" data-hover="dropdown" data-step="1" data-intro="&lt;b&gt;Header&lt;/b&gt;, &lt;b&gt;sidebar&lt;/b&gt;, &lt;b&gt;border style&lt;/b&gt; and &lt;b&gt;color&lt;/b&gt;, all of them can change for you to create the best" data-position="left" class="dropdown-toggle"><i class="fa fa-cogs"></i></a>
+                            <ul class="dropdown-menu dropdown-theme-setting pull-right">
+                                <li>
+                                    <h4 class="mtn">主题风格</h4>
+                                    <select id="list-style" class="form-control">
+                                        <option value="style1">扁平直角</option>
+                                        <option value="style2">扁平圆角</option>
+                                        <option value="style3">扁平有框</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <h4 class="mtn">Menu Styles</h4>
+                                    <select id="list-menu" class="form-control">
+                                        <option value="sidebar-default">菜单风格1</option>
+                                        <option value="sidebar-colors">菜单风格2</option>
+                                        <option value="sidebar-icons">菜单风格3</option>
+                                        <option value="sidebar-collapsed">菜单风格4</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <h4 class="mtn">页头与侧边栏</h4>
+                                    <select id="list-header" class="form-control">
+                                        <option value="header-static">静态</option>
+                                        <option value="header-fixed">固定</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <h4 class="mtn">主题颜色</h4>
+                                    <ul id="list-color" class="list-unstyled list-inline">
+                                        <li data-color="green-dark" data-hover="tooltip" title="深绿" class="green-dark"></li>
+                                        <li data-color="red-dark" data-hover="tooltip" title="深红" class="red-dark"></li>
+                                        <li data-color="pink-dark" data-hover="tooltip" title="深品红" class="pink-dark"></li>
+                                        <li data-color="blue-dark" data-hover="tooltip" title="深蓝" class="blue-dark"></li>
+                                        <li data-color="yellow-dark" data-hover="tooltip" title="深黄" class="yellow-dark"></li>
+                                        <li data-color="green-grey" data-hover="tooltip" title="灰绿" class="green-grey"></li>
+                                        <li data-color="red-grey" data-hover="tooltip" title="灰红" class="red-grey"></li>
+                                        <li data-color="pink-grey" data-hover="tooltip" title="灰品" class="pink-grey"></li>
+                                        <li data-color="blue-grey" data-hover="tooltip" title="灰蓝" class="blue-grey"></li>
+                                        <li data-color="yellow-grey" data-hover="tooltip" title="灰黄" class="yellow-grey"></li>
+                                        <li data-color="yellow-green" data-hover="tooltip" title="绿黄" class="yellow-green"></li>
+                                        <li data-color="orange-grey" data-hover="tooltip" title="灰橙" class="orange-grey"></li>
+                                        <li data-color="pink-blue" data-hover="tooltip" title="蓝品" class="pink-blue"></li>
+                                        <li data-color="pink-violet" data-hover="tooltip" title="紫品" class="pink-violet active"></li>
+                                        <li data-color="orange-violet" data-hover="tooltip" title="紫橙" class="orange-violet"></li>
+                                        <li data-color="pink-green" data-hover="tooltip" title="绿品" class="pink-green"></li>
+                                        <li data-color="pink-brown" data-hover="tooltip" title="棕品" class="pink-brown"></li>
+                                        <li data-color="orange-blue" data-hover="tooltip" title="蓝橙" class="orange-blue"></li>
+                                        <li data-color="yellow-blue" data-hover="tooltip" title="蓝黄" class="yellow-blue"></li>
+                                        <li data-color="green-blue" data-hover="tooltip" title="蓝绿" class="green-blue"></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <!--END THEME SETTING-->
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!--BEGIN MODAL CONFIG PORTLET-->
+            <div id="modal-config" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend et nisl eget porta. Curabitur elementum sem molestie nisl varius, eget tempus odio molestie. Nunc vehicula sem arcu, eu pulvinar neque cursus ac. Aliquam ultricies lobortis magna et aliquam. Vestibulum egestas eu urna sed ultricies. Nullam pulvinar dolor vitae quam dictum condimentum. Integer a sodales elit, eu pulvinar leo. Nunc nec aliquam nisi, a mollis neque. Ut vel felis quis tellus hendrerit placerat. Vivamus vel nisl non magna feugiat dignissim sed ut nibh. Nulla elementum, est a pretium hendrerit, arcu risus luctus augue, mattis aliquet orci ligula eget massa. Sed ut ultricies felis.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--END MODAL CONFIG PORTLET-->
+        </div>
+        <!--END TOPBAR-->
+        <div id="wrapper">
+            <!--BEGIN SIDEBAR MENU-->
+            <nav id="sidebar" role="navigation" class="navbar-default navbar-static-side">
+                <div class="sidebar-collapse menu-scroll">
+                    <ul id="side-menu" class="nav">
+                        <li class="user-panel">
+                            <div class="thumb"><img src="Apollo/images/user/head.jpg" alt="" class="img-circle" />
+                            </div>
+                            <div class="info">
+                                <p>雷锋</p>
+                                <ul class="list-inline list-unstyled">
+                                    <li><a href="#" data-hover="tooltip" title="资料"><i class="fa fa-user"></i></a>
+                                    </li>
+                                    <li><a href="#" data-hover="tooltip" title="邮件"><i class="fa fa-envelope"></i></a>
+                                    </li>
+                                    <li><a href="#" data-hover="tooltip" title="设置" data-toggle="modal" data-target="#modal-config"><i class="fa fa-cog"></i></a>
+                                    </li>
+                                    <li><a id="logOut" href="javascript:;" data-hover="tooltip" title="退出"><i class="fa fa-sign-out"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                        <li class="active"><a href="index.html"><i class="fa fa-tachometer fa-fw"><div class="icon-bg bg-orange"></div></i><span class="menu-title">仪表盘</span></a>
+                        </li>
+                        <!--<li><a href="#"><i class="fa fa-desktop fa-fw"><div class="icon-bg bg-pink"></div></i><span class="menu-title">项目管理</span><span class="fa arrow"></span></a>-->
+                            <!--<ul class="nav nav-second-level">-->
+                                <!--<li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">项目管理	</span></a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</li>-->
+                        <li><a href="#"><i class="fa fa-desktop fa-fw"><div class="icon-bg bg-pink"></div></i><span class="menu-title">订单中心</span><span class="fa arrow"></span><span class="badge badge-white pull-right">3</span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-h-square"></i><span class="submenu-title">平台订单</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="$('#contentFrame').attr('src','views/order/platformOrder.html')"><i class="fa fa-magnet"></i><span class="submenu-title">模板系统订单</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="$('#contentFrame').attr('src','views/order/systemOrder.html')"><i class="fa fa-magnet"></i><span class="submenu-title">系统订单</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="#"><i class="fa fa-send-o fa-fw"><div class="icon-bg bg-green"></div></i><span class="menu-title">售后管理</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="#"><i class="fa fa-briefcase"></i><span class="submenu-title">平台退款单</span></a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-instagram"></i><span class="submenu-title">系统退款单</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="#"><i class="fa fa-rocket fa-fw"><div class="icon-bg bg-green"></div></i><span class="menu-title">商品管理</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="#" onclick="menuItemSelected(this)"><i class="fa fa-spinner"></i><span class="submenu-title">平台商品</span><span class="label label-yellow">v4.1</span></a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-edit"></i><span class="submenu-title">商品类目</span></a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-list-ol"></i><span class="submenu-title">库存分配</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="#"><i class="fa fa-edit fa-fw"><div class="icon-bg bg-violet"></div></i><span class="menu-title">作业管理</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="#"><i class="fa fa-columns"></i><span class="submenu-title">进行中作业</span></a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-file-text-o"></i><span class="submenu-title">历史作业</span></a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-cube"></i><span class="submenu-title">作业规则设置</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="#"><i class="fa fa-th-list fa-fw"><div class="icon-bg bg-blue"></div></i><span class="menu-title">系统管理</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">项目管理	</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">组织管理	</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">用户管理	</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">管理授权	</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">角色管理	</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">菜单管理	</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tablet"></i><span class="submenu-title">店铺管理	</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-tencent-weibo"></i><span class="submenu-title">客户端管理</span></a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-filter"></i><span class="submenu-title">操作审核</span></a>
+                                </li>
+                                <li><a href="#l"><i class="fa fa-indent"></i><span class="submenu-title">归档管理</span></a>
+                                </li>
+                                <li><a href="javascript:;" onclick="menuItemSelected(this)"><i class="fa fa-filter"></i><span class="submenu-title">分单规则</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!--END SIDEBAR MENU-->
+            <!--BEGIN PAGE WRAPPER-->
+            <div id="page-wrapper">
+                <!--BEGIN TITLE & BREADCRUMB PAGE-->
+                <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+                    <div class="page-header pull-left">
+                        <div class="page-title">仪表盘</div>
+                    </div>
+                    <ol class="breadcrumb page-breadcrumb">
+                        <li id="breadcrumbL1"><i class="fa fa-home"></i>&nbsp;<a href="index.html">首页</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li id="breadcrumbL2"><a href="#">系统管理</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li id="breadcrumbL3" class="active">仪表盘</li>
+                    </ol>
+                    <div class="btn btn-blue reportrange hide"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;report&nbsp;<i class="fa fa-angle-down"></i>
+                        <input type="hidden" name="datestart" />
+                        <input type="hidden" name="endstart" />
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <!--END TITLE & BREADCRUMB PAGE-->
+                <!--BEGIN CONTENT-->
+                <iframe id="contentFrame" style="width:100%;height:100%;" scrolling="auto" frameborder="0" src="dashboard.html" width="100%"></iframe>
+                <!--END CONTENT-->
+            </div>
+            <!--BEGIN FOOTER-->
+            <div id="footer">
+                <div class="copyright">2017 © Rkylin - Order Management System</div>
+            </div>
+            <!--END FOOTER-->
+            <!--END PAGE WRAPPER-->
+        </div>
+    </div>
+    
+    <!-- ============================================ 自定义提示框 start ============================================ -->
+    <!--Alert提示框-->
+    <div id="modal-alert" style="z-index:9999;" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id="modalAlertTitle" class="modal-body">提示</div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 启用禁用操作确认 -->
+    <div id="modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal modal-danger fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id="modalConfirmContent" class="modal-body">确定要启用吗？</div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+                    <button id="btnModalOK" type="button" data-dismiss="modal" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 自定义对话框 -->
+    <div id="customModalDialog">
+    </div>
+    <!-- ============================================ 自定义提示框 end ============================================ -->
+    
+    <script src="Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+    <script src="Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="Apollo/madmin/js/jquery-ui.js"></script>
+    <!--loading bootstrap js-->
+    <script src="Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+    <script src="Apollo/madmin/js/html5shiv.js"></script>
+    <script src="Apollo/madmin/js/respond.min.js"></script>
+    <script src="Apollo/madmin/vendors/metisMenu/jquery.metisMenu.js"></script>
+    <script src="Apollo/madmin/vendors/slimScroll/jquery.slimscroll.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script>
+    <script src="Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+    <script src="Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+    <script src="/Apollo/madmin/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+    <script src="/Apollo/madmin/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+    <script src="/Apollo/madmin/vendors/sco.message/sco.message.js"></script>
+    <script src="/Apollo/madmin/vendors/jquery-notific8/notific8.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-highcharts/highcharts.js"></script>
+    <script src="Apollo/madmin/js/jquery.menu.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-pace/pace.min.js"></script>
+    <script src="Apollo/madmin/vendors/holder/holder.js"></script>
+    <script src="Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script>
+    <script src="Apollo/madmin/vendors/jquery-news-ticker/jquery.newsTicker.min.js"></script>
+    <script src="/Apollo/madmin/vendors/moment/moment.js"></script>
+    <script src="/Apollo/madmin/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/Apollo/madmin/vendors/select2/select2.min.js"></script>
+   	<script src="/Apollo/madmin/vendors/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="/Apollo/madmin/vendors/multi-select/js/jquery.multi-select.js"></script>
+    <script src="/Apollo/madmin/js/ui-dropdown-select.js"></script>
+    <!--CORE JAVASCRIPT-->
+    <script src="Apollo/madmin/js/main.js"></script>
+    
+    <script src="/Apollo/madmin/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+    <script src="/Apollo/madmin/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+    <script src="/Apollo/madmin/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+   	<script src="/Apollo/madmin/vendors/jquery-tablesorter/jquery.tablesorter.js"></script>
+    
+</body>
+
+</html>

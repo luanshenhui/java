@@ -1,0 +1,526 @@
+// 店铺Datatable
+var dictTable;
+var dictionaryID;
+var dictionaryName;
+var dictionaryCode;
+var dictionaryRemark;
+var dictionaryVale;
+var dictionaryTypeValue;
+var dictionaryType ="";
+var updateCode;
+
+/**
+ * 页面初始化
+ */
+jQuery(document).ready(function(){
+    
+    $("#dictDetailForm").validate({
+        debug : true,
+        errorPlacement : function(error, element) {
+            error.insertAfter(element);
+        },
+        rules : {
+            txtDictName : {  
+                required : true  
+            },  
+            txtDictCode : {  
+                required : true  
+            },  
+            txt_DictType : {  
+                required : true  
+            },  
+            textValue : {  
+                required : true  
+            },  
+            dateValue : {  
+                required : true  
+            }
+        },
+        messages : {
+            txtDictName : "参数名称不能为空，1-32位字符!",
+            txtDictCode : "参数编码不能为空，1-32位字符!",
+            txt_DictType : "参数类型不能为空，1-32位字符！",
+            textValue : "参数值不能为空，有效长度2000位字符！",
+            dateValue : "日期不能为空！",
+        }
+    });
+    dictTable = $('#dictTable').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "dom": '<"bottom"rtflp>',
+        "searching": false,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+//        "drawCallback": function(settings) {
+//            var api = this.api();
+//            var rows = api.rows({
+//                page: 'current'
+//            }).nodes();
+//            var last = null;
+// 
+//            api.column(5, {
+//                page: 'current'
+//            }).data().each(function(group, i) {
+//                if (last !== group) {
+//                    $(rows).eq(i).before('<tr class="group"><td colspan="4" style="background-color: #ECFFFF;color:#6C6C6C;font-size:20px" class="biaoti" name ="biaoti">' + group + '</td></tr>');
+//                    last = group;
+//                }
+//            });
+//        },
+        "fnDrawCallback": function (o) {
+            var api = this.api();
+            var rows = api.rows({
+                page: 'current'
+            }).nodes();
+            var last = null;
+ 
+            api.column(5, {
+                page: 'current'
+            }).data().each(function(group, i) {
+                if (last !== group) {
+                    $(rows).eq(i).before('<tr class="group"><td colspan="4" style="background-color: #ECFFFF;color:#6C6C6C;font-size:20px" class="biaoti" name ="biaoti">' + group + '</td></tr>');
+                    last = group;
+                }
+            });
+            
+            for(var a=0;a<o.aoData.length;a++){
+                var tdlist=o.aoData[a]
+                for(b=0;b<tdlist.anCells.length-1;b++){
+                    $(tdlist.anCells[b]).attr("title",$(tdlist.anCells[b]).text())
+                }
+            }
+        },
+        "ajax": {
+            "url": "/dictionary/dictList.action",
+            "data": function ( d ) {
+                     d.quickSearch = encodeURI($('#quickSearch').val());
+                }
+        },
+        "tableTools": {
+            "sRowSelect": "bootstrap"
+        },
+        "columns": [ {
+                "data": "dictName"
+            }, {
+                "data": "dictCode"
+            }, {
+                "data": "dictValue"
+            }, {
+                "data": "operation"
+            },{
+                "data": "dictId"
+            },{
+                "data": "dictType"
+            }
+        ],
+        "columnDefs": [{
+                "orderable":false,
+                "targets":[2]
+            },{
+                "orderable":false,
+                "targets":[3]
+            },{
+                "orderable":false,
+                "visible": false,
+                "targets":[4]
+            },{
+                "orderable":false,
+                "visible": false,
+                "targets":[5]
+            }
+        ],
+        "order": [[ 0, "desc" ],[ 1, "desc" ]]
+    });
+    var currentOrder = dictTable.order()[0];
+    if (currentOrder[0] === 5 && currentOrder[1] === 'asc') {
+        dictTable.order([5, 'desc']).draw();
+    } else {
+        dictTable.order([5, 'asc']).draw();
+    }
+     //根据组排序
+//    $('#dictTable tbody').on('click', 'tr.group',
+//    function() {
+//        var currentOrder = dictTable.order()[0];
+//        if (currentOrder[0] === 5 && currentOrder[1] === 'asc') {
+//            dictTable.order([5, 'desc']).draw();
+//        } else {
+//            dictTable.order([5, 'asc']).draw();
+//        }
+//    });
+    
+    $.ajax({
+        type:"GET",
+        url:"/dictionary/getDictTypeList.action",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        async: true,//同步
+        success:function(data) {
+            if (data.result == "success") {
+                $("#txtDictType option").remove();
+                if(null == dictionaryType){
+                    dictionaryType="";
+                }
+                $("#txtDictType").append("<option value=''>" + dictionaryType + "</option>");
+                $.each(data.data, function (n, value) {
+                    $("#txtDictType").append("<option value='" + value.dictType + "'>" + value.dictType + "</option>");
+                });
+            } else {
+                window.top.window.showModalAlert(data.msg);
+            }
+        },
+        error:function(XMLHttpRequest, textStatus) {
+            if (XMLHttpRequest.status == 500) {
+                var result = eval("(" + XMLHttpRequest.responseText + ")");
+                alert(result.errorObject.errorText);
+            }
+        }
+    });
+});
+
+// 搜索框的回车事件
+$('#quickSearch').keydown(function(e){
+    if(e.keyCode==13){
+        $("#btnQuickSearch").click();
+    }
+});
+
+//参数类型下拉菜单
+function getType(){
+    $.ajax({
+        type:"GET",
+        url:"/dictionary/getDictTypeList.action",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        async: false,//同步
+        success:function(data) {
+            if (data.result == "success") {
+                $("#txtDictType option").remove();
+                if(null == dictionaryType){
+                    dictionaryType="";
+                }
+                $("#txtDictType").append("<option value=''>" + dictionaryType + "</option>");
+                $.each(data.data, function (n, value) {
+                    $("#txtDictType").append("<option value='" + value.dictType + "'>" + value.dictType + "</option>");
+                });
+            } else {
+                window.top.window.showModalAlert(data.msg);
+            }
+        },
+        error:function(XMLHttpRequest, textStatus) {
+            if (XMLHttpRequest.status == 500) {
+                var result = eval("(" + XMLHttpRequest.responseText + ")");
+                alert(result.errorObject.errorText);
+            }
+        }
+    });
+}
+
+// 快速搜索，点击时提交表格刷新内容
+$("#btnQuickSearch").click(function () {
+    dictTable.draw();
+});
+
+//添加按钮
+function addDict(){
+    $("#dictIframe").attr("src","/views/system/organization/dictionary/dictIframe.html?dictValue="+"")
+    $("#radioType").show();
+    $("#textPage").show();
+    $("#htmlPage2").hide();
+    $("#datePage").hide();
+    $("#createTitle").html("新建参数");
+    getType();
+    var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+    editDialog.modal({show:true, backdrop:'static'});
+} 
+
+//父窗体归还本页的编辑对话框
+$('#creatDict').on('hide.bs.modal', function () {
+    // 父窗体归还本页的编辑对话框
+    window.top.window.returnCustomModalDialog();
+    ClearInput();
+    $("#txtDictName").val("");
+    $("#txtDictCode").val("");
+    $("#txtDictRemark").val("");
+    $("#dictId").val("");
+    $("#txt_DictType").val("");
+    $("#textValue").val("");
+    $("#htmlValue").val("");
+    $("#dateValue").val("");
+    $("input[name=dict_value_type]").attr("checked",false);
+    var selects = document.getElementsByName("dict_value_type");
+    selects[0].checked  = true ;
+});
+
+//清空输入域样式
+function ClearInput() {  
+    //清空输入域  
+   var validator = $("#dictDetailForm").validate({  
+        submitHandler: function (form) {  
+            form.submit();  
+        }  
+    });  
+    validator.resetForm();  
+    $('#dictDetailForm .state-error').removeClass('state-error');
+    $('#dictDetailForm .state-success').removeClass('state-success');
+} 
+
+//板寸按钮
+$('#dictSave').click(function(){
+    insertDict();
+    dictTable.draw();
+});
+
+//添加或修改保存安妞妞
+function insertDict() {
+    
+    var canshuValue2=$(window.parent.document).contents().find("#dictIframe")[0].contentWindow.$(".note-editable").html();
+    window.top.window.returnCustomModalDialog();
+    var txtDictName = $("#txtDictName").val();
+    var txtDictCode = $("#txtDictCode").val();
+    var txtDictRemark = $("#txtDictRemark").val();
+    var txtDictType =$("#txt_DictType").val();
+    var radio = document.getElementsByName("dict_value_type");
+    for(var i=0; i<radio.length;i++){
+        if(radio[i].checked){
+            var txtDict_value_type =radio[i].value;
+        }
+    }
+    var dictID =$("#dictId").val();
+    var textValue = $("#textValue").val();
+    if(!$("#dictDetailForm").valid()) {
+        // 父窗体借用本页的编辑对话框
+        window.top.window.borrowCustomModalDialog($("#creatDict"));
+        return false;
+    }
+    if($("#dictId").val()!= null&&$("#dictId").val()!=''){
+        debugger
+        if(dictionaryTypeValue == 0){
+            var canshuValue = $("#textValue").val();
+        }else if(dictionaryTypeValue == 1){
+            var canshuValue = $("#dateValue").val();
+        }else if(dictionaryTypeValue == 2){
+            var canshuValue = canshuValue2;
+            if(canshuValue == "<br>"){
+                canshuValue="";
+            }
+            if(null == canshuValue || canshuValue ==""){
+                var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+                editDialog.modal({show:true, backdrop:'static'});
+                return window.top.window.showModalAlert("参数值不能为空");
+            }else if(canshuValue.length >2000){
+                var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+                editDialog.modal({show:true, backdrop:'static'});
+                return window.top.window.showModalAlert("字节不能大于2000");
+            }
+        }
+        
+        var data = {
+                "dictId": dictID,
+                "dictName": txtDictName,
+                "dictCode": txtDictCode,
+                "remark": txtDictRemark,
+                "dictValueType": dictionaryTypeValue,
+                "dictValue":canshuValue,
+                "dictType":txtDictType,
+                "dicUpdateCode":updateCode,
+            };
+        $.ajax({
+            type:"POST",
+            url:"/dictionary/updateDict.action",
+            data:JSON.stringify(data),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            async: false, // 同步
+            success:function(data) {
+                if (data.result == "success") {
+                 $('#creatDict').modal('hide');
+                 window.top.window.showScoMessage('ok', '添加成功');
+                 
+                } else{
+                 window.top.window.showModalAlert(data.msg);
+                 var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+                 editDialog.modal({show:true, backdrop:'static'});
+                }
+            },
+            error:function(XMLHttpRequest, textStatus) {
+                if (XMLHttpRequest.status == 500) {
+                    var result = eval("(" + XMLHttpRequest.responseText + ")");
+                    window.top.window.showModalAlert(result.errorObject.errorText);
+                }
+            }
+        });
+    }else{
+        dictionaryTypeValue = txtDict_value_type;
+        if(dictionaryTypeValue == 0){
+            var canshuValue = $("#textValue").val();
+        }else if(dictionaryTypeValue == 1){
+            var canshuValue = $("#dateValue").val();
+        }else if(dictionaryTypeValue == 2){
+            var canshuValue = canshuValue2;
+            if(null == canshuValue || canshuValue ==""){
+                var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+                editDialog.modal({show:true, backdrop:'static'});
+                return window.top.window.showModalAlert("参数值不能为空");
+            }else if(canshuValue.length > 2000){
+                var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+                editDialog.modal({show:true, backdrop:'static'});
+                return window.top.window.showModalAlert("字节不能大于2000");
+            }
+        }
+        
+        var data = {
+                "dictName": txtDictName,
+                "dictCode": txtDictCode,
+                "remark": txtDictRemark,
+                "dictValueType": txtDict_value_type,
+                "dictValue":canshuValue,
+                "dictType":txtDictType,
+            };
+        $.ajax({
+            type:"POST",
+            url:"/dictionary/addDict.action",
+            data:JSON.stringify(data),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            async: false, // 同步
+            success:function(data) {
+                if (data.result == "success") {
+                 $('#creatDict').modal('hide');
+                 window.top.window.showScoMessage('ok', '添加成功');
+                } else{
+                 window.top.window.showModalAlert(data.msg);
+                 var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+                 editDialog.modal({show:true, backdrop:'static'});
+                }
+            },
+            error:function(XMLHttpRequest, textStatus) {
+                if (XMLHttpRequest.status == 500) {
+                    var result = eval("(" + XMLHttpRequest.responseText + ")");
+                    window.top.window.showModalAlert(result.errorObject.errorText);
+                }
+            }
+        });
+    }
+}
+//radiobutton
+$('#dict_value_type0').click(function(){
+    window.top.window.returnCustomModalDialog();
+    $("#textPage").show();
+    $("#htmlPage2").hide();
+    $("#datePage").hide();
+    dictionaryTypeValue =0;
+    var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+    editDialog.modal({show:true, backdrop:'static'});
+});
+
+//radiobutton
+$('#dict_value_type2').click(function(){
+    window.top.window.returnCustomModalDialog();
+    $("#textPage").hide();
+    $("#htmlPage2").show();
+    $("#datePage").hide();
+    dictionaryTypeValue =2;
+    $(".note-editable").val();
+    var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+    editDialog.modal({show:true, backdrop:'static'});
+});
+
+//radiobutton
+$('#dict_value_type1').click(function(){
+    window.top.window.returnCustomModalDialog();
+    $("#textPage").hide();
+   
+    $("#htmlPage2").hide();
+    $("#datePage").show();
+
+    dictionaryTypeValue =1;
+    var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+    editDialog.modal({show:true, backdrop:'static'});
+    
+});
+
+//修改按钮
+function operationEdit(btnEdit,typeValue,dictValue,name,code,miaoshu,type) {
+    var url="/views/system/organization/dictionary/dictIframe.html?dictValue="+dictValue.toString();
+    $("#dictIframe").attr("src",encodeURI(encodeURI(url)))
+    $("#dictDetailForm")[0].reset();
+    dictionaryID = $(btnEdit).attr("dictionaryID");
+    dictionaryName = name;
+    updateCode = code;
+    dictionaryCode = code;
+    dictionaryRemark = miaoshu;
+    dictionaryVale = dictValue;
+    dictionaryTypeValue = typeValue ;
+    dictionaryType = type;
+    $("#dictId").val(btnEdit);
+    $("#createTitle").html("修改参数");
+    $("#radioType").hide();
+    $("#txtDictName").val(dictionaryName);
+    $("#txtDictCode").val(dictionaryCode);
+    $("#txt_DictType").val(dictionaryType);
+    $("#txtDictRemark").val(dictionaryRemark);
+    if(dictionaryTypeValue == 0){
+        $("#textPage").show();
+        $("#htmlPage2").hide();
+        $("#datePage").hide();
+        $("#textValue").val(dictionaryVale);
+    }else if(dictionaryTypeValue == 1){
+        $("#datePage").show();
+        $("#htmlPage2").hide();
+        $("#textPage").hide();
+        $("#dateValue").val(dictionaryVale);
+    }else if(dictionaryTypeValue == 2){
+        $("#htmlPage2").show();
+        $("#textPage").hide();
+        $("#datePage").hide();
+        $(".note-editable").text(dictionaryVale);
+    }
+    getType();
+    var editDialog = window.top.window.borrowCustomModalDialog($("#creatDict"));
+    editDialog.modal({show:true, backdrop:'static'});
+}
+
+/**
+ * 删除提示
+ * @param btnDelete
+ * @returns
+ */
+function operationDelete(btnDelete){
+    dictionaryID = $(btnDelete).attr("dictionaryID");
+    window.top.window.showModalConfirm("确定要删除该参数吗？", doDelete);
+}
+
+/**
+ * 执行删除店铺操作
+ * @returns
+ */
+function doDelete() {
+    if (dictionaryID == "") {
+        return;
+    }
+    $.ajax({
+        type:"POST",
+        url:"/dictionary/deleteDict.action",
+        dataType: "json",
+        async: false,//同步
+        data : {
+            dictId : dictionaryID
+        },
+        success:function(data) {
+            if (data.result == "success") {
+                window.top.window.showScoMessage('ok', '删除成功');
+            } else{
+                window.top.window.showModalAlert(data.msg);
+            }
+        },
+        error:function(XMLHttpRequest, textStatus) {
+            if (XMLHttpRequest.status == 500) {
+                var result = eval("(" + XMLHttpRequest.responseText + ")");
+                window.top.window.showModalAlert(result.errorObject.errorText);
+            }
+        }
+    });
+    dictionaryID = "";
+    dictTable.draw();
+}

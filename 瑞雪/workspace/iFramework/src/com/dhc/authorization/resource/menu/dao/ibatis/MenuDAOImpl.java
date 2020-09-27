@@ -1,0 +1,399 @@
+package com.dhc.authorization.resource.menu.dao.ibatis;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
+
+import com.dhc.authorization.delegate.domain.WF_ORG_DELEGATE;
+import com.dhc.authorization.resource.menu.dao.IMenuDAO;
+import com.dhc.authorization.resource.menu.domain.WF_ORG_MENU;
+import com.dhc.base.exception.DataAccessException;
+import com.dhc.base.security.SecurityUser;
+import com.dhc.base.security.SecurityUserHoder;
+
+/**
+ * brief description
+ * <p>
+ * Date : 2010/05/11
+ * </p>
+ * <p>
+ * Module : 菜单管理
+ * </p>
+ * <p>
+ * Description: 菜单数据访问对象实现
+ * </p>
+ * <p>
+ * Remark :
+ * </p>
+ * 
+ * @author 王潇艺
+ * @version
+ *          <p>
+ * 			------------------------------------------------------------
+ *          </p>
+ *          <p>
+ *          修改历史
+ *          </p>
+ *          <p>
+ *          序号 日期 修改人 修改原因
+ *          </p>
+ *          <p>
+ *          1
+ *          </p>
+ */
+public class MenuDAOImpl extends SqlMapClientDaoSupport implements IMenuDAO {
+
+	public MenuDAOImpl() {
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据条件获取菜单项（不包括页面元素）
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 菜单vo，作为查询条件
+	 * @return 如果找到，返回List<WF_ORG_MENU> 如果没有找到，返回null
+	 * @throws DataAccessException
+	 */
+	public List getMenuItemsByCondition(WF_ORG_MENU menuItemVO, String expandAll) throws DataAccessException {
+		if (menuItemVO.getUserID() == null) {
+			SecurityUser securityUser = SecurityUserHoder.getCurrentUser();
+			menuItemVO.setUserID(securityUser.getUserBean().getId());
+		}
+		// userID在使用过程中会被修改，所以要提前保存。
+		String oldUserID = menuItemVO.getUserID();
+		List returnList = new ArrayList();
+		try {
+			if (expandAll.equals("1") || expandAll.equalsIgnoreCase("true")) {// 全部查询
+				List roleIDList = new ArrayList();
+				roleIDList = getUserRolesIncludeDelegates(menuItemVO);
+				// 根据自己具有 的所有角色、组织、岗位来取菜单
+				menuItemVO.setUserIdTemp(roleIDList);
+				menuItemVO.setUserID(oldUserID);
+				returnList = getSqlMapClient().queryForList("WF_ORG_MENU.selectMenu", menuItemVO);
+			} else if (expandAll.equals("0") || expandAll.equalsIgnoreCase("false")) {// 部分查询
+				List roleIDList = new ArrayList();
+				roleIDList = getUserRolesIncludeDelegates(menuItemVO);
+				menuItemVO.setUserIdTemp(roleIDList);
+				menuItemVO.setUserID(oldUserID);
+				returnList = getSqlMapClient().queryForList("WF_ORG_MENU.selectRootorSubMenu", menuItemVO);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+
+		return returnList;
+	}
+
+	/**
+	 * 获取某用户的所有角色、组织、岗位id，包括被委托的。
+	 * 
+	 * @param menuItemVO
+	 * @return
+	 * @throws SQLException
+	 * @throws Exception
+	 */
+	public List getUserRolesIncludeDelegates(WF_ORG_MENU menuItemVO) throws SQLException, Exception {
+		List roleIDList = new ArrayList();
+		Map roleIDTemp = new HashMap();
+		List list1 = new ArrayList();
+		// 1、取自己的角色（带权限排除）
+		list1 = getSqlMapClient().queryForList("WF_ORG_MENU.selectMenuPart1", menuItemVO);
+		for (int i = 0; i < list1.size(); i++) {
+			Map map = (Map) list1.get(i);
+			String str = map.get("ROLE_ID").toString();
+			if (!roleIDTemp.containsKey(str)) {
+				roleIDTemp.put(str, str);
+				roleIDList.add(str);
+			}
+		}
+		// 2、取自己的所有有效权限委托
+		List avialableDelegates = getSqlMapClient().queryForList("WF_ORG_DELEGATE.getUserAvailableDelegate",
+				menuItemVO.getUserID());
+		// 3、循环有效委托
+		for (int i = 0; i < avialableDelegates.size(); i++) {
+			WF_ORG_DELEGATE delegate = (WF_ORG_DELEGATE) avialableDelegates.get(i);
+			// 4、 [全部委托]取被委托的角色（全部）
+			if (delegate.getDeleAllPrivil().equals("1")) {
+				// 设置委托人的id
+				menuItemVO.setUserID(delegate.getUserId());
+				// 找委托人的全部角色、权限、组织、岗位
+				list1 = getSqlMapClient().queryForList("WF_ORG_MENU.selectMenuPart1", menuItemVO);
+				for (int j = 0; j < list1.size(); j++) {
+					Map map = (Map) list1.get(j);
+					String str = map.get("ROLE_ID").toString();
+					if (!roleIDTemp.containsKey(str)) {
+						roleIDTemp.put(str, str);
+						roleIDList.add(str);
+					}
+				}
+			} else {
+				// 5、 [部分委托]取被委托的角色（部分）
+				// 设置委托人的id
+				menuItemVO.setUserID(delegate.getUserId());
+				// 找被委托的所有角色
+				list1 = getSqlMapClient().queryForList("WF_ORG_DELEGATE.getUserDelegatedRoles", menuItemVO.getUserID());
+				for (int j = 0; j < list1.size(); j++) {
+					Map map = (Map) list1.get(j);
+					String str = map.get("ROLE_ID").toString();
+					if (!roleIDTemp.containsKey(str)) {
+						roleIDTemp.put(str, str);
+						roleIDList.add(str);
+					}
+				}
+				menuItemVO.setUserIdTemp(roleIDList);
+			}
+		}
+		// 6、循环结束
+		return roleIDList;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存对菜单项的修改
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 菜单项vo
+	 * @throws DataAccessException
+	 */
+	public void updateMenuItem(WF_ORG_MENU menuItemVO) throws DataAccessException {
+		try {
+			getSqlMapClient().update("WF_ORG_MENU.updateMenu", menuItemVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存对页面的修改
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 菜单项vo
+	 * @throws DataAccessException
+	 */
+	public void updatePageItem(WF_ORG_MENU pageItemVO) throws DataAccessException {
+		try {
+			getSqlMapClient().update("WF_ORG_MENU.updateMenu", pageItemVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 新建一个菜单项，需要给MenuItem创建一个uuid
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 菜单项vo
+	 * @throws DataAccessException
+	 */
+	public void insertMenuItem(WF_ORG_MENU menuItemVO) throws DataAccessException {
+		try {
+			this.getSqlMapClient().insert("WF_ORG_MENU.insert", menuItemVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存对页面元素的修改
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 菜单项vo
+	 * @throws DataAccessException
+	 */
+	public void updatePageElement(WF_ORG_MENU menuItemVO) throws DataAccessException {
+		try {
+			getSqlMapClient().update("WF_ORG_MENU.updateEle", menuItemVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 新建页面元素，需要给PageElement创建一个uuid
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 菜单项vo
+	 * @throws DataAccessException
+	 */
+	public void insertPageElement(WF_ORG_MENU menuItemVO) throws DataAccessException {
+		try {
+			this.getSqlMapClient().insert("WF_ORG_MENU.insert", menuItemVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 新建页面元素，需要给PageElement创建一个uuid
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuItemVO
+	 *            - 菜单项vo
+	 * @throws DataAccessException
+	 */
+	public void insertPage(WF_ORG_MENU menuItemVO) throws DataAccessException {
+		try {
+			this.getSqlMapClient().insert("WF_ORG_MENU.insert", menuItemVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除菜单树上的结点，可能是菜单项，也可能是元素。菜单项下如果存在元素则先删除子菜 单项。
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param nodeID
+	 *            - 结点主键
+	 * @throws DataAccessException
+	 */
+	public void deleteNode(String nodeID) throws DataAccessException {
+		try {
+			getSqlMapClient().delete("WF_ORG_MENU.delete", nodeID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 树上节点上移
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param nodeID
+	 *            - 结点主键
+	 * @throws DataAccessException
+	 */
+	public void upNode(String itemId, String changeId) throws DataAccessException {
+		try {
+			getSqlMapClient().update("WF_ORG_MENU.updateOrder1", itemId);
+			getSqlMapClient().update("WF_ORG_MENU.updateOrder2", changeId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 树上节点下移
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param nodeID
+	 *            - 结点主键
+	 * @throws DataAccessException
+	 */
+	public void downNode(String itemId, String changeId) throws DataAccessException {
+		try {
+			getSqlMapClient().update("WF_ORG_MENU.updateOrder2", itemId);
+			getSqlMapClient().update("WF_ORG_MENU.updateOrder1", changeId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DataAccessException("数据库操作异常");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new DataAccessException("未知异常");
+		}
+
+	}
+}

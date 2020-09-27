@@ -1,0 +1,54 @@
+{{#component "coupons js-component"}}
+    <div>
+        <form class="coupon-form-search form-inline">
+            <p class="filter-name">
+                <div class="control-group">
+                    <label for="id">优惠券项目编号:</label>
+                    <input name="id" value="{{id}}" type="text" class="form-control" required/>
+                </div>
+                <div></div>
+                <div class="control-group">
+                    <label for="couponName">优惠券项目名称:</label>
+                    <input class="form-control" id="couponName" type="text" required>
+                </div>
+                <div class="control-group" >
+                    <input class="btn btn-success btn-sm"type="submit" value="搜索"/>
+                </div>
+           </p>
+        </form>
+
+    </div>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="20%">优惠券项目编号</th>
+            <th width="20%">优惠券项目名称</th>
+            <th width="20%">使用类别</th>
+            <th width="20%">使用商户</th>
+            <th width="20%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                <td class="coupon-id">{{id}}</td>
+                <td class="coupon-name">{{couponName}}</td>
+                <td class="coupon-type">{{couponType}}</td>
+                <td class="coupon-user">{{couponUser}}</td>
+                <td>
+                    <button id="{{id}}" class="btn btn-sm js-coupon-setting">设置</button>
+                    <button id="{{id}}" class="btn btn-sm js-coupon-statistics">统计
+                    </button>
+
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{/equals}}
+<div class="pagination" data-total="{{_DATA_.total}}">
+</div>
+{{/component}}

@@ -1,0 +1,29 @@
+<xml>
+	<src>
+		<bean>数据模型
+			<User>用户类</User>
+			<Question>试题类</Question>
+		</bean>
+		<service>每个数据模型包括的业务
+			<UserService>处理用户的业务</UserService>
+			<QuestionService>处理试题的业务</QuestionService>
+			<ExamService>处理考试功能相关的业务</ExamService>
+		</service>
+		<dao>每个数据模型在数据库中的操作
+			<UserDao>处理用户表</UserDao>
+			<QuestionDao>处理试题表</QuestionDao>
+		</dao>
+		<util>工具类
+			<DBUtil>连接数据库的工具类</DBUtil>
+		</util>
+		<ui>显示的页面
+			<LoginFrame>登陆界面</LoginFrame>
+			<RegistFrame>注册页面</RegistFrame>
+			<MenuFrame>菜单页面</MenuFrame>
+			<ExamFrame>考试页面</ExamFrame>
+		</ui>
+		<control>控制层
+			<Control>贯穿整个项目的控制层</Control>
+		</control>
+	</src>
+</xml>

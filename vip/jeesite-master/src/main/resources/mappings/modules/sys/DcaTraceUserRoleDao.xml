@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.DcaTraceUserRoleDao">
+
+	<sql id="dcaTraceUserRoleColumns">
+		a.ROLE_ID AS "roleId",
+		a.ORG_ID AS "orgId",
+		a.ROLE_NAME AS "roleName",
+		a.USER_ID_LIST AS "userIdList",
+ 		a.ROLE_PARENT_ID AS "roleParentId",
+		a.DEPT_ID AS "deptId",
+		a.ROLE_RANK AS "roleRank",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.DEL_FLAG AS "delFlag"
+	</sql>
+	
+	<select id="get" resultType="com.thinkgem.jeesite.modules.sys.entity.DcaTraceUserRole">
+		SELECT 
+			<include refid="dcaTraceUserRoleColumns"/>
+		FROM DCA_TRACE_USER_ROLE a
+		WHERE a.ROLE_ID = #{roleId}
+	</select>
+	
+	<select id="findById" resultType="com.thinkgem.jeesite.modules.sys.entity.DcaTraceUserRole">
+		SELECT 
+			<include refid="dcaTraceUserRoleColumns"/>
+		FROM DCA_TRACE_USER_ROLE a
+		WHERE a.ROLE_ID = #{roleId}
+	</select>
+	
+	<select id="findList" resultType="com.thinkgem.jeesite.modules.sys.entity.DcaTraceUserRole">
+		SELECT 
+			<include refid="dcaTraceUserRoleColumns"/>
+		FROM DCA_TRACE_USER_ROLE a
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="roleName != null and roleName != ''">
+				AND a.ROLE_NAME LIKE 
+				<if test="dbName == 'oracle'">CONCAT(CONCAT('%',REPLACE(#{roleName},'%','/%')),'%') ESCAPE '/'</if>
+				<if test="dbName == 'mssql'">'%'+#{roleName}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%',#{roleName},'%')</if> 
+			</if>						
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.thinkgem.jeesite.modules.sys.entity.DcaTraceUserRole">
+		SELECT 
+			<include refid="dcaTraceUserRoleColumns"/>
+		FROM DCA_TRACE_USER_ROLE a
+		<where>
+			a.DEL_FLAG = 0								
+		</where>
+	</select>
+	
+	<!-- 查出所有子节点  -->
+	<select id="findByParentIdsLike" resultType="com.thinkgem.jeesite.modules.sys.entity.DcaTraceUserRole">
+		SELECT
+			<include refid="dcaTraceUserRoleColumns"/>
+		FROM DCA_TRACE_USER_ROLE a
+		WHERE a.DEL_FLAG = 0 
+		AND a.ROLE_PARENT_ID LIKE #{roleParentId}
+		ORDER BY a.ROLE_ID
+	</select>
+	
+	<!-- 根据用户id查出岗位信息 -->
+	<select id="findByUserId" resultType="com.thinkgem.jeesite.modules.sys.entity.DcaTraceUserRole">		
+		SELECT
+			<include refid="dcaTraceUserRoleColumns"/>
+		FROM
+			DCA_TRACE_USER_ROLE a
+		WHERE
+			a.DEL_FLAG = 0
+		AND a.USER_ID_LIST LIKE '%;'||#{userId}||';%'
+		ORDER BY a.ROLE_RANK
+	</select>
+	
+	<!-- 根据parentId查询（用于判断是否有下属岗位） -->
+	<select id="findByParentId" resultType="com.thinkgem.jeesite.modules.sys.entity.DcaTraceUserRole">
+		SELECT
+			<include refid="dcaTraceUserRoleColumns"/>
+		FROM DCA_TRACE_USER_ROLE a
+		WHERE a.DEL_FLAG = 0 AND a.ROLE_PARENT_ID = #{roleParentId}
+	</select>
+
+</mapper>

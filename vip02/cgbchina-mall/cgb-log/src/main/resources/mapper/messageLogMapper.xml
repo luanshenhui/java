@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageLogModel">
+    <resultMap id="MessageLogMap" type="MessageLogModel">
+        <result property="logId" column="log_id"/>
+        <result property="sendersn" column="sendersn"/>
+        <result property="tradecode" column="tradecode"/>
+        <result property="senderid" column="senderid"/>
+        <result property="receiverid" column="receiverid"/>
+        <result property="orderid" column="orderid"/>
+        <result property="serviceid" column="serviceid"/>
+        <result property="opertime" column="opertime"/>
+        <result property="sendflag" column="sendflag"/>
+        <result property="errflag" column="errflag"/>
+        <result property="errcode" column="errcode"/>
+        <result property="messagecontent" column="messagecontent"/>
+        <result property="extend1" column="extend1"/>
+        <result property="extend2" column="extend2"/>
+        <result property="extend3" column="extend3"/>
+    </resultMap>
+    <sql id="columns">
+    log_id,sendersn,tradecode,senderid,receiverid,orderid,serviceid,opertime,sendflag,errflag,errcode,messagecontent,extend1,extend2,extend3
+    </sql>
+
+    <insert id="insert" parameterType="MessageLogModel" useGeneratedKeys="true"
+            keyProperty="logId" keyColumn="log_id">
+        insert into tbl_message_log
+        (sendersn
+        ,tradecode
+        ,senderid
+        ,receiverid
+        ,orderid
+        ,serviceid
+        ,opertime
+        ,sendflag
+        ,errflag
+        ,errcode
+        ,messagecontent
+        ,extend1
+        ,extend2
+        ,extend3)
+        values(#{sendersn}
+        ,#{tradecode}
+        ,#{senderid}
+        ,#{receiverid}
+        ,#{orderid}
+        ,#{serviceid}
+        ,#{opertime}
+        ,#{sendflag}
+        ,#{errflag}
+        ,#{errcode}
+        ,#{messagecontent}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3})
+    </insert>
+
+    <update id="update" parameterType="MessageLogModel">
+        update tbl_message_log set
+            <if test="sendersn !=null">sendersn = #{sendersn}
+                ,</if>
+            <if test="tradecode !=null">tradecode = #{tradecode}
+                ,</if>
+            <if test="senderid !=null">senderid = #{senderid}
+                ,</if>
+            <if test="receiverid !=null">receiverid = #{receiverid}
+                ,</if>
+            <if test="orderid !=null">orderid = #{orderid}
+                ,</if>
+            <if test="serviceid !=null">serviceid = #{serviceid}
+                ,</if>
+            <if test="opertime !=null">opertime = #{opertime}
+                ,</if>
+            <if test="sendflag !=null">sendflag = #{sendflag}
+                ,</if>
+            <if test="errflag !=null">errflag = #{errflag}
+                ,</if>
+            <if test="errcode !=null">errcode = #{errcode}
+                ,</if>
+            <if test="messagecontent !=null">messagecontent = #{messagecontent}
+                ,</if>
+            <if test="extend1 !=null">extend1 = #{extend1}
+                ,</if>
+            <if test="extend2 !=null">extend2 = #{extend2}
+                ,</if>
+            <if test="extend3 !=null">extend3 = #{extend3}
+                </if>
+        where log_id = #{logId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="logId !=null">and log_id = #{logId}</if>
+            <if test="sendersn !=null">and sendersn = #{sendersn}</if>
+            <if test="tradecode !=null">and tradecode = #{tradecode}</if>
+            <if test="senderid !=null">and senderid = #{senderid}</if>
+            <if test="receiverid !=null">and receiverid = #{receiverid}</if>
+            <if test="orderid !=null">and orderid = #{orderid}</if>
+            <if test="serviceid !=null">and serviceid = #{serviceid}</if>
+            <if test="opertime !=null">and opertime = #{opertime}</if>
+            <if test="sendflag !=null">and sendflag = #{sendflag}</if>
+            <if test="errflag !=null">and errflag = #{errflag}</if>
+            <if test="errcode !=null">and errcode = #{errcode}</if>
+            <if test="messagecontent !=null">and messagecontent = #{messagecontent}</if>
+            <if test="extend1 !=null">and extend1 = #{extend1}</if>
+            <if test="extend2 !=null">and extend2 = #{extend2}</if>
+            <if test="extend3 !=null">and extend3 = #{extend3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="MessageLogMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_message_log
+       where id=#{logId}
+    </select>
+    <select id="findAll" resultMap="MessageLogMap">
+        select
+        <include refid="columns"/>
+        from tbl_message_log
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="MessageLogMap">
+        select
+        <include refid="columns"/>
+        from tbl_message_log
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="MessageLogModel">
+        delete from tbl_message_log where id = logId
+    </delete>
+</mapper>
+
+

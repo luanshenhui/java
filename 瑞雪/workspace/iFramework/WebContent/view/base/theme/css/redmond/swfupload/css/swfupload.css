@@ -1,0 +1,19 @@
+/* swfupload */
+.table_container .swfupload{position:relative;}
+.table_container .progress_box{border:#b1b1b1 1px solid;background-color:#FFF;position:absolute;height:9px;left:0;top:27px;padding:1px;*width:100%;width:96%;}
+.table_container .progress_bar{float:left;background-color:#efefec;width:100%;float:left; height:9px; background-image:url(../images/progress_bar.png)}
+.table_container .progress_ok{height:100%;width:80%;background-color:#4086ce; font-size:9px;line-height:100%; color:#FFF;font-family:"MS Serif", "New York", serif; text-align:center; font-size:9px; background-image:url(../images/progress_ok.png)}
+.table_container .progress_cancel{height:17px;width:27px;background-color:#F00;background-image:url(../images/close2.png);cursor:pointer; position:absolute;top:-3px;right:-1px;*top:-3px;*right:-1px}
+.table_container .input_tips{ border:1px solid #cd0a0a; background-color:#FFFFEC;color:#cd0a0a; padding-left:4px}
+.table_container .swfupload_box{height:50px; width:100%; margin:5px auto 5px auto; border:#CCC 1px solid; position:relative; padding:4px}
+.table_container .border{border:1px solid #cd0a0a;background-color:#FFFFEC;color:#cd0a0a;}
+.table_container .border2{border:1px solid #89b06d;background-color:#f7fff1;color:#cd0a0a;}
+.table_container .tips_info{position:absolute;height:16px;left:0px;top:4px;padding:1px; width:100%}
+.table_container .tips_info .filename_span{height:16px;font-weight:bold;font-family:Arial, Helvetica, sans-serif;color:#666;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; float:left;margin-right:10px; margin-left:10px;width:200px}
+.table_container .tips_info .tips_span{margin-left:10px;color:#cd0a0a;font-weight:normal;float:right; height:14px; margin-right:10px}
+.table_container .tips_info .fileurl_span{height:16px;width:auto;font-weight:normal;font-family:Arial, Helvetica, sans-serif;color:#999;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;float:left;}
+.table_container .topleft{top:26px;left:8px}
+.table_container .width{width:100%}
+.table_container .button_ad{width:100%;margin:10px auto 10px auto; text-align:right;}
+.table_container .button_ad span{margin-right:12px; height:12px; margin-top:-15px}
+.table_container .progress_ok:after{content:url(../images/after.png)}

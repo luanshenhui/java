@@ -1,0 +1,53 @@
+<HTML>
+<HEAD>
+<TITLE>受診者向けページ</TITLE>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+// スキャン表示
+function setCardScan() {
+
+	var strDspNameElement;	//表示用領域のエレメント
+
+	// テキストボックスにフォーカス
+	document.mental.DAYID.focus();
+	document.mental.DAYID.value = '';
+
+	// カードスキャン時のメッセージ表示
+	for ( ; ; ) {
+
+		// エレメント名の編集
+		strDspNameElement = 'Displayname';
+
+		// IEの場合
+		if ( document.all ) {
+			document.all(strDspNameElement).innerHTML = 'カードをスキャンしてください';
+			break;
+		}
+
+		// Netscape6の場合
+		if ( document.getElementById ) {
+			document.getElementById(strDspNameElement).innerHTML = 'カードをスキャンしてください';
+		}
+
+		break;
+	}
+
+}
+-->
+</SCRIPT>
+</HEAD>
+<BODY ONLOAD="javascript:document.mental.DAYID.focus()">
+<FORM NAME="mental" ACTION="/webHains/contents/Mental/mhControl.asp" METHOD="post">
+<DIV ALIGN="CENTER">
+<BR><BR><BR><BR>
+<A HREF="javascript:setCardScan()" ><FONT SIZE="4">★　ここをクリックしてメンタルチェックをはじめます　★</FONT></A><BR>
+<A HREF="javascript:setCardScan()" ><IMG SRC="usertop.jpg"  HEIGHT="300" WIDTH="400" BORDER="0" ALT="クリックしてください"></A>
+<BR><BR><BR>
+<FONT SIZE="6" COLOR="RED"><SPAN ID="Displayname"><%= strDspName %></SPAN></FONT>
+<BR>
+<INPUT TYPE="TEXTBOX" NAME="DAYID" STYLE="width:0;">
+<INPUT TYPE="HIDDEN"  NAME="LOGINKBN" VALUE="0">
+</FORM>
+</DIV>
+</BODY>
+</HTML>

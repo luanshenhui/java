@@ -1,0 +1,700 @@
+<%@ LANGUAGE="VBScript" %>
+<%
+'-----------------------------------------------------------------------------
+'		受診情報詳細 (Ver0.0.1)
+'		AUTHER  : Tsutomu Takagi@fsit.fujitsu.com
+'-----------------------------------------------------------------------------
+Option Explicit
+%>
+<!-- #include virtual = "/webHains/includes/checkSession.inc" -->
+<!-- #include virtual = "/webHains/includes/common.inc"       -->
+<%
+'セッション・権限チェック
+Call CheckSession(BUSINESSCD_RESERVE, CHECKSESSION_BUSINESS_TOP)
+
+'-------------------------------------------------------------------------------
+' 共通宣言部
+'-------------------------------------------------------------------------------
+'データベースアクセス用オブジェクト
+Dim objConsult		'受診情報アクセス用
+Dim objCourse		'コース情報アクセス用
+
+'前画面から送信されるパラメータ値
+Dim strRsvNo		'予約番号
+Dim strPerId		'個人ID
+Dim strOrgCd1		'団体コード1
+Dim strOrgCd2		'団体コード2
+Dim strCsCd			'コースコード
+Dim strCslYear		'受診年
+Dim strCslMonth		'受診月
+Dim strCslDay		'受診日
+
+'コース情報
+Dim strArrCsCd		'コースコードの配列
+Dim strArrCsName	'コース名の配列
+Dim strArrSecondFlg	'２次健診フラグの配列
+Dim lngCount		'コース数
+
+Dim strURL			'URL文字列
+Dim Ret				'関数戻り値
+Dim i				'インデックス
+
+'-------------------------------------------------------------------------------
+' 先頭制御部
+'-------------------------------------------------------------------------------
+'引数値の取得
+strRsvNo    = Request("rsvNo")
+strPerId    = Request("perId")
+strOrgCd1   = Request("orgCd1")
+strOrgCd2   = Request("orgCd2")
+strCsCd     = Request("csCd")
+strCslYear  = Request("cYear")
+strCslMonth = Request("cMonth")
+strCslDay   = Request("cDay")
+
+'予約番号が指定されている場合、受診情報有無のチェックを行う
+If strRsvNo <> "" Then
+
+	Set objConsult = Server.CreateObject("HainsConsult.Consult")
+
+	'受診情報読み込み
+	Ret = objConsult.SelectConsult(strRsvNo)
+
+	Set objConsult = Nothing
+
+	If Ret = False Then
+		Err.Raise 1000, ,"受診情報が存在しません。"
+	End If
+
+End If
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<HTML LANG="ja">
+<HEAD>
+<META HTTP-EQUIV="content-type" CONTENT="text/html;charset=Shift_JIS">
+<meta http-equiv="Content-Style-Type"  content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<TITLE>受診情報詳細</TITLE>
+<!-- #include virtual = "/webHains/includes/setInfo.inc" -->
+<SCRIPT TYPE="text/javascript">
+<!-- #include virtual = "/webHains/includes/date.inc"    -->
+<!--
+// ２次健診チェック用のコース情報
+var course = new Array();
+<%
+Set objCourse = Server.CreateObject("HainsCourse.Course")
+
+'コース情報の読み込み
+lngCount = objCourse.SelectCourseList(strArrCsCd, strArrCsName, strArrSecondFlg, 1)
+
+Set objCourse = Nothing
+
+'配列添字数分の定数を追加
+For i = 0 To lngCount - 1
+%>
+	course[ <%= i %> ] = new codeAndName( '<%= strArrCsCd(i) %>', '<%= strArrSecondFlg(i) %>' );
+<%
+Next
+%>
+// コード＆名称のクラス
+function codeAndName( code, codeName ) {
+	this.code     = code;
+	this.codeName = codeName;
+}
+
+// ウィンドウハンドル
+var winCompare, winDelItem;
+
+// 検査セット情報比較画面呼び出し
+function callCompareWindow() {
+
+	var opened = false;	// 画面が開かれているか
+
+	// すでにガイドが開かれているかチェック
+	if ( winCompare != null ) {
+		if ( !winCompare.closed ) {
+			opened = true;
+		}
+	}
+
+	// 検査セット情報比較画面のURL編集
+	var mainForm = main.entryForm;
+	var url = 'rsvCompareSet.asp';
+	url = url + '?cslDate='  + mainForm.cslYear.value + '/' + mainForm.cslMonth.value + '/' + mainForm.cslDay.value;
+	url = url + '&rsvNo='    + mainForm.rsvNo.value;
+	url = url + '&perId='    + mainForm.perId.value;
+	url = url + '&age='      + mainForm.age.value;
+	url = url + '&orgCd1='   + mainForm.orgCd1.value;
+	url = url + '&orgCd2='   + mainForm.orgCd2.value;
+	url = url + '&csCd='     + mainForm.csCd.value;
+	url = url + '&cslDivCd=' + mainForm.cslDivCd.value;
+	url = url + '&ctrPtCd='  + opt.entryForm.ctrPtCd.value;
+
+	// 現在の選択オプション値を取得
+	var arrOptCd       = new Array();	// オプションコード
+	var arrOptBranchNo = new Array();	// オプション枝番
+	convOptCd( opt.document.optList, arrOptCd, arrOptBranchNo );
+
+	// オプション値を追加
+	url = url + '&optCd=' + arrOptCd;
+	url = url + '&optBranchNo=' + arrOptBranchNo;
+
+	// 開かれている場合は画面をREPLACEし、さもなくば新規画面を開く
+	if ( opened ) {
+		winCompare.focus();
+		winCompare.location.replace( url );
+	} else {
+		winCompare = opt.open( url, '', 'width=700,height=550,status=yes,directories=no,menubar=no,resizable=yes,toolbar=no,scrollbars=yes' );
+	}
+
+}
+
+// セット内項目削除画面呼び出し
+function callDelItemWindow( rsvNo, ctrPtCd, selOptCd, selOptBranchNo ) {
+
+	var opened = false;	// 画面が開かれているか
+	var url;			// セット内項目削除画面のURL
+
+	// すでにガイドが開かれているかチェック
+	if ( winDelItem != null ) {
+		if ( !winDelItem.closed ) {
+			opened = true;
+		}
+	}
+
+	// セット内項目削除画面のURL編集
+	url = 'rsvDeleteSetItem.asp?rsvNo=' + rsvNo + '&ctrPtCd=' + ctrPtCd + '&optCd=' + selOptCd + '&optBranchNo=' + selOptBranchNo;
+
+	// 開かれている場合は画面をREPLACEし、さもなくば新規画面を開く
+	if ( opened ) {
+		winDelItem.focus();
+		winDelItem.location.replace( url );
+	} else {
+		winDelItem = opt.open( url, '', 'width=550,height=550,status=yes,directories=no,menubar=no,resizable=yes,toolbar=no,scrollbars=yes' );
+	}
+
+}
+
+// 画面を閉じる
+function closeWindow( hWnd ) {
+
+	if ( hWnd != null ) {
+		if ( !hWnd.closed ) {
+			hWnd.close();
+		}
+	}
+
+	hWnd = null;
+}
+
+// 入力チェック
+function checkValue( mode ) {
+
+	var mainForm = main.document.entryForm;	// メイン画面のフォームエレメント
+	var optForm  = opt.document.entryForm;	// オプション検査画面のフォームエレメント
+
+	for ( var ret = false; ; ) {
+
+		// 受診者の必須チェック
+		if ( mainForm.perId.value == '' ) {
+			alert( '受診者を指定して下さい。' );
+			break;
+		}
+
+		// 受診団体の必須チェック
+		if ( mode == 0 || mode == 1 ) {
+			if ( mainForm.orgCd1.value == '' || mainForm.orgCd2.value == '' ) {
+				alert( '受診団体を指定して下さい。' );
+				break;
+			}
+		}
+
+		// 受診コースの必須チェック
+		if ( mainForm.csCd.value == '' ) {
+			alert( '受診コースを指定して下さい。' );
+			break;
+		}
+
+		// 受診区分の必須チェック
+		if ( mode == 0 || mode == 1 ) {
+			if ( mainForm.cslDivCd.value == '' ) {
+				alert( '受診区分を指定して下さい。' );
+				break;
+			}
+		}
+
+		// 受診コースが２次健診コースかチェック
+		if ( mode == 2 ) {
+			if ( !isSecondCourse( mainForm.csCd.value ) ) {
+				alert( '現在選択中のコースは２次健診のコースではありません。' );
+				break;
+			}
+		}
+
+		// 受診年月日の必須チェック
+		if ( mainForm.cslYear.value == '' || mainForm.cslMonth.value == '' || mainForm.cslDay.value == '' ) {
+			alert('受診日を指定して下さい。');
+			break;
+		}
+
+		// 受診年月日の妥当性チェック
+		if ( !isDate( mainForm.cslYear.value, mainForm.cslMonth.value, mainForm.cslDay.value ) ) {
+			alert('受診日の入力形式が正しくありません。');
+			break;
+		}
+
+		// 予約群の必須チェック
+		if ( mode == 0 ) {
+			if ( mainForm.rsvGrpCd.value == '' ) {
+				alert( '予約群を指定して下さい。' );
+				break;
+			}
+		}
+
+		// 契約パターンの存在チェック
+		if ( mode == 0 || mode == 1 ) {
+
+			if ( optForm == null ) {
+				alert('この受診条件に合致する契約情報は存在しません。');
+				break;
+			}
+
+			if ( optForm.ctrPtCd.value == '' ) {
+				alert('この受診条件に合致する契約情報は存在しません。');
+				break;
+			}
+
+		}
+
+		// 受診日年齢のチェック(生年月日が受診日より以後であれば発生)
+		if ( mode == 0 || mode == 1 ) {
+			if ( mainForm.age.value == '' ) {
+				alert('受診時年齢が計算できません。');
+				break;
+			}
+		}
+
+		ret = true;
+		break;
+	}
+
+	return ret;
+}
+
+// ラジオボタンの選択値取得
+function getRadioItem( radioButton ) {
+
+	var radioValue;	// 選択されたラジオボタンの値
+
+	for ( var i = 0; i < radioButton.length; i++ ) {
+		if ( radioButton[ i ].checked ) {
+			radioValue = radioButton[ i ].value;
+			break;
+		}
+	}
+
+	return radioValue;
+}
+
+// オプションコードのカンマ形式への変換
+function convOptCd( objForm, arrOptCd, arrOptBranchNo ) {
+
+	var selOptCd;	// オプションコード・枝番
+	var addFlg;		// 追加フラグ
+
+	if ( !objForm ) return;
+	if ( objForm.length == null ) return;
+
+	// 全エレメントを検索
+	for ( var i = 0; i < objForm.length; i++ ) {
+
+		// タイプを判断
+		switch ( objForm.elements[ i ].type ) {
+
+			case 'checkbox':	// チェックボックス、ラジオボタンの場合
+			case 'radio':
+
+				// 選択されていなければ追加しない
+				if ( !objForm.elements[ i ].checked ) {
+					continue;
+				}
+
+				break;
+
+			case 'hidden':		// 隠しエレメントの場合
+
+				// ３番目の要素が受診要否
+				selOptCd = objForm.elements[ i ].value.split(',');
+				if ( selOptCd[ 2 ] != '1' ) {
+					continue;
+				}
+
+				break;
+
+			default:
+				continue;
+
+		}
+
+		// 追加が必要であればいればカンマでコードと枝番を分離して追加
+		selOptCd = objForm.elements[ i ].value.split(',');
+		arrOptCd[ arrOptCd.length ] = selOptCd[ 0 ];
+		arrOptBranchNo[ arrOptBranchNo.length ] = selOptCd[ 1 ];
+
+	}
+
+}
+
+// コースセレクションボックスの編集
+function editCourse( courseInfo, selCsCd ) {
+
+	// セレクションボックスの編集
+	editSelectionBox( main.document.entryForm.ctrCsCd, courseInfo, selCsCd );
+
+	// hidden値の更新
+	main.document.entryForm.csCd.value = main.document.entryForm.ctrCsCd.value;
+
+}
+
+// 受診区分セレクションボックスの編集
+function editCslDiv( cslDivInfo, selCslDivCd ) {
+
+	// セレクションボックスの編集
+	editSelectionBox( main.document.entryForm.ctrCslDivCd, cslDivInfo, selCslDivCd );
+
+	// hidden値の更新
+	main.document.entryForm.cslDivCd.value = main.document.entryForm.ctrCslDivCd.value;
+
+}
+
+// 予約群セレクションボックスの編集
+function editRsvGrp( rsvGrpInfo, selRsvGrpCd ) {
+
+	// セレクションボックスの編集
+	editSelectionBox( main.document.entryForm.selRsvGrpCd, rsvGrpInfo, selRsvGrpCd, true );
+
+	// hidden値の更新
+	main.document.entryForm.rsvGrpCd.value = main.document.entryForm.selRsvGrpCd.value;
+
+}
+
+// セレクションボックスの編集
+function editSelectionBox( selectionElement, codeNameInfo, selectedCode, needEmptyRow ) {
+
+	var index  = 0;
+	var exists = false;
+
+	// コード情報が存在しなければ終了
+	if ( !codeNameInfo ) {
+		selectionElement.length = 0;
+		return;
+	}
+
+	// 選択すべき要素の存在チェック
+	for ( var i = 0; i < codeNameInfo.length; i++ ) {
+		if ( codeNameInfo[ i ].code == selectedCode ) {
+			exists = true;
+			break;
+		}
+	}
+
+	// 要素数の設定
+	selectionElement.length = codeNameInfo.length + ( ( !exists || ( needEmptyRow != null ) ) ? 1 : 0 );
+
+	// まず選択すべき要素が存在しない場合は空行を追加
+	if ( !exists || ( needEmptyRow != null ) ) {
+		selectionElement.options[ index ].value = '';
+		selectionElement.options[ index ].text  = '';
+		selectionElement.options[ index ].selected = true;
+		index++;
+	}
+
+	// 要素の追加開始
+	for ( var i = 0; i < codeNameInfo.length; i++ ) {
+
+		// 要素の追加
+		selectionElement.options[ index ].value = codeNameInfo[ i ].code;
+		selectionElement.options[ index ].text  = codeNameInfo[ i ].codeName;
+
+		// 選択すべき要素であれば選択状態にする
+		if ( codeNameInfo[ i ].code == selectedCode ) {
+			selectionElement.options[ index ].selected = true;
+		}
+
+		index++;
+	}
+
+}
+
+// ２次健診チェック
+function isSecondCourse( csCd ) {
+
+	var ret = false;	// 関数戻り値
+
+	// コースコード指定時
+	if ( csCd != null ) {
+
+		// 配列を検索
+		for ( var i = 0; i < course.length; i++ ) {
+			if ( course[ i ].code == csCd ) {
+				ret = ( course[ i ].codeName == '1' );
+				break;
+			}
+		}
+
+	}
+
+	return ret;
+}
+
+// １次健診歴の編集
+function setFirstCslInfo( rsvNo, cslDate, csName ) {
+
+	if ( rsvNo != '' && rsvNo == '<%= strRsvNo %>' ) {
+		alert('現在の受診情報と同じ健診歴を選択することはできません。');
+		return;
+	}
+
+	main.document.entryForm.firstRsvNo.value   = rsvNo;
+	main.document.entryForm.firstCslDate.value = cslDate;
+	main.document.entryForm.firstCsName.value  = csName;
+	main.document.getElementById('dspFirstCslDate').innerHTML = cslDate;
+	main.document.getElementById('dspFirstCsName').innerHTML = csName;
+
+}
+
+// submit処理
+function submitForm( mode ) {
+
+	var optForm   = opt.document.entryForm;		// オプション検査画面のフォームエレメント
+	var otherForm = other.document.entryForm;	// その他画面のフォームエレメント
+
+	var arrOptCd, arrOptBranchNo;				// オプションコード・枝番
+	var i;										// インデックス
+
+// ## 2003.12.12 Add By T.Takagi@FSIT 保存完了メッセージ対応
+	document.cookie = 'rsvDetailOnSaving=1';
+// ## 2003.12.12 Add End
+
+	// 処理モードを設定する
+	var mainForm = main.document.entryForm;
+	mainForm.mode.value = mode;
+
+	// オプション検査画面の最新契約パターンコードをメイン画面に設定する
+	mainForm.ctrPtCd.value = optForm.ctrPtCd.value;
+
+	// オプション検査画面の受診情報を取得する
+	arrOptCd       = new Array();
+	arrOptBranchNo = new Array();
+	convOptCd( opt.document.optList, arrOptCd, arrOptBranchNo );
+
+	mainForm.optCd.value = arrOptCd;
+	mainForm.optBranchNo.value = arrOptBranchNo;
+
+	// その他画面の更新項目値を詳細画面のエレメント値として編集する
+	mainForm.rsvStatus.value      = otherForm.rsvStatus.value;
+	mainForm.prtOnSave.value      = getRadioItem( otherForm.prtOnSave );
+	mainForm.cardAddrDiv.value    = otherForm.cardAddrDiv.value;
+	mainForm.cardOutEng.value     = getRadioItem( otherForm.cardOutEng );
+	mainForm.formAddrDiv.value    = otherForm.formAddrDiv.value;
+	mainForm.formOutEng.value     = getRadioItem( otherForm.formOutEng );
+	mainForm.reportAddrDiv.value  = otherForm.reportAddrDiv.value;
+	mainForm.reportOutEng.value   = getRadioItem( otherForm.reportOutEng );
+	mainForm.volunteer.value      = otherForm.volunteer.value;
+	mainForm.volunteerName.value  = otherForm.volunteerName.value;
+	mainForm.collectTicket.value  = otherForm.collectTicket.value;
+	mainForm.issueCslTicket.value = otherForm.issueCslTicket.value;
+	mainForm.billPrint.value      = otherForm.billPrint.value;
+	mainForm.isrSign.value        = otherForm.isrSign.value;
+	mainForm.isrNo.value          = otherForm.isrNo.value;
+	mainForm.isrManNo.value       = otherForm.isrManNo.value;
+	mainForm.empNo.value          = otherForm.empNo.value;
+	mainForm.introductor.value    = otherForm.introductor.value;
+<% '#### 2013.3.1 SL-SN-Y0101-612 ADD START #### %>
+	mainForm.sendMailDiv.value    = otherForm.sendMailDiv.value;
+<% '#### 2013.3.1 SL-SN-Y0101-612 ADD END   #### %>
+
+	// DISABLEDのままではsubmit時にエレメント値がPOSTされないのでここで戻す
+	mainForm.cslYear.disabled  = false;
+	mainForm.cslMonth.disabled = false;
+	mainForm.cslDay.disabled   = false;
+	mainForm.rsvGrpCd.disabled = false;
+
+	// メイン画面をsubmit
+	mainForm.submit();
+
+}
+
+// 印刷処理(印刷日更新つき)
+function showPrintDialog( mode, act, rsvNo, addrDiv, outEng ) {
+
+	// 印刷制御用の画面を出力
+	var url = 'rsvPrintControl.asp';
+	url = url + '?mode='    + mode;
+	url = url + '&actMode=' + act;
+	url = url + '&rsvNo='   + rsvNo;
+	url = url + '&addrDiv=' + addrDiv;
+	url = url + '&outEng='  + outEng;
+
+	open( url );
+
+}
+
+// リピータ割引制御画面読み込み
+function replaceCslList( cslDate, cslDivCd, ctrPtCd, perId, gender, birth, hasRepeaterSet, repeaterConsult ) {
+
+	var url = '/webHains/contents/reserve/rsvOptionForRepeater.asp';
+	url = url + '?cslDate='    + cslDate;
+	url = url + '&cslDivCd='   + cslDivCd;
+	url = url + '&ctrPtCd='    + ctrPtCd;
+	url = url + '&perId='      + perId;
+	url = url + '&gender='     + gender;
+	url = url + '&birth='      + birth;
+	url = url + '&hasRepSet='  + hasRepeaterSet;
+	url = url + '&repConsult=' + repeaterConsult;
+
+	cslList.location.replace( url );
+
+}
+
+// はがき印刷処理
+function showPrintCardDialog( rsvNo, act, cardAddrDiv, cardOutEng ) {
+	showPrintDialog( 0, act, rsvNo, cardAddrDiv, cardOutEng );
+}
+
+// 送付案内印刷処理
+function showPrintFormDialog( rsvNo, act, formAddrDiv, formOutEng ) {
+	showPrintDialog( 1, act, rsvNo, formAddrDiv, formOutEng );
+// ## 2003.01.13 Add By T.Takagi 保存時印刷制御方法変更
+	// 送付案内出力時は出力日時を更新しているため、フラグ値も連動して更新
+	formPrinted = true;
+
+	// 保存時印刷制御
+	if ( act == '1' ) {
+		controlPrtOnSave();
+	}
+// ## 2003.01.13 Add End
+}
+
+// ## 2003.01.13 Add By T.Takagi 保存時印刷制御方法変更
+var lastFormCslDate;	// 送付案内最新出力受診日
+var originCslDate;		// 受診情報読み込み直後の受診日
+var cardPrinted;		// はがきを出力したか
+var formPrinted;		// 送付案内を出力したか
+
+// 保存時印刷制御
+function controlPrtOnSave( cslDate ) {
+
+	var prtOnSave = other.entryForm.prtOnSave;
+	var indexCard = 1;
+	var indexForm = 2;
+	var indexNone = 0;
+	var index;
+
+	var mainForm = main.document.entryForm;
+	var wkCslDate;
+	var wkCslYear, wkCslMonth, wkCslDay;
+	var wkStr;
+
+	// 日付を数字８桁の文字列として編集。引数未指定時はドロップダウンの現受診日を取得。
+	if ( cslDate != null ) {
+		wkCslDate = cslDate;
+	} else {
+		wkCslYear  = mainForm.cslYear.value;
+		wkStr      = '00' + mainForm.cslMonth.value;
+		wkCslMonth = wkStr.substring( wkStr.length - 2 );
+		wkStr      = '00' + mainForm.cslDay.value;
+		wkCslDay   = wkStr.substring( wkStr.length - 2 );
+		wkCslDate  = wkCslYear + wkCslMonth + wkCslDay;
+	}
+<%
+'新規時の制御ロジック
+If strRsvNo = "" Then
+%>
+	// 受診日が送付案内出力最新受診日より未来ならはがき出力、さもなくば送付案内を出力
+	index = ( wkCslDate > lastFormCslDate ) ? indexCard : indexForm;
+<%
+'更新時の制御ロジック
+Else
+%>
+	for ( ; ; ) {
+
+		// (1)はがき、送付案内共に未出力の場合、受診日の状態に関わらず新規の場合と同じ
+		if ( !cardPrinted && !formPrinted ) {
+			index = ( wkCslDate > lastFormCslDate ) ? indexCard : indexForm;
+			break;
+		}
+
+		// (2)はがきのみ出力済みの場合
+		if ( cardPrinted && !formPrinted ) {
+
+			// 受診日が送付案内出力最新受診日より未来なら
+			if ( wkCslDate > lastFormCslDate ) {
+
+				// 受診日が受診情報読み込み直後の受診日から変更されているならばはがき、さもなくばなし
+				index = ( wkCslDate != originCslDate ) ? indexCard : indexNone;
+
+			// さもなくば送付案内
+			} else {
+				index = indexForm;
+			}
+
+			break;
+		}
+
+		// (3)送付案内のみ出力済みの場合、または(4)両方とも出力済みの場合(即ち送付案内出力済みの場合)
+
+		// 受診日が受診情報読み込み直後の受診日から変更されているならばはがき、さもなくばなし
+		index = ( wkCslDate != originCslDate ) ? indexCard : indexNone;
+
+		break;
+	}
+<%
+End If
+%>
+	prtOnSave[ index ].checked = true;
+
+}
+// ## 2003.01.13 Add End
+//-->
+</SCRIPT>
+</HEAD>
+<FRAMESET ROWS="90,*" BORDER="0" FRAMESPACING="0" FRAMEBORDER="no">
+<%
+	strURL = "rsvNaviBar.asp"
+	strURL = strURL & "?rsvNo=" & strRsvNo
+'### 2013.01.10 Updated by ishihara 文字サイズ中でもScrollBarが表示されないように微調整
+%>
+	<FRAME SRC="<%= Replace(strURL, "&", "&amp;") %>" NAME="header">
+	<FRAMESET COLS="628,*" BORDER="0" FRAMESPACING="0" FRAMEBORDER="no">
+		<FRAMESET ROWS="248,*" BORDER="0" FRAMESPACING="0" FRAMEBORDER="no">
+<%
+			strURL = "rsvDetail.asp"
+			strURL = strURL & "?rsvNo="    & strRsvNo
+			strURL = strURL & "&perId="    & strPerId
+			strURL = strURL & "&orgCd1="   & strOrgCd1
+			strURL = strURL & "&orgCd2="   & strOrgCd2
+			strURL = strURL & "&csCd="     & strCsCd
+			strURL = strURL & "&cslYear="  & strCslYear
+			strURL = strURL & "&cslMonth=" & strCslMonth
+			strURL = strURL & "&cslDay="   & strCslDay
+%>
+			<FRAME SRC="<%= Replace(strURL, "&", "&amp;") %>" NAME="main">
+			<FRAME SRC="" NAME="opt">
+		</FRAMESET>
+<%
+		strURL = "rsvPersonal.asp"
+		strURL = strURL & "?rsvNo=" & strRsvNo
+'## 2003.01.13 Add By T.Takagi 保存時印刷制御方法変更
+		strURL = strURL & "&cslYear="  & strCslYear
+		strURL = strURL & "&cslMonth=" & strCslMonth
+		strURL = strURL & "&cslDay="   & strCslDay
+'## 2003.01.13 Add End
+%>
+		<FRAMESET ROWS="*,0" BORDER="0" FRAMESPACING="0" FRAMEBORDER="no">
+			<FRAME SRC="<%= Replace(strURL, "&", "&amp;") %>" NAME="other">
+			<FRAME SRC="" NAME="cslList">
+		</FRAMESET>
+	</FRAMESET>
+</FRAMESET>
+</HTML>

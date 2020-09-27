@@ -1,0 +1,61 @@
+{{#component "reject_goods js-component"}}
+    <p class="components-title"><strong>退货管理</strong></p>
+    <form>
+        <div class="control-group">
+            <label>退货类型：</label>
+            <select class="form-control">
+                <option>用户退货</option>
+                <option>供应商退货</option>
+                <option>CC端退货</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>申请退货时间：</label>
+            <input class="form-control js-date-start"/>
+            ----<input class="form-control js-date-end"/>
+        </div>
+        <div class="control-group">
+            <label>退货状态</label>
+            <select>
+                <option>全部</option>
+                <option>待处理</option>
+
+                <option>退货完成</option>
+                <option>退货驳回</option>
+
+            </select>
+        </div>
+        <input type="submit" value="查询"/>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <td>退货编号</td>
+            <td>退货类型</td>
+            <td>订单编号</td>
+            <td>商品名称</td>
+            <td>供应商</td>
+            <td>买家</td>
+            <td>申请时间</td>
+            <td>状态</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>14275375</td>
+            <td>商城撤单</td>
+            <td>201603230039990701</td>
+            <td>苹果iPhone6Plus</td>
+            <td>上海海牙湾贸易有限公司</td>
+            <td>13722113445</td>
+            <td>2014/12/25 22:07:53</td>
+            <td>退货完成</td>
+            <td><a href="{{_HREF_.mainContext}}/mall/reject_details">查看退货详情</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <div class="pagination" data-total=50></div>
+{{/component}}

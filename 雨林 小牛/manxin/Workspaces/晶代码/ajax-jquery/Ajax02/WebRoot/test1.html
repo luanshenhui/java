@@ -1,0 +1,48 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="js/prototype-1.6.0.3.js"></script>
+<script type="text/javascript">
+	function f1(){
+		var obj = {'name':'zs','age':22};
+		alert(obj.name);
+	}
+	
+	function f2(){
+		var obj = {'name':'春娇','address':
+			{
+				'street':'大钟寺',
+				'room':1207
+			}
+		};
+		alert(obj.address.street);
+	}
+	
+	function f3(){
+		var arr = [{'name':'zs','age':22},
+		{'name':'ww','age':22}];
+		alert(arr[1].name);
+	}
+	
+	function f4(){
+		var str = "{'name':'zs','age':22}";
+		//将json字符串转换成js对象
+		var obj = str.evalJSON();
+		alert(obj.name);
+	}
+	
+	function f5(){
+		var str = "[{'name':'zs','age':22}," + 
+		"{'name':'ww','age':22}]";
+		//json字符串转换成一个js对象组成的数组
+		var arr = str.evalJSON();
+		alert(arr[1].name);
+	}
+</script>
+</head>
+<body style="font-size:30px;font-style:italic;">
+		<a href="javascript:;" onclick="f5();">Click Me</a>
+</body>
+</html>

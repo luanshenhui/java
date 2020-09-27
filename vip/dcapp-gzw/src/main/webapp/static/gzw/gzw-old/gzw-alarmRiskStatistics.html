@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据铁笼-融合分析-告警风险统计</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/model.css" />
+<link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+<script src="js/echarts.min.js"></script>
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/js.js"></script>
+</head>
+
+<body>
+<div class="wrap">
+	<div class="container">
+        <div class="header">
+            <h1 class="header-log"><a href="/a" target="_blank" style="cursor:pointer"><img src="image/logo.png"></a></h1>
+            <div class="header-btn"><img src="image/header-icon-start.png"><span>自动播放</span></div>
+            <div class="header-nav header-nav-spac">
+                <ul class="header-nav-btn">
+                    <li class="next disable"><a href="javascript:void(0)" >&gt;</a></li>
+                    <li class="prev"><a href="javascript:void(0)" >&lt;</a></li>
+                </ul>
+                <ul>
+					<li><a href="gzw-businessDataVolume.html" title="融合分析"><i></i>融合分析</a> </li>
+                    <li><a href="gzw-threeImportant1.html" title="三重一大">三重一大</a> </li>
+                    <li><a href="javascript:void(0)" title="财务分析" >财务分析</a> </li>
+                    <li><a href="javascript:void(0)" title="产权分析"  >产权分析</a> </li>
+                    
+                </ul>
+            </div>
+            <div class="header-nav">
+                <ul>
+                    <li><a href="gzw-SupervisoryDutiy.html" title="监管职责"><i></i>监管职责</a> </li>
+                    <li><a href="gzw-workflowInstruction.html" title="流程说明">流程说明</a> </li>
+                    <li><a href="javascript:void(0)" title="风险点" target="_blank" >风险点</a> </li>
+                </ul>
+            </div>
+        </div>
+		<div class="box">
+			<div class="box-head">
+				<a href="firstpage.html" class="arrow-back"><i></i>首页</a>
+                <a href="gzw-businessDataVolume.html" class="arrow-back arrow-back2"><i></i>融合分析</a>
+                <p class="box-title">农投公司</p>
+               <!-- <a href="javascript:void(0)" class="arrow-left"><i></i></a>
+                <a href="javascript:void(0)" class="arrow-right"><i></i></a>-->
+			</div>
+            <div class="box-container">
+                <div class="box-left">
+                    <ul>
+                        <li class="on">
+                            <a href="gzw-alarmRiskStatistics.html" class="">告警风险分析</a>
+                        </li>
+                        <li>
+                            <a href="gzw-riskDefineStatistics.html" class="">风险界定分析</a>
+                        </li>
+                        <li>
+                            <a href="gzw-riskTrendAnalysis.html" class="">风险走势分析</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="box-right">
+                    <div class="box-right-title">
+                        <p><i></i>告警风险分析</p>
+                    </div>
+                    <div class="box-right-form risk-define-statistics">
+
+                        <div class="risk-form-main alarm-risk-stat">
+                            <div class="form-chart-left">
+                                <div id="main" class="main"></div>
+                                <div id="main1" class="main"></div>
+                            </div>
+                        	<div id="main2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+		</div>
+		<div class="clear"></div>
+		<div class="footer">截至2016年12月23日 12：00：00</div>
+    </div>
+</div>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    option = {
+        title:{text:'风险统计',textStyle:{fontSize:'24',color:'#fff'}},
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            x: 'right',
+            itemHeight: '10',
+            padding: [90,0,20,20],
+            data:['重大决策','重大事项','重要人事','大额资金'],textStyle:{fontSize:'20',color:'#fff'}
+        },
+        series: [
+            {
+                name:'访问来源',
+                type:'pie',
+                radius: ['30%', '70%'],
+                avoidLabelOverlap: false,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'outside',
+                        formatter: "{d}%",
+                        textStyle:{
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: true,
+                        length:20
+                    }
+                },
+                data:[
+                    {value:20, name:'重大决策'},
+                    {value:17, name:'重大事项'},
+                    {value:26, name:'重要人事'},
+                    {value:16, name:'大额资金'}
+                ]
+            }
+        ]
+    };
+    myChart.setOption(option);
+
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    option1 = {
+        title:{text:'告警统计',textStyle:{fontSize:'24',color:'#fff'}},
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            x: 'right',
+            itemHeight: '10',
+            padding: [60,0,20,20],
+            data:['重大决策','重大事项','重要人事','大额资金'],textStyle:{fontSize:'20',color:'#fff'}
+        },
+        series: [
+            {
+                name:'访问来源',
+                type:'pie',
+                radius: ['30%', '70%'],
+                avoidLabelOverlap: false,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'outside',
+                        formatter: "{d}%",
+                        textStyle:{
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: true,
+                        length:20
+                    }
+                },
+                data:[
+                    {value:15, name:'重大决策'},
+                    {value:20, name:'重大事项'},
+                    {value:25, name:'重要人事'},
+                    {value:23, name:'大额资金'}
+                ]
+            }
+        ]
+    };
+    myChart1.setOption(option1);
+
+    var myChart2 = echarts.init(document.getElementById('main2'));
+    option2 = {
+        title:{text:'业务事项统计',textStyle:{fontSize:'24',color:'#fff'}},
+        color: ['#3398DB'],
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                data: [{
+                    value: '重大决策',
+                    textStyle: {
+                        fontSize: 20,
+                        color: '#fff'
+                    }
+                },{
+                    value: '重大事项',
+                    textStyle: {
+                        fontSize: 20,
+                        color: '#fff'
+                    }
+                },{
+                    value: '重要人事',
+                    textStyle: {
+                        fontSize: 20,
+                        color: '#fff'
+                    }
+                },{
+                    value: '大额资金',
+                    textStyle: {
+                        fontSize: 20,
+                        color: '#fff'
+                    }
+                },{
+                    value: '投资',
+                    textStyle: {
+                        fontSize: 20,
+                        color: '#fff'
+                    }
+                },{
+                    value: '担保',
+                    textStyle: {
+                        fontSize: 20,
+                        color: '#fff'
+                    }
+                }],
+
+
+
+
+                axisTick: {
+                    alignWithLabel: true
+                }
+
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel:{
+                    textStyle:{
+                        color:'#7a7a7a',
+                        fontSize:20
+                    }
+                }
+            }
+        ],
+        series : [
+            {
+                name:'业务事项统计',
+                type:'bar',
+                barWidth: '60%',
+                data:[10, 52, 200, 334, 390, 330],
+                label:{
+                    normal:{
+                        show:true,
+                        position:'top',
+                        textStyle:{
+                            color:'#ffc700'
+                        }
+                    }
+                }
+            }
+        ]
+    };
+    myChart2.setOption(option2);
+</script>
+</body>
+</html>

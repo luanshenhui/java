@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderDoDetail">
+    <resultMap id="OrderDoDetailMap" type="OrderDoDetail">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="doTime" column="do_time"/>
+        <result property="doUserid" column="do_userid"/>
+        <result property="userType" column="user_type"/>
+        <result property="statusId" column="status_id"/>
+        <result property="statusNm" column="status_nm"/>
+        <result property="msgContent" column="msg_content"/>
+        <result property="doDesc" column="do_desc"/>
+        <result property="roleId" column="role_id"/>
+        <result property="roleNm" column="role_nm"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        id,order_id,do_time,do_userid,user_type,status_id,status_nm,msg_content,do_desc,rule_id,rule_nm,create_oper,create_time,modify_oper,modify_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="OrderDoDetail" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_dodetail
+        (order_id
+        ,do_time
+        ,do_userid
+        ,user_type
+        ,status_id
+        ,status_nm
+        ,msg_content
+        ,do_desc
+        ,rule_id
+        ,rule_nm
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag)
+        values(#{orderId}
+        ,now()
+        ,#{doUserid}
+        ,#{userType}
+        ,#{statusId}
+        ,#{statusNm}
+        ,#{msgContent}
+        ,#{doDesc}
+        ,#{ruleId}
+        ,#{ruleNm}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        ,#{delFlag})
+    </insert>
+    <!--批量插入订单处理历史明细表 add by wujiao-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tbl_order_dodetail
+        (order_id
+        ,do_time
+        ,do_userid
+        ,user_type
+        ,status_id
+        ,status_nm
+        ,msg_content
+        ,do_desc
+        ,rule_id
+        ,rule_nm
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.orderId}
+            ,now()
+            ,#{item.doUserid}
+            ,#{item.userType}
+            ,#{item.statusId}
+            ,#{item.statusNm}
+            ,#{item.msgContent}
+            ,#{item.doDesc}
+            ,#{item.ruleId}
+            ,#{item.ruleNm}
+            ,#{item.createOper}
+            ,now()
+            ,#{item.modifyOper}
+            ,#{item.modifyTime}
+            ,#{item.delFlag})
+        </foreach>
+    </insert>
+    <update id="update" parameterType="OrderDoDetail">
+        update tbl_order_dodetail set
+        order_id
+        = #{orderId},do_time
+        = #{doTime},do_userid
+        = #{doUserid},user_type
+        = #{userType},status_id
+        = #{statusId},status_nm
+        = #{statusNm},msg_content
+        = #{msgContent},do_desc
+        = #{doDesc},role_id
+        = #{roleId},role_nm
+        = #{roleNm},create_oper
+        = #{createOper},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime},del_flag
+        = #{delFlag}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="doTime !=null">and do_time = #{doTime}</if>
+            <if test="doUserid !=null">and do_userid = #{doUserid}</if>
+            <if test="userType !=null">and user_type = #{userType}</if>
+            <if test="statusId !=null">and status_id = #{statusId}</if>
+            <if test="statusNm !=null">and status_nm = #{statusNm}</if>
+            <if test="msgContent !=null">and msg_content = #{msgContent}</if>
+            <if test="doDesc !=null">and do_desc = #{doDesc}</if>
+            <if test="roleId !=null">and role_id = #{roleId}</if>
+            <if test="roleNm !=null">and role_nm = #{roleNm}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="OrderDoDetailMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_order_dodetail
+        where id=#{id}
+    </select>
+    <select id="findByOrderId" resultMap="OrderDoDetailMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_order_dodetail
+        where order_id=#{orderId}order by do_time DESC
+    </select>
+    <select id="findAll" resultMap="OrderDoDetailMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_dodetail
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="OrderDoDetailMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_dodetail
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="OrderDoDetail">
+        delete from tbl_order_dodetail where id = id
+    </delete>
+    <select id="findByOrderStatusId" parameterType="String" resultMap="OrderDoDetailMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_dodetail
+        where order_id=#{orderId} and status_id = '0309'
+    </select>
+    
+    <select id="findByStatusAndOrderId" parameterType="String" resultMap="OrderDoDetailMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_dodetail
+        where order_id=#{orderId} and (status_id = '0307' or status_id = '0308')
+    </select>
+
+    <select id="findByOrderIds" parameterType="java.util.List"  resultMap="OrderDoDetailMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_order_dodetail
+        where order_id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by order_id DESC
+    </select>
+
+</mapper>
+
+

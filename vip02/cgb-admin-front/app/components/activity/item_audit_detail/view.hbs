@@ -1,0 +1,126 @@
+{{#component "item-audit-detail js-component"}}
+    <p>
+        <strong class="main-box-title h1-title" data-type=true>活动初审</strong>
+    </p>
+    <div class="main-box col-box main-box-table-detail-t table-infor">
+        <div class="form-information form-information-two">
+            <span class="wh150 text-right">
+                活动发起者 ：
+            </span>
+            <span>{{_DATA_.adminPromotionResultDto.createOperTypeName}}</span>
+        </div>
+        <div class="form-information form-information-two">
+            <span class="wh150 text-right">
+                活动编号 ：
+            </span>
+            <span>{{_DATA_.adminPromotionResultDto.id}}</span>
+        </div>
+        <div class="form-information form-information-two">
+            <span class="wh150 text-right">
+                活动名称 ：
+            </span>
+            <span>{{_DATA_.adminPromotionResultDto.name}}</span>
+        </div>
+        <div class="form-information form-information-two">
+            <span class="wh150 text-right">
+                活动简称 ：
+            </span>
+            <span>{{_DATA_.adminPromotionResultDto.shortName}}</span>
+        </div>
+        <div class="form-information">
+            <span class="wh150 text-right active-type" data-value="{{_DATA_.adminPromotionResultDto.promType}}">
+                活动类型 ：
+            </span>
+            <span>{{_DATA_.adminPromotionResultDto.promTypeName}}</span>
+        </div>
+        <div class="main-box-title">- 活动基本条件 - </div>
+        <div class="overflow-hidden">
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    渠道 ：
+                </span>
+                <span>{{_DATA_.adminPromotionResultDto.sourceNames}}</span>
+            </div>
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    报名时间 ：
+                </span>
+                <span>
+                    {{#formatDate _DATA_.adminPromotionResultDto.beginEntryDate}}{{/formatDate}}
+                    ～
+                    {{#formatDate _DATA_.adminPromotionResultDto.endEntryDate}}{{/formatDate}}
+                </span>
+            </div>
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    活动时间 ：
+                </span>
+                <span>
+                    {{#formatDate _DATA_.adminPromotionResultDto.beginDate}}{{/formatDate}}
+                    ～
+                    {{#formatDate _DATA_.adminPromotionResultDto.endDate}}{{/formatDate}}
+                </span>
+            </div>
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    循环执行 ：
+                </span>
+                <span> {{_DATA_.adminPromotionResultDto.loopJobFormat}} </span>
+            </div>
+        </div>
+        <div class="main-box-title">- 活动优惠规则 - </div>
+        <div class="hidden-style fullCut" data-value="{{json this}}"></div>
+        {{#equals _DATA_.adminPromotionResultDto.promType '10'}}
+        <div class="overflow-hidden">
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    折扣比例 ：
+                </span>
+                <span>{{_DATA_.adminPromotionResultDto.ruleDiscountRateFormat}}</span>
+            </div>
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    限购 ：
+                </span>
+                <span>{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}</span>
+            </div>
+        </div>
+        {{/equals}}
+        <div class="form-information active-sale-rule"></div>
+        <div class="main-box-title ">- 活动范围 -</div>
+        <div class="overflow-hidden">
+            <div class="form-information">
+                <span class="wh150 text-right">
+                    供应商  ：
+                </span>
+                <div class="left">
+                    {{#each _DATA_.vendorIdNameDtos}}
+                        <p>{{simpleName}}</p>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        <div class="main-box-title">- 促销内容 - </div>
+        <div class="form-information">
+            {{{_DATA_.adminPromotionResultDto.description}}}
+        </div>
+        <div class="audit-div">
+            <div class="main-box-title "> 审核</div>
+            <div class="form-information">
+                <textarea id="descript" class="information-textarea margin-left-20 remaining-target" name="descript"></textarea>
+                <p class="remaining-text" style="text-align: left; margin-left: 20px;">您还可以输入<i>200</i>字</p>
+            </div>
+        </div>
+        <div class="form-information"><span class="wh150 text-right">审核履历：</span>
+            <span class="left">
+                {{{_DATA_.adminPromotionResultDto.auditLog}}}
+            </span>
+        </div>
+        <div class="admin-btn">
+            <button class="btn btn-info btn-medium passed">通 过</button>
+            <button class="btn btn-info btn-medium refuse">拒 绝</button>
+            <a class="btn btn-info btn-medium" href="{{_HREF_.mainContext}}/mall/activity/item-audit">返 回</a>
+        </div>
+        <input type="hidden" id="hidden_id" value="{{_DATA_.adminPromotionResultDto.id}}">
+    </div>
+{{/component}}

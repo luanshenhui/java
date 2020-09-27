@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（车主卡道路救援）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF15",
+            "reportCode":"JF15"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

@@ -1,0 +1,109 @@
+<script src="../member/post.js"></script>
+<form id="form" class="form_template">
+<input type="hidden" name="ID" id="ID"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label star lblParentName"></td>
+		<td>
+			<input type="text" id="parentName" name="parentName" />
+			<input type="hidden" id="parentID"/>
+		</td>
+		<td class="label star lblUsername"></td>
+		<td><input type="text" id="username"/><span id="message" class="red"></span></td>
+<!-- 		<td id="label lblStatus"></td>
+		<td>
+			<input type="hidden" id="parentID"/>
+		</td> -->
+	</tr>
+	<tr>
+		<td class="label star lblName"></td>
+		<td><input type="text" id="name"/></td>
+		<td class="label star lblContact"></td>
+		<td><input type="text" id="phoneNumber" /></td>
+	</tr>
+	<tr>
+		<td class="label lblGroup"></td>
+		<td><select id="groupID"></select></td>
+		<td class="label lblStatus"></td>
+		<td><select id="statusID"></select></td>
+	</tr>
+	<tr>
+		<td class="label star lblPayType"></td>
+		<td><select id="payTypeID"></select></td>
+		<td class="label lblMto"></td>
+		<td><select id="isMTO"></select></td>
+	</tr>
+	<tr>
+		<td class="label star lblOrdenPre"></td>
+		<td><input maxlength="4" type="text" id="ordenPre"/></td>
+		<td class="label lblFabricPre"></td>
+		<td><input type="text" id="fabricPre"/></td>
+	</tr>
+	<tr>
+		<td class="label star lblCompanyName nowrap"></td>
+		<td><input type="text" id="companyName"/></td>
+		<td class="label star lblHomePage"></td>
+		<td><select id="homePage"></select></td>
+	</tr>
+	<tr>
+		<!-- <td><input type="text" id="contact" name="contact" /></td> -->
+		<td class="label lblCompanyShortName"></td>
+		<td><input type="text" id="companyShortName"/></td>
+		<td class="label lblAccount"></td>
+		<td><input type="text" id="account"/></td>
+	</tr>
+<!-- 	<tr>
+		<td class="label lblContact"></td>
+		<td><select id="expressComId"></select></td>
+		<td class="label lblReceiveAddress"></td>
+		<td><input type="text" id="receiveAddress"/></td>
+	</tr> -->
+	<tr>
+		<td class="label star lblCmtPrice"></td>
+		<td colspan="3"><input type="text" id="cmtPrice" style="width:380px;"/><select id="moneySignID" style="width:60px;"></select>
+		</td>
+	</tr>
+	<tr>
+		<td ></td>
+		<td colspan="3">432:1400,433:1100,434:800,2000:150,3000:200,4000:150,6410:1300,6411:1000,6412:800</td>
+	</tr>
+	<tr>
+		<td class="label  lblOwnedPartner"></td>
+		<td><input type="text" id="ownedPartner"/></td>
+		<td class="label lblOwnedStore"></td>
+		<td><input type="text" id="ownedStore"/></td>
+	</tr>
+	<tr>
+		<td class="label lblContractNo"></td>
+		<td><input type="text" id="contractNo"/></td>
+		<td class="label lblMemo"></td>
+		<td><input type="text" id="memo"/></td>
+	</tr>
+	<tr>
+		<td class="label star lblPassword"></td>
+		<td><input id="password" type="password"/></td>
+		<td class="label star lblVerifyPassword"></td>
+		<td><input id="verifyPassword" type="password"/></td>
+	</tr>
+	<tr>
+		<td class="label star lblNoticeNum"></td>
+		<td><input id="noticeNum" name="noticeNum" type="text"/><span id="tip_noticeUnit"></span></td>
+		<td class="label star lblStopNum"></td>
+		<td><input id="stopNum" name="stopNum" type="text"/><span id="tip_stopUnit"></span></td>
+	</tr>
+	<tr>
+		<td class="label blLblDiscount"></td>
+		<td><input type="checkbox" id="isDiscount" name="isDiscount"/></td>
+		<td class="label star lblPayMode"></td>
+		<td><select id="shippingPaymentType"></select></td>
+	</tr>
+	<tr>
+		<td class="label star blLblBusinessUnit"></td>
+		<td><select id="businessUnit"></select></td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="btnSaveMember"></a> <a id="btnCancelMember"></a>
+</div>
+</form>

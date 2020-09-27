@@ -1,0 +1,5 @@
+package com.yulin.dangdang.dao;
+
+public interface SerachDao {
+	public List<Serach> keyWord(Search search);
+}

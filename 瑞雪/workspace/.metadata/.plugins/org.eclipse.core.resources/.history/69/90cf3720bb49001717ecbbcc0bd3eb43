@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.storage.dao.StorDAOImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.storage.vo.StorVO">
+		<id column="stor_id" property="storId" />
+	    <result column="chk" property="chk" />
+	    <result column="stor_code" property="storCode" />
+	    <result column="stor_name" property="storName" />
+	    <result column="prj_id" property="prjId" />
+	    <result column="prj_name" property="prjName" />
+     	<result column="deleted" property="deleted" />
+	    <result column="create_time" property="createtime" />
+	    <result column="update_time" property="updatetime" />
+	    <result column="tel" property="tel" />
+	    <result column="mobile" property="mobile" />
+	    <result column="addr" property="addr" />
+	    <result column="post_code" property="postcode" />
+	    <result column="area_code" property="areacode" />
+	    <result column="remark" property="remark" />
+	</resultMap>
+	
+	<select id="getStorByCondition" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.storage.vo.StorVO" >
+    select '' as chk,  stor_id, stor_name,stor_code, prj_id, prj_name, deleted, create_time, update_time , tel,
+     mobile, addr, post_code, ,area_code , remark
+    from OMS_STOR 
+	where 1=1
+		<if test="storId != null">
+			and stor_id = #{storId}
+		</if>
+		<choose> 
+			<when test="deleted !=null ">
+			</when>
+			<otherwise>
+				and deleted = 'n'
+			</otherwise>  
+		</choose>
+		<if test="storCode != null">
+			and  stor_code = #{storCode}
+		</if>
+		<if test="storName != null">
+			and stor_name = #{storName}
+		</if>
+		<if test="prjName != null">
+			and prj_name = #{prjName}
+		</if>
+  		<if test="searchCondition != null"> 
+			and stor_name like CONCAT('%',#{searchCondition},'%')  or stor_code like CONCAT('%',#{searchCondition},'%')
+		</if> 
+		<if test="prjId != null">
+			and prj_id = #{prjId}
+		</if>
+		
+		<if test="updatetime != null">
+			and update_time = #{updatetime}
+		</if>
+		<if test="createtime != null">
+			and create_time = #{createtime}
+		</if>
+		<if test="tel != null">
+			and tel = #{tel}
+		</if>
+		<if test="mobile != null">
+			and mobile = #{mobile}
+		</if>
+		<if test="addr != null">
+			and addr = #{addr}
+		</if>
+		<if test="postcode != null">
+			and post_code = #{postcode}
+		</if>
+		<if test="areacode != null">
+			and area_code = #{areacode}
+		</if>
+		<if test="remark != null">
+			and remark = #{remark}
+		</if>
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+  </select>
+  
+  
+  <update id="deleteStor" parameterType="cn.rkylin.oms.system.storage.vo.StorVO" >
+    update OMS_STOR
+    set deleted = 'y'
+    WHERE stor_id = #{storId}
+  </update>
+  
+  <insert id="insertStor" parameterType="cn.rkylin.oms.system.storage.vo.StorVO" >
+    insert into OMS_STOR (stor_id, stor_code, stor_name, prj_id, prj_name,
+      deleted, create_time, modify_time)
+    values (#{storId,jdbcType=VARCHAR},#{storCode,jdbcType=VARCHAR}, #{storName,jdbcType=VARCHAR}, #{prjId,jdbcType=VARCHAR},#{prjName,jdbcType=VARCHAR},#{deleted,jdbcType=VARCHAR},
+      now(), now())
+  </insert>
+    <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		stor_id,stor_code,stor_name,prj_id,prj_name
+		from OMS_STOR
+		where stor_id = #{value} AND deleted = 'n'
+  </select>
+  
+  <update id="updateStor" parameterType="cn.rkylin.oms.system.storage.vo.StorVO" >
+    update OMS_STOR
+    set stor_name = #{storName,jdbcType=VARCHAR},
+      stor_code = #{storCode,jdbcType=VARCHAR},
+      prj_id = #{prjId,jdbcType=VARCHAR},
+      prj_name = #{prjName,jdbcType=VARCHAR},
+      modify_time =  now() 
+    WHERE stor_id=#{storId}
+  </update>
+  
+<!--   <select id="WF_ORG_ROLE_select" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.role.domain.WF_ORG_ROLE" > -->
+<!--     select ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN, -->
+<!--       ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE,ROLE_ENABLE -->
+<!--     from WF_ORG_ROLE R  -->
+<!-- 	 where 1=1 -->
+<!-- 		<if test="roleId != null"> -->
+<!-- 			and ROLE_ID = #{roleId} -->
+<!-- 		</if> -->
+<!-- 		<if test="parentRoleId != null"> -->
+<!-- 			and PARENT_ROLE_ID = #{parentRoleId} -->
+<!-- 		</if> -->
+<!-- 		<if test="roleName != null"> -->
+<!-- 			and ROLE_NAME like #{roleName} -->
+<!-- 		</if> -->
+<!-- 		<if test="isAdminrole != null"> -->
+<!-- 			and IS_ADMINROLE = #{isAdminrole} -->
+<!-- 		</if> -->
+<!-- 		<if test="roleEnable != null"> -->
+<!-- 			and ROLE_ENABLE = #{roleEnable} -->
+<!-- 		</if> -->
+<!-- 		<if test="userId != null"> -->
+<!-- 			and R.ROLE_ID IN -->
+<!-- 	       (SELECT A.ROLE_ID -->
+<!-- 	          FROM WF_ORG_USER_ROLE A -->
+<!-- 	         WHERE A.USER_ID = #{userId}) -->
+<!-- 		</if> -->
+<!-- 		<if test="delegateRoleIdList != null"> -->
+<!-- 			OR R.ROLE_ID in -->
+<!-- 				<foreach collection="delegateRoleIdList" item="delegateRoleIdList" index="index" close=")" open="(" separator=",">  -->
+<!-- 				  #{delegateRoleIdList} -->
+<!-- 				</foreach> -->
+<!-- 		</if> -->
+<!--   </select> -->
+ 
+<!--    <select id="selectByIDs" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.role.domain.WF_ORG_ROLE" > -->
+<!--     select ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN, -->
+<!--       ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE,ROLE_ENABLE -->
+<!--     from WF_ORG_ROLE WHERE ROLE_ID IN  -->
+<!-- 		<foreach collection="roleIds" item="roleIds"  close=")" open="(" >  -->
+<!-- 			#{roleIds}  -->
+<!-- 		</foreach> -->
+<!--    </select> -->
+ 
+<!--   <select id="selectByPrimaryKeyRole" parameterType="java.lang.String" resultMap="BaseResultMap"> -->
+<!-- 		select -->
+<!-- 		ROLE_ID,ROLE_NAME,ROLE_DESCRIPTION,IS_ADMINROLE,USER_NUMBERS -->
+<!-- 		from WF_ORG_ROLE -->
+<!-- 		where ROLE_ID = #{value} -->
+<!--   </select> -->
+ 
+<!--   <insert id="insertRole" parameterType="cn.rkylin.oms.system.role.vo.RoleVo" > -->
+<!--     insert into WF_ORG_ROLE (ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, -->
+<!--       ROLE_TIME_BEGIN, ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE,ROLE_ENABLE) -->
+<!--     values (#{roleId,jdbcType=VARCHAR},#{parentRoleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{roleDescri,jdbcType=VARCHAR},#{isAdminrole,jdbcType=VARCHAR},#{roleTimeBegin,jdbcType=TIMESTAMP},#{roleTimeEnd,jdbcType=TIMESTAMP}, -->
+<!--       #{userNumbers,jdbcType=DECIMAL}, #{isUnique,jdbcType=VARCHAR},#{roleEnable,jdbcType=VARCHAR}) -->
+<!--   </insert> -->
+  
+<!--   <insert id="insertRoleUnit" parameterType="cn.rkylin.oms.system.role.domain.WF_ORG_ROLE_UNIT" > -->
+<!-- 	INSERT INTO WF_ORG_ROLE_UNIT -->
+<!-- 	  (UNIT_ID, ROLE_ID) -->
+<!-- 	VALUES -->
+<!-- 	  (#{unitId,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR} ) -->
+<!--   </insert> -->
+  
+<!--   <insert id="insertRoleUser" parameterType="cn.rkylin.oms.system.role.domain.WF_ORG_USER_ROLE" > -->
+<!-- 	INSERT INTO WF_ORG_USER_ROLE -->
+<!-- 	  (USER_ID, ROLE_ID) -->
+<!-- 	VALUES -->
+<!-- 	  (#{userId,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR}) -->
+<!--   </insert> -->
+
+<!--   <update id="updateRole" parameterType="cn.rkylin.oms.system.role.vo.RoleVo" > -->
+<!--     update WF_ORG_ROLE -->
+<!--     set ROLE_NAME = #{roleName,jdbcType=VARCHAR}, -->
+<!--       ROLE_DESCRIPTION = #{roleDescri,jdbcType=VARCHAR}, -->
+<!--       IS_ADMINROLE = #{isAdminrole,jdbcType=VARCHAR}, -->
+<!--       ROLE_TIME_BEGIN = #{roleTimeBegin,jdbcType=TIMESTAMP}, -->
+<!--       ROLE_TIME_END = #{roleTimeEnd,jdbcType=TIMESTAMP}, -->
+<!--       USER_NUMBERS = #{userNumbers,jdbcType=DECIMAL}, -->
+<!--       IS_UNIQUE =  #{isUnique,jdbcType=VARCHAR} -->
+<!--     WHERE ROLE_ID=#{roleId} -->
+<!--   </update> -->
+
+<!-- 	<update id="updateEnable1" parameterType="cn.rkylin.oms.system.role.vo.RoleVo" > -->
+<!--     update WF_ORG_ROLE -->
+<!--     set ROLE_ENABLE = '0' -->
+<!--     WHERE ROLE_ID=#{roleId} -->
+<!--   </update> -->
+  
+<!--   <update id="updateEnable2" parameterType="cn.rkylin.oms.system.role.vo.RoleVo" > -->
+<!--     update WF_ORG_ROLE -->
+<!--     set ROLE_ENABLE = '1' -->
+<!--     WHERE ROLE_ID=#{roleId} -->
+<!--   </update> -->
+  
+<!--   <delete id="deleteRoleUser" parameterType="string" > -->
+<!-- 		DELETE from WF_ORG_USER_ROLE WHERE ROLE_ID= #{value} -->
+<!--   </delete> -->
+	
+<!--   <delete id="deleteRole" parameterType="string" > -->
+<!-- 		delete from WF_ORG_ROLE WHERE ROLE_ID= #{value} -->
+<!--   </delete> -->
+	
+<!--   <delete id="deleteRoleUnit" parameterType="string" > -->
+<!-- 		DELETE from WF_ORG_ROLE_UNIT WHERE ROLE_ID= #{value} -->
+<!--   </delete> -->
+  
+<!--   <select id="select_role" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.role.domain.WF_ORG_ROLE" > -->
+<!--     select ROLE_ID, PARENT_ROLE_ID, ROLE_NAME, ROLE_DESCRIPTION, IS_ADMINROLE, ROLE_TIME_BEGIN, -->
+<!--       ROLE_TIME_END, USER_NUMBERS, IS_UNIQUE,ROLE_ENABLE -->
+<!--     from WF_ORG_ROLE R -->
+<!-- 	where 1=1 -->
+<!-- 		<if test="roleId != null"> -->
+<!-- 			and ROLE_ID = #{roleId} -->
+<!-- 		</if> -->
+<!-- 		<if test="parentRoleId != null"> -->
+<!-- 			and PARENT_ROLE_ID = {parentRoleId} -->
+<!-- 		</if> -->
+<!-- 		<if test="roleName != null"> -->
+<!-- 			and ROLE_NAME like #{roleName} -->
+<!-- 		</if> -->
+<!-- 		<if test="isAdminrole != null"> -->
+<!-- 			and IS_ADMINROLE = #{isAdminrole} -->
+<!-- 		</if> -->
+<!-- 		<if test="userId != null"> -->
+<!-- 			and R.ROLE_ID IN -->
+<!-- 	       (SELECT A.ROLE_ID -->
+<!-- 	          FROM WF_ORG_USER_ROLE A -->
+<!-- 	         WHERE A.USER_ID = #{userId}) -->
+<!-- 		</if> -->
+<!-- 		<if test="delegateRoleIdList != null"> -->
+<!-- 			OR R.ROLE_ID in -->
+<!-- 				<foreach collection="delegateRoleIdList" item="delegateRoleIdList" index="index" close=")" open="(" separator=",">  -->
+<!-- 				  #{delegateRoleIdList} -->
+<!-- 				</foreach> -->
+<!-- 		</if> -->
+<!--   </select> -->
+
+</mapper>

@@ -1,0 +1,16 @@
+<table>
+    <tr>
+        <td>关联系统名字</td>
+        <td>当前限流数</td>
+        <td>限流数</td>
+        <td>操作</td>
+    </tr>
+    {{#each total}}
+        <tr sysId="{{key}}">
+            <td>{{name}}</td>
+            <td></td>
+            <td><input type="text" class="totalLimit" value="{{num}}" /></td>
+            <td><input type="button" value="重置" class="reset" /></td>
+        </tr>
+    {{/each}}
+</table>

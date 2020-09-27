@@ -1,0 +1,28 @@
+package com.yulin.web.common;
+
+import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.*;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+
+public class DBUtil {
+	public static SqlSession getSession(){
+		SqlSession session = null;
+		String path = "cfg/cfg.xml";
+		InputStream is;
+		try {
+			is = Resources.getResourceAsStream(path);
+			SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(is);
+			session = factory.openSession();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return session;
+	}
+}

@@ -1,0 +1,216 @@
+{{#component "pointsRequest js-component"}}
+    <p class="components-title"><strong>- 请款管理 -</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals tabNumber "1"}}class="active"{{/equals}}><a data-role="nav"
+                                                                      href="{{_HREF_.mainContext}}/points/request_money">所有订单</a>
+            </li>
+            <li {{#equals tabNumber "2"}}class="active"{{/equals}}><a data-role="nav"
+                                                                      href="{{_HREF_.mainContext}}/points/request_todo">待处理的订单</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form method="get" class="form js-request-form form-inline">
+                <input type="text" name="tabNumber"
+                       value="{{tabNumber}}" style="display:none">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4">
+                            <label for="mainOrder">主订单编号：</label>
+                            <input type="text" class="control-group" id="ordermainId" name="ordermainId"
+                                   value="{{ordermainId}}">
+                        </span>
+                        <span class="span4">
+                            <label for="mainOrder">订单编号：</label>
+                            <input type="text" class="control-group" id="orderId" name="orderId" value="{{orderId}}">
+                        </span>
+                        <span class="span4">
+                            <label for="cardno">卡号：</label>
+                            <input class="control-group" id="cardno" type="text" name="cardno" value="{{cardno}}">
+                        </span>
+                    </p>
+
+                    <p class="filter-name">
+                        <span class="span5 span-large requestTime">
+                            <label for="startTime">开始日期:</label>
+                            <input class="control-group js-date-start cursor-pointer" id="startTime" type="text"
+                                   value="{{startTime}}"
+                                   name="startTime">
+                        </span>
+                        <span class="span5 span-large requestTime">
+                            <label for="endTime">截止日期:</label>
+                            <input class="control-group js-date-end cursor-pointer" id="endTime" type="text"
+                                   value="{{endTime}}"
+                                   name="endTime">
+                        </span>
+                        {{#equals tabNumber "2"}}
+                            <span class="span4 span-change">
+                                 <label for="sinStatusNm">请款状态:</label>
+                                 <select class="control-group" name="sinStatusId">
+                                     <option value="0332">请款申请</option>
+                                 </select>
+                             </span>
+                        {{/equals}}
+                        {{#equals tabNumber "1"}}
+                            <span class="span4 span-change">
+                             <label for="sinStatusNm">请款状态:</label>
+                             <select class="control-group" name="sinStatusId">
+                                 <option value="">请选择</option>
+                                 <option value="0000">未请款</option>
+                                 <option id="0332" value="0332" {{#equals sinStatusId "0332"}}selected{{/equals}}>请款申请</option>
+                                 <option id="0350" value="0350" {{#equals sinStatusId "0350"}}selected{{/equals}}>同意请款</option>
+                                 <option id="0351" value="0351" {{#equals sinStatusId "0351"}}selected{{/equals}}>请款中</option>
+                                 <option id="0311" value="0311" {{#equals sinStatusId "0311"}}selected{{/equals}}>请款成功</option>
+                                 <option id="0333" value="0333" {{#equals sinStatusId "0333"}}selected{{/equals}}>拒绝请款</option>
+                                 <option id="0352" value="0352" {{#equals sinStatusId "0352"}}selected{{/equals}}>请款失败</option>
+                             </select>
+                            </span>
+                        {{/equals}}
+                    </p>
+                    <p class="filter-name">
+                        <span class="span4">
+                            <label for="vendorSnm">供应商:</label>
+                            <input class="control-group" id="vendorSnm" type="text" name="vendorSnm"
+                                   value="{{vendorSnm}}">
+                        </span>
+                        <span class="span-new">
+                             更多：
+                            <input type="checkbox" name="tblFlag" id="tblFlag" value="1" {{#if tblFlag}}checked{{/if}}>
+                            <label for="tblFlag">
+                                可查6个月以上的数据
+                            </label>
+                         </span>
+                    </p>
+                    <p class="filter-name">
+                        {{#authorial "pointRequestMoney_export"}}
+                            <button id = "2" class="btn btn-info btn-small js-request-export" type = "button" data-toggle="confirm"
+                                    data-title="您确定导出订单吗?"
+                                    data-event="confirm:export-order">批量导出
+                            </button>
+                            <span class="outOrder-state"></span>
+                            <span class="outorder-download"></span>
+                        {{/authorial}}
+                        <button class="btn btn-success btn-small span-new2 js-search-button" type="submit">查询</button>
+                    </p>
+
+                </fieldset>
+            </form>
+            <div class="main-box-table margin-top-20">
+                <table  class="table">
+                    {{#equals tabNumber "1"}}
+                        <tr>
+                            <th width="32%">礼品</th>
+                            <th width="5%">数量</th>
+                            <th width="10%">总金额</th>
+                            <th width="10%">结算金额</th>
+                            <th width="11%">订单状态</th>
+                            <th width="10%">发货状态</th>
+                            <th width="11%">请款状态</th>
+                            <th width="11%">操作</th>
+                        </tr>
+                    {{/equals}}
+                    {{#equals tabNumber "2"}}
+                        <tr>
+                            <th width="3%"></th>
+                            <th width="29%">礼品</th>
+                            <th width="5%">数量</th>
+                            <th width="10%">总金额</th>
+                            <th width="10%">结算金额</th>
+                            <th width="11%">订单状态</th>
+                            <th width="10%">发货状态</th>
+                            <th width="11%">请款状态</th>
+                            <th width="11%">操作</th>
+                        </tr>
+                    {{/equals}}
+                </table>
+                {{#each _DATA_.data}}
+                    <div class="order-tab">
+                        <div class="list-detail">
+                            <p>订单编号：{{orderSubModel.orderId}}</p>
+
+                            <p>卡号：{{orderSubModel.cardno}}</p>
+
+                            <p>渠道：{{orderSubModel.sourceNm}}</p>
+
+                            <p>供应商：{{orderSubModel.vendorSnm}}</p>
+
+
+                        </div>
+                        <table class="table">
+                            <tr data-component="" data-id="{{orderSubModel.orderId}}">
+                                {{#equals tabNumber "2"}}
+                                    <td width="3%"><input name="" type="checkbox" value="{{orderSubModel.orderId}}"  class="js-order-check">
+                                    </td>{{/equals}}
+                                <td width="9%">
+                                    <a href="{{_HREF_.main}}/mall/goods/{{orderSubModel.goodsCode}}?itemCode={{orderSubModel.goodsId}}"
+                                       target="_blank">
+                                        {{#if orderSubModel.itemSmallPic}}<img data-original="{{orderSubModel.itemSmallPic}}">
+                                        {{else}}
+                                            <img data-original="" alt="暂无图片">
+                                        {{/if}}
+                                    </a>
+                                </td>
+                                <td width="23%" class="text-left">
+                                    <a href="{{_HREF_.main}}/mall/goods/{{orderSubModel.goodsCode}}?itemCode={{orderSubModel.goodsId}}"
+                                       target="_blank">{{orderSubModel.goodsNm}}</a>
+
+                                    <p> 礼品编码:{{xid}}</p>
+                                </td>
+                                <td width="5%">{{orderSubModel.goodsNum}}</td>
+                                <td width="10%">{{orderSubModel.totalMoney}}</td>
+                                <td width="10%">{{orderSubModel.calMoney}}</td>
+                                <td width="11%">
+                                    <strong>{{orderSubModel.curStatusNm}}</strong>
+                                    <p><a href="{{_HREF_.mainContext}}/points/order/orderInfo?id={{orderSubModel.orderId}}"
+                                          class="word03">订单详情</a></p>
+                                </td>
+                                <td width="10%">
+                                    {{#equals orderSubModel.goodssendFlag "0"}}
+                                        未发货
+                                    {{/equals}}
+                                    {{#equals orderSubModel.goodssendFlag "1"}}
+                                        已发货
+                                    {{/equals}}
+                                    {{#equals orderSubModel.goodssendFlag "2"}}
+                                        已签收
+                                    {{/equals}}
+                                </td>
+                                <td width="11%">
+                                    {{#if orderSubModel.sinStatusId}}
+                                        {{orderSubModel.sinStatusNm}}
+                                    {{else}}
+                                        未请款
+                                    {{/if}}
+                                </td>
+                                <td width="10%">
+                                    {{#authorial "pointRequestMoney_audit"}}
+                                        {{#equals orderSubModel.sinStatusId "0332"}}
+                                            <a class="table-link-orange js-request-one word03" href="javascript:void(0);">请款审核</a>
+                                        {{/equals}}
+                                    {{/authorial}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                {{/each}}
+                {{#equals _DATA_.total "0"}}
+                {{else}}
+                    {{#equals tabNumber "2"}}
+                        <input name="selectAll" id="selectAll" type="checkbox" value="" class="js-select-all"><label
+                            for="selectAll">全选</label>
+                        <a class="margin-left-10 link js-request-accept font-color-blue" href="javascript:void(0);">通过</a>
+                        <a class="margin-left-10 link js-request-refuse font-color-blue" href="javascript:void(0);">拒绝</a>
+                    {{/equals}}
+                {{/equals}}
+            </div>
+        </div>
+    </div>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    {{/equals}}
+    </div>
+{{/component}}

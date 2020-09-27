@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LogsModel">
+    <resultMap id="LogsMap" type="LogsModel">
+        <result property="id" column="id"/>
+        <result property="shopType" column="shop_type"/>
+        <result property="action" column="action"/>
+        <result property="user" column="user"/>
+        <result property="time" column="time"/>
+        <result property="content" column="content"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="creatOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,shop_type,action,user,time,content,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="LogsModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_sys_log
+        (shop_type
+        ,action
+        ,user
+        ,time
+        ,content
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{shopType}
+        ,#{action}
+        ,#{user}
+        ,#{time}
+        ,#{content}
+        ,#{delFlag}
+        ,#{creatOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="LogsModel">
+        update tbl_sys_log set
+        <if test="shopType !=null">shop_type = #{shopType}
+            ,
+        </if>
+        <if test="action !=null">action = #{action}
+            ,
+        </if>
+        <if test="user !=null">user = #{user}
+            ,
+        </if>
+        <if test="time !=null">time = #{time}
+            ,
+        </if>
+        <if test="content !=null">content = #{content}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="creatOper !=null">create_oper = #{creatOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag = 0
+            <if test="id !=null">and id = #{id}</if>
+            <if test="shopType !=null">and shop_type = #{shopType}</if>
+            <if test="action !=null">and action = #{action}</if>
+            <if test="user !=null">and user = #{user}</if>
+            <!--<if test="time !=null">and time = #{time}</if>-->
+            <if test="startTime !=null">and date_format(`time`,'%Y-%m-%d') = date_format(#{startTime},'%Y-%m-%d')</if>
+            <if test="endTime !=null">and date_format(`time`,'%Y-%m-%d') = date_format(#{endTime},'%Y-%m-%d')</if>
+            <if test="content !=null">and content = #{content}</if>
+            <if test="creatOper !=null">and create_oper = #{creatOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="LogsMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_sys_log
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="LogsMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_sys_log
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="LogsMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_sys_log
+        <include refid="conditions"/>
+        <![CDATA[ order by id asc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="LogsModel">
+        delete from tbl_sys_log where id = id
+    </delete>
+
+    <!--查询条数-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_sys_log
+        <include refid="conditions"/>
+    </select>
+</mapper>
+
+

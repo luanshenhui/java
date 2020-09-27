@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:properties id="app" location="classpath:app.properties"/>
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <!-- Application name -->
+    <dubbo:application name="trade-provider" logger="slf4j"/>
+    <!-- registry address, used for service to register itself -->
+    <dubbo:registry address="#{app.dubboRegistry}"/>
+    <!-- expose this service through dubbo protocol, through port 20880 -->
+    <dubbo:protocol serialization="nativejava" name="dubbo" port="#{app.dubboPort}" threads="#{app.dubboThreads}"
+                    heartbeat="#{app.dubboHeartBeats}"/>
+
+    <dubbo:service interface="cn.com.cgbchina.trade.service.AdminTopService" ref="adminTopServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.CartService" ref="cartServiceImpl" timeout="10000"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.CollocationSellService" ref="collocationSellServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.MakecheckjobService" ref="makecheckjobServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderCancelService" ref="orderCancelServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderPartBackService" ref="orderPartBackServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderReturnTrackService" ref="orderReturnTrackServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderService" ref="orderServiceImpl" timeout="10000"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.PointCollocationService" ref="pointCollocationServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.PointRejectService" ref="pointRejectServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.PointRelatedService" ref="pointRelatedServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.PointsOrderService" ref="pointsOrderServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.RequestMoneyService" ref="requestMoneyServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.ReportService" ref="reportServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.TradeTimeRoleService" ref="tradeTimeRoleServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.VendorOrderService" ref="vendorOrderServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.VendorTopService" ref="vendorTopServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderDealService" ref="orderDealServiceImpl"/>
+    <import resource="trade-service-context.xml"/>
+    <import resource="mybatis-context.xml"/>
+    <!-- ID生成规则 -->
+    <import resource="classpath*:/spring/generator-context.xml"/>
+</beans>

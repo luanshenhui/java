@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>s2.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script type="text/javascript" src="../js/jquery-1.4.3.js"></script>
+	<script type="text/javascript">
+		function f1(){
+			$('#d1 div').css('font-size','90px');
+		}
+		function f2(){
+			$('#d1>div').css('background-color','green');
+		}
+		function f3(){
+			$('#d3+div').css('font-size','60px');
+		}
+		function f4(){
+			$('#d2~div').css('font-size','60px');
+		}
+	</script>
+  </head>
+  
+  <body style="font-size: 30px;">
+    <div id="d1">
+    	<div id="d2">hello 1</div>
+    	<div id="d3" style="width: 200px;height: 200px;background-color: blue">
+    		<div id="d4" style="width: 100px;height: 100px;background-color: red;">hello 2</div>
+    	</div>
+    	<div id="d5">hello 3</div>
+    	<p id="p1">hello 4</p>
+    </div>
+    <a href="javascript:;" onclick="f4();">ClickMe</a>
+  </body>
+</html>

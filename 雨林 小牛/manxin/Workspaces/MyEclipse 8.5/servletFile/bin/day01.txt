@@ -1,0 +1,9 @@
+servlet是如何运行的：
+	1.浏览器依据ip,port建立与servlet容器(servlet容器同时也是一个简单的web服务器)之间的连接
+	2.浏览器打包(按照http协议的要求，将一些数据，比如请求资源路径，请求参数以及一些消息头放到请求数据包里)
+	3.servlet容器拆包(将请求数据包里面的数据解析出来，放到一个request 对象里面，同时会创建response对象)
+	4.servlet容器依据请求资源路径找到对应的servlet的配置，然后将servlet实例化
+	5.servlet容器会调用servlet对象的service方法(将request对象和response对象作为参数)。通过request对象
+		就可以获得相关的数据，然后进行相应的处理，最后将处理的结果放到response对象中
+	6.servlet容器从response对象中取出数据，打包给浏览器
+	7.浏览器拆包，生成相应的页面

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="AUDIT" >
+  <resultMap id="AuditMap" class="com.dhc.base.audit.vo.AuditVO" >
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+	<result column="SESSION_ID" property="sessionId" jdbcType="VARCHAR"/>
+	<result column="IP_ADDRESS" property="ipAddress" jdbcType="VARCHAR"/>
+	<result column="ACTION_TYPE" property="actionType" jdbcType="VARCHAR"/>
+	<result column="ACTION_DATE" property="actionDt" jdbcType="Date"/>
+	<result column="DETAIL" property="detail" jdbcType="VARCHAR"/>
+  </resultMap> 
+  
+  <insert id="insertAudit" parameterClass="com.dhc.base.audit.vo.AuditVO" >
+   INSERT INTO JT_AUDIT
+	  (USER_NAME, SESSION_ID,IP_ADDRESS,ACTION_TYPE,ACTION_DATE, DETAIL ,ACTION_DAY
+	)VALUES(
+	   #userName#,#sessionId#,#ipAddress#,#actionType#,#actionDt#,#detail#,to_char(#actionDt#,'DD')  
+	)
+  </insert>
+</sqlMap>

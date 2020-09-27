@@ -1,0 +1,79 @@
+(function($) {
+	jQuery(document).ready(function() {
+		jQuery('body').bind('keydown',shieldCommon);
+		//obj = window.dialogArguments;// 定义一个对象用于接收对话框参数
+		//opFlag = obj.opFlag;
+		//roleID = obj.roleID;
+		if (opFlag == 1 || opFlag == "1") {
+			showDetail(roleID);
+		}
+		//判断登录人员的控件可见范围
+	    if(hasAdminRole == "false"){
+	    	jQuery("#selIsAdminRole").attr('disabled',true);
+			jQuery("#txtRoleUnits").attr('disabled',true);
+			jQuery("#btnDot2").attr('disabled',true);
+		}
+	    //修改可管理组织的可用状态
+	    adminRoleChange();
+	});
+})(jQuery);
+
+
+function adminRoleChange(){
+	var temp = jQuery("#selIsAdminRole").val();
+	if(temp == "是"){
+		jQuery("#txtRoleUnits").attr('disabled',false);
+		jQuery("#btnDot2").attr('disabled',false);
+	} else {
+		jQuery("#txtRoleUnits").val("");
+		jQuery("#txtRoleUnitsValue").val("");
+		jQuery("#txtRoleUnits").attr('disabled',true);
+		jQuery("#btnDot2").attr('disabled',true);
+	}
+}
+
+//显示角色的详细信息
+function showDetail(roleID) {
+	jQuery("#hidRoleID").val(roleID);
+	//根据roleID取role的明细
+	var sURL1 = webpath + "/RoleAction.do?method=getRoleDetail";
+	jQuery.ajax( {
+		url : sURL1,
+		type : "post",
+		dataType : "json",
+		data : {
+			roleID : roleID
+		},
+		success : function(data) {
+			if(data.errorMessage == undefined){
+				//使用返回的role明细画页面
+				if(data.roleDetail.roleId == "adminRole"){
+					jQuery("#selIsAdminRole").attr('disabled',true);
+				}
+				jQuery("#txtRoleName").val(data.roleDetail.roleName);
+				jQuery("#txtRoleDesc").val(data.roleDetail.roleDescription);
+				jQuery("#txtMax").val(data.roleDetail.userNumbers);
+				jQuery("#selIsAdminRole").val(data.roleDetail.isAdminrole);
+				jQuery("#selIsAdminRole").attr('disabled',true);
+				jQuery("#txtRoleUsers").val(data.roleUsersVALUE);
+				jQuery("#txtRoleUsersValue").val(data.roleUsersKEY);
+				jQuery("#txtRoleUnits").val(data.roleManageUnitsVALUE);
+				jQuery("#txtRoleUnitsValue").val(data.roleManageUnitsKEY);
+				//修改可管理组织单元的状态
+				adminRoleChange();
+			} else {
+				if (data.errorMessage == "session timeout")
+					window.location.href = webpath + "/login.jsp";
+				else
+					alert(data.errorMessage);
+			}
+		},
+		error : function(XMLHttpRequest,textStatus,errorThrown){
+			alert(NET_FAILD);
+			// 通常 textStatus 和 errorThrown 之中 
+		    // 只有一个会包含信息 
+		    //this;  调用本次AJAX请求时传递的options参数
+		}
+	});
+}
+

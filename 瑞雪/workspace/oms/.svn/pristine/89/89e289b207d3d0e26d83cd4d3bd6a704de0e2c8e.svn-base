@@ -1,0 +1,788 @@
+/*
+ * 菜单树
+ * */
+var tree;
+$(document).ready(function() {
+    // 初始化menu
+    menu = new dhtmlXMenuObject("menuTree");
+    menu.setImagePath("/DhtxMenu/");
+    menu.setIconsPath("../../../../Apollo/madmin/vendors/dhtmlxtree/image/MenuIcon/");
+    menu.renderAsContextMenu(true);
+    menu.attachEvent("onClick", rightClick);
+    // 右键点击触发获取详细信息事件
+    menu.attachEvent("onBeforeContextMenu", function() {
+        var itemId = tree.rclk_id;
+        tree._unselectItems(); // 解决右键点击时，被点击节点与新生成两个节点都被选中的问题
+        showDetail(itemId);
+        return true;
+    });
+    menu.loadXML("dhtmlxmenu.xml");
+
+    // 初始化tree
+    tree = new dhtmlXTreeObject("menuTree", "100%", "100%", 0);
+    tree.setImagePath("/csh_books/");
+    tree.attachEvent("onClick", showDetail);
+    // tree.setOnRightClickHandler(test);//设置右键调用方法
+    tree.enableContextMenu(menu);
+    tree.setOnOpenEndHandler(checkSubNodes); // 解决节点请求回来无法展开
+    // tree.setOnOpenStartHandler(beforeOpenNode);
+    tree.setOnMouseInHandler(beforeOpenNode);
+    tree.setOnDblClickHandler(selItem);// 解决多次双击同一个节点选中样式失去的问题
+
+    tree.setXMLAutoLoading("/menu/getElementsByMenuItemID.action?showAllMenu=true");
+    tree.loadXML("/menu/getMenuTree.action?expandAll=&showAllMenu=true");
+    tree.openItem("RootMenu");
+    window.setTimeout(function() {
+        // tree.closeAllItems(0);
+    }, 0);
+
+    // document.getElementById("elementDetail").style.display=
+    // "none";
+    $("#elementDetail").hide(); // $隐藏form;.show()是显示的方法
+    $("#pageDetail").hide();
+
+    // document.getElementById("btn_menuReset").disabled=true;
+    // document.getElementById("btn_menuSave").disabled=true;
+    $("#btn_menuReset").attr("disabled", true);// $按钮置灰
+    $("#btn_menuSave").attr("disabled", true);
+
+    $("#menuDetail").validate({
+        debug : true,
+        errorPlacement : function(error, element) {
+            error.insertAfter(element);
+        },
+        messages : {
+            menuName : {
+                required : "必填字段",
+                byteRangeLength : "图片路径过长"
+            },
+            menuImg : {
+                byteRangeLength : "请求对象长度过长"
+            },
+            menuDes : {
+                byteRangeLength : "页面ID不能为空"
+            },
+            menuLocal : {
+                byteRangeLength : "目标区域不能为空"
+            }
+        }
+    });
+
+    $("#pageDetail").validate({
+        debug : true,
+        errorPlacement : function(error, element) {
+            error.insertAfter(element);
+        },
+        messages : {
+            pageId: {
+                required : "页面ID不能为空",
+                byteRangeLength : "页面ID过长"
+            },  
+            pageName: {
+                required : "名称不能为空",
+                byteRangeLength : "名称过长"
+            }
+        }
+    });
+
+    $("#elementDetail").validate({
+        debug : true,
+        errorPlacement : function(error, element) {
+            error.insertAfter(element);
+        },
+        messages : {
+            eleId: {
+                required : "元素ID不能为空",
+                byteRangeLength : "元素ID过长"
+            },  
+            eleName: {
+                required : "元素名称不能为空",
+                byteRangeLength : "元素名称过长"
+            },              
+            eleImg: {
+                byteRangeLength : "图片路径过长"
+            },
+            eleType: {
+                required : "页面ID不能为空",
+                byteRangeLength : "页面ID过长"
+            },
+            eleDes: {
+                byteRangeLength : "描述过长"
+            }
+        }
+    });
+
+});
+var idString = "";
+/*
+ * 右键菜单事件
+ */
+function rightClick(menuid, zoom) {
+    var itemId = tree.rclk_id; // 获取右键点击节点的id
+    showDetail(itemId);
+    var type = itemId.substr(itemId.lastIndexOf("@") + 1, itemId.length);
+    var level = tree.getLevel(itemId);
+    // 新建菜单
+    if (menuid == "addMenu") {
+        if (type == "MENU" || itemId == "RootMenu") {
+            $.ajax({
+                url : "/menu/createMenuItem.action",
+                type : "post",
+                async : false,
+                dataType : "json",
+                data : {
+                    itemId : itemId,
+                    level : level
+                },
+                success : function(data) {
+                    // tree.insertNewItem(data.menuDetail.parentMenuCode,data.menuDetail.menuCode,data.menuDetail.menuName);
+                    tree.refreshItem(data.menuDetail.parentMenuCode); // 刷新节点就会发送ajax请求，画出新建的节点
+                    // 。insertNewItem方法有些问题
+                    tree.selectItem(data.menuDetail.parentMenuCode);// 先选中父节点，否则无法取消选中
+                    tree.selectItem(data.menuDetail.menuCode);// 选新加节点
+                    // document.getElementById("elementDetail").style.display=
+                    // "none";
+                    // document.getElementById("menuDetail").style.display="";
+                    $("#elementDetail").hide(); // 隐藏form
+                    $("#pageDetail").hide(); // 隐藏form
+                    $("#menuDetail").show(); // 显示form
+
+                    // 解决初始化后，在根节点新建菜单后，虽然可以选中节点，但是按钮不可用的问题
+                    $("#btn_menuReset").attr("disabled", false);
+                    $("#btn_menuSave").attr("disabled", false);
+
+                    $("#menuName").val(data.menuDetail.menuName);
+                    $("#menuImg").val(data.menuDetail.menuImgLocation);
+                    $("#menuDes").val(data.menuDetail.menuDesc);
+                    $("#menuLocal").val(data.menuDetail.menuLocation);
+                    $("#menuArea").val(data.menuDetail.menuArea);
+                       
+                    $("#menuDis").val(data.menuDetail.menuIsDefault);
+                    $("#menuDetail").valid();
+
+                    // $("#menuDetail").validate();
+                }
+            });
+        } else {
+            window.top.window.showModalAlert("菜单只能建在菜单下");
+            return;
+        }
+
+    }
+    // 新建元素
+    if (menuid == "addElement") {
+        // 不能再最外层节点创建元素，"RootMenu"是在java端写死的itemId
+        if (itemId == "RootMenu") {
+            window.top.window.showModalAlert("此处只能创建菜单");
+            return;
+        }
+        if (type == "PAGE") {
+            $.ajax({
+                url : "/menu/createPageElement.action",
+                type : "post",
+                async : false,
+                dataType : "json",
+                data : {
+                    itemId : itemId,
+                    level : level
+                },
+                success : function(data) {
+                    // tree.insertNewItem(data.elementDetail.parentMenuCode,data.elementDetail.menuCode,data.elementDetail.menuName,
+                    // "","tombs.gif","tombs.gif","tombs.gif");
+                    tree.refreshItem(data.elementDetail.parentMenuCode);
+                    tree.selectItem(data.elementDetail.parentMenuCode);// 先选中父节点，否则无法取消选中
+                    tree.selectItem(data.elementDetail.menuCode);// 选中新加节点
+                    // document.getElementById("menuDetail").style.display=
+                    // "none";
+                    // document.getElementById("elementDetail").style.display="";
+                    $("#menuDetail").hide();
+                    $("#pageDetail").hide();
+                    $("#elementDetail").show();
+
+                    $("#eleId").val(data.elementDetail.menuElementId);
+                    $("#eleName").val(data.elementDetail.menuName);
+                    $("#eleImg").val(data.elementDetail.menuImgLocation);
+                    if (data.elementDetail.menuElementType == "" || data.elementDetail.menuElementType == null){
+                        $("#eleType").val("CODE2");
+                    }
+                    else{
+                        $("#eleType").val(data.elementDetail.menuElementType);
+                    }
+                    $("#eleDes").val(data.elementDetail.menuDesc);
+                    jQuery("#elementDetail").valid();
+                }
+            });
+        } else {
+            window.top.window.showModalAlert("元素只能建在页面下");
+            return;
+        }
+    }
+
+    // 新建页面
+    if (menuid == "addPage") {
+        // 不能再最外层节点创建元素，"RootMenu"是在java端写死的itemId
+        if (itemId == "RootMenu") {
+            window.top.window.showModalAlert("页面只能建在菜单下");
+            return;
+        }
+        if (type == "MENU") {
+            $.ajax({
+                url : "/menu/createPage.action",
+                type : "post",
+                async : false,
+                dataType : "json",
+                data : {
+                    itemId : itemId,
+                    level : level
+                },
+                success : function(data) {
+                    // tree.insertNewItem(data.pageDetail.parentMenuCode,data.pageDetail.menuCode,data.pageDetail.menuName);
+                    tree.refreshItem(data.pageDetail.parentMenuCode);
+                    tree.selectItem(data.pageDetail.parentMenuCode);// 先选中父节点，否则无法取消选中
+                    tree.selectItem(data.pageDetail.menuCode);// 选中新加节点
+                    // document.getElementById("menuDetail").style.display=
+                    // "none";
+                    // document.getElementById("pageDetail").style.display="";
+                    $("#menuDetail").hide(); // 隐藏id=menuDetail的form
+                    $("#elementDetail").hide();
+                    $("#pageDetail").show();
+
+                    $("#pageId").val(data.pageDetail.menuElementId);
+                    $("#pageName").val(data.pageDetail.menuName);
+                    $("#pageImg").val(data.pageDetail.menuImgLocation);
+                    $("#pageLocal").val(data.pageDetail.menuLocation);
+                    $("#pageArea").val(data.pageDetail.menuArea);
+                    if (data.pageDetail.menuDesc == "" || data.pageDetail.menuDesc == null){
+                        $("#pageDis").val("0");
+                    }
+                    else{
+                        $("#pageDis").val(data.pageDetail.menuDesc);
+                    }
+                    jQuery("#pageDetail").valid();
+                }
+            });
+        } else {
+            window.top.window.showModalAlert("页面只能建在菜单下");
+            return;
+        }
+    }
+
+    // 删除节点
+    if (menuid == "deleteMenu") {
+        // 不能再最外层节点创建元素，"RootMenu"是在java端写死的itemId
+        if (itemId == "RootMenu") {
+            window.top.window.showModalAlert("不能在此节点下进行删除操作");
+            return;
+        }
+        if (itemId == "") {
+            window.top.window.showModalAlert("请选择要删除的节点");
+            return;
+        }
+        var subItem = tree.getAllSubItems(itemId);
+        if (subItem != "") {
+            window.top.window.showModalAlert("此节点下还有节点，不能删除");
+            return;
+        }
+        idString = itemId;
+        // confirm(ITEM_DELETE_CONFIRM,function(){
+        window.top.window.showModalConfirm("确定要删除吗？", doDelete);
+
+    }
+    // 上移
+    if (menuid == "up") {
+        moveUp(itemId, menuid);
+    }
+    // 下移
+    if (menuid == "down") {
+        moveDown(itemId, menuid);
+    }
+}
+
+function doDelete() {
+    $.ajax({
+        url : "/menu/deleteNode.action",
+        type : "post",
+        async : false,
+        dataType : "json",
+        data : {
+            itemId : idString
+        },
+        success : function(data) {
+            if (data.errorMessage == null || data.errorMessage == undefined) {
+                tree.deleteItem(idString, "");
+                // 清空form中显示的已删除菜单或元素的信息
+                // 使用setTimeout的原因：如不使用，有时删除节点后，右侧详细信息无法清空
+                window.setTimeout(function() {
+                    var menuType = idString.substr(idString.lastIndexOf("@") + 1, idString.length);
+                    if (menuType == "MENU") {
+                        // $("#menuDetail")[0].reset();
+                        // document.getElementById("menuDetail").reset();
+                        $("#menuName").val("");
+                        $("#menuImg").val("");
+                        $("#menuDes").val("");
+                        $("#menuLocal").val("");
+                        $("#menuArea").val("");
+                        $("#menuDis").val("");
+
+                    } else if (menuType == "ELEMENT") {
+                        // $("#elementDetail")[0].reset();
+                        // document.getElementById("elementDetail").reset();
+                        $("#eleId").val("");
+                        $("#eleName").val("");
+                        $("#eleImg").val("");
+                        $("#eleType").val("");
+                        $("#eleDes").val("");
+                    }
+                }, 0);
+                window.top.window.showScoMessage('ok', '删除成功');
+            } else {
+                if (data.errorMessage == "session timeout"){
+                    window.location.href = "/login.jsp";
+                }
+                else{
+                    window.top.window.showModalAlert(data.msg);
+                }
+            }
+        }
+    });
+}
+
+function ClearMenuInput() {  
+    //清空输入域  
+   var validator = $("#menuDetail").validate({  
+        submitHandler: function (form) {  
+            form.submit();  
+        }  
+    });  
+    validator.resetForm();  
+    $('#menuDetail .state-error').removeClass('state-error');
+    $('#menuDetail .state-success').removeClass('state-success');
+} 
+
+function ClearPageInput() {  
+    //清空输入域  
+   var validator = $("#pageDetail").validate({  
+        submitHandler: function (form) {  
+            form.submit();  
+        }  
+    });  
+    validator.resetForm();  
+    $('#pageDetail .state-error').removeClass('state-error');
+    $('#pageDetail .state-success').removeClass('state-success');
+} 
+
+function ClearElementInput() {  
+    //清空输入域  
+   var validator = $("#elementDetail").validate({  
+        submitHandler: function (form) {  
+            form.submit();  
+        }  
+    });  
+    validator.resetForm();  
+    $('#elementDetail .state-error').removeClass('state-error');
+    $('#elementDetail .state-success').removeClass('state-success');
+} 
+
+/*
+ * 点击查询详细信息
+ */
+function showDetail(itemId) {
+    if (itemId == undefined) {
+        // alert(event.srcElement.parentNode.parentNode.innerHTML);
+        itemId = tree.getSelectedItemId();
+    }
+    tree.selectItem(itemId);// 解决初始化后右键第一次选中，焦点消失问题
+    // 当点击根节点的时候，不能进行保存，重置操作,表单清空；
+    if (itemId == "RootMenu") {
+        // --------------------------------------------------------------------------------------
+        // $("#menuDetail")[0].reset();
+        // $("#elementDetail")[0].reset();
+
+        $("#btn_menuReset").attr("disabled", true);// $按钮置灰
+        $("#btn_menuSave").attr("disabled", true);
+
+        $("#btn_eleReset").attr("disabled", true);// $按钮置灰
+        $("#btn_eleSave").attr("disabled", true);
+
+        $("#btn_pageReset").attr("disabled", true);// $按钮置灰
+        $("#btn_pageSave").attr("disabled", true);
+        
+        return;
+
+    } else {
+
+        $("#btn_menuReset").attr("disabled", false);// $按钮取消置灰
+        $("#btn_menuSave").attr("disabled", false);
+
+        $("#btn_eleReset").attr("disabled", false);// $按钮取消置灰
+        $("#btn_eleSave").attr("disabled", false);
+
+        $("#btn_pageReset").attr("disabled", false);// $按钮取消置灰
+        $("#btn_pageSave").attr("disabled", false);
+    }
+    clickItemId = itemId;
+
+    getType();// 获取下拉列表数据；
+
+    $.ajax({
+        url : "/menu/getMenuItemDetail.action",
+        async : false,
+        type : "post",
+        dataType : "json",
+        data : {
+            itemId : itemId
+        },
+        success : function(data) {
+            var itemId = data.menuDetail.menuCode;
+            // 通过截去itemId，判断点击的节点类型
+            var type = itemId.substr(itemId.lastIndexOf("@") + 1, itemId.length);
+            if (type == "MENU") {
+                // document.getElementById("elementDetail").style.display=
+                // "none";
+                // document.getElementById("menuDetail").style.display="";
+                $("#elementDetail").hide();
+                $("#pageDetail").hide();
+                $("#menuDetail").show();
+                $("#menuName").val(data.menuDetail.menuName);
+                $("#menuImg").val(data.menuDetail.menuImgLocation);
+                $("#menuDes").val(data.menuDetail.menuDesc);
+                $("#menuLocal").val(data.menuDetail.menuLocation);
+                $("#menuArea").val(data.menuDetail.menuArea);
+                $("#menuDis").val(data.menuDetail.menuIsDefault);
+                // jQuery("#menuDetail").valid();
+            } else if (type == "ELEMENT") {
+                // document.getElementById("menuDetail").style.display= "none";
+                // document.getElementById("elementDetail").style.display="";
+                $("#menuDetail").hide();
+                $("#pageDetail").hide();
+                $("#elementDetail").show();
+                $("#eleId").val(data.menuDetail.menuElementId);
+                $("#eleName").val(data.menuDetail.menuName);
+                $("#eleImg").val(data.menuDetail.menuImgLocation);
+                if (data.menuDetail.menuElementType == null)
+                    $("#eleType").val("CODE2");
+                else
+                    $("#eleType").val(data.menuDetail.menuElementType);
+                $("#eleDes").val(data.menuDetail.menuDesc);
+                // jQuery("#elementDetail").valid();
+            } else if (type == "PAGE") {
+                $("#elementDetail").hide();
+                $("#menuDetail").hide();
+                $("#pageDetail").show();
+                $("#pageId").val(data.menuDetail.menuElementId);
+                $("#pageName").val(data.menuDetail.menuName);
+                $("#pageImg").val(data.menuDetail.menuImgLocation);
+                $("#pageDes").val(data.menuDetail.menuDesc);
+                $("#pageLocal").val(data.menuDetail.menuLocation);
+                $("#pageArea").val(data.menuDetail.menuArea);
+
+                $("#pageDis").val(data.menuDetail.menuIsDefault);
+                // jQuery("#pageDetail").valid();
+            }
+            ClearElementInput();
+            ClearPageInput();
+            ClearMenuInput();
+        }
+    });
+}
+
+/*
+ * 获取下拉列表数据
+ */
+function getType() {
+    $.ajax({
+        url : "/unit/getUnitType.action",
+        type : "post",
+        async : false,
+        dataType : "json",
+        data : {
+            type : "element"
+        }, // element在数据库wf_org_dictionary表中写死的字段值
+        success : function(data) {
+            for (i = 0; i < data.eleType.length; i++) {
+                // console.log(document.getElementById("eleType").options[i]);
+                document.getElementById("eleType").options[i] = new Option(data.eleType[i].DICT_NAME, data.eleType[i].DICT_CODE);
+            }
+        }
+    });
+}
+
+var clickItemId; // 存放左键点击的节点id
+/*
+ * 修改保存--菜单
+ */
+
+function saveMenu() {
+    // 校验菜单保存数据
+    if (!$("#menuDetail").valid()) {
+        return false;
+    }
+    var menuName = $("#menuName").val();
+    var menuImg = $("#menuImg").val();
+    var menuDes = $("#menuDes").val();
+    var menuLocal = $("#menuLocal").val();
+    var menuArea = $("#menuArea").val();
+    var menuDis = $("#menuDis").val();
+    var menuCode = tree.getSelectedItemId();
+    $.ajax({
+        url : "/menu/saveMenuItem.action",
+        type : "post",
+        async : false,
+        dataType : "json",
+        data : {
+            menuName : menuName,
+            menuImg : menuImg,
+            menuDes : menuDes,
+            menuLocal : menuLocal,
+            menuArea : menuArea,
+            menuDis : menuDis,
+            menuCode : menuCode
+        },
+        success : function(data) {
+            if (data.errorMessage == null || data.errorMessage == undefined) {
+                window.top.window.showScoMessage('ok', '保存成功');
+                tree.setItemText(data.menuDetail.menuCode, data.menuDetail.menuName, data.menuDetail.menuName);
+            } else {
+                if (data.errorMessage == "session timeout"){
+                    window.location.href = "/login.jsp";
+                }
+                else{
+                    window.top.window.showModalAlert(data.errorMessage);
+                }
+            }
+        }
+    });
+
+}
+
+/*
+ * 修改保存--元素
+ */
+function saveEle() {
+    // 校验元素保存数据
+    if (!$("#elementDetail").valid()) {
+        return false;
+    }
+
+    var eleId = $("#eleId").val();
+    var eleName = $("#eleName").val();
+    var eleImg = $("#eleImg").val();
+    // --------------------------------------------------------------------
+    var eleType = $("#eleType").val();
+    var eleDes = $("#eleDes").val();
+
+    var menuCode = tree.getSelectedItemId();
+    $.ajax({
+        url : "/menu/savePageElement.action",
+        type : "post",
+        async : false,
+        dataType : "json",
+        data : {
+            eleId : eleId,
+            eleName : eleName,
+            eleImg : eleImg,
+            eleType : eleType,
+            eleDes : eleDes,
+            menuCode : menuCode
+        },
+        success : function(data) {
+            if (data.errorMessage == null || data.errorMessage == undefined) {
+                window.top.window.showScoMessage('ok', '保存成功');
+                tree.setItemText(data.eleDetail.menuCode, data.eleDetail.menuName, data.eleDetail.menuName);
+            } else {
+                if (data.errorMessage == "session timeout"){
+                    window.location.href = "/login.jsp";
+                }
+                else{
+                    window.top.window.showModalAlert(data.errorMessage);
+                }
+               
+            }
+        }
+    });
+}
+
+function menuReset() {
+    $("#menuName").val("");
+    $("#menuImg").val("");
+    $("#menuDes").val("");
+    $("#menuLocal").val("");
+    $("#menuArea").val("");
+    $("#menuDis").val("0");
+}
+function eleReset() {
+    $("#eleId").val("");
+    $("#eleName").val("");
+    $("#eleImg").val("");
+    // --------------------------------------------------------------------
+    $("#eleType").val("");
+    $("#eleDes").val("");
+}
+function pageReset() {
+    $("#pageId").val("");
+    $("#pageName").val("");
+    $("#pageImg").val("");
+    $("#pageDes").val("");
+    $("#pageLocal").val("");
+    $("#pageArea").val("");
+    $("#pageDis").val("0");
+
+}
+/*
+ * 修改保存--菜单
+ */
+function savePage() {
+    // 校验菜单保存数据
+    if (!$("#pageDetail").valid()) {
+        return false;
+    }
+    var pageId = $("#pageId").val();
+    var pageName = $("#pageName").val();
+    var pageImg = $("#pageImg").val();
+    var pageDes = $("#pageDes").val();
+    var pageLocal = $("#pageLocal").val();
+    var pageArea = $("#pageArea").val();
+    var pageDis = $("#pageDis").val();
+    var menuCode = tree.getSelectedItemId();
+    $.ajax({
+        url : "/menu/savePageItem.action",
+        type : "post",
+        async : false,
+        dataType : "json",
+        data : {
+            pageId : pageId,
+            pageName : pageName,
+            pageImg : pageImg,
+            pageDes : pageDes,
+            pageLocal : pageLocal,
+            pageArea : pageArea,
+            pageDis : pageDis,
+            menuCode : menuCode
+        },
+        success : function(data) {
+            if (data.errorMessage == null || data.errorMessage == undefined) {
+                window.top.window.showScoMessage('ok', '保存成功');
+                tree.setItemText(data.pageDetail.menuCode, data.pageDetail.menuName, data.pageDetail.menuName);
+            } else {
+                if (data.errorMessage == "session timeout"){
+                    window.location.href = "/login.jsp";
+                }
+                else{
+                    window.top.window.showModalAlert(data.errorMessage);
+                }
+            }
+        }
+    });
+
+}
+
+/*
+ * 设置节点展开
+ */
+var beforeOpenSubNodes;
+function checkSubNodes(id, state) {
+    if (beforeOpenSubNodes > 0)
+        return true;
+    if (beforeOpenSubNodes == 0 && state == -1) {
+        tree.openItem(id);
+    }
+    beforeOpenSubNodes = 1;
+    return true;
+}
+
+function beforeOpenNode(id) {
+    beforeOpenSubNodes = tree.hasChildren(id);
+    return true;
+}
+
+/*
+ * 双击设置焦点
+ */
+function selItem() {
+    var selItemId = tree.getSelectedItemId();
+    tree.selectItem(selItemId);
+}
+
+/*
+ * 上移
+ */
+function moveUp(itemId, menuid) {
+    if (checkMoveNode(itemId, menuid)) {
+        var changeItem = tree.moveItem(itemId, "up"); // 执行上移，同时返回与其交换位置的itemId;
+        $.ajax({
+            url : "/menu/MoveUpNode.action",
+            type : "post",
+            dataType : "json",
+            data : {
+                itemId : itemId,
+                changeItemId : changeItem.id
+            },
+            success : function(data) {
+//              if(data.errorMessage==null || data.errorMessage==undefined){
+//              alert("删除成功");
+//          } else {
+//              alert(data.errorMessage);
+//          }
+            }
+        });
+    }
+}
+/*
+ * 下移
+ */
+function moveDown(itemId, menuid) {
+    if (checkMoveNode(itemId, menuid)) {
+        var parentId = tree.getParentId(itemId);
+        var subitemId = tree.getSubItems(parentId);
+        var array = subitemId.split(",");
+        var length = array.length;
+        if (itemId == array[length - 2]) {
+            // 当下移的节点是倒数第二个的时候，通过指定移动到最后一个节点后面的方法执行，
+            // 原因是避开通过下移时，移出当前节点的问题。
+            var changeItem = tree.moveItem(itemId, "item_sibling_next", array[length - 1]);
+        } else {
+            var changeItem = tree.moveItem(itemId, "down").id; // 执行下移，同时返回与其交换位置的itemId;
+        }
+        $.ajax({
+            url : "/menu/MoveDownNode.action",
+            type : "post",
+            dataType : "json",
+            data : {
+                itemId : itemId,
+                changeItemId : changeItem
+            },
+            success : function(data) {
+                // if(data.errorMessage==null || data.errorMessage==undefined){
+                // alert("删除成功");
+                // } else {
+                // alert(data.errorMessage);
+                // }
+            }
+        });
+
+    }
+}
+
+/*
+ * 判断节点所在位置
+ */
+function checkMoveNode(itemId, menuid) {
+    var parentId = tree.getParentId(itemId);
+    var subitemId = tree.getSubItems(parentId);
+    // alert(subitemId);
+    var array = subitemId.split(",");
+    var length = array.length;
+    if (length == 1) {
+        window.top.window.showModalAlert("只有一个节点，无法移动");
+        return false;
+    }
+    if (array[0] == itemId && menuid == "up") {
+        window.top.window.showModalAlert("第一个节点无法上移");
+        return false;
+    }
+    if (array[length - 1] == itemId && menuid == "down") {
+        window.top.window.showModalAlert("最后一个节点无法下移");
+        return false;
+    }
+    return true;
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据铁笼-企业融合分析-告警风险统计</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/model.css" />
+<link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+<script src="js/echarts.min.js"></script>
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/js.js"></script>
+<script src="js/module/alarmRiskStatistics.js"></script>
+</head>
+
+<body>
+<div class="box">
+    <div class="box-head">
+      <!--  <a href="indexBox.html" class="arrow-back"><i></i>首页</a>-->
+        <a href="gzw-businessDataVolume.html" class="arrow-back arrow-back2"><i></i>数据融合分析</a>
+        <p class="box-title"></p>
+        <!-- <a href="javascript:void(0)" class="arrow-left"><i></i></a>
+         <a href="javascript:void(0)" class="arrow-right"><i></i></a>-->
+    </div>
+    <div class="box-container">
+        <div class="box-left">
+            <ul>
+                <li class="on">
+                    <a href="gzw-alarmRiskStatistics.html" class="">告警风险分析</a>
+                </li>
+                <li>
+                    <a href="gzw-riskDefineStatistics.html" class="">风险界定分析</a>
+                </li>
+                <li>
+                    <a href="gzw-riskTrendAnalysis.html" class="">风险走势分析</a>
+                </li>
+            </ul>
+        </div>
+        <div class="box-right">
+            <div class="box-right-title">
+                <p><i></i>告警风险分析</p>
+            </div>
+            <div class="box-right-form risk-define-statistics">
+
+                <div class="risk-form-main alarm-risk-stat">
+                    <div class="form-chart-left">
+                        <div id="main" class="main"></div>
+                        <div id="main-nodata" class="main" style="display: none;width: 650px;height:300px;">风险分析暂无数据</div>
+                        <div id="main1" class="main"></div>
+                        <div id="main1-nodata" class="main" style="display: none;width: 650px;height:300px;">告警分析暂无数据</div>
+                    </div>
+                    <div id="main2"></div>
+                    <div id="main2-nodata" style="display: none;width: 750px;height:500px;float: right;margin:50px 30px 0 0 ;">业务事项分析暂无数据</div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+</body>
+</html>

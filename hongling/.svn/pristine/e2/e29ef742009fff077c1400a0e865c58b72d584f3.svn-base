@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="hongling.entity.FabricWareroom" table="FABRICWAREROOM">
+		<id name="id" type="integer">
+			<column name="ID" />
+			<generator class="increment"></generator>
+		</id>
+         <property name="fabricNo" type="string">
+            <column name="FABRICNO"/>
+        </property>
+        <property name="category" type="integer">
+            <column name="CATEGORY"/>
+        </property>
+        <property name="shazhi" type="string">
+            <column name="SAORI"/>
+        </property>
+         <property name="color" type="integer">
+            <column name="COLOR"/>
+        </property>
+         <property name="flower" type="integer">
+            <column name="FLOWER"/>
+        </property>
+        <property name="weight" type="double">
+            <column name="WEIGHT"/>
+        </property>
+        <property name="composition" type="integer">
+            <column name="COMPOSITION"/>
+        </property>
+        <property name="rmb" type="double">
+            <column name="RMB"/>
+        </property>
+         <property name="dollar" type="double">
+            <column name="DOLLAR"/>
+        </property>
+        <property name="property" type="string">
+            <column name="PROPERTY"/>
+        </property>
+         <property name="brands" type="string">
+            <column name="BRANDS"/>
+        </property>
+        <property name="address" type="string">
+            <column name="ADDRESS"/>
+        </property>
+        <property name="belong" type="string">
+            <column name="BELONG"/>
+        </property>
+        <property name="status" type="integer">
+            <column name="STATUS"/>
+        </property>
+        <property name="stock" type="double">
+            <column name="STOCK"/>
+        </property>
+        <property name="createBy" type="string">
+            <column name="CREATEBY"/>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="CREATETIME"/>
+        </property>
+        <property name="closeBy" type="string">
+            <column name="CLOSEBY"/>
+        </property>
+        <property name="closeTime" type="timestamp">
+            <column name="CLOSETIME"/>
+        </property>
+	</class>
+</hibernate-mapping>

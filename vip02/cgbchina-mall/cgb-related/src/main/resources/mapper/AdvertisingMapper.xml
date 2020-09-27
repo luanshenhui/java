@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdvertisingManageModel">
+    <resultMap id="AdvertisingManageMap" type="AdvertisingManageModel">
+        <result property="id" column="id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="fullName" column="full_name"/>
+        <result property="description" column="description"/>
+        <result property="link" column="link"/>
+        <result property="mediaType" column="media_type"/>
+        <result property="media" column="media"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="auditLog" column="audit_log"/>
+        <result property="auditOper" column="audit_oper"/>
+        <result property="auditDate" column="audit_date"/>
+        <result property="createOperType" column="create_oper_type"/>
+        <result property="modifyOperType" column="modify_oper_type"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,ordertype_id,vendor_id,full_name,description,link,media_type,media,check_status,is_valid,audit_log,audit_oper,audit_date,create_oper_type,modify_oper_type,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="AdvertisingManageModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_ad
+        (ordertype_id
+        ,vendor_id
+        ,full_name
+        ,description
+        ,link
+        ,media_type
+        ,media
+        ,check_status
+        ,is_valid
+        ,audit_log
+        ,audit_oper
+        ,audit_date
+        ,create_oper_type
+        ,modify_oper_type
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{ordertypeId}
+        ,#{vendorId}
+        ,#{fullName}
+        ,#{description}
+        ,#{link}
+        ,#{mediaType}
+        ,#{media}
+        ,#{checkStatus}
+        ,#{isValid}
+        ,#{auditLog}
+        ,#{auditOper}
+        ,#{auditDate}
+        ,#{createOperType}
+        ,#{modifyOperType}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="AdvertisingManageModel">
+        update tbl_ad set
+        modify_time = now(),
+        <if test="description !=null">description = #{description}
+            ,</if>
+        <if test="link !=null">link = #{link}
+            ,</if>
+        <if test="media !=null">media = #{media}
+            ,</if>
+        <if test="checkStatus !=null">check_status = #{checkStatus}
+            ,</if>
+        <if test="modifyOperType !=null">modify_oper_type = #{modifyOperType}
+            ,</if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="fullName !=null">and full_name like concat(concat('%',#{fullName}),'%')</if>
+            <if test="description !=null">and description = #{description}</if>
+            <if test="link !=null">and link = #{link}</if>
+            <if test="mediaType !=null">and media_type = #{mediaType}</if>
+            <if test="media !=null">and media = #{media}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="isValid !=null">and is_valid = #{isValid}</if>
+            <if test="auditLog !=null">and audit_log = #{auditLog}</if>
+            <if test="auditOper !=null">and audit_oper = #{auditOper}</if>
+            <if test="auditDate !=null">and audit_date = #{auditDate}</if>
+            <if test="createOperType !=null">and create_oper_type = #{createOperType}</if>
+            <if test="modifyOperType !=null">and modify_oper_type = #{modifyOperType}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and <![CDATA[ date_format(create_time,'%Y-%m-%d') = #{createTime} ]]></if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="AdvertisingManageMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_ad
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="AdvertisingManageMap">
+        select
+        <include refid="columns"/>
+        from tbl_ad
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="AdvertisingManageMap">
+        select
+        <include refid="columns"/>
+        from tbl_ad
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <!--分页查询 niufw-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_ad
+        <include refid="conditions"/>
+    </select>
+
+    <!--广告管理审核和拒绝   1-审核通过  2-审核拒绝-->
+    <update id="changeCheckStatus" parameterType="AdvertisingManageModel">
+        update tbl_ad set
+        check_status = #{checkStatus},
+        audit_oper = #{auditOper},
+        <if test="checkStatus == 1">audit_date = now()</if>
+        <if test="checkStatus == 2">audit_log = #{auditLog}</if>
+        where id = #{id}
+    </update>
+
+    <!--逻辑删除-->
+    <update id="updateForDelete" parameterType="java.lang.Long">
+        update tbl_ad set
+        is_valid = 0
+        where  id = #{id}
+    </update>
+</mapper>
+
+

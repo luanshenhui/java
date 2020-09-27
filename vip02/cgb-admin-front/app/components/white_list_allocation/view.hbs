@@ -1,0 +1,64 @@
+{{#component "white-list-allocation js-component" }}
+    <p class="account-title"><strong>- 外网链接白名单配置 -</strong></p>
+    <form class="form form-aligned form-inline">
+        <div class="main-box">
+            <div class="col-box column-three"><span class="column-title">白名单：</span>
+                <input id="linkUrl" name="linkUrl" type="text" class="form-control form-width-150" value="{{linkUrl}}">
+            </div>
+            <div class="col-box column-three"><span class="column-title">类型：</span>
+                <select id="type" name="type" class="select-width-160">
+                    <option value="">请选择</option>
+                    <option value="1" {{#equals type "1"}}selected{{/equals}}>规则</option>
+                    <option value="2" {{#equals type "2"}}selected{{/equals}}>答疑</option>
+                    <option value="3" {{#equals type "3"}}selected{{/equals}}>链接</option>
+                </select>
+            </div>
+            <div class="col-right-common"><input class="btn btn-success btn-small pull-right margin-right-10"
+                                                 type="submit"
+                                                 value="查询"/></div>
+            <div class="clear"></div>
+        </div>
+    </form>
+    <div class="add">
+    {{#authorial "whitelist_add"}}
+        <a href="javascript:void(0)" class="btn btn-info btn-small js-white-add">+ 新增</a>
+    {{/authorial}}
+    </div>
+    <div class="clear"></div>
+    <div class="main-box-table m-t-10">
+        <table class="table">
+            <thead>
+            <tr>
+                <th width="15%">类型</th>
+                <th width="60%">白名单</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each _DATA_.data}}
+                <tr data-list="{{json this}}">
+                    <td>{{name}}</td>
+                    <td><div class="text-wrap">{{linkUrl}}</div></td>
+                    <td>
+                {{#authorial "whitelist_edit"}}
+                        <a href="javascript:void(0)" class="btn btn-info btn-sm js-white-edit">修改</a>
+                {{/authorial}}
+                {{#authorial "whitelist_delete"}}
+                        <button id="{{id}}" class="btn btn-sm btn-info" data-toggle="confirm"
+                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                data-event="confirm:delete-white">删除
+                        </button>
+                {{/authorial}}
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{#equals _DATA_.total "0"}}
+            <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+        {{else}}
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        {{/equals}}
+        </div>
+    </div>
+{{/component}}

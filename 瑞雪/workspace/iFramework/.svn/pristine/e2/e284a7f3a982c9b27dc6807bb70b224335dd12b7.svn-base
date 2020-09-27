@@ -1,0 +1,1127 @@
+package com.dhc.authorization.resource.menu.action;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
+import com.dhc.authorization.resource.menu.domain.WF_ORG_MENU;
+import com.dhc.authorization.resource.menu.service.MenuService;
+import com.dhc.base.common.util.SecurityUtil;
+import com.dhc.base.exception.ServiceException;
+import com.dhc.base.security.SecurityUser;
+import com.dhc.base.security.SecurityUserHoder;
+import com.dhc.base.web.struts.SessionCheckBaseDispatchAction;
+import com.dhc.organization.config.OrgI18nConsts;
+
+/**
+ * brief description
+ * <p>
+ * Date : 2010/05/05
+ * </p>
+ * <p>
+ * Module : 菜单管理
+ * </p>
+ * <p>
+ * Description: 组织单元管理Action类
+ * </p>
+ * <p>
+ * Remark :
+ * </p>
+ * 
+ * @author 王潇艺
+ * @version
+ *          <p>
+ * 			------------------------------------------------------------
+ *          </p>
+ *          <p>
+ *          修改历史
+ *          </p>
+ *          <p>
+ *          序号 日期 修改人 修改原因
+ *          </p>
+ *          <p>
+ *          1
+ *          </p>
+ */
+public class MenuAction extends SessionCheckBaseDispatchAction {
+	/**
+	 * 菜单管理业务服务对象
+	 */
+	private MenuService menuService;
+	/**
+	 * 来自系统环境变量中的菜单分类标识，例如：子系统名作为菜单分类， 可以实现不同的子系统看到的菜单不一样
+	 */
+	private String menuCategory = null;
+
+	/**
+	 * 构造函数
+	 */
+	public MenuAction() {
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取菜单树（所有菜单项）
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward getMenuTree(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "showAllMenu,expandAll")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		if (menuCategory == null) {
+			Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+			menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals(""))
+					? null : obj.toString();
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		List list = null;
+		// // 判断是否需要显示全部的菜单，不考虑权限问题
+		// String showAllMenu = request.getParameter("showAllMenu");
+		// showAllMenu = (showAllMenu == null ? "" : showAllMenu);
+		// if (showAllMenu.toLowerCase().equals("true")) {
+		// showAllMenu = "true"; // 显示全部菜单
+		// } else {
+		// showAllMenu = "false"; // 只显示自己能看到的菜单
+		// }
+		String showAllMenu = request.getParameter("showAllMenu");
+		showAllMenu = (showAllMenu == null ? "" : showAllMenu);
+		if (showAllMenu.toLowerCase().equals("true")) {
+			showAllMenu = "available"; // 显示全部菜单
+		} else {
+			showAllMenu = "assignable"; // 只显示自己能看到的菜单
+		}
+
+		// 判断tree是否全部查询的参数。1：全部查询；0：部分查询。
+		String expandAll = request.getParameter("expandAll");
+		expandAll = (expandAll == null ? "" : expandAll);
+		if (expandAll.toLowerCase().equals("true")) {
+			expandAll = "1"; // 全部查询
+		} else {
+			expandAll = "0"; // 部分查询
+		}
+
+		try {
+			String userID = null;
+			if (showAllMenu.equals("true")) {
+				userID = "adminUser";
+			} else {
+				SecurityUser securityUser = SecurityUserHoder.getCurrentUser();
+				userID = securityUser.getUserBean().getId();
+			}
+			list = menuService.getMenuTreeData(userID, expandAll, null, menuCategory, showAllMenu);
+			String strStaXml = null;
+			// if (list.size() != 0) {
+			if (expandAll.equals("1")) {
+				strStaXml = this.parseStation2XMLString(list);
+			} else {
+				strStaXml = this.parseMenus2XMLString(list);
+			}
+			response.setContentType("text/xml");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(strStaXml);
+			// } else {
+			// response.getWriter().write("<item/>");
+			// }
+		} catch (ServiceException e1) {
+			e1.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private String parseStation2XMLString(List wf_org_menu) {
+		// 用于存所有的根组织
+		List rootStaList = new ArrayList();
+		// 用于存所有的子组织
+		List subStaList = new ArrayList();
+		// 用于存组织树的xml内容
+		String StrOrgXML = "";
+		// 把根组织和子组织分开
+		for (int i = 0; i < wf_org_menu.size(); i++) {
+			WF_ORG_MENU menuVO = (WF_ORG_MENU) wf_org_menu.get(i);
+
+			if (menuVO.getParentMenuCode() == null)// .equals("RootMenu@MENU"))
+													// //RootMenu菜单根节点id，为死数据
+				rootStaList.add(menuVO);
+			else {
+				if (!menuVO.getParentMenuCode().equals("@MENU"))
+					subStaList.add(menuVO);
+			}
+
+		}
+		// 循环每一个根组织，把它的子组织灌满
+		try {
+			Document document = DocumentHelper.createDocument();
+			Element itemsElementRoot = document.addElement("tree");
+			itemsElementRoot.addAttribute("id", "0");
+			// 为父节点套一层节点，以便右键新建菜单的时候能建父节点的同级菜单
+			Element itemsElement = itemsElementRoot.addElement("item");
+			itemsElement.addAttribute("text", "功能菜单");
+			itemsElement.addAttribute("id", "RootMenu"); // 最外层写死的节点id:"RootMenu"。
+			itemsElement.addAttribute("im0", "WF_ORG_MENU.gif");
+			itemsElement.addAttribute("im1", "WF_ORG_MENU.gif");
+			itemsElement.addAttribute("im2", "WF_ORG_MENU.gif");
+			for (int j = 0; j < rootStaList.size(); j++) {
+				WF_ORG_MENU menuVO = (WF_ORG_MENU) rootStaList.get(j);
+				Element pageElement = itemsElement.addElement("item");
+				pageElement.addAttribute("text", menuVO.getMenuName());
+				pageElement.addAttribute("id", menuVO.getMenuCode());
+				pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+				pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+				pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+				// 判断是否是按钮，如果是按钮则显示按钮图片
+				String temp = menuVO.getMenuCode();
+				temp = temp.substring(temp.lastIndexOf("@") + 1, temp.length());
+				if (temp.equals("ELEMENT")) {
+					pageElement.addAttribute("im0", "WF_ORG_ELEMENT.gif");
+					pageElement.addAttribute("im1", "WF_ORG_ELEMENT.gif");
+					pageElement.addAttribute("im2", "WF_ORG_ELEMENT.gif");
+				} else if (temp.equals("MENU")) {
+					pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+					pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+					pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+				} else if (temp.equals("PAGE")) {
+					pageElement.addAttribute("im0", "WF_ORG_PAGE.gif");
+					pageElement.addAttribute("im1", "WF_ORG_PAGE.gif");
+					pageElement.addAttribute("im2", "WF_ORG_PAGE.gif");
+				}
+				String StrunitId = (String) menuVO.getMenuCode();
+				StalistToXML(subStaList, StrunitId, pageElement);
+			}
+			StrOrgXML = document.asXML();
+		} catch (Exception ex) {
+			StrOrgXML = "0";
+		}
+		// System.out.println(StrOrgXML);
+		return StrOrgXML;
+	}
+
+	private void StalistToXML(List orgList, String unitId, Element itemsElements) throws Exception {
+		try {
+			for (int i = 0; i < orgList.size(); i++) {
+				WF_ORG_MENU menuVO = (WF_ORG_MENU) orgList.get(i);
+				if (menuVO.getParentMenuCode().equals(unitId)) {
+					Element pageElement = itemsElements.addElement("item");
+					pageElement.addAttribute("text", menuVO.getMenuName());
+					pageElement.addAttribute("id", menuVO.getMenuCode());
+					// 判断是否是按钮，如果是按钮则显示按钮图片
+					String temp = menuVO.getMenuCode();
+					temp = temp.substring(temp.lastIndexOf("@") + 1, temp.length());
+					if (temp.equals("ELEMENT")) {
+						pageElement.addAttribute("im0", "WF_ORG_ELEMENT.gif");
+						pageElement.addAttribute("im1", "WF_ORG_ELEMENT.gif");
+						pageElement.addAttribute("im2", "WF_ORG_ELEMENT.gif");
+					} else if (temp.equals("MENU")) {
+						pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+						pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+						pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+					} else if (temp.equals("PAGE")) {
+						pageElement.addAttribute("im0", "WF_ORG_PAGE.gif");
+						pageElement.addAttribute("im1", "WF_ORG_PAGE.gif");
+						pageElement.addAttribute("im2", "WF_ORG_PAGE.gif");
+					}
+					// pageElement.addAttribute("open", "1");
+					// pageElement.addAttribute("call", "1");
+					// pageElement.addAttribute("select", "1");
+					String StrunitId = (String) menuVO.getMenuCode();
+					StalistToXML(orgList, StrunitId, pageElement);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 把菜单列表中的数据转换成为xml字符串用于前台显示菜单树
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param menuList
+	 *            - 菜单列表
+	 * @return 菜单树xml字符串
+	 * @throws Exception
+	 */
+	private String parseMenus2XMLString(List menuList) {
+		List rootStaList = new ArrayList();
+		// 用于存组织树的xml内容
+		String StrOrgXML = "";
+		// 把根组织和子组织分开
+		for (int i = 0; i < menuList.size(); i++) {
+			WF_ORG_MENU menuVO = (WF_ORG_MENU) menuList.get(i);
+			if (menuVO.getParentMenuCode() == null)
+				rootStaList.add(menuVO);
+		}
+		// 循环每一个根组织，把它的子组织灌满
+		try {
+			Document document = DocumentHelper.createDocument();
+			Element itemsElementRoot = document.addElement("tree");
+			itemsElementRoot.addAttribute("id", "0");
+			// 为父节点套一层节点，以便右键新建菜单的时候能建父节点的同级菜单
+			Element itemsElement = itemsElementRoot.addElement("item");
+			itemsElement.addAttribute("text", "功能菜单");
+			itemsElement.addAttribute("id", "RootMenu"); // 最外层写死的节点id:"RootMenu"。
+			itemsElement.addAttribute("im0", "WF_ORG_MENU.gif");
+			itemsElement.addAttribute("im1", "WF_ORG_MENU.gif");
+			itemsElement.addAttribute("im2", "WF_ORG_MENU.gif");
+			itemsElement.addAttribute("select", "1"); // 设置节点为选中,否则需要选中一个节点双击展开图标才会发起子节点请求
+			for (int j = 0; j < rootStaList.size(); j++) {
+				WF_ORG_MENU menuVO = (WF_ORG_MENU) rootStaList.get(j);
+				Element pageElement = itemsElement.addElement("item");
+				pageElement.addAttribute("text", menuVO.getMenuName());
+				pageElement.addAttribute("id", menuVO.getMenuCode());
+				pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+				pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+				pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+			}
+			StrOrgXML = document.asXML();
+		} catch (Exception ex) {
+			StrOrgXML = "0";
+		}
+		System.out.println(StrOrgXML);
+		return StrOrgXML;
+	}
+
+	// 子节点转化成xml
+	private String parseSubMenus2XMLString(List menuList, String parentId) {
+		// 用于存组织树的xml内容
+		String StrOrgXML = "";
+		// 循环每一个根组织，把它的子组织灌满
+		try {
+			Document document = DocumentHelper.createDocument();
+			Element itemsElement = document.addElement("tree");
+			itemsElement.addAttribute("id", parentId);
+			for (int j = 0; j < menuList.size(); j++) {
+				WF_ORG_MENU menuVO = (WF_ORG_MENU) menuList.get(j);
+				Element pageElement = itemsElement.addElement("item");
+				pageElement.addAttribute("text", menuVO.getMenuName());
+				pageElement.addAttribute("id", menuVO.getMenuCode());
+				// 判断是否是按钮，如果是按钮则显示按钮图片
+				String temp = menuVO.getMenuCode();
+				temp = temp.substring(temp.lastIndexOf("@") + 1, temp.length());
+				if (temp.equals("ELEMENT")) {
+					pageElement.addAttribute("im0", "WF_ORG_ELEMENT.gif");
+					pageElement.addAttribute("im1", "WF_ORG_ELEMENT.gif");
+					pageElement.addAttribute("im2", "WF_ORG_ELEMENT.gif");
+				} else if (temp.equals("MENU")) {
+					pageElement.addAttribute("im0", "WF_ORG_MENU.gif");
+					pageElement.addAttribute("im1", "WF_ORG_MENU.gif");
+					pageElement.addAttribute("im2", "WF_ORG_MENU.gif");
+				} else if (temp.equals("PAGE")) {
+					pageElement.addAttribute("im0", "WF_ORG_PAGE.gif");
+					pageElement.addAttribute("im1", "WF_ORG_PAGE.gif");
+					pageElement.addAttribute("im2", "WF_ORG_PAGE.gif");
+				}
+				StrOrgXML = document.asXML();
+			}
+		} catch (Exception ex) {
+			StrOrgXML = "0";
+		}
+		System.out.println(StrOrgXML);
+		return StrOrgXML;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取菜单项的明细信息
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward getMenuItemDetail(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "itemId")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		JSONObject jsonObject = new JSONObject();
+		String menuCode = request.getParameter("itemId").toString();
+		menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+		try {
+			// 使用adminUser来取菜单项详细信息。
+			WF_ORG_MENU menuVO = menuService.getMenuItemDetail("adminUser", menuCode);
+			if (menuVO != null) {
+				menuVO.setMenuCode(request.getParameter("itemId").toString());
+				String menuDetail = JSONObject.fromObject(menuVO).toString();
+				jsonObject.put("menuDetail", menuDetail);
+				response.getWriter().println(jsonObject.toString());
+			}
+		} catch (ServiceException e) {
+			jsonObject.put("errorMessage", e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			jsonObject.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取页面元素的明细信息
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public void getFormElementDetail(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据菜单项id获取菜单项下面的所有页面元素，作为树上的子结点
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward getElementsByMenuItemID(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "id,showAllMenu")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		if (menuCategory == null) {
+			Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+			menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals(""))
+					? null : obj.toString();
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+
+		String parentMenuCode = request.getParameter("id").toString();
+		parentMenuCode = parentMenuCode.substring(0,
+				(parentMenuCode.lastIndexOf("@") == -1 ? parentMenuCode.length() : parentMenuCode.lastIndexOf("@")));
+
+		// 判断是否需要显示全部的菜单，不考虑权限问题
+		String showAllMenu = request.getParameter("showAllMenu");
+		showAllMenu = (showAllMenu == null ? "" : showAllMenu);
+		if (showAllMenu.toLowerCase().equals("true")) {
+			showAllMenu = "available"; // 显示全部菜单
+		} else {
+			showAllMenu = "assignable"; // 只显示自己能看到的菜单
+		}
+
+		try {
+			String userID = null;
+			if (showAllMenu.equalsIgnoreCase("available")) {
+				userID = "adminUser";
+			} else {
+				SecurityUser securityUser = SecurityUserHoder.getCurrentUser();
+				userID = securityUser.getUserBean().getId();
+			}
+
+			// authorityType为null，默认为可分配(assignable)，不为空则自己指定
+			List subItem = menuService.getFormElementList(userID, parentMenuCode, showAllMenu, menuCategory);
+			String strXml = null;
+			if (subItem.size() != 0) {
+				strXml = this.parseSubMenus2XMLString(subItem, request.getParameter("id").toString());
+				response.setContentType("text/xml");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(strXml);
+			} else {
+				response.setContentType("text/xml");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write("");
+			}
+		} catch (ServiceException e1) {
+			e1.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 画菜单项下面的子元素，只有一层，不需要递归，最终生成<item>标签xml字符串
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param elementsList
+	 *            - 页面元素列表
+	 * @param parentMenuItemID
+	 *            - 父结点菜单项id
+	 * @return 页面元素子结点xml字符串
+	 * @throws Exception
+	 */
+	private String parseElements2XMLString(List elementsList, String parentMenuItemID) {
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 创建一个菜单项
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward createMenuItem(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "itemId,level")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		if (menuCategory == null) {
+			Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+			menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals(""))
+					? null : obj.toString();
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		JSONObject jsonObject = new JSONObject();
+		String parentMenuCode = request.getParameter("itemId").toString();
+		String Level = request.getParameter("level").toString();
+		int menuLevel = Integer.parseInt(Level);
+		WF_ORG_MENU menuVO = new WF_ORG_MENU();
+		if (parentMenuCode.equals("RootMenu")) {
+			menuVO.setParentMenuCode(parentMenuCode);
+		} else {
+			parentMenuCode = parentMenuCode.substring(0, parentMenuCode.lastIndexOf("@"));
+			menuVO.setParentMenuCode(parentMenuCode);
+		}
+		String menuCode = java.util.UUID.randomUUID().toString().replaceAll("-", "");
+		menuVO.setMenuCode(menuCode);
+		menuVO.setMenuName("新建菜单");
+		menuVO.setMenuLevel(menuLevel);
+		menuVO.setMenuArea("content");
+		// menuVO.setMenuLocation("/");
+		menuVO.setMenuType("MENU");
+		menuVO.setMenuIsDefault("0");
+		menuVO.setMenuCategory(menuCategory);
+		try {
+			menuService.createMenuItem(menuVO);
+			menuVO.setParentMenuCode(request.getParameter("itemId").toString());
+			menuVO.setMenuCode(menuCode + "@MENU");
+			String menuDetail = JSONObject.fromObject(menuVO).toString();
+			jsonObject.put("menuDetail", menuDetail);
+			response.getWriter().println(jsonObject.toString());
+		} catch (ServiceException e) {
+			jsonObject.put("errorMessage", e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			jsonObject.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存菜单项的修改
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward saveMenuItem(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "menuCode,menuName,menuImg," + "menuDes,menuArea,menuDis")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		JSONObject jsonObject = new JSONObject();
+		PrintWriter writer = null;
+		String menuCode = request.getParameter("menuCode").toString();
+		// menuItem的类型
+		String menuType = menuCode.substring(menuCode.lastIndexOf("@") + 1, menuCode.length());
+		menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+		String menuName = request.getParameter("menuName").toString();
+		String menuImg = request.getParameter("menuImg").toString();
+		String menuDes = request.getParameter("menuDes").toString();
+		String menuLocal = request.getParameter("menuLocal").toString();
+		String menuArea = request.getParameter("menuArea").toString();
+		String menuDis = request.getParameter("menuDis").toString();
+
+		WF_ORG_MENU menuItemVO = new WF_ORG_MENU();
+		menuItemVO.setMenuName(menuName);
+		menuItemVO.setMenuImgLocation(menuImg);
+		menuItemVO.setMenuDesc(menuDes);
+		menuItemVO.setMenuLocation(menuLocal);
+		menuItemVO.setMenuArea(menuArea);
+		menuItemVO.setMenuIsDefault(menuDis);
+		menuItemVO.setMenuCode(menuCode);
+		// menuItemVO.setMenuType("MENU");//给MenuType赋值，菜单均为此属性。
+
+		try {
+			writer = response.getWriter();
+			menuService.saveMenuItem(menuItemVO);
+
+			// Mon Sep 20 11:41:54 2010 wangxy 菜单在修改保存的时候，要加到spring security
+			// 的url权限列表中，该功能目前没有作用
+			if ((menuType.equalsIgnoreCase("MENU") || menuType.equalsIgnoreCase("PAGE"))
+					&& menuItemVO.getMenuLocation() != null && !menuItemVO.getMenuLocation().equals("")) {
+				ServletContext servletContext = super.getServlet().getServletContext();
+				Object obj = servletContext.getAttribute("urlAuthorities");
+				if (obj != null) {
+					Map<String, String> urlAuthorities = (Map<String, String>) obj;
+					if (!urlAuthorities.containsKey(menuItemVO.getMenuLocation())) {
+						urlAuthorities.put(menuItemVO.getMenuLocation(), "ROLE_USER");// all
+																						// user
+																						// will
+																						// login
+																						// ,all
+																						// user
+																						// has
+																						// the
+																						// same
+																						// role
+					}
+				}
+			}
+			// Over
+
+			menuItemVO.setMenuCode(request.getParameter("menuCode").toString());
+			String menuDetail = JSONObject.fromObject(menuItemVO).toString();
+			jsonObject.put("menuDetail", menuDetail);
+			response.getWriter().println(jsonObject.toString());
+		} catch (ServiceException e) {
+			jsonObject.put("errorMessage", e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			jsonObject.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+			e.printStackTrace();
+		} finally {
+			writer.flush();
+			writer.close();
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 创建一个页面元素
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward createPageElement(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "itemId,level")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		if (menuCategory == null) {
+			Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+			menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals(""))
+					? null : obj.toString();
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		JSONObject jsonObject = new JSONObject();
+		String parentMenuCode = request.getParameter("itemId").toString();
+		parentMenuCode = parentMenuCode.substring(0, parentMenuCode.lastIndexOf("@"));
+		String Level = request.getParameter("level").toString();
+		int menuLevel = Integer.parseInt(Level);
+		WF_ORG_MENU menuVO = new WF_ORG_MENU();
+		menuVO.setParentMenuCode(parentMenuCode);
+		String menuCode = java.util.UUID.randomUUID().toString().replaceAll("-", "");
+		menuVO.setMenuCode(menuCode);
+		menuVO.setMenuName("新建元素");
+		menuVO.setMenuLevel(menuLevel);
+		// menuVO.setMenuArea("pagearea");
+		// menuVO.setMenuLocation("/");
+		menuVO.setMenuType("ELEMENT");
+		menuVO.setMenuIsDefault("0");
+		menuVO.setMenuCategory(menuCategory);
+		try {
+			menuService.createPageElement(menuVO);
+			menuVO.setParentMenuCode(request.getParameter("itemId").toString());
+			menuVO.setMenuCode(menuCode + "@ELEMENT");
+			String elementDetail = JSONObject.fromObject(menuVO).toString();
+			jsonObject.put("elementDetail", elementDetail);
+			response.getWriter().println(jsonObject.toString());
+		} catch (ServiceException e) {
+			jsonObject.put("errorMessage", e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			jsonObject.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存页面元素的修改
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward savePageElement(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "menuCode,eleId,eleName,eleImg," + "eleType,eleDes")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		JSONObject jsonObject = new JSONObject();
+		PrintWriter writer = null;
+		String menuCode = request.getParameter("menuCode").toString();
+		menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+		String eleId = request.getParameter("eleId").toString();
+		String eleName = request.getParameter("eleName").toString();
+		String eleImg = request.getParameter("eleImg").toString();
+		String eleType = request.getParameter("eleType").toString();
+		String eleDes = request.getParameter("eleDes").toString();
+
+		WF_ORG_MENU eleItemVO = new WF_ORG_MENU();
+		eleItemVO.setMenuElementId(eleId);
+		eleItemVO.setMenuName(eleName);
+		eleItemVO.setMenuImgLocation(eleImg);
+		eleItemVO.setMenuElementType(eleType);
+		eleItemVO.setMenuDesc(eleDes);
+		eleItemVO.setMenuCode(menuCode);
+		// eleItemVO.setMenuIsDefault("0");//menuIsDefault赋值，元素没有此属性，赋值为"0"。
+
+		try {
+			writer = response.getWriter();
+			menuService.savePageElement(eleItemVO);
+			eleItemVO.setMenuCode(request.getParameter("menuCode").toString());
+			String eleDetail = JSONObject.fromObject(eleItemVO).toString();
+			jsonObject.put("eleDetail", eleDetail);
+		} catch (ServiceException e) {
+			jsonObject.put("errorMessage", e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			jsonObject.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+			e.printStackTrace();
+		} finally {
+			writer.println(jsonObject.toString());
+			writer.flush();
+			writer.close();
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 创建一个页面元素
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward createPage(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "itemId,level")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		if (menuCategory == null) {
+			Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+			menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals(""))
+					? null : obj.toString();
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		JSONObject jsonObject = new JSONObject();
+		String parentMenuCode = request.getParameter("itemId").toString();
+		parentMenuCode = parentMenuCode.substring(0, parentMenuCode.lastIndexOf("@"));
+		String Level = request.getParameter("level").toString();
+		int menuLevel = Integer.parseInt(Level);
+		WF_ORG_MENU menuVO = new WF_ORG_MENU();
+		menuVO.setParentMenuCode(parentMenuCode);
+		String menuCode = java.util.UUID.randomUUID().toString().replaceAll("-", "");
+		menuVO.setMenuCode(menuCode);
+		menuVO.setMenuName("新建页面");
+		menuVO.setMenuLevel(menuLevel);
+		menuVO.setMenuArea("content");
+		// menuVO.setMenuLocation("/");
+		menuVO.setMenuType("PAGE");
+		menuVO.setMenuIsDefault("0");
+		menuVO.setMenuCategory(menuCategory);
+		try {
+			menuService.createPage(menuVO);
+			menuVO.setParentMenuCode(request.getParameter("itemId").toString());
+			menuVO.setMenuCode(menuCode + "@PAGE");
+			String elementDetail = JSONObject.fromObject(menuVO).toString();
+			jsonObject.put("pageDetail", elementDetail);
+			response.getWriter().println(jsonObject.toString());
+		} catch (ServiceException e) {
+			jsonObject.put("errorMessage", e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			jsonObject.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 保存菜单项的修改
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward savePageItem(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request,
+				"menuCode,pageId,pageName," + "pageImg,pageDes,pageLocal,pageArea,pageDis")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		JSONObject jsonObject = new JSONObject();
+		PrintWriter writer = null;
+		String menuCode = request.getParameter("menuCode").toString();
+		// menuItem的类型
+		String menuType = menuCode.substring(menuCode.lastIndexOf("@") + 1, menuCode.length());
+		menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+		String pageId = request.getParameter("pageId").toString();
+		String pageName = request.getParameter("pageName").toString();
+		String pageImg = request.getParameter("pageImg").toString();
+		String pageDes = request.getParameter("pageDes").toString();
+		String pageLocal = request.getParameter("pageLocal").toString();
+		String pageArea = request.getParameter("pageArea").toString();
+		String pageDis = request.getParameter("pageDis").toString();
+
+		WF_ORG_MENU pageItemVO = new WF_ORG_MENU();
+		pageItemVO.setMenuElementId(pageId);
+		pageItemVO.setMenuName(pageName);
+		pageItemVO.setMenuImgLocation(pageImg);
+		pageItemVO.setMenuDesc(pageDes);
+		pageItemVO.setMenuLocation(pageLocal);
+		pageItemVO.setMenuArea(pageArea);
+		pageItemVO.setMenuIsDefault(pageDis);
+		pageItemVO.setMenuCode(menuCode);
+		// pageItemVO.setMenuType("PAGE");//给MenuType赋值，菜单均为此属性。
+
+		try {
+			writer = response.getWriter();
+			menuService.savePageItem(pageItemVO);
+
+			// Mon Sep 20 11:41:54 2010 wangxy 菜单在修改保存的时候，要加到spring security
+			// 的url权限列表中，该功能目前没有作用
+			if ((menuType.equalsIgnoreCase("MENU") || menuType.equalsIgnoreCase("PAGE"))
+					&& pageItemVO.getMenuLocation() != null && !pageItemVO.getMenuLocation().equals("")) {
+				ServletContext servletContext = super.getServlet().getServletContext();
+				Object obj = servletContext.getAttribute("urlAuthorities");
+				if (obj != null) {
+					Map<String, String> urlAuthorities = (Map<String, String>) obj;
+					if (!urlAuthorities.containsKey(pageItemVO.getMenuLocation())) {
+						urlAuthorities.put(pageItemVO.getMenuLocation(), "ROLE_USER");// all
+																						// user
+																						// will
+																						// login
+																						// ,all
+																						// user
+																						// has
+																						// the
+																						// same
+																						// role
+					}
+				}
+			}
+			// Over
+
+			pageItemVO.setMenuCode(request.getParameter("menuCode").toString());
+			String pageDetail = JSONObject.fromObject(pageItemVO).toString();
+			jsonObject.put("pageDetail", pageDetail);
+			response.getWriter().println(jsonObject.toString());
+		} catch (ServiceException e) {
+			jsonObject.put("errorMessage", e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			jsonObject.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+			e.printStackTrace();
+		} finally {
+			writer.flush();
+			writer.close();
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除菜单树上的某个结点，可能是菜单项，也可能是页面元素
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 */
+	public ActionForward deleteNode(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "itemId")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		JSONObject jsonObject = new JSONObject();
+		PrintWriter writer = null;
+		String menuCode = request.getParameter("itemId").toString();
+		// menuItem的类型
+		String menuType = menuCode.substring(menuCode.lastIndexOf("@") + 1, menuCode.length());
+		menuCode = menuCode.substring(0, menuCode.lastIndexOf("@"));
+		try {
+			writer = response.getWriter();
+			// 使用adminUser来删除菜单项
+			WF_ORG_MENU deleteItem = menuService.getMenuItemDetail("adminUser", menuCode);
+			if (deleteItem != null) {
+				menuService.deleteNode(menuCode);
+
+				// Mon Sep 20 11:41:54 2010 wangxy 菜单在删除的时候，要从spring security
+				// 的url权限列表中删除，该功能目前没有作用
+				if ((menuType.equalsIgnoreCase("MENU") || menuType.equalsIgnoreCase("PAGE"))
+						&& deleteItem.getMenuLocation() != null && !deleteItem.getMenuLocation().equals("")) {
+					ServletContext servletContext = super.getServlet().getServletContext();
+					Object obj = servletContext.getAttribute("urlAuthorities");
+					if (obj != null) {
+						Map<String, String> urlAuthorities = (Map<String, String>) obj;
+						if (urlAuthorities.containsKey(deleteItem.getMenuLocation())) {
+							urlAuthorities.remove(deleteItem.getMenuLocation());
+						}
+					}
+				}
+				// Over
+
+				WF_ORG_MENU menuVO = new WF_ORG_MENU();
+				menuVO.setMenuCode(request.getParameter("itemId").toString());
+				String menuDetail = JSONObject.fromObject(menuVO).toString();
+				jsonObject.put("menuDetail", menuDetail);
+			} else {
+
+			}
+		} catch (ServiceException e) {
+			jsonObject.put("errorMessage", e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			jsonObject.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+			e.printStackTrace();
+		} finally {
+			writer.println(jsonObject.toString());
+			writer.flush();
+			writer.close();
+		}
+		return null;
+	}
+
+	/**
+	 * 节点向上移动方法
+	 */
+	public ActionForward MoveUpNode(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "itemId,changeItemId")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		String moveItem = request.getParameter("itemId").toString();
+		moveItem = moveItem.substring(0, moveItem.lastIndexOf("@"));
+		String changeItem = request.getParameter("changeItemId").toString();
+		changeItem = changeItem.substring(0, changeItem.lastIndexOf("@"));
+		try {
+			menuService.upNode(moveItem, changeItem);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * 节点向下移动方法
+	 */
+	public ActionForward MoveDownNode(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		if (SecurityUtil.existUnavailableChar(request, "itemId,changeItemId")) {
+			return mapping.findForward("unpermitted-character");
+		}
+
+		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+		String moveItem = request.getParameter("itemId").toString();
+		moveItem = moveItem.substring(0, moveItem.lastIndexOf("@"));
+		String changeItem = request.getParameter("changeItemId").toString();
+		changeItem = changeItem.substring(0, changeItem.lastIndexOf("@"));
+		try {
+			menuService.downNode(moveItem, changeItem);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public void setMenuService(MenuService menuService) {
+		this.menuService = menuService;
+	}
+
+	public MenuService getMenuService() {
+		return menuService;
+	}
+}

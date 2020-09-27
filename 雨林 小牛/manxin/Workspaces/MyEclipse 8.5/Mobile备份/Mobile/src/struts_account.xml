@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    <struts>
+    	<!-- 账务账号模块 -->
+    	<package name="account" namespace="/account" extends="yidong">
+    		<action name="findAccount" class="com.cost.account.action.AccountAction">
+    			<!-- <interceptor-ref name="loginStack"></interceptor-ref> -->
+    			<param name="pageSize">4</param>
+				<result name="success">
+					/WEB-INF/account/account_list.jsp
+				</result>
+			</action>
+			<!-- 开通 -->
+			<action name="startAccount" class="com.cost.account.action.StartAccount">
+				<result name="success" type="json">
+					<param name="root">ok</param>
+				</result>
+			</action>
+			<!-- 暂停 -->
+			<action name="pauseAccount" class="com.cost.account.action.PauseAccount">
+				<result name="success" type="json">
+					<param name="root">ok</param>
+				</result>
+			</action>
+			<!-- 跳转到添加页面 -->
+			<action name="accountAdd">
+    			<result name="success">
+    				/WEB-INF/account/account_add.jsp
+    			</result>
+    		</action>
+    		<!-- 查询推荐人身份证号是否存在 -->
+    		<action name="checkRecommender" class="com.cost.account.action.CheckRecommender">
+    			<result name="success" type="json">
+    				<param name="root">
+    					account
+    				</param>
+    			</result>
+    		</action>
+    		<!-- 添加账务账号 -->
+    		<action name="AddAccount" class="com.cost.account.action.AddAccount">
+    			<result name="success" type="redirectAction">
+    				findAccount
+    			</result>
+    		</action>
+    		<!-- 跳转到修改页面 -->
+    		<action name="accountUp" class="com.cost.account.action.AccountModi">
+    			<result name="success">
+	    			/WEB-INF/account/account_modi.jsp
+    			</result>
+    		</action>
+    		<!-- 修改 -->
+    		<action name="Up" class="com.cost.account.action.AccountUp">
+    			<result name="success" type="redirectAction">
+    				findAccount
+    			</result>
+    		</action>
+    		<!-- 删除 -->
+    		<action name="deleteAccount" class="com.cost.account.action.AccountDel">
+    			<result name="success" type="redirectAction">
+    				findAccount
+    			</result>
+    		</action>
+    	</package>
+    </struts>

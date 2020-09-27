@@ -1,0 +1,61 @@
+<div class="modal">
+  <div class="modal-header">
+    <h2>修改角色</h2>
+  </div>
+  <form class="form form-aligned author-update-form" data-id="{{user.id}}" data-name="{{user.name}}" data-type="{{user.type}}" data-userroleid="{{user.userroleid}}">
+    <div class="modal-dialog">
+      <div class="control-group">
+        <label>会员帐号：</label>
+        <span>{{user.name}}</span>
+      </div>
+      <div class="control-group">
+        <label>当前角色：</label>
+        <span>{{user.role}}</span>
+      </div>
+      <div class="control-group">
+        <label for="user-type-select">更改会员类型：</label>
+        <select class="select user-type-select" name="type" id="user-type-select">
+          {{#equals user.type "0"}}
+            <option value="1">买家</option>
+            <option value="3">频道运营</option>
+            <option value="9">财务</option>
+          {{/equals}}
+          {{#equals user.type "1"}}
+            <option value="0">平台管理员</option>
+            <option value="3">频道运营</option>
+            <option value="9">财务</option>
+          {{/equals}}
+          {{#equals user.type "2"}}
+            <option value="6">卖家</option>
+          {{/equals}}
+          {{#equals user.type "3"}}
+            <option value="0">平台管理员</option>
+            <option value="1">买家</option>
+            <option value="3">频道运营</option>
+            <option value="9">财务</option>
+          {{/equals}}
+          {{#equals user.type "6"}}
+            <option value="2">品牌商</option>
+          {{/equals}}
+          {{#equals user.type "9"}}
+            <option value="0">平台管理员</option>
+            <option value="3">频道运营</option>
+            <option value="1">买家</option>
+          {{/equals}}
+        </select>
+      </div>
+      {{!-- {{#equals user.type 1}} --}}
+      <div class="control-group user-role-change">
+        <label for="role-type-select">更改角色：</label>
+        <select class="select role-type-select" name="role" id="role-type-select">
+          <option value="">请选择</option>
+        </select>
+      </div>
+      {{!-- {{/equals}} --}}
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-success btn-medium js-submit" value="确定">
+      <button class="btn btn-medium close" type="button">取消</button>
+    </div>
+  </form>
+</div>

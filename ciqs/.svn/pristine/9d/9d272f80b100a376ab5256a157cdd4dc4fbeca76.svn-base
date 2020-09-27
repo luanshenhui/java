@@ -1,0 +1,296 @@
+package com.dpn.ciqqlc.webservice.impl;
+
+import java.util.Date;
+import java.util.Set;
+
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
+
+import com.alibaba.fastjson.JSON;
+import com.dpn.ciqqlc.common.util.DateUtil;
+import com.dpn.ciqqlc.standard.model.EventLogDTO;
+import com.dpn.ciqqlc.standard.model.VisualDeclareDTO;
+import com.dpn.ciqqlc.standard.service.AffirmDbService;
+import com.dpn.ciqqlc.standard.service.CommonUtilDbService;
+import com.dpn.ciqqlc.webservice.ShipWebService;
+import com.dpn.ciqqlc.webservice.io.VslDecIo;
+import com.dpn.ciqqlc.webservice.io.VslUpdateDecIo;
+import com.dpn.ciqqlc.webservice.vo.ServiceResult;
+
+@WebService(endpointInterface  = "com.dpn.ciqqlc.webservice.ShipWebService")
+@SOAPBinding(style = SOAPBinding.Style.RPC)
+public class ShipWebServiceImpl implements ShipWebService {
+	
+	private final Logger logger_ = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private CommonUtilDbService cus;
+
+	private AffirmDbService affirmDbService;
+    
+    public AffirmDbService getAffirmDbService() {
+    	if(affirmDbService == null){
+    		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+    		affirmDbService = (AffirmDbService)context.getBean("affirmDbServ");
+    	}
+    	return affirmDbService;
+    }
+    
+    public CommonUtilDbService getCus() {
+    	if(cus == null){
+    		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+    		cus = (CommonUtilDbService)context.getBean("commonUtilDbService");
+    	}
+    	return cus;
+    }
+    
+    /*private Validator validator;*/
+    
+	@Override
+	public ServiceResult vslDecService(VslDecIo vslDecIo) {
+		
+		this.getCus();
+		
+		ServiceResult result = new ServiceResult();
+		EventLogDTO el = new EventLogDTO();
+		Date date = DateUtil.getNowDateTime();
+		
+		try {
+		
+			el.setCreate_time(new Date());
+			el.setAction_user(StringUtils.isEmpty(vslDecIo.getAPPROVE_USER())?"0":vslDecIo.getAPPROVE_USER());
+			el.setAction_org_code(StringUtils.isEmpty(vslDecIo.getDEC_ORG())?"0":vslDecIo.getDEC_ORG());
+			el.setAction_date(date);
+			//el.setIndex_value("vslDecService"+DateUtil.DateToString(date, "yyyyMMddHHmmssSSS"));
+			el.setIndex_value(vslDecIo.getVSL_DEC_ID());
+			el.setAction_name("vslDecService_insert");
+			el.setAction_type("vslDecService_insert");
+			el.setDetails_1(JSON.toJSONString(vslDecIo));
+			el.setDetails_2("插入接口调用_"+DateUtil.DateToString(date, "yyyyMMddHHmmssSSS"));
+			cus.insertEventLog(el);
+			
+			ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+			Validator validator =  factory.getValidator();
+			Set<ConstraintViolation<VslDecIo>> constraintViolations = validator.validate(vslDecIo);
+			
+			//校验入参是否正确
+			for (ConstraintViolation<VslDecIo> constraintViolation : constraintViolations) {
+				System.out.println(constraintViolation.getMessage());
+				result.setStatus("0");
+				result.setResult(constraintViolation.getMessage());
+				
+				el.setDetails_3(JSON.toJSONString(result));
+				cus.insertEventLog(el);
+				return result;
+			}
+			
+			
+			VisualDeclareDTO dto = new VisualDeclareDTO();
+			dto.setVsl_dec_id(vslDecIo.getVSL_DEC_ID());
+			VisualDeclareDTO dto1 = this.getAffirmDbService().findVsvByVslDecId(dto);
+			if(dto1 != null){
+				
+				result.setStatus("0");
+				result.setResult("VSL_DEC_ID主键已存在请重新填写");
+				
+				el.setDetails_3(JSON.toJSONString(result));
+				cus.insertEventLog(el);
+				return result;
+			}
+			
+			this.orgVisualDeclareDTO(dto, vslDecIo,date);
+			
+			this.getAffirmDbService().insertVSL(dto);
+			
+			result.setStatus("1");
+			el.setDetails_3(JSON.toJSONString(result));
+			cus.insertEventLog(el);
+			return result;
+			
+		} catch (Exception e) {
+			result.setResult("系统错误");
+			result.setStatus("0");
+			
+			el.setCreate_time(new Date());
+			el.setAction_user(StringUtils.isEmpty(vslDecIo.getAPPROVE_USER())?"0":vslDecIo.getAPPROVE_USER());
+			el.setAction_org_code(StringUtils.isEmpty(vslDecIo.getDEC_ORG())?"0":vslDecIo.getDEC_ORG());
+			el.setAction_date(date);
+			//el.setIndex_value("vslDecService"+DateUtil.DateToString(date, "yyyyMMddHHmmssSSS"));
+			el.setIndex_value(vslDecIo.getVSL_DEC_ID());
+			el.setAction_name("vslDecService_insert");
+			el.setAction_type("vslDecService_insert");
+			el.setDetails_1("vslDecService_insert");
+			el.setDetails_2("插入接口调用_"+DateUtil.DateToString(date, "yyyyMMddHHmmssSSS"));
+			el.setDetails_3(JSON.toJSONString(result));
+			try {
+				cus.insertEventLog(el);
+			} catch (Exception e2) {
+					logger_.error("***********/vslAprService/insert************",e2);
+					result.setResult("系统接口异常:");
+					return result;
+			}
+			
+			
+			logger_.error("***********/vslDecService/************",e);
+			result.setResult("系统接口异常:");
+			return result;
+		}
+		
+	}
+
+	@Override
+	public ServiceResult vslAprService(VslUpdateDecIo vslDecIo) {
+
+		this.getCus();
+		ServiceResult result = new ServiceResult();
+		
+		EventLogDTO el = new EventLogDTO();
+		Date date = DateUtil.getNowDateTime();
+		
+		try {
+			el.setCreate_time(new Date());
+			el.setAction_user(StringUtils.isEmpty(vslDecIo.getAPPROVE_USER())?"0":vslDecIo.getAPPROVE_USER());
+			el.setAction_org_code(StringUtils.isEmpty(vslDecIo.getDEC_ORG())?"0":vslDecIo.getDEC_ORG());
+			el.setAction_date(date);
+			//el.setIndex_value("vslAprService_amp"+DateUtil.DateToString(date, "yyyyMMddHHmmssSSS"));
+			el.setIndex_value(vslDecIo.getVSL_DEC_ID());
+			el.setAction_name("vslAprService_update_amp");
+			el.setAction_type("vslAprService_update_amp");
+			el.setDetails_1(JSON.toJSONString(vslDecIo));
+			el.setDetails_2("插入接口调用_"+DateUtil.DateToString(date, "yyyyMMddHHmmssSSS"));
+			cus.insertEventLog(el);
+			
+			ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+			Validator validator =  factory.getValidator();
+			Set<ConstraintViolation<VslUpdateDecIo>> constraintViolations = validator.validate(vslDecIo);
+			
+			//校验入参是否正确
+			for (ConstraintViolation<VslUpdateDecIo> constraintViolation : constraintViolations) {
+				result.setStatus("0");
+				result.setResult(constraintViolation.getMessage());
+				el.setDetails_3(JSON.toJSONString(result));
+				cus.insertEventLog(el);
+				return result;
+			}
+			
+			VisualDeclareDTO dto = new VisualDeclareDTO();
+			dto.setVsl_dec_id(vslDecIo.getVSL_DEC_ID());
+			VisualDeclareDTO dto1 = this.getAffirmDbService().findVsvByVslDecId(dto);
+			if(dto1 == null){
+				result.setStatus("0");
+				result.setResult("VSL_DEC_ID主键不存在请重新填写");
+				
+				el.setDetails_3(JSON.toJSONString(result));
+				cus.insertEventLog(el);
+				return result;
+			}
+			
+			VslDecIo v = new VslDecIo();
+			BeanUtils.copyProperties(vslDecIo, v);
+			this.orgVisualDeclareDTO(dto, v,null);
+			this.getAffirmDbService().updateVSL(dto);
+			
+			result.setStatus("1");
+			
+			el.setDetails_3(JSON.toJSONString(result));
+			cus.insertEventLog(el);
+			return result;
+			
+		} catch (Exception e) {
+			result.setResult("系统错误");
+			result.setStatus("0");
+			
+			el.setCreate_time(new Date());
+			el.setAction_user(StringUtils.isEmpty(vslDecIo.getAPPROVE_USER())?"0":vslDecIo.getAPPROVE_USER());
+			el.setAction_org_code(StringUtils.isEmpty(vslDecIo.getDEC_ORG())?"0":vslDecIo.getDEC_ORG());
+			el.setAction_date(date);
+			//el.setIndex_value("vslAprService"+DateUtil.DateToString(date, "yyyyMMddHHmmssSSS"));
+			el.setIndex_value(vslDecIo.getVSL_DEC_ID());
+			el.setAction_name("vslAprService_update");
+			el.setAction_type("vslAprService_update");
+			el.setDetails_1("vslDecService_insert");
+			el.setDetails_2("修改接口调用_"+DateUtil.DateToString(date, "yyyyMMddHHmmssSSS"));
+			el.setDetails_3(JSON.toJSONString(result));
+			try {
+				cus.insertEventLog(el);
+			} catch (Exception e2) {
+				logger_.error("***********/vslAprService/insert************",e2);
+				result.setResult("系统接口异常:");
+				return result;
+			}
+			logger_.error("***********/vslAprService/************",e);
+			result.setResult("系统接口异常:");
+			return result;
+		}
+
+	}
+	
+	private void orgVisualDeclareDTO(VisualDeclareDTO dto,VslDecIo vslDecIo,Date date){
+		
+		dto.setVsl_dec_id(vslDecIo.getVSL_DEC_ID());//不可为空	主键传�?过来�?                                            
+		dto.setVsl_cn_name(vslDecIo.getVSL_CN_NAME());//不可为空	中文船名                                                 
+		dto.setVsl_en_name(vslDecIo.getVSL_EN_NAME());//不可为空	英文船名                                                 
+		dto.setCountry_cn_name(vslDecIo.getCOUNTRY_CN_NAME());//不可为空	中文国籍                                             
+		dto.setCountry_en_name(vslDecIo.getCOUNTRY_EN_NAME());//不可为空	英文国籍                                             
+		dto.setCall_sign(vslDecIo.getCALL_SIGN());//不可为空	呼号                                                   
+		dto.setTotal_ton(vslDecIo.getTOTAL_TON());//不可为空	吨数                                                   
+		dto.setNet_ton(vslDecIo.getNET_TON());//不可为空	�?��                                                     
+                                
+		dto.setCur_cargo_sit(vslDecIo.getCUR_CARGO_SIT());//不可为空	载货种类数量及预靠泊地点                                     
+		dto.setHis_cargo_sit(vslDecIo.getHIS_CARGO_SIT());//不可为空	上航次载货种类数量及本次到港作业任务                               
+		dto.setShipper_psn_num(vslDecIo.getSHIPPER_PSN_NUM());//不可为空	船员人数                                             
+		dto.setVisitor_psn_num(vslDecIo.getVISITOR_PSN_NUM());//不可为空	旅客人数                                             
+		dto.setStart_ship_sit(vslDecIo.getSTART_SHIP_SIT());//不可为空	发航港及出发日期
+		
+		dto.setLast_four_port(vslDecIo.getLAST_FOUR_PORT());//不可为空	近四周寄港及日期                                         
+		dto.setShip_sanit_cert(vslDecIo.getSHIP_SANIT_CERT());//不可为空	船舶免予卫生控制措施证书/船舶卫生控制措施证书签发港及日期                    
+		dto.setTraf_cert(vslDecIo.getTRAF_CERT());//不可为空	交�?工具卫生证书签发港及日期                                      
+		dto.setHaving_patient(vslDecIo.getHAVING_PATIENT());//不可为空	船上有无病人                                           
+		dto.setHaving_corpse(vslDecIo.getHAVE_CORPSE());//不可为空	船上是否有人非因意外死亡                                     
+		dto.setHaving_mdk_mdi_cps(vslDecIo.getHAVING_MDK_MDI_CPS());//不可为空	在航海中船上是否有鼠类或其它医学媒介生物反常死亡     
+		
+		if(StringUtils.isNotEmpty(vslDecIo.getEST_ARRIV_DATE())){
+			dto.setEst_arriv_date(vslDecIo.getEST_ARRIV_DATE());//不可为空	预计抵达日期及时�?                                       
+		}
+		if(StringUtils.isNotEmpty(vslDecIo.getDEC_DATE())){
+			dto.setDec_date(DateUtil.formatDate(vslDecIo.getDEC_DATE()));//不可为空	申报时间                                                     
+		}
+		dto.setDec_user(vslDecIo.getDEC_USER());//不可为空	申报人员                                                     
+		if(StringUtils.isNotEmpty(vslDecIo.getAPPROVE_DATE())){
+			dto.setAprv_date(DateUtil.formatDate(vslDecIo.getAPPROVE_DATE()));
+		}
+		
+		dto.setAprv_user(vslDecIo.getAPPROVE_USER());
+		dto.setCheck_type_dec(vslDecIo.getQUAR_TYPE_DEC());
+		dto.setCheck_type_aprv(vslDecIo.getQUAR_TYPE_APPR());
+		dto.setCheck_type_aprv_cn(null);
+		dto.setCheck_type_dec_cn("2");
+		dto.setCreate_date(date);
+		dto.setPort_org(vslDecIo.getINSP_ORG_CODE());//监管局
+		dto.setPort_org_under(vslDecIo.getINSP_ORG_CODE());//分支机构
+		dto.setVoyage_no(vslDecIo.getVOYAGE_NO());
+		dto.setLoad_port(vslDecIo.getLOAD_PORT());
+		dto.setShip_type(vslDecIo.getSHIP_TYPE());
+		dto.setHave_bier(vslDecIo.getHAVE_BIER());
+		dto.setHave_corpse(vslDecIo.getHAVE_CORPSE());
+		dto.setDec_org(vslDecIo.getDEC_ORG());
+		dto.setCheck_rst(vslDecIo.getCHECK_RST());
+		dto.setInsp_org_code(vslDecIo.getINSP_ORG_CODE());
+		dto.setInsp_org_name(vslDecIo.getINSP_ORG_NAME());
+		dto.setArrv_rst("审批结果");
+		
+	}
+
+}

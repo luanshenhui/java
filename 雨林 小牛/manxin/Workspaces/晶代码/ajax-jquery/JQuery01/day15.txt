@@ -1,0 +1,122 @@
+	7)属性操作   dom / d1.html
+		读取：attr('');
+		设置：	attr('','') 或者一次
+		设置多个 attr({"":"","":""});
+		删除：removeAttr('')
+	8)样式操作 dom / d2.html
+		获取和设置: attr("class",""), attr("style","");
+		追加:addClass('')
+		移除:removeClass('') 
+		或者removeClass('s1 s2') 
+		或者removeClass()//会删除所有样式
+		切换样式：toggleClass,有该样式，就删除，没有，
+		就添加。
+		是否有某个样式 hasClass('')
+		读取css('')
+		设置css('','')或者
+		css({'':'','':''})//设置多个样式
+	9)遍历节点 dom / d3.html
+		children()/children(selector)只考虑子元素，不考虑其它后代元素。
+		next()/next(selector)下一个兄弟
+		prev()/prev(selector)上一个兄弟
+		siblings()/siblings(selector)其它兄弟
+		find(selector):查找所有的后代，并且后代要满足
+		selector的要求。
+		
+4、事件处理
+	1)回顾之前的事件处理知识
+		a,绑订事件处理代码
+			方式一:绑订到html标记
+			比如:
+				<input type="button" onclick="f1();"/>
+			方式二: 绑订到dom对象
+			比如:
+				obj.onclick=f1;
+		b,如何获得事件对象 event / e1.html
+			给事件处理函数添加一个参数"event"	
+		c,事件对象有什么作用  event / e1.html
+			作用1:依据事件对象找到事件源　
+				比如:
+					event.srcElement   //ie
+					event.target  //ff chrome
+			作用2:获得鼠标点击的坐标
+				   event.clientX
+				   event.clientY
+			作用3:取消冒泡
+					event.cancelBubble=true;
+		d,事件冒泡 event / e2.html
+			子节点产生的事件会抛给相应的父节点。
+	2)在jQuery当中，如何处理事件
+		a,绑订事件处理代码  event / e3.html
+			方式一:
+				$obj.bind(事件类型,处理函数);		
+				比如:
+					$obj.bind('click',fn1);
+			方式二:
+				$obj.click(fn1);
+		b,	如何获得事件对象  event / e4.html
+				只需要给事件处理函数传递一个参数，
+				比如:
+						$obj.click(function(e){
+						});
+					e就是事件对象(是jQuery对底层的事件
+					对象的封装)。
+		c,事件对象有什么作用 event / e4.html
+			作用1:依据事件对象找到事件源
+				//obj是一个dom对象。
+				var obj = e.target;
+			作用2:获得鼠标点击的坐标	
+				e.pageX
+				e.pageY
+			作用3:取消冒泡  event /e5.html
+				e.stopPropagation();
+		d,合成事件 event / e6.html  e7.html
+			hover(mouseenter,mouseleave): 第一个函数处理
+			光标进入，第二个函数处理光标移出。
+			toggle(fn1,fn2,...):第一次点击，执行fn1,第二次
+			点击，执行fn2, 依此类推，如果执行到末尾，
+			又从第一个函数开始执行。
+		e,模拟操作  event / e8.html
+			方式一：简写形式，比如
+					$obj.focus();
+			方式二:正式写法
+				$obj.trigger('focus');
+5、动画
+	1)show() hide():   animate / a1.html
+		a,作用：通过同时改变元素的宽度与高度来
+		实现显示或者隐藏
+		b,用法:
+			show(时间,[callback]);
+			时间:单位可以是"slow","normal","fast"或者
+			毫秒数。
+			callback:回调函数，当整个动画执行完毕，接下
+			来会调用回调函数。
+	2)slideUp() slideDown() : animate / a1.html
+		a,作用：通过改变元素的高度来实现显示或者隐藏
+		b,用法同上。
+	3)fadeIn() fadeOut():  animate / a2.html
+		a,作用：通过改变元素的不透明度来实现显示或者隐藏。
+		b,用法同上。
+	4)自定义动画 animate(params,speed,[callback])
+		animate / a3.html
+		用法:
+			params: 是一个javascript对象，描述动画结束
+			之后元素的样式。
+			speed:速度，单位是毫秒。
+			callback:回调函数，当整个动画执行完毕，接下
+			来会调用回调函数。
+6、操作类数组的方法：  array / a1.html
+	1)each(fn(i)):循环遍历每一个元素,this代表被迭代的
+	dom对象，$(this)代表被迭代的jQuery对象。i
+	表示正在被迭代的对象的下标(从0开始)。
+	2)eq(index)：返回index+1位置处的jQuery对象
+	3)index(obj)：返回下标，其中obj可以是dom对象
+	或者jQuery对象。
+	4)length属性：jQuery对象包含的dom对象的个数
+	5)get()：返回dom对象组成的数组
+	6)get(index)：返回index+1个dom对象。
+	
+	练习：
+				完成“移动多选框"(example/lab2.html)
+	
+		

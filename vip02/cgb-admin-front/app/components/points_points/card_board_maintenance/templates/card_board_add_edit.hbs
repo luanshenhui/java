@@ -1,0 +1,67 @@
+<div class="modal">
+    <div class="modal-header"><h2>{{#if id}}编辑{{else}}新增{{/if}}</h2></div>
+    <form class="cardBoard-form">
+        <div class="modal-body cardBoard-add-edit">
+
+            <div class="control-group">
+                    <label for="cardName">卡产品名称：</label>
+                    <input id="cardName" name="cardName"  class="form-control" type="text" value="{{cardName}}"/>
+                    <label for="cardLevel">卡等级：</label>
+                    <input id="cardLevel" name="cardLevel"  class="form-control" type="text" value="{{cardLevel}}"/>
+            </div>
+            <div class="control-group">
+                <label for="cardBin">卡bin：</label>
+                <input id="cardBin" name="cardBin" class="form-control" type="text" value="{{cardBin}}"/>
+                <label for="branch">分行名称：</label>
+                <input id="branch" name="branch" class="form-control" type="text" value="{{branch}}"/>
+            </div>
+            <div class="control-group">
+                <label for="jointCardCode">联名卡代号：</label>
+                <input id="jointCardCode" name="jointCardCode" class="form-control" type="text" value="{{jointCardCode}}"/>
+                <label for="thirdLevelCode">第三等级卡产品编码：</label>
+                <input id="thirdLevelCode" name="thirdLevelCode" class="form-control" type="text" value="{{thirdLevelCode}}"/>
+            </div>
+            <div class="control-group">
+                <label for="cardType">卡类：</label>
+                <input id="cardType" name="cardType" class="form-control" type="text" value="{{cardType}}"/>
+                <label for="BranchCode">分行号：</label>
+                <input id="BranchCode" name="thirdLevelCode" class="form-control" type="text" value="{{BranchCode}}"/>
+            </div>
+            <div class="control-group">
+                <label for="promotionPlanOne">推广计划1：</label>
+                <input id="promotionPlanOne" name="promotionPlanOne" class="form-control" type="text" value="{{promotionPlanOne}}"/>
+                <label for="promotionPlanTwo">推广计划2：</label>
+                <input id="promotionPlanTwo" name="promotionPlanTwo" class="form-control" type="text" value="{{promotionPlanTwo}}"/>
+            </div>
+            <div class="control-group">
+                <label for="promotionPlanThree">推广计划3：</label>
+                <input id="promotionPlanThree" name="promotionPlanThree" class="form-control" type="text" value="{{promotionPlanThree}}"/>
+                <label for="promotionPlanFour">推广计划4：</label>
+                <input id="promotionPlanFour" name="promotionPlanFour" class="form-control" type="text" value="{{promotionPlanFour}}"/>
+            </div>
+            <div class="control-group">
+                <label for="promotionPlanFive">推广计划5：</label>
+                <input id="promotionPlanFive" name="promotionPlanFive" class="form-control" type="text" value="{{promotionPlanFive}}"/>
+                <label for="pointsType">积分类型：</label>
+                <input id="pointsType" name="pointsType" class="form-control" type="text" value="{{pointsType}}"/>
+            </div>
+            <div class="control-group">
+                <label for="isPartnerPoints">是否合作方积分：</label>
+                <input id="isPartnerPoints" name="isPartnerPoints" class="form-control" type="text" value="{{isPartnerPoints}}"/>
+                <label for="contact">联系人：</label>
+                <input id="contact" name="contact" class="form-control" type="text" value="{{contact}}"/>
+            </div>
+            <div class="control-group">
+                <label for="contactTel">联系人电话：</label>
+                <input id="contactTel" name="contactTel" class="form-control" type="text" value="{{contactTel}}"/>
+                <label for="cardDesp">卡描述：</label>
+                <input id="cardDesp" name="cardDesp" class="form-control" type="text" value="{{cardDesp}}"/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-sm js-card-confirm" value="确定">
+            <button class="btn btn-info btn-sm close">取消</button>
+        </div>
+    </form>
+
+</div>

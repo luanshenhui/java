@@ -1,0 +1,73 @@
+{{#component "price-system js-component"}}
+    <p class="components-title"><strong>- 价格体系维护 -</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals type "1"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/points-ratio">金普卡积分系数</a>
+            </li>
+            <li {{#equals type "2"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/discount-scale">折扣比例</a>
+            </li>
+            <li {{#equals type "3"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/cash-scale">现金比例</a>
+            </li>
+            <li {{#equals type "4"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/purchase-ratio">采购价上浮系数</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <div class="m-b-10 m-t-10">
+                {{#authorial "priceSystem_add"}}
+                    <button class="btn btn-info btn-small js-discount-add">+ 新增</button>
+                {{/authorial}}
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="12%">基础价格下限</th>
+                    <th width="12%">基础价格上限</th>
+                    <th width="12%">金普卡参数</th>
+                    <th width="12%">创建用户</th>
+                    <th width="12%">创建时间</th>
+                    <th width="12%">最近修改用户</th>
+                    <th width="12%">最近修改时间</th>
+                    <th width="16%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                        <td class="down-limit">{{downLimit}}</td>
+                        <td class="up-limit">{{upLimit}}</td>
+                        <td class="argument-normal">{{argumentNormal}}</td>
+                        <td class="createOper">{{createOper}}</td>
+                        <td class="createTime">{{#formatDate createTime 'day'}}{{/formatDate}}</td>
+                        <td class="modifyOper">{{modifyOper}}</td>
+                        <td class="modifyTime">{{#formatDate modifyTime 'day'}}{{/formatDate}}</td>
+                        <td class="edit-button">
+                            {{#authorial "priceSystem_edit"}}
+                                <button class="btn btn-sm btn-info js-discount-edit">编辑</button>
+                            {{/authorial}}
+                    {{#authorial "priceSystem_delete"}}
+                            <button id="{{id}}" class="btn btn-sm btn-info js-discount-delete"
+                                    data-toggle="confirm"
+                                    data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                    data-event="confirm:delete-discount">
+                                删除
+                            </button>
+                    {{/authorial}}
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            {{#equals _DATA_.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <div class="pagination" data-total="{{_DATA_.total}}"></div>
+            {{/equals}}
+        </div>
+    </div>
+{{/component}}

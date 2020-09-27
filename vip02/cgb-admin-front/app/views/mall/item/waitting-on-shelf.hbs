@@ -1,0 +1,13 @@
+<!--商品管理 待上架tab type传入5-->
+{{#partial "realTitle"}}商品管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "mall_item/item_manage" true}}
+            {
+            "type":"5",
+            "channel":"YG"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

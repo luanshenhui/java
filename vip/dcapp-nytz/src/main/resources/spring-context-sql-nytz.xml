@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<beans>
+		<bean name="sqlApi" class="java.util.HashMap">
+			<constructor-arg>
+				<map>
+					<entry key="nytz_demo_test_1">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="sql">
+								<value>
+									<![CDATA[
+									 SELECT * FROM  SYS_USER where LOGIN_NAME = :login_name  or LOGIN_NAME = :login_id
+									]]>
+								</value>
+							</property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+
+					<entry key="nytz_demo_test_2">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+							<property name="debug" value="true"></property>
+						</bean>
+					</entry>
+
+					<entry key="nytz_demo_test_3">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+							<property name="debug" value="true"></property>
+						</bean>
+					</entry>
+					<!-- 绩效考核结果 -->
+					<entry key="nytz_kpiResult">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+					<!-- 风险详情页 -->
+					<entry key="nytz_riskDetail">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+
+					<!-- 风险详情查看页 -->
+					<entry key="nytz_riskDetail_log">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+					<!-- 风险详情页码-->
+					<entry key="nytz-risk-pageNum">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+					<!-- 风险界定 -->
+					<entry key="nytz_riskDetail_defineStatus">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+					<!-- 操作人 -->
+					<entry key="nytz_operPerson">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+					<!-- 告警状态 -->
+					<entry key="nytz-alarmStatus">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+					<!-- 告警等级 -->
+					<entry key="nytz-alarmLevel">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+					<!-- 告警查询 -->
+					<entry key="nytz_alarmDetail">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+					<!-- 各部门风险等级 -->
+					<entry key="nytz-depart-riskLevel">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					<!-- 各部门风险界定 -->
+					<entry key="nytz-depart-riskDefine">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+					<!-- 各部门告警等级 -->
+					<entry key="nytz-depart-alarmLevel">
+						<bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+							<property name="file" value="true"></property>
+							<property name="ds" ref="dcapp"></property>
+						</bean>
+					</entry>
+					<!-- end -->
+					
+
+				</map>
+			</constructor-arg>
+		</bean>
+	</beans>
+</beans>

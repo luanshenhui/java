@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+	<global-forwards>
+		<forward name="failure" path="/../view/base/error/Error.jsp"
+			redirect="false" />
+		<forward name="unknown-error" path="/../view/base/error/Error.jsp" />
+		<forward name="unpermitted-character" path="/view/base/error/IllegalArgumentException.jsp"/>		
+	</global-forwards>
+	<action-mappings>
+		<!-- 组织单元Action start -->
+		<action type="com.dhc.organization.unit.action.UnitAction"
+			parameter="method" scope="request" path="/UnitAction">
+			<forward name="userDetail" path="/view/organization/unit/UnitDetail.jsp" />
+		</action>
+		<!-- 组织单元Action end -->
+		<!-- 岗位Action start -->
+		<action type="com.dhc.organization.position.action.StationAction"
+			parameter="method" scope="request" path="/StationAction" />
+		<!-- 岗位Action start -->
+		<!-- 用户Action start -->
+		<action type="com.dhc.organization.user.action.UserAction"
+			parameter="method" scope="request" path="/UserAction" >
+			<forward name="userDetail" path="/view/organization/unit/UnitDetail.jsp" />
+			<forward name="userSelect" path="/view/organization/user/UserSelect.jsp" />
+			<forward name="userSelectRadio" path="/view/organization/user/UserSelectRadio.jsp" />
+			<forward name="userList" path="/view/organization/user/UserList.jsp" />
+		</action>
+		<!-- 用户Action end -->
+		<!-- 角色Action start -->
+		<action type="com.dhc.organization.role.action.RoleAction"
+			parameter="method" scope="request" path="/RoleAction" >
+			<forward name="listPage" path="/view/organization/role/RoleList.jsp" />
+			<forward name="roleSelect" path="/view/organization/role/RoleSelect.jsp" />
+			<forward name="adminRoleSelect" path="/view/organization/role/RoleSelectRadio.jsp" />
+		</action>
+		<!-- 角色Action end -->
+	</action-mappings>
+</struts-config>

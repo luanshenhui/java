@@ -1,0 +1,49 @@
+<div class="modal modal-html html-edit">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>上传</h2>
+    </div>
+    <form class="form form-aligned html-edit-form">
+        <div class="html-edit modal-body">
+            <div class="control-group">
+                <label for="actId">静态页面代码:</label>
+                <input id="actId" name="actId" value="{{actId}}" type="text" readonly >
+            </div>
+            <div class="control-group">
+                <label for="actName">页面名称:</label>
+                <input id="actName" class="form-control" name="actName" type="text"
+                       value="{{data.actName}}" readonly>
+            </div>
+            <div class="control-group">
+                <label for="startTime"><span class="required">*</span>开始时间:</label>
+                <input type="text" id="js-date-startEdit"
+                       class="time-border startTime cursor-pointer" name="startTime"
+                       value="{{#formatDate data.startTime}}{{/formatDate}}"/>
+
+                <span class="note-error-empty"><i>&times;</i> 开始时间不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="endTime"><span class="required">*</span>结束时间:</label>
+                <input type="text" id="js-date-endEdit"
+                       class="time-border endTime cursor-pointer" name="endTime"
+                       value="{{#formatDate data.endTime}}{{/formatDate}}"/>
+                <span class="note-error-empty"><i>&times;</i> 结束时间不得为空</span>
+            </div>
+            <div class="control-group zip-upload">
+                <label for="file"><span class="required">*</span>文件名称:</label>
+                <div class="uploadArea">
+                    <input type="button" class="btn btn-success btn-small upload-btn-sl" value="选择并上传文件"/>
+                    <input type="file" id="fileZipAdd" class="upload-file-sl js-file-upload" name="files" data-form-data='{"actId": "{{actId}}"}' multiple data-sequential-uploads="true"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>&nbsp;</label><span class="font-size-12 font-color-gray">说明：上传文件格式必须是zip，否则文件录入无效。</span><br>
+                <label>&nbsp;</label><span class="font-size-12 font-color-gray">说明：上传文件名，请与“静态页面代码”保持一致。</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-small btn-success js-submit-btn" data-id="{{actId}}" value="确定" disabled="disabled">
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

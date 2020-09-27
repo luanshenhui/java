@@ -1,0 +1,22 @@
+package cn.rkylin.oms.system.user.service;
+
+import java.util.List;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.oms.system.user.domain.WF_ORG_USER;
+import cn.rkylin.oms.system.user.vo.UserVO;
+
+public interface IUserService {
+
+	PageInfo<UserVO> findByWhere(int page, int length, UserVO param, boolean b, boolean c, boolean needUserRole, boolean d) throws Exception;
+
+	void saveUser(WF_ORG_USER userVO, String saveType, String table, String idColumnName) throws Exception;
+
+	void lockUser(String userID, String isLocked) throws Exception;
+
+	void deleteUser(List delUserIdList, String extTableName, String idColumnName) throws Exception;
+
+	WF_ORG_USER getUserDetail(String userID) throws Exception;
+
+}

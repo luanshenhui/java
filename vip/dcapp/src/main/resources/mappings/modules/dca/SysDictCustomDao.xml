@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.system.dao.SysDictCustomDao">
+    
+	<sql id="sysDictCustomColumns">
+		a.id AS "id",
+		a.value AS "value",
+		a.label AS "label",
+		a.type AS "type",
+		a.description AS "description",
+		a.sort AS "sort",
+		a.parent_id AS "parent.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="sysDictCustomJoins">
+	</sql>
+    
+	<select id="get" resultType="SysDictCustom">
+		SELECT 
+			<include refid="sysDictCustomColumns"/>
+		FROM sys_dict_custom a
+		<include refid="sysDictCustomJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysDictCustom">
+		SELECT 
+			<include refid="sysDictCustomColumns"/>
+		FROM sys_dict_custom a
+		<include refid="sysDictCustomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysDictCustom">
+		SELECT 
+			<include refid="sysDictCustomColumns"/>
+		FROM sys_dict_custom a
+		<include refid="sysDictCustomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_dict_custom(
+			id,
+			value,
+			label,
+			type,
+			description,
+			sort,
+			parent_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{value},
+			#{label},
+			#{type},
+			#{description},
+			#{sort},
+			#{parent.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_dict_custom SET 	
+			value = #{value},
+			label = #{label},
+			type = #{type},
+			description = #{description},
+			sort = #{sort},
+			parent_id = #{parent.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sys_dict_custom SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findListByType" resultType="SysDictCustom">
+		SELECT  
+			<include refid="sysDictCustomColumns"/>
+		FROM SYS_DICT_CUSTOM a
+		WHERE a.DEL_FLAG = #{DEL_FLAG_NORMAL} AND a.TYPE = #{type}
+		ORDER BY a.VALUE DESC
+	</select>
+	
+	<!-- 根据label和type查询 -->
+	<select id="findByLableAndType" resultType="SysDictCustom">
+		 SELECT 
+		 	<include refid="sysDictCustomColumns"/>
+		 FROM SYS_DICT_CUSTOM a 
+		 WHERE DEL_FLAG = '0'
+		 <if test="label != null and label != ''">
+		 	AND LABEL = #{label}		 
+		 </if>
+		 <if test="type != null and type != ''">
+		 	AND TYPE = #{type}		 
+		 </if>
+	</select>
+	
+</mapper>

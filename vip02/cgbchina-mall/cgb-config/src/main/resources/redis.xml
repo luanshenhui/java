@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<redis>
+    <!-- 开关 -->
+    <open>true</open>
+    <servers>
+        <!-- 主备节点：一主一备 -->
+        <!--<server masterHost="10.2.48.78" masterPost="6380" masterPassword=""
+            bakHost="10.2.48.78" bakPort="6390" bakPassword="" weight="1" timeout="2000"
+            /> <server masterHost="10.2.48.78" masterPost="6381" masterPassword="" bakHost="10.2.48.78"
+            bakPort="6391" bakPassword="" weight="1" timeout="2000" /> -->
+        <server masterHost="10.2.49.61" masterPost="6380" masterPassword="1q2w3e4r" bakHost="10.2.49.64" bakPort="6390"
+                bakPassword="1q2w3e4r" weight="1" timeout="2000"/>
+        <!--
+        <server masterHost="10.2.49.61" masterPost="6381" masterPassword="1q2w3e4r" bakHost="10.2.49.64" bakPort="6391" bakPassword="1q2w3e4r" weight="1" timeout="2000" />
+        <server masterHost="10.2.49.61" masterPost="6382" masterPassword="1q2w3e4r" bakHost="10.2.49.64" bakPort="6392" bakPassword="1q2w3e4r" weight="1" timeout="2000" />
+        -->
+        <!--
+        <server masterHost="10.2.49.61" masterPost="6382"
+            masterPassword="" bakHost="10.2.49.64" bakPort="6392" bakPassword=""
+            weight="1" timeout="2000" />
+        <server masterHost="10.2.49.61" masterPost="6383"
+            masterPassword="" bakHost="10.2.49.64" bakPort="6393" bakPassword=""
+            weight="1" timeout="2000" />
+
+        <server masterHost="10.2.49.65" masterPost="6384"
+            masterPassword="" bakHost="10.2.49.66" bakPort="6394" bakPassword=""
+            weight="1" timeout="2000" />
+        <server masterHost="10.2.49.65" masterPost="6385"
+            masterPassword="" bakHost="10.2.49.66" bakPort="6395" bakPassword=""
+            weight="1" timeout="2000" />
+    -->
+    </servers>
+
+    <!-- 心跳检测间隔时间 -->
+    <intervalTime>60000</intervalTime>
+    <!-- 最大空闲连接数 -->
+    <maxIdleConn>300</maxIdleConn>
+    <!-- 最小空闲连接数 -->
+    <minIdleConn>10</minIdleConn>
+    <!-- 最大连接数 -->
+    <maxConn>1000</maxConn>
+    <!-- 获取连接最大待时间 -->
+    <maxWait>5000</maxWait>
+</redis>

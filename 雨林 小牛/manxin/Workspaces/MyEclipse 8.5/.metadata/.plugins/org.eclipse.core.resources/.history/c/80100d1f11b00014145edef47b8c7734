@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    
+    <!-- 
+    	1.name指定包名，包与包之间的名称不能重复
+    	2.namespace包命名空间，用于拼我们访问包的路径，即URL，不要忘记/线
+    	3.extends 指定包的继承关系，这样我们可以方便的使用Struts2提供的默认设置
+     -->
+   <struts>
+     <package name="demo" namespace="/demo" extends="struts-default">
+     	
+     	 <action name="va" class="day01.Demo">
+     	 	
+     	 	 <result name="success">
+     	 	 	/WEB-INF/jsp/VsDemo.jsp
+     	 	 </result>
+     	 	
+     	 </action>
+     </package>
+   </struts>

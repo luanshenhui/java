@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="chinsoft.entity.Receiving" table="RECEIVING" >
+		<id name="id" type="integer">
+			<column name="ID" precision="22" scale="0" />
+			<generator class="sequence">
+				<param name="sequence">RECEIVING_ID</param>
+			</generator>
+		</id>
+		<property name="ordenid" type="string">
+			<column name="ORDENID" length="18" not-null="true" />
+		</property>
+		<property name="memo" type="string">
+			<column name="MEMO" />
+		</property>
+		<property name="createtime" type="string">
+			<column name="CREATETIME" length="7" not-null="true" />
+		</property>
+		<property name="name" type="string">
+			<column name="NAME" not-null="true" />
+		</property>
+		<property name="phonenumber" type="string">
+			<column name="PHONENUMBER" />
+		</property>
+		<property name="ownedstore" type="string">
+			<column name="OWNEDSTORE" />
+		</property>
+		<property name="sort" type="integer">
+			<column name="sort" precision="22" scale="0" />
+		</property>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,138 @@
+节点封装成对象调用方法或者属性
+1、jQuery基础
+	(1)jQuery的特点
+		jQuery是一个js文件，特点是，利用选择器查找要
+	操作的节点，并且将这些节点封装成jQuery对象，只
+	需要调用jQuery对象的方法或者属性，就可以实现对
+	节点的操作。这样做的好处是：可以兼容不同的浏览器，
+	另外，代码也会得到简化。
+	(2)编程步骤     a1.html
+		step1,利用选择器查找要操作的节点。
+		比如:
+			var $obj = $('#d1');
+		step2,调用jQuery对象的方法或者属性。
+		比如:
+			$obj.css('color','red');
+	(3)jQuery对象与dom对象的转换  a1.html
+		1)dom对象  ---> jQuery对象
+		2)jQuery对象  ---> dom对象
+2、选择器
+	1)什么是选择器?
+			jQuery借鉴了css选择器的语法，用来方便地
+		查找要操作的节点。
+	2)基本选择器  selector/s1.html
+		#id
+		.class
+		element
+		selector1,selector2..selectorn
+		*
+	3)层次选择器  selector / s2.html
+		selector1 selector2 : 后代
+		selector1>selector2 : 只考虑子节点
+		selector1+selector2: 下一个兄弟
+		selector1~selector2: 下面所有的兄弟
+	4)过滤选择器  
+		(1)基本过滤选择器 selector / s3.html
+		:first
+		:last
+		:not(selector)
+		:even
+		:odd
+		:eq(index)
+		:gt(index)
+		:lt(index)
+		(2)内容过滤选择器 selector / s4.html
+		:contains(text) 匹配包含给定文本的元素
+		:empty 匹配所有不包含子元素或者文本的空元素
+		:has(selector) 匹配含有选择器所匹配的元素的元素
+		:parent 匹配含有子元素或者文本的元素
+		(3)可见性过滤选择器 selector / s5.html
+		:hidden 匹配所有不可见元素，或者type为hidden的元素
+		:visible 匹配所有的可见元素
+		(4)属性过滤选择器
+			[attribute]   selector / s6.html
+			[attribute=value]
+			[attribute!=value]
+		(5)子元素过滤选择器  selector / s7.html
+			下标从1开始
+			:nth-child(index/even/odd)
+		(6)表单对象属性过滤选择器 selector / s8.html
+			:enabled
+			:disabled
+			:checked
+			:selected
+	5)表单选择器    
+		:input  input,textarea,select,button
+		:text
+		:pasword
+		:radio
+		:checkbox
+		:submit
+		:image
+		:reset
+		:button
+		:file
+		:hidden
+3、dom操作
+	1)查询   dom / d1.html
+		找到一个节点以后，可以通过以下四个方法来
+	访问节点的html内容、文件内容、属性值、值。
+		a,html(): 访问节点的html内容
+		b,text():访问节点的文本内容
+		c,attr():访问节点的属性
+		d,val():访问节点的值
+		以上方法均可以查询或者修改相应的值。
+	2)创建   dom / d2.html
+		$(html);
+	3)插入节点 dom / d2.html
+		append():作为最后一个孩子追加
+		prepend():作为第一个孩子追加
+		after():作为下一个兄弟追加
+		before():作为上一个兄弟追加
+	4)删除节点  dom / d3.html
+		remove()
+		remove(selector)
+		empty():清空节点
+	5)将javascript代码与html代码分离  dom / d4.html
+	d5.html
+			$(function(){
+				//当整个页面加载完毕，会执行这儿的代码。
+			});
+	6)复制节点 d6.html
+		clone()
+		clone(true):使复制的节点也具有行为(将事件
+		处理代码一块复制)
+	7)属性操作
+		读取：attr('');
+		设置：	attr('','') 或者一次
+		设置多个 attr({"":"","":""});
+		删除：removeAttr('')
+	8)样式操作
+		获取和设置: attr("class","")	
+		追加:addClass('')
+		移除:removeClass('') 
+		或者removeClass('s1 s2') 
+		或者removeClass()//会删除所有样式
+		切换样式：toggleClass,有该样式，就删除，没有，
+		就添加。
+		是否有某个样式 hasClass('')
+		读取css('')
+		设置css('','')或者
+		css({'':'','':''})//设置多个样式
+	9)遍历节点
+		children():只考虑子元素，不考虑其它后代元素。
+		next():
+		prev():
+		siblings():
+		find(expr):
+	
+4、事件处理
+5、动画
+6、类数组
+7、ajax的支持
+
+		
+	
+			
+		
+		

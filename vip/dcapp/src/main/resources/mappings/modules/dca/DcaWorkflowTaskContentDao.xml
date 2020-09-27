@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.workflow.dao.DcaWorkflowTaskContentDao">
+    
+	<sql id="dcaWorkflowTaskContentColumns">
+		a.UUID AS "uuid",
+		a.TASK_ID AS "taskId",
+		a.POST_ID AS "postId",
+		a.COMPUTE_RULE AS "computeRule",
+		a.ALARM_TYPE AS "alarmType",
+		a.ALARM_LEVEL AS "alarmLevel",
+		a.ALARM_LEVEL_NEED AS "alarmLevelNeed",
+		a.ALARM_LEVEL_SUM AS "alarmLevelSum",
+		a.TIME_NEED AS "timeNeed",
+		a.TIME_NEED_UNIT AS "timeNeedUnit",
+		a.TIME_SUM AS "timeSum",
+		a.TIME_SUM_UNIT AS "timeSumUnit",
+		a.IS_RISK AS "isRisk",
+		a.RISK_ID AS "riskId",
+		a.IS_MANUAL_JUDGE AS "isManualJudge",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks",
+		a.IS_EFFECTIVE AS "isEffective"
+	</sql>
+	
+	<sql id="dcaWorkflowTaskContentJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaWorkflowTaskContent">
+		SELECT 
+			<include refid="dcaWorkflowTaskContentColumns"/>
+		FROM DCA_WORKFLOW_TASK_CONTENT a
+		<include refid="dcaWorkflowTaskContentJoins"/>
+		WHERE a.ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="DcaWorkflowTaskContent">
+		SELECT 
+			<include refid="dcaWorkflowTaskContentColumns"/>
+		FROM DCA_WORKFLOW_TASK_CONTENT a
+		<include refid="dcaWorkflowTaskContentJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="riskId != null and riskId != ''">
+				AND a.RISK_ID = #{riskId}
+			</if>
+			<if test="taskId != null and taskId != ''">
+				AND a.TASK_ID = #{taskId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaWorkflowTaskContent">
+		SELECT 
+			<include refid="dcaWorkflowTaskContentColumns"/>
+		FROM DCA_WORKFLOW_TASK_CONTENT a
+		<include refid="dcaWorkflowTaskContentJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO DCA_WORKFLOW_TASK_CONTENT(
+			UUID,
+			TASK_ID,
+			POST_ID,
+			COMPUTE_RULE,
+			ALARM_TYPE,
+			ALARM_LEVEL,
+			ALARM_LEVEL_NEED,
+			ALARM_LEVEL_SUM,
+			TIME_NEED,
+			TIME_NEED_UNIT,
+			TIME_SUM,
+			TIME_SUM_UNIT,
+			IS_RISK,
+			RISK_ID,
+			IS_MANUAL_JUDGE,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS,
+			IS_EFFECTIVE
+		) VALUES (
+			#{uuid},
+			#{taskId},
+			#{postId},
+			#{computeRule},
+			#{alarmType},
+			#{alarmLevel},
+			#{alarmLevelNeed},
+			#{alarmLevelSum},
+			#{timeNeed},
+			#{timeNeedUnit},
+			#{timeSum},
+			#{timeSumUnit},
+			#{isRisk},
+			#{riskId},
+			#{isManualJudge},
+			#{delFlag},
+			#{createPerson},
+			#{createDate},
+			#{updatePerson},
+			#{updateDate},
+			#{remarks},
+			#{isEffective}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE DCA_WORKFLOW_TASK_CONTENT SET 	
+			UUID = #{uuid},
+			TASK_ID = #{taskId},
+			POST_ID = #{postId},
+			COMPUTE_RULE = #{computeRule},
+			ALARM_TYPE = #{alarmType},
+			ALARM_LEVEL = #{alarmLevel},
+			ALARM_LEVEL_NEED = #{alarmLevelNeed},
+			ALARM_LEVEL_SUM = #{alarmLevelSum},
+			TIME_NEED = #{timeNeed},
+			TIME_NEED_UNIT = #{timeNeedUnit},
+			TIME_SUM = #{timeSum},
+			TIME_SUM_UNIT = #{timeSumUnit},
+			IS_RISK = #{isRisk},
+			RISK_ID = #{riskId},
+			IS_MANUAL_JUDGE = #{isManualJudge},
+			CREATE_PERSON = #{createPerson},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = #{updateDate},
+			REMARKS = #{remarks},
+			IS_EFFECTIVE = #{isEffective}
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<update id="delete">
+		UPDATE DCA_WORKFLOW_TASK_CONTENT SET 
+			DEL_FLAG = #{DEL_FLAG_DELETE}
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<!--保存节点内容 -->
+	<insert id="insertContent">
+		begin
+		<foreach item="item" collection="list" index="index" separator=";">
+			INSERT INTO DCA_WORKFLOW_TASK_CONTENT(
+			UUID,
+			TASK_ID,
+			POST_ID,
+			COMPUTE_RULE,
+			ALARM_TYPE,
+			ALARM_LEVEL,
+			ALARM_LEVEL_NEED,
+			ALARM_LEVEL_SUM,
+			TIME_NEED,
+			TIME_NEED_UNIT,
+			TIME_SUM,
+			TIME_SUM_UNIT,
+			IS_RISK,
+			RISK_ID,
+			IS_MANUAL_JUDGE,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS,
+			IS_EFFECTIVE
+		) VALUES (
+			#{item.uuid},
+			#{item.taskId},
+			#{item.postId},
+			#{item.computeRule},
+			#{item.alarmType},
+			#{item.alarmLevel},
+			#{item.alarmLevelNeed},
+			#{item.alarmLevelSum},
+			#{item.timeNeed},
+			#{item.timeNeedUnit},
+			#{item.timeSum},
+			#{item.timeSumUnit},
+			#{item.isRisk},
+			#{item.riskId},
+			#{item.isManualJudge},
+			#{item.delFlag},
+			#{item.createPerson},
+			SYSDATE,
+			#{item.updatePerson},
+			SYSDATE,
+			#{item.remarks},
+			#{item.isEffective}
+		)
+		</foreach>
+		;end;
+	</insert>
+	
+	<update id="updateContent">
+		begin
+		<foreach item="item" collection="list" index="index" separator=";">
+		UPDATE DCA_WORKFLOW_TASK_CONTENT SET 
+			<if test="item.postId != null and item.postId != ''">POST_ID = #{item.postId},</if>
+			<if test="item.computeRule != null and item.computeRule != ''">COMPUTE_RULE = #{item.computeRule},</if>
+			<if test="item.alarmLevel != null and item.alarmLevel != ''">ALARM_LEVEL = #{item.alarmLevel},</if>
+			<if test="item.alarmLevelNeed != null and item.alarmLevelNeed != ''">ALARM_LEVEL_NEED = #{item.alarmLevelNeed},</if>
+			<if test="item.alarmLevelSum != null and item.alarmLevelSum != ''">ALARM_LEVEL_SUM = #{item.alarmLevelSum},</if>
+			<if test="item.timeNeed != null and item.timeNeed != ''">TIME_NEED = #{item.timeNeed},</if>
+			<if test="item.timeNeedUnit != null and item.timeNeedUnit != ''">TIME_NEED_UNIT = #{item.timeNeedUnit},</if>
+			<if test="item.timeSum != null and item.timeSum != ''">TIME_SUM = #{item.timeSum},</if>
+			<if test="item.timeSumUnit != null and item.timeSumUnit != ''">TIME_SUM_UNIT = #{item.timeSumUnit},</if>
+			<if test="item.isRisk != null and item.isRisk != ''">IS_RISK = #{item.isRisk},</if>
+			<if test="item.riskId != null and item.riskId != ''">RISK_ID = #{item.riskId},</if>
+			<if test="item.isManualJudge != null and item.isManualJudge != ''">IS_MANUAL_JUDGE = #{item.isManualJudge},</if>
+			<if test="item.isEffective != null and item.isEffective != ''">IS_EFFECTIVE = #{item.isEffective},</if>
+			UPDATE_PERSON = #{item.updatePerson},
+			UPDATE_DATE = SYSDATE
+		WHERE TASK_ID = #{item.taskId} AND ALARM_TYPE = #{item.alarmType}
+		</foreach>
+		;end;
+	</update>
+	
+</mapper>

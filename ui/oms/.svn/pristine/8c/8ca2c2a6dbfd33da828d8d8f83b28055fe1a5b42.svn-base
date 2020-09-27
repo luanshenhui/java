@@ -1,0 +1,11 @@
+package cn.rkylin.oms.system.position.dao;
+
+import java.util.List;
+
+import cn.rkylin.oms.system.position.domain.WF_ORG_STATION;
+
+public interface IPositionDAO {
+
+	List getStationByCondition(WF_ORG_STATION stationParam) throws Exception;
+
+}

@@ -1,0 +1,110 @@
+package com.yulin.dangdang.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.yulin.dangdang.bean.Item;
+import com.yulin.dangdang.bean.Product;
+import com.yulin.dangdang.dao.daoimpl.ItemDaoImpl;
+
+public class ItemService {
+	List<Item> itemlist = new ArrayList<Item>();
+	
+	public Item returnItem(Product p){
+		Item item = new Item();
+		item.setProduct_id(p.getId());
+		item.setProduct_name(p.getProduct_name());
+		item.setDang_price(p.getDang_price());
+		item.setFixed_price(p.getFixed_price());
+		item.setAmount(item.getDang_price() * item.getProduct_num());
+		item.setProduct_num(1);
+		return item;
+	}
+	
+	public List<Item> itemExist(int id){
+		ProductService ps = new ProductService();
+		if(itemlist.size() == 0){
+			List<Product> list = ps.findGood(id);
+			Product p = list.get(0);
+			Item item = returnItem(p);
+			itemlist.add(item);
+		}else{
+			List<Product> list = ps.findGood(id);
+			Item item = returnItem(list.get(0));
+			if(itemlist.contains(item)){
+				int index = itemlist.indexOf(item);
+				itemlist.get(index).setProduct_num(itemlist.get(index).getProduct_num()+1);
+			}else{
+				itemlist.add(item);
+			}
+		}
+		return itemlist;
+	}	
+	
+	/* 详细信息 */
+	public List<Product> findXiangxi(int id){
+		return new ItemDaoImpl().findAll(id);
+	}
+	
+	/* 修改Item */
+	public List<Item> changeItemNum(List<Item> list, int itemId, int num) {
+		for (Item item : list) {
+			if (item.getId() == itemId) {
+				item.setProduct_num(num);
+			}
+		}
+		itemlist = list;
+		return list;
+	}
+	
+	/* 假删除 */
+	List<Item> delItem = new ArrayList<Item>();
+	public List<Item> delete(List<Item> list , int productId){
+		for(Item item : list){
+			if(item.getProduct_id() == productId){
+				item.setHas_deleted(true);
+				delItem.add(item);
+			}
+		}
+		return delItem;
+	}
+	
+	/* 恢复Item */
+	public List<Item> turn(List<Item> delList, int itemId){
+		for(Item item : delList){
+			if(item.getProduct_id() == itemId){
+				item.setHas_deleted(false);
+				itemlist.add(item);
+			}
+		}
+		return itemlist;
+	}
+	
+	/* 彻底删除 */
+	public List<Item> deletedItem(List<Item> delList, int itemId){	
+		for(Item item : delList){
+			if(item.getProduct_id() == itemId){
+				delList.remove(delList.indexOf(item));
+			}
+		}
+		delItem = delList;
+		return delItem;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

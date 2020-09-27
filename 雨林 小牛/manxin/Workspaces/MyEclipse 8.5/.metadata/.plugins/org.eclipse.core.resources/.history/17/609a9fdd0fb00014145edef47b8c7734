@@ -1,0 +1,29 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8" contentType="text/html; charset=utf-8"%>
+<%@taglib uri="/struts-tags" prefix="s" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  </head>
+  
+  <body>
+   <h1>这是一个演示ValueStack的例子</h1>
+   <!-- 用来调试的标签 -->
+   
+   <!-- 输出标签 -->
+   	姓名：<s:property value="name"/>
+   	<br/>
+   <!-- 输出栈顶标签 -->
+   	栈顶：<s:property/><br/>
+   	城市：<s:property value="citys[0]"/><br/>
+   Request：<s:property value="#request"/><br/>
+  	 所有员工：<s:iterator value="emps">
+   				<s:property value="name"/>
+   		      </s:iterator><br/>
+ 	  页码：
+   <s:iterator begin="1" end="totalPage" var="p">
+   		<s:debug/>
+   		<s:property/>
+   </s:iterator>
+   
+  </body>
+</html>

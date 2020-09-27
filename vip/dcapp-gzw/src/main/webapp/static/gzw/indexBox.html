@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="utf-8">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="js/echarts.min.js"></script>
+	<script src="js/jquery-1.8.3.js"></script>
+	<script src="js/module/indexBox.js"></script>
+</head>
+<body>
+<div class="box">
+			<div class="left m-r-20">
+				<div class="small-box" id="businessGauge">
+				</div>
+				<div class="absoluteSpan businessSpan">效能</div>
+				<div class="absoluteSpan businessDataSpan">业务数据量</div>
+				<div class="small-box">
+					<div class="l-title">
+						<span>风险等级 / 告警等级</span>
+						<p class="right">
+							<span class="end"></span><span class="m-r-20">已处理</span>
+						</p>
+					</div>
+					<div class="l-content">
+						<div>红色<span class="red-font">风险</span>
+							<p>
+								<span class="line-font green" data-id="riskGR" style="">1</span><span class="line-font red " data-id="riskRR" style=""></span>
+							</p>
+							<span class="right m-r-20" data-id="riskRCount">4</span>
+						</div>
+						<div>橙色<span class="red-font">风险</span>
+							<p>
+								<span class="line-font green" data-id="riskGO" style=""></span><span class="line-font orange " data-id="riskOO" style=""></span>
+							</p>
+
+							<span class="right m-r-20" data-id="riskOCount">4</span>
+						</div>
+						<div>黄色<span class="red-font">风险</span>
+							<p>
+								<span class="line-font green" data-id="riskGY" ></span><span class="line-font yellow " data-id="riskYY"></span>
+							</p>
+							<span class="right m-r-20" data-id="riskYCount">7</span>
+						</div>
+					</div>
+					<div class="line1"></div>
+					<div class="l-content">
+						<div>红色<span class="yellow-font m-r-10">告警</span>
+							<p>
+								<span class="line-font green" data-id="alarmGR" style="">10</span><span class="line-font red " data-id="alarmRR" style=""></span>
+							</p>
+
+							<span class="right m-r-20" data-id="alarmRCount">10</span>
+						</div>
+
+						<div>橙色<span class="yellow-font m-r-10">告警</span>
+							<p>
+								<span class="line-font green" data-id="alarmGO" style="">3</span><span class="line-font orange " data-id="alarmOO" style=""></span>
+							</p>
+
+							<span class="right m-r-20" data-id="alarmOCount">13</span>
+						</div>
+						<div>黄色<span class="yellow-font m-r-10">告警</span>
+							<p>
+								<span class="line-font green" data-id="alarmGY" >16</span><span class="line-font yellow" data-id="alarmYY" style="width: 20%;"></span>
+							</p>
+							<span class="right m-r-20" data-id="alarmYCount">20</span>
+						</div>
+					</div>
+				</div>
+				<div class="small-box">
+					<p class="title">数据引擎监控情况</p>
+					<img src="image/pic1.png" alt="" class="small-box-img3"/>
+				</div>
+			</div>
+	        <div class="center-box left" style="margin-left: 7px;">
+	        	<div class="c-logo"><span>业务综合风险分析</span></div>
+				<div class="center-box-container" id="center-form"></div>
+	        </div>
+	        <div class="right ">
+	        	<div class="small-box small-box4" >
+					<p class="title">告警风险对比
+						<span class="risk"><i></i>风险</span>
+						<span class="alarm"><i></i>告警</span>
+
+
+					</p>
+					<div class="small-box-form" id="small-box-form4"></div>
+				</div>
+				<div class="big-box">
+					<p class="title">各专委会风险状况</p>
+					<div class="small-box-form6" id="small-box-form6" ></div>
+				</div>
+
+	        </div>
+		</div>
+
+</body>
+</html>

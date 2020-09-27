@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.apollo.mapper.projectRuleAttachMapper">
+	<sql id="columns">ID,PROJECT_ID,RULE_ID,STATUS,CREATE_DT,UPDATE_DT,CREATE_USER_ID,CREATE_USER_NAME,UPDATE_USER_ID,UPDATE_USER_NAME,UPLOAD_PATH,FILE_NAME
+	</sql>
+	<sql id="tableName">fm_project_rule_attach</sql>
+
+	<insert id="insertPorjectRuleAttach" parameterType="cn.rkylin.core.ApolloMap">
+		insert into
+		<include refid="tableName" />
+		(PROJECT_ID,RULE_ID,STATUS,CREATE_DT,CREATE_USER_ID,CREATE_USER_NAME,UPLOAD_PATH,FILE_NAME)
+		VALUES(#{projectId},#{ruleId},#{status},now(),#{createUserId},#{createUserName},#{uploadPath},#{fileName})
+	</insert>
+
+	<select id="findPorjectRuleAttach" resultType="java.util.Map">
+		select
+		<include refid="columns" />
+		from
+		<include refid="tableName" />
+		t
+		where 1=1 and t.STATUS = 1
+		<if test="null != projectId and '' != projectId">
+			and t.PROJECT_ID = #{projectId}
+		</if>
+		<if test="null != ruleId and '' != ruleId">
+			and t.RULE_ID = #{ruleId}
+		</if>
+	</select>
+
+	<update id="updatePorjectRuleAttach" parameterType="cn.rkylin.core.ApolloMap">
+		UPDATE
+		<include refid="tableName" />
+		SET STATUS =3,UPDATE_DT=now()
+		WHERE STATUS != 3
+		<if test="null != id and '' != id">
+			AND ID=#{id}
+		</if>
+		<if test="null != uid and '' != uid">
+			AND RULE_ID = #{uid}
+		</if>
+		<if test="null != projectId and '' != projectId">
+			AND PROJECT_ID = #{projectId}
+		</if>
+	</update>
+</mapper>

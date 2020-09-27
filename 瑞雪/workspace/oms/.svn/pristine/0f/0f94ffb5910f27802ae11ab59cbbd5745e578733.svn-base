@@ -1,0 +1,39 @@
+package cn.rkylin.oms.system.appClient.dao;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.appClient.domain.App;
+import cn.rkylin.oms.system.appClient.vo.AppVo;
+
+@Repository(value = "appDAO")
+public class AppDAOImpl implements IAppDAO {
+	@Autowired
+	protected IDataBaseFactory dao;
+	@Override
+	public void saveApp(App app) throws Exception {
+		dao.insert("saveApp_insert", app);
+		
+	}
+	
+	@Override
+	public void deleteApp(App app) throws Exception {
+		dao.update("saveApp_delete", app);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public AppVo getAppDetail(App app) throws Exception {
+		List list=dao.findAllList("getAppDetail", app);
+		return (AppVo) (list.size()>0?list.get(0):null);
+	}
+
+	@Override
+	public void updateApp(App app) throws Exception {
+		dao.update("saveApp_update", app);
+	}
+
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LocalCardRelateModel">
+    <resultMap id="LocalCardRelateMap" type="LocalCardRelateModel">
+        <result property="proCode" column="pro_code"/>
+        <result property="formatId" column="format_id"/>
+    </resultMap>
+    <sql id="columns">
+        pro_code,format_id
+    </sql>
+
+    <insert id="insert" parameterType="LocalCardRelateModel" useGeneratedKeys="true">
+        insert into local_card_relate
+        (pro_code
+        ,format_id
+        )
+        values(#{proCode}
+        ,#{formatId}
+        )
+    </insert>
+
+    <update id="update" parameterType="LocalCardRelateModel">
+        update local_card_relate set
+        <if test="formatId !=null">format_id = #{formatId}
+        </if>
+        where pro_code = #{proCode}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="proCode !=null">and pro_code = #{proCode}</if>
+            <if test="formatId !=null">and format_id = #{formatId}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="LocalCardRelateMap">
+        SELECT id,
+        <include refid="columns"/>
+        from local_card_relate
+        where id=#{proCode}
+    </select>
+
+
+    <select id="findFormatIdAll" parameterType="String" resultMap="LocalCardRelateMap">
+        SELECT
+        <include refid="columns"/>
+        from local_card_relate
+        where pro_code=#{proCode}
+    </select>
+
+
+    <select id="findAll" resultMap="LocalCardRelateMap">
+        select id,
+        <include refid="columns"/>
+        from local_card_relate
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="LocalCardRelateMap">
+        select id,
+        <include refid="columns"/>
+        from local_card_relate
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="LocalCardRelateModel">
+        delete from local_card_relate where pro_code = #{proCode} and format_id = #{formatId}
+    </delete>
+    <select id="findByFormatId" parameterType="Map" resultMap="LocalCardRelateMap">
+        SELECT
+        <include refid="columns"/>
+        from local_card_relate
+        where format_id=#{formatId}
+    </select>
+</mapper>
+
+

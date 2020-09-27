@@ -1,0 +1,239 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/common/taglibs.jsp" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>风险预警</title>
+    <%@ include file="/common/resource_show.jsp" %>
+    <script type="text/javascript" src="${ctx}/static/layer/layer.js"></script>
+    <style type="text/css">
+        input.datepick {
+            background: #FFF url(/ciqs/static/dec/images/dpn.date.pick.gif) no-repeat right
+        }
+
+        #title_a {
+            color: #ccc
+        }
+
+        #title_a:hover {
+            color: white;
+        }
+
+        .box-img-bg {
+            background-image: url(../static/show/disc/bg.png);
+            box-sizing: border-box;
+            width: 1198px;
+            height: 164px;
+            padding: 0 200px;
+            position: absolute;
+            display: none;
+            font-size: 20px;
+            line-height: 35px;
+            color: white;
+        }
+
+        .box-content-style {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+        
+        .hr{
+	        text-decoration: none;
+		    width: 140px;
+		    height: 50px;
+		    line-height: 75px;
+		    text-align: center;
+		    list-style-type: none;
+		    font-size: 18px;
+		    color: #FFF;
+		    float: right;
+        }
+        
+        .mytd{
+        padding-left: 55px;
+        }
+        
+        select{
+            width: 200px;
+        }
+    </style>
+    <script type="text/javascript">
+        function pageUtil(page) {
+            $("#guifanWeihuList").attr("action", "/ciqs/warning/guifanWeihuList?page=" + page);
+            $("#guifanWeihuList").submit();
+        }
+        
+       function edit(id){
+		layerIndex = layer.open({
+		  title:'修改',
+		  type: 2, 
+		  area: ['600px', '300px'],
+		    content: '${ctx}/warning/editWeihu.html?id='+id //这里content是一个普通的String
+		  });
+		}
+		
+		function getSelect(e){
+		$("#linkType").val('');
+			$("#linkType").find("option").each(function(k,v){
+				$(v).css("display","block");
+				if(v.getAttribute("parent")){
+					if(v.getAttribute("parent")==e.value){
+						$(v).css("display","block");
+					}else{
+						$(v).css("display","none");
+					}
+				}
+			});
+		}
+    </script>
+</head>
+<body class="bg-gary">
+<div class="freeze_div_list">
+    <div class="title-bg">
+        <div class=" title-position margin-auto white">
+            <div class="title">
+                <span class="font-24px" style="color:white;">规范执法/查询</span>
+            </div>
+            <%@ include file="/WEB-INF/jsp/userinfo.jsp" %>
+        </div>
+    </div>
+    <div class="margin-auto" style="background-color: #1b5ea8;height: 80px">
+        <div class=" title-position margin-auto white" style="display: inline;">
+        	<a class="hr"  style="margin-right:80px;color: white"  href="${ctx}/warning/guifanList">规范执法</a>
+        	<a class="hr" style="color: white">风险预警</a>
+        	<a class="hr" style="color: white">超流程预警</a>
+        </div>
+        <div style="width: 420px; height: 30px;float: left;display: inline;">
+<!--        		 <span style="color:white;height: 50px;display: block;font-size: 16px;padding-top: 20px;padding-left: 110px;">当前位置：规范执法 -查询</span> -->
+          <a class="hr" style="margin-left:30px;color: white"  href="${ctx}/warning/guifanWeihuList">规范执法 维护</a>
+          <a class="hr" style="margin-left:20px;color: white"  href="${ctx}/warning/guifanList">规范执法 查询</a>
+        </div>
+    </div>
+</div>
+<div class="blank_div_list">
+<!-- 	<div class="margin-auto width-1200" style="height: 50px;margin-top: 20px">当前位置：预警时长规则维护 - 查询</div> -->
+</div>
+<div class="margin-auto width-1200 search-box">
+    <div id="alertBoxId" class="box-img-bg"><span class="box-content-style" id="alertContentId"></span></div>
+    <form action="/ciqs/warning/guifanWeihuList" method="post" id="guifanWeihuList">
+        <table width="100%" border="0" class="table-search margin-auto">
+             <tr>
+                <td height="25" align="left"  class="mytd">业务名称：</td>
+                <td height="25" align="left"  class="mytd">流程名称：</td>
+                <td height="25" align="left"></td>
+                <td height="25" align="left"></td>
+            </tr>
+            <tr>
+                <td width="300px" height="50">
+                <select name="businesssType" id="businesssType"  class="search-input input-440px" onchange="getSelect(this)">
+                	<option value="">全部</option>
+               			<c:if test="${not empty typeList }">
+                            <c:forEach items="${typeList}" var="row">
+                                <c:if test="${obj.businessType == row.code}">
+                                    <option selected="selected" value="${row.code}">${row.name}</option>
+                                </c:if>
+                                <c:if test="${obj.businessType!= row.code}">
+                                    <option value="${row.code}">${row.name}</option>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+                </select>                                  
+               	</td>
+                <td width="300px" height="50">
+                <select name="linkType" id="linkType"  class="search-input input-440px" >
+                <option value="">全部</option>
+               			<c:if test="${not empty linkList }">
+                            <c:forEach items="${linkList}" var="row">
+                                <c:if test="${obj.linkType == row.linkType}">
+                                    <option selected="selected" value="${row.linkType}">${row.linkName}</option>
+                                </c:if>
+                                <c:if test="${obj.linkType!= row.linkType}">
+                                    <option  parent="${row.businessType}" value="${row.linkType}">${row.linkName}</option>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+                
+                </select>                                  
+               	</td>
+                <td style="width:250px">
+                    <input type="submit" class="search-btn fo" value="搜索" style="cursor: pointer;display: inline;"
+                           onclick="pageUtil('')"/>
+                </td>
+                <td>
+                    <input type="reset" class="search-btn fo" value="清空" style="cursor: pointer;display: inline;"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="margin-auto width-1200 tips">共找到<span class="yellow font-18px">
+	<c:if test="${not empty list }">
+        ${counts}
+    </c:if>
+	<c:if test="${empty list }">
+        0
+    </c:if>
+	</span>条记录
+</div>
+<div class="margin-auto width-1200  data-box">
+    <div class="margin-cxjg">
+        <table class="margin-cxjg_table" border="0" cellspacing="0" cellpadding="0">
+            <tr class="thead">
+                <td height="25">业务名称</td>
+                <td height="25">流程名称</td>
+                <td height="25">文件名称</td>
+                <td height="25">是否需要预警</td>
+                <td height="25">图片文件数量</td>
+                <td height="25">操作</td>
+            </tr>
+            <c:if test="${not empty list }">
+                <c:forEach items="${list}" var="row">
+                    <tr class="thead_nr">
+                        <td width="20%" height="50" align="center">${row.businessName}</td>
+                        <td width="19%" height="50" align="center">${row.linkName}</td>
+                        <td width="20%" height="50" align="center">${row.dicName}</td>
+                        <td width="15%" height="50" align="center">
+                        	<c:if test="${row.warning eq '0'}">
+	                        	不需要
+	                        </c:if>
+	                        <c:if test="${row.warning eq '1'}">
+	                        	需要
+	                        </c:if>
+                        </td>
+                        <td width="13%" height="50" align="center">${row.dicNum}</td>
+                        <td height="50" align="center" valign="middle">
+                            <a href="javascript:edit('${row.id}');">
+                                <span class="data-btn margin-auto" style="display:inline">修改</span></a>
+                       	</td> 
+                    </tr>
+                </c:forEach>
+            </c:if>
+            <tfoot>
+            <jsp:include page="/common/pageUtil.jsp" flush="true"/>
+            </tfoot>
+        </table>
+         <div style="text-align: center;margin: auto;margin-top: 10px;width:200px;padding-bottom: 10px;">
+			<input type="button" class="search-btn" value="保存"  onclick="save();"/>
+		</div>
+    </div>
+</div>
+<div class="margin-auto width-1200 tips"></div>
+</body>
+<script type="text/javascript">
+    $("li").mouseenter(function () {
+        var img = this.getElementsByTagName("img")[0];
+        var str = img.getAttribute("content");
+        var alertBox = document.getElementById("alertBoxId");
+        var alertContent = document.getElementById("alertContentId");
+        alertContent.innerText = str;
+        alertBox.style.display = 'table';
+    });
+
+    $("li").mouseleave(function () {
+        var alertBox = document.getElementById("alertBoxId")
+        alertBox.style.display = 'none';
+    });
+</script>
+</html>

@@ -1,0 +1,46 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	function f1(){
+		//var $obj = $('#d1');
+		//$obj.css('font-size','80px');
+		
+		//$('#d1').css('font-size','80px');
+		//$('#d1').css('color','red');
+		
+		//$('#d1').css('font-size','80px')
+		//.css('color','blue');
+		
+		$('#d1').css({'font-size':'90px','color':'yellow'});
+		
+	}
+	
+	//dom对象  ---> jQuery对象
+	function f2(){
+		var obj = document.getElementById('d1');
+		//dom对象  ---> jQuery对象
+		var $obj = $(obj);
+		$obj.css('font-style','italic');
+	}
+	
+	//jQuery对象  ---> dom对象
+	function f3(){
+		var $obj = $('#d1');
+		//jQuery对象  ---> dom对象
+		//var obj = $obj.get(0);
+		var obj = $obj.get()[0];
+		obj.innerHTML = 'hello java';
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<div id="d1">hello jQuery</div>
+	<a href="javascript:;" onclick="f2();">ClickMe</a>
+	
+	
+	
+</body>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yulin.text2.DeptMapper">
+	<select id="findAll" resultMap="Dept">
+		select * from dept;
+	</select>
+	<!-- 结果集映射： 表中的字段名和实体类中的属性名不符合 -->
+	<resultMap type="com.yulin.text2.Dept" id="Dept">
+		<id property="id" column="dept_id"/><!-- id特指主键 -->
+		<result property="name" column="dname"/>
+	</resultMap>
+	<!-- 查询1:1的两张表 -->
+	<!-- 利用一条SQL语句完成1:1查询 -->
+	<select id="findAlla" resultMap="DeptAll">
+		select * from dept d,dept_info di where d.dept_id = di.dept_id;
+	</select>
+	<resultMap type="com.yulin.text2.Dept" id="DeptAll">
+		<id property="id" column="dept_id"/>
+		<result property="name" column="dname"/>
+		<result property="location" column="location"/>
+		<association property="info" javaType="com.yulin.text2.DeptInfo">
+			<id property="deptId" column="dept_id"/>
+			<result property="info" column="info"/>
+		</association>
+	</resultMap>
+	<!-- 利用2条SQL语句完成1:1查询 -->
+	<select id="findDept" resultMap="Dept2">
+		select * from dept;
+	</select>
+	<select id="findInfo" parameterType="int" resultType="com.yulin.text2.DeptInfo">
+		select * from dept_info where dept_id = #{id};
+	</select>
+	<resultMap type="com.yulin.text2.Dept" id="Dept2">
+		<id property="id" column="dept_id"/>
+		<result property="name" column="dname"/>
+		<association property="info" select="findInfo" column="dept_id">
+			<id property="dept_id" column="dept_id"/>
+			<result property="info" column="info"/>
+		</association>
+	</resultMap>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

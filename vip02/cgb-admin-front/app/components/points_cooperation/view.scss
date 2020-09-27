@@ -1,0 +1,33 @@
+
+.points-vendor-download{
+  width: 730px;
+  .modal-body{
+    min-height: 100px;
+
+    .upload-btn{
+      width:80px;
+      height:28px;
+      z-index:2;
+    }
+    .upload-file{
+      position:absolute;
+      right:196px;
+      top:82px;
+      height:28px;
+      width:80px;
+      opacity:0;
+      z-index:2;
+      filter: alpha(opacity=0);
+      -moz-opacity: 0;
+    }
+    .font-size-12{
+      font-size: 12px;
+    }
+  }
+}
+
+
+
+
+
+

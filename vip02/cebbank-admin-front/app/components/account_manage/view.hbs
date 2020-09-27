@@ -1,0 +1,148 @@
+{{#component "accounts js-component" }}
+    <p class="account-title"><strong>- 账号管理 -</strong></p>
+    <div class="m-b-10">
+        <form id="form-search" class="form">
+            <fieldset>
+                <p class="filter-name">
+
+                <div class="span4">
+                    <label for="id">账号:</label>
+                    <input id="id" type="text" name="id" class="search-account search-input"
+                           value="{{id}}" maxlength="20" value="{{account}}">
+                </div>
+                <div class="span4">
+                    <label for="name">用户名:</label>
+                    <input id="name" type="text" name="name" class="search-account search-input"
+                           value="{{name}}" maxlength="30">
+                </div>
+                <div class="span4">
+                    <label for="orgSimpleName">机构简称:</label>
+                    <input id="orgSimpleName" type="text" name="orgSimpleName" class="search-account search-input"
+                           value="{{orgSimpleName}}">
+                </div>
+                </p>
+                <p class="filter-name">
+                     <span class="span4">
+                          <label for="roleName">角色:</label>
+                          <input id="roleName" type="text" name="roleName" class="search-account search-input"
+                                 value="{{roleName}}">
+                    </span>
+
+                <span class="span4">
+                    <label for="checkStatus">审核状态:</label>
+                    <select id="checkStatus" type="text" name="checkStatus" class="search-account search-input">
+                        <option value="" {{#equals checkStatus ""}}selected{{/equals}}>全部</option>
+                        <option value="0" {{#equals checkStatus "0"}}selected{{/equals}}>待审核</option>
+                        <option value="1" {{#equals checkStatus "1"}}selected{{/equals}}>已同意</option>
+                        <option value="2" {{#equals checkStatus "2"}}selected{{/equals}}>已拒绝</option>
+                    </select>
+                </span>
+                <span class="span4">
+                    <label for="status">状态:</label>
+                        <select id="status" type="text" name="status" class="search-account search-input">
+                            <option value="" {{#equals status ""}}selected{{/equals}}>全部</option>
+                            <option value="0" {{#equals status "0"}}selected{{/equals}}>启用</option>
+                            <option value="1" {{#equals status "1"}}selected{{/equals}}>停用</option>
+                        </select>
+                </span>
+
+                </p>
+                <input class="btn btn-success btn-small pull-right margin-right-10" type="submit" value="查询"/>
+            </fieldset>
+        </form>
+        <div class="btn-group add-account">
+            {{#authorial "account_add"}}
+                <button class="btn btn-info btn-small js-account-new" data-orgname="{{_USER_.orgFullName}}">添加账号</button>
+            {{/authorial}}
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="8%">序号</th>
+            <th width="10%">账号</th>
+            <th width="10%">用户名</th>
+            <th width="15%">手机号</th>
+            <th width="10%">机构简称</th>
+            <th width="8%">角色</th>
+            <th width="10%">审核状态</th>
+            <th width="10%">状态</th>
+            <th width="30%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}" data-roles="{{json adminRoleDtos}}" data-data="{{json this}}">
+                <td>{{add @index 1}}</td>
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+                <td>{{mobile}}</td>
+                <td>{{orgSimpleName}}</td>
+                <td>{{#each adminRoleDtos}}{{roleName}}{{#if @last}}&nbsp;{{else}},{{/if}}{{/each}}</td>
+                <td>{{#equals checkStatus 0}}待审核{{/equals}}
+                    {{#equals checkStatus 1}}已同意{{/equals}}
+                    {{#equals checkStatus 2}}已拒绝{{/equals}}
+                </td>
+                <td>
+                {{#authorial "account_startStop"}}
+                    {{#equals status "0"}}
+                        <a href="javascript:void(0);" class="js-status0" id="{{id}}" data-toggle="confirm"
+                           data-title="确定停用该账号吗?" data-event="confirm:js-status0"><i
+                                class="icon-btn-on"></i></a>
+                    {{else}}
+                        {{#equals status "1"}}
+                            <a href="javascript:void(0);" class="js-status1" id="{{id}}" data-role="{{adminRoleDtos}}" data-toggle="confirm"
+                               data-title="确定启用该账号吗?" data-event="confirm:js-status1"><i
+                                    class="icon-btn-off"></i></a>
+                        {{/equals}}
+                    {{/equals}}
+                {{else}}
+                    <i {{#equals status '0'}}class="icon-btn-on" {{/equals}}></i>
+                    <i {{#equals status '1'}}class="icon-btn-off" {{/equals}}></i>
+                {{/authorial}}
+                </td>
+                <td>
+                    {{#authorial "account_audit"}}
+                        {{#equals checkStatus 0}}
+                            <button class="btn btn-sm btn-info js-check-status">审核</button>
+                        {{/equals}}
+                    {{/authorial}}
+                    {{#authorial "account_edit"}}
+                        <button class="btn btn-sm btn-info js-account-update">编辑</button>
+                    {{/authorial}}
+                    <button class="btn btn-sm btn-info js-account-view">查看</button>
+                    {{#authorial "account_delete"}}
+                        {{#equals status 1}}
+                            <button class="btn btn-sm  btn-info js-account-delete" id="{{id}}" data-toggle="confirm"
+                                    data-title="您确定删除吗?" data-content="删除之后无法恢复,确定删除吗?" data-event="confirm:delete-account">
+                                删除
+                            </button>
+                        {{/equals}}
+                    {{/authorial}}
+                    {{#authorial "account_password"}}
+                        {{#equals checkStatus 1}}
+                            <button class="btn btn-sm btn-info js-password-edit">密码修改</button>
+                        {{/equals}}
+                    {{/authorial}}
+                    {{#authorial "account_password"}}
+                        {{#equals checkStatus 2}}
+                            <button class="btn btn-sm btn-info js-password-edit">密码修改</button>
+                        {{/equals}}
+                    {{/authorial}}
+                    {{#authorial "account_assignRole"}}
+                        <button class="btn btn-sm btn-info js-account-assign">分配角色</button>
+                    {{/authorial}}
+
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <!--<div class="pagination" data-total="{{_DATA_.total}}">-->
+        {{#equals _DATA_.total "0"}}
+            <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+        {{else}}
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        {{/equals}}
+    </div>
+{{/component}}

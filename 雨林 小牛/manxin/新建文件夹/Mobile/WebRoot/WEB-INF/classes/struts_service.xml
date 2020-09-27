@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    <struts>
+    	<package name="service" namespace="/service" extends="yidong">
+    	<!-- 查询所有 -->
+    		<action name="findService" class="com.service.action.ServiceAction">
+    			<param name="pageSize">4</param>
+    			<result name="success">
+    				/WEB-INF/service/service_list.jsp
+    			</result>
+    		</action>
+    		<!-- 暂停 -->
+    		<action name="pauseAccount" class="com.service.action.PauseAccount">
+				<result name="success" type="json">
+					<param name="root">ok</param>
+				</result>
+			</action>
+    		<!-- 开通 -->
+    		<action name="startAccount" class="com.service.action.StartAccount">
+				<result name="success" type="json">
+					<param name="root">ok</param>
+				</result>
+			</action>
+			<!-- 跳转到添加 -->
+			<action name="serviceAdd" class="com.service.action.ToServiceAdd">
+				<result name="success">
+					/WEB-INF/service/service_add.jsp
+				</result>
+			</action>
+			<!-- 添加 -->
+			<action name="ServiceAdd" class="com.service.action.ServiceAdd">
+				<result name="success" type="redirectAction">
+					findService
+				</result>
+			</action>
+			<!-- 跳转到修改页面 -->
+			<action name="serviceUp" class="com.service.action.ServiceModi">
+				<result name="success">
+					/WEB-INF/service/service_modi.jsp
+				</result>
+			</action>
+			<!-- 修改 -->
+			<action name="Up" class="com.service.action.ServiceUp">
+				<result name="success" type="redirectAction">
+					findService
+				</result>
+			</action>
+
+			<!-- 删除 -->
+			<action name="del" class="com.service.action.ServiceDel">
+				<result name="success" type="redirectAction">
+					findService
+				</result>
+			</action>
+    	</package>
+    </struts>

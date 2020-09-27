@@ -1,0 +1,102 @@
+{{#component "brand-detail js-component"}}
+    <p class="components-title"><div class="main-box-title">品牌广告详情</div></p>
+    <div class="main-box col-box main-box-table-detail-t table-infor">
+        <form class="form form-aligned brand-detail-form">
+            <div class="overflow-hidden" data-data="{{json this}}">
+                <div class="form-information control-group">
+                    <label>品牌ID：</label>
+                    <input class="wh270 brand-id" type="text" readonly="readonly" name="goodsBrandId" value="">
+                </div>
+                <div class="form-information control-group">
+                    <label>品牌名称：</label>
+                    <input class="wh270 barnd-name" type="text" readonly="readonly" value="">
+                </div>
+                <!--<div class="form-information control-group">-->
+                    <!--<label><span class="required">*</span>品牌分类：</label>-->
+                    <!--<select class="wh270 brand-type" name="brandCategoryId" required></select>-->
+                    <!--<span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>-->
+                    <!--<input type="hidden" name="brandCategoryName" class="brand-type-name">-->
+                    <!--<input type="hidden" class="brand-type-id" value="{{_DATA_.brandCategoryId}}">-->
+                <!--</div>-->
+                <div class="form-information control-group">
+                    <label><span class="required">*</span>TOP广告图片：</label>
+                    <input type="button" class="btn btn-success btn-small js-icon-upload" value="上传图片">
+                    <input type="hidden" id="brandImage" name="topPic" value="{{_DATA_.topPic}}" required>
+                    <span class="note-error-empty"><i>&times;</i> 必填 请上传图片</span>
+                </div>
+                <div class="form-information control-group">
+                    <label>图片预览：</label>
+                    {{#if _DATA_.topPic}}
+                        <img data-original="{{_DATA_.topPic}}" class="js-brand-img brand-img"/>
+                    {{else}}
+                        <span class="brand-img-none">暂无图片</span>
+                        <img data-original="{{_DATA_.topPic}}" class="js-brand-img brand-img" style="display: none"/>
+                    {{/if}}
+                </div>
+
+                <div class="form-information control-group">
+                    <span class="notice">注意：请确保广告ID对应的广告审核通过且有效！</span>
+                </div>
+                <div class="form-information control-group">
+                    <label><span class="required">*</span>轮播广告ID1：</label>
+                    <input class="wh270 carousel-ad" type="text" name="slide1Id" value="{{_DATA_.slide1Id}}" required
+                           maxlength=10 pattern="^[0-9]\d*$">
+                    <span class="note-error"><i>&times;</i> 请输入正整数</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                    <span class="slide-error-none"></span>
+                </div>
+                <div class="form-information control-group">
+                    <label><span class="required">*</span>轮播广告ID2：</label>
+                    <input class="wh270 carousel-ad" type="text" name="slide2Id" value="{{_DATA_.slide2Id}}" required
+                           maxlength=10 pattern="^[0-9]\d*$">
+                    <span class="note-error"><i>&times;</i> 请输入正整数</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                    <span class="slide-error-none"></span>
+                </div>
+                <div class="form-information control-group">
+                    <label>轮播广告ID3：</label>
+                    <input class="wh270 carousel-ad" type="text" name="slide3Id" value="{{_DATA_.slide3Id}}"
+                           maxlength=10>
+                    <span class="note-error slide3"><i>&times;</i> 请输入正整数</span>
+                    <span class="slide-error-none"></span>
+                </div>
+                <div class="form-information control-group">
+                    <label>轮播广告ID4：</label>
+                    <input class="wh270 carousel-ad" type="text" name="slide4Id" value="{{_DATA_.slide4Id}}"
+                           maxlength=10>
+                    <span class="note-error slide4"><i>&times;</i> 请输入正整数</span>
+                    <span class="slide-error-none"></span>
+                </div>
+                <div class="form-information control-group">
+                    <label>轮播广告ID5：</label>
+                    <input class="wh270 carousel-ad" type="text" name="slide5Id" value="{{_DATA_.slide5Id}}"
+                           maxlength=10>
+                    <span class="note-error slide5"><i>&times;</i> 请输入正整数</span>
+                    <span class="slide-error-none"></span>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="main-box-title"> 限时特价商品</div>
+            <div class="m-t-10">
+                <button class="btn btn-info btn-small add-items">新增</button>
+            </div>
+            <div class="clear"></div>
+            <table class="list-tabble-con m-t-10 border" width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th scope="col" width="70">商品编码</th>
+                    <th scope="col" width="90">商品名称</th>
+                    <th scope="col" width="70">限时顺序</th>
+                    <th scope="col" width="60">操作</th>
+                </tr>
+                <tbody class="special-items-dto">
+                </tbody>
+            </table>
+
+            <div class="clear"></div>
+            <div class="admin-btn">
+                <input class="btn btn-info btn-medium" type="submit" value="确 定" />
+                <a class="btn btn-info btn-medium" href="{{_HREF_.mainContext}}/mall/brands/brands-info-all">返 回</a>
+            </div>
+        </form>
+    </div>
+{{/component}}

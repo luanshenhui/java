@@ -1,0 +1,240 @@
+{
+    "loop": [
+        {
+            "startindex": 16,
+            "endindex": 19,
+            "type": 2,
+            "detail": 15
+        }
+    ],
+    "item": [
+        {
+            "index": 1,
+            "nameja": "ｼｽﾃﾑｺｰﾄﾞ",
+            "nameen": "SYS-C",
+            "startpos": 1,
+            "length": 1,
+            "type": 1,
+            "recvuseflg": 1,
+            "spaceflg": 0,
+            "telegtype": 1,
+            "values": [ "H" ]
+        },
+      {
+        "index": 2,
+        "nameja": "電文種別",
+        "nameen": "DENBUN-SYUBETU",
+        "startpos": 2,
+        "length": 2,
+        "type": 1,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 1,
+        "values": [ "OE" ]
+      },
+      {
+        "index": 3,
+        "nameja": "発信元ｺｰﾄﾞ",
+        "nameen": "FROM-C",
+        "startpos": 4,
+        "length": 2,
+        "type": 1,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 1,
+        "values": [ "TP", "FJ", "ND" ]
+      },
+      {
+        "index": 4,
+        "nameja": "送信日時",
+        "nameen": "SEND-DATE",
+        "startpos": 6,
+        "length": 14,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 1,
+        "values": []
+      },
+      {
+        "index": 5,
+        "nameja": "処理区分",
+        "nameen": "SYORI-KBN",
+        "startpos": 20,
+        "length": 1,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 1,
+        "telegtype": 1,
+        "values": []
+      },
+      {
+        "index": 6,
+        "nameja": "継続ﾌﾗｸﾞ",
+        "nameen": "CONT-F",
+        "startpos": 21,
+        "length": 1,
+        "type": 1,
+        "recvuseflg": 1,
+        "spaceflg": 1,
+        "telegtype": 1,
+        "values": [ "E" ]
+      },
+      {
+        "index": 7,
+        "nameja": "応答種別",
+        "nameen": "SYUBETU",
+        "startpos": 22,
+        "length": 2,
+        "type": 1,
+        "recvuseflg": 1,
+        "spaceflg": 1,
+        "telegtype": 1,
+        "values": [ "00", "10", "20", "30", "SP" ]
+      },
+      {
+        "index": 8,
+        "nameja": "電文長",
+        "nameen": "DENBUN-LNG",
+        "startpos": 24,
+        "length": 7,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 1,
+        "values": []
+      },
+      {
+        "index": 9,
+        "nameja": "空白",
+        "nameen": "FILLER",
+        "startpos": 31,
+        "length": 20,
+        "type": 1,
+        "recvuseflg": 1,
+        "spaceflg": 1,
+        "telegtype": 1,
+        "values": [ "SP" ]
+      },
+      {
+        "index": 10,
+        "nameja": "受診日",
+        "nameen": "DATE",
+        "startpos": 51,
+        "length": 8,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 2,
+        "values": []
+      },
+      {
+        "index": 11,
+        "nameja": "当日ＩＤ",
+        "nameen": "DATEID",
+        "startpos": 59,
+        "length": 4,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 2,
+        "values": []
+      },
+      {
+        "index": 12,
+        "nameja": "患者ＩＤ",
+        "nameen": "KANJAID",
+        "startpos": 63,
+        "length": 10,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 2,
+        "values": []
+      },
+      {
+        "index": 13,
+        "nameja": "オーダ番号",
+        "nameen": "ORDERNO",
+        "startpos": 73,
+        "length": 8,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 2,
+        "values": []
+      },
+      {
+        "index": 14,
+        "nameja": "バージョン",
+        "nameen": "VERSION",
+        "startpos": 81,
+        "length": 2,
+        "type": 1,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 2,
+        "values": []
+      },
+      {
+        "index": 15,
+        "nameja": "依頼可変データ数",
+        "nameen": "DATALEN",
+        "startpos": 84,
+        "length": 3,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 2,
+        "values": []
+      },
+      {
+        "index": 16,
+        "nameja": "データ種別－１",
+        "nameen": "DATATYPE-1",
+        "startpos": 87,
+        "length": 3,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 2,
+        "values": []
+      },
+      {
+        "index": 17,
+        "nameja": "検査項目コード－１",
+        "nameen": "IRAICD-1",
+        "startpos": 90,
+        "length": 6,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 2,
+        "values": []
+      },
+      {
+        "index": 18,
+        "nameja": "ＳＦＸ－１",
+        "nameen": "SFX-1",
+        "startpos": 96,
+        "length": 2,
+        "type": 2,
+        "recvuseflg": 1,
+        "spaceflg": 0,
+        "telegtype": 2,
+        "values": []
+      },
+      {
+        "index": 19,
+        "nameja": "検査結果－１",
+        "nameen": "KEKKA-1",
+        "startpos": 98,
+        "length": 8,
+        "type": 1,
+        "recvuseflg": 1,
+        "spaceflg": 1,
+        "telegtype": 2,
+        "values": []
+      }
+    ]
+}

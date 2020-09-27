@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    <struts>
+    	<!-- 拦截器演示的小例子 -->
+    	<package name="demo" namespace="/demo" extends="struts-default">
+    		<!-- 注册拦截器 -->
+    		<interceptors>
+    			<interceptor name="someInter" class="com.interceptor.SomeInterceptor"></interceptor>
+    		</interceptors>
+    		<action name="some" class="com.action.SomeAction">
+    			<!-- 引用自定义拦截器，该引用会使默认拦截器引用失效 -->
+    			<interceptor-ref name="someInter"></interceptor-ref>
+    			<interceptor-ref name="defaultStack"></interceptor-ref>
+    			
+    			<result name="success">
+    				/WEB-INF/jsp/ok.jsp
+    			</result>
+    			<result name="error">
+    				/WEB-INF/jsp/error.jsp
+    			</result>
+    		</action>
+    	</package>
+    </struts>

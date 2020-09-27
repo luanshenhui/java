@@ -1,0 +1,23 @@
+<html>
+ <head>
+    <title>e3.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <script type="text/javascript" src="../js/jquery-1.4.3.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('a').click(function(e){
+				//e:对底层事件对象的封装
+				//target属性返回的是一个dom对象
+				//var obj = e.target;
+				//alert(obj.innerHTML);
+				alert(e.pageX + ',' + e.pageY);
+			});
+		});
+  </script>
+  </head>
+  <body style="font-size: 30px;">
+   <a href="javascript:;" id="a1">hello jQuery</a><br/>
+   <a href="javascript:;" id="a2">hello java</a><br/>
+  </body>
+</html>

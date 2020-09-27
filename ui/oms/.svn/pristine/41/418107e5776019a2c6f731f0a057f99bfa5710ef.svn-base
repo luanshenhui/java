@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.user.dao.UserDAOImpl">
+  <resultMap id="BaseResultMap" type="cn.rkylin.oms.system.user.domain.WF_ORG_USER" >
+    <id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="USER_ACCOUNT" property="userAccount" jdbcType="VARCHAR" />
+    <result column="USER_FULLNAME" property="userFullname" jdbcType="VARCHAR" />
+    <result column="USER_PASSWORD" property="userPassword" jdbcType="VARCHAR" />
+    <result column="USER_DESCRIPTION" property="userDescription" jdbcType="VARCHAR" />
+    <result column="USER_PASSWORD_CHANGED" property="userPasswordChanged" jdbcType="TIMESTAMP" />
+    <result column="USER_ACCOUNT_ENABLED" property="userAccountEnabled" jdbcType="CHAR" />
+    <result column="USER_ACCOUNT_LOCKED" property="userAccountLocked" jdbcType="CHAR" />
+    <result column="USER_ACCOUNT_CREATED" property="userAccountCreated" jdbcType="TIMESTAMP" />
+  </resultMap>
+	<sql id="Base_Column">
+	</sql>
+	
+	<select id="pageSelectUser" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.user.vo.UserVO" >
+    select USER_ID, USER_ACCOUNT, USER_FULLNAME, USER_PASSWORD, USER_DESCRIPTION,
+      USER_PASSWORD_CHANGED, USER_ACCOUNT_ENABLED, (case
+         when USER_ACCOUNT_LOCKED = '1' then
+          '是'
+         else
+          '否'
+       end) as USER_ACCOUNT_LOCKED, USER_ACCOUNT_CREATED
+    from WF_ORG_USER
+		where 1=1
+		<if test="userId != null">
+			and USER_ID =#{userId}
+		</if>
+		<if test="userAccount != null">
+			and USER_ACCOUNT = #{userAccount}
+		</if>
+		<if test="userFullname != null">
+			and USER_FULLNAME like #{userFullname}
+		</if>
+		<if test="userAccountLocked != null">
+			USER_ACCOUNT_LOCKED = #{userAccountLocked}
+		</if>
+		<if test="unitID != null">
+			and USER_ID exist
+	       (SELECT DISTINCT (B.USER_ID)
+	          FROM WF_ORG_UNIT A, WF_ORG_USER_UNIT B
+	         WHERE A.UNIT_ID = B.UNIT_ID
+	           AND A.UNIT_ID = #{unitID})
+		</if>
+		<if test="roleId != null">
+			USER_ID exist
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.ROLE_ID = #{roleId})
+		</if>
+		<if test="stationId != null">
+    		USER_ID exist
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_STATION A
+	         WHERE A.STATION_ID = #{stationId})
+		</if>
+		<if test="userPassword != null">
+			USER_PASSWORD = #{userPassword}
+		</if>
+   </select>
+</mapper>

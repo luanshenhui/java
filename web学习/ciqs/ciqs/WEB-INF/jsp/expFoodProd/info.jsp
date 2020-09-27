@@ -1,0 +1,550 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>出口食品生产企业备案</title>
+<%@ include file="/common/resource_show.jsp"%>
+<link type="text/css" rel="stylesheet" href="${ctx}/static/dec/styles/dpn.css" />
+		
+<style type="text/css">
+	input.datepick{background:#FFF url(/ciqs/static/dec/images/dpn.date.pick.gif) no-repeat right}
+</style>
+<link rel="stylesheet" href="${ctx}/static/viewer/assets/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="${ctx}/static/viewer/dist/viewer.css"/>
+<link rel="stylesheet" href="${ctx}/static/viewer/demo/css/main.css"/>
+<style>
+/* a:link, a:visited { */
+/*     color:white; */
+/*     text-decoration: none; */
+/* } */
+.mutd {
+    border: solid 1px #dcdcdc;
+}
+</style>
+<script src="${ctx}/static/viewer/assets/js/jquery.min.js"></script>
+<script src="${ctx}/static/viewer/assets/js/bootstrap.min.js"></script>
+<script src="${ctx}/static/viewer/dist/viewer.js"></script>
+<script src="${ctx}/static/viewer/demo/js/main.js"></script>
+<script type="text/javascript" src="/ciqs/cuplayer/Images/swfobject.js"></script>
+<script type="text/javascript"> 
+		
+		function mytype(type){
+			if(type){
+				if(type=='02'){
+					return "备案受理";
+				}
+				if(type=='020'){
+					return "补充补正";
+				}
+				if(type=='13'){
+					return "评审组任务分配";
+				}
+				if(type=='031'){
+					return "文件审核";
+				}
+				if(type=='0310'){
+					return "文件审核补充补正";
+				}
+				if(type=='032'){
+					return "采信审核";
+				}
+				if(type=='0320'){
+					return "补充补正";
+				}
+				if(type=='033'){
+					return "现场检查";
+				}
+				if(type=='034'){
+					return "跟踪检查";
+				}
+				if(type=='0340'){
+					return "补充补正(跟踪检查企业整改)";
+				}
+				if(type=='041'){
+					return "备案材料终审";
+				}
+				if(type=='042'){
+					return "备案审批决定";
+				}
+				if(type=='0330'){
+					return "现场检查整改";
+				}
+			}
+		}
+		function myfile(type){
+			if(type){
+				if(type=='01'){
+					return "暂停备案通知书";
+				}
+				if(type=='02'){
+					return "恢复备案通知书";
+				}
+				if(type=='03'){
+					return "撤销备案通知书";
+				}
+				if(type=='04'){
+					return "注销备案通知书";
+				}
+				if(type=='05'){
+					return "不予备案通知书";
+				}
+				if(type=='06'){
+					return "不予变更通知书";
+				}
+				if(type=='07'){
+					return "予以受理通知书 ";
+				}
+				if(type=='08'){
+					return "不予受理通知书";
+				}
+				if(type=='09'){
+					return "补充补正通知书";
+				}
+				if(type=='10'){
+					return "评审任务通知书";
+				}
+				if(type=='11'){
+					return "行政许可申请材料接收清单";
+				}
+				if(type=='12'){
+					return "予以备案通知书";
+				}
+			}
+		}
+
+		function dualtype(type){
+			if(!type){
+				return "提交";
+			}
+			if(type=='01'){
+				return "岗内流转";
+			}
+			if(type=='02'){
+				return "受理补充补正";
+			}
+			if(type=='03'){
+				return "不予受理";
+			}
+			if(type=='04'){
+				return "予以受理";
+			}
+			if(type=='05'){
+				return "同意审批决定";
+			}
+			if(type=='06'){
+				return "退回";
+			}
+			if(type=='0101'){
+				return "文审岗位内流转";
+			}
+			if(type=='0102'){
+				return "文审补充补正";
+			}
+			if(type=='0103'){
+				return "文审结束";
+			}
+			if(type=='0301'){
+				return "合格,无需整改";
+			}
+			if(type=='0302'){
+				return "基本合格,仍需整改";
+			}
+			if(type=='0303'){
+				return "不合格";
+			}
+		}
+
+		$(function(){
+			  $.ajax({
+    			url:"getInfoData"+location.search,
+    			type:"get",
+    			dataType:"json",
+    			success:function(data){
+    			console.log(data);
+    				var o = data.obj;
+//     				var dto = data.dto;
+    				var list = data.list;
+    				var rdmPsn = data.rdmPsn;
+    				if(data.checkPsn && data.checkTime){
+	    				var checkPsn=data.checkPsn.name;
+	    				var checkTime=data.checkTime;
+	    				$("#name_5").html(checkPsn);
+	    				$("#time_5").html(checkTime);
+    				}
+	    			if(o){
+	    			$("#time_1").text(o.startStrdate.substring(0,16));
+	    			$("#name_1").text(o.orgname);
+	    			 	var url ="/ciqs/expFoodPOF/toTextList?apply_no="+o.applycode+"&compName="+o.orgname;
+    					 $("#xcid").attr("href",url);
+		    				$("#d1").append(
+		    				  "<tr class=\"table_xqlbbj\">"+
+							  	"<td width='34%'>生产企业名称 </td>"+
+							  	"<td width='33%'>企业申请时间 </td>"+
+							  	"<td width='33%'>详情 :</td>"+
+							  "</tr>"+
+							   "<tr>"+
+							  "<td width='34%'><span>"+o.orgname+"</span></td>"+
+							  	"<td width='33%'><span>"+new Date(o.startdate).toLocaleDateString().replace("/", "-").replace("/", "-")+"</span></td>"+
+							  	"<td width='33%'><a style='color:#23527c' href='infoList"+location.search+"'>查看</a></td>"+
+							  "</tr>");
+	    			}
+	    			if(list && list.length>0){
+	    			var title="<tr class='table_xqlbbj'>"+
+					      "<td width='220' height='35' align='center' valign='bottom'>处理人</td>"+
+					      "<td width='220' height='35' align='center' valign='bottom'>处理机构</td>"+
+					      "<td width='220' height='35' align='center' valign='bottom'>处理节点</td>"+
+					      "<td width='220' height='35' align='center' valign='bottom'>处理决定</td>"+
+					      "<td width='220' height='35' align='center' valign='bottom'>处理意见</td>"+
+					      "<td width='220' height='35' align='center' valign='bottom'>处理时间</td>"+
+					      "<td width='220' height='35' align='center' valign='bottom'>生成模板</td>"+
+					      "<td width='220' height='35' align='center' valign='bottom'>相关附件</td>"+
+				    	"</tr>";
+	    				 var t1=title;var t2=title;var t3=title;var t4=title;var t5=title;var t6=title;var t7=title;
+	    				 for(var i=0;i<list.length;i++){
+	    				 	 if(list[i].applynote=='02' || list[i].applynote=='020'){
+	    				 	 	var fileList="";
+	    				 	 	var mbList="";
+							      if(list[i].fileList && list[i].fileList.length>0){
+								      for(var k=0;k<list[i].fileList.length;k++){
+								     	fileList+="<a style='color:#23527c' href='fileList?fileid="+list[i].fileList[k].fileid+"&filetype="+list[i].fileList[k].filetype+"&filename="+list[i].fileList[k].filename+"&path="+list[i].fileList[k].path+"&startdate="+list[i].fileList[k].startdate+"'>"+list[i].fileList[k].filename+"</a><br/>";
+								      }
+							      }
+							     if(list[i].mbList && list[i].mbList.length>0){
+								      for(var k=0;k<list[i].mbList.length;k++){
+								     	mbList+="<a style='color:#23527c' href='mbList?noticetype="+list[i].mbList[k].noticetype+"&noticeid="+list[i].mbList[k].noticeid+"&applyid="+list[i].mbList[k].applyid+"'>"+myfile(list[i].mbList[k].noticetype)+"</a><a style='color:#23527c' href='javaScript:void(0)'  onclick='seal(this)'>（盖章）<a/><br/>";
+								      }
+							      }
+// 	    				 	 $("#d2").append(title)
+								t2+="<tr class='table_xqlbnr'>"+
+							      "<td width='220' align='center'>"+list[i].username+"</td>"+
+							      "<td width='220' align='center'>"+list[i].belongorg+"</td>"+
+							      "<td width='220' align='center'>"+mytype(list[i].applynote)+"</td>"+
+							      "<td width='220' align='center'>"+dualtype(list[i].dualtype)+"</td>"+
+							      "<td width='220' align='center'>"+list[i].dualcontent+"</td>"+
+							      "<td width='220' align='center'>"+list[i].createdate+"</td>"+
+							      "<td width='220' align='center'>"+mbList+"</td>"+
+							      "<td width='220' align='center'>"+fileList+"</td>"+
+							    "</tr>";
+							    priSelf(2,list[i]);
+		    				 }
+		    				 if(list[i].applynote=='13'){
+		    				 	var fileList="";
+	    				 	 	var mbList="";
+							      if(list[i].fileList && list[i].fileList.length>0){
+								      for(var k=0;k<list[i].fileList.length;k++){
+								     	fileList+="<a style='color:#23527c' href='fileList?fileid="+list[i].fileList[k].fileid+"&filetype="+list[i].fileList[k].filetype+"&filename="+list[i].fileList[k].filename+"&path="+list[i].fileList[k].path+"&startdate="+list[i].fileList[k].startdate+"'>"+list[i].fileList[k].filename+"</a><br/>";
+								      }
+							      }
+							      if(list[i].mbList && list[i].mbList.length>0){
+								      for(var k=0;k<list[i].mbList.length;k++){
+								     	mbList+="<a style='color:#23527c' href='mbList?noticetype="+list[i].mbList[k].noticetype+"&noticeid="+list[i].mbList[k].noticeid+"&applyid="+list[i].mbList[k].applyid+"'>"+myfile(list[i].mbList[k].noticetype)+"</a><a style='color:#23527c' href='javaScript:void(0)'  onclick='seal(this)'>（盖章）<a/><br/>";
+								      }
+							      }
+		    				 t3+="<tr class='table_xqlbnr'>"+
+							      "<td width='220' align='center'>"+list[i].username+"</td>"+
+							      "<td width='220' align='center'>"+list[i].belongorg+"</td>"+
+							      "<td width='220' align='center'>"+mytype(list[i].applynote)+"</td>"+
+							       "<td width='220' align='center'>"+dualtype(list[i].dualtype)+"</td>"+
+							      "<td width='220' align='center'>"+list[i].dualcontent+"</td>"+
+							      "<td width='220' align='center'>"+list[i].createdate+"</td>"+
+							      "<td width='220' align='center'>"+mbList+"</td>"+
+							      "<td width='220' align='center'>"+fileList+"</td>"+
+							    "</tr>";
+							     priSelf(3,list[i]);
+		    				 }
+		    				 if(list[i].applynote=='031' || list[i].applynote=='0310' || list[i].applynote=='032'){
+		    				 	var fileList="";
+	    				 	 	var mbList="";
+							      if(list[i].fileList && list[i].fileList.length>0){
+								      for(var k=0;k<list[i].fileList.length;k++){
+								     	fileList+="<a style='color:#23527c' href='fileList?fileid="+list[i].fileList[k].fileid+"&filetype="+list[i].fileList[k].filetype+"&filename="+list[i].fileList[k].filename+"&path="+list[i].fileList[k].path+"&startdate="+list[i].fileList[k].startdate+"'>"+list[i].fileList[k].filename+"</a><br/>";
+								      }
+							      }
+							     if(list[i].mbList && list[i].mbList.length>0){
+								      for(var k=0;k<list[i].mbList.length;k++){
+								     	mbList+="<a style='color:#23527c' href='mbList?noticetype="+list[i].mbList[k].noticetype+"&noticeid="+list[i].mbList[k].noticeid+"&applyid="+list[i].mbList[k].applyid+"'>"+myfile(list[i].mbList[k].noticetype)+"</a><a style='color:#23527c' href='javaScript:void(0)'  onclick='seal(this)'>（盖章）<a/><br/>";
+								      }
+							      }
+		    				 t4+="<tr class='table_xqlbnr'>"+
+							        "<td width='220' align='center'>"+list[i].username+"</td>"+
+							      "<td width='220' align='center'>"+list[i].belongorg+"</td>"+
+							      "<td width='220' align='center'>"+mytype(list[i].applynote)+"</td>"+
+							       "<td width='220' align='center'>"+dualtype(list[i].dualtype)+"</td>"+
+							      "<td width='220' align='center'>"+list[i].dualcontent+"</td>"+
+							      "<td width='220' align='center'>"+list[i].createdate+"</td>"+
+							     "<td width='220' align='center'>"+mbList+"</td>"+
+							      "<td width='220' align='center'>"+fileList+"</td>"+
+							    "</tr>";
+							     priSelf(4,list[i]);
+		    				 }
+		    				 if(list[i].applynote=='033' || list[i].applynote=='0330' || list[i].applynote=='034' || list[i].applynote=='0340'){
+		    					var fileList="";
+	    				 	 	var mbList="";
+							      if(list[i].fileList && list[i].fileList.length>0){
+								      for(var k=0;k<list[i].fileList.length;k++){
+								     	fileList+="<a style='color:#23527c' href='fileList?fileid="+list[i].fileList[k].fileid+"&filetype="+list[i].fileList[k].filetype+"&filename="+list[i].fileList[k].filename+"&path="+list[i].fileList[k].path+"&startdate="+list[i].fileList[k].startdate+"'>"+list[i].fileList[k].filename+"</a><a style='color:#23527c' href='javaScript:void(0)'  onclick='seal(this)'>（盖章）<a/><br/>";
+								      }
+							      }
+							      if(list[i].mbList && list[i].mbList.length>0){
+								      for(var k=0;k<list[i].mbList.length;k++){
+								     	mbList+="<a style='color:#23527c' href='mbList?noticetype="+list[i].mbList[k].noticetype+"&noticeid="+list[i].mbList[k].noticeid+"&applyid="+list[i].mbList[k].applyid+"'>"+myfile(list[i].mbList[k].noticetype)+"</a><a style='color:#23527c' href='javaScript:void(0)'  onclick='seal(this)'>（盖章）<a/><br/>";
+								      }
+							      }
+		    				 t5+="<tr class='table_xqlbnr'>"+
+							       "<td width='220' align='center'>"+list[i].username+"</td>"+
+							      "<td width='220' align='center'>"+list[i].belongorg+"</td>"+
+							      "<td width='220' align='center'>"+mytype(list[i].applynote)+"</td>"+
+							       "<td width='220' align='center'>"+dualtype(list[i].dualtype)+"</td>"+
+							      "<td width='220' align='center'>"+list[i].dualcontent+"</td>"+
+							      "<td width='220' align='center'>"+list[i].createdate+"</td>"+
+							       "<td width='220' align='center'>"+mbList+"</td>"+
+							      "<td width='220' align='center'>"+fileList+"</td>"+
+							    "</tr>";
+							     priSelf(5,list[i]);
+		    				 }
+		    				 if(list[i].applynote=='041'){
+		    				 	var fileList="";
+	    				 	 	var mbList="";
+							      if(list[i].fileList && list[i].fileList.length>0){
+								      for(var k=0;k<list[i].fileList.length;k++){
+								     	fileList+="<a style='color:#23527c' href='fileList?fileid="+list[i].fileList[k].fileid+"&filetype="+list[i].fileList[k].filetype+"&filename="+list[i].fileList[k].filename+"&path="+list[i].fileList[k].path+"&startdate="+list[i].fileList[k].startdate+"'>"+list[i].fileList[k].filename+"</a><br/>";
+								      }
+							      }
+							     if(list[i].mbList && list[i].mbList.length>0){
+								      for(var k=0;k<list[i].mbList.length;k++){
+								     	mbList+="<a style='color:#23527c' href='mbList?noticetype="+list[i].mbList[k].noticetype+"&noticeid="+list[i].mbList[k].noticeid+"&applyid="+list[i].mbList[k].applyid+"'>"+myfile(list[i].mbList[k].noticetype)+"</a><a style='color:#23527c' href='javaScript:void(0)'  onclick='seal(this)'>（盖章）<a/><br/>";
+								      }
+							      }
+		    				 t6+="<tr class='table_xqlbnr'>"+
+							        "<td width='220' align='center'>"+list[i].username+"</td>"+
+							      "<td width='220' align='center'>"+list[i].belongorg+"</td>"+
+							      "<td width='220' align='center'>"+mytype(list[i].applynote)+"</td>"+
+							       "<td width='220' align='center'>"+dualtype(list[i].dualtype)+"</td>"+
+							      "<td width='220' align='center'>"+list[i].dualcontent+"</td>"+
+							      "<td width='220' align='center'>"+list[i].createdate+"</td>"+
+							      "<td width='220' align='center'>"+mbList+"</td>"+
+							      "<td width='220' align='center'>"+fileList+"</td>"+
+							    "</tr>";
+							     priSelf(6,list[i]);
+		    				 }
+		    				 if(list[i].applynote=='042'){
+		    				 	var fileList="";
+	    				 	 	var mbList="";
+							      if(list[i].fileList && list[i].fileList.length>0){
+								      for(var k=0;k<list[i].fileList.length;k++){
+								     	fileList+="<a style='color:#23527c' href='fileList?fileid="+list[i].fileList[k].fileid+"&filetype="+list[i].fileList[k].filetype+"&filename="+list[i].fileList[k].filename+"&path="+list[i].fileList[k].path+"&startdate="+list[i].fileList[k].startdate+"'>"+list[i].fileList[k].filename+"</a><br/>";
+								      }
+							      }
+							      if(list[i].mbList && list[i].mbList.length>0){
+								      for(var k=0;k<list[i].mbList.length;k++){
+								     	mbList+="<a style='color:#23527c' href='mbList?noticetype="+list[i].mbList[k].noticetype+"&noticeid="+list[i].mbList[k].noticeid+"&applyid="+list[i].mbList[k].applyid+"'>"+myfile(list[i].mbList[k].noticetype)+"</a><a style='color:#23527c' href='javaScript:void(0)'  onclick='seal(this)'>（盖章）<a/><br/>";
+								      }
+							      }
+		    				 t7+="<tr class='table_xqlbnr'>"+
+							      "<td width='220' align='center'>"+list[i].username+"</td>"+
+							      "<td width='220' align='center'>"+list[i].belongorg+"</td>"+
+							      "<td width='220' align='center'>"+mytype(list[i].applynote)+"</td>"+
+							     "<td width='220' align='center'>"+dualtype(list[i].dualtype)+"</td>"+
+							      "<td width='220' align='center'>"+list[i].dualcontent+"</td>"+
+							      "<td width='220' align='center'>"+list[i].createdate+"</td>"+
+							      "<td width='220' align='center'>"+mbList+"</td>"+
+							      "<td width='220' align='center'>"+fileList+"</td>"+
+							    "</tr>";
+							     priSelf(7,list[i]);
+		    				 }
+	    				 }
+	    				 $("#d2").append(t2);
+	    				 $("#d3").append(t3);
+	    				 $("#d4").append(t4);
+	    				 $("#d5").append(t5);
+	    				 $("#d6").append(t6);
+	    				 $("#d7").append(t7);
+	    					
+	    				}
+	    			
+	    			 	var zz="";var zy="";
+	    				for(var i=0;i<rdmPsn.length;i++){
+		    				 if(rdmPsn[i].rdm_type && rdmPsn[i].rdm_type=='1' && rdmPsn[i].psn_type=='0'){
+		    				 	zz+=rdmPsn[i].psn_name+",";
+		    				 }else if(rdmPsn[i].rdm_type && rdmPsn[i].rdm_type=='1' && rdmPsn[i].psn_type=='1'){
+		    				 	zy+=rdmPsn[i].psn_name+",";
+		    				 }
+		    				 $("#name_3").html(rdmPsn[i].str_rdm_user);
+    						 $("#time_3").html(rdmPsn[i].str_rdm_date);
+	    				 }
+	    				 $("#z_z").html(zz?zz.substring(0,zz.length-1):"");
+	    				 $("#z_y").html(zy?zy.substring(0,zy.length-1):"");
+	    				 if($("#d7").find("tr").length>1){
+	    				 	$("#d8").append("<tr class='table_xqlbnr'><td width='220' align='center' class='table_xqlbbj'>归档</td><td colspan='6'>已归档</td></tr>");
+	    				 }
+	    				 //时间计算
+	    				    $("#flow_color").children().eq(0).find("div").getHour($("#time_1").text(),$("#time_2").text(),"+");
+							$("#flow_color").children().eq(1).find("div").getHour($("#time_2").text(),$("#time_3").text(),"+");
+							$("#flow_color").children().eq(2).find("div").getHour($("#time_3").text(),$("#time_4").text(),"+");
+							$("#flow_color").children().eq(3).find("div").getHour($("#time_4").text(),$("#time_5").text(),"+");
+							$("#flow_color").children().eq(4).find("div").getHour($("#time_5").text(),$("#time_6").text(),"+");
+							$("#flow_color").children().eq(5).find("div").getHour($("#time_6").text(),$("#time_7").text(),"+");
+							$("#flow_color").children().eq(6).find("div").getHour($("#time_7").text(),$("#time_8").text(),"+");
+// 							var b=false;
+// 							if(!$("#qt_8").text()){b=true;}
+// 							$("#flow_time").getHour($("#time_1").text(),$("#time_8").text()==""?new Date().toLocaleDateString()+" "+new Date().toLocaleTimeString().substring(2,7):$("#time_8").text(),null,b);
+	    			
+// 	    					var totelHour=$("#flow_time").text(); 
+// 		 			        if(totelHour && totelHour.toString().split(".").length>1){
+// 			 			        totelHour= totelHour.toString().split(".");
+// 			 			        totelHour=totelHour[0]+":"+(parseInt(totelHour[1])*0.6).toFixed(0);
+// 			 			        $("#flow_time").text(totelHour);
+// 		 			        }
+		 			        $("#flow_time").text(ciqFormatTime(1,7,"time_"));
+		 			        $("td,span").each(function(k,v){
+								if($(v).text()=='undefined' || $(v).text()=='null'){
+									$(v).text("");
+								}
+			    			});	
+			    			
+			    			$("span[id^='time_']").each(function(){	
+	    					if($(this).text()){
+	    					var dataid=$(this)[0].getAttribute('id');
+	    						$("li[data-id='"+dataid+"']").attr("class","icongreen");
+	    					}else{
+	    						var dataid=$(this)[0].getAttribute('id');
+	    						$("li[data-id='"+dataid+"']").attr("class","iconyellow");
+	    					}
+	    				});
+    			}
+    		}); 
+		});
+
+		function priSelf(i,o){
+			if (!$("#time_"+i).html()) {
+				$("#name_"+i).html(o.username);
+				$("#time_"+i).html(o.createdate.substring(0,16));
+			} else if (new Date(o.createdate) > new Date($("#time_"+i).html())) {
+				$("#name_"+i).html(o.username);
+				$("#time_"+i).html(o.createdate.substring(0,16));
+			}
+		}
+
+		function FormSubmit(){
+			$("#select_form").attr("action", "/ciqs/expFoodPOF/expFoodList");
+			$("#Intercepe_form").attr("method", "get");
+			$("#select_form").submit();
+		}
+		/**
+		 * 显示图片浏览
+		 * path 数据库保存的图片地址 201708/20170823/1B083FEA24D6E00004df8.jpg
+		 * wangzhy
+		 */
+		function toImgDetail(path){
+		    //var url ="/ciqs/showVideo?imgPath=201708/20170823/tibet-1.jpg";
+			var url = "/ciqs/showVideo?imgPath="+path;
+			$("#imgd1").attr("src",url);
+			$("#imgd1").click();
+		}
+		
+		function download(file){
+			window.location.href="/ciqs/expFoodPOF/download?fileName="+file;
+		}
+		
+		function seal(e){
+			var href=$(e).prev().attr("href").replace("mbList","sealPdf");
+			window.location.href=href;
+		}
+</script>
+
+</head>
+<body class="bg-gary">
+<%@ include file="myOrg.jsp"%>
+<!-- 图片查看 -->
+		<div class="row" style="z-index:200000;">
+		 	<div class="col-sm-8 col-md-6" style="z-index:200000;">
+		      <div class="docs-galley" style="z-index:200000;">
+		        	<ul class="docs-pictures clearfix" style="z-index:200000;">
+		          	<li>
+		          	<img id="imgd1" style="z-index:200000;display: none" src="${ctx}/static/viewer/assets/img/thumbnails/tibet-3.jpg" alt="Cuo Na Lake" />
+		          	</li>
+		        	</ul>
+		      </div>
+		   	</div> 
+		</div>
+<!-- *************************************************************************************** -->
+<div class="title-cxjg">企业申请</div>
+<div class="margin-chx">
+<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0" id="d1">
+</table>
+</div>
+<div class="title-cxjg">备案受理</div>
+<div class="margin-chx">
+<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0" id="d2">
+</table>
+</div>
+<div class="title-cxjg">评审组任务分配</div>
+	<div class="margin-chx">
+		<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0" id="d3">
+		</table>
+		<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0">
+		 <tr class="table_xqlbbj">
+	       <td width="220" height="35">评审组名单</td>
+	       <td width="220" height="35">组长：（随机的组长）</td>
+	       <td width="220" id="z_z"></td>
+	       <td width="220" height="35">组员：（随机的组员）</td>
+	       <td width="220" id="z_y"></td>
+	    </tr>
+		</table>
+	</div>
+<div class="title-cxjg">文件审核</div>
+	<div class="margin-chx">
+		<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0" id="d4">
+		</table>
+	</div>
+<div class="title-cxjg">现场查验</div>
+		<div class="margin-chx">
+		<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0" id="d5">
+		</table>
+		<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0">
+		 <tr class="table_xqlbbj">
+	      <td width="220" height="35" colspan="6"><a id="xcid"  style="color:#014ccc">现场检查记录</a></td>
+	    </tr>
+		</table>
+		</div>
+<div class="title-cxjg">备案材料终审</div>
+		<div class="margin-chx">
+		<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0" id="d6">
+		</table>
+		</div>
+<div class="title-cxjg">备案审批决定、归档</div>
+		<div class="margin-chx">
+		<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0" id="d7">
+		</table>
+		<br/>
+		<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0" id="d8">
+		</table>
+		</div>
+<div class="title-cxjg">发证</div>
+		<div class="margin-chx">
+		<table class="table-xqlb" border="0" cellspacing="0" cellpadding="0" id="d9">
+			<tr>
+				<td width="220" class="table_xqlbbj">编制备案编号</td>
+				<td>原始记录查看</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td width="220" class="table_xqlbbj">发证</td>
+				<td>操作人：</td>
+				<td>王明伟</td>
+				<td>操作时间：</td>
+				<td>2017-09-30</td>
+				<td>原始记录查看</td>
+			</tr>
+		</table>
+		</div>	
+		
+		<div style="text-align: center;margin: auto;margin-top: 10px;width:200px;padding-bottom: 10px;">
+			<input type="button" class="search-btn" value="返回"  onclick="JavaScript:history.go(-1);"/>
+		</div>						
+	</body>
+</html>

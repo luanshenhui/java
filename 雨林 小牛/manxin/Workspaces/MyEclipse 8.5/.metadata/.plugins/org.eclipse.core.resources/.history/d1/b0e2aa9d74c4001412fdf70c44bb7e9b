@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DeptMapping">
+<!-- 写法1 -->
+	<select id="findDept" parameterType="com.yulin.text2.Dept" resultType="com.yulin.text2.Dept">
+		select * from dept where name = #{name}
+		<if test="id != 0">
+			and id = #{id}
+		</if>
+	</select>
+<!-- 写法2 -->
+	<select id="findDept2" parameterType="com.yulin.text2.Dept" resultType="com.yulin.text2.Dept">
+		select * from dept
+		<if test="name != null">
+			where  name = #{name}
+		</if>
+		<if test="id != 0 and id !=null">
+			and id = #{id}
+		</if>
+	</select>
+<!-- 写法3 choose 有name筛选name,有id再加上id的筛选,如果没有name只有id则筛选id -->
+	<select id="findDept3" parameterType="com.yulin.text2.Dept" resultType="com.yulin.text2.Dept">
+		select * from dept
+		<choose>
+			<when test="name != null">
+				where name = #{name}
+			</when>
+			<when test="name != null and id != 0">
+				where name = #{name} and id = #{id}
+			</when>
+			<when test="id != 0 and id != null">
+				where id = #{id}
+			</when>
+		</choose>
+	</select>
+	
+<!-- 写法4 where标签 有name则筛选name 有id则筛选id 两个都有就都筛选 -->
+	<select id="findDept4" parameterType="com.yulin.text2.Dept" resultType="com.yulin.text2.Dept">
+		select * from dept
+		<where>
+			<if test="name != null"></if>
+		</where>
+	</select>
+</mapper>

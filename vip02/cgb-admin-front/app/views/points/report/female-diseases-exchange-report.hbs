@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（中国人寿保险真情卡女性疾病）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF23",
+            "reportCode":"JF23,JF54"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

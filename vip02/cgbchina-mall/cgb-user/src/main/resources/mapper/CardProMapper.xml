@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CardPro">
+    <resultMap id="CardProMap" type="CardPro">
+        <result property="id" column="id"/>
+        <result property="cardproNm" column="cardpro_nm"/>
+        <result property="cardLevel" column="card_level"/>
+        <result property="cardDesc" column="card_desc"/>
+        <result property="cardBin" column="card_bin"/>
+        <result property="bankNm" column="bank_nm"/>
+        <result property="relacardNo" column="relacard_no"/>
+        <result property="formatId" column="format_id"/>
+        <result property="pdtNbr" column="pdt_nbr"/>
+        <result property="bankNo" column="bank_no"/>
+        <result property="plan1" column="plan1"/>
+        <result property="plan2" column="plan2"/>
+        <result property="plan3" column="plan3"/>
+        <result property="plan4" column="plan4"/>
+        <result property="plan5" column="plan5"/>
+        <result property="bounsType" column="bouns_type"/>
+        <result property="bounsFlat" column="bouns_flat"/>
+        <result property="comPeople" column="com_people"/>
+        <result property="comTel" column="com_tel"/>
+        <result property="cardLevelId" column="card_level_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="isBinding" column="is_binding"/>
+
+    </resultMap>
+    <sql id="columns">
+        id,cardpro_nm,card_level,card_desc,card_bin,bank_nm,relacard_no,format_id,pdt_nbr,bank_no,plan1,plan2,plan3,plan4,plan5,bouns_type,bouns_flat,com_people,com_tel,card_level_id,create_oper,create_time,modify_oper,modify_time,is_binding
+    </sql>
+
+    <insert id="insert" parameterType="CardPro" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_card_pro
+        (cardpro_nm
+        ,card_level
+        ,card_desc
+        ,card_bin
+        ,bank_nm
+        ,relacard_no
+        ,format_id
+        ,pdt_nbr
+        ,bank_no
+        ,plan1
+        ,plan2
+        ,plan3
+        ,plan4
+        ,plan5
+        ,bouns_type
+        ,bouns_flat
+        ,com_people
+        ,com_tel
+        ,card_level_id
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,is_binding)
+        values(#{cardproNm}
+        ,#{cardLevel}
+        ,#{cardDesc}
+        ,#{cardBin}
+        ,#{bankNm}
+        ,#{relacardNo}
+        ,#{formatId}
+        ,#{pdtNbr}
+        ,#{bankNo}
+        ,#{plan1}
+        ,#{plan2}
+        ,#{plan3}
+        ,#{plan4}
+        ,#{plan5}
+        ,#{bounsType}
+        ,#{bounsFlat}
+        ,#{comPeople}
+        ,#{comTel}
+        ,#{cardLevelId}
+        ,0
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,0)
+    </insert>
+
+    <update id="update" parameterType="CardPro">
+        update tbl_card_pro set
+        cardpro_nm
+        = #{cardproNm},card_level
+        = #{cardLevel},card_desc
+        = #{cardDesc},card_bin
+        = #{cardBin},bank_nm
+        = #{bankNm},relacard_no
+        = #{relacardNo},format_id
+        = #{formatId},pdt_nbr
+        = #{pdtNbr},bank_no
+        = #{bankNo},plan1
+        = #{plan1},plan2
+        = #{plan2},plan3
+        = #{plan3},plan4
+        = #{plan4},plan5
+        = #{plan5},bouns_type
+        = #{bounsType},bouns_flat
+        = #{bounsFlat},com_people
+        = #{comPeople},com_tel
+        = #{comTel},card_level_id
+        = #{cardLevelId},del_flag
+        = #{delFlag},create_oper
+        = #{createOper},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime},is_binding
+        = #{isBinding}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        where del_flag = 0
+        <if test="id !=null">and id = #{id}</if>
+        <if test="cardproNm !=null">and cardpro_nm = #{cardproNm}</if>
+        <if test="cardLevel !=null">and card_level = #{cardLevel}</if>
+        <if test="cardDesc !=null">and card_desc = #{cardDesc}</if>
+        <if test="cardBin !=null">and card_bin = #{cardBin}</if>
+        <if test="bankNm !=null">and bank_nm = #{bankNm}</if>
+        <if test="relacardNo !=null">and relacard_no = #{relacardNo}</if>
+        <if test="formatId !=null">and format_id = #{formatId}</if>
+        <if test="pdtNbr !=null">and pdt_nbr = #{pdtNbr}</if>
+        <if test="bankNo !=null">and bank_no = #{bankNo}</if>
+        <if test="plan1 !=null">and plan1 = #{plan1}</if>
+        <if test="plan2 !=null">and plan2 = #{plan2}</if>
+        <if test="plan3 !=null">and plan3 = #{plan3}</if>
+        <if test="plan4 !=null">and plan4 = #{plan4}</if>
+        <if test="plan5 !=null">and plan5 = #{plan5}</if>
+        <if test="bounsType !=null">and bouns_type = #{bounsType}</if>
+        <if test="bounsFlat !=null">and bouns_flat = #{bounsFlat}</if>
+        <if test="comPeople !=null">and com_people = #{comPeople}</if>
+        <if test="comTel !=null">and com_tel = #{comTel}</if>
+        <if test="cardLevelId !=null">and card_level_id = #{cardLevelId}</if>
+        <if test="createOper !=null">and create_oper = #{createOper}</if>
+        <if test="createTime !=null">and create_time = #{createTime}</if>
+        <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+        <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        <if test="isBinding !=null">and is_binding = #{isBinding}</if>
+    </sql>
+    <sql id="conditionss">
+        where del_flag = 0
+        <if test="id !=null">and id = #{id}</if>
+        <if test="cardproNm !=null">and cardpro_nm = #{cardproNm}</if>
+        <if test="cardLevel !=null">and card_level = #{cardLevel}</if>
+        <if test="cardDesc !=null">and card_desc = #{cardDesc}</if>
+        <if test="cardBin !=null">and card_bin = #{cardBin}</if>
+        <if test="bankNm !=null">and bank_nm = #{bankNm}</if>
+        <if test="relacardNo !=null">and relacard_no = #{relacardNo}</if>
+        <if test="formatId !=null">and format_id = #{formatId}</if>
+        <if test="pdtNbr !=null">and pdt_nbr = #{pdtNbr}</if>
+        <if test="bankNo !=null">and bank_no = #{bankNo}</if>
+        <if test="plan1 !=null">and plan1 = #{plan1}</if>
+        <if test="plan2 !=null">and plan2 = #{plan2}</if>
+        <if test="plan3 !=null">and plan3 = #{plan3}</if>
+        <if test="plan4 !=null">and plan4 = #{plan4}</if>
+        <if test="plan5 !=null">and plan5 = #{plan5}</if>
+        <if test="bounsType !=null">and bouns_type = #{bounsType}</if>
+        <if test="bounsFlat !=null">and bouns_flat = #{bounsFlat}</if>
+        <if test="comPeople !=null">and com_people = #{comPeople}</if>
+        <if test="comTel !=null">and com_tel = #{comTel}</if>
+        <if test="cardLevelId !=null">and card_level_id = #{cardLevelId}</if>
+        <if test="createOper !=null">and create_oper = #{createOper}</if>
+        <if test="createTime !=null">and create_time = #{createTime}</if>
+        <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+        <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        and is_binding = 0
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="CardProMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_card_pro
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="CardProMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_card_pro
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="CardProMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_card_pro
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="CardPro">
+        delete from tbl_card_pro where id = id
+    </delete>
+    <!--总数count-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_card_pro
+        <include refid="conditions"/>
+    </select>
+    <!-- 以下两个方法 是点击卡等级 通过formatId进行查询卡类卡板信息-->
+    <select id="counts" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_card_pro
+        where del_flag = 0
+        and format_id IN
+        <foreach collection="formatId" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="findCardProProCode" parameterType="Map" resultMap="CardProMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_card_pro
+        where del_flag = 0
+        and format_id IN
+        <foreach collection="formatId" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <!--end -->
+
+
+    <update id="updateIsBinding" parameterType="CardPro">
+        update tbl_card_pro
+        set modify_oper = #{modifyOper},
+            modify_time = now(),
+            is_binding = 1
+        where format_id = #{formatId}
+        and del_flag=0
+    </update>
+
+    <update id="updateUnBinding" parameterType="String">
+        update tbl_card_pro set
+        modify_oper
+        = #{modifyOper},modify_time
+        = now(),is_binding
+        = 0
+        where format_id = #{formatId}
+    </update>
+    <!--以下两个方法用来查询点击绑定按钮 查询出的未经过绑定的卡类卡板 -->
+    <select id="countSecond" resultType="Long">
+        select count(1)
+        from tbl_card_pro
+        <include refid="conditionss"/>
+    </select>
+    <select id="pagers" parameterType="Map" resultMap="CardProMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_card_pro
+        <include refid="conditionss"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <!-- add by geshuo 20160824 : 根据参数查询 -->
+    <select id="findByParams" parameterType="Map" resultMap="CardProMap">
+        select
+        <include refid="columns"/>
+        from tbl_card_pro
+        <include refid="conditions"/>
+    </select>
+</mapper>
+
+

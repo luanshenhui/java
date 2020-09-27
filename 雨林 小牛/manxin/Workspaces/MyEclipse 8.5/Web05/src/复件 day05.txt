@@ -1,0 +1,299 @@
+1、servlet容器如何处理请求资源路径
+	比如输入 http://ip:port/appname/abc.html
+	/appname/abc.html称为请求资源路径。
+	step1 依据/appname查找该应用对应的文件夹(比如
+	查找webapps下面的文件夹是否与其匹配)。
+	 http://ip:port/appname/index/index.jsp
+	 相当于找到服务器中的某个文件夹中的jsp/html文件
+	step2 在找到的文件夹下面，找到web.xml文件，
+	然后使用<url-pattern>与servlet去做匹配。
+		匹配规则:
+			精确匹配: 即要求<url-pattern>与路径
+			完全一致。
+			通配符匹配:使用"*"代表任意的字符串。
+				比如在<url-pattern>中:
+					/*
+					/abc/*
+			后缀匹配:不能使用“/"开头，
+			要求"*.任意的字符串"。
+				比如
+					*.do   要求以.do结尾
+					*.action 要求以.action结尾
+		step3 尝试查找/abc.html文件,如果找到，
+		则返回该文件，找不到，则返回404状态码。		
+					
+2、一个servlet如何处理多种请求
+	step1 使用后缀匹配模式。
+	step2 在service()方法里:
+		//获得请求资源路径
+		String uri = request.getRequestURI();
+		//分析请求资源路径，来决定做何种处理。
+							
+3、servlet的生命周期及核心的接口与类
+	1)核心接口与类
+		a,Servlet接口
+			init(ServletConfig config)
+			destroy()
+			service(ServletRequest res,
+			ServletResponse rep)
+		b,GenericServlet抽象类
+			实现了Servlet接口中的init,destroy方法。
+		c,HttpServlet抽象类
+			继承了GenericServlet，实现了service方法。
+		d,ServletRequest与ServletResponse接口
+		e,HttpServletRequest与HttpServletRequest接口
+		f,ServletConfig接口
+			String getInitParameter(String paraName);
+		
+	2)servlet的生命周期
+		所谓生命周期，指的是servlet容器如何创建servlet实例、
+	分配其资源、调用其方法、并销毁其实例的整个过程。
+		阶段一:	
+			实例化,就是创建servlet对象,调用构造器。
+			第一种情况：当请求到达容器时，容器查找该
+									 servlet对象是否存在，如果不存
+									 在，才会创建实例。
+			第二种情况：容器在启动时，或者新部署了某个
+									应用时，会检查web.xml当中，servlet
+									是否有load-on-starup配置。如果有，
+									则会创建该servlet实例。
+									load-on-starup参数值越小，优先
+									级越高。
+		阶段二：
+			初始化,为servlet分配资源，
+			调用init(ServletConfig config);
+			config对象可以用来访问servlet的初始化参数。
+			初始化参数是使用init-param配置的参数。
+			init可以override。
+		阶段三：就绪/调用
+			有请求到达容器，容器调用servlet对象的
+			service()方法。
+			HttpServlet的service()方法，会依据请求方式
+			来调用doGet()或者doPost()方法。但是，这两
+			个do方法默认情况下，会抛出异常，需要子类去
+			override。
+		阶段四：销毁
+			容器依据自身的算法，将不再需要的servlet
+			对象删除掉，在删除之前，会调用servlet
+			对象的destroy()方法。destroy()方法用于释放
+			资源。
+			在servlet的整个生命周期当中，init,destroy
+			只会执行一次，而service方法会执行多次。
+			
+4、jsp
+	1)什么是jsp?
+		java server page(java服务器端页面技术)。
+	是sun公司制订的一种服务器端动态页面生成技术的
+规范。
+	因为直接使用servlet生成页面，如果页面比较复杂，
+则代码过于繁琐，并且难以维护。所以，对于比较复杂
+的页面，使用jsp来编写，更容易编写和维护。
+	2)如何写一个jsp文件。
+	写一个以.jsp为后缀的文件，然后，在该文件当中，
+添加html和java代码。编写完成之后，不需要编译，当
+客户端请求访问某个.jsp文件，则服务器会自动将
+.jsp文件转换成一个.java文件(该.java文件其实是一个
+servlet)。
+	3)jsp文件的组成
+		a,html(包括css,javascript)：
+		直接写在.jsp文件里即可。
+		b,java代码:
+			第一种形式 java代码片断
+			语法:
+				<%  java代码 %>
+			第二种形式 jsp表达式
+			语法:
+				<%= java表达式%>
+		c,指令:
+			 所谓指令，就是告诉jsp引擎(容器当中，负责
+			 将.jsp文件转换成.java文件，并在运行时，
+			 为jsp提供一些 辅助支持的模块),在将.jsp
+			 文件转换成.java文件时，做一些额外的处理。
+			 语法:
+			 	<%@ 指令名 属性名=属性值%>
+			 	page指令
+			 		import属性：用于导包。
+			 								比如
+			 								<%@page import="java.util.*,java.text.*"%>
+			 		contentType属性:等价于
+			 								response.setContentType();
+			 		pageEncoding属性:告诉jsp引擎，.jsp文件
+			 								保存时的编码。
+		d,隐含对象
+			所谓隐含对象，指的是在.jsp文件当中，不用
+		声明和创建该对象，就可以直接使用的对象。原
+		因是，.jsp文件对应的.java文件当中，已经自动
+		生成了该对象的代码。
+			out	 
+			request
+			response
+			session
+	4).jsp文件如何转换成.java文件
+		a,html    	----> 放到service()方法里，使用
+											out.write()输出。
+		b,java代码片断 ->	放到service()方法里，照搬。
+5、转发与重定向的区别
+	1)地址
+		转发的地址必须是同一个应用内部的各个组件。
+		重定向的地址没有限制。
+	2)能否共享request
+		转发可以
+		重定向不行
+	3)浏览器地址栏的地址是否变化
+		转发不变
+		重定向会变
+	4)事件是否处理完毕
+		转发是一件事未做完
+		重定向是一件事已经做完
+6、session	
+		a,什么是session?
+		浏览器访问服务器时，服务器会创建一个session
+		对象(该对象有一个唯一的id, 一般称为sessionId)
+		。服务器在缺省情况下，会将sessionId以cookie
+		机制发送给浏览器。当浏览器再次访问服务器时，
+		会将sessionId发送给服务器。服务器依据sessionId
+		就可以找到对应的session对象。通过这种方式，
+		就可以管理用户的状态。
+		b,如何获得session对象
+			方式一:
+				HttpSession session = request.getSession(boolean flag);
+				当flag = true:
+					服务器会先查看请求中是否包含sessionId,
+					如果没有，则创建一个session对象。
+					如果有，则依据sessionId去查找对应的
+					session对象，如果找到，则返回。
+					如果找不到，则创建一个新的session对象。
+				当flag = false:
+					服务器会先查看请求中是否包含sessionId,
+					如果没有,返回null。
+					如果有，则依据sessionId去查找对应的
+					session对象，如果找到，则返回。
+					如果找不到，返回null。
+			方式二:
+				HttpSession session = request.getSession();
+				与request.getSession(true)等价。
+		c,HttpSession接口提供的一些方法
+				//获得sessionId。
+				String session.getId();
+				//绑订数据
+				session.setAttribute(String name,Object obj);
+				//obj最好实现Serializable接口(服务器
+				在对session进行持久化操作时，比如钝化
+				、激活，会使用序列化协议)。
+				Object session.getAttribute(String name);
+				//如果name对应的值不存在，返回null。
+				session.removeAttribute(String name);
+		d,session超时
+				服务器会将超过指定时间的session对象
+			删除(在指定的时间内，该session对象没有
+			使用)。
+				方式一：
+					session.setMaxInactiveInterval(int seconds);
+				方式二：
+					服务器有一个缺省的超时限制，可以
+				通过相应的配置文件来重新设置。
+					比如可以修改tomcat的web.xml(
+					tomcat_home/conf下面)。
+					<session-config>
+        		<session-timeout>30</session-timeout>
+    			</session-config>
+				另外，也可以只修改某个应用的web.xml。
+		e,删除session
+			session.invalidate();
+			
+	案例:
+		session验证
+		step1 在登录成功之后，在session上绑订一些数据。
+	比如:
+		session.setAttribute("user",user);
+		step2 在访问需要保护的页面或者资源时，执行
+		Object obj = session.getAttribute("user")；
+		如果obj为null,说明没有登录，一般重定向到
+		登录页面。
+7、状态管理
+	1)什么是状态管理
+		将客户端(一般是浏览器)与服务器之间的多次
+	交互当作一个整体来看待，即将多次操作所涉及的
+	数据记录下来。
+	2)怎样进行状态管理
+		第一种方式，在客户端管理用户的状态
+		(cookie)。
+		第二种方式，在服务器端管理用户的状态
+		(session)。
+	3)cookie
+		a,什么是cookie?
+			浏览器在访问服务器时，服务器将一些数据
+		以set-cookie消息头的形式发送给浏览器。浏览
+		器会将这些数据保存起来。当浏览器再次访问
+		服务器时，会将这些数据以cookie消息头的形式
+		发送给服务器。通过这种方式，可以管理用户的
+		状态。
+		b,怎样创建cookie?
+			Cookie cookie = new Cookie(String name,
+			String value);
+			response.addCookie(cookie);
+		c,查询cookie
+			//如果没有cookie，则返回null。
+			Cookie[] cookies = request.getCookies();
+			String name = cookie.getName();
+			String value = cookie.getValue();
+		d,cookie保存时的编码问题
+			cookie的值只能是ascii字符，如果是中文，
+			需要将中文转换成ascii字符形式。
+			可以使用URLEncoder.encode()方法和
+			URLDecoder.decode()方法来进行这种转换。
+		e,cookie的保存时间
+			cookie.setMaxAge(int seconds);
+			seconds > 0:浏览器会将cookie以文件的方式
+			保存在硬盘上。在超过指定的时间以后，会删除
+			该文件。
+			seconds < 0:默认值，浏览器会将cookie保存
+			在内存里面。只有当浏览器关闭之后，才会删除。
+			seconds = 0:删除。
+		f,删除cookie
+			比如要删除一个name为"username"的cookie。
+			Cookie c = new Cookie("username","");
+			c.setMaxAge(0);
+			response.addCookie(c);
+		g,cookie的路径问题
+			浏览器在向服务器上的某个地址发送请求时，
+		会先比较cookie的路径与向访问的路径(地址)是
+		否匹配。只有匹配的cookie，才会发送。
+			cookie的路径可以通过
+			cookie.setPath(String path)方法来设置。
+			如果没有设置,则有一个缺省的路径，缺省的
+			路径是生成该cookie的组件的路径。
+				比如: /appname/addCookie保存了一个cookie,
+			则该cookie的路径就是/appname/addCookie。
+			
+			规则:
+				cookie的路径必须是要访问的路径的上层目录
+				或者是与要访问的路径相等，浏览器才会
+				将cookie发送给服务器。
+				
+				一般可以设置setPath("/appname"),表示访问
+				该应用下的所有地址，均会发送cookie。
+		h,cookie的限制
+			cookie可以禁止
+			cookie的大小有限制(4k左右)
+			cookie的数量也有限制(浏览器大约能保存300个)	
+			cookie的值只能是字符串，要考虑编码问题。
+			cookie不安全
+	练习：
+		写一个Add_FindCookieServlet,该servlet先查询
+	有没有一个名叫name的cookie，如果有，则显示
+	该cookie的值，如果没有，则创建该cookie(
+	cookie的名字:name,cookie的值:zs)。		
+				
+				
+					
+			
+				
+				
+				
+			
+			
+			
+		
+		
+		

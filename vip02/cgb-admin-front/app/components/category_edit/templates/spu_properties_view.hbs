@@ -1,0 +1,20 @@
+<div class="menu-panel left">
+  <div class="get-properties properties-edit-panel">
+    <ul>
+      <li><label class="properties-edit-label" for="">查看品牌</label></li>
+      <li class="key-name"><span class="attribute">品牌：</span><span class="attribute-value">{{data.brandName}}</span></li>
+      {{#each data.attributes}}
+      <li data-spu-property="{{json this}}" class="key-name">
+        {{#equals isSku "true"}}
+          <span class="key-name-label attribute-value attribute-seller-value">{{attributeKeyName}}（销售属性）</span>
+        {{else}}
+          <span class="key-name-label left">{{attributeKeyName}}：</span>
+        {{/equals}}
+        {{#equals isSku "false"}}
+          <span class="attribute-value right">{{value}}</span>
+        {{/equals}}
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>

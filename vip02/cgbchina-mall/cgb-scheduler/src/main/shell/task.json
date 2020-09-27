@@ -1,0 +1,22 @@
+[
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.PromotionSyncService",
+      "taskName": "batchProm",
+      "desc": "荷兰拍实时",
+      "taskCron": "*/30 * * * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  },
+  {
+    "taskScheduler": {
+      "taskGroup": "cn.com.cgbchina.batch.service.PromotionSyncService",
+      "taskName": "batchDutchAuctionRelease",
+      "desc": "荷兰拍释放",
+      "taskCron": "0 0/5 * * * ?",
+      "taskType":"dubbo",
+      "status":"1"
+    }
+  }
+]

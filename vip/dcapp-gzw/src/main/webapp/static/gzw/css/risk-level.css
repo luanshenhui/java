@@ -1,0 +1,563 @@
+.risk-level {
+    font-size:16px;
+}
+.risk-level .risk-color{
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+.risk-level span{
+    display: inline-block;
+    width:30px;
+    height:10px;
+    margin: 15px 10px 0 22px ;
+}
+.risk-level .risk-level-red{
+    background: #d20000;
+}
+.risk-level .risk-level-orange{
+    background: #e3950c;
+}
+.risk-level .risk-level-yellow{
+    background: #fff000;
+}
+.risk-level .risk-define-red{
+    background: #d20000;
+}
+.risk-level .risk-define-green{
+    background: #30ada0;
+}
+.risk-level .risk-define-blue{
+    background: #1a64d3;
+}
+.risk-form-main{
+    margin:0 0 0 25px;
+    height: 732px;
+    overflow-y: auto;
+}
+.risk-form-main a{cursor: pointer;}
+.risk-form-main1{
+    height: 680px;
+}
+.alarm-risk-stat{
+    height:690px;
+}
+.risk-form-main .main{
+    margin-top: 45px;
+}
+.risk-define-statistics .main1{
+    width: 1440px;
+    height:680px;
+    padding-top: 50px
+}
+.three-important  .risk-form-main{
+    height: 735px;
+}
+.risk-form-main p{
+    font-size: 18px;
+    text-align: center;
+    padding:0;
+}
+.risk-level .company-module{
+    display: block;
+    float: left;
+    width:330px;
+    height: 190px;
+    margin: 30px 0 0 20px;
+    padding-top:10px;
+    background: #141515 !important;
+    border: 2px solid #090204;border-radius: 6px;
+    position: relative;
+}
+.risk-form-main1 .company-module{
+    margin: 20px 0 0 20px;
+}
+
+.risk-level .company-module.bar-none:after{
+    position: absolute;
+    top:90px;
+    left: 125px;
+    text-space: 5px;
+    color:#1755b4;
+    font-size: 20px;
+    content:'暂无数据'
+}
+.corFinancial-chart .risk-level .company-module.bar-none:after{
+    top: 160px;
+    left: 175px;
+    font-size: 22px;
+}
+.risk-form-main a:hover{text-decoration: none}
+.risk-form-main .form-left {
+    width: 1000px;
+    float: left;
+}
+.risk-form-main .form-right{
+    float: right;
+    padding: 20px 20px 0 0;
+}
+.form-right .md-box,.form-right .sm-box,.form-right .lg-box{
+    width: 350px;
+    border:2px solid #000;
+    background: #171718;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 0 1px 0 #fff;
+    box-sizing: content-box;
+}
+.form-right .lg-box{
+    height: 560px;
+}
+.form-right .md-box{
+    height: 370px;
+}
+.form-right .sm-box{
+    height: 200px;
+}
+.form-right .lg-box p{
+    font-size: 20px;
+    padding: 0;
+    color: #fff;text-align: left;
+}
+/*重大事项决策*/
+.form-left .decision-making ul {
+    margin: 20px 0 0 30px;
+}
+.form-left .decision-making ul li {
+    position: relative;
+    list-style: none;
+    display: inline-block;
+    font-size: 20px;
+    height: 35px;
+    margin-right: 80px;
+    line-height: 35px;
+    cursor: pointer;
+}
+.form-left .decision-making ul li.on{
+    color: #389ad1;
+}
+.form-left .decision-making ul li.on:before {
+    position: absolute;
+    top: 9px;
+    left: -15px;
+    width: 8px;
+    height: 15px;
+    background: url("../image/triangle.png");
+    content: '';
+}
+
+/******* 告警风险统计 *******/
+.alarm-risk-stat .form-chart-left{
+    float: left;
+}
+.alarm-risk-stat #main{
+    width: 650px;
+    height:300px;
+}
+.alarm-risk-stat #main1{
+    width: 650px;
+    height:300px;
+}
+.alarm-risk-stat #main2{
+    width: 750px;
+    height:500px;
+    float: right;
+    margin:50px 30px 0 0 ;
+}
+/****** 三重一大2 *******/
+.form-left #chart1{
+    width:1000px;
+    height:600px;
+    margin-top:20px;
+}
+.form-right #chart2{
+    width:350px;
+    height:450px;
+}
+.lg-box .risk-color span{
+    margin-right: 39px;
+    display: inline-block;
+    margin-top:5px;
+}
+.lg-box .risk-color span i{
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 12px;
+}
+.lg-box .risk-color .chart2-title1 i{
+    background:#81c5f2;
+}
+.lg-box .risk-color .chart2-title2 i{
+    background:#8c2766;
+}
+.lg-box .risk-color .chart2-title3 i{
+    background:#ec9320;
+}
+.lg-box .risk-color .chart2-title4 i{
+    background:#2dbedc;
+}
+.lg-box .risk-color .chart2-title5 i{
+    background:#d22c2d;
+}
+.lg-box .risk-color .chart2-title6 i{
+    background:#2cbe50;
+}
+/** 风险走势分析 **/
+.risk-trend-analyze .risk-trend-main #main{
+    width: 1400px;
+    height:650px;
+    margin-top:25px;
+}
+
+/*** 财务分析 ***/
+.box-right-form .financial-chart{
+    padding-top: 20px;
+
+}
+.box-right-form .financial-chart>div{
+    display: inline-block;
+    float: left;
+}
+
+.box-right-form .financial-table{
+   /* height: 700px;*/
+   /* padding-top: 50px;*/
+    padding-left: 30px;
+    margin-left: 20px;
+    width: 480px;
+}
+.financial-statistic .block-module{
+    width: 715px;
+    height: 335px;
+    margin: 10px;
+    padding-top: 10px;
+}
+
+/** 企业财务分析 **/
+.corFinancial-chart .corFinancial-title{
+    text-align: left;
+    padding: 0 0 10px 0px;
+
+}
+.corFinancial-chart .corFinancial-title span{
+    margin-right:40px;
+    color:#fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+.corFinancial-chart .corFinancial-title span.on{
+    color:#0099FF;
+}
+.corFinancial-chart .chart-annual .company-module{
+    width: 450px;
+    height: 400px;
+    float: left;
+    margin-bottom: 10px;
+}
+.corFinancial-chart .risk-level{
+    margin: 0 0 20px 0;
+}
+.three-important1 .risk-color{
+    margin: 10px 0 15px 0;
+}
+.three-important1 .risk-level .inspect-orange{
+    background: #ED7D31;
+}
+.three-important1 .risk-level .inspect-blue{
+    background: #0099FF;
+}
+/** 表格样式 **/
+.style-table{
+    border: 4px solid #000;
+    margin-top: 8px;
+    border-radius: 20px;
+    width: 480px;
+    overflow: hidden;
+}
+.style-table thead{
+    background: url("../image/table-head-bg.png") repeat-x;
+}
+.style-table thead tr th{
+    color:#fff;
+    font-size: 20px;
+    line-height: 25px;
+    height: 65px;
+}
+.style-table tbody tr td{
+    border-top:2px solid #000;
+}
+.style-table tr td{
+    height: 50px;
+    text-align: center;
+    color:#fff;
+    font-size: 20px;
+}
+.style-table tbody tr:nth-child(2n){
+    background: #383838;
+}
+.style-table tbody tr:nth-child(2n+1){
+    background: #171719;
+}
+/** 企业财务分析新增 **/
+.corFinancial-chart .chart-left.risk-level .company-module{
+    float: none!important;
+    margin-top: 10px!important;
+}
+
+
+/*企业财务分析*/
+.corFinancial-chart-statistics .block-module{
+    display: block;
+    float: left;
+    width: 700px;
+    height: 310px;
+    padding: 5px ;
+    margin: 0 20px 22px 20px;
+}
+.block-module-background{
+    background: #141515 !important;
+    border: 2px solid #090204;border-radius: 6px;
+}
+.corFinancial-chart-statistics .m-b-10{
+    margin-top: 10px;
+}
+.m-t-10{
+   margin-top: 10px!important;
+}
+/** 财务分析时间轴 **/
+.financial-tree{
+    width: 100%;
+    margin-top:20px;
+}
+.financial-tree ul li{
+    float: left;
+    position: relative;
+    height: 120px;
+}
+.financial-tree ul li i{
+    position: absolute;
+    top:60px;
+    width: 32px;
+    height: 32px;
+    border:2px solid #080305;
+    background: #666666;
+    border-radius: 50%;
+}
+.financial-tree .btn-group li.on i,.financial-tree .btn-group li.able:hover i{
+    background: #0c9d36;
+}
+.financial-tree .btn-group li i.start-pot:after,.financial-tree .btn-group li i.middle-pot:after{
+    position: absolute;
+    left: 32px;
+    top:14px;
+    height: 4px;
+    background: #3D3E40;
+    content: '';
+}
+.financial-tree .btn-group li i.end-pot:after,.financial-tree .btn-group li i.start-pot:before{
+    position: absolute;
+    content: '';
+    top:14px;
+    height: 4px;
+}
+.financial-tree .btn-group li i.start-pot:before{
+    right: 32px;
+}
+.financial-tree .btn-group li i.end-pot:after{
+    left: 32px;
+}
+/* 年份 */
+.financial-year{
+    padding-left: 10%;
+}
+.financial-year ul li{
+    margin-right: 100px;
+}
+.financial-year ul li .btn-cm{
+    width: 122px;
+}
+.financial-year ul li i{
+    left: 60px;
+}
+.financial-year  .btn-group li i:after{
+    width: 202px;
+}
+.financial-year .btn-group li i.start-pot:before,.financial-year .btn-group li i.end-pot:after {
+    width: 123px;
+}
+.financial-year .btn-group li i.start-pot:before{
+    background: url("../image/year-left.png");
+}
+.financial-year .btn-group li i.end-pot:after{
+    background: url("../image/year-right.png");
+}
+
+/* 月份 */
+.financial-month ul li{
+    margin-right: 25px;
+}
+.financial-month ul li .btn-cm{
+    width: 60px;
+}
+.financial-month ul li i{
+    left: 30px;
+}
+.financial-month  .btn-group li i:after{
+    width: 70px;
+}
+.financial-month .btn-group li i.start-pot:before,.financial-month .btn-group li i.end-pot:after {
+    width: 50px;
+}
+.financial-month .btn-group li i.start-pot:before{
+    background: url("../image/month-left.png");
+}
+.financial-month .btn-group li i.end-pot:after{
+    background: url("../image/month-right.png");
+}
+/* 月份的年 */
+.financial-month>div.select-group{
+    float: left;
+    position: relative;
+    width: 120px;
+    margin-right:60px;
+    margin-left:15px;
+}
+.financial-month>div.select-group .btn-cm{
+    margin-left: -9px;
+    width: 143px;
+    padding-left: 15px;
+    background: url(../image/left-btn-on-line.png);
+}
+.financial-month>div.select-group:before,.financial-month>div.select-group:after{
+    position: absolute;
+    top: 0;
+    width: 15px;
+    height: 45px;
+    content: '';
+}
+.financial-month>div.select-group:before{
+    left: -15px;
+    background: url(../image/left-btn-on-left.png);
+}
+.financial-month>div.select-group:after{
+    right: -15px;
+    background: url(../image/left-btn-on-right.png);
+}
+.financial-month>div.select-group i{
+    position: absolute;
+    width: 15px;
+    height: 8px;
+    top: 20px;
+    right: 7px;
+    background: url("../image/select-arrow.png");
+}
+
+/** 人事效能  **/
+.personnel-efficiency{
+    margin: 0 0 0 25px;
+    padding: 5px 25px 0 0;
+    overflow-y: inherit;
+}
+.personnel-efficiency .personal-div{
+    background: #333333;
+    border:2px solid #000;
+    width: 100%;
+    height: 330px;
+    padding:30px 10px;
+    margin-top:30px;
+}
+.personnel-efficiency .personal-div>div{
+    float: left;
+    margin-right: 14px;
+}
+.person-photo{
+    width: 210px;
+}
+.person-photo img{
+    display: block;
+    width:179px;
+    height: 215px;
+    margin:0 auto;
+}
+.person-photo p{
+    text-align: center;
+    font-size: 20px;
+    line-height:35px;
+}
+.person-info{
+    width: 384px;
+    border-right:2px dotted #767676;
+    height: 280px;
+}
+.person-info>div{
+    margin-bottom: 20px;
+}
+.person-info>div span{
+    font-size: 18px;
+    display: inline-block;
+}
+.person-info>div .person-info-title{
+    width: 100px;
+    position: relative;
+    height: 39px;
+    line-height: 39px;
+    text-align: center;
+    margin-right: 15px;
+}
+.person-info>div .person-info-title:before,.person-info>div .person-info-title:after{
+    position: absolute;
+    width: 6px;
+    height: 39px;
+    top:0;
+    content: '';
+}
+.person-info>div .person-info-title:before{
+    left:-6px;
+}
+.person-info>div .person-info-title:after{
+    right:-6px;
+}
+.person-info>div .person-title-green{
+    background: url("../image/person-info-title-green-line.png") repeat-x;
+}
+.person-info>div .person-title-green:before{
+    background: url("../image/person-info-title-green-left.png");
+}
+.person-info>div .person-title-green:after{
+    background: url("../image/person-info-title-green-right.png");
+}
+.person-info>div .person-title-orange{
+    vertical-align: top;
+    background: url("../image/person-info-title-orange-line.png") repeat-x;
+}
+.person-info>div .person-title-orange:before{
+    background: url("../image/person-info-title-orange-left.png");
+}
+.person-info>div .person-title-orange:after{
+    background: url("../image/person-info-title-orange-right.png");
+}
+.person-info>div .person-title-red{
+    vertical-align: top;
+    background: url("../image/person-info-title-red-line.png") repeat-x;
+}
+.person-info>div .person-title-red:before{
+    background: url("../image/person-info-title-red-left.png");
+}
+.person-info>div .person-title-red:after{
+    background: url("../image/person-info-title-red-right.png");
+}
+.person-info>div span.info-data{
+    line-height: 35px;
+    width: 262px;
+}
+.person-info:last-child{
+    border-right:none;
+}
+/** 系统轮播，无数据样式 **/
+.news-box .news-main p.news-none{
+    text-align: center;
+    margin-top: 50px;
+    width: 300px;
+    color: #0e6ab0;
+    font-size: 20px !important;
+}

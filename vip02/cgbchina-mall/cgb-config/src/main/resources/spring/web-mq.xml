@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+				        http://www.springframework.org/schema/jms
+				        http://www.springframework.org/schema/jms/spring-jms-4.0.xsd">
+	<bean id="connectionFactory"
+		class="org.springframework.jms.connection.CachingConnectionFactory">
+		<description>JMS连接工厂</description>
+		<property name="targetConnectionFactory">
+			<bean class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+				<property name="brokerURL" value="#{app.mqbrokerURL}" />
+				<property name="userName" value="#{app.mquserName}" />
+				<property name="password" value="#{app.mqpassword}" />
+				<property name="trustAllPackages" value="true" />
+			</bean>
+		</property>
+		<property name="sessionCacheSize" value="#{app.mqsessionCacheSize}" />
+	</bean>
+	<bean id="messageConverter" class="com.spirit.jms.mq.NotifyMessageConverter"/>
+	<!-- 配置消息发送目的地方式 -->
+	<!-- Queue队列：仅有一个订阅者会收到消息，消息一旦被处理就不会存在队列中 -->
+	<bean id="jmsQueueTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<description>队列模式模型</description>
+		<constructor-arg ref="connectionFactory" />
+		<property name="receiveTimeout" value="#{app.mqreceiveTimeout}" />
+		<property name="pubSubDomain" value="false" />
+		<property name="messageConverter" ref="messageConverter" />
+	</bean>
+
+	<bean id="notifyQueueSmsU" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="shop.cgb.sms.upload"></constructor-arg>
+	</bean>
+	<!-- 使用Spring JmsTemplate 的消息生产者 -->
+	<bean id="queueSenderSmsU" class="com.spirit.jms.mq.QueueSender">
+		<property name="jmsTemplate" ref="jmsQueueTemplate" />
+		<property name="notifyQueue" ref="notifyQueueSmsU" />
+	</bean>
+</beans>

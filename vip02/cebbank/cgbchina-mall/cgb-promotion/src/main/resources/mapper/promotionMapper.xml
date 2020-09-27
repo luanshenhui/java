@@ -1,0 +1,1029 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PromotionModel">
+    <resultMap id="PromotionMap" type="PromotionModel">
+        <result property="id" column="id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="promCode" column="prom_code"/>
+        <result property="name" column="name"/>
+        <result property="shortName" column="short_name"/>
+        <result property="promType" column="prom_type"/>
+        <result property="isSignup" column="is_signup"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="loopType" column="loopType"/>
+        <result property="loopData" column="loopData"/>
+        <result property="loopBeginTime1" column="loopBeginTime1"/>
+        <result property="loopEndTime1" column="loopEndTime1"/>
+        <result property="loopBeginTime2" column="loopBeginTime2"/>
+        <result property="loopEndTime2" column="loopEndTime2"/>
+        <result property="ruleDiscountRate" column="ruleDiscountRate"/>
+        <result property="ruleLimitBuyCount" column="ruleLimitBuyCount"/>
+        <result property="ruleLimitBuyType" column="ruleLimitBuyType"/>
+        <result property="ruleFrequency" column="ruleFrequency"/>
+        <result property="ruleLimitTicket" column="ruleLimitTicket"/>
+        <result property="ruleGroupCount" column="ruleGroupCount"/>
+        <result property="ruleMinPay1" column="ruleMinPay1"/>
+        <result property="ruleMinPay2" column="ruleMinPay2"/>
+        <result property="ruleMinPay3" column="ruleMinPay3"/>
+        <result property="ruleMinPay4" column="ruleMinPay4"/>
+        <result property="ruleMinPay5" column="ruleMinPay5"/>
+        <result property="ruleMinPay6" column="ruleMinPay6"/>
+        <result property="ruleMinPay7" column="ruleMinPay7"/>
+        <result property="ruleMinPay8" column="ruleMinPay8"/>
+        <result property="ruleMinPay9" column="ruleMinPay9"/>
+        <result property="ruleMinPay10" column="ruleMinPay10"/>
+        <result property="ruleFee1" column="ruleFee1"/>
+        <result property="ruleFee2" column="ruleFee2"/>
+        <result property="ruleFee3" column="ruleFee3"/>
+        <result property="ruleFee4" column="ruleFee4"/>
+        <result property="ruleFee5" column="ruleFee5"/>
+        <result property="ruleFee6" column="ruleFee6"/>
+        <result property="ruleFee7" column="ruleFee7"/>
+        <result property="ruleFee8" column="ruleFee8"/>
+        <result property="ruleFee9" column="ruleFee9"/>
+        <result property="ruleFee10" column="ruleFee10"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="description" column="description"/>
+        <result property="feeRule" column="fee_rule"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="beginEntryDate" column="begin_entry_date"/>
+        <result property="endEntryDate" column="end_entry_date"/>
+        <result property="createOperType" column="create_oper_type"/>
+        <result property="modifyOperType" column="modify_oper_type"/>
+        <result property="auditLog" column="audit_log"/>
+        <result property="auditOper" column="audit_oper"/>
+        <result property="auditDate" column="audit_date"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result column="range_count" property="rangeCount"/>
+        <result column="audit_range_count" property="auditRangeCount"/>
+    </resultMap>
+    <sql id="columns">
+        id,ordertype_id,range_count,audit_range_count,prom_code,name,short_name,prom_type,is_signup,begin_date,end_date,loopType,loopData,loopBeginTime1,loopEndTime1,loopBeginTime2,loopEndTime2,ruleDiscountRate,ruleLimitBuyCount,ruleLimitBuyType,ruleFrequency,ruleLimitTicket,ruleGroupCount,ruleMinPay1,ruleMinPay2,ruleMinPay3,ruleMinPay4,ruleMinPay5,ruleMinPay6,ruleMinPay7,ruleMinPay8,ruleMinPay9,ruleMinPay10,ruleFee1,ruleFee2,ruleFee3,ruleFee4,ruleFee5,ruleFee6,ruleFee7,ruleFee8,ruleFee9,ruleFee10,source_id,description,fee_rule,check_status,begin_entry_date,end_entry_date,create_oper_type,modify_oper_type,audit_log,audit_oper,audit_date,is_valid,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="PromotionModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_promotion
+        (ordertype_id
+        ,prom_code
+        ,name
+        ,short_name
+        ,prom_type
+        ,is_signup
+        ,begin_date
+        ,end_date
+        ,loopType
+        ,loopData
+        ,loopBeginTime1
+        ,loopEndTime1
+        ,loopBeginTime2
+        ,loopEndTime2
+        ,ruleDiscountRate
+        ,ruleLimitBuyCount
+        ,ruleLimitBuyType
+        ,ruleFrequency
+        ,ruleLimitTicket
+        ,ruleGroupCount
+        ,ruleMinPay1
+        ,ruleMinPay2
+        ,ruleMinPay3
+        ,ruleMinPay4
+        ,ruleMinPay5
+        ,ruleMinPay6
+        ,ruleMinPay7
+        ,ruleMinPay8
+        ,ruleMinPay9
+        ,ruleMinPay10
+        ,ruleFee1
+        ,ruleFee2
+        ,ruleFee3
+        ,ruleFee4
+        ,ruleFee5
+        ,ruleFee6
+        ,ruleFee7
+        ,ruleFee8
+        ,ruleFee9
+        ,ruleFee10
+        ,source_id
+        ,description
+        ,fee_rule
+        ,check_status
+        ,begin_entry_date
+        ,end_entry_date
+        ,create_oper_type
+        ,modify_oper_type
+        ,audit_log
+        ,audit_oper
+        ,audit_date
+        ,is_valid
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{ordertypeId}
+        ,#{promCode}
+        ,#{name}
+        ,#{shortName}
+        ,#{promType}
+        ,#{isSignup}
+        ,#{beginDate}
+        ,#{endDate}
+        ,#{loopType}
+        ,#{loopData}
+        ,#{loopBeginTime1}
+        ,#{loopEndTime1}
+        ,#{loopBeginTime2}
+        ,#{loopEndTime2}
+        ,#{ruleDiscountRate}
+        ,#{ruleLimitBuyCount}
+        ,#{ruleLimitBuyType}
+        ,#{ruleFrequency}
+        ,#{ruleLimitTicket}
+        ,#{ruleGroupCount}
+        ,#{ruleMinPay1}
+        ,#{ruleMinPay2}
+        ,#{ruleMinPay3}
+        ,#{ruleMinPay4}
+        ,#{ruleMinPay5}
+        ,#{ruleMinPay6}
+        ,#{ruleMinPay7}
+        ,#{ruleMinPay8}
+        ,#{ruleMinPay9}
+        ,#{ruleMinPay10}
+        ,#{ruleFee1}
+        ,#{ruleFee2}
+        ,#{ruleFee3}
+        ,#{ruleFee4}
+        ,#{ruleFee5}
+        ,#{ruleFee6}
+        ,#{ruleFee7}
+        ,#{ruleFee8}
+        ,#{ruleFee9}
+        ,#{ruleFee10}
+        ,#{sourceId}
+        ,#{description}
+        ,#{feeRule}
+        ,#{checkStatus}
+        ,#{beginEntryDate}
+        ,#{endEntryDate}
+        ,#{createOperType}
+        ,#{modifyOperType}
+        ,#{auditLog}
+        ,#{auditOper}
+        ,#{auditDate}
+        ,#{isValid}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+    </insert>
+
+    <update id="update" parameterType="PromotionModel">
+        update tbl_promotion set
+        <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+            ,
+        </if>
+        <if test="promCode !=null">prom_code = #{promCode}
+            ,
+        </if>
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="shortName !=null">short_name = #{shortName}
+            ,
+        </if>
+        <if test="promType !=null">prom_type = #{promType}
+            ,
+        </if>
+        <if test="isSignup !=null">is_signup = #{isSignup}
+            ,
+        </if>
+        <if test="beginDate !=null">begin_date = #{beginDate}
+            ,
+        </if>
+        <if test="endDate !=null">end_date = #{endDate}
+            ,
+        </if>
+        <if test="loopType !=null">loopType = #{loopType}
+            ,
+        </if>
+        <if test="loopData !=null">loopData = #{loopData}
+            ,
+        </if>
+        <if test="loopBeginTime1 !=null">loopBeginTime1 = #{loopBeginTime1}
+            ,
+        </if>
+        <if test="loopEndTime1 !=null">loopEndTime1 = #{loopEndTime1}
+            ,
+        </if>
+        <if test="loopBeginTime2 !=null">loopBeginTime2 = #{loopBeginTime2}
+            ,
+        </if>
+        <if test="loopEndTime2 !=null">loopEndTime2 = #{loopEndTime2}
+            ,
+        </if>
+        <if test="ruleDiscountRate !=null">ruleDiscountRate = #{ruleDiscountRate}
+            ,
+        </if>
+        <if test="ruleLimitBuyCount !=null">ruleLimitBuyCount = #{ruleLimitBuyCount}
+            ,
+        </if>
+        <if test="ruleLimitBuyType !=null">ruleLimitBuyType = #{ruleLimitBuyType}
+            ,
+        </if>
+        <if test="ruleFrequency !=null">ruleFrequency = #{ruleFrequency}
+            ,
+        </if>
+        <if test="ruleLimitTicket !=null">ruleLimitTicket = #{ruleLimitTicket}
+            ,
+        </if>
+        <if test="ruleGroupCount !=null">ruleGroupCount = #{ruleGroupCount}
+            ,
+        </if>
+        <if test="ruleMinPay1 !=null">ruleMinPay1 = #{ruleMinPay1}
+            ,
+        </if>
+        <if test="ruleMinPay2 !=null">ruleMinPay2 = #{ruleMinPay2}
+            ,
+        </if>
+        <if test="ruleMinPay3 !=null">ruleMinPay3 = #{ruleMinPay3}
+            ,
+        </if>
+        <if test="ruleMinPay4 !=null">ruleMinPay4 = #{ruleMinPay4}
+            ,
+        </if>
+        <if test="ruleMinPay5 !=null">ruleMinPay5 = #{ruleMinPay5}
+            ,
+        </if>
+        <if test="ruleMinPay6 !=null">ruleMinPay6 = #{ruleMinPay6}
+            ,
+        </if>
+        <if test="ruleMinPay7 !=null">ruleMinPay7 = #{ruleMinPay7}
+            ,
+        </if>
+        <if test="ruleMinPay8 !=null">ruleMinPay8 = #{ruleMinPay8}
+            ,
+        </if>
+        <if test="ruleMinPay9 !=null">ruleMinPay9 = #{ruleMinPay9}
+            ,
+        </if>
+        <if test="ruleMinPay10 !=null">ruleMinPay10 = #{ruleMinPay10}
+            ,
+        </if>
+        <if test="ruleFee1 !=null">ruleFee1 = #{ruleFee1}
+            ,
+        </if>
+        <if test="ruleFee2 !=null">ruleFee2 = #{ruleFee2}
+            ,
+        </if>
+        <if test="ruleFee3 !=null">ruleFee3 = #{ruleFee3}
+            ,
+        </if>
+        <if test="ruleFee4 !=null">ruleFee4 = #{ruleFee4}
+            ,
+        </if>
+        <if test="ruleFee5 !=null">ruleFee5 = #{ruleFee5}
+            ,
+        </if>
+        <if test="ruleFee6 !=null">ruleFee6 = #{ruleFee6}
+            ,
+        </if>
+        <if test="ruleFee7 !=null">ruleFee7 = #{ruleFee7}
+            ,
+        </if>
+        <if test="ruleFee8 !=null">ruleFee8 = #{ruleFee8}
+            ,
+        </if>
+        <if test="ruleFee9 !=null">ruleFee9 = #{ruleFee9}
+            ,
+        </if>
+        <if test="ruleFee10 !=null">ruleFee10 = #{ruleFee10}
+            ,
+        </if>
+        <if test="sourceId !=null">source_id = #{sourceId}
+            ,
+        </if>
+        <if test="description !=null">description = #{description}
+            ,
+        </if>
+        <if test="feeRule !=null">fee_rule = #{feeRule}
+            ,
+        </if>
+        <if test="checkStatus !=null">check_status = #{checkStatus}
+            ,
+        </if>
+        <if test="beginEntryDate !=null">begin_entry_date = #{beginEntryDate}
+            ,
+        </if>
+        <if test="endEntryDate !=null">end_entry_date = #{endEntryDate}
+            ,
+        </if>
+        <if test="createOperType !=null">create_oper_type = #{createOperType}
+            ,
+        </if>
+        <if test="modifyOperType !=null">modify_oper_type = #{modifyOperType}
+            ,
+        </if>
+        <if test="auditLog !=null">audit_log = #{auditLog}
+            ,
+        </if>
+        <if test="auditOper !=null">audit_oper = #{auditOper}
+            ,
+        </if>
+        <if test="auditDate !=null">audit_date = #{auditDate}
+            ,
+        </if>
+        <if test="isValid !=null">is_valid = #{isValid}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+            ,
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="promCode !=null">and prom_code = #{promCode}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="shortName !=null">and short_name = #{shortName}</if>
+            <if test="promType !=null">and prom_type = #{promType}</if>
+            <if test="isSignup !=null">and is_signup = #{isSignup}</if>
+            <if test="beginDate !=null">and begin_date = #{beginDate}</if>
+            <if test="endDate !=null">and end_date = #{endDate}</if>
+            <if test="loopType !=null">and loopType = #{loopType}</if>
+            <if test="loopData !=null">and loopData = #{loopData}</if>
+            <if test="loopBeginTime1 !=null">and loopBeginTime1 = #{loopBeginTime1}</if>
+            <if test="loopEndTime1 !=null">and loopEndTime1 = #{loopEndTime1}</if>
+            <if test="loopBeginTime2 !=null">and loopBeginTime2 = #{loopBeginTime2}</if>
+            <if test="loopEndTime2 !=null">and loopEndTime2 = #{loopEndTime2}</if>
+            <if test="ruleDiscountRate !=null">and ruleDiscountRate = #{ruleDiscountRate}</if>
+            <if test="ruleLimitBuyCount !=null">and ruleLimitBuyCount = #{ruleLimitBuyCount}</if>
+            <if test="ruleLimitBuyType !=null">and ruleLimitBuyType = #{ruleLimitBuyType}</if>
+            <if test="ruleFrequency !=null">and ruleFrequency = #{ruleFrequency}</if>
+            <if test="ruleLimitTicket !=null">and ruleLimitTicket = #{ruleLimitTicket}</if>
+            <if test="ruleGroupCount !=null">and ruleGroupCount = #{ruleGroupCount}</if>
+            <if test="ruleMinPay1 !=null">and ruleMinPay1 = #{ruleMinPay1}</if>
+            <if test="ruleMinPay2 !=null">and ruleMinPay2 = #{ruleMinPay2}</if>
+            <if test="ruleMinPay3 !=null">and ruleMinPay3 = #{ruleMinPay3}</if>
+            <if test="ruleMinPay4 !=null">and ruleMinPay4 = #{ruleMinPay4}</if>
+            <if test="ruleMinPay5 !=null">and ruleMinPay5 = #{ruleMinPay5}</if>
+            <if test="ruleMinPay6 !=null">and ruleMinPay6 = #{ruleMinPay6}</if>
+            <if test="ruleMinPay7 !=null">and ruleMinPay7 = #{ruleMinPay7}</if>
+            <if test="ruleMinPay8 !=null">and ruleMinPay8 = #{ruleMinPay8}</if>
+            <if test="ruleMinPay9 !=null">and ruleMinPay9 = #{ruleMinPay9}</if>
+            <if test="ruleMinPay10 !=null">and ruleMinPay10 = #{ruleMinPay10}</if>
+            <if test="ruleFee1 !=null">and ruleFee1 = #{ruleFee1}</if>
+            <if test="ruleFee2 !=null">and ruleFee2 = #{ruleFee2}</if>
+            <if test="ruleFee3 !=null">and ruleFee3 = #{ruleFee3}</if>
+            <if test="ruleFee4 !=null">and ruleFee4 = #{ruleFee4}</if>
+            <if test="ruleFee5 !=null">and ruleFee5 = #{ruleFee5}</if>
+            <if test="ruleFee6 !=null">and ruleFee6 = #{ruleFee6}</if>
+            <if test="ruleFee7 !=null">and ruleFee7 = #{ruleFee7}</if>
+            <if test="ruleFee8 !=null">and ruleFee8 = #{ruleFee8}</if>
+            <if test="ruleFee9 !=null">and ruleFee9 = #{ruleFee9}</if>
+            <if test="ruleFee10 !=null">and ruleFee10 = #{ruleFee10}</if>
+            <if test="sourceId !=null">and source_id = #{sourceId}</if>
+            <if test="description !=null">and description = #{description}</if>
+            <if test="feeRule !=null">and fee_rule = #{feeRule}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="beginEntryDate !=null">and begin_entry_date = #{beginEntryDate}</if>
+            <if test="endEntryDate !=null">and end_entry_date = #{endEntryDate}</if>
+            <if test="createOperType !=null">and create_oper_type = #{createOperType}</if>
+            <if test="modifyOperType !=null">and modify_oper_type = #{modifyOperType}</if>
+            <if test="auditLog !=null">and audit_log = #{auditLog}</if>
+            <if test="auditOper !=null">and audit_oper = #{auditOper}</if>
+            <if test="auditDate !=null">and audit_date = #{auditDate}</if>
+            <if test="isValid !=null">and is_valid = #{isValid}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="PromotionMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_promotion
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="PromotionMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_promotion
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="PromotionMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="PromotionModel">
+        delete from tbl_promotion where id = id
+    </delete>
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_promotion
+        <include refid="conditions"/>
+    </select>
+    <select id="vendorFindByCode" parameterType="Map" resultMap="PromotionMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_promotion
+        where prom_code=#{promCode}
+    </select>
+    <!--内管平台-->
+    <select id="adminPage" parameterType="Map" resultMap="PromotionMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_promotion
+        WHERE 1=1
+        <if test="id !=null">and id = #{id}</if>
+        <if test="shortName !=null">and short_name LIKE CONCAT("%",CONCAT(#{shortName},"%"))</if>
+        <if test="promType !=null">and prom_type = #{promType}</if>
+        <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+        <if test="createOperType !=null">and create_oper_type = #{createOperType}</if>
+        <if test="beginDate !=null">and begin_date &gt; #{beginDate}</if>
+        <if test="endDate !=null">and end_date &lt; #{endDate}</if>
+        <if test="sourceId != null">AND source_id LIKE CONCAT(CONCAT("%",#{sourceId}),"%")</if>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="adminPageCount" parameterType="Map" resultType="Long">
+        SELECT
+        COUNT(1)
+        FROM tbl_promotion
+        WHERE 1=1
+        <if test="id !=null">and id = #{id}</if>
+        <if test="shortName !=null">and short_name LIKE CONCAT("%",CONCAT(#{shortName},"%"))</if>
+        <if test="promType !=null">and prom_type = #{promType}</if>
+        <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+        <if test="createOperType !=null">and create_oper_type = #{createOperType}</if>
+        <if test="beginDate !=null">and begin_date &gt; #{beginDate}</if>
+        <if test="endDate !=null">and end_date &lt; #{endDate}</if>
+        <if test="sourceId != null">AND source_id LIKE CONCAT(CONCAT("%",#{sourceId}),"%")</if>
+    </select>
+    <insert id="adminAdd" parameterType="PromotionModel" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into tbl_promotion
+        (ordertype_id
+        ,prom_code
+        ,name
+        ,short_name
+        ,prom_type
+        ,is_signup
+        ,begin_date
+        ,end_date
+        ,loopType
+        ,loopData
+        ,loopBeginTime1
+        ,loopEndTime1
+        ,loopBeginTime2
+        ,loopEndTime2
+        ,ruleDiscountRate
+        ,ruleLimitBuyCount
+        ,ruleLimitBuyType
+        ,ruleFrequency
+        ,ruleLimitTicket
+        ,ruleGroupCount
+        ,ruleMinPay1
+        ,ruleMinPay2
+        ,ruleMinPay3
+        ,ruleMinPay4
+        ,ruleMinPay5
+        ,ruleMinPay6
+        ,ruleMinPay7
+        ,ruleMinPay8
+        ,ruleMinPay9
+        ,ruleMinPay10
+        ,ruleFee1
+        ,ruleFee2
+        ,ruleFee3
+        ,ruleFee4
+        ,ruleFee5
+        ,ruleFee6
+        ,ruleFee7
+        ,ruleFee8
+        ,ruleFee9
+        ,ruleFee10
+        ,source_id
+        ,description
+        ,fee_rule
+        ,check_status
+        ,begin_entry_date
+        ,end_entry_date
+        ,create_oper_type
+        ,audit_log
+        ,audit_oper
+        ,audit_date
+        ,is_valid
+        ,create_oper
+        ,create_time)
+        values(#{ordertypeId}
+        ,#{promCode}
+        ,#{name}
+        ,#{shortName}
+        ,#{promType}
+        ,#{isSignup}
+        ,#{beginDate}
+        ,#{endDate}
+        ,#{loopType}
+        ,#{loopData}
+        ,#{loopBeginTime1}
+        ,#{loopEndTime1}
+        ,#{loopBeginTime2}
+        ,#{loopEndTime2}
+        ,#{ruleDiscountRate}
+        ,#{ruleLimitBuyCount}
+        ,#{ruleLimitBuyType}
+        ,#{ruleFrequency}
+        ,#{ruleLimitTicket}
+        ,#{ruleGroupCount}
+        ,#{ruleMinPay1}
+        ,#{ruleMinPay2}
+        ,#{ruleMinPay3}
+        ,#{ruleMinPay4}
+        ,#{ruleMinPay5}
+        ,#{ruleMinPay6}
+        ,#{ruleMinPay7}
+        ,#{ruleMinPay8}
+        ,#{ruleMinPay9}
+        ,#{ruleMinPay10}
+        ,#{ruleFee1}
+        ,#{ruleFee2}
+        ,#{ruleFee3}
+        ,#{ruleFee4}
+        ,#{ruleFee5}
+        ,#{ruleFee6}
+        ,#{ruleFee7}
+        ,#{ruleFee8}
+        ,#{ruleFee9}
+        ,#{ruleFee10}
+        ,#{sourceId}
+        ,#{description}
+        ,#{feeRule}
+        ,#{checkStatus}
+        ,#{beginEntryDate}
+        ,#{endEntryDate}
+        ,#{createOperType}
+        ,#{auditLog}
+        ,#{auditOper}
+        ,#{auditDate}
+        ,#{isValid}
+        ,#{createOper}
+        ,NOW())
+    </insert>
+    <update id="adminUpdate" parameterType="PromotionModel">
+        update tbl_promotion set
+
+        `name` = #{name},
+        `short_name` = #{shortName} ,
+
+        begin_date = #{beginDate}
+        ,
+
+        end_date = #{endDate} ,
+
+        loopType = #{loopType}
+        ,
+
+        loopData = #{loopData}
+        ,
+
+        loopBeginTime1 = #{loopBeginTime1}
+        ,
+
+        loopEndTime1 = #{loopEndTime1}
+        ,
+
+        loopBeginTime2 = #{loopBeginTime2}
+        ,
+
+        loopEndTime2 = #{loopEndTime2}
+        ,
+
+        ruleDiscountRate = #{ruleDiscountRate}
+        ,
+        ruleLimitBuyCount = #{ruleLimitBuyCount}
+        ,
+
+        ruleLimitBuyType = #{ruleLimitBuyType}
+        ,
+
+        ruleFrequency = #{ruleFrequency}
+        ,
+
+        ruleLimitTicket = #{ruleLimitTicket}
+        ,
+
+        ruleGroupCount = #{ruleGroupCount}
+        ,
+
+        ruleMinPay1 = #{ruleMinPay1}
+        ,
+
+        ruleMinPay2 = #{ruleMinPay2}
+        ,
+
+        ruleMinPay3 = #{ruleMinPay3}
+        ,
+
+        ruleMinPay4 = #{ruleMinPay4}
+        ,
+
+        ruleMinPay5 = #{ruleMinPay5}
+        ,
+
+        ruleMinPay6 = #{ruleMinPay6}
+        ,
+
+        ruleMinPay7 = #{ruleMinPay7}
+        ,
+
+        ruleMinPay8 = #{ruleMinPay8}
+        ,
+
+        ruleMinPay9 = #{ruleMinPay9}
+        ,
+
+        ruleMinPay10 = #{ruleMinPay10}
+        ,
+
+        ruleFee1 = #{ruleFee1}
+        ,
+
+        ruleFee2 = #{ruleFee2}
+        ,
+
+        ruleFee3 = #{ruleFee3}
+        ,
+
+        ruleFee4 = #{ruleFee4}
+        ,
+
+        ruleFee5 = #{ruleFee5}
+        ,
+
+        ruleFee6 = #{ruleFee6}
+        ,
+
+        ruleFee7 = #{ruleFee7}
+        ,
+
+        ruleFee8 = #{ruleFee8}
+        ,
+
+        ruleFee9 = #{ruleFee9}
+        ,
+
+        ruleFee10 = #{ruleFee10}
+        ,
+
+        source_id = #{sourceId}
+        ,
+
+        description = #{description}
+        ,
+       begin_entry_date = #{beginEntryDate}
+            ,
+            check_status=#{checkStatus},
+       end_entry_date = #{endEntryDate}
+            ,
+
+        modify_time =NOW(),modify_oper_type = #{modifyOperType},modify_oper = #{modifyOper}
+        where id = #{id}
+    </update>
+    <sql id="conditionsBySelectName">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="promCode !=null">and prom_code = #{promCode}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="shortName !=null">and short_name = #{shortName}</if>
+            <if test="promType !=null">and prom_type = #{promType}</if>
+            <if test="isSignup !=null">and is_signup = #{isSignup}</if>
+            <if test="beginDate !=null">and begin_date <![CDATA[ >= ]]> #{beginDate}</if>
+            <if test="endDate !=null">and end_date <![CDATA[ <= ]]> #{endDate}</if>
+            <if test="loopType !=null">and loopType = #{loopType}</if>
+            <if test="loopData !=null">and loopData = #{loopData}</if>
+            <if test="loopBeginTime1 !=null">and loopBeginTime1 = #{loopBeginTime1}</if>
+            <if test="loopEndTime1 !=null">and loopEndTime1 = #{loopEndTime1}</if>
+            <if test="loopBeginTime2 !=null">and loopBeginTime2 = #{loopBeginTime2}</if>
+            <if test="loopEndTime2 !=null">and loopEndTime2 = #{loopEndTime2}</if>
+            <if test="ruleDiscountRate !=null">and ruleDiscountRate = #{ruleDiscountRate}</if>
+            <if test="ruleLimitBuyCount !=null">and ruleLimitBuyCount = #{ruleLimitBuyCount}</if>
+            <if test="ruleLimitBuyType !=null">and ruleLimitBuyType = #{ruleLimitBuyType}</if>
+            <if test="ruleFrequency !=null">and ruleFrequency = #{ruleFrequency}</if>
+            <if test="ruleLimitTicket !=null">and ruleLimitTicket = #{ruleLimitTicket}</if>
+            <if test="ruleGroupCount !=null">and ruleGroupCount = #{ruleGroupCount}</if>
+            <if test="sourceId !=null">and source_id = #{sourceId}</if>
+            <if test="description !=null">and description = #{description}</if>
+            <if test="feeRule !=null">and fee_rule = #{feeRule}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="beginEntryDate !=null">and begin_entry_date = #{beginEntryDate}</if>
+            <if test="endEntryDate !=null">and end_entry_date = #{endEntryDate}</if>
+            <if test="createOperType !=null">and create_oper_type = #{createOperType}</if>
+            <if test="modifyOperType !=null">and modify_oper_type = #{modifyOperType}</if>
+            <if test="auditLog !=null">and audit_log = #{auditLog}</if>
+            <if test="auditOper !=null">and audit_oper = #{auditOper}</if>
+            <if test="auditDate !=null">and audit_date = #{auditDate}</if>
+            <if test="isValid !=null">and is_valid = #{isValid}</if>
+            <if test="promotionIdList != null">and id in #{promotionIdList}</if>
+        </where>
+    </sql>
+    <sql id="conditionsBySelectNameForAdmin">
+        <where>
+            prom_type in ('10','20')
+            and check_status in ('3','5','6','7','8')
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="promCode !=null">and prom_code = #{promCode}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="shortName !=null">and short_name = #{shortName}</if>
+            <if test="promType !=null">and prom_type = #{promType}</if>
+            <if test="isSignup !=null">and is_signup = #{isSignup}</if>
+            <if test="beginDate !=null">and begin_date <![CDATA[ >= ]]> #{beginDate}</if>
+            <if test="endDate !=null">and end_date <![CDATA[ <= ]]> #{endDate}</if>
+            <if test="loopType !=null">and loopType = #{loopType}</if>
+            <if test="loopData !=null">and loopData = #{loopData}</if>
+            <if test="loopBeginTime1 !=null">and loopBeginTime1 = #{loopBeginTime1}</if>
+            <if test="loopEndTime1 !=null">and loopEndTime1 = #{loopEndTime1}</if>
+            <if test="loopBeginTime2 !=null">and loopBeginTime2 = #{loopBeginTime2}</if>
+            <if test="loopEndTime2 !=null">and loopEndTime2 = #{loopEndTime2}</if>
+            <if test="ruleDiscountRate !=null">and ruleDiscountRate = #{ruleDiscountRate}</if>
+            <if test="ruleLimitBuyCount !=null">and ruleLimitBuyCount = #{ruleLimitBuyCount}</if>
+            <if test="ruleLimitBuyType !=null">and ruleLimitBuyType = #{ruleLimitBuyType}</if>
+            <if test="ruleFrequency !=null">and ruleFrequency = #{ruleFrequency}</if>
+            <if test="ruleLimitTicket !=null">and ruleLimitTicket = #{ruleLimitTicket}</if>
+            <if test="ruleGroupCount !=null">and ruleGroupCount = #{ruleGroupCount}</if>
+            <if test="sourceId !=null">and source_id = #{sourceId}</if>
+            <if test="description !=null">and description = #{description}</if>
+            <if test="feeRule !=null">and fee_rule = #{feeRule}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="beginEntryDate !=null">and begin_entry_date = #{beginEntryDate}</if>
+            <if test="endEntryDate !=null">and end_entry_date = #{endEntryDate}</if>
+            <if test="createOperType !=null">and create_oper_type = #{createOperType}</if>
+            <if test="modifyOperType !=null">and modify_oper_type = #{modifyOperType}</if>
+            <if test="auditLog !=null">and audit_log = #{auditLog}</if>
+            <if test="auditOper !=null">and audit_oper = #{auditOper}</if>
+            <if test="auditDate !=null">and audit_date = #{auditDate}</if>
+            <if test="isValid !=null">and is_valid = #{isValid}</if>
+            <if test="promotionIdList != null">and id in #{promotionIdList}</if>
+        </where>
+    </sql>
+    <select id="countBySelectName" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_promotion
+        <include refid="conditionsBySelectName"/>
+    </select>
+    <select id="pagerBySelectName" parameterType="Map" resultMap="PromotionMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion
+        <include refid="conditionsBySelectName"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit}]]>
+    </select>
+    <select id="countBySelectNameForAdmin" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_promotion
+        <include refid="conditionsBySelectNameForAdmin"/>
+    </select>
+    <select id="pagerBySelectNameForAdmin" parameterType="Map" resultMap="PromotionMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion
+        <include refid="conditionsBySelectNameForAdmin"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit}]]>
+    </select>
+    <update id="updateCheckStatus" parameterType="Map">
+        UPDATE tbl_promotion SET
+        check_status=#{checkStatus},audit_log=#{auditLog},audit_oper=#{auditOper},audit_date=NOW()
+        WHERE id=#{id}
+    </update>
+    <update id="updateCheckStatusForVendor" parameterType="Map">
+        UPDATE tbl_promotion SET
+        check_status=#{checkStatus}
+        WHERE id=#{id}
+    </update>
+    <select id="findPromotionByIds" parameterType="List" resultMap="PromotionMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_promotion WHERE id IN
+        <foreach collection="list" open="(" close=")" separator="," item="idItem">
+            #{idItem}
+        </foreach>
+    </select>
+
+    <select id="checkManager" resultMap="PromotionMap" parameterType="Map">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_promotion WHERE is_valid=1 AND create_oper_type="0"
+        <if test="id != null">
+            AND id=#{id}
+        </if>
+        <if test="shortName != null">
+            AND short_name LIKE CONCAT("%",CONCAT(#{shortName},"%"))
+        </if>
+        <if test="promType != null">
+            AND prom_type=#{promType}
+        </if>
+        <if test="promType == null">
+            AND prom_type IN ("10","20")
+        </if>
+        <if test="checkStatus !=null">
+            AND check_status=#{checkStatus}
+        </if>
+        <if test="checkStatus == null">
+            AND check_status IN (2,3,4)
+        </if>
+        <if test="beginDate !=null">
+            AND begin_date  <![CDATA[>]]>   #{beginDate}
+        </if>
+        <if test="endDate !=null">
+            AND end_date  <![CDATA[<]]>   #{endDate}
+        </if>
+        <![CDATA[ order by id desc limit #{offset}, #{limit}]]>
+    </select>
+    <select id="doubleCheckManager" resultMap="PromotionMap" parameterType="Map">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_promotion WHERE is_valid=1 AND check_status IN (5,6,7,8)
+        <if test="id != null">
+            AND id=#{id}
+        </if>
+        <if test="shortName != null">
+            AND short_name LIKE CONCAT("%",CONCAT(#{shortName},"%"))
+        </if>
+        <if test="beginDate !=null">
+            AND begin_date  <![CDATA[>]]>   #{beginDate}
+        </if>
+        <if test="endDate !=null">
+            AND end_date  <![CDATA[<]]>   #{endDate}
+        </if>
+        <if test="promType !=null">
+            AND prom_type=#{promType}
+        </if>
+        <if test="checkStatus !=null">
+            AND check_status=#{checkStatus}
+        </if>
+        <if test="createOperType !=null">
+            AND create_oper_type=#{createOperType}
+        </if>
+        <![CDATA[ order by id desc limit #{offset}, #{limit}]]>
+    </select>
+    <update id="offAndDelete" parameterType="Map">
+        UPDATE tbl_promotion SET check_status=#{checkStatus} WHERE id=#{id}
+    </update>
+    <select id="checkManagerCount" resultType="Integer" parameterType="Map">
+        SELECT
+        COUNT(1)
+        FROM tbl_promotion WHERE is_valid=1 AND create_oper_type="0"
+        <if test="id != null">
+            AND id=#{id}
+        </if>
+        <if test="shortName != null">
+            AND short_name LIKE CONCAT("%",CONCAT(#{shortName},"%"))
+        </if>
+        <if test="promType != null">
+            AND prom_type=#{promType}
+        </if>
+        <if test="promType == null">
+            AND prom_type IN ("10","20")
+        </if>
+        <if test="checkStatus !=null">
+            AND check_status=#{checkStatus}
+        </if>
+        <if test="checkStatus == null">
+            AND check_status IN (2,3,4)
+        </if>
+        <if test="beginDate !=null">
+            AND begin_date  <![CDATA[>]]>   #{beginDate}
+        </if>
+        <if test="endDate !=null">
+            AND end_date  <![CDATA[<]]>   #{endDate}
+        </if>
+    </select>
+    <select id="doubleCheckManagerCount" resultType="Integer" parameterType="Map">
+        SELECT
+        COUNT(1)
+        FROM tbl_promotion WHERE is_valid=1 AND check_status IN (5,6,7,8)
+        <if test="id != null">
+            AND id=#{id}
+        </if>
+        <if test="shortName != null">
+            AND short_name LIKE CONCAT("%",CONCAT(#{shortName},"%"))
+        </if>
+        <if test="beginDate !=null">
+            AND begin_date  <![CDATA[>]]>   #{beginDate}
+        </if>
+        <if test="endDate !=null">
+            AND end_date  <![CDATA[<]]>   #{endDate}
+        </if>
+        <if test="promType !=null">
+            AND prom_type=#{promType}
+        </if>
+        <if test="checkStatus !=null">
+            AND check_status=#{checkStatus}
+        </if>
+        <if test="createOperType !=null">
+            AND create_oper_type=#{createOperType}
+        </if>
+    </select>
+
+    <select id="findPromotionIds" resultType="Integer" parameterType="Map">
+        SELECT
+        id
+        FROM tbl_promotion WHERE is_valid=1
+        <if test="currentDate !=null">
+            AND #{currentDate}  <![CDATA[>]]> begin_date
+            AND #{currentDate}  <![CDATA[<]]> DATE_ADD(end_date, interval 1 day)
+        </if>
+        <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+        <if test="promType != null and promType != ''">
+            and prom_type=#{promType}
+        </if>
+
+        <if test="noLoopType != null and noLoopType == -1">
+            and loopType is null
+        </if>
+        <if test="statusList != null">
+            and check_status in
+            <foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="getPromotionForBatch" parameterType="Map" resultMap="PromotionMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_promotion
+        <where>
+            <!-- 审核状态（全部通过，部分通过）-->
+            check_status IN ('7', '8')
+            <!-- 开始时间在 期间内-->
+            AND ((
+            <!-- 活动开始时间 >= 次日 00：00：00-->
+            begin_date <![CDATA[>=]]> #{startTime}
+            <!-- 活动开始时间 <= 指定日期 23：59：59 -->
+            AND begin_date  <![CDATA[<= ]]> #{endTime}
+            ) <!-- 结束时间在 期间内-->
+            OR (
+            end_date <![CDATA[>=]]> #{startTime}
+            <!-- 活动开始时间<= 指定日期 23：59：59 -->
+            AND end_date<![CDATA[<= ]]> #{endTime}
+            ) <!-- 开始结束时间包含 整个期间-->
+            OR (
+            begin_date <![CDATA[ < ]]> #{startTime}
+            <!-- 活动开始时间<= 指定日期 23：59：59-->
+            AND end_date <![CDATA[ > ]]>#{endTime}
+            )
+            )
+            <!-- 广发商城活动-->
+            AND ordertype_id = 'yg' <!-- 有效-->
+            AND is_valid = '1'AND
+            (loopType ="" OR loopType is NULL)
+        </where>
+    </select>
+
+    <!-- 查询最近一场已经结束的活动 add by geshuo 20160713 -->
+    <select id="findLastPromotion" parameterType="Map" resultMap="PromotionMap">
+        SELECT max(TIMESTAMPDIFF(SECOND ,now(),end_date)) AS timeDiff,
+        <include refid="columns"/>
+        FROM tbl_promotion
+        WHERE is_valid=1
+        <if test="ordertypeId !=null">
+            and ordertype_id = #{ordertypeId}
+        </if>
+        <if test="promType != null and promType != ''">
+            and prom_type=#{promType}
+        </if>
+        <if test="statusList != null">
+            and check_status in
+            <foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND TIMESTAMPDIFF(SECOND ,now(),end_date) <![CDATA[<]]> 0
+        limit 1
+    </select>
+
+</mapper>
+
+

@@ -1,0 +1,16 @@
+<tr data-id="{{id}}">
+  <td class="shop-template-name left-text">
+    <div class="shop-template-logo">
+      <img data-original="{{logoUrl}}">
+    </div>
+    <div class="shop-template-name">
+      <span>{{name}}</span>
+    </div>
+  </td>
+  <td class="template-subdomain">{{subdomain}}</td>
+  <td>{{status}}</td>
+  <td>
+    <button class="btn btn-small js-shop-template-edit">编辑</button>
+    {{#equals status "1"}}<button class="btn btn-small js-shop-template-release">发布</button>{{/equals}}
+  </td>
+</tr>

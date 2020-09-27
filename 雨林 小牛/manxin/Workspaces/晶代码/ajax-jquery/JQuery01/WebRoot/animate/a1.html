@@ -1,0 +1,33 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style>
+	#d1{
+		width:300px;
+		height:40px;
+		background-color:#fff8dc;
+		display:none;
+	}
+</style>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('#a1').toggle(function(){
+			$('#d1').show(600);
+			//$('#d1').slideDown('slow');
+		},function(){
+			$('#d1').hide('slow');
+			//$('#d1').slideUp('slow');
+		});
+	});
+</script>
+</head>
+<body style="font-size:30px;">
+	<a href="javascript:;" 
+	id="a1">待我长发及腰的下一句是什么?</a>
+	<div id="d1">用来拖地可好</div>
+	
+</body>
+</html>

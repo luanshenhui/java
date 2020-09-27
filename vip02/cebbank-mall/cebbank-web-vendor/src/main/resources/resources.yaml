@@ -1,0 +1,68 @@
+resources:
+  - url : "/index"
+    name : "首页"
+    icon : ""
+
+  - url : ""
+    name : "网上商城"
+    icon : ""
+    menus:
+      - url : ""
+        name : "商品管理"
+        type : "0"
+        menus :
+          - url : "/mall/attribute/attribute"
+            name : "属性管理"
+            type : "0"
+            menus :
+               - id : "1"
+                 name : "增加"
+                 type : "1"
+                 url : "/api/"
+               - id : "1"
+                 name : "编辑"
+                 type : "1"
+                 url : "/api/"
+
+
+          - url : "/mall/categories/back_categories"
+            name : "后台台类目管理"
+            menus :
+               - id : "dfsa"
+                 name : "新增"
+
+
+          - url : "/mall/categories/front_categories"
+            name : "前台类目管理"
+            menus :
+               - id : "dsfa"
+                 name : "fdsa"
+
+          - url : ""
+            name : "品牌管理"
+            menus :
+               - id : "dsa"
+                 name : "fdsa"
+
+          - url : ""
+            name : "产品管理"
+            menus :
+               - name : ""
+                 id : ""
+
+          - url : ""
+            name : "商品管理"
+            menus :
+               - name : ""
+                 id : ""
+          - url : ""
+            name : "品牌授权管理"
+            menus :
+               - name : ""
+                 id : ""
+
+      - url : ""
+        name : "结算管理"
+        type : "0"
+        menus :
+          - name : "请款管理"

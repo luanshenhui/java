@@ -1,0 +1,41 @@
+<script language= "javascript" src="../customer/customer.js"></script>
+<table>
+	<tr>
+		<td class="label lblCustomerNo"></td>
+		<td colspan="2" ><input type="text" id="userNo" name="userNo" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblName star"></td>
+		<td colspan="2" ><input type="hidden" name="ID" id="ID"/><input type="text" id="name" name="name" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblGender star"></td>
+		<td colspan="2"><select id="genderID" name="genderID"></select></td>
+	</tr>
+	<tr>
+		<td class="label lblHeight star"></td>
+		<td><input type="text" id="height" name="height" class="textbox" style="width:120px;height:18px;"/></td>
+		<td><select id="heightUnitID" name="heightUnitID" class="w80"></select></td>
+	</tr>
+	<tr>
+		<td class="label lblWeight"></td>
+		<td style="width:100px;"><input type="text" id="weight" name="weight" class="textbox" style="width:120px;height:18px;"/></td>
+		<td><select id="weightUnitID" name="weightUnitID" class="w80"></select></td>
+	</tr>
+	<tr>
+		<td class="label lblEmail"></td>
+		<td colspan="2"><input type="text" id="email" name="email" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblTel"></td>
+		<td colspan="2"><input type="text" id="tel" name="tel" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblAddress"></td>
+		<td colspan="2"><input type="text" id="address" name="address" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblLtName"></td>
+		<td colspan="2"><input type="text" id="ltName" name="ltName" class="textbox" maxlength="8"/></td>
+	</tr>
+</table>

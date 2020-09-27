@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CouponInfModel">
+    <resultMap id="CouponInfMap" type="CouponInfModel">
+        <result property="id" column="id"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="couponNm" column="coupon_nm"/>
+        <result property="backCategoryId" column="back_category_id"/>
+        <result property="backCategoryNm" column="back_category_nm"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="vendorNms" column="vendor_nms"/>
+        <result property="brandId" column="brand_id"/>
+        <result property="brandName" column="brand_name"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="isManual" column="is_manual"/>
+        <result property="isFirstlogin" column="is_firstlogin"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="backCategoryNm" column="back_category_nm"/>
+        <result property="vendorNms" column="vendor_nms"/>
+        <result property="brandName" column="brand_name"/>
+        <result property="goodsName" column="goods_name"/>
+    </resultMap>
+    <sql id="columns">
+        id,coupon_id,coupon_nm,back_category_id,back_category_nm,vendor_id,vendor_nms,brand_id,brand_name,goods_id,goods_name,is_manual,is_firstlogin,start_time,end_time,del_flag,create_oper,create_time,modify_oper,modify_time,back_category_nm,vendor_nms,brand_name,goods_name
+    </sql>
+
+    <insert id="insert" parameterType="CouponInfModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_coupon_inf
+        (coupon_id
+        ,coupon_nm
+        ,back_category_id
+        ,back_category_nm
+        ,vendor_id
+        ,vendor_nms
+        ,brand_id
+        ,brand_name
+        ,goods_id
+        ,goods_name
+        ,is_manual
+        ,is_firstlogin
+        ,start_time
+        ,end_time
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,begin_date
+        ,end_date
+        )
+        values(#{couponId}
+        ,#{couponNm}
+        ,#{backCategoryId}
+        ,#{backCategoryNm}
+        ,#{vendorId}
+        ,#{vendorNms}
+        ,#{brandId}
+        ,#{brandName}
+        ,#{goodsId}
+        ,#{goodsName}
+        ,#{isManual}
+        ,#{isFirstlogin}
+        ,#{startTime}
+        ,#{endTime}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        ,#{beginDate}
+        ,#{endDate}
+        )
+    </insert>
+
+    <update id="update" parameterType="CouponInfModel">
+        update tbl_coupon_inf set
+        <if test="couponId !=null">coupon_id = #{couponId}
+            ,
+        </if>
+        <if test="couponNm !=null">coupon_nm = #{couponNm}
+            ,
+        </if>
+        <if test="backCategoryId !=null and backCategoryId != ''">back_category_id = #{backCategoryId}
+            ,
+        </if>
+        <if test="backCategoryNm !=null and backCategoryNm != ''">back_category_nm = #{backCategoryNm}
+            ,
+        </if>
+        <if test="vendorId !=null and vendorId != ''">vendor_id = #{vendorId}
+            ,
+        </if>
+        <if test="vendorNms !=null and vendorNms != ''">vendor_nms = #{vendorNms}
+            ,
+        </if>
+        <if test="brandId !=null and brandId != ''">brand_id = #{brandId}
+            ,
+        </if>
+        <if test="brandName !=null and brandName != ''">brand_name = #{brandName}
+            ,
+        </if>
+        <if test="goodsId !=null and goodsId != ''">goods_id = #{goodsId}
+            ,
+        </if>
+        <if test="goodsName !=null and goodsName != ''">goods_name = #{goodsName}
+            ,
+        </if>
+        <if test="isManual !=null">is_manual = #{isManual}
+            ,
+        </if>
+        <if test="isFirstlogin !=null">is_firstlogin = #{isFirstlogin}
+            ,
+        </if>
+        <if test="startTime !=null">start_time = #{startTime}
+            ,
+        </if>
+        <if test="endTime !=null">end_time = #{endTime}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="beginDate !=null">begin_date = #{beginDate}
+            ,
+        </if>
+        <if test="endDate !=null">end_date = #{endDate}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+
+    <update id="updateAll" parameterType="CouponInfModel">
+        update tbl_coupon_inf set
+        coupon_id = #{couponId}
+            ,
+        coupon_nm = #{couponNm}
+            ,
+        back_category_id = #{backCategoryId}
+            ,
+        back_category_nm = #{backCategoryNm}
+            ,
+        vendor_id = #{vendorId}
+            ,
+        vendor_nms = #{vendorNms}
+            ,
+        brand_id = #{brandId}
+            ,
+        brand_name = #{brandName}
+            ,
+        goods_id = #{goodsId}
+            ,
+        goods_name = #{goodsName}
+            ,
+        <if test="isManual !=null">is_manual = #{isManual}
+            ,
+        </if>
+        <if test="isFirstlogin !=null">is_firstlogin = #{isFirstlogin}
+            ,
+        </if>
+        <if test="startTime !=null">start_time = #{startTime}
+            ,
+        </if>
+        <if test="endTime !=null">end_time = #{endTime}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="beginDate !=null">begin_date = #{beginDate}
+            ,
+        </if>
+        <if test="endDate !=null">end_date = #{endDate}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="couponId !=null">and coupon_id = #{couponId}</if>
+            <if test="couponNm !=null">and coupon_nm = #{couponNm}</if>
+            <if test="backCategoryId !=null">and back_category_id = #{backCategoryId}</if>
+            <if test="backCategoryNm !=null">and back_category_nm = #{backCategoryNm}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="vendorNms !=null">and vendor_nms = #{vendorNms}</if>
+            <if test="brandId !=null">and brand_id = #{brandId}</if>
+            <if test="brandName !=null">and brand_name = #{brandName}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="goodsName !=null">and goods_name = #{goodsName}</if>
+            <if test="isManual !=null">and is_manual = #{isManual}</if>
+            <if test="isFirstlogin !=null">and is_firstlogin = #{isFirstlogin}</if>
+            <if test="startTime !=null">and start_time = #{startTime}</if>
+            <if test="endTime !=null">and end_time = #{endTime}</if>
+            and del_flag = 0
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="backCategoryNm !=null">and back_category_nm = #{backCategoryNm}</if>
+            <if test="vendorNms !=null">and vendor_nms = #{vendorNms}</if>
+            <if test="brandName !=null">and brand_name = #{brandName}</if>
+            <if test="goodsName !=null">and goods_name = #{goodsName}</if>
+            <if test="beginDate !=null">and begin_date = #{beginDate}</if>
+            <if test="endDate !=null">and end_date = #{endDate}</if>
+        </where>
+    </sql>
+    <sql id="conditionslike">
+        <where>
+            <if test="couponId !=null">and coupon_id like concat(concat('%',#{couponId}),'%')</if>
+            <if test="couponNm !=null">and coupon_nm like concat(concat('%',#{couponNm}),'%')</if>
+            and del_flag = 0
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="CouponInfMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        where id=#{id}
+    </select>
+    <select id="findByCouponId" parameterType="Map" resultMap="CouponInfMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        where coupon_id = #{couponId} and del_flag = 0 limit 1
+    </select>
+    <select id="findAll" resultMap="CouponInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="CouponInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        <include refid="conditionslike"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="CouponInfModel">
+        delete from tbl_coupon_inf where id = id
+    </delete>
+
+    <select id="findByFirstLogin" resultMap="CouponInfMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        where del_flag = 0 and is_firstlogin = 1 and <![CDATA[start_time < now()]]> and <![CDATA[now() < end_time]]>
+    </select>
+
+    <!--我的优惠券，详细-->
+    <select id="detailedCoupon" parameterType="Integer" resultMap="CouponInfMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        where id=#{projectNO}
+    </select>
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_coupon_inf
+        <include refid="conditionslike"/>
+    </select>
+
+    <!--可以领取的优惠券-->
+    <select id="findByGoodsInfo" parameterType="Map" resultMap="CouponInfMap">
+        select
+        coupon_id, coupon_nm, is_manual, begin_date, end_date
+        from
+        tbl_coupon_inf
+        where
+        ((concat('%、', back_category_id, '、%') like concat('%、', #{backCategory1Id}, '、%')
+        or concat('%、', back_category_id, '、%') like concat('%、', #{backCategory2Id}, '、%')
+        or concat('%、', back_category_id, '、%') like concat('%、', #{backCategory3Id}, '、%')
+        or concat('%、', vendor_id, '、%') like concat('%、', #{vendorId}, '、%')
+        or concat('%、', brand_id, '、%') like concat('%、', #{goodsBrandId}, '、%')
+        or concat('%、', goods_id, '、%') like concat('%、', #{code}, '、%'))
+        or
+        ((back_category_id is null or back_category_id = '')
+        and (vendor_id is null or vendor_id = '')
+        and (brand_id is null or brand_id = '')
+        and (goods_id is null or goods_id = ''))
+        )
+        and del_flag = 0
+        and is_manual = 1
+        and <![CDATA[start_time <= now()]]> and <![CDATA[now() <= end_time]]>
+    </select>
+
+    <!--可以使用的优惠券-->
+    <select id="findByGoodsSpendableInfo" parameterType="Map" resultMap="CouponInfMap">
+        select
+        coupon_id, coupon_nm, is_manual, begin_date, end_date
+        from
+        tbl_coupon_inf
+        where
+        ((concat('%、', back_category_id, '、%') like concat('%、', #{backCategory1Id}, '、%')
+        or concat('%、', back_category_id, '、%') like concat('%、', #{backCategory2Id}, '、%')
+        or concat('%、', back_category_id, '、%') like concat('%、', #{backCategory3Id}, '、%')
+        or concat('%、', vendor_id, '、%') like concat('%、', #{vendorId}, '、%')
+        or concat('%、', brand_id, '、%') like concat('%、', #{goodsBrandId}, '、%')
+        or concat('%、', goods_id, '、%') like concat('%、', #{code}, '、%'))
+        or
+        ((back_category_id is null or back_category_id = '')
+        and (vendor_id is null or vendor_id = '')
+        and (brand_id is null or brand_id = '')
+        and (goods_id is null or goods_id = ''))
+        )
+        and del_flag = 0
+        and <![CDATA[begin_date <= now()]]> and <![CDATA[now() <= end_date]]>
+    </select>
+
+    <!-- add by geshuo 20160806: 清除 其他首次登录设定数据-->
+    <update id="updateOtherFirstLogin">
+        update tbl_coupon_inf
+        set is_firstlogin = 0,
+        start_time = null,
+        end_time  = null
+        where is_manual = 0
+        and is_firstlogin = 1
+        and del_flag=0
+    </update>
+
+    <select id="findCouponsByCoupons" parameterType="List" resultType="String">
+        SELECT coupon_id
+        from tbl_coupon_inf
+        where coupon_id IN
+        <foreach collection="list" item="item" index="index" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="updateById" parameterType="CouponInfModel">
+        update tbl_coupon_inf set
+        begin_date = #{beginDate},
+        end_date = #{endDate},
+        modify_time = now()
+        where coupon_id = #{couponId}
+    </update>
+
+    <!--删除所有优惠券-->
+    <delete id="deleteAll">
+        UPDATE tbl_coupon_inf set del_flag = "1"
+    </delete>
+
+    <!--循环新增-->
+    <insert id="insertForList" parameterType="list">
+            insert into tbl_coupon_inf
+        (coupon_id
+        ,coupon_nm
+        ,is_manual
+        ,is_firstlogin
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,begin_date
+        ,end_date)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.couponId}
+            ,#{item.couponNm}
+            ,#{item.isManual}
+            ,#{item.isFirstlogin}
+            ,0
+            ,#{item.createOper}
+            ,now()
+            ,#{item.modifyOper}
+            ,now()
+            ,#{item.beginDate}
+            ,#{item.endDate})
+        </foreach>
+    </insert>
+    <!--根据id集合查询优惠券-->
+    <select id="findByCouponIds" parameterType="List" resultType="String">
+        SELECT
+        coupon_id
+        from tbl_coupon_inf
+        where coupon_id IN
+        <foreach collection="list" item="item" index="index" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <!--循环更新部分字段-->
+    <update id="updateForList" parameterType="list">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update tbl_coupon_inf set
+            <if test="item.delFlag !=null">del_flag = #{item.delFlag}
+                ,
+            </if>
+            <if test="item.modifyOper !=null">modify_oper = #{item.modifyOper}
+                ,
+            </if>
+            <if test="item.beginDate !=null">begin_date = #{item.beginDate}
+                ,
+            </if>
+            <if test="item.endDate !=null">end_date = #{item.endDate}
+                ,
+            </if>
+            modify_time = now()
+            where coupon_id = #{item.couponId}
+        </foreach>
+    </update>
+
+    <!--删除要插入的-->
+    <delete id="deleteCreat" parameterType="List">
+        delete from tbl_coupon_inf where coupon_id in
+        <foreach collection="list" item="item" index="index" open="("
+                 separator="," close=")">
+            #{item.couponId}
+        </foreach>
+    </delete>
+</mapper>
+
+

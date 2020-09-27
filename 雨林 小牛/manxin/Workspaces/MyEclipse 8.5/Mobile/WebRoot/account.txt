@@ -1,0 +1,33 @@
+
+create table account(
+id number(9) primary key,//自增Id
+recommender_id number(9),//外键
+login_name varchar2(30) unique not null,//登录名
+login_passwd varchar2(30)  not null,//密码
+status char check (status in(0,1,2)) ,//状态
+create_date date,
+pause_date date,
+close_date date,
+real_name varchar(20) not null,//姓名
+idcard_no char(18) unique not null,//身份证号
+birthdate date,//生日
+gender char check(gender in(0,1)),//性别
+occupation varchar2(50),//职业
+telephone varchar2(15),//电话
+email varchar2(50),//邮箱
+mailaddress varchar2(50),//通信地址
+zipcode char(6),//邮编
+qq varchar2(15),//qq
+last_login_time date,//最后一次登录的时间
+last_login_ip varchar2(15),//最后一次登录的ip
+constraint account_recommender_id_fk foreign key(recommender_id) references account(id)
+);
+
+Insert into account(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,PAUSE_DATE,CLOSE_DATE,REAL_NAME,IDCARD_NO,BIRTHDATE,GENDER,OCCUPATION,TELEPHONE,EMAIL,MAILADDRESS,ZIPCODE,QQ,LAST_LOGIN_TIME,LAST_LOGIN_IP) values (1005,null,'taiji001','256528','1',to_date('2008-03-15 00:00:00','yyyy-mm-dd hh24:mi:ss'),null,null,'zhangsanfeng','410381194302256528',to_date('1943-02-25 00:00:00','yyyy-mm-dd hh24:mi:ss'),'1',null,'13669351234',null,null,null,null,null,null);
+Insert into account(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,PAUSE_DATE,CLOSE_DATE,REAL_NAME,IDCARD_NO,BIRTHDATE,GENDER,OCCUPATION,TELEPHONE,EMAIL,MAILADDRESS,ZIPCODE,QQ,LAST_LOGIN_TIME,LAST_LOGIN_IP) values (1010,null,'xl18z60','190613','1',to_date('2009-01-10 00:00:00','yyyy-mm-dd hh24:mi:ss'),null,null,'guojing','330682196903190613',to_date('1969-03-19 00:00:00','yyyy-mm-dd hh24:mi:ss'),'1',null,'13338924567',null,null,null,null,null,null);
+Insert into account(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,PAUSE_DATE,CLOSE_DATE,REAL_NAME,IDCARD_NO,BIRTHDATE,GENDER,OCCUPATION,TELEPHONE,EMAIL,MAILADDRESS,ZIPCODE,QQ,LAST_LOGIN_TIME,LAST_LOGIN_IP) values (1011,1010,'dgbf70','270429','1',to_date('2009-03-01 00:00:00','yyyy-mm-dd hh24:mi:ss'),null,null,'huangrong','330902197108270429',to_date('1971-08-27 00:00:00','yyyy-mm-dd hh24:mi:ss'),'0',null,'13637811357',null,null,null,null,null,null);
+Insert into account(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,PAUSE_DATE,CLOSE_DATE,REAL_NAME,IDCARD_NO,BIRTHDATE,GENDER,OCCUPATION,TELEPHONE,EMAIL,MAILADDRESS,ZIPCODE,QQ,LAST_LOGIN_TIME,LAST_LOGIN_IP) values (1015,1005,'mjjzh64','041115','1',to_date('2010-03-12 00:00:00','yyyy-mm-dd hh24:mi:ss'),null,null,'zhangwuji','610121198906041115',to_date('1989-06-04 00:00:00','yyyy-mm-dd hh24:mi:ss'),'1',null,'13572952468',null,null,null,null,null,null);
+Insert into account(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,PAUSE_DATE,CLOSE_DATE,REAL_NAME,IDCARD_NO,BIRTHDATE,GENDER,OCCUPATION,TELEPHONE,EMAIL,MAILADDRESS,ZIPCODE,QQ,LAST_LOGIN_TIME,LAST_LOGIN_IP) values (1018,1011,'jmdxj00','010322','1',to_date('2011-01-01 00:00:00','yyyy-mm-dd hh24:mi:ss'),null,null,'guofurong','350581200201010322',to_date('1996-01-01 03:22:00','yyyy-mm-dd hh24:mi:ss'),'0',null,'18617832562',null,null,null,null,null,null);
+Insert into account(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,PAUSE_DATE,CLOSE_DATE,REAL_NAME,IDCARD_NO,BIRTHDATE,GENDER,OCCUPATION,TELEPHONE,EMAIL,MAILADDRESS,ZIPCODE,QQ,LAST_LOGIN_TIME,LAST_LOGIN_IP) values (1019,1011,'ljxj90','310346','1',to_date('2012-02-01 00:00:00','yyyy-mm-dd hh24:mi:ss'),null,null,'luwushuang','320211199307310346',to_date('1993-07-31 00:00:00','yyyy-mm-dd hh24:mi:ss'),'0',null,'13186454984',null,null,null,null,null,null);
+Insert into account(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,PAUSE_DATE,CLOSE_DATE,REAL_NAME,IDCARD_NO,BIRTHDATE,GENDER,OCCUPATION,TELEPHONE,EMAIL,MAILADDRESS,ZIPCODE,QQ,LAST_LOGIN_TIME,LAST_LOGIN_IP) values (1020,null,'kxhxd20','012115','1',to_date('2012-02-20 00:00:00','yyyy-mm-dd hh24:mi:ss'),null,null,'weixiaobao','321022200010012115',to_date('2000-10-01 00:00:00','yyyy-mm-dd hh24:mi:ss'),'1',null,'13953410078',null,null,null,null,null,null);
+commit;

@@ -1,0 +1,61 @@
+<html>
+<head>
+<!-- 加亮某行(带有多选框) -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+	<style>
+		thead{
+			background-color:#cccccc;
+		}
+		.row1{
+			background-color:#FFE7BA;
+		}
+		.row2{
+			background-color:#FFF0F5;
+		}
+		.selected{
+			background-color:red;
+		}
+	</style>
+	<script type="text/javascript" 
+	src="../js/jquery-1.4.3.js">
+	</script>
+	<script type="text/javascript">
+		$(function(){
+			$('tbody tr:even').addClass('row1');
+			$('tbody tr:odd').addClass('row2');
+			//刚开始打开页面时，如果多选框被选中，
+			//则对应的行应该加亮
+			$(':checkbox:checked').parent()
+			.parent().addClass('selected');
+			$('tbody tr').click(function(){
+				if($(this).hasClass('selected')){
+					$(this).removeClass('selected');
+					$(this).find(':checkbox').attr('checked',false);
+				}else{
+					$(this).addClass('selected');
+					$(this).find(':checkbox').attr('checked',true);
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<form action="del.do">
+	<table width="50%" border="1" cellpadding="0"
+	cellspacing="0">
+		<caption style="font-weight:800;">员工信息</caption>
+		<thead>
+			<tr><th>&nbsp;</th><th>姓名</th><th>薪水</th><th>年龄</th></tr>
+		</thead>
+		<tbody>
+			<tr><td><input type="checkbox" name="c1" value="1"/></td><td>张三</td><td>20000</td><td>23</td></tr>
+			<tr><td><input type="checkbox" name="c1" checked="checked" value="2"/></td><td>李四</td><td>22000</td><td>22</td></tr>
+			<tr><td><input type="checkbox" name="c1" value="3"/></td><td>王五</td><td>14000</td><td>26</td></tr>
+			<tr><td><input type="checkbox" name="c1" value="4"/></td><td>马六</td><td>15000</td><td>21</td></tr>
+		</tbody>
+	</table>
+	<input type="submit" value="删除"/>
+	</form>
+</body>
+</html>

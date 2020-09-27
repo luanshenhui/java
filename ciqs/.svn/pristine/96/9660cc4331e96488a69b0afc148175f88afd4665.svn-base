@@ -1,0 +1,216 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>进出境货轮检疫</title>
+<%@ include file="/common/resource_show.jsp"%>
+<style type="text/css">
+.title a:link,.title a:visited,.user-info a:link,.user-info a:visited{
+     color:white;
+     text-decoration:none;
+}
+.title a:active,.title a:hover,.user-info a:active,.user-info a:hover{
+     color:#014ccc;
+     text-decoration:underline;
+}
+.box-img-bg {
+    background-image: url(../static/show/disc/bg.png);
+    box-sizing: border-box;
+    width: 1198px;
+    height: 164px;
+    padding: 0 200px;
+    position: absolute;
+    display: none;
+    font-size: 20px;
+    line-height: 35px;
+    color: white;
+}
+
+.box-content-style {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+</style>
+<script type="text/javascript">
+function pageUtil(page){
+         $("form").attr("action", "/ciqs/affirm/showtransports_jsp?page="+page);
+		 $("form").submit();
+}
+</script>
+</head>
+<body  class="bg-gary">
+<div class="freeze_div_list">
+<div class="title-bg" >
+<div class=" title-position margin-auto white">
+	<div class="title"><span class="font-24px" style="color:white;">行政确认 /</span><a href="showtransports_jsp">进出境货轮检疫</a></div>
+<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+</div>
+</div>
+<div class="flow-bg" >
+<div class="flow-position margin-auto" >
+
+<ul class="white font-18px flow-height font-weight">
+	<li>审批</li>
+	<li>检疫查验</li>
+	<li>卫生监督</li>
+	<li>卫生处理</li>
+	<li>证书签发</li>
+	<li>归档</li>
+	<li></li>
+	<li></li>
+</ul>
+<ul>
+  <li><img src="${ctx}/static/show/images/affirm/affirmA1.png" width="107" height="103" content="根据国家质检总局公布的疫情警示通报，申报信息及《国际航行船舶进境检疫申报书》进行网上审核，确定检疫方式。若确定检疫方式为电讯检疫，则批复的同时即为进境船舶检疫通过。记录内容包括：《国际航行船舶进境检疫申报书》、《船舶入境卫生检疫证》。"/></li>
+  <li><img src="${ctx}/static/show/images/affirm/affirmA2.png" width="107" height="103" content="检查相关文件及船舶的卫生情况，对有症状的可疑病例进行医学检查。相关记录内容包括：《入境检疫查验卫生监督记录》、《口岸传染病可疑病例流行病学调查表》、《采样知情同意书》、《口岸传染病可疑病例医学排查记录表》、《口岸传染病疑似病例转诊单》、《方便就诊卡》。"/></li>
+  <li><img src="${ctx}/static/show/images/affirm/affirmA3.png" width="107" height="103" content="卫生监督即检查船舶的卫生情况。记录内容包括：《检疫查验卫生监督记录》、《交通工具熏蒸操作检查考核评分表》、《卫生处理现场监督记录表》、《卫生处理效果评价工作记录表》、《交通工具喷洒操作检查考核评分表》、《交通工具垃圾消毒操作检查考核评分表》。"/></li>
+  <li><img src="${ctx}/static/show/images/affirm/affirmA4.png" width="107" height="103" content="根据流行病学调查、医学检查和卫生检查的结果，做出“没有染疫”、“染疫嫌疑”或“染疫”的判断，并按有关规定进行卫生处理。"/></li>
+  <li><img src="${ctx}/static/show/images/affirm/affirmA5.png" width="107" height="103" content="完成进境检疫后，对未发现染疫的进境船舶，检验检疫人员应当立即签发《船舶入境卫生检疫证》;对需要实施检疫处理措施的进境船舶，经检疫处理合格后，予以签发《船舶入境检疫证》。"/></li>
+  <li><img src="${ctx}/static/show/images/affirm/affirmA6.png" width="107" height="103" content="全部检疫工作完毕后，将完整数据录入“口岸公共卫生风险监测预警决策系统”；及时将所有资料整理归档，交检务科妥善保存。"/></li>
+  <li></li>
+  <li></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="blank_div_list">
+</div>
+<div class="margin-auto width-1200 search-box">
+    <div id="alertBoxId" class="box-img-bg"><span class="box-content-style" id="alertContentId"></span></div>
+<form action="" id="form" method="post">
+<table width="100%" border="0" class="table-search margin-auto">
+  <tr>
+    <td height="25" align="left" valign="middle">中文船名</td>
+    <td height="25" align="left" valign="middle">英文船名</td>
+    <td height="25" align="left" valign="middle">开始时间</td>
+    <td height="25" align="left" valign="middle">结束时间</td>
+    <td height="25" align="left" valign="middle">检疫方式</td>
+    <td height="25" align="left" valign="middle">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="195" height="50" align="left" valign="middle"><input name="vsl_cn_name"  type="text" class="search-input input-175px" id="vsl_cn_name" value="${map.vsl_cn_name}"/></td>
+    <td width="220" height="50" align="left" valign="middle"><input name="vsl_en_name" type="text" class="search-input input-175px" id="vsl_en_name" value="${map.vsl_en_name}"/></td>
+    <td width="160" height="50" align="left" valign="middle"><input name="start_time" type="text" class="search-input input-140px datepick dp-applied" id="start_time" value="${map.start_time}"/></td>
+    <td width="185" height="50" align="left" valign="middle"><input name="end_time" type="text" class="search-input input-140px datepick" id="end_time" value="${map.end_time}" /></td>
+    <td width="185" height="50" align="left" valign="middle">
+         <select name="check_type_aprv"  class="search-input input-140px" id="check_type_dec">
+               <option value="">全选</option>
+	               <c:if test="${not empty checktypes}">
+		               <c:forEach items="${checktypes}" var="checktype">
+		               		<option value="${checktype.name}" <c:if test="${map.check_type_aprv==checktype.name}">selected="selected"</c:if>>${checktype.name}检疫</option>
+		               </c:forEach>   
+	               </c:if>
+         </select>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25" align="left" valign="middle">直属局</td>
+    <td colspan="2" height="25" align="left" valign="middle">分支机构</td>
+  </tr>
+  <tr>
+    <td colspan="2" width="300" height="50" align="left" valign="middle">
+    <select name="port_org"  class="search-input input-175px" id="port_org" style="width:300px;">
+    <c:if test="${not empty organizes}">
+           <c:forEach items="${organizes}" var="organize">
+           <option value="${organize.code}" <c:if test="${map.port_org==organize.code}">selected="selected"</c:if>>${organize.name}</option>
+           </c:forEach>   
+    </c:if>
+    </select>
+    </td>
+    <td colspan="2" width="220" height="50" align="left" valign="middle">
+    <select name="port_org_under" class="search-input input-175px" id="port_org_under" style="width:300px;">
+    <c:if test="${not empty deptments}">
+           <c:forEach items="${deptments}" var="deptment">
+           	<option value="${deptment.code}" <c:if test="${map.port_org_under==deptment.code}">selected="selected"</c:if>>${deptment.name}</option>
+           </c:forEach>   
+    </c:if>
+    </select>
+    </td>
+  </tr>
+  <tr>
+	<td></td>
+	<td></td>
+	<td style="width:250px">
+		<input type="submit" class="search-btn fo" value="搜索" style="cursor: pointer;" onclick="pageUtil('1')"/>
+	</td>
+	<td>	
+		<input type="button" id="from_rest" class="search-btn fo" value="清空" style="cursor: pointer;"/>
+	</td>
+	<td></td>
+  </tr>
+</table>
+</form>
+</div>
+
+<div class="margin-auto width-1200 tips" >共找到<span class="yellow font-18px" id="counts">${counts}</span>条记录</div>
+<div class="margin-auto width-1200  data-box">
+<div class="margin-cxjg">
+  <table class="margin-cxjg_table" border="0" cellspacing="0" cellpadding="0">
+    <tr class="thead">
+      <td>中文船名</td>
+      <td>英文船名</td>
+      <td>呼号</td>
+      <td>中文国籍</td>
+      <td>检疫方式（审批）</td>
+      <td>船员人数</td>
+      <td>审批时间</td>
+      <td>证书签发</td>
+      <td>直属局</td>
+      <td>分支机构</td>
+      <td>操作</td>
+    </tr>
+     <tbody>
+	    <c:forEach items="${results}" var="result">
+	    <c:set value="${fn:split(result.ship_sanit_cert,',')[1]}" var="ship_sanit_cert_date" scope="request"></c:set>
+	    <tr class="thead_nr">
+	      <td width='100px' height='90' align='center'><span class='gary'><strong> ${result.vsl_cn_name}</strong></span></td>
+	      <td width='100px' height='90' align='center'>${result.vsl_en_name}</td>
+	      <td width='200px' height='90' align='center'>${result.call_sign}</td>
+	      <td width='150px' height='90' align='center'>${result.country_cn_name}</td>
+	      <td width='100px' height='90' align='center' class=''>${result.check_type_aprv}</td>
+	      <td width='150px' height='90' align='center'><span>${result.shipper_psn_num}</span></td>
+	      <td width='150px' height='90' align='center'><span class='gary'><fmt:formatDate value="${result.aprv_date}" type="both" pattern="yyyy-MM-dd"/></span></td>
+	      <!-- <td width='150px' height='90' align='center'>${fn:split(result.ship_sanit_cert,",")[0]}</br>${fn:substring(ship_sanit_cert_date,0,10)}</td> -->
+	      <td width='150px' height='90' align='center'>
+			<c:if test="${result.cert_count > 0 }">已发证</c:if>
+			<c:if test="${result.cert_count == 0 }">
+				<c:if test="${map.check_type_aprv == 'DXJY' }">已发证</c:if>
+				<c:if test="${map.check_type_aprv != 'DXJY' }">未发证</c:if>
+			</c:if>
+		  </td>
+	      <td width='150px' height='90' align='center'>${result.port_org}</td>
+	      <td width='150px' height='90' align='center'>${result.port_org_under}</td>
+	      <td width='50px' height='90' align='center' valign='middle'><a href='showtransportinfo_jsp?transportid=${result.vsl_dec_id}'><span class='data-btn margin-auto' style='width:50px'>详细+</span></a></td>
+	   </tr>
+	   </c:forEach>
+     </tbody> 
+     <tfoot>
+       <jsp:include page="/common/pageUtil.jsp" flush="true"/>
+    </tfoot>
+  </table>
+</div>
+</div>
+<div class="margin-auto width-1200 tips" ></div>
+</body>
+<script type="text/javascript">
+    $("li").mouseenter(function () {
+        var img = this.getElementsByTagName("img")[0];
+        var str = img.getAttribute("content");
+        var alertBox = document.getElementById("alertBoxId");
+        var alertContent = document.getElementById("alertContentId");
+        alertContent.innerText = str;
+        alertBox.style.display = 'table';
+    });
+
+    $("li").mouseleave(function () {
+        var alertBox = document.getElementById("alertBoxId")
+        alertBox.style.display = 'none';
+    });
+    
+    $("#from_rest").click(function(){
+    	$("#vsl_cn_name,#vsl_en_name,#start_time,#end_time,#check_type_dec").val("");
+    });
+</script>
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean id="baseTransactionProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">PROPAGATION_REQUIRED,-ServiceException</prop>
+				<prop key="update*">PROPAGATION_REQUIRED,-ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED,-ServiceException</prop>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- audit 数据访问配置 -->
+	<bean id="auditService" parent="baseTransactionProxy">
+		<property name="target">
+			<ref bean="AuditService" />
+		</property>
+	</bean>
+	<bean id="AuditService" class="com.dhc.base.audit.service.impl.AuditServiceImpl">
+		<property name="auditDAO" ref="auditDAO" />
+	</bean>
+</beans>

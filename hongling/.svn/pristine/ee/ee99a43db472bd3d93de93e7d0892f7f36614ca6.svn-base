@@ -1,0 +1,40 @@
+<script src="../blexpresscom/post.js"></script>
+<form id="form" class="form_template">
+<input type="hidden" name="ID" id="ID"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label star lblComName"></td>
+		<td>
+			<input type="text" id="name" name="name"/>
+		</td>
+		<td class="label lblShortName"></td>
+		<td>
+			<input type="text" id="shortname" name="shortname"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="label star lblLinkMan"></td>
+		<td><input type="text" id="linkMan" name="linkMan"/></td>
+		<td class="label star lblMobile"></td>
+		<td><input type="text" id="mobile" name="mobile"/></td>
+	</tr>
+	<tr>
+		<td class="label lblTel"></td>
+		<td><input type="text" id="tel" name="tel" /></td>
+		<td class="label star lblSeq"></td>
+		<td><input type="text" id="seq" name="seq"/></td>
+	</tr>
+	<tr>
+		<td class="label lblAddr"></td>
+		<td colspan="3"><input type="text" id="addr" name="addr" style="width: 80%"/></td>
+	</tr>
+	<tr>
+		<td class="label lblMemo"></td>
+		<td colspan="3"><input type="text" id="memo" name="memo" style="width: 80%"/></td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="btnSaveExpress"></a> <a id="btnCancelExpress"></a>
+</div>
+</form>

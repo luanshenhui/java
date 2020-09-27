@@ -1,0 +1,248 @@
+{{#component "activitys js-component"}}
+    <p class="components-title"><strong>- 活动管理 -</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals tabType "0"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/activity/activity_all">所有活动</a>
+            </li>
+            <li {{#equals tabType "1"}}class="active"{{/equals}}><a data-role="nav"
+                                                                  href="{{_HREF_.mainContext}}/mall/activity/activity_editing">编辑中活动</a>
+            </li>
+            <li {{#equals tabType "2"}}class="active"{{/equals}}><a data-role="nav"
+                                                                  href="{{_HREF_.mainContext}}/mall/activity/activity_starting">待开始活动</a>
+            </li>
+            <li {{#equals tabType "3"}}class="active"{{/equals}}><a data-role="nav"
+                                                                  href="{{_HREF_.mainContext}}/mall/activity/activity_doing">进行中活动</a>
+            </li>
+            <li {{#equals tabType "4"}}class="active"{{/equals}}><a data-role="nav"
+                                                                   href="{{_HREF_.mainContext}}/mall/activity/activity_end">已结束活动</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form item-form-search form-inline promotion-search-form">
+                <fieldset>
+                    <p class="filter-name">
+                       <span class="span4 span-large">
+                           <label for="shortName">活动简称:</label>
+                           <input name="shortName" type="text" class="form-control" value="{{shortName}}" maxlength="200"/>
+                       </span>
+                        &nbsp;&nbsp;
+                       <span class="span5 span-large">
+                           <label for="id">活动编号:</label>
+                           <input name="id" type="text" class="form-control" value="{{id}}" maxlength="10"/>
+                      </span>
+                        &nbsp;&nbsp;
+                       <span class="span5 span-large">
+                           <label for="promType">活动类型:</label>
+                           <select class="activity-type-select" name="promType">
+                               <option value="" {{#equals promType ""}}selected{{/equals}}>请选择</option>
+                               <option value="10" {{#equals promType "10"}}selected{{/equals}}>折扣</option>
+                               <option value="20" {{#equals promType "20"}}selected{{/equals}}>满减</option>
+                               <option value="30" {{#equals promType "30"}}selected{{/equals}}>秒杀</option>
+                               <option value="40" {{#equals promType "40"}}selected{{/equals}}>团购</option>
+                               <option value="50" {{#equals promType "50"}}selected{{/equals}}>荷兰拍</option>
+                           </select>
+                       </span>
+                    </p>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="createOperType">活动发起者:</label>
+                            <select class="createOperType" name="createOperType">
+                                <option value="" {{#equals createOperType ""}}selected{{/equals}}>请选择</option>
+                                <option value="0" {{#equals createOperType "0"}}selected{{/equals}}>内管</option>
+                                <option value="1" {{#equals createOperType "1"}}selected{{/equals}}>供应商</option>
+                            </select>
+                        </span>
+                        &nbsp;&nbsp;
+                        <!--<span class="span5 span-large">
+                            <label for="supplier">供应商:</label>
+                            <input name="supplier" type="text" class="form-control"/>
+                         </span>-->
+                        <span class="span5 span-large">
+                            <label for="sourceId">销售渠道:</label>
+                            <select class="" name="sourceId" id="sourceId">
+                                <option value="" {{#equals sourceId ""}}selected{{/equals}}>请选择</option>
+                                <option value="00" {{#equals sourceId "00"}}selected{{/equals}}>商城</option>
+                                <option value="01" {{#equals sourceId "01"}}selected{{/equals}}>CC</option>
+                                <option value="02" {{#equals sourceId "02"}}selected{{/equals}}>IVR</option>
+                                <option value="03" {{#equals sourceId "03"}}selected{{/equals}}>手机商城</option>
+                                <option value="04" {{#equals sourceId "04"}}selected{{/equals}}>短信</option>
+                                <option value="05" {{#equals sourceId "05"}}selected{{/equals}}>微信广发银行</option>
+                                <option value="06" {{#equals sourceId "06"}}selected{{/equals}}>微信广发信用卡</option>
+                                <option value="09" {{#equals sourceId "09"}}selected{{/equals}}>APP</option>
+                            </select>
+                        </span>
+                        &nbsp;
+                         <span class="span5 span-large">
+                            <label>&nbsp;活动时间:</label>
+                             <input class="form-control application_date input-small-z js-date-start cursor-pointer" type="text"
+                                    id="startTime"
+                                    name="beginDate" value="{{beginDate}}"/>
+                             <em>-</em>
+                             <input class="form-control end_date input-small-z js-date-end cursor-pointer" type="text" id="endTime"
+                                    name="endDate" value="{{endDate}}"/>
+                        </span>
+                    </p>
+                </fieldset>
+                <p class="filter-name">
+                    <input class="btn btn-success btn-small pull-right prom-search-btn" type="button" value="查询"/>
+                </p>
+            </form>
+            <div class="add">
+                {{#authorial "activityMan_add"}}
+                    <a href="activity_add" class="btn btn-info btn-small">+ 新增活动</a>
+                {{/authorial}}
+            </div>
+            <div class="main-box-table">
+                {{#equals _DATA_.total "0"}}
+                    <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+                {{else}}
+                    <table class="table">
+                    <thead>
+                    <tr>
+                        <th width="6%">活动编号</th>
+                        <th width="10%">活动简称</th>
+                        <th width="10%">活动类型</th>
+                        <th width="10%">活动发起者</th>
+                        <th width="17%">报名时间</th>
+                        <th width="17%">活动时间</th>
+                        <th width="10%">活动状态</th>
+                        <th width="20%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{#each _DATA_.data}}
+                        {{#of checkStatus "0,1,2,3,4,5,6,7,8,9,10,11,12,13"}}
+                            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                                <td class="activity-id">{{id}}</td>
+                                <td class="activity-name">{{shortName}}</td>
+                                <td class="activity-type">
+                                    {{#equals promType "10"}}折扣{{/equals}}
+                                    {{#equals promType "20"}}满减{{/equals}}
+                                    {{#equals promType "30"}}秒杀{{/equals}}
+                                    {{#equals promType "40"}}团购{{/equals}}
+                                    {{#equals promType "50"}}荷兰拍{{/equals}}
+                                </td>
+                                <td class="activity-user">
+                                    {{#equals createOperType "0"}}
+                                        内管平台
+                                    {{else}}
+                                        供应商平台
+                                    {{/equals}}
+                                </td>
+                                <td class="activity-singupTime">{{#formatDate beginEntryDate}}{{/formatDate}}<br />
+                                    -{{#formatDate endEntryDate}}{{/formatDate}}</td>
+                                <td class="activity-Time">{{#formatDate beginDate}}{{/formatDate}}<br />
+                                    -{{#formatDate endDate}}{{/formatDate}}</td>
+                                <td class="activity-state">
+                                    {{#equals checkStatus "0"}}编辑中{{/equals}}
+                                    {{#equals checkStatus "2"}}待初审{{/equals}}
+                                    {{#equals checkStatus "3"}}初审通过{{/equals}}
+                                    {{#equals checkStatus "4"}}未通过初审{{/equals}}
+                                    {{#equals checkStatus "5"}}待复审{{/equals}}
+                                    {{#equals checkStatus "6"}}未通过复审{{/equals}}
+                                    {{#equals checkStatus "7"}}
+                                        {{#equals workStatus "0"}}
+                                            进行中
+                                        {{else}}
+                                            {{#equals workStatus "1"}}
+                                                待开始
+                                            {{else}}
+                                                {{#equals workStatus "2"}}已结束
+                                                {{else}}
+                                                    复审通过
+                                                {{/equals}}
+                                            {{/equals}}
+                                        {{/equals}}
+                                    {{/equals}}
+                                    {{#equals checkStatus "8"}}
+                                        {{#equals workStatus "0"}}
+                                            进行中
+                                        {{else}}
+                                            {{#equals workStatus "1"}}
+                                                待开始
+                                            {{else}}
+                                                {{#equals workStatus "2"}}已结束
+                                                {{else}}
+                                                    部分通过复审
+                                                {{/equals}}
+                                            {{/equals}}
+                                        {{/equals}}
+                                    {{/equals}}
+                                    {{#equals checkStatus "9"}}进行中{{/equals}}
+                                    {{#equals checkStatus "10"}}已结束{{/equals}}
+                                    {{#equals checkStatus "11"}}已结束{{/equals}}
+                                    {{#equals checkStatus "12"}}已结束{{/equals}}
+                                    {{#equals checkStatus "13"}}已删除{{/equals}}
+                                </td>
+                                <td>
+                                    {{#equals checkStatus "0"}}
+                                        {{#equals createOperType "0"}}
+                                            {{#authorial "activityMan_edit"}}
+                                                <button class="btn btn-info btn-sm js-activity_edit">
+                                                    编辑
+                                                </button>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                        {{#authorial "activityMan_delete"}}
+                                            <button class="btn btn-info btn-sm" id="{{id}}"
+                                                    class="js-delete-activity cursor-poiter"
+                                                    data-toggle="confirm"
+                                                    data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                                    data-event="confirm:delete-activity">
+                                                删除
+                                            </button>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#of  checkStatus "2,3,5"}}
+                                        <button class="btn btn-info btn-sm js-activity-detail">查看</button>
+                                    {{/of}}
+                                    {{#of  checkStatus "4,6"}}
+                                        <button class="btn btn-info btn-sm js-activity-detail">查看</button>
+                                       {{#equals createOperType "0"}}
+                                        <button class="btn btn-info btn-sm js-activity_edit">编辑</button>
+                                           {{/equals}}
+                                    {{/of}}
+                                    {{#of checkStatus "7,8,9"}}
+                                        <button class="btn btn-info btn-sm js-activity-detail">查看</button>
+                                        {{#of workStatus "0,1"}}
+                                            {{#authorial "activityMan_offSale"}}
+                                                <button class="btn btn-info btn-sm" id="{{id}}"
+                                                        class="js-rollDown-activity cursor-poiter"
+                                                        data-toggle="confirm"
+                                                        data-title="您确定下线吗?" data-content="下线之后无法恢复,确定要下线吗？"
+                                                        data-event="confirm:rollDown-activity">
+                                                    下线
+                                                </button>
+                                            {{/authorial}}
+                                        {{/of}}
+                                        {{#authorial "activityMan_statistics"}}
+                                        {{#equals workStatus "2"}}
+                                            <button class="btn btn-info btn-sm js-activity-total">统计</button>
+                                        {{/equals}}
+                                        {{/authorial}}
+                                    {{/of}}
+
+                                    {{#of  checkStatus "10,11,12"}}
+                                        <button class="btn btn-info btn-sm js-activity-detail">查看</button>
+                                        {{#authorial "activityMan_statistics"}}
+                                        <button class="btn btn-info btn-sm js-activity-total">统计</button>
+                                        {{/authorial}}
+                                    {{/of}}
+                                    {{#equals checkStatus "13"}}
+                                        <button class="btn btn-info btn-sm js-activity-detail">查看</button>
+                                    {{/equals}}
+                                </td>
+                            </tr>
+                        {{/of}}
+                    {{/each}}
+                    </tbody>
+                </table>
+                {{/equals}}
+            </div>
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+    </div>
+{{/component}}

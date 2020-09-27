@@ -1,0 +1,120 @@
+package cn.rkylin.oms.system.unit.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.position.dao.IPositionDAO;
+import cn.rkylin.oms.system.position.domain.WF_ORG_STATION;
+import cn.rkylin.oms.system.unit.dao.IUnitDAO;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+
+@Service("unitService")
+public class UnitServiceImpl extends ApolloService implements IUnitService {
+	
+	@Autowired
+	private IUnitDAO unitDAO;
+	@Autowired
+	private IPositionDAO positionDAO;
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getRootUnit(String userId) throws Exception{
+		try {
+			List unitTree = unitDAO.getRootUnit(userId);
+			return unitTree;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List getSubUnit(String userId, String parentUnitID, boolean needStation, boolean needManagable) throws Exception {
+		List subTree = null;
+		try {
+			subTree = unitDAO.getSubUnit(userId, parentUnitID);
+			// 如果需要获取岗位，则取出该组织下的岗位
+			if (needStation) {
+				WF_ORG_STATION stationParam = new WF_ORG_STATION();
+
+				if (needManagable) {
+					stationParam.setUserId(userId);
+					stationParam.setManagable("true");
+				} else
+					stationParam.setManagable("false");
+				stationParam.setUnitId(parentUnitID);
+				List positionList = positionDAO.getStationByCondition(stationParam);
+				if (subTree == null)
+					subTree = new ArrayList();
+				if (positionList != null && positionList.size() > 0) {
+					for (int i = 0; i < positionList.size(); i++) {
+						WF_ORG_STATION temp = (WF_ORG_STATION) positionList.get(i);
+						Map stationMap = new HashMap();
+						stationMap.put("PARENT_UNIT_ID", parentUnitID + "@UNIT");
+						stationMap.put("STATION_ID", temp.getStationId() + "@STATION");
+						// 叫UNIT_ID是因为前台写死了。这样改改比较简单
+						stationMap.put("UNIT_ID", temp.getStationId() + "@STATION");
+						stationMap.put("STATION_NAME", temp.getStationName());
+						stationMap.put("MANAGEABLE", temp.getManagable());
+						subTree.add(stationMap);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage());
+		} 
+		return subTree;
+	}
+
+	@Override
+	public void saveUnit(WF_ORG_UNIT unitVO, String saveType, String extTableName, String idColName) {
+		try {
+			if (saveType.equals("0")) {
+				unitDAO.createUnit(unitVO, extTableName, idColName);
+			} else {
+				unitDAO.updateUnit(unitVO, extTableName, idColName);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public WF_ORG_UNIT getUnitDetail(String unitID){
+		WF_ORG_UNIT unitVO = new WF_ORG_UNIT();
+		unitVO.setUnitId(unitID);
+		List listUnit = null;
+		try {
+			listUnit = unitDAO.getUnitByCondition(unitVO);
+			unitVO = (WF_ORG_UNIT) listUnit.get(0);
+//			unitVO.setExtInfoMap(iunitDAO.getExtInfo("unit", unitID));
+			// WF_ORG_UNIT unit = (WF_ORG_UNIT)listUnit.get(0);
+			// listUser = iuserDAO.getUserByUnitID(unitID);
+			// unit.setUserList(listUser);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return unitVO;
+	}
+
+	@Override
+	public void deleteUnit(String unitID, String extTableName, String idColumnName, boolean advanceDelete) {
+		try {
+			unitDAO.deleteUnit(unitID, extTableName, idColumnName, advanceDelete);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+}

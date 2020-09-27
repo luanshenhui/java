@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BatchEspActRemindModel">
+    <resultMap id="EspActRemindMap" type="cn.com.cgbchina.batch.model.BatchEspActRemindModel">
+        <result property="id" column="id"/>
+        <result property="actId" column="act_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="mesDatetime" column="mes_datetime"/>
+        <result property="custMobile" column="cust_mobile"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="sendDatetime" column="send_datetime"/>
+        <result property="sendFlag" column="send_flag"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,act_id,goods_id,cust_id,mes_datetime,cust_mobile,ordertype_id,send_datetime,send_flag,del_flag,create_time,modify_time
+    </sql>
+
+    <select id="findNeedSendMsg" parameterType="map" resultMap="EspActRemindMap">
+    	select 
+    	<include refid="columns"/>
+        from tbl_esp_act_remind
+        where mes_datetime &lt; #{date} 
+        and send_flag=0
+        and del_flag=0
+        limit #{offset},#{limit}
+    </select>
+    <select id="findNeedSendMsgCount" parameterType="map" resultType="long">
+    	select 
+    	count(1)
+        from tbl_esp_act_remind
+        where mes_datetime &lt; #{date} 
+        and send_flag=0
+        and del_flag=0
+    </select>
+    <update id="updateSendFlg" parameterType="map" >
+		update tbl_esp_act_remind set send_flag=#{flg} where id in 
+		<foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </update>
+</mapper>
+
+

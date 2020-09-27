@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean id="organizationTransactionProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">PROPAGATION_REQUIRED,-ServiceException</prop>
+				<prop key="update*">PROPAGATION_REQUIRED,-ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED,-ServiceException</prop>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!--
+		=========BUSINESS OBJECT DEFINITIONS=========
+	-->
+	<!-- Organization management Start -->
+	<bean id="orgFacade"
+		class="com.dhc.organization.facade.impl.OrganizationFacadeImpl">
+		<property name="userService">
+			<ref bean="TP_UserService" />
+		</property>
+	</bean>
+	
+	<bean id="TP_UnitService" parent="organizationTransactionProxy">
+		<property name="target">
+			<ref bean="UnitService" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="save*">PROPAGATION_REQUIRED, -ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED, -ServiceException</prop>
+			</props>
+		</property>
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+	</bean>
+	<bean id="UnitService"
+		class="com.dhc.organization.unit.service.UnitService">
+		<property name="iunitDAO" ref="unitDAO" />
+		<property name="iuserDAO" ref="userDAO" />
+		<property name="ipositionDAO" ref="stationDAO" />
+	</bean>
+	<!-- Organization management End -->
+
+	<!-- Station management Start -->
+	<bean id="TP_StationService" parent="organizationTransactionProxy">
+		<property name="target">
+			<ref bean="StationService" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="save*">PROPAGATION_REQUIRED, -ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED, -ServiceException</prop>
+			</props>
+		</property>
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+	</bean>
+	<bean id="StationService"
+		class="com.dhc.organization.position.service.StationService">
+		<property name="ipositionDAO" ref="stationDAO" />
+		<property name="iuserDAO" ref="userDAO" />
+	</bean>
+	<!-- Station management End -->
+	
+	<!-- User management Start -->
+	<bean id="TP_UserService" parent="organizationTransactionProxy">
+		<property name="target">
+			<ref bean="UserService" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="save*">PROPAGATION_REQUIRED, -ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED, -ServiceException</prop>
+			</props>
+		</property>
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+	</bean>
+	<bean id="UserService"
+		class="com.dhc.organization.user.service.UserService">
+		<property name="iuserDAO" ref="userDAO" />
+		<property name="iunitDAO" ref="unitDAO" />
+		<property name="iroleDAO" ref="roleDAO" />
+		<property name="imenuDAO" ref="menuDAO" />		
+		<property name="istationDAO" ref="stationDAO" />
+		<property name="menuGrantDAO" ref="privilegeDAO" />
+		<property name="passwordEncoder" ref="passwordEncoder" />
+	</bean>
+	<!-- User management End -->
+	<!-- Role management Start -->
+	<bean id="TP_RoleService" parent="organizationTransactionProxy">
+		<property name="target">
+			<ref bean="RoleService" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="save*">PROPAGATION_REQUIRED, -ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED, -ServiceException</prop>
+			</props>
+		</property>
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+	</bean>
+	<bean id="RoleService"
+		class="com.dhc.organization.role.service.RoleService">
+		<property name="iroleDAO" ref="roleDAO" />
+		<property name="iunitDAO" ref="unitDAO" />
+		<property name="iuserDAO" ref="userDAO" />
+		<property name="menuGrantDAO" ref="privilegeDAO" />
+	</bean>
+	<!-- Role management End -->
+</beans>

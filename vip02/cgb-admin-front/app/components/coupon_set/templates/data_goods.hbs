@@ -1,0 +1,12 @@
+<table class="table-list">
+    {{#each list}}
+        <tbody>
+        <tr>
+            <td width="5%"><input type="checkbox" class="optCodebox" name="goodsNames" data-id="{{this.code}}" id="{{this.code}}"
+                                  value="{{this.name}}"></td>
+            <td width="30%">{{this.code}}</td>
+            <td width="65%" class="breakWords">{{this.name}}</td>
+        </tr>
+        </tbody>
+    {{/each}}
+</table>

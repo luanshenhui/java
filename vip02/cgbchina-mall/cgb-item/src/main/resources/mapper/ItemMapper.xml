@@ -1,0 +1,1055 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Item">
+    <resultMap id="ItemMap" type="ItemModel">
+        <result property="code" column="code"/>
+        <result property="goodsCode" column="goods_code"/>
+        <result property="marketPrice" column="market_price"/>
+        <result property="price" column="price"/>
+        <result property="stock" column="stock"/>
+        <result property="o2oCode" column="o2o_code"/>
+        <result property="o2oVoucherCode" column="o2o_voucher_code"/>
+        <result property="installmentNumber" column="installment_number"/>
+        <result property="stockWarning" column="stock_warning"/>
+        <result property="nostockNotifyTime" column="nostock_notify_time"/>
+        <result property="image1" column="image1"/>
+        <result property="image2" column="image2"/>
+        <result property="image3" column="image3"/>
+        <result property="image4" column="image4"/>
+        <result property="image5" column="image5"/>
+        <result property="freightSize" column="freight_size"/>
+        <result property="freightWeight" column="freight_weight"/>
+        <result property="stagesCode" column="stages_code"/>
+        <result property="fixPoint" column="fix_point"/>
+        <result property="machCode" column="mach_code"/>
+        <result property="goodsTotal" column="goods_total"/>
+        <result property="stickFlag" column="stick_flag"/>
+        <result property="stickOrder" column="stick_order"/>
+        <result property="wxOrder" column="wx_order"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="mid" column="mid"/>
+        <result property="oid" column="oid"/>
+        <result property="xid" column="xid"/>
+        <result property="bid" column="bid"/>
+        <result property="wxProp1" column="wx_prop1"/>
+        <result property="wxProp2" column="wx_prop2"/>
+        <result property="wxProp3" column="wx_prop3"/>
+        <result property="preinstallStock" column="preinstall_stock"/>
+        <result property="productPointRate" column="product_point_rate"/>
+        <result property="bestRate" column="best_rate"/>
+        <result property="maxPoint" column="max_point"/>
+        <result property="cardLevelId" column="card_level_id"/>
+        <result property="prefuctureId" column="prefucture_id"/>
+        <result property="virtualLimit" column="virtual_limit"/>
+        <result property="virtualLimitDays" column="virtual_limit_days"/>
+        <result property="virtualMileage" column="virtual_mileage"/>
+        <result property="virtualPrice" column="virtual_price"/>
+        <result property="virtualIntegralLimit" column="virtual_integral_limit"/>
+        <result property="isShow" column="is_show"/>
+        <result property="attributeKey1" column="attribute_key1"/>
+        <result property="attributeName1" column="attribute_name1"/>
+        <result property="attributeValue1" column="attribute_value1"/>
+        <result property="attributeKey2" column="attribute_key2"/>
+        <result property="attributeName2" column="attribute_name2"/>
+        <result property="attributeValue2" column="attribute_value2"/>
+        <result property="displayFlag" column="display_flag"/>
+        <result property="wxLimitCount" column="wx_limit_count"/>
+    </resultMap>
+    <sql id="columns">
+           code,goods_code,market_price,price,stock,o2o_code,o2o_voucher_code,installment_number,stock_warning,nostock_notify_time,image1,image2,image3,image4,image5,freight_size,freight_weight,stages_code,fix_point,mach_code,goods_total,stick_flag,stick_order,wx_order,del_flag,create_oper,create_time,modify_oper,modify_time,mid,oid,xid,bid,wx_prop1,wx_prop2,wx_prop3,preinstall_stock,product_point_rate,best_rate,max_point,card_level_id,prefucture_id,virtual_limit,virtual_limit_days,virtual_mileage,virtual_price,virtual_integral_limit,is_show,display_flag,wx_limit_count,attribute_key1, attribute_name1, attribute_value1,attribute_key2,attribute_name2,attribute_value2
+    </sql>
+
+    <insert id="insert" parameterType="ItemModel" useGeneratedKeys="true"
+            keyProperty="code" keyColumn="code">
+        insert into tbl_item
+        (code
+        ,goods_code
+        ,market_price
+        ,price
+        ,stock
+        ,o2o_code
+        ,o2o_voucher_code
+        ,installment_number
+        ,stock_warning
+        ,nostock_notify_time
+        ,image1
+        ,image2
+        ,image3
+        ,image4
+        ,image5
+        ,freight_size
+        ,freight_weight
+        ,stages_code
+        ,fix_point
+        ,mach_code
+        ,wx_order
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,mid
+        ,oid
+        ,xid
+        ,bid
+        ,wx_prop1
+        ,wx_prop2
+        ,wx_prop3
+        ,preinstall_stock
+        ,product_point_rate
+        ,best_rate
+        ,max_point
+        ,prefucture_id
+        ,virtual_limit
+        ,virtual_limit_days
+        ,virtual_mileage
+        ,virtual_price
+        ,virtual_integral_limit
+        ,card_level_id
+        ,is_show
+        ,display_flag
+        ,wx_limit_count
+        ,attribute_key1
+        ,attribute_name1
+        ,attribute_value1
+        ,attribute_key2
+        ,attribute_name2
+        ,attribute_value2)
+        values(#{code}
+        ,#{goodsCode}
+        ,#{marketPrice}
+        ,#{price}
+        ,#{stock}
+        ,#{o2oCode}
+        ,#{o2oVoucherCode}
+        ,#{installmentNumber}
+        ,#{stockWarning}
+        ,#{nostockNotifyTime}
+        ,#{image1}
+        ,#{image2}
+        ,#{image3}
+        ,#{image4}
+        ,#{image5}
+        ,#{freightSize}
+        ,#{freightWeight}
+        ,#{stagesCode}
+        ,#{fixPoint}
+        ,#{machCode}
+        ,#{wxOrder}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{mid}
+        ,#{oid}
+        ,#{xid}
+        ,#{bid}
+        ,#{wxProp1}
+        ,#{wxProp2}
+        ,#{wxProp3}
+        ,#{preinstallStock}
+        ,#{productPointRate}
+        ,#{bestRate}
+        ,#{maxPoint}
+        ,#{prefuctureId}
+        ,#{virtualLimit}
+        ,#{virtualLimitDays}
+        ,#{virtualMileage}
+        ,#{virtualPrice}
+        ,#{virtualIntegralLimit}
+        ,#{cardLevelId}
+        ,#{isShow}
+        ,#{displayFlag}
+        ,#{wxLimitCount}
+        ,#{attributeKey1}
+        ,#{attributeName1}
+        ,#{attributeValue1}
+        ,#{attributeKey2}
+        ,#{attributeName2}
+        ,#{attributeValue2})
+    </insert>
+
+    <update id="update" parameterType="ItemModel">
+        update tbl_item
+        <set>
+            modify_time = now(),
+            <if test="goodsCode !=null">goods_code = #{goodsCode},</if>
+            <if test="marketPrice !=null">market_price = #{marketPrice},</if>
+            <if test="price !=null">price = #{price},</if>
+            <if test="stock !=null">stock = #{stock} ,</if>
+            <if test="o2oCode !=null">o2o_code = #{o2oCode},</if>
+            <if test="o2oVoucherCode !=null">o2o_voucher_code = #{o2oVoucherCode},</if>
+            <if test="installmentNumber !=null">installment_number = #{installmentNumber},</if>
+            <if test="stockWarning !=null">stock_warning = #{stockWarning},</if>
+            <if test="nostockNotifyTime !=null">nostock_notify_time = #{nostockNotifyTime},</if>
+            <if test="image1 !=null">image1 = #{image1} ,</if>
+            <if test="image2 !=null">image2 = #{image2},</if>
+            <if test="image3 !=null">image3 = #{image3},</if>
+            <if test="image4 !=null">image4 = #{image4},</if>
+            <if test="image5 !=null">image5 = #{image5} ,</if>
+            <if test="freightSize !=null">freight_size = #{freightSize},</if>
+            <if test="freightWeight !=null">freight_weight = #{freightWeight} ,</if>
+            <if test="stagesCode !=null">stages_code = #{stagesCode},</if>
+            <if test="fixPoint !=null">fix_point = #{fixPoint},</if>
+            <if test="machCode !=null">mach_code = #{machCode} ,</if>
+            <if test="goodsTotal !=null">goods_total = #{goodsTotal},</if>
+            <if test="stickFlag !=null">stick_flag = #{stickFlag},</if>
+            <if test="stickOrder !=null">stick_order = #{stickOrder},</if>
+            <if test="wxOrder !=null">wx_order = #{wxOrder},</if>
+            <if test="delFlag !=null">del_flag = #{delFlag},</if>
+            <if test="createOper !=null">create_oper = #{createOper},</if>
+            <if test="createTime !=null">create_time = #{createTime},</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper},</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime},</if>
+            <if test="mid !=null">mid = #{mid} ,</if>
+            <if test="oid !=null">oid = #{oid},</if>
+            <if test="xid !=null">xid = #{xid},</if>
+            <if test="bid !=null">bid = #{bid} ,</if>
+            <if test="wxProp1 !=null">wx_prop1 = #{wxProp1},</if>
+            <if test="wxProp2 !=null">wx_prop2 = #{wxProp2} ,</if>
+            <if test="wxProp3 !=null">wx_prop3 = #{wxProp3},</if>
+            <if test="preinstallStock !=null">preinstall_stock = #{preinstallStock} ,</if>
+            <if test="productPointRate !=null">product_point_rate = #{productPointRate},</if>
+            <if test="bestRate !=null">best_rate = #{bestRate} ,</if>
+            <if test="maxPoint !=null">max_point = #{maxPoint},</if>
+            <if test="cardLevelId !=null">card_level_id = #{cardLevelId},</if>
+            <if test="prefuctureId !=null">prefucture_id = #{prefuctureId} ,</if>
+            <if test="virtualLimit !=null">virtual_limit = #{virtualLimit},</if>
+            <if test="virtualLimitDays !=null">virtual_limit_days = #{virtualLimitDays},</if>
+            <if test="virtualMileage !=null">virtual_mileage = #{virtualMileage},</if>
+            <if test="virtualPrice !=null">virtual_price = #{virtualPrice} ,</if>
+            <if test="virtualIntegralLimit !=null">virtual_integral_limit = #{virtualIntegralLimit} ,</if>
+            <if test="isShow !=null">is_show = #{isShow} ,</if>
+            <if test="displayFlag !=null">display_flag = #{displayFlag} ,</if>
+            <if test="wxLimitCount !=null">wx_limit_count = #{wxLimitCount} ,</if>
+            <if test="attributeKey1 !=null">attribute_key1 = #{attributeKey1},</if>
+            <if test="attributeName1 !=null">attribute_name1 = #{attributeName1},</if>
+            <if test="attributeValue1 !=null">attribute_value1 = #{attributeValue1},</if>
+            <if test="attributeKey2 !=null">attribute_key2 = #{attributeKey2},</if>
+            <if test="attributeName2 !=null">attribute_name2 = #{attributeName2},</if>
+            <if test="attributeValue2 !=null">attribute_value2 = #{attributeValue2}</if>
+        </set>
+        where code = #{code}
+    </update>
+
+    <update id="updateItem" parameterType="ItemModel">
+        update tbl_item set
+        modify_time = now(),
+        market_price = #{marketPrice},
+        product_point_rate = #{productPointRate},
+        fix_point = #{fixPoint}
+        <if test="goodsCode !=null">,goods_code = #{goodsCode}</if>
+        <if test="price !=null">,price = #{price}</if>
+        <if test="stock !=null">,stock = #{stock}</if>
+        <if test="o2oCode !=null">,o2o_code = #{o2oCode}</if>
+        <if test="o2oVoucherCode !=null">,o2o_voucher_code = #{o2oVoucherCode}</if>
+        <if test="installmentNumber !=null">,installment_number = #{installmentNumber}</if>
+        <if test="stockWarning !=null">,stock_warning = #{stockWarning}</if>
+        <if test="nostockNotifyTime !=null">,nostock_notify_time = #{nostockNotifyTime}</if>
+        <if test="image1 !=null">,image1 = #{image1}</if>
+        <if test="image2 !=null">,image2 = #{image2}</if>
+        <if test="image3 !=null">,image3 = #{image3}</if>
+        <if test="image4 !=null">,image4 = #{image4}</if>
+        <if test="image5 !=null">,image5 = #{image5}</if>
+        <if test="freightSize !=null">,freight_size = #{freightSize}</if>
+        <if test="freightWeight !=null">,freight_weight = #{freightWeight}</if>
+        <if test="stagesCode !=null">,stages_code = #{stagesCode}</if>
+        <if test="machCode !=null">,mach_code = #{machCode}</if>
+        <if test="goodsTotal !=null">,goods_total = #{goodsTotal}</if>
+        <if test="stickFlag !=null">,stick_flag = #{stickFlag}</if>
+        <if test="stickOrder !=null">,stick_order = #{stickOrder}</if>
+        <if test="wxOrder !=null">,wx_order = #{wxOrder}</if>
+        <if test="delFlag !=null">,del_flag = #{delFlag}</if>
+        <if test="createOper !=null">,create_oper = #{createOper}</if>
+        <if test="createTime !=null">,create_time = #{createTime}</if>
+        <if test="modifyOper !=null">,modify_oper = #{modifyOper}</if>
+        <if test="mid !=null">,mid = #{mid}</if>
+        <if test="oid !=null">,oid = #{oid}</if>
+        <if test="xid !=null">,xid = #{xid}</if>
+        <if test="bid !=null">,bid = #{bid}</if>
+        <if test="wxProp1 !=null">,wx_prop1 = #{wxProp1}</if>
+        <if test="wxProp2 !=null">,wx_prop2 = #{wxProp2}</if>
+        <if test="wxProp3 !=null">,wx_prop3 = #{wxProp3}</if>
+        <if test="preinstallStock !=null">,preinstall_stock = #{preinstallStock}</if>
+        <if test="productPointRate !=null">,product_point_rate = #{productPointRate}</if>
+        <if test="bestRate !=null">,best_rate = #{bestRate}</if>
+        <if test="maxPoint !=null">,max_point = #{maxPoint}</if>
+        <if test="displayFlag !=null">,display_flag = #{displayFlag}</if>
+        <if test="wxLimitCount !=null">,wx_limit_count = #{wxLimitCount}</if>
+        <if test="attributeKey1!=null">,attribute_key1=#{attributeKey1}</if>
+        <if test="attributeName1!=null">,attribute_name1=#{attributeName1}</if>
+        <if test="attributeValue1!=null">,attribute_value1=#{attributeValue1}</if>
+        <if test="attributeKey2!=null">,attribute_key2=#{attributeKey2}</if>
+        <if test="attributeName2!=null">,attribute_name2=#{attributeName2}</if>
+        <if test="attributeValue2!=null">,attribute_value2=#{attributeValue2}</if>
+        where code = #{code}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            and del_flag = 0
+            <if test="code !=null">and code = #{code}</if>
+            <if test="goodsCode !=null">and goods_code = #{goodsCode}</if>
+            <if test="marketPrice !=null">and market_price = #{marketPrice}</if>
+            <if test="price !=null">and price = #{price}</if>
+            <if test="stock !=null">and stock = #{stock}</if>
+            <if test="o2oCode !=null">and o2o_code = #{o2oCode}</if>
+            <if test="o2oVoucherCode !=null">and o2o_voucher_code = #{o2oVoucherCode}</if>
+            <if test="installmentNumber !=null">and installment_number = #{installmentNumber}</if>
+            <if test="stockWarning !=null">and stock_warning = #{stockWarning}</if>
+            <if test="nostockNotifyTime !=null">and nostock_notify_time = #{nostockNotifyTime}</if>
+            <if test="image1 !=null">and image1 = #{image1}</if>
+            <if test="image2 !=null">and image2 = #{image2}</if>
+            <if test="image3 !=null">and image3 = #{image3}</if>
+            <if test="image4 !=null">and image4 = #{image4}</if>
+            <if test="image5 !=null">and image5 = #{image5}</if>
+            <if test="freightSize !=null">and freight_size = #{freightSize}</if>
+            <if test="freightWeight !=null">and freight_weight = #{freightWeight}</if>
+            <if test="stagesCode !=null">and stages_code = #{stagesCode}</if>
+            <if test="fixPoint !=null">and fix_point = #{fixPoint}</if>
+            <if test="machCode !=null">and mach_code = #{machCode}</if>
+            <if test="goodsTotal !=null">and goods_total = #{goodsTotal}</if>
+            <if test="stickFlag !=null">and stick_flag = #{stickFlag}</if>
+            <if test="stickOrder !=null">and stick_order = #{stickOrder}</if>
+            <if test="wxOrder !=null">and wx_order = #{wxOrder}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="mid !=null">and mid = #{mid}</if>
+            <if test="oid !=null">and oid = #{oid}</if>
+            <if test="xid !=null">and xid = #{xid}</if>
+            <if test="bid !=null">and bid = #{bid}</if>
+            <if test="xidNotNull !=null">and xid is not null</if>
+            <if test="wxProp1 !=null">and wx_prop1 = #{wxProp1}</if>
+            <if test="wxProp2 !=null">and wx_prop2 = #{wxProp2}</if>
+            <if test="wxProp3 !=null">and wx_prop3 = #{wxProp3}</if>
+            <if test="preinstallStock !=null">and preinstall_stock = #{preinstallStock}</if>
+            <if test="productPointRate !=null">and product_point_rate = #{productPointRate}</if>
+            <if test="bestRate !=null">and best_rate = #{bestRate}</if>
+            <if test="maxPoint !=null">and max_point = #{maxPoint}</if>
+            <if test="cardLevelId !=null">and card_level_id = #{cardLevelId}</if>
+            <if test="displayFlag !=null">and display_flag = #{displayFlag}</if>
+            <if test="wxLimitCount !=null">and wx_limit_count = #{wxLimitCount}</if>
+            <if test="attributeKey1!=null">attribute_key1=#{attributeKey1},</if>
+            <if test="attributeName1!=null">attribute_name1=#{attributeName1},</if>
+            <if test="attributeValue1!=null">attribute_value1=#{attributeValue1},</if>
+            <if test="attributeKey2!=null">attribute_key2=#{attributeKey2},</if>
+            <if test="attributeName2!=null">attribute_name2=#{attributeName2},</if>
+            <if test="attributeValue2!=null">attribute_value2=#{attributeValue2},</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_item
+        where code=#{code} and del_flag=0
+    </select>
+
+    <select id="maxId" resultType="String">
+        select
+        max(code)
+        from tbl_item
+    </select>
+
+    <select id="forDeltaDump" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE  <![CDATA[code <= #{lastId} AND modify_time > #{compared}]]>
+        ORDER BY code DESC LIMIT #{limit}
+    </select>
+    <!-- 查询所有item 索引 add by zhoupeng-->
+    <select id="findFullItemToIndex" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE  <![CDATA[code <= #{lastId}]]>
+        ORDER BY code DESC LIMIT #{limit}
+    </select>
+
+    <select id="findAll" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        <include refid="conditions"/>
+    </select>
+    <!-- 根据商品codeList及单品code模糊查询-->
+    <select id="findAllExtra" parameterType="Map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        WHERE
+        goods_code IN
+        <foreach collection="goodsCodeList" item="goodsCodeList" index="index" open="(" separator="," close=")">
+            #{goodsCodeList}
+        </foreach>
+        AND del_flag=0
+        AND stock >0
+        AND (fix_point IS NULL or fix_point = 0 )
+        <if test="code !=null">and code LIKE concat(concat('%',#{code}),'%')</if>
+        <if test="itemCodes !=null">and
+            code NOT IN
+            <foreach collection="itemCodes" item="itemCode" index="index" open="(" separator="," close=")">
+                #{itemCode}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        <include refid="conditions"/>
+        <![CDATA[ order by code desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <!-- 根据商品codeList及单品code模糊查询-->
+    <select id="pagerExtra" parameterType="Map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        WHERE
+        goods_code IN
+        <foreach collection="goodsCodeList" item="goodsCodeList" index="index" open="(" separator="," close=")">
+            #{goodsCodeList}
+        </foreach>
+        AND del_flag=0
+        AND stock >0
+        AND (fix_point IS NULL or fix_point = 0 )
+        <if test="code !=null">and code LIKE concat(concat('%',#{code}),'%')</if>
+        <if test="itemCodes !=null">and
+            code NOT IN
+            <foreach collection="itemCodes" item="itemCode" index="index" open="(" separator="," close=")">
+                #{itemCode}
+            </foreach>
+        </if>
+        <![CDATA[ order by code desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <delete id="delete" parameterType="ItemModel">
+        delete from tbl_item where id = code
+    </delete>
+
+
+    <!--根据商品编码查询相应的单品的所有信息-->
+    <select id="findItemDetailByGoodCode" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where goods_code=#{goodsCode} and del_flag=0
+    </select>
+
+    <!--根据商品或单品编码取得单品列表 add by caofangyi-->
+    <select id="findItemListByGoodsOrItemCode" resultType="String">
+        SELECT
+        goods_code
+        FROM tbl_item
+        WHERE
+        del_flag=0
+        AND (
+        code=#{code}
+        OR goods_code=#{code}
+        )
+        ORDER BY goods_code,code
+    </select>
+    <!--根据商品CODE列表取得单品列表-->
+    <select id="findItemListByGoodsCodeList" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE goods_code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+        ORDER BY goods_code,code
+    </select>
+
+    <!--根据单品编码列表取得单品列表-->
+    <select id="findByCodes" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+        ORDER BY code
+    </select>
+    <!--根据单品编码列表取得单品列表不排序-->
+    <select id="findNoCode" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+        order by FIELD(code,<foreach collection="list" item="item" index="index" separator=",">
+        #{item}
+    </foreach>)
+    </select>
+    <!--根据code查询相应的单品的所有信息 add by liuhan-->
+    <select id="findItemDetailByCode" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where code=#{itemCode} and del_flag=0
+    </select>
+    <!--批量插入单品信息 add by caofangyi-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tbl_item
+        (code
+        ,goods_code
+        ,market_price
+        ,price
+        ,stock
+        ,o2o_code
+        ,o2o_voucher_code
+        ,installment_number
+        ,stock_warning
+        ,nostock_notify_time
+        ,image1
+        ,image2
+        ,image3
+        ,image4
+        ,image5
+        ,freight_size
+        ,freight_weight
+        ,stages_code
+        ,fix_point
+        ,mach_code
+        ,wx_order
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,mid
+        ,oid
+        ,xid
+        ,bid
+        ,wx_prop1
+        ,wx_prop2
+        ,wx_prop3
+        ,preinstall_stock
+        ,product_point_rate
+        ,best_rate
+        ,max_point
+        ,display_flag
+        ,wx_limit_count)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.code}
+            ,#{item.goodsCode}
+            ,#{item.marketPrice}
+            ,#{item.price}
+            ,#{item.stock}
+            ,#{item.o2oCode}
+            ,#{item.o2oVoucherCode}
+            ,#{item.installmentNumber}
+            ,#{item.stockWarning}
+            ,#{item.nostockNotifyTime}
+            ,#{item.image1}
+            ,#{item.image2}
+            ,#{item.image3}
+            ,#{item.image4}
+            ,#{item.image5}
+            ,#{item.freightSize}
+            ,#{item.freightWeight}
+            ,#{item.stagesCode}
+            ,#{item.fixPoint}
+            ,#{item.machCode}
+            ,#{item.wxOrder}
+            ,0
+            ,#{item.createOper}
+            ,now()
+            ,#{item.modifyOper}
+            ,now()
+            ,#{item.mid}
+            ,#{item.oid}
+            ,#{item.xid}
+            ,#{item.bid}
+            ,#{item.wxProp1}
+            ,#{item.wxProp2}
+            ,#{item.wxProp3}
+            ,#{item.preinstallStock}
+            ,#{item.productPointRate}
+            ,#{item.bestRate}
+            ,#{item.maxPoint}
+            ,#{item.displayFlag}
+            ,#{item.wxLimitCount})
+        </foreach>
+    </insert>
+    <!--置顶商品 查询所有排序单品 edit by zhoupeng-->
+    <select id="findAllStickOrder" resultType="Integer">
+        SELECT stick_order
+        FROM tbl_item
+        WHERE stick_flag = 1
+        AND del_flag = 0
+    </select>
+
+    <!--查询置顶商品 edit by zhoupeng-->
+    <select id="findAllStickFlagPager" parameterType="Map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        <include refid="stickFlagConditions"/>
+        order by stick_order asc limit #{offset}, #{limit}
+    </select>
+    <select id="findAllStickFlagCount" parameterType="Map" resultType="Long">
+        select count(1)
+        from tbl_item
+        <include refid="stickFlagConditions"/>
+    </select>
+    <!-- mid 该条件为了检索出 商品有关的单品，作为判断标识-->
+    <sql id="stickFlagConditions">
+        <where>
+            and del_flag = 0
+            and mid is not null
+            and mid != ''
+            <if test="code !=null">and code = #{code}</if>
+            <if test="stickFlag !=null">and stick_flag = #{stickFlag}</if>
+            <if test="goodsCodes !=null">and goods_code in
+                <foreach collection="goodsCodes" item="code" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_item
+        <include refid="conditions"/>
+    </select>
+
+    <select id="findByCodesNoOrder" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+    </select>
+
+    <select id="findByIdAndOidOrMid" parameterType="Map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where del_flag!=1
+        <if test="code!=null and code!='' ">
+            and code=#{code}
+        </if>
+        <if test="omid!=null and omid!='' ">
+            and (oid=#{omid} or mid=#{omid})
+        </if>
+        limit 1
+    </select>
+
+
+    <!--根据单品编码列表取得库存大于0的单品列表-->
+    <select id="findStoredByCodes" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM item
+        WHERE code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+        and stock>0
+        ORDER BY code
+    </select>
+
+    <select id="findByMid" parameterType="string" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where del_flag=0
+        and mid=#{mid}
+    </select>
+
+    <select id="findItemsByGoodsCodeAndStick" parameterType="map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where del_flag=0
+        <if test="goodsCodes != null">
+            and goods_code IN
+            <foreach collection="goodsCodes" item="goodsCode" open="(" separator="," close=")">
+                #{goodsCode}
+            </foreach>
+        </if>
+        <if test="stickFlag != null">and stick_flag=#{stickFlag}</if>
+    </select>
+
+    <update id="updateStock" parameterType="String">
+        update tbl_item set
+        stock = stock + 1
+        where code = #{code} and stock + 1 <![CDATA[ < ]]>9999
+    </update>
+
+    <!--根据itemCode查询单品相关信息 niufw-->
+    <select id="findByItemcode" parameterType="java.lang.String" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where code=#{itemCode}
+    </select>
+
+    <update id="updateGoodsJF" parameterType="ItemModel">
+        update tbl_item set stock=stock+#{stock} where code=#{code} and (stock+#{stock})<![CDATA[ < ]]>9999
+    </update>
+
+    <update id="updateGoodsYG" parameterType="ItemModel">
+        update tbl_item set stock=stock+#{stock} where code=#{code}
+    </update>
+
+    <update id="updateItemTotal" parameterType="ItemModel">
+        update tbl_item set goods_total=goods_total+#{goodsTotal} where code=#{code}
+    </update>
+
+    <select id="findItemListByGoodsCode" parameterType="String" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item where goods_code = #{goodsCode} AND del_flag=0
+    </select>
+
+    <select id="findWxItemCount" resultType="Long">
+        select count(1)
+        from tbl_item
+        WHERE del_flag = 0
+        <if test="mid !=null">and mid = #{mid}</if>
+        <if test="goodsCodeList!=null">
+            and goods_code IN
+            <foreach collection="goodsCodeList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="findWxItemByPage" parameterType="Map" resultMap="ItemMap">
+        SELECT
+        code,goods_code,mid,image1,price,installment_number,wx_order
+        FROM tbl_item
+        WHERE del_flag = 0
+        <if test="mid !=null">AND mid = #{mid}</if>
+        <if test="goodsCodeList!=null">
+            AND goods_code IN
+            <foreach collection="goodsCodeList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[ ORDER BY wx_order IS NULL ,wx_order ASC ,mid ASC limit #{offset}, #{limit} ]]>
+    </select>
+
+    <!--根据单品编码List查询单品list(包含已删除)-->
+    <select id="findByCodesAll" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--根据单品编码查询单品(包含已删除)-->
+    <select id="findByCodeAll" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_item
+        where code=#{code}
+    </select>
+
+    <!--根据条件检索单品list -->
+    <select id="findItemByConditions" parameterType="Map" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_item
+        <include refid="conditions"/>
+    </select>
+    <!--根据前十条商品CodeList查找单品信息-->
+    <select id="findTopItemListByGoodsCodeList" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE goods_code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+        order by FIELD(goods_code,
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item}
+        </foreach>) LIMIT 10
+    </select>
+    <!--根据礼品编码xid查询礼品编码-->
+    <select id="findItemByXid" parameterType="String" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_item
+        where xid=#{goodsXid} and del_flag=0 limit 1
+    </select>
+    <!--根据mid查询相应的单品的所有信息-->
+    <select id="findItemDetailByMid" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where mid=#{mid} and del_flag=0
+    </select>
+
+    <!--根据mid集合查询相应的单品的所有信息-->
+    <select id="findByMids" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where del_flag=0 and mid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item.itemCode}
+        </foreach>
+    </select>
+
+    <update id="updatePresentStock" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update tbl_item set
+            stock
+            = #{item.stock},modify_oper
+            = #{item.modifyOper},modify_time
+            =now()
+            where code = #{item.code}
+        </foreach>
+    </update>
+
+    <update id="updateBatchStock" parameterType="Map">
+        update tbl_item set
+        stock = stock + #{backStocCnt},
+        modify_oper = #{userId},
+        modify_time = now()
+        where code = #{code}
+    </update>
+    <!---->
+    <select id="findGoodsCodeListByItemCodeList" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+    </select>
+
+    <!--MAL502 回滚库存 niufw-->
+    <update id="rollbackBacklogByNum" parameterType="ItemModel">
+        update tbl_item set
+        <if test="stock !=null">stock = #{stock}</if>
+        where code = #{code}
+    </update>
+
+    <!--MAL115 下单减库存 -->
+    <update id="subtractStock" parameterType="ItemModel">
+        update tbl_item
+        set stock = stock - #{stock}
+        where
+            code = #{code}
+        and stock >= #{stock}
+    </update>
+
+
+    <!-- 批量更新单品信息 -->
+    <update id="updateItemInfos" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update tbl_item set
+            modify_time = now()
+            <if test="item.goodsCode !=null">,goods_code = #{item.goodsCode}</if>
+            <if test="item.price !=null">,price = #{item.price}</if>
+            <if test="item.stock !=null">,stock = #{item.stock}</if>
+            <if test="item.o2oCode !=null">,o2o_code = #{item.o2oCode}</if>
+            <if test="item.o2oVoucherCode !=null">,o2o_voucher_code = #{item.o2oVoucherCode}</if>
+            <if test="item.installmentNumber !=null">,installment_number = #{item.installmentNumber}</if>
+            <if test="item.stockWarning !=null">,stock_warning = #{item.stockWarning}</if>
+            <if test="item.nostockNotifyTime !=null">,nostock_notify_time = #{item.nostockNotifyTime}</if>
+            <if test="item.image1 !=null">,image1 = #{item.image1}</if>
+            <if test="item.image2 !=null">,image2 = #{item.image2}</if>
+            <if test="item.image3 !=null">,image3 = #{item.image3}</if>
+            <if test="item.image4 !=null">,image4 = #{item.image4}</if>
+            <if test="item.image5 !=null">,image5 = #{item.image5}</if>
+            <if test="item.freightSize !=null">,freight_size = #{item.freightSize}</if>
+            <if test="item.freightWeight !=null">,freight_weight = #{item.freightWeight}</if>
+            <if test="item.stagesCode !=null">,stages_code = #{item.stagesCode}</if>
+            <if test="item.machCode !=null">,mach_code = #{item.machCode}</if>
+            <if test="item.goodsTotal !=null">,goods_total = #{item.goodsTotal}</if>
+            <if test="item.stickFlag !=null">,stick_flag = #{item.stickFlag}</if>
+            <if test="item.stickOrder !=null">,stick_order = #{item.stickOrder}</if>
+            <if test="item.wxOrder !=null">,wx_order = #{item.wxOrder}</if>
+            <if test="item.delFlag !=null">,del_flag = #{item.delFlag}</if>
+            <if test="item.modifyOper !=null">,modify_oper = #{item.modifyOper}</if>
+            <if test="item.xid !=null">,xid = #{item.xid}</if>
+            <if test="item.wxProp1 !=null">,wx_prop1 = #{item.wxProp1}</if>
+            <if test="item.wxProp2 !=null">,wx_prop2 = #{item.wxProp2}</if>
+            <if test="item.wxProp3 !=null">,wx_prop3 = #{item.wxProp3}</if>
+            <if test="item.preinstallStock !=null">,preinstall_stock = #{item.preinstallStock}</if>
+            <if test="item.productPointRate !=null">,product_point_rate = #{item.productPointRate}</if>
+            <if test="item.bestRate !=null">,best_rate = #{item.bestRate}</if>
+            <if test="item.maxPoint !=null">,max_point = #{item.maxPoint}</if>
+            <if test="item.marketPrice !=null">,market_price = #{item.marketPrice}</if>
+            <if test="item.fixPoint !=null">,fix_point = #{item.fixPoint}</if>
+            <if test="item.displayFlag !=null">,display_flag = #{item.displayFlag}</if>
+            <if test="item.wxLimitCount !=null">, wx_limit_count = #{item.wxLimitCount}</if>
+            where code = #{item.code}
+        </foreach>
+    </update>
+
+    <select id="findStockByItemCode" parameterType="String" resultType="Long">
+        SELECT stock FROM tbl_item WHERE code=#{para} AND del_flag=0
+    </select>
+    <select id="findStocksByItemCodes" parameterType="List" resultMap="ItemMap">
+        SELECT stock,code,price FROM tbl_item WHERE del_flag=0 AND code IN
+        <foreach collection="list" open="(" close=")" separator="," item="itemCode">
+            #{itemCode}
+        </foreach>
+    </select>
+
+    <update id="updateStockForOrder" parameterType="Map">
+        update tbl_item set
+        stock = stock - #{itemCount}
+        where code = #{code} and stock >= #{itemCount} and del_flag=0
+    </update>
+
+    <select id="findMidIsExist" parameterType="String" resultType="Long">
+        select count(1) from tbl_item
+        WHERE del_flag = 0 and mid = #{mid}
+    </select>
+
+    <update id="updateWxOrder" parameterType="ItemModel">
+        update tbl_item set
+        modify_time = now()
+        ,wx_order = #{wxOrder}
+        where code = #{code}
+    </update>
+
+    <update id="updateRollBackStockForJF" parameterType="Map">
+        update tbl_item set
+        stock = stock + #{backStocCnt},
+        modify_oper = #{userId},
+        modify_time = now()
+        where code = #{code}
+        and stock != 9999
+    </update>
+
+    <select id="forDump" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item WHERE  <![CDATA[code < #{lastId}]]> and del_flag=0 ORDER BY code DESC LIMIT #{limit}
+    </select>
+
+    <select id="findLikeMidOrXid" resultType="String">
+        select
+        DISTINCT code
+        from tbl_item
+        where  mid LIKE concat(concat('%',#{midOrXid}),'%')or xid LIKE concat(concat('%',#{midOrXid}),'%')
+    </select>
+    <!--根据 midOrXid、channel 查询 单品信息 add by zhoupeng-->
+    <select id="findGoodsCodesbyMidOrXid" parameterType="Map" resultType="String">
+        SELECT
+        DISTINCT goods_code
+        FROM tbl_item
+        WHERE
+        del_flag=0
+        <!--<if test='channel == "YG"'>and mid LIKE concat(concat('%',#{midOrXid}),'%')</if>-->
+        <!--<if test='channel == "JF"'>and xid LIKE concat(concat('%',#{midOrXid}),'%')</if>-->
+        <if test='channel == "YG"'>and mid = #{midOrXid}</if>
+        <if test='channel == "JF"'>and xid = #{midOrXid}</if>
+    </select>
+
+    <select id="findByXids" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE xid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+        ORDER BY xid
+    </select>
+
+    <update id="deleteWxOrder" parameterType="String">
+        update tbl_item set wx_order = null where  code = #{itemCode}
+    </update>
+
+
+    <update id="updateWithoutNull" parameterType="ItemModel">
+        update tbl_item set
+        modify_time = now(),
+        market_price = #{marketPrice},
+        price = #{price},
+        stock = #{stock} ,
+        o2o_code = #{o2oCode},
+        o2o_voucher_code = #{o2oVoucherCode},
+        installment_number = #{installmentNumber},
+        stock_warning = #{stockWarning},
+        image1 = #{image1} ,
+        image2 = #{image2},
+        image3 = #{image3},
+        image4 = #{image4},
+        image5 = #{image5} ,
+        stages_code = #{stagesCode},
+        fix_point = #{fixPoint},
+        card_level_id = #{cardLevelId},
+        <if test="modifyOper !=null">modify_oper = #{modifyOper},</if>
+        bid = #{bid} ,
+        product_point_rate = #{productPointRate},
+        <if test="bestRate !=null">best_rate = #{bestRate} ,</if>
+        <if test="maxPoint !=null">max_point = #{maxPoint},</if>
+        <if test="cardLevelId !=null">card_level_id = #{cardLevelId},</if>
+        virtual_limit = #{virtualLimit},
+        virtual_limit_days = #{virtualLimitDays},
+        virtual_mileage = #{virtualMileage},
+        virtual_price = #{virtualPrice},
+        virtual_integral_limit = #{virtualIntegralLimit},
+        is_show = #{isShow},
+        display_flag = #{displayFlag}
+        where code = #{code}
+    </update>
+
+    <update id="updatePrice" parameterType="ItemModel">
+        update tbl_item set
+        modify_time = now()
+        ,market_price = #{marketPrice}
+        ,fix_point = #{fixPoint}
+        ,price = #{price}
+        ,modify_oper = #{modifyOper}
+        <if test="displayFlag !=null">, display_flag = #{displayFlag}</if>
+        <if test="productPointRate !=null">,product_point_rate = #{productPointRate}</if>
+        <if test="bestRate !=null">,best_rate = #{bestRate} </if>
+        <if test="maxPoint !=null">,max_point = #{maxPoint}</if>
+        where code = #{code}
+    </update>
+    <select id="findItemCodesByItemCode" parameterType="String" resultType="String">
+        SELECT
+       	code
+        FROM tbl_item
+        WHERE
+        goods_code = (select goods_code from tbl_item where code = #{itemCode} )
+        and
+        del_flag = 0
+    </select>
+
+
+</mapper>
+
+

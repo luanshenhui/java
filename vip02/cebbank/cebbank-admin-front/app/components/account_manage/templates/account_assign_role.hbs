@@ -1,0 +1,27 @@
+<div class="modal assign-role">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>分配角色</h2>
+    </div>
+    <form class="form form-aligned accountAssign-form" data-accountId="{{accountId}}">
+        <div class="account-new modal-body">
+            <div class="control-group">
+                <div class="btn-search">
+                    <label><span class="required">*</span>角色:</label>
+                </div>
+                <div class="btn-search role-height">
+                    {{#each roles}}
+                        <div>
+                            <input type="checkbox" name="roles" value="{{roleId}}"
+                                   class="form-control role-left"/>{{roleName}}
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+                <input type="submit" class="btn btn-success btn-small js-accountManage-assign" value="完成">
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,13 @@
+<!--商品管理 待复审tab type传入4-->
+{{#partial "realTitle"}}商品管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "mall_item/item_manage" true}}
+            {
+            "type":"4",
+            "channel":"YG"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

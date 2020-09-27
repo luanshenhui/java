@@ -1,0 +1,32 @@
+<div class="modal discount-scale-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>折扣比例编辑</h2>
+    </div>
+    <form class="form form-aligned discount-scale-form">
+        <!--隐藏传递该条数据的id，编辑时会用到-->
+        <input id="id" name="id" type="hidden" value="{{data.id}}">
+
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="pricesystemId">优惠等级代码 :</label>
+                <input id="pricesystemId" name="pricesystemId" type="text" value="{{data.pricesystemId}}" readonly>
+            </div>
+
+            <div class="control-group">
+                <label for="pricesystemNm">优惠等级名称 :</label>
+                <input id="pricesystemNm" name="pricesystemNm" type="text" value="{{data.pricesystemNm}}" readonly>
+            </div>
+
+            <div class="control-group">
+                <label for="argumentOther">折扣比例 :</label>
+                <input id="argumentOther" name="argumentOther" type="text" value="{{data.argumentOther}}" maxlength="4">
+            </div>
+        </div>
+        <div class="modal-footer">
+                <input type="submit" class="btn btn-success btn-small" value="保存">
+            <button class="btn btn-close btn-small close">取消</button>
+        </div>
+    </form>
+</div>

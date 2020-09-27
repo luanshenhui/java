@@ -1,0 +1,197 @@
+.points-present {
+  .cursor-pointer{
+    cursor:pointer;
+  }
+  /**搜索条件样式**/
+  .width-120 {
+    width: 120px !important;
+  }
+  .span5 {
+    padding: 0 5px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: middle;
+    zoom: 1;
+    width: 514px;
+    text-align: right;
+  }
+  .channel-ck{
+    margin-left: 25px;
+  }
+  /**布局样式**/
+  .margin-right-10 {
+    margin-right: 10px !important;
+  }
+  .margin-bottom-20 {
+    margin-bottom: 20px !important;
+  }
+  .margin-bottom-10 {
+    margin-bottom: 10px !important;
+  }
+  .margin-left-10 {
+    margin-left: 10px !important;
+  }
+  .margin-top-10 {
+    margin-top: 10px !important;
+  }
+  .font-color-bule {
+    color: #328cff
+  }
+  /**表格样式**/
+  .main-box-table {
+    background-color: #fff;
+   /* padding: 10px 0;*/
+    /*.table-th {
+      margin: 0 auto;
+      width: 95.5% !important;
+      th {
+        padding: 10px 5px;
+      }
+    }*/
+    .table{
+      border-bottom: 0;
+      th{
+        border-bottom: 0;
+      }
+    }
+    .order-tab {
+      /*width: 95.5%;*/
+      margin: 0 auto;
+      border: solid 1px #eee;
+      border-bottom: none;
+      .list-detail {
+        width: 100%;
+        height: 40px;
+        line-height: 15px;
+        border-bottom: solid 1px #eee;
+        background: #f8f8f8;
+        p {
+          float: left;
+          padding-left: 20px;
+          font-size: 14px;
+          color: #333;
+          height: 1px;
+        }
+      }
+      .list-tabble-con {
+        tr {
+          td {
+            border-bottom: solid 1px #eee;
+            font-size: 14px;
+            color: #333;
+            line-height: 20px;
+            text-align: center;
+            vertical-align: middle;
+            .table-state tr td {
+              border: none !important;
+              color: #333;
+              font-size: 14px;
+              line-height: 20px;
+              padding: 4px;
+              text-align: right;
+              vertical-align: middle;
+            }
+            .table-state-table {
+              width: 40%;
+            }
+          }
+        }
+      }
+      .table-list {
+        width: 100%;
+        border-collapse: collapse;
+        tr:hover {
+          background-color: #ffeced;
+        }
+      }
+    }
+  }
+}
+
+/**价格、库存Modal框样式**/
+.item-modal {
+  width: 800px;
+  .main-box-title-popup {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+  }
+  .filter-name {
+    margin-left: 50px;
+  }
+  .control-group {
+    width: 50%;
+  }
+
+  .break {
+    width: 50%;
+    word-wrap: break-word;
+    word-break: break-all;
+    display: inline-block;
+  }
+  .margin-bottom-20 {
+    margin-bottom: 20px !important;
+  }
+}
+
+.pendpriced-model {
+  width: 980px;
+  .modal-body {
+    background-color: #fff;
+    padding: 20px 30px;
+    text-align: center;
+
+    table.modal-body-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th {
+        padding: 10px;
+        text-align: right;
+        font-weight: normal;
+      }
+      
+      td {
+        padding: 10px;
+        text-align: left;
+      }
+
+    }
+    .margin-top-30 {
+      margin-top: 30px !important;
+    }
+    .price-table {
+      padding: 10px !important;
+      margin: 0 auto;
+
+      td {
+        padding: 5px;
+        text-align: center;
+        margin: 0 auto;
+      }
+
+      th {
+        padding: 5px;
+        text-align: center;
+        margin: 0 auto;
+
+        input[type=checkbox] {
+          vertical-align: middle;
+          margin-right: 0px;
+        }
+      }
+      .border {
+        border: 1px #ccc solid;
+      }
+    }
+  }
+  .border{
+    border: 1px #ccc solid;
+  }
+  input[type=text] {
+    border-radius:0px;
+  }
+  .remaining-text{
+    width: 300px;
+  }
+}

@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}会员购物车报表{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"HY05",
+            "reportCode":"HY05,HY06"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

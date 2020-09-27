@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 调用 用户服务  user-service consumer  -->
+    <dubbo:reference interface="cn.com.cgbchina.user.service.VendorService" id="vendorService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.UserBrowseHistoryService" id="userBrowseHistoryService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.UserFavoriteService" id="userFavoriteService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.MailStatesService" id="mailStatesService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.ACustToelectronbankService" id="aCustToelectronbankService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.ACardCustToelectronbankService" id="aCardCustToelectronbankService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.CardProService" id="cardProService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.CustInfoCommonService" id="custInfoCommonService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.LocalCardRelateService" id="localCardRelateService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.LocalProcodeService" id="localProcodeService"/>
+
+</beans>

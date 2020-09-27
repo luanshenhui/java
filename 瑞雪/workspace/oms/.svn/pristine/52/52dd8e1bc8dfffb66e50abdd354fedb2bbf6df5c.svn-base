@@ -1,0 +1,11 @@
+package cn.rkylin.oms.system.enterprise.service;
+
+import java.util.List;
+
+import cn.rkylin.oms.system.enterprise.domain.Enterprise;
+
+public interface IEnterpriseService {
+
+	List getEnterpriseName(Enterprise param);
+
+}

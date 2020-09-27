@@ -1,0 +1,57 @@
+﻿jQuery.csFabricCommon={
+	bindLabel:function (){
+		$("#memo").parent().append($.csCore.getValue("Common_Date"));
+//		$.csCore.getValue("Common_Keyword",null,".lblKeyword");
+//		$.csCore.getValue("Common_Category",null,".lblCategory");
+//		$.csCore.getValue("DictCategory_34",null,".lblFabricSupplyCategory");
+//		$.csCore.getValue("Fabric_Supply",null,".lblFabricSupply");
+//		$.csCore.getValue("Fabric_SupplyCode",null,".lblFabricSupplyCode");
+//		$.csCore.getValue("Fabric_dhrq",null,".lblArriveDate");
+//		$.csCore.getValue("Fabric_Code",null,".lblCode");
+//		$.csCore.getValue("Common_Price",null,".lblPrice");
+//		$.csCore.getValue("Fabric_Weight",null,".lblWeight");
+//		$.csCore.getValue("Fabric_Series",null,".lblSeries");
+//		$.csCore.getValue("Fabric_Flower",null,".lblFlower");
+//		$.csCore.getValue("Fabric_Color",null,".lblColor");
+//		$.csCore.getValue("Fabric_IsStop",null,".lblIsStop");
+//		$.csCore.getValue("Fabric_Composition",null,".lblComposition");
+//		$.csCore.getValue("Fabric_Inventory",null,".lblInventory");
+//		$.csCore.getValue("Fabric_ShaZhi",null,".lblShaZhi");
+//		$.csCore.getValue("Fabric_SequenceNo",null,".lblSequenceNo");
+//		$.csCore.getValue("Fabric_OccupyAmount",null,".lblOccupyAmount");
+//		$.csCore.getValue("Fabric_OccupyFromDate",null,".lblFromDate");
+//		$.csCore.getValue("Fabric_OccupyToDate",null,".lblToDate");
+//		$.csCore.getValue("Common_Status",null,".lblStatus");
+//		$.csCore.getValue("Common_Memo",null,".lblMemo");
+//		$.csCore.getValue("Button_Edit",null,".lblEdit");
+//		$.csCore.getValue("Button_Edit",null,".edit");
+//		$.csCore.getValue("Fabric_Occupy",null,".lblOccupy");
+//		$.csCore.getValue("Fabric_Occupy",null,".occupy");
+//		$.csCore.getValue("Fabric_ename",null,".lblFabric_ename");
+//		$.csCore.getValue("Fabric_ysddh",null,".lblFabric_ysddh");
+//		$.csCore.getValue("Fabric_ecode",null,".lblFabric_ecode");
+//		$.csCore.getValue("Fabric_mlwg",null,".lblFabric_mlwg");
+//		$.csCore.getValue("Fabric_mdcd",null,".lblFabric_mdcd");
+//		$.csCore.getValue("Fabric_mlcd",null,".lblFabric_mlcd");
+//		$.csCore.getValue("Fabric_mlfk",null,".lblFabric_mlfk");
+//		$.csCore.getValue("Fabric_hgf",null,".lblFabric_hgf");
+//		$.csCore.getValue("Fabric_dhrq",null,".lblFabric_dhrq");
+//		$.csCore.getValue("Fabric_Supply",null,".lblFabric_Supply");
+//		$.csCore.getValue("Common_Category",null,".lblCommon_Category");
+//		$.csCore.getValue("Fabric_Release",null,".lblFabric_Release");
+//		$.csCore.getValue("Button_Submit",null,"#btnSaveFabric,#btnOccupyFabric");
+//		$.csCore.getValue("Button_Cancel",null,"#btnCancelFabric,#btnOccupyCancel");
+//		$.csCore.getValue($.csCore.getDictResourceName(DICT_BACKEND_MENU_FABRIC_MANAGER),null,"#FabricSearch h1");
+//		$.csCore.getValue("Button_Search",null,"#btnSearch");
+//		$.csCore.getValue("Button_Remove",null,"#btnRemoveFabric");
+//		$.csCore.getValue("Button_Add",null,"#btnCreateFabric");
+//		$.csCore.getValue("Button_Export",null,"#btnExportFabric");
+//		$.csCore.getValue("Fabric_OccupyView",null,"#btnOccupyView");
+//		$.csCore.getValue("Fabric_OccupyInfo",null,"#form_occupy h1");
+	},
+	getFabricByID:function(id){
+		var url = $.csCore.buildServicePath('/service/fabric/getfabricbyid');
+		var param = $.csControl.appendKeyValue("","id",id);
+		return $.csCore.invoke(url,param);
+	}
+};

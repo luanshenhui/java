@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- service consumer config-->
+
+    <!-- Application name -->
+    <dubbo:application name="#{app.dubboApp}"/>
+
+    <!-- registry address, used for service to register itself -->
+    <dubbo:registry address="#{app.dubboRegistry}"/>
+
+    <!-- user  service-->
+    <dubbo:reference interface="cn.com.cgbchina.user.service.AddressService" id="addressService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.ImageService" id="imageService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.AdminMenuMagService" id="adminMenuMagService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.AdminRoleMenuService" id="adminRoleMenuService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.EspPublishInfService" id="espPublishInfService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.AdminRoleService" id="adminRoleService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.LogonHistoryService" id="logonHistoryService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.MailStatesService" id="mailStatesService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.LogsService" id="logsService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.MallUserService" id="mallUserService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.MemberAddressService" id="memberAddressService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.NewMessageService" id="newMessageService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.OrganiseService" id="organiseService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.PersonalMessageService" id="personalMessageService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.UserBrowseHistoryService" id="userBrowseHistoryService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.UserFavoriteService" id="userFavoriteService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.UserInfoService" id="userInfoService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.UserRoleService" id="userRoleService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.VendorMenuService" id="vendorMenuService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.VendorRoleMenuService" id="vendorRoleMenuService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.VendorRoleRefService" id="vendorRoleidService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.VendorRoleService" id="vendorRoleService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.VendorService" id="vendorService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.VendorUserService" id="vendorUserService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.ACardCustToelectronbankService"
+                     id="aCardCustToelectronbankService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.ACustToelectronbankService"
+                     id="aCustToelectronbankService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.CardProService" id="cardProService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.CustInfoCommonService" id="custInfoCommonService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.LocalCardRelateService" id="localCardRelateService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.LocalProcodeService" id="localProcodeService"/>
+
+    <!-- item service -->
+
+    <dubbo:reference interface="cn.com.cgbchina.item.service.AttributeKeyService" id="attributeKeyService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.AttributeValueService" id="attributeValueService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.AuditLoggingService" id="auditLoggingService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.BackCategoriesService" id="backCategoriesService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.BrandService" id="brandService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.BrowseHistoryService" id="browseHistoryService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.CategoryMappingService" id="categoryMappingService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.CouponScaleService" id="couponScaleService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.FavoriteService" id="favoriteService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.FrontCategoriesService" id="frontCategoriesService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.FrontCategoryTreeService" id="frontCategoryTree"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GiftPartitionService" id="giftPartitionService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GoodsConsultService" id="goodsConsultService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GoodsDetailService" id="goodsDetailService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GoodsImportService" id="goodsImportService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GoodsOperateDetailService" id="goodsOperateDetailService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GoodsRecommendationService"
+                     id="goodsRecommendationService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GoodsService" id="goodsService"/>
+    <!-- TODO 此类有问题，暂时注释 -->
+    <dubbo:reference interface="cn.com.cgbchina.item.service.ItemIndexService" id="itemIndexService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.ItemSearchService" id="itemSearchService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.ItemService" id="itemService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.ItemWechatService" id="itemWechatService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.OrderTieinSaleService" id="orderTieinSaleService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.PointsPoolService" id="pointsPoolService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.ProductService" id="productService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.ServicePromiseService" id="servicePromiseService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.SpecialPointsRateService" id="specialPointsRateService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.VendorGoodsService" id="vendorGoodsService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.BackCategoriesImportService"
+                     id="backCategoriesImportService"/>
+
+    <!-- trade service -->
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.AdminTopService" id="adminTopService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.CartService" id="cartService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.CollocationSellService" id="collocationSellService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.MakecheckjobService" id="makecheckjobService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.OrderCancelService" id="orderCancelService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.OrderPartBackService" id="orderPartBackService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.OrderReturnTrackService" id="orderReturnTrackService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.OrderService" id="orderService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.PointCollocationService" id="pointCollocationService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.PointRejectService" id="pointRejectService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.PointRelatedService" id="pointRelatedService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.PointsOrderService" id="pointsOrderService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.RequestMoneyService" id="requestMoneyService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.ReportService" id="reportService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.TradeTimeRoleService" id="tradeTimeRoleService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.VendorOrderService" id="vendorOrderService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.VendorTopService" id="vendorTopService"/>
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.OrderDealService" id="orderDealService"/>
+    <!-- related service -->
+    <dubbo:reference interface="cn.com.cgbchina.related.service.AnnouncementService" id="announcementService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.CouPonInfService" id="couPonInfService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.BusinessService" id="businessService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.CfgProCodeService" id="cfgProCodeService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.EspAdvertiseService" id="espAdvertiseService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.DefaultSearchTermService"
+                     id="defaultSearchTermService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.HotSearchService" id="hotSearchService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.KeywordSearchService" id="keywordSearchService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.MessageSettingService" id="messageSettingService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.SmsTemplateService" id="smsTemplateService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.TradeSettingService" id="tradeSettingService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.AuctionQuestionInfService"
+                     id="auctionQuestionInfService"/>
+
+
+    <!-- promotion service -->
+    <dubbo:reference interface="cn.com.cgbchina.promotion.service.PromotionService" id="promotionService"/>
+    <dubbo:reference interface="cn.com.cgbchina.promotion.service.VendorPromotionService" id="vendorPromotionService"/>
+    <dubbo:reference interface="cn.com.cgbchina.promotion.service.MallPromotionService" id="mallPromotionService"/>
+
+</beans>

@@ -1,0 +1,93 @@
+package com.dpn.ciqqlc.http.form;
+
+import com.dpn.ciqqlc.standard.model.PageDto;
+
+public class WarningLinkRuleForm extends PageDto{
+	private String id;
+	//业务类型
+	private String businessType;
+	//业务类型名称
+	private String businessName;
+	//针对大窑湾货物类型
+	private String goodType;
+	//流程类型
+	private String linkType;
+	//流程名称
+	private String linkName;
+	//文件类型
+	private String dicType;
+	//文件名称
+	private String dicName;
+	//是否预警
+	private String warning;
+	//是否为最终状态
+	private String endFlag;
+	//文件数量
+	private Integer dicNum;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getBusinessType() {
+		return businessType;
+	}
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
+	}
+	public String getBusinessName() {
+		return businessName;
+	}
+	public void setBusinessName(String businessName) {
+		this.businessName = businessName;
+	}
+	public String getGoodType() {
+		return goodType;
+	}
+	public void setGoodType(String goodType) {
+		this.goodType = goodType;
+	}
+	public String getLinkType() {
+		return linkType;
+	}
+	public void setLinkType(String linkType) {
+		this.linkType = linkType;
+	}
+	public String getLinkName() {
+		return linkName;
+	}
+	public void setLinkName(String linkName) {
+		this.linkName = linkName;
+	}
+	public String getDicType() {
+		return dicType;
+	}
+	public void setDicType(String dicType) {
+		this.dicType = dicType;
+	}
+	public String getDicName() {
+		return dicName;
+	}
+	public void setDicName(String dicName) {
+		this.dicName = dicName;
+	}
+	public String getWarning() {
+		return warning;
+	}
+	public void setWarning(String warning) {
+		this.warning = warning;
+	}
+	public String getEndFlag() {
+		return endFlag;
+	}
+	public void setEndFlag(String endFlag) {
+		this.endFlag = endFlag;
+	}
+	public Integer getDicNum() {
+		return dicNum;
+	}
+	public void setDicNum(Integer dicNum) {
+		this.dicNum = dicNum;
+	}
+}

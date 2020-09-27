@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EspNavCategoryInfModel">
+    <resultMap id="EspNavCategoryInfMap" type="EspNavCategoryInfModel">
+        <result property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="level" column="level"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="categorySeq" column="category_seq"/>
+        <result property="forwardType" column="forward_type"/>
+        <result property="channelId" column="channel_id"/>
+        <result property="goodTypeId" column="good_type_id"/>
+        <result property="linkHref" column="link_href"/>
+        <result property="categoryDesc" column="category_desc"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,category_id,parent_id,level,category_name,category_seq,forward_type,channel_id,good_type_id,link_href,category_desc,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="EspNavCategoryInfModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_esp_nav_category_inf
+        (id
+        ,category_id
+        ,parent_id
+        ,level
+        ,category_name
+        ,category_seq
+        ,forward_type
+        ,channel_id
+        ,good_type_id
+        ,link_href
+        ,category_desc
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{id}
+        ,#{categoryId}
+        ,#{parentId}
+        ,#{level}
+        ,#{categoryName}
+        ,#{categorySeq}
+        ,#{forwardType}
+        ,#{channelId}
+        ,#{goodTypeId}
+        ,#{linkHref}
+        ,#{categoryDesc}
+        ,#{delFlag}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="EspNavCategoryInfModel">
+        update tbl_esp_nav_category_inf set
+            <if test="categoryId !=null">category_id = #{categoryId}
+                ,</if>
+            <if test="parentId !=null">parent_id = #{parentId}
+                ,</if>
+            <if test="level !=null">level = #{level}
+                ,</if>
+            <if test="categoryName !=null">category_name = #{categoryName}
+                ,</if>
+            <if test="categorySeq !=null">category_seq = #{categorySeq}
+                ,</if>
+            <if test="forwardType !=null">forward_type = #{forwardType}
+                ,</if>
+            <if test="channelId !=null">channel_id = #{channelId}
+                ,</if>
+            <if test="goodTypeId !=null">good_type_id = #{goodTypeId}
+                ,</if>
+            <if test="linkHref !=null">link_href = #{linkHref}
+                ,</if>
+            <if test="categoryDesc !=null">category_desc = #{categoryDesc}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+           modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        where del_flag = 0
+        <if test="id !=null">and id = #{id}</if>
+        <if test="categoryId !=null">and category_id = #{categoryId}</if>
+        <if test="parentId !=null">and parent_id = #{parentId}</if>
+        <if test="level !=null">and level = #{level}</if>
+        <if test="categoryName !=null">and category_name = #{categoryName}</if>
+        <if test="categorySeq !=null">and category_seq = #{categorySeq}</if>
+        <if test="forwardType !=null">and forward_type = #{forwardType}</if>
+        <if test="channelId !=null">and channel_id = #{channelId}</if>
+        <if test="goodTypeId !=null">and good_type_id = #{goodTypeId}</if>
+        <if test="linkHref !=null">and link_href = #{linkHref}</if>
+        <if test="categoryDesc !=null">and category_desc = #{categoryDesc}</if>
+        <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        <if test="createOper !=null">and create_oper = #{createOper}</if>
+        <if test="createTime !=null">and create_time = #{createTime}</if>
+        <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+        <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EspNavCategoryInfMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_nav_category_inf
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="EspNavCategoryInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_nav_category_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="count" parameterType="Map" resultType="Long">
+        select count(1)
+        from tbl_esp_nav_category_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="EspNavCategoryInfMap">
+        select <include refid="columns"/>
+        from tbl_esp_nav_category_inf
+        <include refid="conditions"/>
+        <![CDATA[ order by category_seq asc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="EspNavCategoryInfModel">
+        delete from tbl_esp_nav_category_inf where id = id
+    </delete>
+
+    <select id="findBrandTypes" resultMap="EspNavCategoryInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_nav_category_inf
+        where del_flag=0 and parent_id='04'
+        order by category_seq
+    </select>
+
+    <select id="findMaxId" resultType="java.lang.Integer">
+        select max(id) from tbl_esp_nav_category_inf
+    </select>
+
+    <select id="findByCategoryId" parameterType="String" resultMap="EspNavCategoryInfMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_nav_category_inf
+        where category_id =#{categoryId} and del_flag = '0' LIMIT 1
+    </select>
+</mapper>
+

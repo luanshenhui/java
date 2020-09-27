@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<bean name="loginuserService" class="com.market.service.LoginuserServiceImpl">
+		<property name="loginuserDAO">
+			<ref bean="loginuserDAO" />
+		</property>
+	</bean>
+	<bean name="employeeService" class="com.market.service.EmployeeServiceImpl">
+		<property name="employeeDAO">
+			<ref bean="employeeDAO" />
+		</property>
+	</bean>
+	<bean name="memberService" class="com.market.service.MemberServiceImpl">
+		<property name="memberDAO">
+			<ref bean="memberDAO" />
+		</property>
+	</bean>
+	<bean name="cardService" class="com.market.service.CardServiceImpl">
+		<property name="cardDAO">
+			<ref bean="cardDAO" />
+		</property>
+	</bean>
+	<bean name="brandService" class="com.market.service.BrandServiceImpl">
+		<property name="brandDAO">
+			<ref bean="brandDAO" />
+		</property>
+	</bean>
+	<bean name="goodsService" class="com.market.service.GoodsServiceImpl">
+		<property name="goodsDAO">
+			<ref bean="goodsDAO" />
+		</property>
+	</bean>
+	<bean name="stockService" class="com.market.service.StockServiceImpl">
+		<property name="stockDAO">
+			<ref bean="stockDAO" />
+		</property>
+	</bean>
+	<bean name="salesDetailService" class="com.market.service.SalesDetailServiceImpl">
+		<property name="salesDetailDAO">
+			<ref bean="salesDetailDAO" />
+		</property>
+	</bean>
+	<bean name="salesService" class="com.market.service.SalesServiceImpl">
+		<property name="salesDAO">
+			<ref bean="salesDAO" />
+		</property>
+	</bean>
+	<bean name="stockDetailService" class="com.market.service.StockDetailServiceImpl">
+		<property name="stockDetailDAO">
+			<ref bean="stockDetailDAO" />
+		</property>
+	</bean>
+
+</beans>

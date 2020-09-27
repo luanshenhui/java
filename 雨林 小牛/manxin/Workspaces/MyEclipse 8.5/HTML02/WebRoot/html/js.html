@@ -1,0 +1,22 @@
+<html>
+<head>
+<script>
+	function f1(){
+		var a = document.getElementById("d1");		
+		var b = document.getElementById("d2");
+		var c = a.style.background;
+		a.style.background = b.style.background;
+		b.style.background = c;
+	}
+
+</script>
+</head>
+
+<body>
+	<div>
+	<div id="d1" style=" width: 200px; height: 200px; background-color: blue"></div>
+	<div id="d2" style=" width: 200px; height: 200px; background-color: purple;"></div>
+	<input type="button" id="b" value="ÑÕÉ«" onclick="f1()"/>
+	</div>
+</body>
+</html>

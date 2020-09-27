@@ -1,0 +1,146 @@
+{{#component "points-cooperation js-component"}}
+    <p class="components-title"><strong>- 供应商信息管理 -</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals type "1"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/points/cooperation/cooperation_all">所有供应商</a>
+            </li>
+            <li {{#equals type "2"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/points/cooperation/cooperation_audit">待审核供应商</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form item-form-search form-inline">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="vendorId">供应商编码:</label>
+                            <input type="text" name="vendorId" value="{{vendorId}}" class="form-control"/>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="simpleName">供应商简称:</label>
+                            <input type="text" class="form-control" name="simpleName" value="{{simpleName}}">
+                        </span>
+                        <span class="span4 span-large">
+                            <input class="btn btn-success btn-small margin-right-0 float-right" type="submit"
+                                   value="查询"/>
+                        </span>
+                    </p>
+                </fieldset>
+            </form>
+
+            <div class="m-b-10">
+                {{#authorial "pointCooper_add"}}
+                    <button class="btn btn-info btn-small js-cooperation-add">+ 新增</button>
+                {{/authorial}}
+            </div>
+
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="10%">供应商编码</th>
+                    <th width="10%">供应商简称</th>
+                    <th width="10%">业务类型</th>
+                    <th width="10%">联系人</th>
+                    <th width="10%">电话</th>
+                    <th width="10%">当前状态</th>
+                    <th width="10%">审核状态</th>
+                    <th width="30%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{vendorId}}" data-data="{{json this}}">
+                        <td class="vendor-id">{{vendorId}}</td>
+                        <td class="vendor-snm">{{simpleName}}</td>
+                        <td class="ordertype-id">
+                            {{#equals "JF" businessTypeId}}
+                                积分商城
+                            {{else}}
+                                {{#equals "YG" businessTypeId}}
+                                    广发商城
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                        <td class="linkman">{{contact}}</td>
+                        <td class="phone">{{phone}}</td>
+                        <td class="status">
+                            {{#equals "0101" status}}
+                                未启用
+                            {{else}}
+                                {{#equals "0102" status}}
+                                    已启用
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                        <td class="check-status">
+                            {{#equals 0 vendorModel.checkStatus}}
+                                待审核(新增)
+                            {{else}}
+                                {{#equals 1 vendorModel.checkStatus}}
+                                    已审核
+                                {{else}}
+                                    {{#equals 2 vendorModel.checkStatus}}
+                                        待审核(编辑)
+                                    {{else}}
+                                        <!--已拒绝（新增）和已拒绝（编辑）都用 已拒绝 来展现到页面上-->
+                                        {{#equals 3 vendorModel.checkStatus}}
+                                            已拒绝
+                                        {{else}}
+                                            {{#equals 4 vendorModel.checkStatus}}
+                                                已拒绝
+                                            {{/equals}}
+                                        {{/equals}}
+                                    {{/equals}}
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                        <td class="edit-button">
+                            {{#authorial "pointCooper_look"}}
+                                <button class="btn btn-sm btn-info js-cooperation-view">查看</button>
+                            {{/authorial}}
+                            {{#authorial "pointCooper_edit"}}
+                                <button class="btn btn-sm btn-info js-cooperation-edit">编辑</button>
+                            {{/authorial}}
+                            {{#if vendorModel.checkStatus}}
+                                {{#equals "0" vendorModel.checkStatus}}
+                                    {{#authorial "pointCooper_audit"}}
+                                        <button class="btn btn-sm btn-info js-cooperation-check">审核</button>
+                                    {{/authorial}}
+                                {{else}}
+                                    {{#equals "2" vendorModel.checkStatus}}
+                                        {{#authorial "pointCooper_audit"}}
+                                            <button class="btn btn-sm btn-info js-cooperation-check">审核</button>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                {{/equals}}
+                            {{/if}}
+                            {{#equals "0101" status}}
+                                {{#authorial "pointCooper_delete"}}
+                                    <button id="{{vendorId}}" class="btn btn-sm btn-info js-cooperation-delete"
+                                            data-toggle="confirm"
+                                            data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                            data-event="confirm:delete-cooperation">
+                                        删除
+                                    </button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#authorial "pointCooper_account"}}
+                                <button class="btn btn-sm btn-info js-cooperation-account">账号管理</button>
+                            {{/authorial}}
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            {{#equals _DATA_.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <div class="pagination" data-total="{{_DATA_.total}}"></div>
+            {{/equals}}
+        </div>
+    </div>
+{{/component}}

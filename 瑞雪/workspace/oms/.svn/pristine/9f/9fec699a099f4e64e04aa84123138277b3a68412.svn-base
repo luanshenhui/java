@@ -1,0 +1,16 @@
+package cn.rkylin.oms.system.dictionary.service;
+
+
+import com.github.pagehelper.PageInfo;
+import cn.rkylin.oms.system.dictionary.vo.DictVO;
+
+public interface IDictService {
+	
+	PageInfo<DictVO> findByWhere(int page, int length, DictVO param) throws Exception;
+	
+	public void insert(DictVO dictVO) throws Exception;
+	
+	public void update(DictVO dictVO) throws Exception;
+	
+	public void delete(String dictId) throws Exception;
+}

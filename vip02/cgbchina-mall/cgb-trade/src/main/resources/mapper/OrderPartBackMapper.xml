@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderPartBack">
+    <resultMap id="OrderPartBackMap" type="OrderPartBackModel">
+        <result property="id" column="id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="referenceNo" column="reference_no"/>
+        <result property="goodsNum" column="goods_num"/>
+        <result property="totalMoney" column="total_money"/>
+        <result property="commission" column="commission"/>
+        <result property="curStatusId" column="cur_status_id"/>
+        <result property="curStatusNm" column="cur_status_nm"/>
+        <result property="userType" column="user_type"/>
+        <result property="doUserid" column="do_userid"/>
+        <result property="doTime" column="do_time"/>
+        <result property="doDesc" column="do_desc"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="vendorName" column="vendor_name"/>
+        <result property="memberId" column="member_id"/>
+        <result property="memo" column="memo"/>
+        <result property="operationType" column="operation_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="memoExt" column="memo_ext"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="memberName" column="member_name"/>
+        <result property="returnType" column="return_type"/>
+    </resultMap>
+    <sql id="columns">
+        id,ordertype_id,order_id,reference_no,goods_num,total_money,commission,cur_status_id,cur_status_nm,user_type,do_userid,do_time,do_desc,goods_name,goods_id,vendor_id,vendor_name,member_id,memo,operation_type,create_time,modify_time,del_flag,memo_ext,create_oper,modify_oper,member_name,return_type
+    </sql>
+
+    <insert id="insert" parameterType="OrderPartBackModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_partback
+        (ordertype_id
+        ,order_id
+        ,reference_no
+        ,goods_num
+        ,total_money
+        ,commission
+        ,cur_status_id
+        ,cur_status_nm
+        ,user_type
+        ,do_userid
+        ,do_time
+        ,do_desc
+        ,goods_name
+        ,goods_id
+        ,vendor_id
+        ,vendor_name
+        ,member_id
+        ,memo
+        ,operation_type
+        ,create_time
+        ,modify_time
+        ,del_flag
+        ,memo_ext
+        ,create_oper
+        ,modify_oper
+        ,member_name
+        ,return_type)
+        values(#{ordertypeId}
+        ,#{orderId}
+        ,#{referenceNo}
+        ,#{goodsNum}
+        ,#{totalMoney}
+        ,#{commission}
+        ,#{curStatusId}
+        ,#{curStatusNm}
+        ,#{userType}
+        ,#{doUserid}
+        ,now()
+        ,#{doDesc}
+        ,#{goodsName}
+        ,#{goodsId}
+        ,#{vendorId}
+        ,#{vendorName}
+        ,#{memberId}
+        ,#{memo}
+        ,#{operationType}
+        ,now()
+        ,#{modifyTime}
+        ,#{delFlag}
+        ,#{memoExt}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,#{memberName}
+        ,#{returnType})
+    </insert>
+
+    <update id="update" parameterType="OrderPartBackModel">
+        update tbl_order_partback set
+        <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+            ,
+        </if>
+        <if test="orderId !=null">order_id = #{orderId}
+            ,
+        </if>
+        <if test="referenceNo !=null">reference_no = #{referenceNo}
+            ,
+        </if>
+        <if test="goodsNum !=null">goods_num = #{goodsNum}
+            ,
+        </if>
+        <if test="totalMoney !=null">total_money = #{totalMoney}
+            ,
+        </if>
+        <if test="commission !=null">commission = #{commission}
+            ,
+        </if>
+        <if test="curStatusId !=null">cur_status_id = #{curStatusId}
+            ,
+        </if>
+        <if test="curStatusNm !=null">cur_status_nm = #{curStatusNm}
+            ,
+        </if>
+        <if test="userType !=null">user_type = #{userType}
+            ,
+        </if>
+        <if test="doUserid !=null">do_userid = #{doUserid}
+            ,
+        </if>
+        <if test="doTime !=null">do_time = #{doTime}
+            ,
+        </if>
+        <if test="doDesc !=null">do_desc = #{doDesc}
+            ,
+        </if>
+        <if test="goodsName !=null">goods_name = #{goodsName}
+            ,
+        </if>
+        <if test="goodsId !=null">goods_id = #{goodsId}
+            ,
+        </if>
+        <if test="vendorId !=null">vendor_id = #{vendorId}
+            ,
+        </if>
+        <if test="vendorName !=null">vendor_name = #{vendorName}
+            ,
+        </if>
+        <if test="memberId !=null">member_id = #{memberId}
+            ,
+        </if>
+        <if test="memo !=null">memo = #{memo}
+            ,
+        </if>
+        <if test="operationType !=null">operation_type = #{operationType}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="memoExt !=null">memo_ext = #{memoExt}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="memberName !=null">member_name = #{memberName}
+            ,
+        </if>
+        <if test="returnType !=null">return_type = #{returnType}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="orderId !=null">and order_id LIKE concat(concat('%',#{orderId}),'%')</if>
+            <if test="referenceNo !=null">and reference_no = #{referenceNo}</if>
+            <if test="goodsNum !=null">and goods_num = #{goodsNum}</if>
+            <if test="totalMoney !=null">and total_money = #{totalMoney}</if>
+            <if test="commission !=null">and commission = #{commission}</if>
+            <if test="curStatusId !=null">and cur_status_id = #{curStatusId}</if>
+            <if test="curStatusNm !=null">and cur_status_nm = #{curStatusNm}</if>
+            <if test="userType !=null">and user_type = #{userType}</if>
+            <if test="doUserid !=null">and do_userid = #{doUserid}</if>
+            <if test="doTime !=null">and do_time = #{doTime}</if>
+            <if test="doDesc !=null">and do_desc = #{doDesc}</if>
+            <if test="goodsName !=null">and goods_name = #{goodsName}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="vendorName !=null">and vendor_name = #{vendorName}</if>
+            <if test="memberId !=null">and member_id = #{memberId}</if>
+            <if test="memo !=null">and memo = #{memo}</if>
+            <if test="operationType !=null">and operation_type = #{operationType}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="startTime !=null">and <![CDATA[ date_format(create_time,'%Y-%m-%d') >= #{startTime} ]]></if>
+            <if test="endTime !=null">and <![CDATA[ date_format(create_time,'%Y-%m-%d') <= #{endTime} ]]></if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="memoExt !=null">and memo_ext = #{memoExt}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="memberName !=null">and member_name = #{memberName}</if>
+            <if test="returnType !=null  and returnType != ''">and return_type = #{returnType}</if>
+            <!--      <if test="type !=null  and type != '' and type == '1'">and cur_status_id = #{curStatusId}</if>
+                  <if test="type !=null  and type != '' and type == 2">and cur_status_id = '0334'</if>-->
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="OrderPartBackMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_order_partback
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="OrderPartBackMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_partback
+        <include refid="conditions"/>
+    </select>
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_order_partback
+        <include refid="conditions"/>
+    </select>
+    <select id="pager" parameterType="Map" resultMap="OrderPartBackMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_partback
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="OrderPartBackModel">
+        delete from tbl_order_partback where id = id
+    </delete>
+    <select id="findByOrderId" parameterType="Map" resultMap="OrderPartBackMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_order_partback
+        where order_id=#{orderId}
+    </select>
+
+    <!--批量更新退货状态 0335是退货成功状态 add by yuxinxin-->
+    <update id="updateAll" parameterType="Map">
+        update tbl_order_partback set
+        modify_time=now()
+        ,cur_status_id = '0327'
+        <if test="modifyOper !=null">,modify_oper = #{modifyOper}</if>
+        where id IN
+        <foreach collection="rejectGoodsList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>
+
+

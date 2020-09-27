@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblCfgSysparamModel">
+    <resultMap id="TblCfgSysparamMap" type="TblCfgSysparamModel">
+        <result property="paramId" column="param_id"/>
+        <result property="paramNm" column="param_nm"/>
+        <result property="paramDesc" column="param_desc"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="maintainFlag" column="maintain_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    param_id,param_nm,param_desc,ordertype_id,maintain_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="TblCfgSysparamModel" useGeneratedKeys="true"
+            keyProperty="paramId" keyColumn="param_id">
+        insert into tbl_cfg_sysparam
+        (param_nm
+        ,param_desc
+        ,ordertype_id
+        ,maintain_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{paramNm}
+        ,#{paramDesc}
+        ,#{ordertypeId}
+        ,#{maintainFlag}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="TblCfgSysparamModel">
+        update tbl_cfg_sysparam
+          <set>
+            <if test="paramNm !=null">param_nm = #{paramNm}
+                ,</if>
+            <if test="paramDesc !=null">param_desc = #{paramDesc}
+                ,</if>
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="maintainFlag !=null">maintain_flag = #{maintainFlag}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+                </if>
+          </set>
+        where param_id = #{paramId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="paramId !=null">and param_id = #{paramId}</if>
+            <if test="paramNm !=null">and param_nm = #{paramNm}</if>
+            <if test="paramDesc !=null">and param_desc = #{paramDesc}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="maintainFlag !=null">and maintain_flag = #{maintainFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblCfgSysparamMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_cfg_sysparam
+       where param_id=#{paramId}
+    </select>
+    <select id="findAll" resultMap="TblCfgSysparamMap">
+        select
+        <include refid="columns"/>
+        from tbl_cfg_sysparam
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblCfgSysparamMap">
+        select
+        <include refid="columns"/>
+        from tbl_cfg_sysparam
+        <include refid="conditions"/>
+        <![CDATA[ order by param_id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblCfgSysparamModel">
+        delete from tbl_cfg_sysparam where param_id = param_id
+    </delete>
+</mapper>
+
+

@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}分期退货报表{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"YG18",
+            "reportCode":"YG18,YG19,YG60"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

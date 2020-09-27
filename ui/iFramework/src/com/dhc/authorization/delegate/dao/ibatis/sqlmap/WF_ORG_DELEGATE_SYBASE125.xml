@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="WF_ORG_DELEGATE">
+  <resultMap class="com.dhc.authorization.delegate.domain.WF_ORG_DELEGATE" id="WF_ORG_DELEGATEResultMap">
+    <result column="DELE_ID" jdbcType="VARCHAR" property="deleId" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="TRUSTOR_ID" jdbcType="VARCHAR" property="trustorId" />
+    <result column="DELE_NAME" jdbcType="VARCHAR" property="deleName" />
+    <result column="DELE_DESCRIPTION" jdbcType="VARCHAR" property="deleDescription" />
+    <result column="DELE_TIME_BEGIN" jdbcType="VARCHAR" property="deleTimeBegin" />
+    <result column="DELE_TIME_END" jdbcType="VARCHAR" property="deleTimeEnd" />
+    <result column="DELE_ALL_PRIVIL" jdbcType="CHAR" property="deleAllPrivil" />
+    <result column="TRUSTOR_NAME" jdbcType="VARCHAR" property="trustor_name" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+  <parameterMap class="map" id="params">   
+    <parameter property="sqlStr"  javaType="String" jdbcType="VARCHAR" mode="IN"/>   
+	<parameter property="startRec"  javaType="java.lang.Integer" jdbcType="int" mode="IN"/>   
+	<parameter property="lastRec"  javaType="java.lang.Integer" jdbcType="int" mode="IN"/>   
+  </parameterMap>
+  <procedure id="GetPagingData" parameterMap="params" resultMap="WF_ORG_DELEGATEResultMap">   
+    {call GetPagingData(?,?,?)}
+  </procedure> 
+  <select id="select" parameterClass="com.dhc.authorization.delegate.domain.WF_ORG_DELEGATE" resultMap="WF_ORG_DELEGATEResultMap">
+    SELECT DELE_ID,
+       D.USER_ID,
+       TRUSTOR_ID,
+       U.USER_FULLNAME TRUSTOR_NAME,
+       DELE_NAME,
+       DELE_DESCRIPTION,
+       CONVERT(DATETIME,DELE_TIME_BEGIN, 120) AS DELE_TIME_BEGIN,
+       CONVERT(DATETIME,DELE_TIME_END, 120) AS DELE_TIME_END,
+       (CASE WHEN DELE_ALL_PRIVIL = 1 THEN '是' ELSE '否' END) AS DELE_ALL_PRIVIL
+  FROM WF_ORG_DELEGATE D LEFT JOIN WF_ORG_USER U
+         ON  U.USER_ID = D.TRUSTOR_ID  WHERE (D.USER_ID IN
+       (SELECT DISTINCT (UU.USER_ID)
+          FROM WF_ORG_USER_UNIT UU
+         WHERE UU.UNIT_ID IN (SELECT RU.UNIT_ID
+                                FROM WF_ORG_USER_ROLE UR, WF_ORG_ROLE_UNIT RU
+                               WHERE UR.USER_ID = #currentUserId#
+                                 AND RU.ROLE_ID = UR.ROLE_ID)
+        )
+  OR TRUSTOR_ID = #currentUserId#)
+	<isNotNull prepend="AND" property="deleName">
+		DELE_NAME = #deleName#
+	</isNotNull>
+	<isNotNull prepend="AND" property="userId">
+		 USER_ID = #userId#
+	</isNotNull>
+	<isNotNull prepend="AND" property="trustorId">
+		TRUSTOR_ID = #trustorId#
+	</isNotNull>
+  </select>
+  <delete id="delete" parameterClass="java.lang.String">
+    DELETE FROM WF_ORG_DELEGATE WHERE DELE_ID = #deleId#
+  </delete>
+  <insert id="insert" parameterClass="com.dhc.authorization.delegate.domain.WF_ORG_DELEGATE">
+    INSERT INTO WF_ORG_DELEGATE (DELE_ID, USER_ID, TRUSTOR_ID, DELE_NAME, DELE_DESCRIPTION,
+      DELE_TIME_BEGIN, DELE_TIME_END, DELE_ALL_PRIVIL)
+    values (#deleId#, #userId#, #trustorId#, #deleName#, #deleDescription#, convert(char(15),#deleTimeBegin:VARCHAR:NULL#, 120),
+       convert(char(15),#deleTimeEnd:VARCHAR:NULL#, 120), #deleAllPrivil#)
+  </insert>
+  <update id="update" parameterClass="com.dhc.authorization.delegate.domain.WF_ORG_DELEGATE">
+    UPDATE WF_ORG_DELEGATE
+    SET 
+      USER_ID = #userId#,
+      TRUSTOR_ID = #trustorId#,
+      DELE_NAME = #deleName#,
+      DELE_DESCRIPTION = #deleDescription#,
+	  <isNotNull prepend="" property="deleTimeBegin">
+		DELE_TIME_BEGIN = convert(char(15),#deleTimeBegin#, 120),
+	  </isNotNull>
+	  <isNotNull prepend="" property="deleTimeEnd">
+		DELE_TIME_END = convert(char(15),#deleTimeEnd#, 120),
+	  </isNotNull>
+      DELE_ALL_PRIVIL = #deleAllPrivil#
+     WHERE DELE_ID = #deleId#
+  </update>
+  <select id="count" parameterClass="com.dhc.authorization.delegate.domain.WF_ORG_DELEGATE" resultClass="java.lang.Integer" >
+  	<![CDATA[
+	SELECT COUNT(*)
+	  FROM (SELECT DELE_ID,
+	               D.USER_ID,
+	               UU.USER_FULLNAME USER_NAME,
+	               TRUSTOR_ID,
+	               U.USER_FULLNAME TRUSTOR_NAME,
+	               DELE_NAME,
+	               DELE_DESCRIPTION,
+	               CONVERT(DATETIME, DELE_TIME_BEGIN, 108) AS DELE_TIME_BEGIN,
+	               CONVERT(DATETIME, DELE_TIME_END, 108) AS DELE_TIME_END,
+	               (CASE
+	                 WHEN DELE_ALL_PRIVIL = '1' THEN
+	                  '是'
+	                 ELSE
+	                  '否'
+	               END) DELE_ALL_PRIVIL
+	          FROM WF_ORG_DELEGATE D
+	          LEFT JOIN WF_ORG_USER U ON U.USER_ID = D.TRUSTOR_ID
+	          LEFT JOIN WF_ORG_USER UU ON UU.USER_ID = D.USER_ID
+	         WHERE D.USER_ID = #currentUserId#
+	            OR D.TRUSTOR_ID = #currentUserId#
+	        UNION ALL
+	        select DELE_ID,
+	               D.USER_ID,
+	               UU.USER_FULLNAME USER_NAME,
+	               TRUSTOR_ID,
+	               U.USER_FULLNAME TRUSTOR_NAME,
+	               DELE_NAME,
+	               DELE_DESCRIPTION,
+	               CONVERT(DATETIME, DELE_TIME_BEGIN, 108) AS DELE_TIME_BEGIN,
+	               CONVERT(DATETIME, DELE_TIME_END, 108) AS DELE_TIME_END,
+	               (CASE
+	                 WHEN DELE_ALL_PRIVIL = '1' THEN
+	                  '是'
+	                 ELSE
+	                  '否'
+	               END) DELE_ALL_PRIVIL
+	          FROM WF_ORG_DELEGATE D
+	          LEFT JOIN WF_ORG_USER U ON U.USER_ID = D.TRUSTOR_ID
+	          LEFT JOIN WF_ORG_USER UU ON UU.USER_ID = D.USER_ID
+	         WHERE D.USER_ID <> #currentUserId#
+	           AND D.USER_ID IN
+	               (SELECT DISTINCT (UU.USER_ID)
+	                  FROM WF_ORG_USER_UNIT UU
+	                 WHERE UU.UNIT_ID IN
+	                       (SELECT RU.UNIT_ID
+	                          FROM WF_ORG_USER_ROLE UR, WF_ORG_ROLE_UNIT RU
+	                         WHERE UR.USER_ID = #currentUserId#
+	                           AND RU.ROLE_ID = UR.ROLE_ID))) T
+	]]>
+	<dynamic prepend="WHERE">
+		<isNotNull prepend="AND" property="deleName">
+			DELE_NAME = #deleName#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userId">
+			 USER_ID = #userId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="trustorId">
+			TRUSTOR_ID = #trustorId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="deleId">
+			DELE_ID != #deleId#
+		</isNotNull>
+	</dynamic>
+  </select>
+  <select id="selectDelegateDetail" parameterClass="java.lang.String" resultMap="WF_ORG_DELEGATEResultMap">
+	  SELECT D1.DELE_ID,
+	       D1.USER_ID,
+	       UU.USER_FULLNAME USER_NAME,
+	       D1.TRUSTOR_ID,
+	       U.USER_FULLNAME TRUSTOR_NAME,
+	       D1.DELE_NAME,
+	       D1.DELE_DESCRIPTION,
+	       CONVERT(DATETIME,D1.DELE_TIME_BEGIN, 120) AS DELE_TIME_BEGIN,
+	       CONVERT(DATETIME,DELE_TIME_END, 120) AS DELE_TIME_END,
+	       D1.DELE_ALL_PRIVIL
+	    FROM WF_ORG_DELEGATE D1 LEFT JOIN WF_ORG_USER U
+         ON  U.USER_ID = D1.TRUSTOR_ID 
+         LEFT JOIN WF_ORG_USER UU ON UU.USER_ID = D1.USER_ID
+	  WHERE  D1.DELE_ID = #deleId#    
+  </select>
+  <select id="getUserAvailableDelegate" resultMap="WF_ORG_DELEGATEResultMap" parameterClass="java.lang.String" >
+  	<![CDATA[
+        SELECT
+		    DELE_ID,
+		    USER_ID,
+		    TRUSTOR_ID,
+		    DELE_NAME,
+		    DELE_DESCRIPTION,
+		    DELE_TIME_BEGIN,
+		    DELE_TIME_END,
+		    DELE_ALL_PRIVIL,
+		    '' TRUSTOR_NAME,
+		    '' USER_NAME
+        FROM
+            WF_ORG_DELEGATE
+        WHERE
+            TRUSTOR_ID = #value#
+        AND
+            ((
+                WF_ORG_DELEGATE.DELE_TIME_BEGIN <= GETDATE()
+            AND WF_ORG_DELEGATE.DELE_TIME_END >= GETDATE()
+            )
+         OR
+            (
+                WF_ORG_DELEGATE.DELE_TIME_BEGIN IS NULL
+            AND WF_ORG_DELEGATE.DELE_TIME_END >= GETDATE()
+            )
+         OR
+            (
+                WF_ORG_DELEGATE.DELE_TIME_BEGIN <= GETDATE()
+            AND WF_ORG_DELEGATE.DELE_TIME_END IS NULL
+            )
+         OR
+            (
+                WF_ORG_DELEGATE.DELE_TIME_BEGIN IS NULL
+            AND WF_ORG_DELEGATE.DELE_TIME_END IS NULL
+            ))
+  	]]>
+  </select>
+  
+  <select id="getUserDelegatedRoles" resultClass="java.util.HashMap" parameterClass="java.lang.String" >
+	<![CDATA[
+	SELECT
+	    DI_PRIV_ID ROLE_ID
+	FROM
+	    WF_ORG_DELEITEM T1
+	LEFT JOIN WF_ORG_DELEGATE T2
+	ON
+	    T2.DELE_ID = T1.DELE_ID
+	WHERE
+	    T2.TRUSTOR_ID = #value#
+	AND T2.DELE_ID IN
+	    (
+	        SELECT
+	            DELE_ID
+	        FROM
+	            WF_ORG_DELEGATE
+	        WHERE
+	            TRUSTOR_ID = #value#
+	        AND
+	            ((
+	                WF_ORG_DELEGATE.DELE_TIME_BEGIN <= GETDATE()
+	            AND WF_ORG_DELEGATE.DELE_TIME_END >= GETDATE()
+	            )
+	         OR
+	            (
+	                WF_ORG_DELEGATE.DELE_TIME_BEGIN IS NULL
+	            AND WF_ORG_DELEGATE.DELE_TIME_END >= GETDATE()
+	            )
+	         OR
+	            (
+	                WF_ORG_DELEGATE.DELE_TIME_BEGIN <= GETDATE()
+	            AND WF_ORG_DELEGATE.DELE_TIME_END IS NULL
+	            )
+	         OR
+	            (
+	                WF_ORG_DELEGATE.DELE_TIME_BEGIN IS NULL
+	            AND WF_ORG_DELEGATE.DELE_TIME_END IS NULL
+	            ))
+	    )
+	]]>
+  </select>
+</sqlMap>

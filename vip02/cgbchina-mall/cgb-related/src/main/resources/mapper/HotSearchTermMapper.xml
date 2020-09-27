@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HotSearchTermModel">
+    <resultMap id="HotSearchTermMap" type="HotSearchTermModel">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sort" column="sort"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="creatOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,name,sort,status,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="HotSearchTermModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_hot_search
+        (name
+        ,sort
+        ,status
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{name}
+        ,#{sort}
+        ,#{status}
+        ,#{delFlag}
+        ,#{creatOper}
+        ,NOW(),
+        #{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="Map">
+        update tbl_hot_search set
+        name
+        = #{hotSearchTermModel.name},sort
+        = #{hotSearchTermModel.sort},status
+        = #{hotSearchTermModel.status},del_flag
+        = #{hotSearchTermModel.delFlag},create_oper
+        = #{hotSearchTermModel.creatOper},create_time
+        = NOW(),modify_oper
+        = #{hotSearchTermModel.modifyOper},modify_time
+        = #{hotSearchTermModel.modifyTime}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="sort !=null">and sort = #{sort}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="creatOper !=null">and create_oper = #{creatOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findByName" parameterType="String" resultMap="HotSearchTermMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_hot_search
+        where name=#{name} and del_flag != 1
+    </select>
+    <select id="findAll" resultMap="HotSearchTermMap" parameterType="Map">
+        select
+        <include refid="columns"/>
+        from tbl_hot_search
+        where del_flag != 1
+        <if test="termName != null">and name like #{termName} escape '/'</if>
+        <![CDATA[ order by sort desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="findHotHeader" resultMap="HotSearchTermMap" parameterType="Map">
+        select
+        <include refid="columns"/>
+        from tbl_hot_search
+        where del_flag != 1
+        limit #{limit}
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="HotSearchTermMap">
+        select
+        <include refid="columns"/>
+        from tbl_hot_search
+        where del_flag != 1
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="HotSearchTermModel">
+        delete from tbl_hot_search where `name` = #{name}
+    </delete>
+    <update id="logicDelete" parameterType="HotSearchTermModel">
+        update tbl_hot_search set del_flag = 1 where `name` = #{name}
+    </update>
+    <select id="countAll" parameterType="Map" resultType="Integer">
+        SELECT count(1) from tbl_hot_search
+        WHERE del_flag != 1
+        <if test="termName != null">
+            and `name`=#{termName}
+        </if>
+    </select>
+    <select id="countTo" parameterType="Map" resultType="Integer">
+        SELECT count(1) from tbl_hot_search
+        WHERE del_flag != 1
+        <if test="termName != null">
+            and `name`=#{termName}
+        </if>
+        and id != #{id}
+    </select>
+</mapper>
+
+

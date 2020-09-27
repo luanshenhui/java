@@ -1,0 +1,87 @@
+{{#component "keyword_search js-component"}}
+    <p class="components-title"><strong>- 关键字搜索词管理 -</strong></p>
+    <form class="form form-inline keyword-search-form">
+        <fieldset>
+            <p class="filter-name">
+            <span class="span4 span-large">
+                <label class="field-group-label">关键字:</label>
+                <input type="text" class="form-control" name="keyWords" value="{{keyWords}}">
+            </span>
+            <span class="span4 span-large firm">
+                <label class="field-group-label">业务类型:</label>
+                <select class="form-control js-keyword-orderType" name="ordertypeId" id="ordertypeId">
+                    <option value="">请选择</option>
+                    <option value="yg" {{#equals ordertypeId "yg"}}selected{{/equals}}>广发商城</option>
+                    <option value="jf" {{#equals ordertypeId "jf"}}selected{{/equals}}>积分商城</option>
+
+                </select>
+            </span>
+            <span class="span4 span-large">
+                <label class="field-group-label">搜索渠道:</label>
+                <input type="hidden" id="sourceIdVal" value="{{sourceId}}">
+                <select class="form-control" name="sourceId" id="sourceId">
+                </select>
+            </span>
+            </p>
+            <p class="filter-name">
+                <span class="span4 span-large dateTime">
+                    <label class="field-group-label" for="startTime">开始日期:</label>
+                    <input class="form-control application_date js-date-start cursor-pointer" id="startTime" type="text"
+                           value="{{startTime}}"
+                           name="startTime">
+                    </span>
+                  <span class="span4 span-large dateTime">
+                      <label class="field-group-label" for="endTime">结束日期:</label>
+                    <input class="form-control authorize_date js-date-end cursor-pointer" id="endTime" type="text" value="{{endTime}}"
+                           name="endTime">
+                </span>
+            </p>
+            <input class="btn btn-success btn-small right" type="submit"
+                   value="查询"/>
+        </fieldset>
+    </form>
+    <div class="m-t-10">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>关键字</th>
+                <th>业务类型</th>
+                <th>搜索日期</th>
+                <th>搜索渠道</th>
+            </tr>
+            </thead>
+            {{#if _DATA_.data}}
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr>
+                        <td>{{keyWords}}</td>
+                        <td>{{#equals ordertypeId "YG"}}广发商城{{/equals}}{{#equals ordertypeId "JF"}}积分商城{{/equals}}</td>
+                        <td>{{#formatDate createTime}}{{/formatDate}}</td>
+                        <td>
+                            {{#equals sourceId "00"}}广发商城{{/equals}}
+                            {{#equals sourceId "01"}}CallCenter02{{/equals}}
+                            {{#equals sourceId "02"}}IVR渠道{{/equals}}
+                            {{#equals sourceId "03"}}手机商城{{/equals}}
+                            {{#equals sourceId "04"}}短信渠道{{/equals}}
+                            {{#equals sourceId "05"}}微信广发银行{{/equals}}
+                            {{#equals sourceId "06"}}微信广发信用卡{{/equals}}
+                            {{#equals sourceId "09"}}APP{{/equals}}
+
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            {{else}}
+                <tbody>
+                <tr>
+                    <td colspan="4">
+                            <p>没有符合条件的信息，请尝试其他搜索条件。</p>
+                    </td>
+                </tr>
+                </tbody>
+            {{/if}}
+        </table>
+    </div>
+    <div class="clear"></div>
+    <div class="pagination" data-total={{_DATA_.total}}></div>
+{{/component}}

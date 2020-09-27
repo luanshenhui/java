@@ -1,0 +1,42 @@
+<script src="../blexpresscom/common.js"></script>
+<script src="../blexpresscom/list.js"></script>
+<div id="BlExpressComSearch" class="list_search">
+	<h1 id="expressCom"></h1>
+	<label class="lblKeyword"></label><input type="text" id="keyword"/>
+	<a id="btnSearch"></a>
+	<a id="btnAdd"></a>
+	<a id="btnRemove"></a>
+</div>
+<div id="BlExpressComResult"></div>
+<div id="BlExpressComStatistic"></div>
+<div id="BlExpressComPagination" class="paging"></div>
+<textarea  id="BlExpressComTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class='check'><input type="checkbox" onclick="$.csControl.checkAll('chkRow', this.checked);"/></td>
+			<td class="lblNumber"></td>
+			<td class="lblComName"></td>
+			<td class="lblShortName"></td>
+			<td class="lblLinkMan"></td>
+			<td class="lblTel"></td>
+			<td class="lblMobile"></td>
+			<td class="lblAddr"></td>
+			<td class="lblMemo"></td>
+			<td class="lblOperate"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ID}">
+			<td class="center check"><input type="checkbox" value="{$T.row.ID}" name="chkRow"/></td>
+			<td class="center">{$T.row.number}</td>
+			<td class="center link" onclick="$.csBlExpressComList.openView('{$T.row.ID}')">{$T.row.name}</td>
+			<td class="center">{$T.row.shortname}</td>
+			<td class="center">{$T.row.linkMan}</td>
+			<td class="center">{$T.row.tel}</td>
+			<td class="center">{$T.row.mobile}</td>
+			<td class="center">{$T.row.addr}</td>
+			<td class="center">{$T.row.memo}</td>
+			<td class="center"><a class="edit" onclick="$.csBlExpressComList.openPost('{$T.row.ID}')"></a></td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

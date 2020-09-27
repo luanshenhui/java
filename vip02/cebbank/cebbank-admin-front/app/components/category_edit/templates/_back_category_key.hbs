@@ -1,0 +1,17 @@
+<li class="attribute-li" data-attribute="{{json this}}">
+  <span class="attribute" data-id="{{id}}">
+    <span class="attr" data-name="{{name}}"><span class="attribute-number">{{#if index}}{{index}}{{else}}{{add @index 1}}{{/if}}</span>.&nbsp;{{name}}</span>
+    <span class="is-enum">{{#equals valueType 0}}不可枚举{{else}}可枚举{{/equals}}</span>
+  </span>
+  <span class="operate on-hover">
+    {{#equals valueType "1"}}
+    <span class="js-attr-value-get" style="margin: 0 20px 0 10px;">
+      <a href="javascript:void(0);">查看属性</a>
+    </span>
+    <button class="btn btn-success btn-small js-attr-edit">编辑属性值</button>
+    {{/equals}}
+    <span {{#equals valueType "1"}}{{else}}class="only-delete"{{/equals}}>
+      <button id="{{id}}" class="btn btn-success btn-small" data-toggle="confirm" data-title="您确定删除吗?" data-content="删除之后若要恢复请重新添加" data-event="confirm:deleteAttribute">删除</button>
+    </span>
+  </span>
+</li>

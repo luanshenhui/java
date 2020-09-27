@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MakeCheckAccCheckErr">
+    <select id="findByIsShouDong" resultType="String">
+    select
+	   param_nm as paramNm
+    from
+	   tbl_cfg_sysparam
+    where
+	  param_id ='0030'
+    </select>
+
+    <select id="findByMakeAccErrSum" parameterType="String" resultType="Long">
+        select
+        count(create_time)
+        from
+        tbl_order_main
+        where
+        cur_status_id in (
+        '0308',
+        '0309',
+        '0310',
+        '0334',
+        '0327',
+        '0328',
+        '0335',
+        '0332',
+        '0350',
+        '0351',
+        '0311',
+        '0333',
+        '0352',
+        '0001',
+        '0002',
+        '0003'
+        )
+        and ordertype_id = 'JF'
+        and check_status != '1'
+        and <![CDATA[create_time < #{prevDate}]]>
+    </select>
+    <select id="findByUncheckNum" parameterType="String" resultType="Long">
+        select
+        count(cancel_time)
+        from
+        tbl_order_cancel
+        where
+        cancel_check_status != '1'
+        and <![CDATA[cancel_time < #{prevDate}]]>
+    </select>
+    <select id="findByCheckUncheckNum" parameterType="String" resultType="Integer">
+        select
+        count(id)
+        from
+        tbl_order_check
+        where
+        ispoint = '0'
+        and <![CDATA[do_date < #{prevDate}]]>
+    </select>
+</mapper>
+
+

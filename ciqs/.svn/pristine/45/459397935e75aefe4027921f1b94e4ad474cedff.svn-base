@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>DPN页面样式示例</title>
+    <link type="text/css" rel="stylesheet" href="Templets/css/style3.css" />
+    <script type="text/javascript" src="http://apollo.dpn.com.cn/stcres/dpn.js"></script>
+    <script type="text/javascript" src="http://apollo.dpn.com.cn/sso/sso.js"></script>
+</head>
+<body>
+    <!-- **** head ********************************************************* -->
+    <div class="dpn-frame-head">
+    <div class="dpn-frame-head-top">
+<span class="logo">行政确认 /进出境货轮检疫</span>
+        <div class="tollbar">你好：唐荣，欢迎登录系统 | <a href="#">返回首页</a> | <a href="#">退出</a>
+        </div>
+        </div>
+    </div>
+    <!-- **** menu ********************************************************* -->
+    <div class="dpn-frame-menu">
+     <div class="loca">
+          <ul class="nav">
+          <li><a href="javascript:changeContent('#');">申报</a></li>
+          <li><a href="javascript:changeContent('#');">审批</a></li>
+          <li><a href="javascript:changeContent('#');">登轮前检查</a></li>
+          <li><a href="javascript:changeContent('#');">登轮后审核</a> </li>
+          <li><a href="javascript:changeContent('#');">检疫查验</a></li>
+          <li><a href="javascript:changeContent('#');">卫生监督</a></li>
+          <li><a href="javascript:changeContent('#');">证书签发</a> </li>
+         <li><a href="javascript:changeContent('#');">归档</a> </li>
+       </ul>
+     </div>
+</div>
+
+    <!-- **** content ****************************************************** -->
+    <div class="dpn-frame-content">
+        <iframe id="content_frame" src="查询页.html" scrolling="auto" frameborder="0" width="100%" height="100%"></iframe>
+    </div>
+    <!-- **** foot ********************************************************* -->
+<div class="dpn-frame-foot">技术支持：交通电子口岸分中心&nbsp;&nbsp;7*24小时客户服务热线：400-668-5666&nbsp;86-0411-82731333</div>
+    <!-- **** javascript *************************************************** -->
+    <script type="text/javascript">
+        function changeContent(targetUrl){
+        	jQuery("#content_frame").attr("src", targetUrl);
+        }
+        
+        jQuery(function(){
+            addProdAutoSwitch("sso_products", "JUPITER");
+            jQuery("#content_frame").attr("src", "查询页.html");
+        });
+    </script>
+</body>
+</html>

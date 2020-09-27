@@ -1,0 +1,11 @@
+<li class="item-image-li {{#if image}}js-item-image{{else}}upload-image{{/if}}">
+    {{#if image}}
+        <a href="javascript:void(0);" class="image-replace" title="替换图片">
+            <img src="{{image}}"  width="30px" height="30px">
+        </a>
+        <i class="icon-icons-product-del js-del-icon"></i>
+    {{else}}
+        <a href="javascript:void(0);" class="js-image-upload" title="添加图片">
+            <i class="fa fa-fw fa-plus"></i></a>
+    {{/if}}
+</li>

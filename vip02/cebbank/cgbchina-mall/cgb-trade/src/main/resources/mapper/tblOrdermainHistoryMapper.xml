@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblOrdermainHistoryModel">
+    <resultMap id="TblOrdermainHistoryMap" type="TblOrdermainHistoryModel">
+        <result property="ordermainId" column="ordermain_id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="ordertypeNm" column="ordertype_nm"/>
+        <result property="cardno" column="cardno"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="sourceNm" column="source_nm"/>
+        <result property="source2Id" column="source2_id"/>
+        <result property="source2Nm" column="source2_nm"/>
+        <result property="totalNum" column="total_num"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="totalBonus" column="total_bonus"/>
+        <result property="promotDiscount" column="promot_discount"/>
+        <result property="bonusDiscount" column="bonus_discount"/>
+        <result property="voucherDiscount" column="voucher_discount"/>
+        <result property="paymentAmount" column="payment_amount"/>
+        <result property="isInvoice" column="is_invoice"/>
+        <result property="invoice" column="invoice"/>
+        <result property="invoiceContent" column="invoice_content"/>
+        <result property="bpCustGrp" column="bp_cust_grp"/>
+        <result property="csgName" column="csg_name"/>
+        <result property="csgIdType" column="csg_id_type"/>
+        <result property="csgIdcard" column="csg_idcard"/>
+        <result property="csgPostcode" column="csg_postcode"/>
+        <result property="csgAddress" column="csg_address"/>
+        <result property="csgPhone1" column="csg_phone1"/>
+        <result property="csgPhone2" column="csg_phone2"/>
+        <result property="ordermainDesc" column="ordermain_desc"/>
+        <result property="permLimit" column="perm_limit"/>
+        <result property="cashLimit" column="cash_limit"/>
+        <result property="stagesLimit" column="stages_limit"/>
+        <result property="cardUserid" column="card_userid"/>
+        <result property="contIdType" column="cont_id_type"/>
+        <result property="contIdcard" column="cont_idcard"/>
+        <result property="contNm" column="cont_nm"/>
+        <result property="contNmPy" column="cont_nm_py"/>
+        <result property="contPostcode" column="cont_postcode"/>
+        <result property="contAddress" column="cont_address"/>
+        <result property="contMobPhone" column="cont_mob_phone"/>
+        <result property="contHphone" column="cont_hphone"/>
+        <result property="expDate" column="exp_date"/>
+        <result property="foreAccdate" column="fore_accdate"/>
+        <result property="cardtypeId" column="cardtype_id"/>
+        <result property="pdtNbr" column="pdt_nbr"/>
+        <result property="formatId" column="format_id"/>
+        <result property="totalIncPrice" column="total_inc_price"/>
+        <result property="stateCode" column="state_code"/>
+        <result property="stateNm" column="state_nm"/>
+        <result property="lockedFlag" column="locked_flag"/>
+        <result property="curStatusId" column="cur_status_id"/>
+        <result property="curStatusNm" column="cur_status_nm"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="commDate" column="comm_date"/>
+        <result property="commTime" column="comm_time"/>
+        <result property="reserved1" column="reserved1"/>
+        <result property="custFlag" column="cust_flag"/>
+        <result property="vipFlag" column="vip_flag"/>
+        <result property="acctAddFlag" column="acct_add_flag"/>
+        <result property="custSex" column="cust_sex"/>
+        <result property="psFlag" column="ps_flag"/>
+        <result property="custEmail" column="cust_email"/>
+        <result property="custBirthday" column="cust_birthday"/>
+        <result property="expDate2" column="exp_date_2"/>
+        <result property="versionNum" column="version_num"/>
+        <result property="orgCode" column="org_code"/>
+        <result property="orgNm" column="org_nm"/>
+        <result property="orgLevel" column="org_level"/>
+        <result property="csgProvince" column="csg_province"/>
+        <result property="csgCity" column="csg_city"/>
+        <result property="csgBorough" column="csg_borough"/>
+        <result property="acceptedNo" column="accepted_no"/>
+        <result property="serialNo" column="serial_no"/>
+        <result property="eUpdateStatus" column="e_update_status"/>
+        <result property="ismerge" column="ismerge"/>
+        <result property="integraltypeId" column="integraltype_id"/>
+        <result property="defraytype" column="defraytype"/>
+        <result property="merId" column="mer_id"/>
+        <result property="errorCode" column="error_code"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="payResultTime" column="pay_result_time"/>
+        <result property="desc1" column="desc1"/>
+        <result property="desc2" column="desc2"/>
+        <result property="desc3" column="desc3"/>
+        <result property="referenceNo" column="reference_no"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="bpCustGrp" column="bp_cust_grp"/>
+        <result property="lockedFlag" column="locked_flag"/>
+        <result property="curStatusId" column="cur_status_id"/>
+    </resultMap>
+    <sql id="columns">
+    ordermain_id,ordertype_id,ordertype_nm,cardno,source_id,source_nm,source2_id,source2_nm,total_num,total_price,total_bonus,promot_discount,bonus_discount,voucher_discount,payment_amount,is_invoice,invoice,invoice_content,bp_cust_grp,csg_name,csg_id_type,csg_idcard,csg_postcode,csg_address,csg_phone1,csg_phone2,ordermain_desc,perm_limit,cash_limit,stages_limit,card_userid,cont_id_type,cont_idcard,cont_nm,cont_nm_py,cont_postcode,cont_address,cont_mob_phone,cont_hphone,exp_date,fore_accdate,cardtype_id,pdt_nbr,format_id,total_inc_price,state_code,state_nm,locked_flag,cur_status_id,cur_status_nm,create_oper,modify_oper,comm_date,comm_time,reserved1,cust_flag,vip_flag,acct_add_flag,cust_sex,ps_flag,cust_email,cust_birthday,exp_date_2,version_num,org_code,org_nm,org_level,csg_province,csg_city,csg_borough,accepted_no,serial_no,e_update_status,ismerge,integraltype_id,defraytype,mer_id,error_code,check_status,pay_result_time,desc1,desc2,desc3,reference_no,del_flag,create_time,modify_time,bp_cust_grp,locked_flag,cur_status_id
+    </sql>
+
+    <insert id="insert" parameterType="TblOrdermainHistoryModel" useGeneratedKeys="true"
+            keyProperty="ordermainId" keyColumn="ordermain_id">
+        insert into tblordermain_history
+        (ordertype_id
+        ,ordertype_nm
+        ,cardno
+        ,source_id
+        ,source_nm
+        ,source2_id
+        ,source2_nm
+        ,total_num
+        ,total_price
+        ,total_bonus
+        ,promot_discount
+        ,bonus_discount
+        ,voucher_discount
+        ,payment_amount
+        ,is_invoice
+        ,invoice
+        ,invoice_content
+        ,bp_cust_grp
+        ,csg_name
+        ,csg_id_type
+        ,csg_idcard
+        ,csg_postcode
+        ,csg_address
+        ,csg_phone1
+        ,csg_phone2
+        ,ordermain_desc
+        ,perm_limit
+        ,cash_limit
+        ,stages_limit
+        ,card_userid
+        ,cont_id_type
+        ,cont_idcard
+        ,cont_nm
+        ,cont_nm_py
+        ,cont_postcode
+        ,cont_address
+        ,cont_mob_phone
+        ,cont_hphone
+        ,exp_date
+        ,fore_accdate
+        ,cardtype_id
+        ,pdt_nbr
+        ,format_id
+        ,total_inc_price
+        ,state_code
+        ,state_nm
+        ,locked_flag
+        ,cur_status_id
+        ,cur_status_nm
+        ,create_oper
+        ,modify_oper
+        ,comm_date
+        ,comm_time
+        ,reserved1
+        ,cust_flag
+        ,vip_flag
+        ,acct_add_flag
+        ,cust_sex
+        ,ps_flag
+        ,cust_email
+        ,cust_birthday
+        ,exp_date_2
+        ,version_num
+        ,org_code
+        ,org_nm
+        ,org_level
+        ,csg_province
+        ,csg_city
+        ,csg_borough
+        ,accepted_no
+        ,serial_no
+        ,e_update_status
+        ,ismerge
+        ,integraltype_id
+        ,defraytype
+        ,mer_id
+        ,error_code
+        ,check_status
+        ,pay_result_time
+        ,desc1
+        ,desc2
+        ,desc3
+        ,reference_no
+        ,del_flag
+        ,create_time
+        ,modify_time
+        ,bp_cust_grp
+        ,locked_flag
+        ,cur_status_id)
+        values(#{ordertypeId}
+        ,#{ordertypeNm}
+        ,#{cardno}
+        ,#{sourceId}
+        ,#{sourceNm}
+        ,#{source2Id}
+        ,#{source2Nm}
+        ,#{totalNum}
+        ,#{totalPrice}
+        ,#{totalBonus}
+        ,#{promotDiscount}
+        ,#{bonusDiscount}
+        ,#{voucherDiscount}
+        ,#{paymentAmount}
+        ,#{isInvoice}
+        ,#{invoice}
+        ,#{invoiceContent}
+        ,#{bpCustGrp}
+        ,#{csgName}
+        ,#{csgIdType}
+        ,#{csgIdcard}
+        ,#{csgPostcode}
+        ,#{csgAddress}
+        ,#{csgPhone1}
+        ,#{csgPhone2}
+        ,#{ordermainDesc}
+        ,#{permLimit}
+        ,#{cashLimit}
+        ,#{stagesLimit}
+        ,#{cardUserid}
+        ,#{contIdType}
+        ,#{contIdcard}
+        ,#{contNm}
+        ,#{contNmPy}
+        ,#{contPostcode}
+        ,#{contAddress}
+        ,#{contMobPhone}
+        ,#{contHphone}
+        ,#{expDate}
+        ,#{foreAccdate}
+        ,#{cardtypeId}
+        ,#{pdtNbr}
+        ,#{formatId}
+        ,#{totalIncPrice}
+        ,#{stateCode}
+        ,#{stateNm}
+        ,#{lockedFlag}
+        ,#{curStatusId}
+        ,#{curStatusNm}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,#{commDate}
+        ,#{commTime}
+        ,#{reserved1}
+        ,#{custFlag}
+        ,#{vipFlag}
+        ,#{acctAddFlag}
+        ,#{custSex}
+        ,#{psFlag}
+        ,#{custEmail}
+        ,#{custBirthday}
+        ,#{expDate2}
+        ,#{versionNum}
+        ,#{orgCode}
+        ,#{orgNm}
+        ,#{orgLevel}
+        ,#{csgProvince}
+        ,#{csgCity}
+        ,#{csgBorough}
+        ,#{acceptedNo}
+        ,#{serialNo}
+        ,#{eUpdateStatus}
+        ,#{ismerge}
+        ,#{integraltypeId}
+        ,#{defraytype}
+        ,#{merId}
+        ,#{errorCode}
+        ,#{checkStatus}
+        ,#{payResultTime}
+        ,#{desc1}
+        ,#{desc2}
+        ,#{desc3}
+        ,#{referenceNo}
+        ,#{delFlag}
+        ,#{createTime}
+        ,#{modifyTime}
+        ,#{bpCustGrp}
+        ,#{lockedFlag}
+        ,#{curStatusId})
+    </insert>
+
+    <update id="update" parameterType="TblOrdermainHistoryModel">
+        update tblordermain_history set
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="ordertypeNm !=null">ordertype_nm = #{ordertypeNm}
+                ,</if>
+            <if test="cardno !=null">cardno = #{cardno}
+                ,</if>
+            <if test="sourceId !=null">source_id = #{sourceId}
+                ,</if>
+            <if test="sourceNm !=null">source_nm = #{sourceNm}
+                ,</if>
+            <if test="source2Id !=null">source2_id = #{source2Id}
+                ,</if>
+            <if test="source2Nm !=null">source2_nm = #{source2Nm}
+                ,</if>
+            <if test="totalNum !=null">total_num = #{totalNum}
+                ,</if>
+            <if test="totalPrice !=null">total_price = #{totalPrice}
+                ,</if>
+            <if test="totalBonus !=null">total_bonus = #{totalBonus}
+                ,</if>
+            <if test="promotDiscount !=null">promot_discount = #{promotDiscount}
+                ,</if>
+            <if test="bonusDiscount !=null">bonus_discount = #{bonusDiscount}
+                ,</if>
+            <if test="voucherDiscount !=null">voucher_discount = #{voucherDiscount}
+                ,</if>
+            <if test="paymentAmount !=null">payment_amount = #{paymentAmount}
+                ,</if>
+            <if test="isInvoice !=null">is_invoice = #{isInvoice}
+                ,</if>
+            <if test="invoice !=null">invoice = #{invoice}
+                ,</if>
+            <if test="invoiceContent !=null">invoice_content = #{invoiceContent}
+                ,</if>
+            <if test="bpCustGrp !=null">bp_cust_grp = #{bpCustGrp}
+                ,</if>
+            <if test="csgName !=null">csg_name = #{csgName}
+                ,</if>
+            <if test="csgIdType !=null">csg_id_type = #{csgIdType}
+                ,</if>
+            <if test="csgIdcard !=null">csg_idcard = #{csgIdcard}
+                ,</if>
+            <if test="csgPostcode !=null">csg_postcode = #{csgPostcode}
+                ,</if>
+            <if test="csgAddress !=null">csg_address = #{csgAddress}
+                ,</if>
+            <if test="csgPhone1 !=null">csg_phone1 = #{csgPhone1}
+                ,</if>
+            <if test="csgPhone2 !=null">csg_phone2 = #{csgPhone2}
+                ,</if>
+            <if test="ordermainDesc !=null">ordermain_desc = #{ordermainDesc}
+                ,</if>
+            <if test="permLimit !=null">perm_limit = #{permLimit}
+                ,</if>
+            <if test="cashLimit !=null">cash_limit = #{cashLimit}
+                ,</if>
+            <if test="stagesLimit !=null">stages_limit = #{stagesLimit}
+                ,</if>
+            <if test="cardUserid !=null">card_userid = #{cardUserid}
+                ,</if>
+            <if test="contIdType !=null">cont_id_type = #{contIdType}
+                ,</if>
+            <if test="contIdcard !=null">cont_idcard = #{contIdcard}
+                ,</if>
+            <if test="contNm !=null">cont_nm = #{contNm}
+                ,</if>
+            <if test="contNmPy !=null">cont_nm_py = #{contNmPy}
+                ,</if>
+            <if test="contPostcode !=null">cont_postcode = #{contPostcode}
+                ,</if>
+            <if test="contAddress !=null">cont_address = #{contAddress}
+                ,</if>
+            <if test="contMobPhone !=null">cont_mob_phone = #{contMobPhone}
+                ,</if>
+            <if test="contHphone !=null">cont_hphone = #{contHphone}
+                ,</if>
+            <if test="expDate !=null">exp_date = #{expDate}
+                ,</if>
+            <if test="foreAccdate !=null">fore_accdate = #{foreAccdate}
+                ,</if>
+            <if test="cardtypeId !=null">cardtype_id = #{cardtypeId}
+                ,</if>
+            <if test="pdtNbr !=null">pdt_nbr = #{pdtNbr}
+                ,</if>
+            <if test="formatId !=null">format_id = #{formatId}
+                ,</if>
+            <if test="totalIncPrice !=null">total_inc_price = #{totalIncPrice}
+                ,</if>
+            <if test="stateCode !=null">state_code = #{stateCode}
+                ,</if>
+            <if test="stateNm !=null">state_nm = #{stateNm}
+                ,</if>
+            <if test="lockedFlag !=null">locked_flag = #{lockedFlag}
+                ,</if>
+            <if test="curStatusId !=null">cur_status_id = #{curStatusId}
+                ,</if>
+            <if test="curStatusNm !=null">cur_status_nm = #{curStatusNm}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="commDate !=null">comm_date = #{commDate}
+                ,</if>
+            <if test="commTime !=null">comm_time = #{commTime}
+                ,</if>
+            <if test="reserved1 !=null">reserved1 = #{reserved1}
+                ,</if>
+            <if test="custFlag !=null">cust_flag = #{custFlag}
+                ,</if>
+            <if test="vipFlag !=null">vip_flag = #{vipFlag}
+                ,</if>
+            <if test="acctAddFlag !=null">acct_add_flag = #{acctAddFlag}
+                ,</if>
+            <if test="custSex !=null">cust_sex = #{custSex}
+                ,</if>
+            <if test="psFlag !=null">ps_flag = #{psFlag}
+                ,</if>
+            <if test="custEmail !=null">cust_email = #{custEmail}
+                ,</if>
+            <if test="custBirthday !=null">cust_birthday = #{custBirthday}
+                ,</if>
+            <if test="expDate2 !=null">exp_date_2 = #{expDate2}
+                ,</if>
+            <if test="versionNum !=null">version_num = #{versionNum}
+                ,</if>
+            <if test="orgCode !=null">org_code = #{orgCode}
+                ,</if>
+            <if test="orgNm !=null">org_nm = #{orgNm}
+                ,</if>
+            <if test="orgLevel !=null">org_level = #{orgLevel}
+                ,</if>
+            <if test="csgProvince !=null">csg_province = #{csgProvince}
+                ,</if>
+            <if test="csgCity !=null">csg_city = #{csgCity}
+                ,</if>
+            <if test="csgBorough !=null">csg_borough = #{csgBorough}
+                ,</if>
+            <if test="acceptedNo !=null">accepted_no = #{acceptedNo}
+                ,</if>
+            <if test="serialNo !=null">serial_no = #{serialNo}
+                ,</if>
+            <if test="eUpdateStatus !=null">e_update_status = #{eUpdateStatus}
+                ,</if>
+            <if test="ismerge !=null">ismerge = #{ismerge}
+                ,</if>
+            <if test="integraltypeId !=null">integraltype_id = #{integraltypeId}
+                ,</if>
+            <if test="defraytype !=null">defraytype = #{defraytype}
+                ,</if>
+            <if test="merId !=null">mer_id = #{merId}
+                ,</if>
+            <if test="errorCode !=null">error_code = #{errorCode}
+                ,</if>
+            <if test="checkStatus !=null">check_status = #{checkStatus}
+                ,</if>
+            <if test="payResultTime !=null">pay_result_time = #{payResultTime}
+                ,</if>
+            <if test="desc1 !=null">desc1 = #{desc1}
+                ,</if>
+            <if test="desc2 !=null">desc2 = #{desc2}
+                ,</if>
+            <if test="desc3 !=null">desc3 = #{desc3}
+                ,</if>
+            <if test="referenceNo !=null">reference_no = #{referenceNo}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+                ,</if>
+            <if test="bpCustGrp !=null">bp_cust_grp = #{bpCustGrp}
+                ,</if>
+            <if test="lockedFlag !=null">locked_flag = #{lockedFlag}
+                ,</if>
+            <if test="curStatusId !=null">cur_status_id = #{curStatusId}
+                </if>
+        where ordermain_id = #{ordermainId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="ordermainId !=null">and ordermain_id = #{ordermainId}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="ordertypeNm !=null">and ordertype_nm = #{ordertypeNm}</if>
+            <if test="cardno !=null">and cardno = #{cardno}</if>
+            <if test="sourceId !=null">and source_id = #{sourceId}</if>
+            <if test="sourceNm !=null">and source_nm = #{sourceNm}</if>
+            <if test="source2Id !=null">and source2_id = #{source2Id}</if>
+            <if test="source2Nm !=null">and source2_nm = #{source2Nm}</if>
+            <if test="totalNum !=null">and total_num = #{totalNum}</if>
+            <if test="totalPrice !=null">and total_price = #{totalPrice}</if>
+            <if test="totalBonus !=null">and total_bonus = #{totalBonus}</if>
+            <if test="promotDiscount !=null">and promot_discount = #{promotDiscount}</if>
+            <if test="bonusDiscount !=null">and bonus_discount = #{bonusDiscount}</if>
+            <if test="voucherDiscount !=null">and voucher_discount = #{voucherDiscount}</if>
+            <if test="paymentAmount !=null">and payment_amount = #{paymentAmount}</if>
+            <if test="isInvoice !=null">and is_invoice = #{isInvoice}</if>
+            <if test="invoice !=null">and invoice = #{invoice}</if>
+            <if test="invoiceContent !=null">and invoice_content = #{invoiceContent}</if>
+            <if test="bpCustGrp !=null">and bp_cust_grp = #{bpCustGrp}</if>
+            <if test="csgName !=null">and csg_name = #{csgName}</if>
+            <if test="csgIdType !=null">and csg_id_type = #{csgIdType}</if>
+            <if test="csgIdcard !=null">and csg_idcard = #{csgIdcard}</if>
+            <if test="csgPostcode !=null">and csg_postcode = #{csgPostcode}</if>
+            <if test="csgAddress !=null">and csg_address = #{csgAddress}</if>
+            <if test="csgPhone1 !=null">and csg_phone1 = #{csgPhone1}</if>
+            <if test="csgPhone2 !=null">and csg_phone2 = #{csgPhone2}</if>
+            <if test="ordermainDesc !=null">and ordermain_desc = #{ordermainDesc}</if>
+            <if test="permLimit !=null">and perm_limit = #{permLimit}</if>
+            <if test="cashLimit !=null">and cash_limit = #{cashLimit}</if>
+            <if test="stagesLimit !=null">and stages_limit = #{stagesLimit}</if>
+            <if test="cardUserid !=null">and card_userid = #{cardUserid}</if>
+            <if test="contIdType !=null">and cont_id_type = #{contIdType}</if>
+            <if test="contIdcard !=null">and cont_idcard = #{contIdcard}</if>
+            <if test="contNm !=null">and cont_nm = #{contNm}</if>
+            <if test="contNmPy !=null">and cont_nm_py = #{contNmPy}</if>
+            <if test="contPostcode !=null">and cont_postcode = #{contPostcode}</if>
+            <if test="contAddress !=null">and cont_address = #{contAddress}</if>
+            <if test="contMobPhone !=null">and cont_mob_phone = #{contMobPhone}</if>
+            <if test="contHphone !=null">and cont_hphone = #{contHphone}</if>
+            <if test="expDate !=null">and exp_date = #{expDate}</if>
+            <if test="foreAccdate !=null">and fore_accdate = #{foreAccdate}</if>
+            <if test="cardtypeId !=null">and cardtype_id = #{cardtypeId}</if>
+            <if test="pdtNbr !=null">and pdt_nbr = #{pdtNbr}</if>
+            <if test="formatId !=null">and format_id = #{formatId}</if>
+            <if test="totalIncPrice !=null">and total_inc_price = #{totalIncPrice}</if>
+            <if test="stateCode !=null">and state_code = #{stateCode}</if>
+            <if test="stateNm !=null">and state_nm = #{stateNm}</if>
+            <if test="lockedFlag !=null">and locked_flag = #{lockedFlag}</if>
+            <if test="curStatusId !=null">and cur_status_id = #{curStatusId}</if>
+            <if test="curStatusNm !=null">and cur_status_nm = #{curStatusNm}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="commDate !=null">and comm_date = #{commDate}</if>
+            <if test="commTime !=null">and comm_time = #{commTime}</if>
+            <if test="reserved1 !=null">and reserved1 = #{reserved1}</if>
+            <if test="custFlag !=null">and cust_flag = #{custFlag}</if>
+            <if test="vipFlag !=null">and vip_flag = #{vipFlag}</if>
+            <if test="acctAddFlag !=null">and acct_add_flag = #{acctAddFlag}</if>
+            <if test="custSex !=null">and cust_sex = #{custSex}</if>
+            <if test="psFlag !=null">and ps_flag = #{psFlag}</if>
+            <if test="custEmail !=null">and cust_email = #{custEmail}</if>
+            <if test="custBirthday !=null">and cust_birthday = #{custBirthday}</if>
+            <if test="expDate2 !=null">and exp_date_2 = #{expDate2}</if>
+            <if test="versionNum !=null">and version_num = #{versionNum}</if>
+            <if test="orgCode !=null">and org_code = #{orgCode}</if>
+            <if test="orgNm !=null">and org_nm = #{orgNm}</if>
+            <if test="orgLevel !=null">and org_level = #{orgLevel}</if>
+            <if test="csgProvince !=null">and csg_province = #{csgProvince}</if>
+            <if test="csgCity !=null">and csg_city = #{csgCity}</if>
+            <if test="csgBorough !=null">and csg_borough = #{csgBorough}</if>
+            <if test="acceptedNo !=null">and accepted_no = #{acceptedNo}</if>
+            <if test="serialNo !=null">and serial_no = #{serialNo}</if>
+            <if test="eUpdateStatus !=null">and e_update_status = #{eUpdateStatus}</if>
+            <if test="ismerge !=null">and ismerge = #{ismerge}</if>
+            <if test="integraltypeId !=null">and integraltype_id = #{integraltypeId}</if>
+            <if test="defraytype !=null">and defraytype = #{defraytype}</if>
+            <if test="merId !=null">and mer_id = #{merId}</if>
+            <if test="errorCode !=null">and error_code = #{errorCode}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="payResultTime !=null">and pay_result_time = #{payResultTime}</if>
+            <if test="desc1 !=null">and desc1 = #{desc1}</if>
+            <if test="desc2 !=null">and desc2 = #{desc2}</if>
+            <if test="desc3 !=null">and desc3 = #{desc3}</if>
+            <if test="referenceNo !=null">and reference_no = #{referenceNo}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="bpCustGrp !=null">and bp_cust_grp = #{bpCustGrp}</if>
+            <if test="lockedFlag !=null">and locked_flag = #{lockedFlag}</if>
+            <if test="curStatusId !=null">and cur_status_id = #{curStatusId}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblOrdermainHistoryMap">
+       SELECT
+        <include refid="columns"/>
+        from tblordermain_history
+       where id=#{ordermainId}
+    </select>
+    <select id="findAll" resultMap="TblOrdermainHistoryMap">
+        select
+        <include refid="columns"/>
+        from tblordermain_history
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblOrdermainHistoryMap">
+        select
+        <include refid="columns"/>
+        from tblordermain_history
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblOrdermainHistoryModel">
+        delete from tblordermain_history where id = ordermainId
+    </delete>
+</mapper>
+
+

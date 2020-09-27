@@ -1,0 +1,183 @@
+<div class="modal modal-advertise-new">
+    <div class="modal-header">
+        <a href="javascript:void(0);" class="close">×</a>
+
+        <div class="modal-title">{{title}}</div>
+    </div>
+    <form class="form form-aligned esp-advertise-form">
+        <div class="modal-body" data-data="{{json data}}">
+            <div class="table-infor">
+                <input type="hidden" name="id" value="{{data.id}}"/>
+                <input id="advertiseId" type="hidden" data-id="{{data.id}}"/>
+
+                <div class="form-information "><span class=" w130 text-right">业务类型 ：</span>
+                    {{#equals title '编辑手机广告'}}
+                            <input type="text" name="ordertypeId" value="{{data.ordertypeId}}" style="display: none" readonly="readonly">
+                        <span class="left">{{#equals data.ordertypeId 'YG'}}广发商城{{else}}积分商城{{/equals}}</span>
+                    {{else}}
+                    <select id="ordertypeIdEdit" name="ordertypeId"
+                            class="left js-select-ordertypeId" {{#equals title '编辑手机广告'}}disabled="disabled" {{/equals}}>
+                        <option value="">请选择</option>
+                        <option value="YG" {{#equals data.ordertypeId 'YG'}}selected{{/equals}} >广发商城</option>
+                        <option value="JF" {{#equals data.ordertypeId 'JF'}}selected{{/equals}} >积分商城</option>
+                    </select>
+                    {{/equals}}
+                </div>
+                <div class="form-information "><span class=" w130 text-right">广告类型 ：</span>
+                    {{#equals title '编辑手机广告'}}
+                        <input type="text" name="advertisePos" value="{{data.advertisePos}}" style="display: none" readonly="readonly">
+                    <span class="left">{{#equals data.advertisePos '10'}}文字广告{{/equals}}
+                        {{#equals data.advertisePos '11'}}首页JS图片广告（300x130）{{/equals}}
+                        {{#equals data.advertisePos '12'}}底部特惠广告区（300x130）{{/equals}}
+                        {{#equals data.advertisePos '13'}}首页栏目广告9个（100x100）{{/equals}}
+                        {{#equals data.advertisePos '14'}}团购广告{{/equals}}
+                        {{#equals data.advertisePos '15'}}秒杀广告{{/equals}}</span>
+                    {{else}}
+                    <select id="advertisePosEdit" name="advertisePos" type="text"
+                            class="left" {{#equals title '编辑手机广告'}}disabled="disabled" {{/equals}}>
+                        <option value="">请选择</option>
+                        <option value="10" {{#equals data.advertisePos '10'}}selected{{/equals}}>文字广告</option>
+                        <option value="11" {{#equals data.advertisePos '11'}}selected{{/equals}}>首页JS图片广告（300x130）
+                        </option>
+                        <option value="12" {{#equals data.advertisePos '12'}}selected{{/equals}}>底部特惠广告区（300x130）
+                        </option>
+                        <option value="13" {{#equals data.advertisePos '13'}}selected{{/equals}}>首页栏目广告9个（100x100）
+                        </option>
+                        <option value="14" {{#equals data.advertisePos '14'}}selected{{/equals}}>团购广告</option>
+                        <option value="15" {{#equals data.advertisePos '15'}}selected{{/equals}}>秒杀广告</option>
+                        {{/equals}}
+                    </select>
+                </div>
+                <div class="form-information" id="linkTypeinp"><span class="w130 text-right">跳转类型：</span>
+                    <select id="linkType" name="linkType"
+                            class="left select_jumping" {{!#equals title '编辑手机广告'}}{{!/equals}}><!--disabled="disabled"-->
+                        <option value="">请选择</option>
+                    {{#equals data.ordertypeId 'YG'}}
+                        <option value="1" {{#equals data.linkType '1'}}selected{{/equals}}>关键字</option>
+                        <option value="2" {{#equals data.linkType '2'}}selected{{/equals}}>页面</option>
+                    {{else}}
+                        {{#equals data.ordertypeId 'JF'}}
+                            <option value="3" {{#equals data.linkType '3'}}selected{{/equals}}>分区</option>
+                            <option value="4" {{#equals data.linkType '4'}}selected{{/equals}}>类别</option>
+                            <option value="5" {{#equals data.linkType '5'}}selected{{/equals}}>商品</option>
+                        {{else}}
+                            <option value="1" {{#equals data.linkType '1'}}selected{{/equals}}>关键字</option>
+                            <option value="2" {{#equals data.linkType '2'}}selected{{/equals}}>页面</option>
+                            <option value="3" {{#equals data.linkType '3'}}selected{{/equals}}>分区</option>
+                            <option value="4" {{#equals data.linkType '4'}}selected{{/equals}}>类别</option>
+                            <option value="5" {{#equals data.linkType '5'}}selected{{/equals}}>商品</option>
+                        {{/equals}}
+                    {{/equals}}
+
+                    </select>
+                </div>
+                {{#equals title '新增手机广告'}}
+                    <div class="form-information" id="keywordinp" name="keywordinp"><span
+                            class="w130 text-right">关键字：</span>
+                        <input id="keyword" name="keyword" type="text" maxlength="40"
+                               class="left wh150 m-t-5 form-control" {{#equals data.linkType '1'}}
+                               value="{{data.keyword}}"{{/equals}}>
+                    </div>
+                    <div class="form-information " id="advertiseHref" name="advertiseHref"><span
+                            class="w130 text-right" id="advertiseHref-name">单品编码：</span>
+                        <input name="advertiseHref" type="text" value="{{data.advertiseHref}}" maxlength="300"
+                               class="left wh150 m-t-5 form-control">
+                        <span id="advertiseHref-text">请填写14或20单品编码</span>
+                    </div>
+                    <div class="form-information" id="partitions" name="partitions"><span
+                            class="w130 text-right">分区：</span>
+                        <select id="partitionsKeyword" name="partitionsKeyword" class="left">
+                            <option value="">请选择</option>
+                            <option value="1" {{#equals data.linkType '3'}}{{#equals data.keyword '1'}}selected{{/equals}}{{/equals}}>
+                                白金卡专区
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-information" id="classifications" name="classifications"><span
+                            class="w130 text-right">类别：</span>
+                        <select class="left js-select1 select" data-level="1" name="backCategory1Id">
+                            <option value="">请选择</option>
+                            <option value=""
+                                    {{#equals data.backCategory1Id '1'}}selected{{/equals}}>{{data.backCategory1Id}}</option>
+                        </select>
+                        <span>-</span>
+                        <select data-level="2" name="backCategory2Id" class="left js-select2 select">
+                            <option value="">请选择</option>
+                        </select>
+                        <span>-</span>
+                        <select data-level="3" name="backCategory3Id" class="left js-select3 select">
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                {{/equals}}
+                {{#equals title '编辑手机广告'}}
+                    <div class="form-information" id="keywordinp" name="keywordinp"><span
+                            class="w130 text-right">关键字：</span>
+                        <input id="keyword" name="keyword" type="text" maxlength="40"
+                               class="left wh150 m-t-5 form-control" {{#equals data.linkType '1'}}
+                               value="{{data.keyword}}"{{/equals}}>
+                    </div>
+                    <div class="form-information" id="partitions" name="partitions"><span
+                            class="w130 text-right">分区：</span>
+                        <select id="partitionsKeyword" name="partitionsKeyword" class="left">
+                            <option value="">请选择</option>
+                            <option value="1" {{#equals data.linkType '3'}}{{#equals data.keyword '1'}}selected{{/equals}}{{/equals}}>
+                                白金卡专区
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-information" id="classifications" name="classifications"><span
+                            class="w130 text-right">类别：</span>
+                        <select class="left js-select1 select" data-level="1" name="backCategory1Id">
+                            <option value="">请选择</option>
+                            <option value=""
+                                    {{#equals data.backCategory1Id '1'}}selected{{/equals}}>{{data.backCategory1Id}}</option>
+                        </select>
+                        <span>-</span>
+                        <select data-level="2" name="backCategory2Id" class="left js-select2 select">
+                            <option value="">请选择</option>
+                        </select>
+                        <span>-</span>
+                        <select data-level="3" name="backCategory3Id" class="left js-select3 select">
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                    <div class="form-information " id="advertiseHref" name="advertiseHref"><span
+                            class="w130 text-right" id="advertiseHref-name">单品编码：</span>
+                        <input name="advertiseHref" type="text" value="{{data.advertiseHref}}"
+                               maxlength="300"
+                               class="left wh150 m-t-5 form-control">
+                        <span id="advertiseHref-text">请填写14或20单品编码</span>
+                    </div>
+                {{/equals}}
+                <div class="form-information">
+                    <label for="advertiseImage"><span class="w130 text-right">图片上传：</span></label>
+
+                    <input type="button" class="btn btn-success btn-small js-icon-upload" value="上传图片"/>
+                    <input type="hidden" id="advertiseImage" name="advertiseImage" value="{{data.advertiseImage}}">
+
+
+                    <!--<input id="fileimg" type="file" name="advertiseImage" class="ipt" style="width:170px;"/>-->
+                    <!--<input type="button" class="btn btn-success btn-small js-image-upload" value="上传"/>-->
+                    <!--<i class="upload-msg" style="color:red;" id="msg_info_id"></i>-->
+                </div>
+                <div class="form-information "><span class="w130 text-right">显示顺序：</span>
+                    <input name="advertiseSeq" id="advertiseSeq" type="text" value="{{data.advertiseSeq}}"
+                           maxlength="9"
+                           class="left wh150 m-t-5 form-control">
+                </div>
+                <div class="form-information clearfix "><span class="w130 text-right">文字描述：</span>
+                    <textarea id="advertiseDesc" name="advertiseDesc" value="{{data.advertiseDesc}}" maxlength="200"
+                              class="left wh300 m-t-5">{{data.advertiseDesc}}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            {{#equals add true}}
+                    <input type="submit" class="btn btn-success btn-small js-default-term-edit" value="确定">
+                {{else}}
+                    <input type="submit" class="btn btn-success btn-small js-default-term-edit" value="确定">
+            {{/equals}}
+        </div>
+    </form>
+</div>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.visualization.dao.DcaReportRiskDao">
+
+
+	 <!-- 风险统计表 风险级别:2-黄色 3-橙色 4-红色 add by gaojianshuo 2016-12-07  -->
+	 
+	<select id="findReportRisk" resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaReportRiskEntity">
+		SELECT BIZ_FLOW_ID AS flowId,BIZ_FLOW_NAME AS flowName,BIZ_DATA_ID AS dataId,BIZ_DATA_NAME AS dataName,
+			 SUM(DECODE(RISK_LEVEL,30,1,0)) yellowCount,
+			 SUM(DECODE(RISK_LEVEL,20,1,0)) orangeCount,
+			 SUM(DECODE(RISK_LEVEL,10,1,0)) redCount,
+			 COUNT(RISK_LEVEL) totalCount
+		FROM DCA_RISK_MANAGE
+		<include refid="alarm_stat_conditions"></include>
+		<if test="year != null and year != -999">
+			AND EXTRACT(year FROM UPDATE_DATE) = #{year}
+		</if>
+		<if test="bizOperPerson != null and bizOperPerson != '-999'">
+			AND BIZ_OPER_PERSON = #{bizOperPerson}
+		</if>
+		<if test="bizOperPost != null and bizOperPost != '-999'">
+			AND BIZ_OPER_POST = #{bizOperPost}
+		</if>
+		<if test="idxDataType != null and idxDataType != ''">
+			AND SUBSTR(a.POWER_ID, 0, 2) = #{idxDataType}
+		</if>
+		<if test="currentUser != null and postId != null">
+			OR RISK_MANAGE_ID IN (SELECT RISK_MANAGE_ID FROM DCA_RISK_TRANS e 
+			   WHERE e.USER_ID = #{currentUser.id} 
+				 AND e.OFFICE_ID =#{currentUser.office.id} 
+				 AND e.POST_ID = #{postId}
+				 <if test="year != null and year != -999">
+					AND EXTRACT(year FROM e.UPDATE_DATE) = #{year}
+				 </if>
+			   )	
+		</if>		
+		GROUP BY BIZ_FLOW_ID,BIZ_FLOW_NAME,BIZ_DATA_ID,BIZ_DATA_NAME
+		ORDER BY BIZ_FLOW_ID,BIZ_DATA_ID
+	</select>
+	
+	<!-- 风险统计表获取年份 add by panghuidan 2016-12-16  -->
+	
+	<select id="findRiskYear" resultType="Integer">
+		SELECT EXTRACT(year FROM UPDATE_DATE) year
+		FROM DCA_RISK_MANAGE
+		<include refid="alarm_stat_conditions"></include>
+		<if test="bizOperPerson != null and bizOperPerson != '-999'">
+			AND BIZ_OPER_PERSON = #{bizOperPerson}
+		</if>
+		<if test="bizOperPost != null and bizOperPost != '-999'">
+			AND BIZ_OPER_POST = #{bizOperPost}
+		</if>
+		GROUP BY EXTRACT(year FROM UPDATE_DATE)
+		ORDER BY year DESC
+	</select>
+	
+	
+		<!-- 风险统计查询条件是否删除 -->
+	<sql id="alarm_stat_conditions">
+		<where>
+			DEL_FLAG = #{DEL_FLAG_NORMAL}
+			
+		</where>
+	</sql>
+	
+	<!-- 部门列表 add by gaojianshuo 2016-12-10  -->
+	<!-- <select id="findOperatorOffice" resultType="String">
+		SELECT NAME FROM SYS_OFFICE
+	</select> -->
+	
+</mapper>

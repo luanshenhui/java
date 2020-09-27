@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GoodsBrandModel">
+    <resultMap id="GoodsBrandMap" type="GoodsBrandModel">
+        <result property="id" column="id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="goodsBrand" column="goods_brand"/>
+        <result property="brandName" column="brand_name"/>
+        <result property="brandSeq" column="brand_seq"/>
+        <result property="brandState" column="brand_state"/>
+        <result property="brandImage" column="brand_image"/>
+        <result property="brandDesc" column="brand_desc"/>
+        <result property="publishStatus" column="publish_status"/>
+        <result property="initial" column="initial"/>
+        <result property="spell" column="spell"/>
+        <result property="brandHead" column="brand_head"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="brandInforStatus" column="brand_infor_status"/>
+        <result property="approverId" column="approver_id"/>
+        <result property="approveMemo" column="approve_memo"/>
+        <result property="approveDiff" column="approve_diff"/>
+    </resultMap>
+    <sql id="columns">
+        id,ordertype_id,goods_brand,brand_name,brand_seq,brand_state,brand_image,brand_desc,publish_status,initial,spell,brand_head,del_flag,create_oper,create_time,modify_oper,modify_time,brand_infor_status,
+        approver_id,approve_memo,approve_diff
+    </sql>
+
+    <insert id="insert" parameterType="GoodsBrandModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_goods_brand
+        (ordertype_id
+        ,goods_brand
+        ,brand_name
+        ,brand_seq
+        ,brand_state
+        ,brand_image
+        ,brand_desc
+        ,publish_status
+        ,initial
+        ,spell
+        ,brand_head
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,brand_infor_status
+        ,approver_id
+        ,approve_memo
+        ,approve_diff)
+        values(#{ordertypeId}
+        ,#{goodsBrand}
+        ,#{brandName}
+        ,#{brandSeq}
+        ,#{brandState}
+        ,#{brandImage}
+        ,#{brandDesc}
+        ,#{publishStatus}
+        ,#{initial}
+        ,#{spell}
+        ,#{brandHead}
+        ,#{delFlag}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        ,#{brandInforStatus}
+        ,#{approverId}
+        ,#{approveMemo}
+        ,#{approveDiff})
+    </insert>
+
+    <update id="update" parameterType="GoodsBrandModel">
+        update tbl_goods_brand set
+        modify_time=now()
+        <if test="ordertypeId !=null">,ordertype_id = #{ordertypeId}</if>
+        <if test="goodsBrand !=null">,goods_brand = #{goodsBrand}</if>
+        <if test="brandName !=null">,brand_name = #{brandName}</if>
+        <if test="brandSeq !=null">,brand_seq = #{brandSeq}</if>
+        <if test="brandState !=null">,brand_state = #{brandState}</if>
+        <if test="brandImage !=null">,brand_image = #{brandImage}</if>
+        <if test="brandDesc !=null">,brand_desc = #{brandDesc}</if>
+        <if test="publishStatus !=null">,publish_status = #{publishStatus}</if>
+        <if test="initial !=null">,initial = #{initial}</if>
+        <if test="spell !=null">,spell = #{spell}</if>
+        <if test="brandHead !=null">,brand_head = #{brandHead}</if>
+        <if test="delFlag !=null">,del_flag = #{delFlag}</if>
+        <if test="createOper !=null">,create_oper = #{createOper}</if>
+        <if test="createTime !=null">,create_time = #{createTime}</if>
+        <if test="modifyOper !=null">,modify_oper = #{modifyOper}</if>
+        <if test="brandInforStatus !=null">,brand_infor_status = #{brandInforStatus}</if>
+        <if test="approverId !=null">,approver_id = #{approverId}</if>
+        <if test="approveMemo !=null">,approve_memo = #{approveMemo}</if>
+        <if test="approveDiff !=null">,approve_diff = #{approveDiff}</if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="goodsBrand !=null">and goods_brand = #{goodsBrand}</if>
+            <if test="brandName !=null">and brand_name = #{brandName}</if>
+            <if test="brandSeq !=null">and brand_seq = #{brandSeq}</if>
+            <if test="brandState !=null">and brand_state = #{brandState}</if>
+            <if test="brandImage !=null">and brand_image = #{brandImage}</if>
+            <if test="brandDesc !=null">and brand_desc = #{brandDesc}</if>
+            <if test="publishStatus !=null">and publish_status = #{publishStatus}</if>
+            <if test="initial !=null">and initial = #{initial}</if>
+            <if test="spell !=null">and spell = #{spell}</if>
+            <if test="brandHead !=null">and brand_head = #{brandHead}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="brandInforStatus !=null">and brand_infor_status = #{brandInforStatus}</if>
+            <if test="approverId !=null">and approver_id = #{approverId}</if>
+            <if test="approveMemo !=null">and approve_memo = #{approveMemo}</if>
+            <if test="approveDiff !=null">and approve_diff = #{approveDiff}</if>
+        </where>
+    </sql>
+    <sql id="conditionsQuery">
+        <where>
+            del_flag = 0
+            <if test="status == 1">
+                and brand_infor_status in(00,01,02)
+            </if>
+            <if test="status == 2 ">
+                and brand_infor_status = 00
+            </if>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="goodsBrand !=null">and goods_brand = #{goodsBrand}</if>
+            <if test="brandName !=null">and brand_name like concat(concat('%',#{brandName}),'%')</if>
+            <if test="brandSeq !=null">and brand_seq = #{brandSeq}</if>
+            <if test="brandState !=null">and brand_state = #{brandState}</if>
+            <if test="brandImage !=null">and brand_image = #{brandImage}</if>
+            <if test="brandDesc !=null">and brand_desc = #{brandDesc}</if>
+            <if test="publishStatus !=null">and publish_status = #{publishStatus}</if>
+            <if test="initial !=null">and initial = #{initial}</if>
+            <if test="spell !=null">and spell = #{spell}</if>
+            <if test="brandHead !=null">and brand_head = #{brandHead}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="brandInforStatus !=null">and brand_infor_status = #{brandInforStatus}</if>
+            <if test="approverId !=null">and approver_id = #{approverId}</if>
+            <if test="approveMemo !=null">and approve_memo = #{approveMemo}</if>
+            <if test="approveDiff !=null">and approve_diff = #{approveDiff}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="GoodsBrandMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_brand
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="GoodsBrandMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_brand
+        <include refid="conditions"/>
+    </select>
+
+    <select id="findAllBrandsSpecial" parameterType="Map" resultMap="GoodsBrandMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_brand
+        <include refid="conditionsQuery"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="GoodsBrandMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_brand
+        <include refid="conditionsQuery"/>
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_goods_brand
+        <include refid="conditionsQuery"/>
+    </select>
+
+    <delete id="delete" parameterType="Long">
+        update tbl_goods_brand set del_flag = 1 where id = #{id}
+    </delete>
+
+    <!--根据id取得品牌名称 add:tanliang-->
+    <select id="findBrandInfoById" parameterType="Long" resultMap="GoodsBrandMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_brand
+        where id=#{id}
+    </select>
+
+    <!--根据品牌名称取得品牌id add:tanliang-->
+    <select id="findBrandIdByName" parameterType="Map" resultMap="GoodsBrandMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_brand
+        where brand_name=#{brandName}
+        and ordertype_id=#{ordertypeId}
+        and del_flag = 0
+    </select>
+
+    <!--校验品牌名称 add by chenle -->
+    <select id="checkBrandName" parameterType="GoodsBrandModel" resultMap="GoodsBrandMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_brand
+        where brand_name=#{brandName}
+        and ordertype_id=#{ordertypeId}
+        and del_flag = 0
+    </select>
+
+
+    <!--根据品牌名称模糊查询品牌id add by chenle-->
+    <select id="findBrandIdListByName" parameterType="String" resultType="Long">
+        SELECT id FROM tbl_goods_brand
+        WHERE
+        brand_name like concat('%',replace(replace(replace(#{brandName},'%','/%'),'_','/_'),'\\','/\\'),'%')escape '/'
+    </select>
+
+
+    <!--取得所有品牌名称 根据品牌名称模糊查询 add by TanLiang-->
+    <select id="findBrandByParam" parameterType="Map" resultMap="GoodsBrandMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_goods_brand
+        <include refid="conditionsElse"/>
+    </select>
+
+    <sql id="conditionsElse">
+        <where>
+            del_flag = 0
+            <if test="brandName !=null">
+                and brand_name
+                like concat('%',replace(replace(replace(#{brandName},'%','/%'),'_','/_'),'\\','/\\'),'%') escape '/'
+            </if>
+            <if test="brandInforStatus !=null">and brand_infor_status = #{brandInforStatus}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+        </where>
+    </sql>
+
+    <!--Add by Tanliang-->
+    <select id="counts" resultType="Long">
+        select count(1)
+        from tbl_goods_brand
+        <include refid="conditionsElse"/>
+    </select>
+
+
+    <!--新增产品选择品牌弹出框分页 add by tanliang-->
+    <select id="pagers" parameterType="Map" resultMap="GoodsBrandMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_brand
+        <include refid="conditionsElse"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+
+    <select id="findByIds" parameterType="java.util.List" resultMap="GoodsBrandMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_brand
+        where id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+</mapper>
+
+

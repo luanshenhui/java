@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}短信模板管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "mall_SMS_template" true}}
+            {
+            "type":"1"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

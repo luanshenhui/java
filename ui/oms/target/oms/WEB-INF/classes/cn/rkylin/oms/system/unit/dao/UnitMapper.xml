@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.unit.dao.UnitDAOImpl">
+	<resultMap id="Unit_BaseResultMap" type="cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT">
+	 	<id column="UNIT_ID" jdbcType="VARCHAR" property="unitId" />
+	    <result column="PARENT_UNIT_ID" jdbcType="VARCHAR" property="parentUnitId" />
+	    <result column="STATION_ID" jdbcType="VARCHAR" property="stationId" />
+	    <result column="STATION_NAME" jdbcType="VARCHAR" property="stationName" />
+	    <result column="UNIT_NAME" jdbcType="VARCHAR" property="unitName" />
+	    <result column="UNIT_DESCRIPTION" jdbcType="VARCHAR" property="unitDescription" />
+	    <result column="UNIT_TYPE" jdbcType="VARCHAR" property="unitType" />
+	    <result column="MANAGEABLE" jdbcType="VARCHAR" property="manageable" />
+	</resultMap>
+
+	<select id="getUnitByCondition" parameterType="cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT" resultMap="Unit_BaseResultMap">
+	SELECT UNIT_ID,
+	       PARENT_UNIT_ID,
+	       STATION_ID,
+	       (SELECT STATION_NAME
+	          FROM WF_ORG_STATION STATION
+	         WHERE STATION.STATION_ID = UNIT.STATION_ID) AS STATION_NAME,
+	       UNIT_NAME,
+	       UNIT_DESCRIPTION,
+	       UNIT_TYPE,
+	       '1' AS MANAGEABLE
+	  FROM WF_ORG_UNIT UNIT
+		where 1=1
+		<if test="unitId != null">
+			and UNIT_ID = #{unitId}
+		</if>
+		<if test="parentUnitId != null">
+			and PARENT_UNIT_ID = #{parentUnitId}
+		</if>
+		<if test="unitName != null">
+			and UNIT_NAME = #{unitName}
+		</if>
+		<if test="unitType != null">
+			and UNIT_TYPE = #{unitType}
+		</if>
+		<if test="manageable != null">
+			and MANAGEABLE = #{manageable}
+		</if>
+		<if test="roleId != null">
+			and UNIT.UNIT_ID IN
+	       (SELECT A.UNIT_ID
+	          FROM WF_ORG_ROLE_UNIT A
+	         WHERE A.ROLE_ID = #{roleId})
+		</if>
+		<if test="userId != null">
+			and UNIT.UNIT_ID IN
+	       (SELECT A.UNIT_ID
+	          FROM WF_ORG_USER_UNIT A
+	         WHERE A.USER_ID = #{userId})
+		</if>
+		<if test="delegateUnitIdList != null">
+			and UNIT.UNIT_ID in
+       			<foreach collection="array" item="delegateUnitIdList" index="index" close=")" open="(" separator=","> 
+				  #{delegateUnitIdList} 
+				</foreach>
+		</if>
+	</select>
+	
+	<select id="selectRootUnit" parameterType="string" resultType="java.util.HashMap">
+    SELECT CONCAT(UNIT_ID , '@UNIT') AS UNIT_ID,
+       UNIT_NAME,
+       (CASE
+         WHEN PARENT_UNIT_ID IS NULL THEN
+          NULL
+         ELSE
+          CONCAT(PARENT_UNIT_ID , '@UNIT')
+       END) AS PARENT_UNIT_ID,
+       (CASE
+        WHEN 'adminUser' = #{userID} THEN
+          1
+         WHEN UNIT_ID IN 
+              (SELECT DISTINCT (UNIT_ID) 
+                 FROM WF_ORG_ROLE_UNIT RU
+                WHERE RU.ROLE_ID IN
+                      (SELECT T.ROLE_ID
+                         FROM WF_ORG_USER_ROLE T, WF_ORG_ROLE R
+                        WHERE R.ROLE_ID = T.ROLE_ID
+                          AND R.IS_ADMINROLE = '是'
+                          AND T.USER_ID = #{value})) THEN
+          1
+         ELSE
+          0
+       END) AS MANAGEABLE
+  FROM WF_ORG_UNIT
+ where UNIT_ID = 'RootUnit'
+    OR PARENT_UNIT_ID = 'RootUnit'
+  </select>
+  
+   <select id="selectSubUnit" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    SELECT CONCAT(UNIT_ID , '@UNIT') AS UNIT_ID,
+       UNIT_NAME,
+       CONCAT(PARENT_UNIT_ID , '@UNIT') AS PARENT_UNIT_ID,
+       (CASE
+         WHEN 'adminUser' = #{userID} THEN
+          1
+         WHEN UNIT_ID IN 
+              (SELECT DISTINCT (UNIT_ID)
+                 FROM WF_ORG_ROLE_UNIT RU
+                WHERE RU.ROLE_ID IN
+                      (SELECT T.ROLE_ID
+                         FROM WF_ORG_USER_ROLE T, WF_ORG_ROLE R
+                        WHERE R.ROLE_ID = T.ROLE_ID
+                          AND R.IS_ADMINROLE = '是'
+                          AND T.USER_ID = #{userID})) THEN
+          1
+         ELSE
+          0
+       END) as MANAGEABLE
+  FROM WF_ORG_UNIT
+ WHERE PARENT_UNIT_ID = #{parentUnitID}
+  </select>
+  
+   <insert id="WF_ORG_UNIT_insert" parameterType="cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT">
+    INSERT INTO WF_ORG_UNIT (UNIT_ID, PARENT_UNIT_ID, STATION_ID, UNIT_NAME, UNIT_DESCRIPTION,
+      UNIT_TYPE)
+    values (#{unitId}, #{parentUnitId}, #{stationId,jdbcType=VARCHAR}, #{unitName}, #{unitDescription,jdbcType=VARCHAR}, #{unitType})
+  </insert>
+  
+   <insert id="WF_ORG_UNIT_insertUserUnit" parameterType="cn.rkylin.oms.system.unit.domain.WF_ORG_USER_UNIT">
+    INSERT INTO WF_ORG_USER_UNIT (UNIT_ID, USER_ID)
+    VALUES (#{unitId}, #{userId})
+  </insert>
+  
+  <update id="WF_ORG_UNIT_updateUnit" parameterType="cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT">
+    UPDATE WF_ORG_UNIT
+    SET STATION_ID = #{stationId,jdbcType=VARCHAR},
+      UNIT_NAME = #{unitName,jdbcType=VARCHAR},
+      UNIT_DESCRIPTION = #{unitDescription,jdbcType=VARCHAR},
+      UNIT_TYPE = #{unitType}
+      WHERE UNIT_ID = #{unitId}
+  </update>
+  
+   <delete id="WF_ORG_UNIT_deleteUserUnit" parameterType="java.lang.String">
+    DELETE FROM WF_ORG_USER_UNIT WHERE UNIT_ID = #{unitId}
+  </delete>
+  
+  <delete id="WF_ORG_UNIT_deleteUnitRoles" parameterType="cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT">
+    DELETE FROM WF_ORG_ROLE_UNIT WHERE UNIT_ID = #{unitId}
+  </delete>
+  
+   <delete id="WF_ORG_UNIT_deleteUnitUsers" parameterType="cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT">
+    DELETE FROM WF_ORG_USER_UNIT WHERE UNIT_ID = #{unitId}
+  </delete>
+  
+   <delete id="WF_ORG_UNIT_delete" parameterType="cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT">
+    DELETE FROM WF_ORG_UNIT WHERE UNIT_ID = #{unitId}
+  </delete>
+  
+   <select id="WF_ORG_DICTIONARY_selectUnitType" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select DICT_CODE, DICT_NAME
+    from WF_ORG_DICTIONARY where DICT_TYPE =#{dictType}
+  </select>
+</mapper>

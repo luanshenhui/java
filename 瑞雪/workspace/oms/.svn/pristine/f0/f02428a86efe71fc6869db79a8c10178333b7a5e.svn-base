@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.dictionary.dao.DictDAOImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.dictionary.vo.DictVO">
+		<id column="dict_id" property="dictId" />
+	    <result column="dict_code" property="dictCode" />
+	    <result column="dict_type" property="dictType" />
+	    <result column="dict_name" property="dictName" />
+	    <result column="dict_value_type" property="dictValueType" />
+	    <result column="remark" property="remark" />
+	    <result column="value" property="dictValue" />
+	    <result column="create_time" property="createTime" />
+	    <result column="update_time" property="updateTime" />
+	    <result column="deleted" property="deleted" />
+	    <result column="operation" property="operation" />
+	</resultMap>
+	
+	<select id="getDictByCondition" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.dictionary.vo.DictVO" >
+    select  dict_id, dict_code, dict_type, dict_name, dict_value_type, remark,
+      value, create_time, update_time, deleted, '' as operation 
+    from OMS_DICT D
+	where 1=1
+		<if test="dictId != null">
+			and dict_id = #{dictId}
+		</if>
+		<if test="dictCode != null">
+			and  dict_code = #{dictCode}
+		</if>
+		<if test="dictType != null">
+			and dict_type = #{dictType}
+		</if>
+  		
+		<if test="dictName != null">
+			and dict_name = #{dictName}
+		</if>
+		<if test="searchCondition != null"> 
+			and dict_code like CONCAT('%',#{searchCondition},'%')  or dict_name like CONCAT('%',#{searchCondition},'%')
+		</if> 
+		<if test="dictValueType != null">
+			and dict_value_type = #{dictValueType}
+		</if>
+		
+		<if test="remark != null">
+			and remark = #{remark}
+		</if>
+		<if test="dictValue != null">
+			and value = #{dictValue}
+		</if>
+		<if test="createTime != null">
+			and create_time = #{createTime}
+		</if>
+		<if test="updateTime != null">
+			and update_time = #{updateTime}
+		</if>
+		<if test="deleted != null">
+			and deleted = #{deleted}
+		</if>
+
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+  </select>
+  
+<insert id="insertDict" parameterType="cn.rkylin.oms.system.dictionary.vo.DictVO" >
+    insert into OMS_DICT (dict_id, dict_code, dict_type, dict_name, dict_value_type,
+      remark, value, create_time, update_time,deleted)
+    values (#{dictId,jdbcType=VARCHAR},#{dictCode,jdbcType=VARCHAR}, #{dictType,jdbcType=VARCHAR}, #{dictName,jdbcType=VARCHAR},#{dictValueType,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{dictValue,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},#{deleted,jdbcType=VARCHAR})
+  </insert>
+
+ <delete id="deleteDict" parameterType="string" >
+		delete from OMS_DICT WHERE dict_id= #{value}
+  </delete>
+
+  <update id="updateDict" parameterType="cn.rkylin.oms.system.dictionary.vo.DictVO" >
+    update OMS_DICT
+    set dict_name = #{dictName,jdbcType=VARCHAR},
+      dict_code = #{dictCode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+<!--       update_time = #{updateTime,jdbcType=TIMESTAMP}, -->
+      value =  #{dictValue,jdbcType=VARCHAR}
+    WHERE dict_id=#{dictId}
+  </update>
+
+
+</mapper>

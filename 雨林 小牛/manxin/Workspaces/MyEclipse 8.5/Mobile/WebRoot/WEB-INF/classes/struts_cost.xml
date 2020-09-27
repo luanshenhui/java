@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    <struts>
+    	<!-- 资费管理模块 -->
+    	 
+    	<package name="cost" namespace="/cost" extends="yidong">
+    		<action name="costFee" class="com.cost.action.Action">
+    		  <interceptor-ref name="loginStack"></interceptor-ref>
+    			<result name="success">
+    				/WEB-INF/fee/fee_list.jsp
+    			</result>
+    		</action>
+    		
+    		<action name="costAdd">
+    			<result name="success">
+    				/WEB-INF/fee/fee_add.jsp
+    			</result>
+    		</action>
+			
+    		<action name="Add" class="com.cost.action.CostAddAction">
+    			<result name="success" type="redirectAction">
+    				costFee
+    			</result>
+    		</action>
+    		
+    		<action name="costUp" class="com.cost.action.CostModiAction">
+    			<result name="success">
+    				/WEB-INF/fee/fee_modi.jsp
+    			</result>
+    		</action>
+    		<action name="Up" class="com.cost.action.CostUpAction">
+    			<result name="success" type="redirectAction">
+    				costFee
+    			</result>
+    		</action>
+    		<action name="del" class="com.cost.action.CostDelAction">
+    			<result name="success" type="redirectAction">
+    				costFee
+    			</result>
+    		</action>
+    		
+    		<!-- 查询资费名称是否重复 -->
+			<action name="checkRepeat" class="com.cost.action.CheckRepeatAction">
+			<!-- 以json类型的Result向页面输出json字符串 -->
+				<result name="success" type="json">
+				<!-- 指定Action中的repeat属性,做成json字符串 -->
+					<param name="root">
+						repeat
+					</param>
+				</result>
+			</action>
+			
+    	</package>
+    </struts>

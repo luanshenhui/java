@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InfoOutSystemModel">
+    <resultMap id="InfoOutSystemMap" type="InfoOutSystemModel">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="verifyCode" column="verify_code"/>
+        <result property="validateStatus" column="validate_status"/>
+        <result property="systemRole" column="system_role"/>
+        <result property="verifyId" column="verify_id"/>
+        <result property="msgtype" column="msgtype"/>
+        <result property="mobile" column="mobile"/>
+        <result property="status" column="status"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,order_id,verify_code,validate_status,system_role,verify_id,msgtype,mobile,status,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="InfoOutSystemModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_info_outsystem
+        (order_id
+        ,verify_code
+        ,validate_status
+        ,system_role
+        ,verify_id
+        ,msgtype
+        ,mobile
+        ,status
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{orderId}
+        ,#{verifyCode}
+        ,#{validateStatus}
+        ,#{systemRole}
+        ,#{verifyId}
+        ,#{msgtype}
+        ,#{mobile}
+        ,#{status}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="InfoOutSystemModel">
+        update tbl_info_outsystem set
+        <if test="orderId !=null">order_id = #{orderId}
+            ,
+        </if>
+        <if test="verifyCode !=null">verify_code = #{verifyCode}
+            ,
+        </if>
+        <if test="validateStatus !=null">validate_status = #{validateStatus}
+            ,
+        </if>
+        <if test="systemRole !=null">system_role = #{systemRole}
+            ,
+        </if>
+        <if test="verifyId !=null">verify_id = #{verifyId}
+            ,
+        </if>
+        <if test="msgtype !=null">msgtype = #{msgtype}
+            ,
+        </if>
+        <if test="mobile !=null">mobile = #{mobile}
+            ,
+        </if>
+        <if test="status !=null">status = #{status}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="verifyCode !=null">and verify_code = #{verifyCode}</if>
+            <if test="validateStatus !=null">and validate_status = #{validateStatus}</if>
+            <if test="systemRole !=null">and system_role = #{systemRole}</if>
+            <if test="verifyId !=null">and verify_id = #{verifyId}</if>
+            <if test="msgtype !=null">and msgtype = #{msgtype}</if>
+            <if test="mobile !=null">and mobile = #{mobile}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="InfoOutSystemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_info_outsystem
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="InfoOutSystemMap">
+        select
+        <include refid="columns"/>
+        from tbl_info_outsystem
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="InfoOutSystemMap">
+        select
+        <include refid="columns"/>
+        from tbl_info_outsystem
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="InfoOutSystemModel">
+        delete from tbl_info_outsystem where id = id
+    </delete>
+
+    <update id="updateValidateCode" parameterType="InfoOutSystemModel">
+        update tbl_info_outsystem set
+        verify_code = #{verifyCode},
+        modif_oper = #{ModifyOper},
+        modify_time = now()
+        where order_id = #{orderId}
+    </update>
+
+
+    <select id="findByOrderId" parameterType="java.lang.String" resultMap="InfoOutSystemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_info_outsystem
+        where order_id=#{orderId}
+    </select>
+
+    <update id="updateMsgStatus" parameterType="InfoOutSystemModel">
+        update tbl_info_outsystem set
+        msgtype=#{msgtype},
+        status=#{status},
+        mobile =#{mobile},
+        modify_time = now()
+        where order_id = #{orderId}
+    </update>
+
+    <update id="updateInfoByOrderId" parameterType="InfoOutSystemModel">
+        update tbl_info_outsystem set
+        verify_code = #{verifyCode},
+        validate_status = #{validateStatus},
+        verify_id = #{verifyId},
+        modify_oper = #{modifyOper},
+        modify_time = now()
+        where order_id = #{orderId}
+    </update>
+
+    <select id="findInfoByOrderId" parameterType="String" resultMap="InfoOutSystemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_info_outsystem
+        where order_id=#{orderId}
+    </select>
+
+    <select id="findInfoByValidateStatus" parameterType="Map" resultMap="InfoOutSystemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_info_outsystem
+        where order_id = #{orderId} and validate_status = #{validateStatus}
+    </select>
+    <select id="findByOrderIdDesc" resultMap="InfoOutSystemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_info_outsystem
+        where order_id=#{orderId} ORDER BY modify_time DESC
+    </select>
+
+</mapper>
+
+

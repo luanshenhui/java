@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblGoodsPaywayModel">
+    <resultMap id="TblGoodsPaywayMap" type="TblGoodsPaywayModel">
+        <result property="goodsPaywayId" column="goods_payway_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="paywayCode" column="payway_code"/>
+        <result property="payType" column="pay_type"/>
+        <result property="incCode" column="inc_code"/>
+        <result property="stagesCode" column="stages_code"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="authFlat1" column="auth_flat1"/>
+        <result property="authFlat2" column="auth_flat2"/>
+        <result property="perStage" column="per_stage"/>
+        <result property="stagesFlagCash" column="stages_flag_cash"/>
+        <result property="stagesFlagPoint" column="stages_flag_point"/>
+        <result property="stagesFlagInc" column="stages_flag_inc"/>
+        <result property="goodsPoint" column="goods_point"/>
+        <result property="isAction" column="is_action"/>
+        <result property="isBirth" column="is_birth"/>
+        <result property="memberLevel" column="member_level"/>
+        <result property="goodsPrice" column="goods_price"/>
+        <result property="calMoney" column="cal_money"/>
+        <result property="goodsPaywayDesc" column="goods_payway_desc"/>
+        <result property="ischeck" column="ischeck"/>
+        <result property="curStatus" column="cur_status"/>
+        <result property="categoryNo" column="category_no"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="reserved1" column="reserved1"/>
+    </resultMap>
+    <sql id="columns">
+    goods_payway_id,goods_id,payway_code,pay_type,inc_code,stages_code,rule_id,auth_flat1,auth_flat2,per_stage,stages_flag_cash,stages_flag_point,stages_flag_inc,goods_point,is_action,is_birth,member_level,goods_price,cal_money,goods_payway_desc,ischeck,cur_status,category_no,create_oper,create_time,modify_oper,modify_time,reserved1
+    </sql>
+
+    <insert id="insert" parameterType="TblGoodsPaywayModel" useGeneratedKeys="true"
+            keyProperty="goodsPaywayId" keyColumn="goods_payway_id">
+        insert into tbl_goods_payway
+        (goods_id
+        ,payway_code
+        ,pay_type
+        ,inc_code
+        ,stages_code
+        ,rule_id
+        ,auth_flat1
+        ,auth_flat2
+        ,per_stage
+        ,stages_flag_cash
+        ,stages_flag_point
+        ,stages_flag_inc
+        ,goods_point
+        ,is_action
+        ,is_birth
+        ,member_level
+        ,goods_price
+        ,cal_money
+        ,goods_payway_desc
+        ,ischeck
+        ,cur_status
+        ,category_no
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,reserved1)
+        values(#{goodsId}
+        ,#{paywayCode}
+        ,#{payType}
+        ,#{incCode}
+        ,#{stagesCode}
+        ,#{ruleId}
+        ,#{authFlat1}
+        ,#{authFlat2}
+        ,#{perStage}
+        ,#{stagesFlagCash}
+        ,#{stagesFlagPoint}
+        ,#{stagesFlagInc}
+        ,#{goodsPoint}
+        ,#{isAction}
+        ,#{isBirth}
+        ,#{memberLevel}
+        ,#{goodsPrice}
+        ,#{calMoney}
+        ,#{goodsPaywayDesc}
+        ,#{ischeck}
+        ,#{curStatus}
+        ,#{categoryNo}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{reserved1})
+    </insert>
+
+    <update id="update" parameterType="TblGoodsPaywayModel">
+        update tbl_goods_payway set
+        <if test="goodsId !=null">goods_id = #{goodsId}
+            ,</if>
+        <if test="paywayCode !=null">payway_code = #{paywayCode}
+            ,</if>
+        <if test="payType !=null">pay_type = #{payType}
+            ,</if>
+        <if test="incCode !=null">inc_code = #{incCode}
+            ,</if>
+        <if test="stagesCode !=null">stages_code = #{stagesCode}
+            ,</if>
+        <if test="ruleId !=null">rule_id = #{ruleId}
+            ,</if>
+        <if test="authFlat1 !=null">auth_flat1 = #{authFlat1}
+            ,</if>
+        <if test="authFlat2 !=null">auth_flat2 = #{authFlat2}
+            ,</if>
+        <if test="perStage !=null">per_stage = #{perStage}
+            ,</if>
+        <if test="stagesFlagCash !=null">stages_flag_cash = #{stagesFlagCash}
+            ,</if>
+        <if test="stagesFlagPoint !=null">stages_flag_point = #{stagesFlagPoint}
+            ,</if>
+        <if test="stagesFlagInc !=null">stages_flag_inc = #{stagesFlagInc}
+            ,</if>
+        <if test="goodsPoint !=null">goods_point = #{goodsPoint}
+            ,</if>
+        <if test="isAction !=null">is_action = #{isAction}
+            ,</if>
+        <if test="isBirth !=null">is_birth = #{isBirth}
+            ,</if>
+        <if test="memberLevel !=null">member_level = #{memberLevel}
+            ,</if>
+        <if test="goodsPrice !=null">goods_price = #{goodsPrice}
+            ,</if>
+        <if test="calMoney !=null">cal_money = #{calMoney}
+            ,</if>
+        <if test="goodsPaywayDesc !=null">goods_payway_desc = #{goodsPaywayDesc}
+            ,</if>
+        <if test="ischeck !=null">ischeck = #{ischeck}
+            ,</if>
+        <if test="curStatus !=null">cur_status = #{curStatus}
+            ,</if>
+        <if test="categoryNo !=null">category_no = #{categoryNo}
+            ,</if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,</if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,</if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,</if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+            ,</if>
+        <if test="reserved1 !=null">reserved1 = #{reserved1}
+        </if>
+        where goods_payway_id = #{goodsPaywayId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="goodsPaywayId !=null">and goods_payway_id = #{goodsPaywayId}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="paywayCode !=null">and payway_code = #{paywayCode}</if>
+            <if test="payType !=null">and pay_type = #{payType}</if>
+            <if test="incCode !=null">and inc_code = #{incCode}</if>
+            <if test="stagesCode !=null">and stages_code = #{stagesCode}</if>
+            <if test="ruleId !=null">and rule_id = #{ruleId}</if>
+            <if test="authFlat1 !=null">and auth_flat1 = #{authFlat1}</if>
+            <if test="authFlat2 !=null">and auth_flat2 = #{authFlat2}</if>
+            <if test="perStage !=null">and per_stage = #{perStage}</if>
+            <if test="stagesFlagCash !=null">and stages_flag_cash = #{stagesFlagCash}</if>
+            <if test="stagesFlagPoint !=null">and stages_flag_point = #{stagesFlagPoint}</if>
+            <if test="stagesFlagInc !=null">and stages_flag_inc = #{stagesFlagInc}</if>
+            <if test="goodsPoint !=null">and goods_point = #{goodsPoint}</if>
+            <if test="isAction !=null">and is_action = #{isAction}</if>
+            <if test="isBirth !=null">and is_birth = #{isBirth}</if>
+            <if test="memberLevel !=null">and member_level = #{memberLevel}</if>
+            <if test="goodsPrice !=null">and goods_price = #{goodsPrice}</if>
+            <if test="calMoney !=null">and cal_money = #{calMoney}</if>
+            <if test="goodsPaywayDesc !=null">and goods_payway_desc = #{goodsPaywayDesc}</if>
+	    	<if test="ischeck !=null">and ischeck = #{ischeck}</if>
+	    	<if test="ischeckNot !=null">and ischeck != #{ischeckNot}</if>
+            <if test="curStatus !=null">and cur_status = #{curStatus}</if>
+            <if test="categoryNo !=null">and category_no = #{categoryNo}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="reserved1 !=null">and reserved1 = #{reserved1}</if>
+			<if test="goodsPointRange !=null">
+				<if test="goodsPointRange == '00'"><![CDATA[and goodsPoint >= 0 and goods_point <10000]]></if>
+				<if test="goodsPointRange == '01'"><![CDATA[and goodsPoint >= 10000 and goods_point <=49999]]></if>
+				<if test="goodsPointRange == '02'"><![CDATA[and goodsPoint >= 50000  and goods_point <=99999]]></if>
+				<if test="goodsPointRange == '03'"><![CDATA[and goodsPoint >= 100000  and goods_point <=19999]]></if>
+				<if test="goodsPointRange == '04'"><![CDATA[and goodsPoint >= 200000 ]]></if>
+			</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_payway_id=#{goodsPaywayId} and ischeck !='d'
+    </select>
+    <select id="findAll" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        <include refid="conditions"/>
+        <![CDATA[ order by goods_payway_id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblGoodsPaywayModel">
+        delete from tbl_goods_payway where goods_payway_id = goodsPaywayId
+    </delete>
+	<!--根据单品编码列表取得单品支付方式 -->
+	<select id="findByGoodsIds" parameterType="java.util.List"
+		resultMap="TblGoodsPaywayMap">
+		SELECT
+		<include refid="columns" />
+		FROM tbl_goods_payway
+		WHERE goods_id IN
+		<foreach collection="list" item="item" index="index" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	    and ischeck = '06'
+		ORDER BY stages_code desc
+	</select>
+
+    <!--根据单品编码列表取得单品支付方式 -->
+    <select id="findByGoodsIdsAsc" parameterType="java.util.List"
+            resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns" />
+        FROM tbl_goods_payway
+        WHERE goods_id IN
+        <foreach collection="list" item="item" index="index" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+        and ischeck = '06'
+        ORDER BY stages_code asc
+    </select>
+
+    <select id="findListByItemCode" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where
+        goods_id=#{itemCode} and member_level='0000'
+    </select>
+    <select id="findByGoodsIdsNoActive" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id IN
+		<foreach collection="list" item="item" index="index" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>and member_level!='0006'
+		and ischeck = '06'
+    </select>
+
+    <select id="findByGoodsId" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where
+        goods_id=#{itemCode}  and ischeck = '06' and stages_code='0001'
+    </select>
+
+    <select id="findGoodsPaywayByItemCodes" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where ischeck = '06' and stages_code=1
+        and is_action='1'
+        <if test="isBirth != null">and is_birth!='1'</if>
+        <if test="itemCodes != null">
+        	and goods_id IN
+	        <foreach collection="itemCodes" item="itemCode" open="(" separator="," close=")">
+				#{itemCode}
+			</foreach>
+        </if>
+
+    </select>
+
+
+    <select id="findHighestStageInfo" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where ischeck = '06' and goods_id=#{goodsId}
+        order by stages_code desc
+    </select>
+
+    <insert id="insertAllPayWay" parameterType="java.util.List">
+        insert into tbl_goods_payway
+        (goods_payway_id
+        ,goods_id
+        ,payway_code
+        ,pay_type
+        ,inc_code
+        ,stages_code
+        ,rule_id
+        ,per_stage
+        ,stages_flag_cash
+        ,stages_flag_point
+        ,stages_flag_inc
+        ,goods_point
+        ,is_action
+        ,is_birth
+        ,member_level
+        ,goods_price
+        ,cal_money
+        ,goods_payway_desc
+        ,ischeck
+        ,cur_status
+        ,category_no
+        ,create_oper
+        ,create_time
+        ,reserved1)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.goodsPaywayId}
+            ,#{item.goodsId}
+            ,#{item.paywayCode}
+            ,#{item.payType}
+            ,#{item.incCode}
+            ,#{item.stagesCode}
+            ,#{item.ruleId}
+            ,#{item.perStage}
+            ,#{item.stagesFlagCash}
+            ,#{item.stagesFlagPoint}
+            ,#{item.stagesFlagInc}
+            ,#{item.goodsPoint}
+            ,#{item.isAction}
+            ,#{item.isBirth}
+            ,#{item.memberLevel}
+            ,#{item.goodsPrice}
+            ,#{item.calMoney}
+            ,#{item.goodsPaywayDesc}
+            ,#{item.ischeck}
+            ,#{item.curStatus}
+            ,#{item.categoryNo}
+            ,#{item.createOper}
+            ,now()
+            ,#{item.reserved1})
+        </foreach>
+    </insert>
+    <select id="findByItemCodeAndStagesCode" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id = #{itemCode} and stages_code = #{stagesCode} and ischeck = '06'
+    </select>
+    <select id="findByItemCode"  parameterType="String" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id=#{itemCode} and ischeck != 'd' ORDER BY stages_code ASC
+    </select>
+    <!--&lt;!&ndash; 06审核通过 0102：已启用&ndash;&gt;-->
+    <!--<select id="findCheckByItemCode"  resultMap="TblGoodsPaywayMap">-->
+    <!--SELECT-->
+    <!--<include refid="columns"/>-->
+    <!--from tbl_goods_payway-->
+    <!--where goods_id=#{itemCode} and ischeck = '06' and cur_status ="0102" ORDER BY stages_code ASC-->
+    <!--</select>-->
+
+
+    <update id="updatePayWayMemberLevel">
+        update tbl_goods_payway set
+        <if test="goodsPoint !=null">goods_point = #{goodsPoint},</if>
+        <if test="goodsPrice !=null">goods_price = #{goodsPrice},</if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper},</if>
+        <if test="ischeck !=null">ischeck = #{ischeck},</if>
+        modify_time = now()
+        where member_level = #{memberLevel} and goods_id=#{goodsId}
+    </update>
+    <select id="findInfoByItemCode" parameterType="String" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id=#{itemCode} and ischeck = '06' ORDER BY stages_code ASC
+    </select>
+
+    <update id="deletePayWay" parameterType="Map">
+        update tbl_goods_payway set
+        ischeck = 'd',modify_oper = #{modifyOper}, modify_time = now()
+        where goods_id  IN
+        <foreach collection="itemCodeList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="findMaxGoodsPayway" parameterType="String" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id=#{itemCode} and ischeck = '06' ORDER BY stages_code DESC LIMIT 1
+    </select>
+
+    <select id="findJPPoints" parameterType="String" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_goods_payway
+        where goods_id = #{goodsId} and member_level ='0000' and ischeck = '06'
+    </select>
+
+
+    <select id="findByGoodsPaywayInfo"  resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id=#{itemCode} and ischeck = '06' ORDER BY stages_code DESC
+    </select>
+
+    <select id="findByGoodsPaywayInfoJF"  resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id=#{itemCode} and ischeck = '06' ORDER BY member_level
+    </select>
+
+    <select id="findByGoodsPayWayIdList"  parameterType="java.util.List" resultMap="TblGoodsPaywayMap">
+        SELECT <include refid="columns"/>
+        FROM tbl_goods_payway
+        where goods_payway_id  IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    <select id="count" parameterType="Map" resultType="Long">
+        select count(1)
+        from tbl_goods_payway
+        <include refid="conditions"/>
+    </select>
+
+    <select id="findByGoodsIdList" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_goods_payway
+       where
+        goods_id IN
+        <foreach collection="itemList" item="itemList" index="index" open="(" separator="," close=")">
+            #{itemList}
+        </foreach>
+        and ischeck = '06'
+        and cur_status ='0102'
+        <![CDATA[ order by goods_point desc limit 1 ]]>
+    </select>
+
+    <select id="findByGoodsIdListNoOrder" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_goods_payway
+        where
+        goods_id IN
+        <foreach collection="itemList" item="itemList" index="index" open="(" separator="," close=")">
+            #{itemList}
+        </foreach>
+        and ischeck = '06'
+        and cur_status ='0102'
+        and member_level = #{memberLevel}
+    </select>
+
+    <update id="updateGoodsPaywayByGoodsIdAndIscheck">
+        update tbl_goods_payway set
+        ischeck=#{ischeckNew},
+        cur_status=#{curStatus},
+        modify_oper=#{modifyOper},
+        modify_time=now()
+        where goods_id=#{goodsId} and ischeck=#{ischeckOld}
+    </update>
+
+    <!-- add by geshuo 20160818:根据参数查询支付方式  -->
+    <select id="findGoodsPayWayByParams" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        select <include refid="columns" />
+        from tbl_goods_payway
+        <include refid="conditions"/>
+    </select>
+
+    <select id="findPaywayByGoodsIds" parameterType="String" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id = #{goodsId}
+        and <![CDATA[member_level<>'0006' and ischeck = '06']]>
+    </select>
+
+    <select id="findJxpayway" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id = #{goodsId}
+        and payway_code='0003'
+        and member_level='0005'
+        and ischeck = '06'
+    </select>
+    <select id="findJxpayway1" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id = #{goodsId}
+        and goods_payway_id=#{goodsPaywayId}
+        and ischeck = '06'
+    </select>
+
+    <select id="getBirthPayway"  resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id=#{goodsId} member_level='0004'
+    </select>
+    
+    <select id="getGoodsPayawy" resultMap="TblGoodsPaywayMap" >
+    	select 
+    	<include refid="columns"/>
+    	from tbl_goods_payway
+    		where goods_id = #{goodsId}
+    	and ischeck  = '06'
+    </select>
+    
+    <select id="getJPPoint" resultType="Long">
+        select goods_point  from tbl_goods_payway
+        where goods_id = #{goodsId} and member_level='0000' and ischeck = '06'
+    </select>
+
+    <select id="findPwById" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_payway_id=#{goodsPaywayId}
+    </select>
+
+</mapper>

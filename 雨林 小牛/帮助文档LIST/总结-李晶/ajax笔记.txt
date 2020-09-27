@@ -1,0 +1,228 @@
+1、ajax是什么？
+  asynchronous javascript and xml
+  异步的      
+  强调用户体验的一种技术，让用户用起来更方便
+  ajax是为了解决传统的web应用当中“等待-响应-等待”的弊端而创建的一种技术，其实质是利用浏览器内置的一个对象（XMLHttpRequest）异步地向服务器发送请求，服务器送回处理结果（不是一个新的页面，而是部分数据），然后，在浏览器端，使用DOM利用处理结果更新页面。整个过程，页面无刷新。
+
+  javascript:ECMAScript,DOM,BOM(window,document,location,navigator,
+不打断用户操作，按需要获取相应数据，页面无刷新
+
+2、编程
+ （1）如何获得ajax对象（XMLHttpRequest对象）
+  因为ajax对象没有标准化（属于BOM模型），要区分浏览器：
+  function getXhr(){
+     var xhr = null;
+     if(window.XMLHttpRequest){
+        //非ie浏览器
+        xhr = new XMLHttpRequest();
+     }else{
+        //ie浏览器
+        xhr = new ActiveXObject('Microsoft.XMLHttp');
+     }
+     return xhr;
+  }
+
+  (2)ajax对象的属性
+     onreadystatechange:绑定一个事件处理函数（注册监听器）。
+     readyState:ajax对象与服务器进行通讯的状态，其值分别是0，1，2，3，4.当值为4时，表示ajax对象已经获得了服务器返回的所有的数据。
+     responseText:可以用来获得服务器返回的文本数据（字符串）。
+     responseXML:获得服务器返回的XML数据。
+     status:获得状态码。
+  （3）编程步骤
+     step1 获得ajax对象
+       var xhr = getXhr();
+
+     step2 使用ajax对象向服务器发送请求
+       方式一：发送get请求
+       //open：ajax对象与服务器建立连接
+       //open（arg1，arg2，arg3）
+       //arg1：请求方式 ‘get’  ‘post’
+       //arg2：请求地址，如果有请求参数，要添加到请求地址的后面，如果是post请求，则要将请求参数放到send里；
+       //arg3：true表示异步，false表示同步
+         同步时浏览器会锁定页面，知道服务器返回处理的结果。
+       xhr.open('get','check_username.do?username=zs',true);
+       //绑定一个事件处理函数（注册一个监听器）
+       xhr.onreadystatechange=f1;
+       //send方法会将数据发送给服务器
+       xhr.send(null);//'get'请求时send内为null，'post'请求时，send内为参数。
+
+        方式二：发送post请求
+	xhr.open('post','check_username.do',true);
+	//要求ajax对象在请求数据包里面，添加一个
+	//content-type消息头。
+	xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
+	xhr.onreadystatechange=f1;
+	xhr.send('username=zs');
+
+     step3 编写服务器端的程序，处理请求。
+     step4 编写事件处理函数，在事件处理函数中，获得服务器返回的数据，然后更新。
+       function f1(){
+          if(xhr.readyState == 4){
+             //只有服务器发送的数据全部接收完毕，才能调用responseText属性获得响应。
+             var txt = xhr.responseText;
+             //dom操作：更新页面
+          }
+       }
+
+ajax对象与服务器进行通讯时，会产生readystatchange事件。
+ajax对象在与服务进行通讯时，会有5个状态值，分别是0，1，2，3，4
+0 未初始化 对象已建立，但是尚未初始化（尚未调用open方法）
+1 初始化 对象已建立，尚未调用send方法
+2 发送数据 send方法已调用
+3 数据传送中 已接收部分数据
+4 数据接收完毕 已经接收了服务器返回的所有数据
+
+
+
+3、ajax编程中的编码问题
+ （1）如果链接地址包含中文，如何处理？
+     浏览器会器内置的ajax对象会对中文参数值按照gbk或gb2312进行编码。而其他浏览器对中文参数值都是按utf-8进行编码。
+     解决方式：
+        step1 添加URIEncoding="utf-8",
+        step2 使用encodeURI函数，对请求地址进行编码(会使用utf-8编码)。
+	(3) 在ajax编程当中，如果采用post方式向服务器发送请求，
+	对于中文参数，应该如何处理？
+	浏览器都会镀髂谥玫腶jax对象会对中文参数值按照gbk或gb2312进行编码。而其他浏览器对中文参数值都是按utf-8进行编码。
+     解决方式：
+        step1 添加URIEncoding="utf-8",
+        step2 使用encodeURI函数，对请求地址进行编码(会使用utf-8编码)。
+	(3) 在ajax编程当中，如果采用post方式向服务器发送请求，
+	对于中文参数，应该如何处理？
+	浏览器都会对中文参数值按照utf-8进行编码。
+	解决方式：
+	   request.setCharacterEncoding("utf-8");	
+4、get方式发请求，会有缓存问题，如何解决？
+  1)ie内置的ajax对象在发送请求之前，会先查看是否访问过该地址，如果访问过，则不再向服务器发送请求，这个问题称之为缓存问题。
+  2)解决方式：
+	在请求地址后面添加一个随机数。
+	比如:   
+	xhr.open('get','cache.do?' + Math.random,true);
+
+-------------------------------------------------------
+day02
+
+1、ajax的优点
+  （1）不打断用户的操作，页面无刷新
+  （2）按照需要获取数据
+  （3）是一种标准技术，不需要浏览器下载插件
+2、json
+  (1)什么是json（javascript object notation)js对象声明
+     一种轻量级的数据交换标准，经常用于浏览器与服务器之间交换数据。
+     轻量级是相对与xml而言，解析的速度更快，并且传输的数据量更小。
+  (2)json的基本语法
+   a 表示一个对象
+     {属性名：属性值，属性名：属性值，...}
+     注意：
+        属性名必须用引号引起来
+        属性值如果是字符串，必须用引号引起来
+        属性值可以是string，number，null，boolean，object
+     例如：{'name':'zs','age':26}
+          {'name':'ww','address':{'city':'bj','room':1240}}
+   b 表示一个对象数组
+     [{属性名：属性值，属性名：属性值...}{属性名：属性值，属性名：属性值...}...]
+  (3)如何使用json做数据交换
+   a 将java对象（数组、集合）转换成一个json字符串。
+     可以使用jsonlib.jar来做转换。
+   b 将json字符串转换成javascript对象或者数组。
+     可以使用prototype或者jQuery工具来做转换。
+     prototype的简单使用：
+        $(id): getElementById(id);
+	$F(id): getElementById(id).value;
+	$(id1,id2...):依次查询id1,id2...返回一个数组。
+	strip():除掉字符串两端的空格。
+	evalJSON(): 将json字符串转换成一个javascript对象或者对象数组。
+
+热卖商品建表信息：
+create table t_sale(
+id bigint primary key auto_increment,
+prodName varchar(50),
+qty int);
+
+insert into t_sale(prodName,qty)values('bmwx5',120);
+insert into t_sale(prodName,qty)values('bmwx4',110);
+insert into t_sale(prodName,qty)values('bmwx3',220);
+insert into t_sale(prodName,qty)values('bmwx2',180);
+
+----------------------------------------------------------------
+day03
+
+1、使用ajax发送同步请求
+	1)什么是同步请求?
+		ajax对象在向服务器发送请求的时候，浏览器会将页面锁定，此时，用户不能做其它操作。
+	2)如何发送同步请求?
+		open(请求方式，请求地址,false);
+
+2、jQuery基础
+	1)jQuery是什么?
+	是一个js框架，其最大的特点是，利用选择器查找节点，查找到的节点会被jQuery框架封装成一个jQuery对象。通过调用jQuery对象的属性和方法，来实现对底层dom节点的操作。这样做的好处是：可以屏蔽浏览器之间的差异，另外，代码也会变得更加简洁。
+	2)编程的基本步骤
+	step1 利用选择器查找节点
+	step2 调用jQuery对象的方法或者属性，实现
+	对节点的操作。
+	3)jQuery对象与dom对象的转换
+		a, dom对象转换成jQuery对象
+			$(dom对象)
+		b, jQuery对象转换成dom对象
+			$obj.get(0)
+			或者
+			$obj.get()[0]
+3、jQuery选择器
+	 1)基本选择器
+		#id:依据id查找节点
+		.class: 依据class属性值
+		element: 依据标记的名称
+		selector1,select2..selectn: 将多个选择器的结果
+		进行合并。
+		*：所有的节点。
+	 2)层次选择器
+		select1 select2: 查找所有后代
+		select1>select2: 只查找子节点
+		select1+select2: 下一个兄弟
+		select1~select2: 下面所有的兄弟
+		
+	3)过滤选择器
+		(1)基本过滤选择器
+		:first  第一个
+		:last		最后一个
+		:not(selector)  排除满足selector的节点
+		:even 下标为偶数(下标从0开始)
+		:odd		下标为奇数
+		:eq(index) 下标等于index
+		:gt(index)		下标大于index
+		:lt(index)		下标小于index
+
+		(2)内容过滤选择器
+			:contains(text):包含指定文本(text)的节点。
+			:empty : 没有子节点或者没有内容的节点
+			:has(selector): 包含有selector节点的节点
+			:parent : 有子节点或者有内容的节点
+
+		(3)可见性过滤选择器
+			:hidden  隐含的节点
+			:visible	  可见的节点
+			
+		(4)属性过滤选择器
+			[attribute] : 具有attribute属性的节点
+			[attribute=value] 属性值等于value的节点
+			[attribute!=value]	属性值不等于value的节点
+			
+		(5)子元素过滤选择器
+			:nth-child(index/even/odd): 对符合条件的所有节点采取相同的操作。注意index下标从1开始。
+
+		(6)表单对象属性过滤选择器
+			:enabled :可用的表单域
+			:disabled :不可用的表单域
+			:checked ：单选、多选 被选中的
+			:selected : 下拉列表被选中的
+	4)表单选择器
+		:input  input节点,select,textarea
+		:text  文本输入框
+		:pasword 密码输入框
+		:radio 单选
+		:checkbox 多选
+		:submit 提交
+		:reset 重置
+		:button 按钮
+		:file 文件上传
+		:hidden 隐藏域
+

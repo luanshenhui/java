@@ -1,0 +1,70 @@
+<script language= "javascript" src="../orden/common.js"></script>
+<script language= "javascript" src="../orden/list.js"></script>
+<div id="OrdenSearch" class="list_search">
+	<h1></h1>
+	<div class="search_left">
+		<label class="lblClothingCategory"></label>
+		<select id="searchClothingID"></select>
+		<label class="lblStatus"></label>
+		<select id="searchStatusID"></select>
+		<label class="lblMemberName"></label>
+		<select id="searchClientID"></select>
+		<label class="lblKeyword"></label>
+		<input type="text" id="keyword" style="width:50px;">
+		<br/>
+		<a id="btnCreateOrden"></a>
+		<a id="btnExportOrdens"></a>
+		<a id="btnStatement"></a>
+		<a id="btnOrdenStatistic"></a>
+	</div>
+	<div class="search_right">
+		<label class="lblPubDate"></label>
+		<input type="text" id="fromDate" class="date"/>
+		<input type="text" id="toDate" class="date"/>
+		<br/>
+		<label class="lblDealDate"></label>
+		<input type="text" id="dealDate" class="date"/>
+		<input type="text" id="dealToDate" class="date"/>
+		<a id="btnSearch"></a>
+	</div>
+</div>
+<div id="OrdenResult"></div>
+<div id="overdue" style="display:none;"></div>
+<div id="OrdenStatistic" class="pagingleft"></div>
+<div id="OrdenPagination" class="paging"></div>
+<textarea  id="OrdenTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td></td>
+			<td class="lblNumber"></td>
+			<td class="lblCode"></td>
+			<td class="lblClothingCategory"></td>
+			<td class="lblName"></td>
+			<td class="lblFabric"></td>
+			<td class="lblPubDate"></td>
+			<td class="lblDeliveryDate"></td>
+			<td class="lblDealDate"></td>
+			<td class="lblDeliveryStatus"></td>
+			<td class="lblStatus"></td>
+			<td class="lblDo"></td>
+			<td class="lblStopCause"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ordenID}">
+			<td class="center"><input type="checkbox" value="{$T.row.ordenID}" onclick="$.csControl.checkOnce(this);" name="chkRow"/></td>
+			<td class="center">{$T.row.number}</td>
+			<td class="link" onclick="$.csOrdenList.openView('{$T.row.ordenID}')">{$T.row.ordenID}</td>
+			<td>{$T.row.clothingName}</td>
+			<td>{$T.row.customer.name}</td>
+			<td>{$T.row.fabricCode}</td>
+			<td class="center {#if $T.row.isPubOverdue == DICT_YES}red{#/if}">{$.csDate.formatMillisecondDate($T.row.pubDate)}</td>
+			<td class="center">{$.csDate.formatMillisecondDate($T.row.deliveryDate)}</td>
+			<td class="center link" onclick="$.csOrdenList.editJhrq('{$T.row.ordenID}','{$.csDate.formatMillisecondDate($T.row.jhrq)}')">{$.csDate.formatMillisecondDate($T.row.jhrq)}</td>
+			<td class="center">{$T.row.deliveryStatusName}</td>
+			<td class="center">{$T.row.statusName}</td>
+			<td class="center nowrap">{$T.row.constDefine}</td>
+			<td>{$T.row.stopCauseName}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

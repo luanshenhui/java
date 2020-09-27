@@ -1,0 +1,143 @@
+{{#component "advertising-manage js-component" }}
+    <p class="components-title"><strong>- 广告管理 -</strong></p>
+    <div class="m-b-10">
+        <form id="form-search" class="form">
+            <fieldset>
+                <p class="filter-name">
+                    <span class="span4">
+                        <label for="checkStatus">状态:</label>
+                        <select id="checkStatus" name="checkStatus" class="search-account search-input">
+                            <option value="" {{#equals checkStatus ""}}selected{{/equals}}>请选择</option>
+                            <option value="0" {{#equals checkStatus "0"}}selected{{/equals}}>待审核</option>
+                            <option value="1" {{#equals checkStatus "1"}}selected{{/equals}}>审核通过</option>
+                            <option value="2" {{#equals checkStatus "2"}}selected{{/equals}}>审核拒绝</option>
+                        </select>
+                    </span>
+                    <span class="span4">
+                        <label for="id">申请编号:</label>
+                        <input id="id" type="text" name="id" class="search-account search-input"
+                               value="{{id}}" maxlength="20">
+                    </span>
+                    <span class="span4">
+                        <label for="createTime">申请日期:</label>
+                        <input id="createTime" type="text" name="createTime"
+                               class="search-account search-input datepicker cursor-pointer"
+                               value="{{createTime}}" maxlength="30">
+                    </span>
+                </p>
+                <p class="filter-name">
+                    <span class="span4">
+                        <label for="fullName">供应商:</label>
+                        <input id="fullName" type="text" name="fullName" class="search-account search-input"
+                               value="{{fullName}}" maxlength="20">
+                    </span>
+
+                    <span class="span4">
+                        <label for="ordertypeId">业务类型:</label>
+                        <select id="ordertypeId" name="ordertypeId" class="search-account search-input">
+                            <option value="" {{#equals ordertypeId ""}}selected{{/equals}}>请选择</option>
+                            <option value="YG" {{#equals ordertypeId "YG"}}selected{{/equals}}>广发商城</option>
+                            <option value="JF" {{#equals ordertypeId "JF"}}selected{{/equals}}>积分商城</option>
+                        </select>
+                    </span>
+                </p>
+                <input class="btn btn-success btn-small margin-right-0 pull-right" type="submit" value="查询"/>
+            </fieldset>
+        </form>
+    </div>
+    <div class="main-box-table margin-top-20">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="list-tabble-title">
+            <tr>
+                <th width="5%">序号</th>
+                <th width="20%">目标链接地址</th>
+                <th width="15%">描述</th>
+                <th width="8%">状态</th>
+                <th width="15%">操作</th>
+            </tr>
+        </table>
+        {{#each _DATA_.data}}
+            <div class="order-tab">
+                <div class="list-detail">
+                    <p>申请编号：{{id}}</p>
+
+                    <p>供应商：{{fullName}}</p>
+
+                    <p>申请日期：{{#formatDate createTime 'day'}}{{/formatDate}}</p>
+
+                    <p>业务类型：
+                        {{#equals "YG" ordertypeId}}
+                            广发商城
+                        {{else}}
+                            {{#equals "JF" ordertypeId}}
+                                积分商城
+                            {{/equals}}
+                        {{/equals}}
+                    </p>
+
+                </div>
+
+
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="list-tabble-con">
+                    <tr>
+                        <th width="5%"></th>
+                        <th width="20%"></th>
+                        <th width="15%"></th>
+                        <th width="8%"></th>
+                        <th width="15%"></th>
+                    </tr>
+                    <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                        <td class="img js-view-image"><img src={{media}}></td>
+                        <td title="{{link}}" class="detail">
+                            <a href="{{link}}">{{link}}</a>
+                        </td>
+                        <td title="{{description}}" class="description">{{description}}</td>
+                        <td class="checkStatus">
+                            {{#equals "0" checkStatus}}
+                                待审核
+                            {{else}}
+                                {{#equals "1" checkStatus}}
+                                    审核通过
+                                {{else}}
+                                    {{#equals "2" checkStatus}}
+                                        审核拒绝
+                                    {{/equals}}
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                        <td class="operation">
+                            {{#equals "0" checkStatus}}
+                                {{#authorial "advertisingManage_audit"}}
+                                    <button class="btn btn-sm btn-info js-advertising-check">通过</button>
+                                    <button class="btn btn-sm btn-info js-advertising-refuse">拒绝</button>
+                                {{/authorial}}
+                            {{else}}
+                                {{#equals "2" checkStatus}}
+                                    {{#authorial "advertisingManage_delete"}}
+                                        <button id="{{id}}" class="btn btn-sm btn-info js-advertising-delete"
+                                                data-toggle="confirm"
+                                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                                data-event="confirm:delete-advertising">
+                                            删除
+                                        </button>
+                                    {{/authorial}}
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                    </tr>
+                </table>
+                <div class="pop-img" data-id="{{id}}">
+                    <i class="triangle">&nbsp;</i>
+                    <img src={{media}}>
+                </div>
+            </div>
+
+        {{/each}}
+
+    </div>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    {{/equals}}
+    </div>
+{{/component}}

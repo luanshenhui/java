@@ -1,0 +1,93 @@
+{{#component "rejectGoods js-component"}}
+    <p class="components-title"><strong>退货管理</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class=" form form-aligned  term-form-search form-inline">
+                <fieldset>
+                    <p class="filter-name">
+                       <span class="span4 span-large">
+								     <label>退货类型：</label>
+										<select class="form-control" name="returnType">
+                                            <option value="">请选择</option>
+                                            <option value="00" {{#equals returnType "00"}}selected{{/equals}}>供应商退货
+                                            </option>
+                                            <option value="01" {{#equals returnType "01"}}selected{{/equals}}>商城退货
+                                            </option>
+                                            <option value="02" {{#equals returnType "02"}}selected{{/equals}}>CC端退货
+                                            </option>
+                                        </select>
+                       </span>
+
+                       <span class="span5 span-large">
+					     <label for="createTime">申请退货时间：</label>
+								<input class="form-control js-date-start" type="text" value="{{startTime}}"
+                                       name="startTime"/><em>-</em>
+                                 <input class="form-control js-date-end" type="text" value="{{endTime}}"
+                                        name="endTime"/>
+                       </span>
+
+                    </p>
+                    <p class="filter-name">
+                       <span class="span4 span-large">
+					      <label>退货状态：</label>
+								<select name="curStatusId">
+                                    <option value="">全部</option>
+                                    <option value="0334" {{#equals curStatusId "0334"}}selected{{/equals}}>待处理</option>
+                                    <option value="0327" {{#equals curStatusId "0327"}}selected{{/equals}}>退货完成</option>
+                                    <option value="0335" {{#equals curStatusId "0335"}}selected{{/equals}}>退货驳回</option>
+                                </select>
+					   </span>
+                       <span class="span3 span-large pull-right">
+									<label>&nbsp;</label>
+                                 <button class="btn btn-success btn-small" type="submit">查询</button>
+					   </span>
+                    </p>
+
+                </fieldset>
+
+
+            </form>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="8%">退货编号</th>
+                    <th width="10%">退货类型</th>
+                    <th width="15%">订单编号</th>
+                    <th width="11%">商品名称</th>
+                    <th width="10%">供应商</th>
+                    <th width="12%">买家</th>
+                    <th width="12%">申请时间</th>
+                    <th width="10%">状态</th>
+                    <th width="12%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{orderId}}" data-data="{{json this}}">
+                        <td>{{id}}</td>
+                        <td>{{#equals returnType "00"}}供应商退货{{/equals}}
+                            {{#equals returnType "01"}}商城退货{{/equals}}
+                            {{#equals returnType "02"}}CC端退货{{/equals}}
+                        </td>
+                        <td><a href="{{_HREF_.mainContext}}/mall/order/order_detail?id={{orderId}}">{{orderId}}</a></td>
+                        <td><a href="">{{goodsName}}</a></td>
+                        <td>{{venderName}}</td>
+                        <td>{{memberName}}</td>
+                        <td>{{formatDate createTime "day"}}</td>
+                        <td>{{#equals curStatusId "0334"}}待处理{{/equals}}
+                            {{#equals curStatusId "0327"}}退货完成{{/equals}}
+                            {{#equals curStatusId "0335"}}退货驳回{{/equals}}
+                            <!--{{#equals curStatusId "0312"}}已撤单{{/equals}}-->
+
+                        </td>
+                        <td><a href="{{_HREF_.mainContext}}/mall/reject_details?partbackId={{id}}">退货详情</a></td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+
+
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+    </div>
+{{/component}}

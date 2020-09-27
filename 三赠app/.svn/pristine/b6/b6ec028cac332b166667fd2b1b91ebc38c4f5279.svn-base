@@ -1,0 +1,53 @@
+// Generated code from Butter Knife. Do not modify!
+package com.sanzeng.hello_watch.ui.activity.login;
+
+import android.view.View;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import butterknife.internal.ViewBinder;
+import com.sanzeng.hello_watch.views.SureRoleGridView;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class SureRoleActivity$$ViewBinder<T extends SureRoleActivity> implements ViewBinder<T> {
+  @Override
+  public Unbinder bind(Finder finder, T target, Object source) {
+    return new InnerUnbinder<>(target, finder, source);
+  }
+
+  protected static class InnerUnbinder<T extends SureRoleActivity> implements Unbinder {
+    protected T target;
+
+    private View view2131558518;
+
+    protected InnerUnbinder(final T target, Finder finder, Object source) {
+      this.target = target;
+
+      View view;
+      target.gridView = finder.findRequiredViewAsType(source, 2131558517, "field 'gridView'", SureRoleGridView.class);
+      view = finder.findRequiredView(source, 2131558518, "method 'requestData'");
+      view2131558518 = view;
+      view.setOnClickListener(new DebouncingOnClickListener() {
+        @Override
+        public void doClick(View p0) {
+          target.requestData();
+        }
+      });
+    }
+
+    @Override
+    public void unbind() {
+      T target = this.target;
+      if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+      target.gridView = null;
+
+      view2131558518.setOnClickListener(null);
+      view2131558518 = null;
+
+      this.target = null;
+    }
+  }
+}

@@ -1,0 +1,280 @@
+body, h1, h2, h3, h4, h5, h6, div, p, a, dl, dt, dd, ul, ol, li, form, button, input, textarea, select, table, th, td, img, span {
+	margin: 0;
+	padding: 0;
+	border: none;
+	font-size: 14px;
+	color: #333;
+	text-decoration: none;
+	outline-style: none;
+	list-style: none;
+	font-family: "微软雅黑", "Microsoft Yahei";
+	text-indent: 0;
+}
+input{
+	border: 1px solid #ccc;
+	outline: none;
+	height: 30px;
+	vertical-align: middle;
+}
+textarea{
+	border: 1px solid #CAE8FF;
+}
+.PopMain{
+	width: 670px;
+	background: #fff;
+}
+.mainModule h2{
+	background: #f2fafe;
+	color: #00a0e9;
+	line-height: 35px;
+	margin: 10px 0;
+	padding-left: 5px;
+}
+.mainModule div>.spanTit{
+	width:100px;
+	text-align: right;
+	line-height: 30px;
+	margin-right: 10px;
+	display: inline-block;
+}
+.singleDiv{
+	padding-left: 20px;
+	margin: 10px 0;
+	line-height:30px;
+}
+
+.basicMes .singleDiv input[type="text"]{
+	width: 300px;
+}
+.chkRoleD{
+	display: inline-block;
+	width: 400px;
+	margin-bottom: 10px;
+	vertical-align: top;
+}
+.chkRoleD span{
+	margin-right:30px;
+	line-height: 35px;
+}
+.chkR{
+	display: none !important;
+}
+.chkR + .labelChk{
+	position: relative;
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+
+.checkedOn{
+	background: url("/assets/dca/img/chk2.png");
+}
+
+.checkedOff{
+	background: url("/assets/dca/img/chk1.png"); 
+}
+ 		
+.TabCondt{
+	height: 35px;
+	line-height: 35px;
+	border-bottom: 1px solid #ccc;
+}
+.TabCondt li{
+	float: left;
+	position: relative;
+	display: block;
+	height:100%;
+	padding: 0 20px;
+	cursor:pointer;
+}
+.TabCondt li:hover,.tabOn{
+	color:#157ab5;
+}
+
+.tabOn:after,.TabCondt li:hover:after{
+	background:#00a0e9;
+	width:100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 3px;
+	content: '';
+}
+
+.isOpen{
+	vertical-align: middle;
+	padding:3px 22px;
+}
+.openImg{
+	background: url("/assets/dca/img/useIcon.png");
+}
+.closeImg{
+	background: url("/assets/dca/img/useIcon2.png");
+}
+
+.TriggerConUl{
+	padding-left: 90px;
+}
+.TriggerConUl li{
+	margin-botton:20px;
+}
+.TriggerConUl .triggerRadio{
+	margin: 10px 0 20px 0;
+	height: 30px;
+	line-height: 30px;
+}
+.TriggerConUl .triggerRadio *{
+	float: left;
+}
+
+.hideRadio{
+	display: none;
+}
+.hideRadio + .radioLab{
+	position: relative;
+	display: block;
+	width: 18px;
+	height: 18px;
+	margin-right: 20px;
+	margin-top: 6px;
+	background: url("/assets/dca/img/radio1.png");
+}
+.hideRadio:checked + .radioLab {
+	background: url("/assets/dca/img/radio2.png");
+}
+
+.TriggerConUl .trigTime{
+	width: 140px;
+	margin:0 40px 0 10px;;
+	vertical-align: middle;
+	height: 30px;
+}
+.selectS{
+	margin-left:110px;
+	margin-top:-40px;
+}
+.selectUnit{
+	width:65px;
+	border:1px solid #ccc;
+	height:40px;
+}
+
+.TriggerConUl .alertLi{
+	padding-left: 40px;
+	margin: 10px 0;
+}
+.TriggerConUl li input{
+	width: 90px;
+}
+.alertLi{
+	margin-bottom:10px;
+	padding-left:40px;
+}
+
+.alertCircle{
+	padding: 2px 9px;
+}
+.CondtTrigger .alertCircle{
+	margin-left: 10px;
+}
+.tabRemark .alertCircle{
+	margin-left: 10px;
+}
+.alertY{
+	clear: left;
+}
+.alertG i{
+	background: url("/assets/dca/img/alertG.png") no-repeat;
+}
+.alertY i{
+	background: url("/assets/dca/img/alertY.png") no-repeat;
+}
+.alertO i{
+	background: url("/assets/dca/img/alertO.png") no-repeat;
+}
+.alertR i{
+	background: url("/assets/dca/img/alertR.png") no-repeat;
+}
+.condtRelated{
+	margin-top: 10px;
+}
+.condtRelated .spanTit{
+	margin-right: 5px !important;
+}
+.condtRelated .selectL{
+	width: 300px;
+	height: 30px;
+	vertical-align: middle;
+	border:1px solid #ccc;
+}
+.mt-15{
+	margin-top: 15px;
+}
+
+.l-h-20{
+	line-height:20px;
+}
+.condtDefine .spanTit{
+	line-height: 20px !important;
+}
+.tabRemark{
+	border-top: 1px dashed #ccc;
+    padding-top: 10px;
+}
+.tabRemark>*{
+	color: #999;
+}
+.tabRemark span .alertCircle{
+	margin-left:10px;
+	margin-right: 20px;
+}
+
+.conTriDiv{
+	padding-left: 110px;
+	height:120px;
+}
+.selectM{
+	width: 200px;
+	margin:0 10px;
+}
+
+.alertDiv{
+	border-top:1px dashed #96abc4;
+	padding-top:20px;
+}
+.alertDiv .alertSpan{
+	margin-right: 20px;
+}
+
+.CondtTrigger .trigInput{
+	width: 300px;
+	margin-right: 10px;
+	padding:5px;
+	float: left;
+}
+
+.TabMain{
+	display: none;
+}
+.TabMainOn{
+	display: block;
+} 
+.fontRed {
+	color: red; 
+	padding-left: 43px;
+}
+.info-text p{
+	color: #0000E3;
+	padding-left:25px;
+	text-indent:-25px;
+}
+.label-rule{
+	padding-top: 0;
+	padding-right: 10px;
+	float: left;
+}
+.p-t-0{
+	padding-top: 0;
+}

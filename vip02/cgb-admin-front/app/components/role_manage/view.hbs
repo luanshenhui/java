@@ -1,0 +1,60 @@
+{{#component "role js-component"}}
+    <p class="components-title"><strong>- 角色管理 -</strong></p>
+    <div>
+        <form class="form form-aligned form-inline">
+            <fieldset>
+                <span class="span3">
+                    <label for="name">角色:</label>
+                    <input id="name" name="name" value="{{name}}" type="text" class="form-control"/>
+                    </span>
+                <span class="span1">
+                    <label for="reaccount">
+                        <input class="btn btn-success btn-small btn-search" type="submit" value="搜索"/>
+                    </label>
+                </span>
+            </fieldset>
+        </form>
+    </div>
+    <div class="btn-group add-account">
+        {{#authorial "role_add"}}
+            <button class="btn btn-info btn-small js-role-new">新建角色</button>
+        {{/authorial}}
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="5%">序号</th>
+            <th width="10%">角色</th>
+            <th width="5%">创建时间</th>
+            <th width="5%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-id="{{id}}" data-status="{{isEnabled}}" data-data="{{json this}}">
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+                <td>{{formatDate createTime}}</td>
+                <td>
+                    {{#authorial "role_edit"}}
+                        <button class="btn btn-sm btn-info js-role-edit">编辑</button>
+                    {{/authorial}}
+                    {{#authorial "role_delete"}}
+                        <button id="{{id}}" class="btn btn-sm btn-info js-role-delete" data-toggle="confirm"
+                            data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？" data-event="confirm:delete-role">
+                            删除
+                        </button>
+                    {{/authorial}}
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <!--<div class="pagination" data-total="{{_DATA_.total}}">-->
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    {{/equals}}
+    </div>
+{{/component}}

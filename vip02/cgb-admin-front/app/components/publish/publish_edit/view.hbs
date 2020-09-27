@@ -1,0 +1,69 @@
+{{#component "publishEdit js-component"}}
+    <link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <p class="components-title"><h3>- 发布公告 -</h3></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form form-aligned publish-edit-form" data-id="{{id}}">
+                <fieldset>
+                    <div class="control-group publish-label top">
+                        <label for="publishTitle"><span class="required">*</span>公告名称：</label>
+                        <input type="text" id="publishTitle" name="publishTitle"
+                               value="{{_DATA_.publishTitle}}" class="form-control js-publish-name input-larges" maxlength="100" required/>
+                        <span class="note notNull"><i>&times;</i> 必填 不得为空</span>
+                        <span class="note-error-empty notNull"><i>&times;</i> 必填 不得为空</span>
+                    </div>
+                    <div class="control-group publish-label">
+                        <label for="linkHref"><span></span>链接地址：</label>
+                        <input type="text" id="linkHref" name="linkHref"
+                               value="{{_DATA_.linkHref}}" class="form-control input-larges js-link-href" maxlength="200"/>
+                    </div>
+                    <div class="control-group publish-label">
+                       <span class="span span-large">
+                        <label for="publishType"><span class="required">*</span>公告类型：</label>
+                            <select id="publishType" name="publishType" required>
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals "00" _DATA_.publishType}} selected {{/equals}}>最新公告</option>
+                            </select>
+                        </span>
+                    </div>
+
+                    <div class="control-group publish-label">
+                       <span class="span span-large">
+                        <label for="curStatus"><span class="required">*</span>公告状态：</label>
+                            <select id="curStatus" name="curStatus">
+                                <option value="0102" {{#equals "0102" _DATA_.curStatus}}selected{{/equals}}>启用</option>
+                                <option value="0101" {{#equals "0101" _DATA_.curStatus}}selected{{/equals}}>停用</option>
+                            </select>
+                        </span>
+                    </div>
+
+                    <div class="control-group publish-label">
+                        <label for="publishDate"><span class="required">*</span>发布时间：</label>
+                        <input type="text" id="publishDate" name="publishDate"
+                               value="{{formatDate _DATA_.publishDate "day"}}"  class="form-control input-mediums  publish_date" maxlength="100"  required pattern="\d{4}-\d{1,2}-\d{1,2}"/>
+                        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                        <span class="note-error"><i>&times;</i> 只能输入日期</span>
+                    </div>
+                    <div class="control-group publish-label">
+                        <label for="expireDate"><span class="required">*</span>过期时间：</label>
+                        <input type="text" id="expireDate" name="expireDate"
+                               value="{{formatDate _DATA_.expireDate "day"}}"   class="form-control input-mediums  expire_name" maxlength="100"  required pattern="\d{4}-\d{1,2}-\d{1,2}"/>
+                        <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                        <span class="note-error"><i>&times;</i> 只能输入日期</span>
+                    </div>
+                    <div class="control-group publish-label">
+                        <label for="introduction" class="js-introduction" data-value="{{_DATA_.publishContent}}">公告内容：</label>
+                        <script type="text/plain" id="myEditor" style="width:890px;height:240px;">
+                        </script>
+                    </div>
+                </fieldset>
+                <p class="filter-name">
+                <div class="bottom-button button-style">
+                    <input class="btn btn-success btn-medium js-publish-save" type="submit" value="保存"/>
+                    <a href="{{_HREF_.mainContext}}/admins/publish/publish_manage" class="btn btn-close btn-medium">取消</a>
+                </div>
+                </p>
+            </form>
+        </div>
+    </div>
+{{/component}}

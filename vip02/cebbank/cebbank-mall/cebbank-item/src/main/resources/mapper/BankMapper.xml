@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Bank">
+    <resultMap id="BankMap" type="Bank">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="cityId" column="city_id"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,code,name,city_id,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="Bank" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_bank
+        (code
+        ,name
+        ,city_id
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{code}
+        ,#{name}
+        ,#{cityId}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="Bank">
+        update tbl_bank set
+        code
+        = #{code},name
+        = #{name},city_id
+        = #{cityId},create_oper
+        = #{createOper},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="code !=null">and code = #{code}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="cityId !=null">and cityId = #{cityId}</if>
+            <if test="createOper !=null">and createOper = #{createOper}</if>
+            <if test="createTime !=null">and createTime = #{createTime}</if>
+            <if test="modifyOper !=null">and modifyOper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modifyTime = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="BankMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_bank
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="BankMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_bank
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="BankMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_bank
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="Bank">
+        delete from tbl_bank where id = id
+    </delete>
+</mapper>
+
+

@@ -1,0 +1,10 @@
+{{#equals type 1}}
+    <select name="vendorId" id="vendorId" class="js-vendor-select" required>
+        <option value="">请选择供应商</option>
+        {{#each data}}
+            <option value="{{vendorId}}" data-vendorrole="{{vendorRole}}">{{simpleName}}</option>
+        {{/each}}
+    </select>
+{{else}}
+    <input type="text" name="vendorId" disabled value="{{data.simpleName}}" data-id="{{data.vendorId}}">
+{{/equals}}

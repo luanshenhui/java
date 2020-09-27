@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.ectrade.dao.EcTradeDAOImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.ectrade.vo.EcTradeVO">
+		<id column="ec_trade_id" jdbcType="VARCHAR" property="ecTradeId" />
+		<result column="ec_trade_code" jdbcType="VARCHAR" property="ecTradeCode" />
+		<result column="prj_id" jdbcType="VARCHAR" property="prjId" />
+		<result column="prj_name" jdbcType="VARCHAR" property="prjName" />
+		<result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+		<result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+		<result column="shop_account" jdbcType="VARCHAR" property="shopAccount" />
+		<result column="shop_type" jdbcType="VARCHAR" property="shopType" />
+		<result column="ec_trade_status" jdbcType="VARCHAR" property="ecTradeStatus" />
+		<result column="ec_cust_code" jdbcType="VARCHAR" property="ecCustCode" />
+		<result column="ec_cust_name" jdbcType="VARCHAR" property="ecCustName" />
+		<result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
+		<result column="cons" jdbcType="VARCHAR" property="cons" />
+		<result column="cons_tel" jdbcType="VARCHAR" property="consTel" />
+		<result column="cons_mobile" jdbcType="VARCHAR" property="consMobile" />
+		<result column="cons_addr" jdbcType="VARCHAR" property="consAddr" />
+		<result column="cons_post_code" jdbcType="VARCHAR" property="consPostCode" />
+		<result column="area_coding" jdbcType="VARCHAR" property="areaCoding" />
+		<result column="tot_weight" jdbcType="DECIMAL" property="totWeight" />
+		<result column="trade_money" jdbcType="DECIMAL" property="tradeMoney" />
+		<result column="paid_fee" jdbcType="DECIMAL" property="paidFee" />
+		<result column="lgst_fee" jdbcType="DECIMAL" property="lgstFee" />
+		<result column="trade_disc" jdbcType="DECIMAL" property="tradeDisc" />
+		<result column="serv_fee" jdbcType="DECIMAL" property="servFee" />
+		<result column="point_money" jdbcType="DECIMAL" property="pointMoney" />
+		<result column="ticket_money" jdbcType="DECIMAL" property="ticketMoney" />
+		<result column="paid_time" jdbcType="TIMESTAMP" property="paidTime" />
+		<result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+		<result column="cust_remark" jdbcType="VARCHAR" property="custRemark" />
+		<result column="sales_remark" jdbcType="VARCHAR" property="salesRemark" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="is_invoice" jdbcType="VARCHAR" property="isInvoice" />
+		<result column="invoice_title" jdbcType="VARCHAR" property="invoiceTitle" />
+		<result column="alipay_order_no" jdbcType="VARCHAR" property="alipayOrderNo" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="deleted" jdbcType="VARCHAR" property="deleted" />
+		
+		<result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+		<result column="parent_trade_id" jdbcType="VARCHAR" property="parentTradeId" />
+		<result column="split_status" jdbcType="VARCHAR" property="splitStatus" />
+		
+		<result column="ecOrderShow" jdbcType="VARCHAR" property="ecOrderShow" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="exceptionType" jdbcType="VARCHAR" property="exceptionType" />
+		<result column="splitFlg" jdbcType="VARCHAR" property="splitFlg" />
+		<result column="partiallySend" jdbcType="VARCHAR" property="partiallySend" />
+		<result column="sendTime" jdbcType="TIMESTAMP" property="sendTime" />
+		
+		<result column="countNoPay" jdbcType="INTEGER" property="countNoPay" />
+		<result column="countWait" jdbcType="INTEGER" property="countWait" />
+		<result column="countWaitSend" jdbcType="INTEGER" property="countWaitSend" />
+		<result column="countSend" jdbcType="INTEGER" property="countSend" />
+		<result column="countOver" jdbcType="INTEGER" property="countOver" />
+		<result column="countCancel" jdbcType="INTEGER" property="countCancel" />
+		
+		<result column="ec_item_code" jdbcType="VARCHAR" property="ecItemCode" />
+	    <result column="ec_item_name" jdbcType="VARCHAR" property="ecItemName" />
+	    <result column="ec_sku_code" jdbcType="VARCHAR" property="ecSkuCode" />
+	    <result column="ec_sku_name" jdbcType="VARCHAR" property="ecSkuName" />
+	    <result column="ec_order_status" jdbcType="VARCHAR" property="ecOrderStatus" />
+	    <result column="split_shop_name" jdbcType="VARCHAR" property="splitShopName" />
+	    <result column="erp_status" jdbcType="VARCHAR" property="erpStatus" />
+	    <result column="delete_reason" jdbcType="VARCHAR" property="deleteReason" />
+	    <result column="ship_time" jdbcType="VARCHAR" property="shipTime" />
+	    <result column="lgst_name" jdbcType="VARCHAR" property="lgstName" />
+	    <result column="logisticsId" jdbcType="VARCHAR" property="logisticsId" />
+	    <result column="waitesend" jdbcType="INTEGER" property="waiteSend" />
+	</resultMap>
+	<sql id="Base_Column_List_EcTrade">
+	    ec_trade_id, ec_trade_code, prj_id, prj_name, shop_id, shop_name, shop_account, shop_type, 
+	    ec_trade_status, ec_cust_code, ec_cust_name, trade_type, cons, cons_tel, cons_mobile, 
+	    cons_addr, cons_post_code, area_coding, tot_weight, trade_money, paid_fee, lgst_fee, 
+	    trade_disc, serv_fee, point_money, ticket_money, paid_time, end_time, cust_remark, 
+	    sales_remark, remark, invoice, invoice_title, alipay_order_no, create_time, update_time, 
+	    deleted, order_time, split_status, parent_trade_id
+	</sql>
+	<sql id="Base_Counts">
+		sum(case when ecTrade.ec_trade_status is not null and ecTrade.ec_trade_status = 'EB_WAIT_BUYER_PAY' then 1 else 0 end) as countNoPay,
+		sum(case when ecTrade.split_status is not null and ecTrade.split_status = 'n' then 1 else 0 end) as countWait,
+		sum(case when ecTrade.ec_trade_status is not null and ecTrade.ec_trade_status = 'EB_WAIT_SELLER_SEND' and ecTrade.split_status = 'y' then 1 else 0 end) as countWaitSend,
+		sum(case when ecTrade.ec_trade_status is not null and ecTrade.ec_trade_status = 'EB_TRADE_ALL_SEND' and ecTrade.split_status = 'y' then 1 else 0 end) as countSend,
+		sum(case when ecTrade.ec_trade_status is not null and ecTrade.ec_trade_status = 'EB_TRADE_FINISHED' and ecTrade.split_status = 'y' then 1 else 0 end) as countOver,
+		sum(case when ecTrade.ec_trade_status is not null and ecTrade.ec_trade_status = 'EB_TRADE_CANCELED'  and ecTrade.split_status = 'y' then 1 else 0 end) as countCancel
+	</sql>
+	<sql id = "Base_Export_EC_Trade">
+		ecTrade.prj_name as prj_name,
+		ecTrade.shop_name as shop_name,
+		ecTrade.ec_trade_code as ec_trade_code,
+		ecTrade.ec_trade_status as ec_trade_status,
+		'' as status,
+		ecTrade.shop_type as shop_type,
+		ecTrade.ec_cust_code as ec_cust_code,
+		ecTrade.order_time as order_time,
+		ecTrade.paid_time as paid_time,
+		ecTrade.end_time as end_time,
+		
+		ecOrder.delete_reason as exceptionType,
+		ecOrder.ec_item_code as ec_item_code,
+		ecOrder.ec_item_name as ec_item_name,
+		ecOrder.ec_sku_code as ec_sku_code,
+		ecOrder.ec_sku_name as ec_sku_name,
+		ecOrder.ec_order_status as ec_order_status,
+		ecOrder.split_shop_name as split_shop_name,
+		ecOrder.erp_status as erp_status,
+		ecOrder.delete_reason as delete_reason,
+		ecOrder.lgst_name as lgst_name,
+    	ecOrder.lgst_no as lgst_no,
+    	ecOrder.ship_time as ship_time
+	</sql>
+	<sql id="Base_Column_List">
+		ecTrade.ec_trade_id as ec_trade_id,
+		ecTrade.ec_trade_code as ecTradeCode,
+		ecTrade.ec_trade_code as ec_trade_code,
+		ecTrade.prj_name as prjName,
+		ecTrade.shop_account as shop_account,
+		ecTrade.shop_type as shop_type,
+		ecTrade.shop_name as shopName,
+		ecTrade.ec_trade_status as ec_trade_status,
+		ecTrade.ec_cust_code as ec_cust_code,
+		ecTrade.ec_cust_name as ec_cust_name,
+		ecTrade.trade_type as trade_type,
+		ecTrade.cons as cons,
+		ecTrade.cons_tel as cons_tel,
+		ecTrade.cons_mobile as cons_mobile,
+		ecTrade.cons_addr as cons_addr,
+		ecTrade.cons_post_code as cons_post_code,
+		ecTrade.area_coding as area_coding,
+		ecTrade.tot_weight as tot_weight,
+		ecTrade.trade_money as trade_money,
+		ecTrade.paid_fee as paid_fee,
+		ecTrade.lgst_fee as lgst_fee,
+		ecTrade.trade_disc as trade_disc,
+		ecTrade.serv_fee as serv_fee,
+		ecTrade.point_money as point_money,
+		ecTrade.ticket_money as ticket_money,
+		ecTrade.paid_time as paid_time,
+		ecTrade.end_time as end_time,
+		ecTrade.cust_remark as cust_remark,
+		ecTrade.sales_remark as sales_remark,
+		ecTrade.remark as remark,
+		ecTrade.invoice as invoice,
+		ecTrade.invoice_title as invoice_title,
+		ecTrade.alipay_order_no as alipay_order_no,
+		ecTrade.create_time as create_time,
+		ecTrade.update_time as update_time,
+		ecTrade.deleted as deleted,
+		'' as ecOrderShow,
+		'' as status,
+		'' as partiallySend,
+		(select count(ec_order_id) from oms_ec_order where ec_trade_id = ecTrade.ec_trade_id and ship_time is null) as waitesend,
+		case when split.split_rule_id is not null then '1' else '0' end as splitFlg,
+		ecTrade.order_time as orderTime,
+		ecTrade.split_status as splitStatus,
+		(select min(ship_time) from oms_ec_order where ec_trade_id = ecTrade.ec_trade_id) as sendTime,
+		case when (select count(ec_order_id) from oms_ec_order where ec_trade_id = ecTrade.ec_trade_id and delete_reason is not null) > 0 then '1' else '0' end as exceptionType
+		
+	</sql>
+	<select id="pageSelectEcTrade" parameterType="cn.rkylin.oms.ectrade.vo.EcTradeVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from oms_ec_trade ecTrade 
+		     left join 
+		     oms_split_rule split 
+		     on split.shop_id = ecTrade.shop_id 
+		    and split.deleted = 'n' 
+		    and split.enable = 'y'
+		where ecTrade.deleted = 'n' and ecTrade.ec_trade_id = ecTrade.parent_trade_id
+		<if test="searchCondition != null">
+			 and (ecTrade.ec_trade_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.ec_cust_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.cons_tel like CONCAT('%',#{searchCondition},'%')
+			   or EXISTS (SELECT ecorder.ec_order_id FROM oms_ec_order ecorder where ecorder.ec_trade_id = ecTrade.ec_trade_id AND ecorder.ec_sku_code like CONCAT('%',#{searchCondition},'%'))
+			     )
+		</if>
+		<if test="splitStatus != null">
+			 and ecTrade.split_status = #{splitStatus}
+		</if>
+		
+		<if test="splitStatus == 'n'.toString()">
+			 and ecTrade.ec_trade_status &lt;&gt; 'EB_WAIT_BUYER_PAY' 
+		</if>
+		
+		<if test="prjId != null">
+			 and ecTrade.prj_id = #{prjId}
+		</if>
+		
+		<if test="shopId != null">
+			 and ecTrade.shop_id = #{shopId}
+		</if>
+		
+		<if test="shopType != null">
+			 and ecTrade.shop_type = #{shopType}
+		</if>
+		
+		<if test="ecTradeCode != null">
+			 and ecTrade.ec_trade_code = #{ecTradeCode}
+		</if>
+		
+		<if test="ecCustCode != null">
+			 and ecTrade.ec_cust_code = #{ecCustCode}
+		</if>
+		
+		<if test="ecTradeId != null">
+			 and ecTrade.ec_trade_id = #{ecTradeId}
+		</if>
+		
+		<if test="ecTradeStatus != null">
+			 and ecTrade.ec_trade_status = #{ecTradeStatus}
+		</if>
+		
+		<if test="orderBy != null">
+            ORDER BY ${orderBy}
+        </if>
+	</select>
+
+	<select id="selectEcTradeCounts" parameterType="cn.rkylin.oms.ectrade.vo.EcTradeVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Counts" />
+		from oms_ec_trade ecTrade
+		where deleted = 'n' and ecTrade.ec_trade_id = ecTrade.parent_trade_id
+		<if test="searchCondition != null">
+			 and (ecTrade.ec_trade_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.ec_cust_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.ec_trade_id like CONCAT('%',#{searchCondition},'%')
+			   or EXISTS (SELECT ecorder.ec_order_id FROM oms_ec_order ecorder where ecorder.ec_trade_id = ecTrade.ec_trade_id AND ecorder.ec_sku_code like CONCAT('%',#{searchCondition},'%'))
+			     )
+		</if>
+		
+		<if test="prjId != null">
+			 and ecTrade.prj_id = #{prjId}
+		</if>
+		
+		<if test="shopId != null">
+			 and ecTrade.shop_id = #{shopId}
+		</if>
+		
+		<if test="shopType != null">
+			 and ecTrade.shop_type = #{shopType}
+		</if>
+		
+		<if test="ecTradeCode != null">
+			 and ecTrade.ec_trade_code = #{ecTradeCode}
+		</if>
+		
+		<if test="ecCustCode != null">
+			 and ecTrade.ec_cust_code = #{ecCustCode}
+		</if>
+		
+		<if test="ecTradeId != null">
+			 and ecTrade.ec_trade_id = #{ecTradeId}
+		</if>
+		
+		<!--缺少字段 
+		<if test="childEcTradeId != null">
+			 and ecTrade.ec_trade_id = (select parentId from oms_ec_trade where ec_trade_id = #{childEcTradeId})
+		</if>
+		 -->
+		<if test="ecTradeStatus != null">
+			 and ecTrade.ec_trade_status = #{ecTradeStatus}
+		</if>
+		
+		<if test="orderBy != null">
+            ORDER BY ${orderBy}
+        </if>
+	</select>
+	
+	<!-- 导出  -->
+	<!-- 未付款 -->
+	<select id="exportSelectEcTradeNoPay" parameterType="cn.rkylin.oms.ectrade.vo.EcTradeVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Export_EC_Trade" />
+		from oms_ec_trade ecTrade 
+		     left join 
+		     oms_ec_order ecorder
+		     on ecorder.ec_trade_id = ecTrade.ec_trade_id 
+		    and ecorder.deleted = 'n' 
+		where ecTrade.deleted = 'n'
+		<if test="searchCondition != null">
+			 and (ecTrade.ec_trade_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.ec_cust_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.cons_tel like CONCAT('%',#{searchCondition},'%')
+			   or ecorder.ec_sku_code like CONCAT('%',#{searchCondition},'%')
+			     )
+		</if>
+		and ecTrade.ec_trade_status = 'EB_WAIT_BUYER_PAY'
+		<if test="selectWhere != null">
+            ${selectWhere}
+        </if>
+        
+	</select>
+	<!-- 待处理 -->
+	<select id="exportSelectEcTradeNoDeal" parameterType="cn.rkylin.oms.ectrade.vo.EcTradeVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Export_EC_Trade" />
+		from oms_ec_trade ecTrade 
+			left join
+			 oms_ec_trade ecTrade1
+			 on ecTrade.ec_trade_id = ecTrade1.parent_trade_id 
+			 and <![CDATA[ecTrade1.ec_trade_id <> ecTrade.parent_trade_id]]>
+		     left join 
+		     oms_ec_order ecorder
+		     on ecorder.ec_trade_id = ecTrade1.ec_trade_id 
+		    and ecorder.deleted = 'n' 
+		where ecTrade.deleted = 'n' and ecTrade.ec_trade_id = ecTrade.parent_trade_id
+		<if test="searchCondition != null">
+			 and (ecTrade.ec_trade_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.ec_cust_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.cons_tel like CONCAT('%',#{searchCondition},'%')
+			   or ecorder.ec_sku_code like CONCAT('%',#{searchCondition},'%')
+			     )
+		</if>
+		and ecTrade.split_status = 'n' and ecTrade.ec_trade_status &lt;&gt; 'EB_WAIT_BUYER_PAY'
+		<if test="selectWhere != null">
+            ${selectWhere}
+        </if>
+	</select>
+	<!--待发货 -->
+	<select id="exportSelectEcTradeWaiteSend" parameterType="cn.rkylin.oms.ectrade.vo.EcTradeVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Export_EC_Trade" />
+		from oms_ec_trade ecTrade 
+		     left join
+			 oms_ec_trade ecTrade1
+			 on ecTrade.ec_trade_id = ecTrade1.parent_trade_id 
+			 and <![CDATA[ecTrade1.ec_trade_id <> ecTrade.parent_trade_id]]>
+		     left join 
+		     oms_ec_order ecorder
+		     on ecorder.ec_trade_id = ecTrade1.ec_trade_id 
+		    and ecorder.deleted = 'n' 
+		where ecTrade.deleted = 'n' and ecTrade.ec_trade_id = ecTrade.parent_trade_id
+		<if test="searchCondition != null">
+			 and (ecTrade.ec_trade_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.ec_cust_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.cons_tel like CONCAT('%',#{searchCondition},'%')
+			   or ecorder.ec_sku_code like CONCAT('%',#{searchCondition},'%')
+			     )
+		</if>
+		and ecTrade.split_status = 'n'
+		and ecTrade.ec_trade_status = 'EB_WAIT_SELLER_SEND'
+		<if test="selectWhere != null">
+            ${selectWhere}
+        </if>
+	</select>
+	<!--发货 -->
+	<select id="exportSelectEcTradeSend" parameterType="cn.rkylin.oms.ectrade.vo.EcTradeVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Export_EC_Trade" />
+		from oms_ec_trade ecTrade 
+		     left join
+			 oms_ec_trade ecTrade1
+			 on ecTrade.ec_trade_id = ecTrade1.parent_trade_id 
+			 and <![CDATA[ecTrade1.ec_trade_id <> ecTrade.parent_trade_id]]>
+		     left join 
+		     oms_ec_order ecorder
+		     on ecorder.ec_trade_id = ecTrade1.ec_trade_id  
+		    and ecorder.deleted = 'n' 
+		where ecTrade.deleted = 'n' and ecTrade.ec_trade_id = ecTrade.parent_trade_id
+		<if test="searchCondition != null">
+			 and (ecTrade.ec_trade_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.ec_cust_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.cons_tel like CONCAT('%',#{searchCondition},'%')
+			   or ecorder.ec_sku_code like CONCAT('%',#{searchCondition},'%')
+			     )
+		</if>
+		and ecTrade.ec_trade_status = 'EB_TRADE_ALL_SEND'
+		<if test="selectWhere != null">
+            ${selectWhere}
+        </if>
+	</select>
+	<!--完成 -->
+	<select id="exportSelectEcTradeOver" parameterType="cn.rkylin.oms.ectrade.vo.EcTradeVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Export_EC_Trade" />
+		from oms_ec_trade ecTrade 
+		     left join
+			 oms_ec_trade ecTrade1
+			 on ecTrade.ec_trade_id = ecTrade1.parent_trade_id 
+			 and <![CDATA[ecTrade1.ec_trade_id <> ecTrade.parent_trade_id]]>
+		     left join 
+		     oms_ec_order ecorder
+		     on ecorder.ec_trade_id = ecTrade1.ec_trade_id  
+		    and ecorder.deleted = 'n' 
+		where ecTrade.deleted = 'n' and ecTrade.ec_trade_id = ecTrade.parent_trade_id
+		<if test="searchCondition != null">
+			 and (ecTrade.ec_trade_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.ec_cust_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.cons_tel like CONCAT('%',#{searchCondition},'%')
+			   or ecorder.ec_sku_code like CONCAT('%',#{searchCondition},'%')
+			     )
+		</if>
+		and ecTrade.ec_trade_status = 'EB_TRADE_FINISHED'
+		<if test="selectWhere != null">
+            ${selectWhere}
+        </if>
+	</select>
+	<!--废弃 -->
+	<select id="exportSelectEcTradeCanceled" parameterType="cn.rkylin.oms.ectrade.vo.EcTradeVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Export_EC_Trade" />
+		from oms_ec_trade ecTrade 
+		     left join
+			 oms_ec_trade ecTrade1
+			 on ecTrade.ec_trade_id = ecTrade1.parent_trade_id 
+			 and <![CDATA[ecTrade1.ec_trade_id <> ecTrade.parent_trade_id]]>
+		     left join 
+		     oms_ec_order ecorder
+		     on ecorder.ec_trade_id = ecTrade1.ec_trade_id  
+		    and ecorder.deleted = 'n' 
+		where ecTrade.deleted = 'n'
+		<if test="searchCondition != null">
+			 and (ecTrade.ec_trade_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.ec_cust_code like CONCAT('%',#{searchCondition},'%')
+			   or ecTrade.cons_tel like CONCAT('%',#{searchCondition},'%')
+			   or ecorder.ec_sku_code like CONCAT('%',#{searchCondition},'%')
+			     )
+		</if>
+		and ecTrade.ec_trade_status = 'EB_TRADE_CANCELED'
+		<if test="selectWhere != null">
+            ${selectWhere}
+        </if>
+	</select>
+	<!-- 根据tid取得trade数据 -->
+	<select id="selectEcTradeByTid" parameterType="cn.rkylin.oms.ectrade.vo.EcTradeVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List_EcTrade" />
+		from oms_ec_trade
+		where deleted = 'n'
+		and ec_trade_code = #{ecTradeCode}
+		order by ec_trade_id asc
+	</select>
+	<select id="selectByPrimaryKeyEcTrade" parameterType="java.lang.String" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List_EcTrade" />
+	    from oms_ec_trade
+	    where ec_trade_id = #{ecTradeId,jdbcType=VARCHAR}
+  	</select>
+</mapper>

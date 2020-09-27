@@ -1,0 +1,37 @@
+create table COST
+(
+  id            NUMBER(4) not null,
+  name          VARCHAR2(50) not null,
+  base_duration NUMBER(11),
+  base_cost     NUMBER(7,2),
+  unit_cost     NUMBER(7,4),
+  status        CHAR(1),
+  descr         VARCHAR2(100),
+  creatime      DATE default SYSDATE,
+  startime      DATE,
+  cost_type     CHAR(1)
+)
+
+
+insert into COST (id, name, base_duration, base_cost, unit_cost, status, descr, creatime, startime, cost_type)
+values (122, '��ʱ�շ���Ŀ', 0, 0, 0, '1', 'bbbbbbbbbbbbbb', to_date('22-05-2013 16:20:40', 'dd-mm-yyyy hh24:mi:ss'), null, '2');
+insert into COST (id, name, base_duration, base_cost, unit_cost, status, descr, creatime, startime, cost_type)
+values (1, '5.9Ԫ�ײ�', 20, 5.9, .0111, '0', '5.9Ԫ20Сʱ/��,��������0.0111��/��', to_date('13-05-2013 17:17:52', 'dd-mm-yyyy hh24:mi:ss'), null, '2');
+insert into COST (id, name, base_duration, base_cost, unit_cost, status, descr, creatime, startime, cost_type)
+values (2, '6.9Ԫ�ײ�', 40, 6.9, .0083, '0', '6.9Ԫ40Сʱ/��,��������0.0083��/��', to_date('13-05-2013 17:17:52', 'dd-mm-yyyy hh24:mi:ss'), null, '2');
+insert into COST (id, name, base_duration, base_cost, unit_cost, status, descr, creatime, startime, cost_type)
+values (3, '8.5Ԫ�ײ�', 100, 8.5, .0056, '0', '8.5Ԫ100Сʱ/��,��������0.0056��/��', to_date('13-05-2013 17:17:52', 'dd-mm-yyyy hh24:mi:ss'), null, '2');
+insert into COST (id, name, base_duration, base_cost, unit_cost, status, descr, creatime, startime, cost_type)
+values (4, '10.5Ԫ�ײ�', 200, 10.5, .0028, '0', '10.5Ԫ200Сʱ/��,��������0.0028��/��', to_date('13-05-2013 17:17:52', 'dd-mm-yyyy hh24:mi:ss'), null, '2');
+insert into COST (id, name, base_duration, base_cost, unit_cost, status, descr, creatime, startime, cost_type)
+values (5, '��ʱ�շ�', null, null, .0139, '0', '0.0139��/��,��ʹ�ò��շ�', to_date('13-05-2013 17:17:52', 'dd-mm-yyyy hh24:mi:ss'), null, '3');
+insert into COST (id, name, base_duration, base_cost, unit_cost, status, descr, creatime, startime, cost_type)
+values (6, '����', null, 20, null, '0', 'ÿ��20Ԫ,������ʹ��ʱ��', to_date('13-05-2013 17:17:52', 'dd-mm-yyyy hh24:mi:ss'), null, '1');
+insert into COST (id, name, base_duration, base_cost, unit_cost, status, descr, creatime, startime, cost_type)
+values (14, 'test', null, 10, null, '0', '111', to_date('13-05-2013 18:11:54', 'dd-mm-yyyy hh24:mi:ss'), to_date('14-05-2013 14:18:50', 'dd-mm-yyyy hh24:mi:ss'), '1');
+commit;
+
+
+
+CREATE SEQUENCE c_costId start with 1001 increment by 1 //
+insert into cost values(c_costId .nextval,'8.8套餐',12,12,12,'taocan','ttttt',null,null,'t')

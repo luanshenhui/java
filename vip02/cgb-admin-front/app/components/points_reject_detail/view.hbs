@@ -1,0 +1,13 @@
+{{#component "pointsRejectDetail js-component"}}
+    <p class="components-title"><strong>退货状态</strong></p>
+    <tbody data-content="{{_DATA_}}">
+    {{#each _DATA_.data}}
+     <p  data-component="" data-id="{{id}}" data-data="{{json this}}">{{rejectStatus}}</p>
+    {{/each}}
+    </tbody>
+
+    <p class="components-title"><strong>操作记录</strong></p>
+    <button class="btn btn-info btn-sm close" onclick="goback()">关闭</button>
+
+
+{{/component}}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="XnlpLXSYModel">
+    <resultMap id="XnlpLXSYMap" type="XnlpLXSYModel">
+        <result property="custName" column="cust_name"/>
+        <result property="cardType" column="card_type"/>
+        <result property="certNbr" column="cert_nbr"/>
+        <result property="card4" column="card_4"/>
+        <result property="serverStart" column="server_start"/>
+        <result property="serverEnd" column="server_end"/>
+        <result property="desc" column="desc"/>
+        <result property="type" column="type"/>
+        <result property="hisUpdateInd" column="his_update_ind"/>
+        <result property="txDate" column="tx_date"/>
+    </resultMap>
+    <sql id="columns">
+    cust_name,card_type,cert_nbr,card_4,server_start,server_end,desc,type,his_update_ind,tx_date
+    </sql>
+    
+    <select id="findLXSYByCert" parameterType="map" resultMap="XnlpLXSYMap" >
+    	select 
+    		<include refid="columns"/>
+        from tbl_xnlp_lxsy
+        where cert_nbr=#{certNo}
+    </select>
+
+    <sql id="columnsk">
+        cust_name,card_type,cert_nbr,card_4,server_start,server_end,type,his_update_ind,tx_date
+    </sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="custName !=null">and cust_name = #{custName}</if>
+            <if test="cardType !=null">and card_type = #{cardType}</if>
+            <if test="certNbr !=null">and cert_nbr = #{certNbr}</if>
+            <if test="card4 !=null">and card_4 = #{card4}</if>
+            <if test="serverStart !=null">and server_start = #{serverStart}</if>
+            <if test="serverEnd !=null">and server_end = #{serverEnd}</if>
+            <if test="desc !=null">and desc = #{desc}</if>
+            <if test="type !=null">and type = #{type}</if>
+            <if test="hisUpdateInd !=null">and his_update_ind = #{hisUpdateInd}</if>
+            <if test="txDate !=null">and tx_date = #{txDate}</if>
+            <if test="id !=null">and id = #{id}</if>
+        </where>
+    </sql>
+
+    <select id="findByNo" parameterType="Map" resultMap="XnlpLXSYMap">
+        select id,
+        <include refid="columnsk"/>
+        from tbl_xnlp_lxsy
+        <include refid="conditions"/>
+    </select>
+</mapper>

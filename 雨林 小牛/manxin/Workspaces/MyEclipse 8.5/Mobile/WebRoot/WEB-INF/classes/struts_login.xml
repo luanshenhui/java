@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    <struts>
+    <!-- 登录模块 -->
+    <package name="login" namespace="/login" extends="yidong">
+    		<!-- 
+    			默认执行ActionSport的execute方法
+    		 -->
+    		<action name="toLogin">
+    			<result name="success">
+    				/WEB-INF/login.jsp
+    			</result>
+    		</action>
+    		<!-- 点击登录按钮时，表单提交验证的action -->
+    		<action name="login" class="com.cost.admin.AdminAction">
+    			<!-- 成功则去首页 -->
+    			<result name="success">
+    				/WEB-INF/index.jsp
+    			</result>
+    			<!-- 失败则返回登录页 -->
+    			<result name="fail">
+    				/WEB-INF/login.jsp
+    			</result>
+    		</action>
+    		<!-- 生成验证码的Action -->
+			<action name="imageCode" class="com.cost.admin.ImageCodeAction">
+				<!-- 
+					通过stream类型的Result，
+					向页面输出生成验证码的二进制数据。
+				 -->
+				 <result name="success"
+				 	type="stream">
+				 	<!-- 
+				 		这里的inputName是固定写法，
+				 		目的是给这种类型的Result对象的
+				 		inputName属性赋值。
+				 		imageStream是Action里的输出属性名，
+				 		这个输出属性是InputStream类型的。
+				 	 -->
+				 	<param name="inputName">imageStream</param>
+				 </result>
+			</action>
+			
+			
+			
+			<!-- 修改密码 -->
+    		<action name="toUpPwd" class="com.cost.admin.FindAdminAction">
+    			<result name="success">
+    				/WEB-INF/user/user_modi_pwd.jsp
+    			</result>
+			</action>
+    	</package>
+    </struts>

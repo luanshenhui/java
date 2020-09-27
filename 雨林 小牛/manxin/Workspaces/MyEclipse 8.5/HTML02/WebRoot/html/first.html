@@ -1,0 +1,37 @@
+<html>
+<head>
+	<link href="1.css" type="text/css" rel="stylesheet">
+	<script>
+	function f1(){
+		alert("OK!");	
+		var a  = document.getElementById("btn1");
+		var b = a.value;
+		alert(a);
+		alert(b);
+		alert("OK!2");
+		a.value = "点你咋地?";
+		a.type="text";
+	}
+	function f2(id){
+		var a = document.getElementById(id);
+		alert(a);
+		var b = a.style.background;
+		alert(b);
+		a.style.background = "green";
+		
+	}//练习:新建一个Html，包含两个Div和一个按钮，点击按钮会互换颜色
+	</script>
+</head>
+
+<body>
+	<div id="a">
+		<div id="b">
+			<div id="c">
+			</div>
+		</div>
+	</div>
+	<input type="button" id="btn1" value="点我" onclick="f1();"/>
+	<div id="d1" style="width: 200px; height: 200px; background-color: blue"></div>
+	<input type="button" id="btn2" value="点我呀" onclick="f2('d1');"/>
+</body>
+</html>

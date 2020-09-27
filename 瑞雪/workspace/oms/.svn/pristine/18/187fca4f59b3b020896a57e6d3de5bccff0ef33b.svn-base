@@ -1,0 +1,14 @@
+package cn.rkylin.oms.system.messageDefine.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import cn.rkylin.core.IDataBaseFactory;
+
+@Repository(value = "messageDefineDao")
+public class MessageDefineDaoImpl implements IMessageDefineDao{
+	
+	@Autowired
+	protected IDataBaseFactory dao;
+
+}

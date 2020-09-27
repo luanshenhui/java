@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.project.dao.ProjectManageDAOImpl">
+    <resultMap id="BaseResultMap" type="cn.rkylin.oms.system.project.vo.ProjectVO">
+        <id column="prj_id" jdbcType="VARCHAR" property="prjId"/>
+        <result column="prj_name" jdbcType="VARCHAR" property="prjName"/>
+        <result column="prj_type" jdbcType="VARCHAR" property="prjType"/>
+        <result column="cons" jdbcType="VARCHAR" property="cons"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="enable" jdbcType="VARCHAR" property="enable"/>
+        <result column="deleted" jdbcType="VARCHAR" property="deleted"/>
+        <result column="ent_id" jdbcType="VARCHAR" property="entId"/>
+        <result column="ent_name" jdbcType="VARCHAR" property="entName"/>
+        <result column="operation" jdbcType="VARCHAR" property="operation"/>
+        <result column="enable_status" jdbcType="VARCHAR" property="enableStatus"/>
+        <result column="chk" jdbcType="VARCHAR" property="chk"/>
+    </resultMap>
+    <select id="pageSelectProject" parameterType="cn.rkylin.oms.system.project.vo.ProjectVO" resultMap="BaseResultMap">
+        select
+        '' as chk,
+        prj_id,
+        prj_name,
+        prj_type,
+        cons,
+        tel,
+        expire_time,
+        remark,
+        create_time,
+        modify_time,
+        enable,
+        ent_id,
+        ent_name,
+        '' as operation,
+        '' as enable_status
+        from oms_project
+        where deleted = 'n'
+        <if test="prjId != null">
+            and prj_id = #{prjId}
+        </if>
+        <if test="prjName != null">
+            and prj_name like CONCAT('%',#{prjName},'%')
+        </if>
+        <if test="enable != null">
+            and enable = #{enable}
+        </if>
+        <if test="deleted != null">
+            and deleted = #{deleted}
+        </if>
+        <if test="entId != null">
+            and ent_id = #{entId}
+        </if>
+        <if test="unitList != null">
+            AND ent_id in (
+                SELECT ent_id FROM wf_org_unit where 1=1 
+                and unit_id in
+                    <foreach collection="unitList" item="unitList" index="index" close=")" open="(" separator=","> 
+                      #{unitList.unitId}
+                    </foreach> 
+                )
+        </if>
+        <if test="orderBy != null">
+            ORDER BY ${orderBy}
+        </if>
+    </select>
+    <insert id="insertPrj" parameterType="cn.rkylin.core.ApolloMap">
+		insert into oms_project (prj_id, prj_name, prj_type,
+		  cons, tel, expire_time,
+		  remark, create_time,modify_time,
+		  enable, deleted,ent_id,ent_name)
+		values (#{prjId}, #{prjName}, #{prjType},
+		  #{cons}, #{tel}, #{expireTime},
+		  #{remark}, now(),now(),
+		  #{enable}, #{deleted},#{entId},#{entName})
+	</insert>
+    <select id="getProjectInfo" resultType="java.util.Map">
+		SELECT prj_id,
+			prj_name,
+			prj_type,
+			cons,
+			tel,
+			DATE_FORMAT(expire_time,'%Y-%m-%d %H:%i:%s') AS expire_time,
+			remark,
+			ent_name,
+			enable
+		FROM oms_project
+		where prj_id=#{prjId}
+	</select>
+    <update id="updatePrj" parameterType="cn.rkylin.core.ApolloMap" conn="master">
+		update oms_project
+		set
+		  prj_name=#{prjName},
+		  prj_type=#{prjType},
+		  cons=#{cons},
+		  tel=#{tel},
+		  expire_time=#{expireTime},
+		  remark=#{remark}
+		where prj_id = #{prjId}
+	</update>
+    <update id="updatePrjEnable" parameterType="cn.rkylin.core.ApolloMap" conn="master">
+        update oms_project
+        set  enable=#{enable}
+        where prj_id = #{prjId}
+    </update>
+    <update id="updatePrjDisable" parameterType="cn.rkylin.core.ApolloMap" conn="master">
+        update oms_project
+        set  enable=#{enable}
+        where prj_id = #{prjId}
+    </update>
+    <update id="updatePrjShopDisable" parameterType="cn.rkylin.core.ApolloMap" conn="master">
+		update oms_shop
+		set  enable=#{enable}
+		where prj_id = #{prjId}
+	</update>
+    <update id="deletePrj" parameterType="cn.rkylin.core.ApolloMap" conn="master">
+        update oms_project
+        set  deleted=#{deleted}
+        where prj_id = #{prjId}
+    </update>
+    <update id="deletePrjShop" parameterType="cn.rkylin.core.ApolloMap" conn="master">
+		update oms_shop
+		set  deleted=#{deleted}
+		where prj_id = #{prjId}
+	</update>
+    <select id="getProjectInfoByName" resultType="java.util.Map">
+        SELECT prj_id,
+        prj_name,
+        prj_type,
+        cons,
+        tel,
+        expire_time,
+        remark
+        FROM oms_project
+        where prj_name=#{prjName}
+    </select>
+    <select id="getProjectInfoByNameAndId" resultType="java.util.Map">
+		SELECT prj_id,
+		prj_name,
+		prj_type,
+		cons,
+		tel,
+		expire_time,
+		remark
+		FROM oms_project
+		where prj_name=#{prjName} and prj_id!=#{prjId}
+	</select>
+    <select id="getEnableShop" resultType="java.util.Map">
+		SELECT prj_id
+		FROM oms_shop
+		where prj_id=#{prjId}
+	</select>
+
+    <!-- 导出功能继承 -->
+    <resultMap id="BaseResultExportMap" type="cn.rkylin.oms.system.project.vo.ProjectExportVO" extends="BaseResultMap">
+    </resultMap>
+    <select id="exportSelectProjectManage" parameterType="cn.rkylin.core.ApolloMap" resultMap="BaseResultExportMap">
+        select
+        prj_id,
+        prj_name,
+        prj_type,
+        cons,
+        tel,
+        expire_time,
+        remark,
+        create_time,
+        modify_time,
+        enable,
+        ent_id,
+        ent_name,
+        '' as operation,
+        '' as enable_status
+        from oms_project
+        where deleted = 'n'
+        <if test="value != null">
+            and prj_name like CONCAT('%',#{value},'%')
+        </if>
+        <if test="selectWhere != null">
+            ${selectWhere}
+        </if>
+    </select>
+    
+    <!-- 取得需要分单的店铺的项目 -->
+     <select id="pageSelectSplitProject" parameterType="cn.rkylin.oms.system.project.vo.ProjectVO" resultMap="BaseResultMap">
+        select
+        p.prj_id,
+        p.prj_name
+        from oms_project p
+		where  exists (select s.shop_id from oms_shop s where p.prj_id = s.prj_id 
+    	  and p.deleted = 'n' 
+          and s.deleted = 'n' 
+          and s.need_split_order = 'y' 
+          and p.enable = 'y') 
+    </select>
+</mapper>

@@ -1,0 +1,55 @@
+package com.yulin.pm;
+import java.util.*;
+
+public class ShapeDemo {
+
+	/**
+	 * 面相对象 多态
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("请问您要创建一个什么图形？");
+		System.out.println("1.圆形 2.矩形 3.三角形");
+		Scanner scan = new Scanner(System.in);
+		int in=scan.nextInt();
+		Shape s = null;	//多态
+		if(in==1){
+			System.out.println("请输入半径：");
+			int r=scan.nextInt();
+			s = new Circle(r);
+		}else if(in==2){
+			System.out.println("请输入长：");
+			int w=scan.nextInt();
+			System.out.println("请输入宽：");
+			int h=scan.nextInt();
+			System.out.println(w);
+			System.out.println(h);
+			s = new Delta(r);
+		}else if(in==3){
+			System.out.println("请输入三角形的底：");
+			int b=scan.nextInt();
+			System.out.println("请输入三角形的高：");
+			int h=scan.nextInt();
+			System.out.println("请输入三角形的边长：");
+			int a=scan.nextInt();
+			System.out.println("请输入三角形的边长：");
+			int c=scan.nextInt();
+			System.out.println(b);
+			System.out.println(h);
+			System.out.println(a);
+			System.out.println(c);
+		}
+		
+		System.out.println("请选择您要查看的信息：1.周长 2.面积");
+		in=scan.nextInt();
+		if(in==1){
+			System.out.println(s.zhouChang());
+		}else if(in==2){
+			System.out.println(s.mianJi());
+		}
+		
+		//练习：参考代码，自定义矩形和三角形，理解继承、方法的重写和多态
+
+	}
+
+}

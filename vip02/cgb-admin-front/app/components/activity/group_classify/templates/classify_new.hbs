@@ -1,0 +1,20 @@
+<div class="modal attribute_new">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned classify-form">
+        <div class="modal-body my-style-css">
+            <div class="control-group">
+                <label for="name"><span class="required">*</span>团购分类名称:</label>
+                <input id="name" name="name" class="form-control" type="text" placeholder="请输入分类名称"
+                       value="{{name}}" required maxlength=10>
+                <span class="note"><i>&times;</i> 必填不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填不得为空</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="保存">
+        </div>
+    </form>
+</div>

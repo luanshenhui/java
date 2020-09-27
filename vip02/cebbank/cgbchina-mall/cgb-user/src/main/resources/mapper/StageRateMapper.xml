@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StageRate">
+    <resultMap id="StageRateMap" type="StageRateModel">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="name" column="name"/>
+        <result property="businessScenario" column="business_scenario"/>
+        <result property="orderAmount" column="order_amount"/>
+        <result property="totalStage" column="total_stage"/>
+        <result property="endPaySign" column="end_pay_sign"/>
+        <result property="endPayCorpus" column="end_pay_corpus"/>
+        <result property="fixFeeSign" column="fix_fee_sign"/>
+        <result property="fixAmountFee" column="fix_amount_fee"/>
+        <result property="r1Rate" column="r1_rate"/>
+        <result property="r1Percent" column="r1_percent"/>
+        <result property="r2Rate" column="r2_rate"/>
+        <result property="r2Percent" column="r2_percent"/>
+        <result property="r2Stage" column="r2_stage"/>
+        <result property="r3Rate" column="r3_rate"/>
+        <result property="r3Percent" column="r3_percent"/>
+        <result property="r3Stage" column="r3_stage"/>
+        <result property="freeStageFrom" column="free_stage_from"/>
+        <result property="freeStageTo" column="free_stage_to"/>
+        <result property="freeStage" column="free_stage"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="vendorId" column="vendor_id"/>
+    </resultMap>
+    <sql id="columns">
+        id,type,name,business_scenario,order_amount,total_stage,end_pay_sign,end_pay_corpus,fix_fee_sign,fix_amount_fee,r1_rate,r1_percent,r2_rate,r2_percent,r2_stage,r3_rate,r3_percent,r3_stage,free_stage_from,free_stage_to,free_stage,del_flag,create_oper,modify_oper,create_time,modify_time,vendor_id
+    </sql>
+
+    <insert id="insert" parameterType="StageRateModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_stage_rate
+        (type
+        ,name
+        ,business_scenario
+        ,order_amount
+        ,total_stage
+        ,end_pay_sign
+        ,end_pay_corpus
+        ,fix_fee_sign
+        ,fix_amount_fee
+        ,r1_rate
+        ,r1_percent
+        ,r2_rate
+        ,r2_percent
+        ,r2_stage
+        ,r3_rate
+        ,r3_percent
+        ,r3_stage
+        ,free_stage_from
+        ,free_stage_to
+        ,free_stage
+        ,del_flag
+        ,create_oper
+        ,modify_oper
+        ,create_time
+        ,modify_time
+        ,vendor_id)
+        values(#{type}
+        ,#{name}
+        ,#{businessScenario}
+        ,#{orderAmount}
+        ,#{totalStage}
+        ,#{endPaySign}
+        ,#{endPayCorpus}
+        ,#{fixFeeSign}
+        ,#{fixAmountFee}
+        ,#{r1Rate}
+        ,#{r1Percent}
+        ,#{r2Rate}
+        ,#{r2Percent}
+        ,#{r2Stage}
+        ,#{r3Rate}
+        ,#{r3Percent}
+        ,#{r3Stage}
+        ,#{freeStageFrom}
+        ,#{freeStageTo}
+        ,#{freeStage}
+        ,'0'
+        ,#{createOper}
+        ,#{modifyOper}
+        ,now()
+        ,#{modifyTime}
+        ,#{vendorId})
+    </insert>
+
+    <update id="update" parameterType="StageRateModel">
+        update tbl_stage_rate set
+        <if test="type !=null">type = #{type}
+            ,
+        </if>
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="businessScenario !=null">business_scenario = #{businessScenario}
+            ,
+        </if>
+        <if test="orderAmount !=null">order_amount = #{orderAmount}
+            ,
+        </if>
+        <if test="totalStage !=null">total_stage = #{totalStage}
+            ,
+        </if>
+        <if test="endPaySign !=null">end_pay_sign = #{endPaySign}
+            ,
+        </if>
+        <if test="endPayCorpus !=null">end_pay_corpus = #{endPayCorpus}
+            ,
+        </if>
+        <if test="fixFeeSign !=null">fix_fee_sign = #{fixFeeSign}
+            ,
+        </if>
+        <if test="fixAmountFee !=null">fix_amount_fee = #{fixAmountFee}
+            ,
+        </if>
+        <if test="r1Rate !=null">r1_rate = #{r1Rate}
+            ,
+        </if>
+        <if test="r1Percent !=null">r1_percent = #{r1Percent}
+            ,
+        </if>
+        <if test="r2Rate !=null">r2_rate = #{r2Rate}
+            ,
+        </if>
+        <if test="r2Percent !=null">r2_percent = #{r2Percent}
+            ,
+        </if>
+        <if test="r2Stage !=null">r2_stage = #{r2Stage}
+            ,
+        </if>
+        <if test="r3Rate !=null">r3_rate = #{r3Rate}
+            ,
+        </if>
+        <if test="r3Percent !=null">r3_percent = #{r3Percent}
+            ,
+        </if>
+        <if test="r3Stage !=null">r3_stage = #{r3Stage}
+            ,
+        </if>
+        <if test="freeStageFrom !=null">free_stage_from = #{freeStageFrom}
+            ,
+        </if>
+        <if test="freeStageTo !=null">free_stage_to = #{freeStageTo}
+            ,
+        </if>
+        <if test="freeStage !=null">free_stage = #{freeStage}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="type !=null">and type = #{type}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="businessScenario !=null">and business_scenario = #{businessScenario}</if>
+            <if test="orderAmount !=null">and order_amount = #{orderAmount}</if>
+            <if test="totalStage !=null">and total_stage = #{totalStage}</if>
+            <if test="endPaySign !=null">and end_pay_sign = #{endPaySign}</if>
+            <if test="endPayCorpus !=null">and end_pay_corpus = #{endPayCorpus}</if>
+            <if test="fixFeeSign !=null">and fix_fee_sign = #{fixFeeSign}</if>
+            <if test="fixAmountFee !=null">and fix_amount_fee = #{fixAmountFee}</if>
+            <if test="r1Rate !=null">and r1_rate = #{r1Rate}</if>
+            <if test="r1Percent !=null">and r1_percent = #{r1Percent}</if>
+            <if test="r2Rate !=null">and r2_rate = #{r2Rate}</if>
+            <if test="r2Percent !=null">and r2_percent = #{r2Percent}</if>
+            <if test="r2Stage !=null">and r2_stage = #{r2Stage}</if>
+            <if test="r3Rate !=null">and r3_rate = #{r3Rate}</if>
+            <if test="r3Percent !=null">and r3_percent = #{r3Percent}</if>
+            <if test="r3Stage !=null">and r3_stage = #{r3Stage}</if>
+            <if test="freeStageFrom !=null">and free_stage_from = #{freeStageFrom}</if>
+            <if test="freeStageTo !=null">and free_stage_to = #{freeStageTo}</if>
+            <if test="freeStage !=null">and free_stage = #{freeStage}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="StageRateMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_stage_rate
+        where id=#{id}
+    </select>
+    <!--供应商编辑查询分期费率-->
+    <select id="findStageByVendorId" parameterType="java.lang.String" resultMap="StageRateMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_stage_rate
+        where vendor_id=#{vendorId} and del_flag='0'
+    </select>
+    <select id="findByVendorId" parameterType="Map" resultMap="StageRateMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_stage_rate
+        where vendor_id=#{vendorId}
+    </select>
+    <select id="findAll" resultMap="StageRateMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_stage_rate
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="StageRateMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_stage_rate
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <!--逻辑删除-->
+    <update id="updateForDelete" parameterType="java.lang.Long">
+        update tbl_stage_rate set
+        del_flag
+        = '1'
+        where id = #{id}
+    </update>
+</mapper>
+
+

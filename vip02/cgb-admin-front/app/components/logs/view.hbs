@@ -1,0 +1,115 @@
+{{#component "logs js-component"}}
+    <p class="components-title"><strong>- 日志管理 -</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form logs-form-search form-inline form form-aligned">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                           <label class="js-shopType">操作类型:</label>
+                            <select id="shopType" name="shopType">
+                                <option value="">所有业务</option>
+                                <option value="ng" {{#equals "ng" shopType}}selected{{/equals}}>内管系统</option>
+                                <option value="vd" {{#equals "vd" shopType}}selected{{/equals}}>供应商系统</option>
+                                <option value="yg" {{#equals "yg" shopType}}selected{{/equals}}>商城</option>
+                                <option value="jf" {{#equals "jf" shopType}}selected{{/equals}}>积分商城</option>
+                                <option value="cc" {{#equals "cc" shopType}}selected{{/equals}}>CallCenter</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                           <label class="js-action">操作动作:</label>
+                            <select id="action" name="action">
+                                <option value="">所有动作</option>
+                                <option value="0401" {{#equals "0401" action}}selected{{/equals}}>登录成功</option>
+                                <option value="0402" {{#equals "0402" action}}selected{{/equals}}>登录失败</option>
+                                <option value="0403" {{#equals "0403" action}}selected{{/equals}}>注销</option>
+
+                                <option value="0500" {{#equals "0500" action}}selected{{/equals}}>编辑中</option>
+                                <option value="0501" {{#equals "0501" action}}selected{{/equals}}>待初审</option>
+                                <option value="0502" {{#equals "0502" action}}selected{{/equals}}>待复审</option>
+                                <option value="0503" {{#equals "0503" action}}selected{{/equals}}>商品变更审核</option>
+
+                                <option value="0504" {{#equals "0504" action}}selected{{/equals}}>价格变更审核</option>
+                                <option value="0505" {{#equals "0505" action}}selected{{/equals}}>下架申请审核</option>
+                                <option value="0506" {{#equals "0506" action}}selected{{/equals}}>审核通过</option>
+                                <option value="0570" {{#equals "0570" action}}selected{{/equals}}>初审拒绝</option>
+
+                                <option value="0571" {{#equals "0571" action}}selected{{/equals}}>复审拒绝</option>
+                                <option value="0572" {{#equals "0572" action}}selected{{/equals}}>商品变更审核拒绝</option>
+                                <option value="0573" {{#equals "0573" action}}selected{{/equals}}>价格变更审核拒绝</option>
+                                <option value="0574" {{#equals "0574" action}}selected{{/equals}}>下架申请审核拒绝</option>
+
+                                <option value="0301" {{#equals "0301" action}}selected{{/equals}}>待付款</option>
+                                <option value="0316" {{#equals "0316" action}}selected{{/equals}}>订单状态未明</option>
+                                <option value="0308" {{#equals "0308" action}}selected{{/equals}}>支付成功</option>
+                                <option value="0307" {{#equals "0307" action}}selected{{/equals}}>支付失败</option>
+
+                                <option value="0305" {{#equals "0305" action}}selected{{/equals}}>处理中</option>
+                                <option value="0309" {{#equals "0309" action}}selected{{/equals}}>已发货</option>
+                                <option value="0306" {{#equals "0306" action}}selected{{/equals}}>发货处理中</option>
+                                <option value="0310" {{#equals "0310" action}}selected{{/equals}}>已签收</option>
+
+                                <option value="0312" {{#equals "0312" action}}selected{{/equals}}>已撤单</option>
+                                <option value="0304" {{#equals "0304" action}}selected{{/equals}}>已废单</option>
+                                <option value="0334" {{#equals "0334" action}}selected{{/equals}}>退货申请</option>
+                                <option value="0327" {{#equals "0327" action}}selected{{/equals}}>退货成功</option>
+
+                                <option value="0335" {{#equals "0335" action}}selected{{/equals}}>拒绝退货申请</option>
+                                <option value="0380" {{#equals "0380" action}}selected{{/equals}}>拒绝签收</option>
+                                <option value="0381" {{#equals "0381" action}}selected{{/equals}}>无人签收</option>
+                                <option value="0382" {{#equals "0382" action}}selected{{/equals}}>订单推送失败</option>
+                            </select>
+                            </span>
+                            <span class="span4 span-large">
+                            <label for="oprationUser">操作用户:</label>
+                            <input class="form-control js-user" id="user" type="text" name="user">
+                        </span>
+                    </p>
+                 <span class="span4 span-large">
+                        <label for="startTime">开始日期:</label>
+                        <input class="form-control start_date js-date-start" type="text" id="startTime"
+                               name="startTime" value="{{startTime}}"/>
+                 </span>
+                 <span class="span4 span-large">
+                        <label for="endTime">截止日期:</label>
+                       <input class="form-control end_date js-date-end" type="text" id="endTime" name="endTime"
+                              value="{{endTime}}"/>
+                 </span>
+                      <span class="span1 span-large">
+                            <label>&nbsp;</label>
+                            <input class="btn btn-success btn-small js-log-check" type="submit" value="查询"/>
+                        </span>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="5%">ID</th>
+            <th width="10%">业务类型</th>
+            <th width="10%">操作动作</th>
+            <th width="15%">操作用户</th>
+            <th width="10%">操作日期</th>
+            <th width="45%">操作内容</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}">
+                <td class="id">{{id}}</td>
+                <td class="shopType">{{shopTypeName}}</td>
+                <td class="action">{{actionName}}</td>
+                <td class="user">{{user}}</td>
+                <td class="time">{{formatDate time "day"}}</td>
+                <td class="log-content">{{content}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    {{/equals}}
+{{/component}}

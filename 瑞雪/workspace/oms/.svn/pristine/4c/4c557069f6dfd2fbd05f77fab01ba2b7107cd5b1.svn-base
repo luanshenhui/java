@@ -1,0 +1,432 @@
+package cn.rkylin.core;
+
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.core.exception.BusinessException;
+import cn.rkylin.core.utils.HttpRequester;
+import cn.rkylin.core.utils.HttpRequester.MethodEnum;
+import cn.rkylin.core.utils.HttpRespons;
+import cn.rkylin.oms.system.position.domain.WF_ORG_STATION;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+
+/**
+ * 自定义baseDao 增删改查方法
+ */
+@Service("dataBaseFactory")
+public class DataBaseFactoryImpl implements IDataBaseFactory {
+
+	@Autowired
+	private HttpRequester httpcilent;
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@Value("#{api_properties}")
+	private Properties apiProperties;
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public PageInfo<ApolloRet> findByPage(int pageNo, int pageSize, String index, Map reqMap) throws Exception {
+		SqlSession sqlSession = null;
+		PageInfo<ApolloRet> result = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(index);
+			PageHelper.startPage(pageNo, pageSize, true);
+			List list = sqlSession.selectList(index, reqMap);
+			result = new PageInfo<ApolloRet>(list);
+
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20",
+					"pageNo:" + pageNo + ",pageSize:" + pageSize + ",index:" + index + ",params:" + reqMap);
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+
+	/**
+	 * 查询数据,支持 select/enums 两种查询方式(非分页)
+	 */
+	@SuppressWarnings({ "rawtypes" })
+	public <E> List<E> findForList(String index, Map reqMap) throws Exception {
+		SqlSession sqlSession = null;
+		List<E> result = null;
+		MappedStatement ms = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(index);
+			ms = sqlSession.getConfiguration().getMappedStatement(index);// mapper节点
+			if (SqlCommandType.ENUMS.equals(ms.getSqlCommandType())) {// 节点类型为enum
+				result = findByEnums(index, reqMap, ms);// 直接从枚举中获取数据
+			} else {
+				result = findBySql(index, reqMap, sqlSession);
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", "index:" + index + ",params:" + reqMap);
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+
+	/**
+	 * 删除操作
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	public int delete(String index, Map reqMap) throws Exception {
+		String sql = null;
+		SqlSession sqlSession = null;
+		try {
+
+			sqlSession = getSession(index);
+			int count = sqlSession.delete(index, reqMap);
+			return count;
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", "index:" + index + ",params:" + reqMap);
+		} finally {
+			closeSession(sqlSession);
+		}
+
+	}
+
+	/**
+	 * 新增
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	public int insert(String index, Map reqMap) throws Exception {
+		SqlSession sqlSession = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(index);
+			int count = sqlSession.insert(index, reqMap);
+			return count;
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", "index:" + index + ",params:" + reqMap);
+		} finally {
+			closeSession(sqlSession);
+		}
+	}
+
+	/**
+	 * 批量新增
+	 * 
+	 * @param index
+	 * @param paramList
+	 * @return
+	 * @throws Exception
+	 */
+	public int insertBatch(String index, List paramList) throws Exception {
+		SqlSession sqlSession = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(index);
+			int count = sqlSession.insert(index, paramList);
+			return count;
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", "index:" + index + ",params:" + paramList);
+		} finally {
+			closeSession(sqlSession);
+		}
+	}
+
+	/**
+	 * 更新
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	public int update(String index, Map reqMap) throws Exception {
+		SqlSession sqlSession = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(index);
+			int count = sqlSession.update(index, reqMap);
+			return count;
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", "index:" + index + ",params:" + reqMap);
+		} finally {
+			closeSession(sqlSession);
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public int count(String index, Map reqMap) throws Exception {
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = getSession(index);
+			Integer count = sqlSession.selectOne(index, reqMap);
+			return count;
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", "index:" + index + ",params:" + reqMap);
+		} finally {
+			closeSession(sqlSession);
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public HttpRespons callService(String index, Map map, MethodEnum method) throws Exception {
+		String url = "";
+		try {
+			String key = ApolloUtil.URL_MAP.get(index);
+			if (key != null && apiProperties.containsKey(key)) {
+				url = apiProperties.getProperty(key);
+			}
+			MappedStatement ms = getSession(index).getConfiguration().getMappedStatement(index);// mapper节点
+			url += ms.getBoundSql(map).getSql();
+			if (MethodEnum.get.equals(method)) {
+				return httpcilent.sendGetApi(index, url, map);
+			}
+			return httpcilent.sendPostApi(index, url, map);
+		} catch (Exception e) {
+			throw new BusinessException(e, "-10",
+					"index:" + index + ",method:" + method + ",url:" + url + ",params:" + map);
+		}
+	}
+
+	/**
+	 * 多数据源切换SqlSessionFactory
+	 * 
+	 * @param index
+	 *            sqlID
+	 * @return
+	 * @throws Exception
+	 */
+	private SqlSession getSession(String index) throws Exception {
+		// index获取对应的conn属性 , 根据conn获取对应的SqlSessionFactory
+		// 实现数据源切换
+		return sessionFactory.getSessionFactory(ApolloUtil.CONN_MAP.get(index));
+	}
+
+	/**
+	 * enums类型操作 , 直接从枚举获取数据
+	 * 
+	 * @param reqMap
+	 * @param ms
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private <E> List<E> findByEnums(String index, Map reqMap, MappedStatement ms) throws Exception {
+		List result = null;
+		BoundSql boundSql = ms.getSqlSource().getBoundSql(reqMap);
+		String className = boundSql.getSql().split("@")[0];
+		String methodName = boundSql.getSql().split("@")[1];
+		Class<?> threadClazz = Class.forName(className);
+		Method method = threadClazz.getMethod(methodName, Map.class);
+		result = (List<Map>) method.invoke(threadClazz, reqMap);
+		return result;
+	}
+
+	/**
+	 * select类型操作 从对应数据源查询数据
+	 * 
+	 * @param reqMap
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	private <E> List<E> findBySql(String index, Map reqMap, SqlSession sqlSession) throws Exception {
+		List<E> result = null;
+
+		if (index == null)
+			return null;
+		try {
+			result = sqlSession.selectList(index, reqMap);
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", "index:" + index + ",params:" + reqMap);
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+
+	private void closeSession(SqlSession sqlSession) {
+		if (sqlSession != null) {
+			// sqlSession.commit();
+			// sqlSession.close();
+		}
+	}
+
+	/**
+	 * 泛型分页查询
+	 * 
+	 * @author wangxiaoyi
+	 * @param pageNo
+	 * @param pageSize
+	 * @param pageStatement
+	 * @param paramObj
+	 * @return
+	 * @throws Exception
+	 */
+	public <E> PageInfo<E> findPage(int pageNo, int pageSize, String pageStatement, E paramObj) throws Exception {
+		SqlSession sqlSession = null;
+		PageInfo<E> result = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(pageStatement);
+			PageHelper.startPage(pageNo, pageSize, true);
+			List<E> list = sqlSession.selectList(pageStatement, paramObj);
+			result = new PageInfo<E>(list);
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20",
+					"pageNo:" + pageNo + ",pageSize:" + pageSize + ",index:" + pageStatement + ",params:" + paramObj);
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+
+	/**
+	 * 按条件全部取得
+	 * 
+	 * @author wangxiaoyi
+	 * @param pageStatement
+	 * @param paramObj
+	 * @return <E> List<E> 全部结果集取得
+	 * @throws Exception
+	 */
+	public <E> List<E> findList(String pageStatement, String quickSearch) throws Exception {
+		SqlSession sqlSession = null;
+		List<E> result = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(pageStatement);
+			List<E> list = sqlSession.selectList(pageStatement, quickSearch);
+			result = list;
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", ",index:" + pageStatement + ",params:" + quickSearch);
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+	
+	/**
+	 * 按条件全部取得
+	 * 
+	 * @author wangxiaoyi
+	 * @param pageStatement
+	 * @param paramObj
+	 * @return <E> List<E> 全部结果集取得
+	 * @throws Exception
+	 */
+	public <E> List<E> findList(String pageStatement, Map reqMap) throws Exception {
+		SqlSession sqlSession = null;
+		List<E> result = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(pageStatement);
+			List<E> list = sqlSession.selectList(pageStatement, reqMap);
+			result = list;
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", ",index:" + pageStatement + ",params:" + reqMap);
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+	
+	/**
+	 * 按条件全部取得
+	 * 
+	 * @author wangxiaoyi
+	 * @param pageStatement
+	 * @param paramObj
+	 * @return <E> List<E> 全部结果集取得
+	 * @throws Exception
+	 */
+	public <E> List<E> findAllList(String pageStatement, E paramObj) throws Exception {
+		SqlSession sqlSession = null;
+		List<E> result = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(pageStatement);
+			List<E> list = sqlSession.selectList(pageStatement, paramObj);
+			result = list;
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", ",index:" + pageStatement + ",params:" + paramObj);
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+	
+	public int insert(String pageStatement, Object entity) throws Exception {
+		int result = 0;
+		SqlSession sqlSession = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(pageStatement);
+			result = sqlSession.insert(pageStatement, entity);
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", pageStatement + "错误");
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+
+	@Override
+	public int update(String updateStatement, Object entity) throws Exception {
+		int result = 0;
+		SqlSession sqlSession = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(updateStatement);
+			result = sqlSession.update(updateStatement, entity);
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", updateStatement + "错误");
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+
+	@Override
+	public int delete(String deleteStatement, Object entity) throws Exception {
+		int result = 0;
+		SqlSession sqlSession = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(deleteStatement);
+			result = sqlSession.delete(deleteStatement, entity);
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", deleteStatement + "错误");
+		} finally {
+			closeSession(sqlSession);
+		}
+		return result;
+	}
+
+	@Override
+	public Map findMapList(String statement, Object paramObj,String parm) throws Exception {
+		SqlSession sqlSession = null;
+		String sql = null;
+		try {
+			sqlSession = getSession(statement);
+			return sqlSession.selectMap(statement, paramObj, parm);
+		} catch (Exception e) {
+			throw new BusinessException(e, "-20", ",index:" + statement + ",params:" + paramObj);
+		} finally {
+			closeSession(sqlSession);
+		}
+	}
+
+}

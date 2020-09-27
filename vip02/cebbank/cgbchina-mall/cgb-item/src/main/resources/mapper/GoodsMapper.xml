@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Goods">
+    <resultMap id="GoodsMap" type="GoodsModel">
+        <result property="code" column="code"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="name" column="name"/>
+        <result property="productId" column="product_id"/>
+        <result property="createType" column="create_type"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="manufacturer" column="manufacturer"/>
+        <result property="goodsBrandId" column="goods_brand_id"/>
+        <result property="backCategory1Id" column="back_category1_id"/>
+        <result property="backCategory2Id" column="back_category2_id"/>
+        <result property="backCategory3Id" column="back_category3_id"/>
+        <result property="channelMall" column="channel_mall"/>
+        <result property="channelCc" column="channel_cc"/>
+        <result property="channelMallWx" column="channel_mall_wx"/>
+        <result property="channelCreditWx" column="channel_credit_wx"/>
+        <result property="channelPhone" column="channel_phone"/>
+        <result property="channelApp" column="channel_app"/>
+        <result property="channelSms" column="channel_sms"/>
+        <result property="channelPoints" column="channel_points"/>
+        <result property="channelIvr" column="channel_ivr"/>
+        <result property="goodsType" column="goods_type"/>
+        <result property="isInner" column="is_inner"/>
+        <result property="mailOrderCode" column="mail_order_code"/>
+        <result property="promotionTitle" column="promotion_title"/>
+        <result property="adWord" column="ad_word"/>
+        <result property="keyword" column="keyword"/>
+        <result property="giftDesc" column="gift_desc"/>
+        <result property="introduction" column="introduction"/>
+        <result property="serviceType" column="service_type"/>
+        <result property="recommendGoods1Code" column="recommend_goods1_code"/>
+        <result property="recommendGoods2Code" column="recommend_goods2_code"/>
+        <result property="recommendGoods3Code" column="recommend_goods3_code"/>
+        <result property="regionType" column="region_type"/>
+        <result property="approveStatus" column="approve_status"/>
+        <result property="limitCount" column="limit_count"/>
+        <result property="pointsType" column="points_type"/>
+        <result property="cards" column="cards"/>
+        <result property="onShelfMallDate" column="on_shelf_mall_date"/>
+        <result property="offShelfMallDate" column="off_shelf_mall_date"/>
+        <result property="onShelfCcDate" column="on_shelf_cc_date"/>
+        <result property="offShelfCcDate" column="off_shelf_cc_date"/>
+        <result property="onShelfMallWxDate" column="on_shelf_mall_wx_date"/>
+        <result property="offShelfMallWxDate" column="off_shelf_mall_wx_date"/>
+        <result property="onShelfCreditWxDate" column="on_shelf_credit_wx_date"/>
+        <result property="offShelfCreditWxDate" column="off_shelf_credit_wx_date"/>
+        <result property="onShelfPhoneDate" column="on_shelf_phone_date"/>
+        <result property="offShelfPhoneDate" column="off_shelf_phone_date"/>
+        <result property="onShelfAppDate" column="on_shelf_app_date"/>
+        <result property="offShelfAppDate" column="off_shelf_app_date"/>
+        <result property="onShelfSmsDate" column="on_shelf_sms_date"/>
+        <result property="offShelfSmsDate" column="off_shelf_sms_date"/>
+        <result property="freightSize" column="freight_size"/>
+        <result property="freightWeight" column="freight_weight"/>
+        <result property="approveDifferent" column="approve_different"/>
+        <result property="attribute" column="attribute"/>
+        <result property="currType" column="curr_type"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="onShelfTime" column="on_shelf_time"/>
+    </resultMap>
+    <sql id="columns">
+        code,ordertype_id,name,product_id,create_type,vendor_id,manufacturer,goods_brand_id,back_category1_id,back_category2_id,back_category3_id,channel_mall,channel_cc,channel_mall_wx,channel_credit_wx,channel_phone,channel_app,channel_sms,goods_type,is_inner,mail_order_code,promotion_title,ad_word,keyword,gift_desc,introduction,service_type,recommend_goods1_code,recommend_goods2_code,recommend_goods3_code,region_type,approve_status,limit_count,points_type,cards,on_shelf_mall_date,off_shelf_mall_date,on_shelf_cc_date,off_shelf_cc_date,on_shelf_mall_wx_date,off_shelf_mall_wx_date,on_shelf_credit_wx_date,off_shelf_credit_wx_date,on_shelf_phone_date,off_shelf_phone_date,on_shelf_app_date,off_shelf_app_date,on_shelf_sms_date,off_shelf_sms_date,freight_size,freight_weight,approve_different,attribute,curr_type,del_flag,create_oper,create_time,modify_oper,modify_time,on_shelf_time
+    </sql>
+
+    <insert id="insert" parameterType="GoodsModel" useGeneratedKeys="true"
+            keyProperty="code" keyColumn="code">
+        insert into tbl_goods
+        (code,
+        ordertype_id
+        ,name
+        ,product_id
+        ,create_type
+        ,vendor_id
+        ,manufacturer
+        ,goods_brand_id
+        ,back_category1_id
+        ,back_category2_id
+        ,back_category3_id
+        ,channel_mall
+        ,channel_cc
+        ,channel_mall_wx
+        ,channel_credit_wx
+        ,channel_phone
+        ,channel_app
+        ,channel_sms
+        ,goods_type
+        ,is_inner
+        ,mail_order_code
+        ,promotion_title
+        ,ad_word
+        ,keyword
+        ,gift_desc
+        ,introduction
+        ,service_type
+        ,recommend_goods1_code
+        ,recommend_goods2_code
+        ,recommend_goods3_code
+        ,region_type
+        ,approve_status
+        ,limit_count
+        ,points_type
+        ,cards
+        ,on_shelf_mall_date
+        ,off_shelf_mall_date
+        ,on_shelf_cc_date
+        ,off_shelf_cc_date
+        ,on_shelf_mall_wx_date
+        ,off_shelf_mall_wx_date
+        ,on_shelf_credit_wx_date
+        ,off_shelf_credit_wx_date
+        ,on_shelf_phone_date
+        ,off_shelf_phone_date
+        ,on_shelf_app_date
+        ,off_shelf_app_date
+        ,on_shelf_sms_date
+        ,off_shelf_sms_date
+        ,freight_size
+        ,freight_weight
+        ,approve_different
+        ,attribute
+        ,curr_type
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,on_shelf_time)
+        values(
+        #{code}
+        ,#{ordertypeId}
+        ,#{name}
+        ,#{productId}
+        ,#{createType}
+        ,#{vendorId}
+        ,#{manufacturer}
+        ,#{goodsBrandId}
+        ,#{backCategory1Id}
+        ,#{backCategory2Id}
+        ,#{backCategory3Id}
+        ,#{channelMall}
+        ,#{channelCc}
+        ,#{channelMallWx}
+        ,#{channelCreditWx}
+        ,#{channelPhone}
+        ,#{channelApp}
+        ,#{channelSms}
+        ,#{goodsType}
+        ,#{isInner}
+        ,#{mailOrderCode}
+        ,#{promotionTitle}
+        ,#{adWord}
+        ,#{keyword}
+        ,#{giftDesc}
+        ,#{introduction}
+        ,#{serviceType}
+        ,#{recommendGoods1Code}
+        ,#{recommendGoods2Code}
+        ,#{recommendGoods3Code}
+        ,#{regionType}
+        ,#{approveStatus}
+        ,#{limitCount}
+        ,#{pointsType}
+        ,#{cards}
+        ,#{onShelfMallDate}
+        ,#{offShelfMallDate}
+        ,#{onShelfCcDate}
+        ,#{offShelfCcDate}
+        ,#{onShelfMallWxDate}
+        ,#{offShelfMallWxDate}
+        ,#{onShelfCreditWxDate}
+        ,#{offShelfCreditWxDate}
+        ,#{onShelfPhoneDate}
+        ,#{offShelfPhoneDate}
+        ,#{onShelfAppDate}
+        ,#{offShelfAppDate}
+        ,#{onShelfSmsDate}
+        ,#{offShelfSmsDate}
+        ,#{freightSize}
+        ,#{freightWeight}
+        ,#{approveDifferent}
+        ,#{attribute}
+        ,#{currType}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        ,#{onShelfTime})
+    </insert>
+
+    <update id="update" parameterType="GoodsModel">
+        update tbl_goods set
+        modify_time=now()
+        <if test="ordertypeId !=null">,ordertype_id = #{ordertypeId}</if>
+        <if test="name !=null">,name = #{name}</if>
+        <if test="productId !=null">,product_id = #{productId}</if>
+        <if test="createType !=null">,create_type = #{createType}</if>
+        <if test="vendorId !=null">,vendor_id = #{vendorId}</if>
+        <if test="manufacturer !=null">,manufacturer = #{manufacturer}</if>
+        <if test="goodsBrandId !=null">,goods_brand_id = #{goodsBrandId}</if>
+        <if test="backCategory1Id !=null">,back_category1_id = #{backCategory1Id}</if>
+        <if test="backCategory2Id !=null">,back_category2_id = #{backCategory2Id}</if>
+        <if test="backCategory3Id !=null">,back_category3_id = #{backCategory3Id}</if>
+        <if test="channelMall !=null">,channel_mall = #{channelMall}</if>
+        <if test="channelCc !=null">,channel_cc = #{channelCc}</if>
+        <if test="channelMallWx !=null">,channel_mall_wx = #{channelMallWx}</if>
+        <if test="channelCreditWx !=null">,channel_credit_wx = #{channelCreditWx}</if>
+        <if test="channelPhone !=null">,channel_phone = #{channelPhone}</if>
+        <if test="channelApp !=null">,channel_app = #{channelApp}</if>
+        <if test="channelSms !=null">,channel_sms = #{channelSms}</if>
+        <if test="goodsType !=null">,goods_type = #{goodsType}</if>
+        <if test="isInner !=null">,is_inner = #{isInner}</if>
+        <if test="mailOrderCode !=null">,mail_order_code = #{mailOrderCode}</if>
+        <if test="promotionTitle !=null">,promotion_title = #{promotionTitle}</if>
+        <if test="adWord !=null">,ad_word = #{adWord}</if>
+        <if test="keyword !=null">,keyword = #{keyword}</if>
+        <if test="giftDesc !=null">,gift_desc = #{giftDesc}</if>
+        <if test="introduction !=null">,introduction = #{introduction}</if>
+        <if test="serviceType !=null">,service_type = #{serviceType}</if>
+        <if test="recommendGoods1Code !=null">,recommend_goods1_code = #{recommendGoods1Code}</if>
+        <if test="recommendGoods2Code !=null">,recommend_goods2_code = #{recommendGoods2Code}</if>
+        <if test="recommendGoods3Code !=null">,recommend_goods3_code = #{recommendGoods3Code}</if>
+        <if test="regionType !=null">,region_type = #{regionType}</if>
+        <if test="approveStatus !=null">,approve_status = #{approveStatus}</if>
+        <if test="limitCount !=null">,limit_count = #{limitCount}</if>
+        <if test="pointsType !=null">,points_type = #{pointsType}</if>
+        <if test="cards !=null">,cards = #{cards}</if>
+        <if test="onShelfMallDate !=null">,on_shelf_mall_date = now()</if>
+        <if test="offShelfMallDate !=null">,off_shelf_mall_date = now()</if>
+        <if test="onShelfCcDate !=null">,on_shelf_cc_date = now()</if>
+        <if test="offShelfCcDate !=null">,off_shelf_cc_date = now()</if>
+        <if test="onShelfMallWxDate !=null">,on_shelf_mall_wx_date = now()</if>
+        <if test="offShelfMallWxDate !=null">,off_shelf_mall_wx_date = now()</if>
+        <if test="onShelfCreditWxDate !=null">,on_shelf_credit_wx_date = now()</if>
+        <if test="offShelfCreditWxDate !=null">,off_shelf_credit_wx_date = now()</if>
+        <if test="onShelfPhoneDate !=null">,on_shelf_phone_date = now()</if>
+        <if test="offShelfPhoneDate !=null">,off_shelf_phone_date = now()</if>
+        <if test="onShelfAppDate !=null">,on_shelf_app_date = now()</if>
+        <if test="offShelfAppDate !=null">,off_shelf_app_date = now()</if>
+        <if test="onShelfSmsDate !=null">,on_shelf_sms_date = now()</if>
+        <if test="offShelfSmsDate !=null">,off_shelf_sms_date = now()</if>
+        <if test="freightSize !=null">,freight_size = #{freightSize}</if>
+        <if test="freightWeight !=null">,freight_weight = #{freightWeight}</if>
+        <if test="approveDifferent !=null">,approve_different = #{approveDifferent}</if>
+        <if test="attribute !=null">,attribute = #{attribute}</if>
+        <if test="currType !=null">,curr_type = #{currType}</if>
+        <if test="delFlag !=null">,del_flag = #{delFlag}</if>
+        <if test="createOper !=null">,create_oper = #{createOper}</if>
+        <if test="createTime !=null">,create_time = now()</if>
+        <if test="modifyOper !=null">,modify_oper = #{modifyOper}</if>
+        <if test="modifyTime !=null">,modify_time = now()</if>
+        <if test="onShelfTime !=null">,on_shelf_time = #{onShelfTime}</if>
+        where code = #{code}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="code !=null">and code = #{code}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="productId !=null">and product_id = #{productId}</if>
+            <if test="createType !=null">and create_type = #{createType}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="manufacturer !=null">and manufacturer = #{manufacturer}</if>
+            <if test="goodsBrandId !=null">and goods_brand_id = #{goodsBrandId}</if>
+            <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+            <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+            <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+            <if test="channelMall !=null">and channel_mall = #{channelMall}</if>
+            <if test="channelCc !=null">and channel_cc = #{channelCc}</if>
+            <if test="channelMallWx !=null">and channel_mall_wx = #{channelMallWx}</if>
+            <if test="channelCreditWx !=null">and channel_credit_wx = #{channelCreditWx}</if>
+            <if test="channelPhone !=null">and channel_phone = #{channelPhone}</if>
+            <if test="channelApp !=null">and channel_app = #{channelApp}</if>
+            <if test="channelSms !=null">and channel_sms = #{channelSms}</if>
+            <if test="channelPoints !=null">,channel_points = #{channelPoints}</if>
+            <if test="channelIvr !=null">,channel_ivr = #{channelIvr}</if>
+            <if test="goodsType !=null">and goods_type = #{goodsType}</if>
+            <if test="isInner !=null">and is_inner = #{isInner}</if>
+            <if test="mailOrderCode !=null">and mail_order_code = #{mailOrderCode}</if>
+            <if test="promotionTitle !=null">and promotion_title = #{promotionTitle}</if>
+            <if test="adWord !=null">and ad_word = #{adWord}</if>
+            <if test="keyword !=null">and keyword = #{keyword}</if>
+            <if test="giftDesc !=null">and gift_desc = #{giftDesc}</if>
+            <if test="introduction !=null">and introduction = #{introduction}</if>
+            <if test="serviceType !=null">and service_type = #{serviceType}</if>
+            <if test="recommendGoods1Code !=null">and recommend_goods1_code = #{recommendGoods1Code}</if>
+            <if test="recommendGoods2Code !=null">and recommend_goods2_code = #{recommendGoods2Code}</if>
+            <if test="recommendGoods3Code !=null">and recommend_goods3_code = #{recommendGoods3Code}</if>
+            <if test="regionType !=null">and region_type = #{regionType}</if>
+            <if test="approveStatus !=null">and approve_status = #{approveStatus}</if>
+            <if test="limitCount !=null">and limit_count = #{limitCount}</if>
+            <if test="pointsType !=null">and points_type = #{pointsType}</if>
+            <if test="cards !=null">and cards = #{cards}</if>
+            <if test="onShelfMallDate !=null">and on_shelf_mall_date = #{onShelfMallDate}</if>
+            <if test="offShelfMallDate !=null">and off_shelf_mall_date = #{offShelfMallDate}</if>
+            <if test="onShelfCcDate !=null">and on_shelf_cc_date = #{onShelfCcDate}</if>
+            <if test="offShelfCcDate !=null">and off_shelf_cc_date = #{offShelfCcDate}</if>
+            <if test="onShelfMallWxDate !=null">and on_shelf_mall_wx_date = #{onShelfMallWxDate}</if>
+            <if test="offShelfMallWxDate !=null">and off_shelf_mall_wx_date = #{offShelfMallWxDate}</if>
+            <if test="onShelfCreditWxDate !=null">and on_shelf_credit_wx_date = #{onShelfCreditWxDate}</if>
+            <if test="offShelfCreditWxDate !=null">and off_shelf_credit_wx_date = #{offShelfCreditWxDate}</if>
+            <if test="onShelfPhoneDate !=null">and on_shelf_phone_date = #{onShelfPhoneDate}</if>
+            <if test="offShelfPhoneDate !=null">and off_shelf_phone_date = #{offShelfPhoneDate}</if>
+            <if test="onShelfAppDate !=null">and on_shelf_app_date = #{onShelfAppDate}</if>
+            <if test="offShelfAppDate !=null">and off_shelf_app_date = #{offShelfAppDate}</if>
+            <if test="onShelfSmsDate !=null">and on_shelf_sms_date = #{onShelfSmsDate}</if>
+            <if test="offShelfSmsDate !=null">and off_shelf_sms_date = #{offShelfSmsDate}</if>
+            <if test="freightSize !=null">and freight_size = #{freightSize}</if>
+            <if test="freightWeight !=null">and freight_weight = #{freightWeight}</if>
+            <if test="approveDifferent !=null">and approve_different = #{approveDifferent}</if>
+            <if test="attribute !=null">and attribute = #{attribute}</if>
+            <if test="currType !=null">and curr_type = #{currType}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="onShelfTime !=null">and on_shelf_time = #{onShelfTime}</if>
+        </where>
+    </sql>
+
+    <!--by yuxinxin-->
+    <sql id="conditionsLike">
+        <where>
+            <if test="searchKey !=null and searchKey!=''">code like concat(concat('%',#{searchKey}),'%')</if>
+            <if test="searchKey !=null and searchKey!=''">or name like concat(concat('%',#{searchKey}),'%')</if>
+            <if test="code !=null">and code = #{code}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="productId !=null">and product_id = #{productId}</if>
+            <if test="createType !=null">and create_type = #{createType}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="manufacturer !=null">and manufacturer = #{manufacturer}</if>
+            <if test="goodsBrandId !=null">and goods_brand_id = #{goodsBrandId}</if>
+            <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+            <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+            <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+            <if test="channelMall !=null">and channel_mall = #{channelMall}</if>
+            <if test="channelCc !=null">and channel_cc = #{channelCc}</if>
+            <if test="channelMallWx !=null">and channel_mall_wx = #{channelMallWx}</if>
+            <if test="channelCreditWx !=null">and channel_credit_wx = #{channelCreditWx}</if>
+            <if test="channelPhone !=null">and channel_phone = #{channelPhone}</if>
+            <if test="channelApp !=null">and channel_app = #{channelApp}</if>
+            <if test="channelSms !=null">and channel_sms = #{channelSms}</if>
+            <if test="goodsType !=null">and goods_type = #{goodsType}</if>
+            <if test="isInner !=null">and is_inner = #{isInner}</if>
+            <if test="mailOrderCode !=null">and mail_order_code = #{mailOrderCode}</if>
+            <if test="promotionTitle !=null">and promotion_title = #{promotionTitle}</if>
+            <if test="adWord !=null">and ad_word = #{adWord}</if>
+            <if test="keyword !=null">and keyword = #{keyword}</if>
+            <if test="giftDesc !=null">and gift_desc = #{giftDesc}</if>
+            <if test="introduction !=null">and introduction = #{introduction}</if>
+            <if test="serviceType !=null">and service_type = #{serviceType}</if>
+            <if test="recommendGoods1Code !=null">and recommend_goods1_code = #{recommendGoods1Code}</if>
+            <if test="recommendGoods2Code !=null">and recommend_goods2_code = #{recommendGoods2Code}</if>
+            <if test="recommendGoods3Code !=null">and recommend_goods3_code = #{recommendGoods3Code}</if>
+            <if test="regionType !=null">and region_type = #{regionType}</if>
+            <if test="approveStatus !=null">and approve_status = #{approveStatus}</if>
+            <if test="limitCount !=null">and limit_count = #{limitCount}</if>
+            <if test="pointsType !=null">and points_type = #{pointsType}</if>
+            <if test="cards !=null">and cards = #{cards}</if>
+            <if test="onShelfMallDate !=null">and on_shelf_mall_date = #{onShelfMallDate}</if>
+            <if test="offShelfMallDate !=null">and off_shelf_mall_date = #{offShelfMallDate}</if>
+            <if test="onShelfCcDate !=null">and on_shelf_cc_date = #{onShelfCcDate}</if>
+            <if test="offShelfCcDate !=null">and off_shelf_cc_date = #{offShelfCcDate}</if>
+            <if test="onShelfMallWxDate !=null">and on_shelf_mall_wx_date = #{onShelfMallWxDate}</if>
+            <if test="offShelfMallWxDate !=null">and off_shelf_mall_wx_date = #{offShelfMallWxDate}</if>
+            <if test="onShelfCreditWxDate !=null">and on_shelf_credit_wx_date = #{onShelfCreditWxDate}</if>
+            <if test="offShelfCreditWxDate !=null">and off_shelf_credit_wx_date = #{offShelfCreditWxDate}</if>
+            <if test="onShelfPhoneDate !=null">and on_shelf_phone_date = #{onShelfPhoneDate}</if>
+            <if test="offShelfPhoneDate !=null">and off_shelf_phone_date = #{offShelfPhoneDate}</if>
+            <if test="onShelfAppDate !=null">and on_shelf_app_date = #{onShelfAppDate}</if>
+            <if test="offShelfAppDate !=null">and off_shelf_app_date = #{offShelfAppDate}</if>
+            <if test="onShelfSmsDate !=null">and on_shelf_sms_date = #{onShelfSmsDate}</if>
+            <if test="offShelfSmsDate !=null">and off_shelf_sms_date = #{offShelfSmsDate}</if>
+            <if test="freightSize !=null">and freight_size = #{freightSize}</if>
+            <if test="freightWeight !=null">and freight_weight = #{freightWeight}</if>
+            <if test="approveDifferent !=null">and approve_different = #{approveDifferent}</if>
+            <if test="attribute !=null">and attribute = #{attribute}</if>
+            <if test="currType !=null">and curr_type = #{currType}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="onShelfTime !=null">and on_shelf_time = #{onShelfTime}</if>
+        </where>
+    </sql>
+
+    <select id="findById" parameterType="Map" resultMap="GoodsMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods
+        where code=#{code}
+    </select>
+    <select id="findDetailById" parameterType="Map" resultMap="GoodsMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods
+        where code=#{code}
+    </select>
+    <select id="findAll" parameterType="Map" resultMap="GoodsMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods
+        <include refid="conditionsLike"/>
+    </select>
+
+    <!--商品列表查询条件 add by chenle-->
+    <sql id="pageCondition">
+        <where>
+            del_flag = 0
+            <if test="type !=null and type== 1">
+                AND approve_status in (00,01,02,03,04,05,06,70,71,72,73,74)
+            </if>
+            <if test="type !=null and type== 2">
+                AND approve_status = 00
+            </if>
+            <if test="type !=null and type== 3">
+                AND approve_status = 01
+            </if>
+            <if test="type !=null and type== 4">
+                AND approve_status = 02
+            </if>
+            <if test="type !=null and type== 5">
+                AND (channel_mall = 01 OR channel_cc = 01 OR channel_mall_wx = 01 OR channel_credit_wx = 01 OR
+                channel_phone = 01
+                OR channel_app = 01 OR channel_sms = 01)
+            </if>
+            <if test="type !=null and type== 6">
+                AND (channel_mall = 02 OR channel_cc = 02 OR channel_mall_wx = 02 OR channel_credit_wx = 02 OR
+                channel_phone = 02
+                OR channel_app = 02 OR channel_sms = 02)
+            </if>
+            <if test="type !=null and type== 7">
+                AND approve_status = 05
+            </if>
+            <if test="type !=null and type== 8">
+                AND approve_status in (03,04)
+            </if>
+            <if test="type !=null and type== 9">
+                AND approve_status in (01,02,03,04,05)
+            </if>
+            <if test="type !=null and type== 10">
+                AND approve_status in (70,71,72,73,74)
+            </if>
+            <if test="code !=null">
+                AND code = #{code}
+            </if>
+            <if test="name !=null">
+                AND name LIKE concat(concat('%',#{name}),'%')
+            </if>
+            <if test="channelMall !=null">
+                AND channel_mall = #{channelMall}
+            </if>
+            <if test="channelCc !=null ">
+                AND channel_cc = #{channelCc}
+            </if>
+            <if test="channelMallWx !=null">
+                AND channel_mall_wx = #{channelMallWx}
+            </if>
+            <if test="channelState !=null ">
+                AND (channel_mall_wx =02 OR channel_credit_wx =02)
+            </if>
+            <if test="channelCreditWx !=null">
+                AND channel_credit_wx = #{channelCreditWx}
+            </if>
+            <if test="channelPhone !=null">
+                AND channel_phone = #{channelPhone}
+            </if>
+            <if test="channelApp !=null">
+                AND channel_app = #{channelApp}
+            </if>
+            <if test="channelSms !=null">
+                AND channel_sms = #{channelSms}
+            </if>
+            <if test="approveStatus !=null">
+                AND approve_status = #{approveStatus}
+            </if>
+            <if test="ordertypeId !=null">
+                AND ordertype_id = #{ordertypeId}
+            </if>
+            <if test="brandIds !=null">
+                and goods_brand_id in
+                <foreach collection="brandIds" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="vendorIds !=null">
+                and vendor_id in
+                <foreach collection="vendorIds" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="backCategoryId1 !=null">
+                and back_category1_id = #{backCategoryId1}
+            </if>
+            <if test="backCategoryId2 !=null">
+                and back_category2_id = #{backCategoryId2}
+            </if>
+            <if test="backCategoryId3 !=null">
+                and back_category3_id = #{backCategoryId3}
+            </if>
+            <if test="vendorId !=null">
+                and vendor_id = #{vendorId}
+            </if>
+        </where>
+    </sql>
+    <!--分页时用的总数-->
+    <select id="pageCount" resultType="Long">
+        select count(1)
+        from tbl_goods
+        <include refid="pageCondition"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="GoodsMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods
+        <include refid="pageCondition"/>
+        <![CDATA[ order by modify_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <delete id="delete" parameterType="GoodsModel">
+        delete from tbl_goods where id = code
+    </delete>
+
+    <!--总数count-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_goods
+        WHERE
+        <include refid="conditions"/>
+    </select>
+
+    <select id="findGoodsCount" parameterType="Map" resultMap="GoodsMap">
+        select count(1) as eachCount,approve_status
+        from tbl_goods
+        where del_flag=0
+        <if test="vendorId != null and vendorId != ''">
+             and vendor_id = #{vendorId}
+        </if>
+        <if test="ordertypeId != null and ordertypeId != ''">
+            and ordertype_id = #{ordertypeId}
+        </if>
+        GROUP BY approve_status
+    </select>
+
+    <!--查找上架商品数量-->
+    <select id="findUpShelfGoodsCount" parameterType="Map" resultType="Integer">
+        SELECT count(1) FROM tbl_goods
+        WHERE del_flag = 0
+        AND (channel_mall = 02 OR channel_cc = 02 OR channel_mall_wx = 02 OR channel_credit_wx = 02 OR
+        channel_phone = 02
+        OR channel_app = 02 OR channel_sms = 02)
+        <if test="vendorId != null and vendorId != ''">
+            and vendor_id = #{vendorId}
+        </if>
+        <if test="ordertypeId != null and ordertypeId != ''">
+            and ordertype_id = #{ordertypeId}
+        </if>
+    </select>
+
+    <!--查找下架商品数量-->
+    <select id="findDownShelfGoodsCount" parameterType="Map" resultType="Integer">
+        SELECT count(1) FROM tbl_goods
+        WHERE del_flag = 0
+        AND (channel_mall = 01 OR channel_cc = 01 OR channel_mall_wx = 01 OR channel_credit_wx = 01 OR
+        channel_phone = 01
+        OR channel_app = 01 OR channel_sms = 01)
+        <if test="vendorId != null and vendorId != ''">
+            and vendor_id = #{vendorId}
+        </if>
+        <if test="ordertypeId != null and ordertypeId != ''">
+            and ordertype_id = #{ordertypeId}
+        </if>
+    </select>
+
+    <!-- 根据code模糊查询 -->
+    <select id="findGoodsByGoodsName" parameterType="String" resultType="String">
+        SELECT code
+        FROM tbl_goods
+        WHERE name LIKE concat(concat('%',#{goodsName}),'%')
+        AND del_flag=0
+    </select>
+
+    <select id="getGoodsNameByItemId" parameterType="java.util.List" resultMap="GoodsMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods
+        where code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item.goodsCode}
+        </foreach>
+    </select>
+
+    <!--批量更新商品状态 add by chenle-->
+    <update id="updateAllGoodsStatus" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index">
+            update tbl_goods set
+            modify_time=now()
+            <!--modify_oper = #{item.modifyOper}-->
+            <!--<if test="item.approveStatus == '01'">-->
+            <!--,approve_status = '02'-->
+            <!--</if>-->
+            where `code` = #{item.code};
+        </foreach>
+    </update>
+
+    <!-- 根据供应商ID下架该供应商下所有渠道的所有商品 -->
+    <update id="updateChannelByVendorId" parameterType="String">
+        UPDATE tbl_goods SET
+        channel_mall = '01',
+        channel_cc = '01',
+        channel_mall_wx = '01',
+        channel_credit_wx = '01',
+        channel_phone = '01',
+        channel_app = '01',
+        channel_sms = '01'
+        WHERE
+        vendor_id = #{vendorId}
+    </update>
+
+    <select id="findByCodes" parameterType="java.util.List" resultMap="GoodsMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods
+        where code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY code
+    </select>
+
+    <!-- 获取当前供应商下可用商品codeList -->
+    <select id="findGoodsInVendor" parameterType="Map" resultType="String">
+        SELECT code
+        FROM tbl_goods
+        WHERE
+        ordertype_id = #{ordertypeId}
+        and vendor_id = #{vendorId}
+        and channel_mall = #{channelMall}
+        and del_flag = #{delFlag}
+        and is_inner = #{isInner}
+        <if test="name !=null">and name like concat(concat('%',#{name}),'%')</if>
+    </select>
+
+    <!-- 根据类目，商品名称模糊查询商品  add by liuhan-->
+    <select id="findGoodsByGoodsNameLike" parameterType="GoodsModel" resultType="String">
+        SELECT code
+        FROM tbl_goods
+        WHERE name LIKE concat(concat('%',#{name}),'%')
+        <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+        <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+        <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+        AND del_flag=0
+    </select>
+
+    <!-- 根据产品id查询商品（产品用） add by tanliang-->
+    <select id="findGoodsByProductId" parameterType="Long" resultMap="GoodsMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_goods
+        WHERE product_id = #{productId}
+        AND del_flag=0
+    </select>
+
+    <!-- 根据类目，商品名称模糊查询商品  add by liuhan-->
+    <select id="findGoodsListByGoodsNameLikeForProm" parameterType="Map" resultMap="GoodsMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_goods
+        WHERE del_flag=0
+        <if test="name !=null">and name LIKE concat(concat('%',#{name}),'%')</if>
+        <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+        <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+        <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+        <if test="brandIds !=null">and goods_brand_id IN ( #{brandIds} )</if>
+        <if test="vendorIds !=null">and vendor_id IN ( #{vendorIds} )</if>
+        <if test="count !=null"><![CDATA[ ORDER BY modify_time DESC limit 0, #{count} ]]></if>
+    </select>
+    <!--判断分区下是否有礼品 add by tongxueying-->
+    <select id="checkUsedPartition" parameterType="String" resultType="Long">
+        select count(1)
+        from tbl_goods
+        where region_type= #{code}
+    </select>
+
+    <select id="findGoodsListByConditions" parameterType="Map" resultMap="GoodsMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods
+        <include refid="pageCondition"/>
+    </select>
+
+
+    <!--礼品管理查询-->
+    <select id="presentCount" resultType="Long">
+        select count(*)
+        from tbl_goods
+        <include refid="presentCondition"/>
+    </select>
+
+    <select id="presentPager" parameterType="Map" resultMap="GoodsMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods
+        <include refid="presentCondition"/>
+        <![CDATA[ order by modify_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <sql id="presentCondition">
+        <where>
+            del_flag = 0
+            and ordertype_id = "JF"
+            <!--所有礼品-->
+            <if test="type !=null and type== 1">
+                AND approve_status in (00,01,02,03,04,05,06,07,08,70,71,72,73,74,75)
+            </if>
+            <!--编辑中-->
+            <if test="type !=null and type== 2">
+                AND approve_status = 00
+            </if>
+            <!--待初审-->
+            <if test="type !=null and type== 3">
+                AND approve_status = 01
+            </if>
+            <!--待复审-->
+            <if test="type !=null and type== 4">
+                AND approve_status = 02
+            </if>
+            <!--上架-->
+            <if test="type !=null and type== 5">
+                AND (channel_mall = 01 OR channel_cc = 01 OR channel_mall_wx = 01 OR channel_credit_wx = 01 OR
+                channel_phone = 01
+                OR channel_app = 01 OR channel_sms = 01)
+            </if>
+            <!--在售信息-->
+            <if test="type !=null and type== 6">
+                AND (channel_mall = 02 OR channel_cc = 02 OR channel_mall_wx = 02 OR channel_credit_wx = 02 OR
+                channel_phone = 02
+                OR channel_app = 02 OR channel_sms = 02)
+            </if>
+            <!--下架审核-->
+            <if test="type !=null and type== 7">
+                AND approve_status = 05
+            </if>
+            <!--变更审核-->
+            <if test="type !=null and type== 8">
+                AND approve_status in (03,04)
+            </if>
+            <if test="type !=null and type== 9">
+                AND approve_status = 07
+            </if>
+            <if test="type !=null and type== 10">
+                AND approve_status = 08
+            </if>
+            <!--礼品编码-->
+            <if test="code !=null">
+                AND code = #{code}
+            </if>
+            <!--供应商名称-->
+            <if test="vendorIds !=null">
+                and vendor_id in
+                <foreach collection="vendorIds" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <!--礼品名称-->
+            <if test="name !=null">
+                AND name LIKE concat(concat('%',#{name}),'%')
+            </if>
+            <!--品牌-->
+            <if test="brandIds !=null">
+                and goods_brand_id in
+                <foreach collection="brandIds" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <!--后台类目-->
+            <if test="backCategoryId1 !=null">
+                and back_category1_id = #{backCategoryId1}
+            </if>
+            <if test="backCategoryId2 !=null">
+                and back_category2_id = #{backCategoryId2}
+            </if>
+            <if test="backCategoryId3 !=null">
+                and back_category3_id = #{backCategoryId3}
+            </if>
+            <!--审核状态-->
+            <if test="approveStatus !=null">
+                AND approve_status = #{approveStatus}
+            </if>
+            <!--积分商城-->
+            <if test="channelPoints !=null ">
+                AND channel_points = #{channelPoints}
+            </if>
+            <!--CC状态-->
+            <if test="channelCc !=null ">
+                AND channel_cc = #{channelCc}
+            </if>
+            <!--手机商城状态-->
+            <if test="channelPhone !=null">
+                AND channel_phone = #{channelPhone}
+            </if>
+            <!--IVR-->
+            <if test="channelIVR !=null ">
+                AND channel_IVR = #{channelIVR}
+            </if>
+            <!-- 短信状态-->
+            <if test="channelSms !=null">
+                AND channel_sms = #{channelSms}
+            </if>
+            <!--供应商-->
+            <if test="vendorId !=null">
+                and vendor_id = #{vendorId}
+            </if>
+        </where>
+    </sql>
+</mapper>

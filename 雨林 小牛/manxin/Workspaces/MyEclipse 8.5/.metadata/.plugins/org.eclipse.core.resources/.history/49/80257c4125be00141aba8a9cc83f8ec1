@@ -1,0 +1,22 @@
+package com.manxin.service;
+
+import com.manxin.dao.DAO;
+import com.manxin.dao.DAOImpl;
+
+public class ServiceImpl implements Service{
+
+	private DAO dao = new DAOImpl();
+	
+	@Override
+	public void add() {
+		// TODO Auto-generated method stub
+		dao.add();
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		dao.update();
+	}
+
+}

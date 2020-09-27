@@ -1,0 +1,67 @@
+<div class="menu-panel top">
+    <div class="spu-new">
+        <table class="create-spu-form">
+            <tr>
+                <th class="spu-name">新建产品</th>
+                <th class="input-spu-name" colspan="3">
+                    <input type="hidden" id="spu-id" name="id" value="{{spu.id}}">
+                    <input type="text" id="spu-name" name="name" class="input-large" placeholder="请输入产品名称"
+                           value="{{spu.name}}">
+                </th>
+            </tr>
+            <tr>
+                <th class="spu-brand">选择品牌</th>
+                <th class="select-spu-brand" colspan="9">
+                    <div class="search-brand">
+                        <div class="search-brand-group">
+                            <i class="fa fa-fw fa-search"></i>
+                            <input type="text" class="js-search-brand" {{#if spu.brandId}}disabled{{/if}} placeholder="搜索品牌名">
+                        </div>
+                    </div>
+                    <select class="select" id="spu-brand-id" {{#if spu.brandId}}disabled{{/if}}>
+                        <option value=""  {{#unless spu.brandId}}selected{{/unless}}>请选择品牌</option>
+                        {{#each brand.data}}
+                            <option value="{{id}}"
+                                    {{#equals ../spu.brandId id}}selected {{/equals}}>{{brandName}}</option>
+                        {{/each}}
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th class="spu-attr" rowspan="{{add attribute.data.length 2}}">产品属性</th>
+            </tr>
+            {{#each attribute.data}}
+                <tr class="spu-property-list " data-id="{{id}}" id="key-{{id}}" data-type="{{valueType}}">
+                    <td class="spu-attribute" colspan="3">
+                        <input type="checkbox" name="isSpu">
+                        <span>{{name}}</span>
+                    </td>
+                    {{#if valueType}}
+                        <td class="spu-sku" colspan="3">
+                            <input type="checkbox" name="isSku" value="0" style="display:none;" disabled/><span
+                                class="setSku" style="display:none">设为销售属性</span>
+                        </td>
+                    {{/if}}
+                    {{#if valueType}}
+                        <td class="spu-property" colspan="3">
+                            <select data-type="{{valueType}}" name="value" style="width:100px;display:none;"
+                                    disabled></select><br>
+                        </td>
+                    {{else}}
+                        <td class="spu-property" colspan="3">
+                            <input data-type="{{valueType}}" type="text" name="value" style="display:none;" disabled/>
+                        </td>
+                    {{/if}}
+                </tr>
+            {{/each}}
+            <tr>
+                <td class="operate-button-group">
+                    <button type="button" class="btn btn-success btn-small js-create-spu">创建</button>
+                    <button class="btn btn-small btn-info js-menu-cancel" type="button">取消</button>
+                    <label class="tip-label" style="color:red;"></label>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+

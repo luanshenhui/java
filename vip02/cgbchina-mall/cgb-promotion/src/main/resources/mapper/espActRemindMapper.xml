@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EspActRemindModel">
+    <resultMap id="EspActRemindMap" type="EspActRemindModel">
+        <result property="id" column="id"/>
+        <result property="actId" column="act_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="mesDatetime" column="mes_datetime"/>
+        <result property="custMobile" column="cust_mobile"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="sendDatetime" column="send_datetime"/>
+        <result property="sendFlag" column="send_flag"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,act_id,goods_id,cust_id,mes_datetime,cust_mobile,ordertype_id,send_datetime,send_flag,del_flag,create_time,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="EspActRemindModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_esp_act_remind
+        (act_id
+        ,goods_id
+        ,cust_id
+        ,mes_datetime
+        ,cust_mobile
+        ,ordertype_id
+        ,send_datetime
+        ,send_flag
+        ,del_flag
+        ,create_time
+        ,modify_time)
+        values(#{actId}
+        ,#{goodsId}
+        ,#{custId}
+        ,#{mesDatetime}
+        ,#{custMobile}
+        ,#{ordertypeId}
+        ,#{sendDatetime}
+        ,#{sendFlag}
+        ,0
+        ,now()
+        ,now()
+        )
+    </insert>
+
+    <update id="update" parameterType="EspActRemindModel">
+        update tbl_esp_act_remind set
+        <if test="actId !=null">act_id = #{actId}
+            ,
+        </if>
+        <if test="goodsId !=null">goods_id = #{goodsId}
+            ,
+        </if>
+        <if test="custId !=null">cust_id = #{custId}
+            ,
+        </if>
+        <if test="mesDatetime !=null">mes_datetime = #{mesDatetime}
+            ,
+        </if>
+        <if test="custMobile !=null">cust_mobile = #{custMobile}
+            ,
+        </if>
+        <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+            ,
+        </if>
+        <if test="sendDatetime !=null">send_datetime = #{sendDatetime}
+            ,
+        </if>
+        <if test="sendFlag !=null">send_flag = #{sendFlag}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="actId !=null">and act_id = #{actId}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="mesDatetime !=null">and mes_datetime = #{mesDatetime}</if>
+            <if test="custMobile !=null">and cust_mobile = #{custMobile}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="sendDatetime !=null">and send_datetime = #{sendDatetime}</if>
+            <if test="sendFlag !=null">and send_flag = #{sendFlag}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EspActRemindMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_esp_act_remind
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="EspActRemindMap">
+        select
+        <include refid="columns"/>
+        from tbl_esp_act_remind
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="EspActRemindMap">
+        select
+        <include refid="columns"/>
+        from tbl_esp_act_remind
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="EspActRemindModel">
+        delete from tbl_esp_act_remind where id = #{id}
+    </delete>
+
+    <!-- 取消提醒：逻辑删除，外部接口调用 add by geshuo 20160722 -->
+    <update id="deleteRemindByParams" parameterType="Map">
+        update tbl_esp_act_remind
+        set del_flag = 1
+        <include refid="conditions"/>
+    </update>
+    
+    <!-- 查询是否提醒  -->
+    <select id="findIsRemidByGoods" parameterType="EspActRemindModel" resultType="Integer">
+        SELECT count(1) FROM tbl_esp_act_remind
+        WHERE act_id = #{actId} and  goods_id = #{goodsId} and cust_id = #{custId} and del_flag=0
+    </select>
+    
+</mapper>
+
+

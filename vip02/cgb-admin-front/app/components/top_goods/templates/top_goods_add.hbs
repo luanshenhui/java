@@ -1,0 +1,55 @@
+<div class="modal top-goods-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        新增置顶商品
+    </div>
+    <form class="form form-aligned topgoods-form-add">
+        <div class="modal-body">
+            <!-- 一级类目 -->
+            <div class="admin-cat-box2">
+                <div class="admin-cat-box-title">一级类目</div>
+                <ul class="admin-cat-box-list back-category-list" id="level1" data-level=1>
+                    {{#each data.data}}
+                        <li class="next-back-category" data-id="{{id}}" data-name="{{name}}">
+                            <a href="javascript:void(0)" class="find-next-category" title="{{name}}">{{name}}</a>
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <!-- 二级类目 -->
+            <div class="admin-cat-box2">
+                <div class="admin-cat-box-title">二级类目</div>
+                <ul class="admin-cat-box-list back-category-list" id="level2" data-level=2>
+                </ul>
+            </div>
+            <!-- 三级类目 -->
+            <div class="admin-cat-box2">
+                <div class="admin-cat-box-title">三级类目</div>
+                <ul class="admin-cat-box-list back-category-list" id="level3" data-level=3>
+                </ul>
+            </div>
+            <div class="admin-cat-box2 border-right-none" style="width:35%; padding-left:10px;">
+                <div class="admin-cat-box-title">单品信息</div>
+                <!--<div class="admin-cat-box-search">-->
+                    <!--<input type="text" class="form-control-admin-search form-width-185 js-goods-search"-->
+                           <!--placeholder="商品名称">-->
+                    <!---->
+                <!--</div>-->
+                <div class="search-item">
+                    <div class="search-item-group">
+                        <!--<i class="fa fa-search"></i>-->
+                        <input type="text" class="search-item-input js-search-item" placeholder="搜索关键字">
+                        <i class="icon-search-btn admin-cat-search col-left-common js-goods-search-btn"
+                           data-type="search"></i>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="js-item-search-result"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+                <input type="submit" class="btn btn-success btn-small" value="确定">
+            <button class="btn btn-info btn-small close">关闭</button>
+        </div>
+    </form>
+</div>

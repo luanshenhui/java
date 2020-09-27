@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Order>
+	<!--订单信息-->
+	<OrderInformation>
+		<OrderDate>2008-10-17</OrderDate>
+		<Createman>用户名</Createman>
+		<Password>用户名</Password>
+		<SizeCategoryID>尺寸分类</SizeCategoryID>
+		<SizeAreaID>尺寸区域码</SizeAreaID>
+		<Fabrics>MBL551A</Fabrics>
+		<SizeUnitID>MBL551A</SizeUnitID>
+		<ClothingStyle>3</ClothingStyle>
+		<!--版型风格(正常款，长款，短款) -->
+		<CustormerBody>1,2,3,</CustormerBody>
+	</OrderInformation>
+	<!--订单上顾客基本信息-->
+	<CustomerInformation>
+		<CustomerName>宋富</CustomerName>
+		<!--顾客姓名(50个字符)-->
+		<Height>180.34</Height>
+		<HeightUnitID></HeightUnitID>
+		<Weight>90</Weight>
+		<WeightUnitID></WeightUnitID>
+		<Email></Email>
+		<Address></Address>
+		<Tel></Tel>
+		<GenderID></GenderID>
+		<!--1代表男，0代表女-->
+	</CustomerInformation>
+	<OrderDetails>
+		<!--单条订单明细-->
+		<OrderDetail>
+			<!--单条订单明细信息-->
+			<OrderDetailInformation>
+				<SizeSpecChest></SizeSpecChest>
+				<SizeSpecHeight></SizeSpecHeight>
+				<!--款式 (50个字符)-->
+				<Categories>MXK</Categories>
+				<!--大类 -->
+				<Quantity>2</Quantity>
+				<!--数量 -->
+				<VersionStyle>2</VersionStyle>
+				<!--着装风格(463 合体版,464 修身版) -->
+			</OrderDetailInformation>
+
+			<ClothingSize>41:50,42:60</ClothingSize>
+			<!--单条订单明细成衣尺寸信息 根据订单明细大类的不同ClothingSize元素包含的ClothingCode的元素数量与成衣部位不同-->
+			<!--单条订单明细刺绣信息-->
+			<EmbroideryProcess>
+				<Embroidery>
+					<Location>72</Location><!--左前片第五粒扣-->
+					<!--位置 -->
+					<Font>10</Font><!--书法字体-->
+					<!--字体 -->
+					<Color>18</Color><!--红色-->
+					<!--颜色 -->
+					<Content>LOVE</Content>
+					<!--内容 -->
+				</Embroidery>
+				<Embroidery>
+					<Location>72</Location><!--左前片第五粒扣-->
+					<!--位置 -->
+					<Font>10</Font><!--书法字体-->
+					<!--字体 -->
+					<Color>18</Color><!--红色-->
+					<!--颜色 -->
+					<Content>LOVE</Content>
+					<!--内容 -->
+				</Embroidery>
+			</EmbroideryProcess>
+			<OrdersProcess>000b,000A:2500,</OrdersProcess>
+			<!--单条订单明细工艺信息 -->
+			<SpecialProcess>000b,000A:2500,</SpecialProcess>
+			<!--客户指定工艺-->
+		</OrderDetail>
+	</OrderDetails>
+</Order>

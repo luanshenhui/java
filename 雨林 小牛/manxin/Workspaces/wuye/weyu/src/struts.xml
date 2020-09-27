@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.i18n.encoding" value="utf-8"/>
+	<package name="ssh" extends="struts-default">
+		<!-- inteceptor -->
+		<interceptors>
+			<interceptor name="encode" class="com.keda.wuye.interceptor.EncodeInterceptor"></interceptor>
+			<interceptor-stack name="my">
+				<interceptor-ref name="encode"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- user -->
+		<action name="user_*" class="com.keda.wuye.action.UserAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="login" class="com.keda.wuye.action.UserAction" method="login">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<action name="isIdUsed11" class="com.keda.wuye.action.UserAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<action name="f5user_*" class="com.keda.wuye.action.UserAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<!-- community -->
+		<action name="com_*" class="com.keda.wuye.action.CommunityAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="f5_*" class="com.keda.wuye.action.CommunityAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed" class="com.keda.wuye.action.CommunityAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<!-- houses -->
+		<action name="house_*" class="com.keda.wuye.action.HousesAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="f5house_*" class="com.keda.wuye.action.HousesAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed1" class="com.keda.wuye.action.HousesAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<!-- rooms -->
+		<action name="room_*" class="com.keda.wuye.action.RoomsAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="f5room_*" class="com.keda.wuye.action.RoomsAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed2" class="com.keda.wuye.action.RoomsAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<!-- resident -->
+		<action name="resi_*" class="com.keda.wuye.action.ResidentAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="f5resi_*" class="com.keda.wuye.action.ResidentAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed3" class="com.keda.wuye.action.ResidentAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<!-- cominfo -->
+		<action name="comi_*" class="com.keda.wuye.action.CominfoAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="f5comi_*" class="com.keda.wuye.action.CominfoAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<!-- fee-->
+		<action name="fee_*" class="com.keda.wuye.action.FeeAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="f5fee_*" class="com.keda.wuye.action.FeeAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed4" class="com.keda.wuye.action.FeeAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<!-- plant-->
+		<action name="pl_*" class="com.keda.wuye.action.PlantAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed5" class="com.keda.wuye.action.PlantAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<action name="f5pl_*" class="com.keda.wuye.action.PlantAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<!-- carport-->
+		<action name="car_*" class="com.keda.wuye.action.CarportAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed6" class="com.keda.wuye.action.CarportAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<action name="f5car_*" class="com.keda.wuye.action.CarportAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<!-- pay-->
+		<action name="pay_*" class="com.keda.wuye.action.PayAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed7" class="com.keda.wuye.action.PayAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<action name="f5pay_*" class="com.keda.wuye.action.PayAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<!-- repairs-->
+		<action name="rep_*" class="com.keda.wuye.action.RepairsAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed8" class="com.keda.wuye.action.RepairsAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<action name="f5rep_*" class="com.keda.wuye.action.RepairsAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<!-- complaint-->
+		<action name="comp_*" class="com.keda.wuye.action.ComplaintAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed9" class="com.keda.wuye.action.ComplaintAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<action name="f5comp_*" class="com.keda.wuye.action.ComplaintAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<!-- alarm-->
+		<action name="alarm_*" class="com.keda.wuye.action.AlarmAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+		<action name="isIdUsed10" class="com.keda.wuye.action.AlarmAction" method="notice">
+			<interceptor-ref name="my"></interceptor-ref>
+		</action>
+		
+		<action name="f5alarm_*" class="com.keda.wuye.action.AlarmAction" method="{1}">
+			<interceptor-ref name="my"></interceptor-ref>
+			<result name="success" type="redirect">${path}</result>
+			<result name="input">${path}</result>
+		</action>
+		
+	</package>
+</struts>

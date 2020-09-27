@@ -1,0 +1,328 @@
+var lgstTable;
+var btnAdvSearchflg= false;
+jQuery(document).ready(function(){
+    $("#lgstDetailForm").validate({
+        debug : true,
+        errorPlacement : function(error, element) {
+            error.insertAfter(element);
+        },
+        rules : {
+            txtLgstName : {  
+                required : true  
+            },  
+            txtLgstCode : {  
+                required : true  
+            }
+        },
+        messages : {
+            txtLgstName : "仓库名称不能为空，1-32位字符!",
+            txtLgstCode : "仓库编码不能为空，1-50位字符!"
+        }
+    });
+    lgstTable = $('#lgstTable').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "dom": '<"bottom"rtflp>',
+        "searching": false,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+        "ajax": {
+            "url": "/lgst/LgstList.action",
+            "data": function ( d ) {
+                 if ($("#advSearchPanel").is(":hidden")) {
+                     d.quickSearch = encodeURI($('#quickSearch').val());
+                 }
+            }
+        },
+        "tableTools": {
+            "sRowSelect": "bootstrap"
+        },
+        "columns": [{
+                "data": "chk"
+            }, {
+                "data": "lgstCode"
+            }, {
+                "data": "lgstName"
+            }, {
+                "data": "createtime"
+            }, {
+                "data": "remark"
+            }
+        ],
+        "columnDefs": [{
+                "orderable":false,
+                "targets":[0]
+            },{
+                "orderable":false,
+                "targets":[4]
+            }
+        ],
+        "order": [[ 1, "desc" ],[ 2, "desc" ],[ 3, "desc" ]]
+    });
+});
+//低级查询按钮
+$("#btnQuickSearch").click(function () {
+    lgstTable.draw();
+});
+
+  // 搜索框的回车事件
+$('#quickSearch').keydown(function(e){
+    if(e.keyCode==13){
+        $("#btnQuickSearch").click();
+    }
+});
+
+//选择行
+$('#lgstTable tbody').on('click','td',function () {
+    var len=$(this).children().length
+    if(len==0){//选择行
+        $("#lgstTable tbody input[type='checkbox']").prop("checked",false)
+        var first=$(this).parent().children()[0];
+        var ck = $(first).children()[0];
+        $(ck).prop("checked",true)
+    }else{//选择checkbox
+        
+    }
+})
+
+//全选
+$(".checkall").click(function(){
+    if($(this).attr("checked")){
+        $("input[name='chkItem']").attr("checked",$(this).attr("checked"));
+    }else{
+        $("input[name='chkItem']").removeAttr("checked");
+    }
+});
+
+//删除
+var lgstIdssum1 ="";
+function deletelgst(){
+    lgstIdssum1 = "";
+    $("input[type='checkbox']:checked").each(function(k,v){
+        if(lgstIdssum1==""){
+            lgstIdssum1=this.getAttribute('lgstid');
+        }else if(lgstIdssum1!=""){
+            lgstIdssum1+=","+this.getAttribute('lgstid');
+        }
+    });
+    if (lgstIdssum1 == null || lgstIdssum1==undefined || lgstIdssum1=="" || lgstIdssum1 == ","){
+        window.top.window.showModalAlert("请选择一个目标！");
+        return;
+    }
+    window.top.window.showModalConfirm("确定要删除该仓库吗？", delLgst);
+}
+
+function delLgst(){
+    debugger
+    var sURL = "/lgst/deleteLgst.action";
+     $.ajax({
+        url : sURL,
+        type : "post",
+        dataType : "json",
+        async: false,
+        data : {
+            lgstIds : lgstIdssum1
+        },
+        success : function(data) {
+             if (data.result == "success") {
+                    window.top.window.showScoMessage('ok', '删除成功');
+                } else{
+                    window.top.window.showModalAlert(data.msg);
+                }
+        },
+        error:function(XMLHttpRequest, textStatus) {
+            if (XMLHttpRequest.status == 500) {
+                var result = eval("(" + XMLHttpRequest.responseText + ")");
+                window.top.window.showModalAlert(result.errorObject.errorText);
+            }
+        }
+    });
+     lgstTable.draw();
+}
+
+//父窗体归还本页的编辑对话框
+$('#creatLgst').on('hide.bs.modal', function () {
+    // 父窗体归还本页的编辑对话框
+    window.top.window.returnCustomModalDialog();
+    ClearInput();
+    $("#txtLgstName").val("");
+    $("#txtLgstCode").val(""); 
+    $("#lgstId").val("");
+    $("#lgstName").val("");
+    $("#lgstCode").val("");
+    $("#txtRemark").val("");
+});
+
+//添加
+function addlgst(){
+
+    $("#createTitle").html("新建物流公司");
+    var editDialog = window.top.window.borrowCustomModalDialog($("#creatLgst"));
+    editDialog.modal({show:true, backdrop:'static'});
+} 
+//保存按钮
+$('#lgstSave').click(function(){
+    insertLgst();
+    lgstTable.draw();
+});
+
+//新建/修改
+function insertLgst() {
+    // 父窗体归还本页的编辑对话框
+    window.top.window.returnCustomModalDialog();
+    var txtLgstName = $("#txtLgstName").val();
+    var txtLgstCode = $("#txtLgstCode").val();
+    var updateLgstName = $("#lgstName").val();
+    var updateLgstCode =$("#lgstCode").val();
+    var txtRemark = $("#txtRemark").val();
+    
+    if(!$("#lgstDetailForm").valid()) {
+        // 父窗体借用本页的编辑对话框
+        window.top.window.borrowCustomModalDialog($("#creatLgst"));
+        return false;
+    }
+    if($("#lgstId").val()!= null&&$("#lgstId").val()!=''){
+    var Lid =$("#lgstId").val();
+    var data = {
+            "lgstName": txtLgstName,
+            "lgstCode": txtLgstCode,
+            "prjId": txtPrjId,
+            "lgstId": Lid,
+            "updateLgstCode": updateLgstCode,
+            "updateLgstName": updateLgstName,
+            "remark": txtRemark 
+        };
+     $.ajax({
+            type:"POST",
+            url:"/lgst/updateLgst.action",
+            data:JSON.stringify(data),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            async: false, // 同步
+            success:function(data) {
+                if (data.result == "success") {
+                    $('#creatLgst').modal('hide');
+                    window.top.window.showScoMessage('ok', '修改成功');
+                } else{
+                    window.top.window.showModalAlert(data.msg);
+                    var editDialog = window.top.window.borrowCustomModalDialog($("#creatLgst"));
+                    editDialog.modal({show:true, backdrop:'static'});
+                }
+            },
+            error:function(XMLHttpRequest, textStatus) {
+                if (XMLHttpRequest.status == 500) {
+                    var result = eval("(" + XMLHttpRequest.responseText + ")");
+                    window.top.window.showModalAlert(result.errorObject.errorText);
+                }
+            }
+        });
+    
+   }else{
+       var data = {
+               "lgstName": txtLgstName,
+               "lgstCode": txtLgstCode,
+               "remark": txtRemark 
+            };
+       $.ajax({
+           type:"POST",
+           url:"/lgst/addLgst.action",
+           data:JSON.stringify(data),
+           contentType: "application/json;charset=utf-8",
+           dataType: "json",
+           async: false, // 同步
+           success:function(data) {
+               debugger
+               if (data.result == "success") {
+                $('#creatLgst').modal('hide');
+                window.top.window.showScoMessage('ok', '添加成功');
+               } else{
+                window.top.window.showModalAlert(data.msg);
+                var editDialog = window.top.window.borrowCustomModalDialog($("#creatLgst"));
+                editDialog.modal({show:true, backdrop:'static'});
+               }
+           },
+           error:function(XMLHttpRequest, textStatus) {
+               if (XMLHttpRequest.status == 500) {
+                   var result = eval("(" + XMLHttpRequest.responseText + ")");
+                   window.top.window.showModalAlert(result.errorObject.errorText);
+               }
+           }
+       });
+   }
+    $("#txtLgstName").val("");
+    $("#txtLgstCode").val(""); 
+    $("#lgstId").val("");
+    $("#lgstName").val("");
+    $("#lgstCode").val("");
+    $("#txtRemark").val("");
+    lgstTable.draw();
+}
+
+
+//修改用户
+function updateLgst(){
+    var idString = "";
+    $("input[type='checkbox']:checked").each(function(k,v){
+        if(idString==""){
+            if(this.getAttribute('lgstid')!=null)
+            idString=this.getAttribute('lgstid');
+        }else if(idString!=""){
+            if(this.getAttribute('lgstid')!=null)
+            idString+=","+this.getAttribute('lgstid');
+        }
+    });
+
+    if (idString == null || idString==undefined || idString=="" || idString == ","){
+        window.top.window.showModalAlert("请选择仓库");
+        return;
+    }else if(idString.split(",").length>1){
+        window.top.window.showModalAlert("只能选择一个仓库");
+        return;
+    }
+    var sURL = "/lgst/getLgstDetail.action";
+    jQuery.ajax( {
+        url : sURL,
+        type : "post",
+        dataType : "json",
+        data : {
+            lgstId : idString
+        },
+        success : function(data) {
+            if(data.errorMessage == undefined){
+                $("#lgstId").val(data.lgstDetail.lgstId);
+                $("#txtLgstName").val(data.lgstDetail.lgstName);
+                $("#txtLgstCode").val(data.lgstDetail.lgstCode);
+                $("#lgstName").val(data.lgstDetail.lgstName);
+                $("#lgstCode").val(data.lgstDetail.lgstCode);
+                $("#txtRemark").val(data.lgstDetail.remark);
+                $("#createTitle").html("修改物流公司");
+                var editDialog = window.top.window.borrowCustomModalDialog($("#creatLgst"));
+                editDialog.modal({show:true, backdrop:'static'});
+            }else {
+                if (data.errorMessage == "session timeout"){
+                    window.location.href = "/login.jsp";
+                }
+                else{
+                    window.top.window.showModalAlert(data.errorMessage);
+                    
+                }
+            }
+        },
+        error : function(XMLHttpRequest,textStatus,errorThrown){
+            window.top.window.showModalAlert("操作失败，可能是网络原因");
+        }
+    });
+}
+
+function ClearInput() {  
+    //清空输入域  
+   var validator = $("#lgstDetailForm").validate({  
+        submitHandler: function (form) {  
+            form.submit();  
+        }  
+    });  
+    validator.resetForm();  
+    $('#lgstDetailForm .state-error').removeClass('state-error');
+    $('#lgstDetailForm .state-success').removeClass('state-success');
+} 

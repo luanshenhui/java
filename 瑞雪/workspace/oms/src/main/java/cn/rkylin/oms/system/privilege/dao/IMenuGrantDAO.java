@@ -1,0 +1,229 @@
+package cn.rkylin.oms.system.privilege.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.dao.DataAccessException;
+
+import cn.rkylin.core.exception.BusinessException;
+import cn.rkylin.oms.system.privilege.domain.WF_ORG_RESOURCE_AUTHORITY;
+import cn.rkylin.oms.system.privilege.domain.WF_ORG_ROLE_PRIV;
+
+
+public interface IMenuGrantDAO {
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 插入用户权限排除信息
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param userID
+	 *            - 用户的id
+	 * @param resourceID
+	 *            - 资源id
+	 * @return 无
+	 * @throws DataAccessException
+	 * @throws Exception 
+	 */
+	public void insertUserExclude(String userID, String resourceID) throws DataAccessException, Exception;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除用户权限排除信息
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param userID
+	 *            - 用户的id
+	 * @param resourceID
+	 *            - 资源id
+	 * @return 无
+	 * @throws DataAccessException
+	 * @throws Exception 
+	 */
+	public void deleteUserExclude(String userID, String resourceID) throws DataAccessException, Exception;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 查询用户对于某资源是否在unit,station,role上可用
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param userID
+	 *            - 用户的id
+	 * @param resourceID
+	 *            - 资源id
+	 * @return 可用返回true，不可用返回false
+	 * @throws DataAccessException
+	 * @throws Exception 
+	 */
+	public boolean ifUserResourceAvailable(String userID, String resourceID) throws DataAccessException, Exception;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据帐户，判断url或者menuItem是否可用
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param paramMap
+	 *            - 查询参数map
+	 * @throws Exception 
+	 * @throws ServiceException
+	 */
+	public boolean isResourceAvailable(Map paramMap) throws DataAccessException, Exception;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据条件获取资源授权信息
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param authVO
+	 *            - 授权查询条件VO
+	 * @return 如果找到，返回List 如果没有找到，返回new ArrayList
+	 * @throws DataAccessException
+	 * @throws Exception 
+	 */
+	public List getResourceAuthority(WF_ORG_RESOURCE_AUTHORITY authVO) throws DataAccessException, Exception;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据角色id，获取该角色可以使用的菜单树。返回的结果Map：key=菜单id，值=是否有可用
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图 <statement id="getTest" resultClass="java.util.HashMap"> SELECT
+	 * ID, NAME FROM TEST </statement>
+	 * 
+	 * 
+	 * public Map getMapTest(){ List testList =
+	 * (Student)sqlMap.queryForList("getTest",null); Map result = new HashMap();
+	 * for(int i=0; i<testList.size(); i++){ Map tmp = (Map)testList.get(i);
+	 * result.put(tmp.get("id"),tmp.get("name")); } }
+	 * 
+	 * </p>
+	 * 
+	 * @param roleID
+	 *            - 角色id
+	 * @param privilegeType
+	 *            - 授权类型：assignable，available（可分配，可使用）
+	 * @return 如果找到，返回HashMap<WF_ORG_MENU> 如果没有找到，返回null
+	 * @throws DataAccessException
+	 */
+	public Map getRoleMenuTreePrivileges(String roleID, String privilegeType) throws DataAccessException;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据岗位id，获取该岗位可以使用的菜单树。返回的结果Map：key=菜单id，值=是否有可用
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param stationID
+	 *            - 岗位id
+	 * @param privilegeType
+	 *            - 授权类型：assignable，available（可分配，可使用）
+	 * @return 如果找到，返回HashMap<WF_ORG_MENU> 如果没有找到，返回null
+	 * @throws DataAccessException
+	 */
+	public Map getStationMenuTreePrivileges(String stationID, String privilegeType) throws DataAccessException;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据角色id，菜单项id，获取该菜单项下所有元素 的可用性。返回的结果Map：key=元素id，值=是否可用
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param authVO
+	 *            - 授权查询条件VO
+	 * @param type
+	 *            - 查询类型（user、role、unit、station）
+	 * @return 如果找到，返回HashMap 如果没有找到，返回null
+	 * @throws DataAccessException
+	 * @throws BusinessException 
+	 * @throws Exception 
+	 */
+	public Map getElementPrivByMenuIDRoleID(WF_ORG_RESOURCE_AUTHORITY authVO, String type) throws DataAccessException, BusinessException, Exception;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据岗位id，菜单项id，获取该菜单项下所有元素 的可用性。返回的结果Map：key=元素id，值=是否可用
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param authVO
+	 *            - 授权查询条件VO
+	 * @return 如果找到，返回HashMap 如果没有找到，返回null
+	 * @throws DataAccessException
+	 */
+	public Map getElementPrivByMenuIDStationID(WF_ORG_RESOURCE_AUTHORITY authVO) throws DataAccessException;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除特定类型的权限（见参数）
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param resourceVO
+	 *            - 资源授权对象VO
+	 * @throws DataAccessException
+	 * @throws Exception 
+	 */
+	public void deletePrivileges(WF_ORG_RESOURCE_AUTHORITY resAuth) throws DataAccessException, Exception;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 新建特定类型的权限（见参数）
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param resourceVO
+	 *            - 资源VO
+	 * @throws DataAccessException
+	 * @throws Exception 
+	 */
+	public void insertPrivilege(WF_ORG_RESOURCE_AUTHORITY resAuth) throws DataAccessException, Exception;
+
+	
+	/**
+	 * 根据角色id删除wf_org_role_priv表中记录
+	 * @param roleId
+	 * @throws Exception 
+	 */
+    public void delPriRole(String roleId) throws Exception;
+
+    public void insertPriRole(WF_ORG_ROLE_PRIV entry) throws Exception;
+
+    public List getRolePrivList(String id) throws Exception;
+
+}

@@ -1,0 +1,188 @@
+package cn.rkylin.oms.system.messageDefine.controller;
+
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
+import com.alibaba.fastjson.JSONObject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.core.controller.ApolloController;
+import cn.rkylin.oms.system.messageDefine.dao.MessageDefineDaoImpl;
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE;
+import cn.rkylin.oms.system.messageDefine.service.IMessageDefineService;
+import cn.rkylin.oms.system.messageDefine.vo.MessageDefineVo;
+
+@Controller
+@RequestMapping("/messageDefine")
+public class MessageDefineController extends ApolloController  {
+	private static final Log logger = LogFactory.getLog(MessageDefineController.class);
+	private static final String PAGE_SELECT_STATEMENT = "pageSelectShop"; // 分页语句Statement名称
+	private static final String GOTO_MES_LIST = "/system/organization/logistics/LogisticsList"; // 跳转到店铺列表页
+	@Autowired
+	private IMessageDefineService messageDefineService;
+	
+	/**
+	 * 构造函数
+	 */
+	public MessageDefineController() {
+
+	}
+
+	/**
+	 * 跳转到物流公司列表
+	 */
+	@RequestMapping(value = "/gotoMessageDefineList")
+	public String gotoMessageDefineList() {
+		return GOTO_MES_LIST;
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据查询条件获取物流公司信息
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @throws 无
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/messageDefineList", method = RequestMethod.GET)
+	public Map<String, Object> getMessageDefine(String quickSearch, MessageDefineVo mes, String formJson,
+			@RequestParam(required = false, defaultValue = "0") int start,
+			@RequestParam(required = false, defaultValue = "10") int length) throws Exception {
+		// 用于返回值的json对象
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		try {
+			// 前台搜索条件，此处只有一个角色名称
+			MessageDefineVo param = new MessageDefineVo();
+			if (quickSearch != null) {
+				quickSearch = URLDecoder.decode(quickSearch, "UTF-8");
+				if (StringUtils.isNotEmpty(quickSearch)) {
+					param.setSearchCondition(quickSearch);
+				}
+				
+			} else {
+				// 高级查询检索条件
+				formJson = URLDecoder.decode(formJson, "UTF-8");
+				OMS_MESSAGE roleVo = JSONObject.parseObject(formJson, OMS_MESSAGE.class);
+				
+				if (roleVo != null) {
+					if (StringUtils.isNotEmpty(mes.getEnabled())) {
+						param.setEnabled(mes.getEnabled());
+					}
+					if (StringUtils.isNotEmpty(mes.getSendWay())) {
+						param.setSendWay(mes.getSendWay());
+					}
+					if (StringUtils.isNotEmpty(mes.getTitle())) {
+						param.setTitle(mes.getTitle());
+					}
+				}
+			}
+			
+			
+			
+			// 处理分页
+			if (length == -1) {
+				length = Integer.MAX_VALUE;
+			}
+			int page = start / length + 1;
+			// 处理转义的字段
+			Map<String, String> replaceFieldsMap = new HashMap<String, String>();
+			replaceFieldsMap.put("validateStatus", "validate");
+			replaceFieldsMap.put("status", "enable");
+			// 排序语句生成
+			String orderStatement = getOrderString(MessageDefineDaoImpl.class.getName(), "getMessageList",
+					replaceFieldsMap);
+			if (StringUtils.isNotEmpty(orderStatement)) {
+				param.setOrderBy(orderStatement);
+			}
+			// 获取分页数据
+			PageInfo<MessageDefineVo> messVOList = messageDefineService.findByWhere(page, length, param);
+			// 设置返回结果内容
+			returnMap.put(JSON_RESULT, SUCCESS);
+			returnMap.put(RECORDS_FILTERED, messVOList.getTotal());
+			returnMap.put(RECORDS_TOTAL, messVOList.getTotal());
+			returnMap.put(RETURN_DATA, messVOList.getList());
+			
+		} catch (Exception ex) {
+			logger.error(ex);
+			returnMap.put(JSON_RESULT, FAILED);
+			returnMap.put(JSON_MSG, ex.getMessage());
+		}
+		// 生成返回结果json串，null内容也需要返回
+		return returnMap;
+	}
+	
+	/**
+	 * 新增
+	 * @param  实体
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/saveMessage", method = RequestMethod.POST)
+	public String saveMessage(OMS_MESSAGE message) {
+		try {
+			messageDefineService.saveMessage(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			return FAILED;
+		}
+		return SUCCESS;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/deleteMgs")
+	public Map<String, Object> deleteMgs(String msgId) throws Exception {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		try {
+			messageDefineService.delete(msgId);
+			returnMap.put(JSON_RESULT, SUCCESS);
+		} catch (Exception ex) {
+			logger.error(ex);
+			returnMap.put(JSON_RESULT, FAILED);
+			returnMap.put(JSON_MSG, ex.getMessage());
+		}
+		return returnMap;
+	}
+	@ResponseBody
+	@RequestMapping(value = "/doEnable", method = RequestMethod.POST)
+	public  Map<String, Object> doEnable(HttpServletRequest request,
+			HttpServletResponse response) {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+	
+		String msgEnable =request.getParameter("enableValue");
+		String msgId = request.getParameter("msgId");
+		try {
+			messageDefineService.doEnable(msgEnable,msgId);
+			returnMap.put(JSON_RESULT, SUCCESS);
+		} catch (Exception ex) {
+			logger.error(ex);
+			returnMap.put(JSON_RESULT, FAILED);
+			returnMap.put(JSON_MSG, ex.getMessage());
+		}
+		return returnMap;
+	}
+}
+
+

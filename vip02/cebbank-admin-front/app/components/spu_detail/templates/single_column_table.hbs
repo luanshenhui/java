@@ -1,0 +1,21 @@
+<table class="table table-striped center-text">
+  <thead>
+    <tr>
+      <th>{{entries.0.key}}</th>
+      <th>商品编码</th>
+      <th>型号</th>
+      <th>价格</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    {{#each entries}}
+      <td class="column" data-id="{{id}}" data-name="{{value}}">{{value}}</td>
+      <td><input class="input-small" type="text" name="outerId" data-real-id="{{realId}}" min="0"/></td>
+      <td><input class="input-small" type="text" name="model" data-real-id="{{realId}}" min="0"/></td>
+      <td><input class="input-small" type="text" name="skuPrice" data-real-id="{{realId}}" min="0"/></td>
+      </tr>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

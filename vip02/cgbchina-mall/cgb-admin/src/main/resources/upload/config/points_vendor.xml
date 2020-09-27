@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+    <worksheet idx="0">
+        <!--保留空白位置，保证loop开始读取位置正确-->
+        <section startRow="0" endRow="1">
+        </section>
+        <!-- items:对应Java里面的Map<> bean的key -->
+        <loop startRow="2" endRow="2" items="pointsVendors" var="vendor" varType="cn.com.cgbchina.user.dto.VendorInfoUploadDto">
+            <section startRow="2" endRow="2">
+                <mapping row="2" col="0">vendor.uploadFlag</mapping>
+                <mapping row="2" col="1">vendor.uploadFailedReason</mapping>
+                <mapping row="2" col="2">vendor.vendorId</mapping>
+                <mapping row="2" col="3">vendor.merId</mapping>
+                <mapping row="2" col="4">vendor.fullName</mapping>
+                <mapping row="2" col="5">vendor.simpleName</mapping>
+                <mapping row="2" col="6">vendor.taxCode</mapping>
+                <mapping row="2" col="7">vendor.businessTypeId</mapping>
+                <mapping row="2" col="8">vendor.payCondition</mapping>
+                <mapping row="2" col="9">vendor.payGroup</mapping>
+                <mapping row="2" col="10">vendor.payWay</mapping>
+                <mapping row="2" col="11">vendor.payCurrency</mapping>
+                <mapping row="2" col="12">vendor.freightTip</mapping>
+                <mapping row="2" col="13">vendor.feeType</mapping>
+                <mapping row="2" col="14">vendor.province</mapping>
+                <mapping row="2" col="15">vendor.city</mapping>
+                <mapping row="2" col="16">vendor.area</mapping>
+                <mapping row="2" col="17">vendor.cooperAddress</mapping>
+                <mapping row="2" col="18">vendor.enterpriseAddress</mapping>
+                <mapping row="2" col="19">vendor.postCode</mapping>
+                <mapping row="2" col="20">vendor.payAddress</mapping>
+                <mapping row="2" col="21">vendor.buyAddress</mapping>
+                <mapping row="2" col="22">vendor.payConditionAddress</mapping>
+                <mapping row="2" col="23">vendor.payGroupAddress</mapping>
+                <mapping row="2" col="24">vendor.address</mapping>
+                <mapping row="2" col="25">vendor.debtAccount</mapping>
+                <mapping row="2" col="26">vendor.prepayAccount</mapping>
+                <mapping row="2" col="27">vendor.contact</mapping>
+                <mapping row="2" col="28">vendor.phone</mapping>
+                <mapping row="2" col="29">vendor.contactTax</mapping>
+                <mapping row="2" col="30">vendor.email</mapping>
+                <mapping row="2" col="31">vendor.invoice</mapping>
+                <mapping row="2" col="32">vendor.accBank</mapping>
+                <mapping row="2" col="33">vendor.accNo</mapping>
+                <mapping row="2" col="34">vendor.status</mapping>
+                <mapping row="2" col="35">vendor.vendorRole</mapping>
+                <mapping row="2" col="36">vendor.unionPayNo</mapping>
+
+            </section>
+            <!--循环结束条件 最后离结束内容的偏移-->
+            <loopbreakcondition>
+                <!--offset 行偏移 正数n为读取当前行时先判断往下n行是否符合结束条件 负数测试过，走不通读取数据-->
+                <rowcheck offset="0">
+                    <!--offset 为判断该行那一列(个)单元格内容 -->
+                    <cellcheck offset="3"></cellcheck>
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>

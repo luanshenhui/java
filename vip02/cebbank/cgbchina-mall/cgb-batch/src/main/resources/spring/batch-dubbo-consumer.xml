@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:reference interface="cn.com.cgbchina.trade.service.OrderCancelService" id="orderCancelService"/>
+    <dubbo:reference interface="cn.com.cgbchina.promotion.service.PromotionService" id="promotionService"/>
+
+    <dubbo:reference id="orderService" interface="cn.com.cgbchina.trade.service.OrderService"/>
+    <dubbo:reference id="orderReturnTrackService" interface="cn.com.cgbchina.trade.service.OrderReturnTrackService"/>
+    <dubbo:reference id="orderPartBackService" interface="cn.com.cgbchina.trade.service.OrderPartBackService"/>
+    <dubbo:reference id="requestMoneyService" interface="cn.com.cgbchina.trade.service.RequestMoneyService"/>
+    <dubbo:reference id="vendorOrderService" interface="cn.com.cgbchina.trade.service.VendorOrderService"/>
+
+    <dubbo:reference id="goodsService" interface="cn.com.cgbchina.item.service.GoodsService"/>
+    <dubbo:reference id="itemService" interface="cn.com.cgbchina.item.service.ItemService "/>
+    <dubbo:reference id="vendorGoodsService" interface="cn.com.cgbchina.item.service.VendorGoodsService"/>
+
+    <dubbo:reference id="memberAddressService" interface="cn.com.cgbchina.user.service.MemberAddressService"/>
+    <dubbo:reference id="userInfoService" interface="cn.com.cgbchina.user.service.UserInfoService"/>
+    <dubbo:reference id="vendorService" interface="cn.com.cgbchina.user.service.VendorService"/>
+
+</beans>

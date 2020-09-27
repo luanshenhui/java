@@ -1,0 +1,48 @@
+package demo.card;
+
+import java.util.*;
+
+public class GameDemo {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		GameDemo gd = new GameDemo();
+		CardDemo[] cd = gd.createCard();
+		System.out.println(Arrays.toString(cd));
+		CardDemo[] cd1 = gd.randomCard();
+		System.out.println(Arrays.toString(cd1));
+
+	}
+	
+	public CardDemo[] createCard(){
+		CardDemo[] cd = new CardDemo[54];
+		int index = 0;
+		for(int i = CardDemo.THREE;i <= CardDemo.TOW;i++){
+			cd[index++] = new CardDemo(i,CardDemo.FANGPIAN);
+			cd[index++] = new CardDemo(i,CardDemo.MEIHUA);
+			cd[index++] = new CardDemo(i,CardDemo.HONGTAO);
+			cd[index++] = new CardDemo(i,CardDemo.HEITAO);
+		}
+		cd[index++] = new CardDemo(CardDemo.GHOST,CardDemo.SMAIL);
+		cd[index++] = new CardDemo(CardDemo.GHOST,CardDemo.LARGE);
+		return cd;
+	}
+	
+	public CardDemo[] randomCard(){
+		CardDemo[] cd = new CardDemo[54];
+		Random rd = new Random();
+		int index = rd.nextInt(50);
+		for(int i = CardDemo.THREE;i <= CardDemo.TOW;i++){
+			for(int j = CardDemo.FANGPIAN;j <= CardDemo.HEITAO;j++){
+				cd[index] = new CardDemo(i,j);
+			}
+		}
+		cd[index++] = new CardDemo(CardDemo.GHOST,CardDemo.SMAIL);
+		cd[index++] = new CardDemo(CardDemo.GHOST,CardDemo.LARGE);
+		return cd;
+	}
+
+}

@@ -1,0 +1,24 @@
+<div class="modal">
+    <div class="modal-header"><h2>{{#if id}}编辑金普卡参数{{else}}新增金普卡参数{{/if}}</h2></div>
+    <form class="price-system-form">
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="basePriceMin" >基础下限：</label>
+                <input id="basePriceMin" name="basePriceMin" class="form-control" type="text" value="{{basePriceMin}}"/>
+            </div>
+            <div class="control-group">
+                <label for="basePriceMax" >基础上限：</label>
+                <input id="basePriceMax" name="basePriceMax" class="form-control" type="text" value="{{basePriceMax}}"/>
+            </div>
+            <div class="control-group">
+                <label for="cardParam" >金普卡参数：</label>
+                <input id="cardParam" name="cardParam" class="form-control" type="text" value="{{cardParam}}"/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-sm" value="确定">
+            <button class="btn btn-info btn-sm close">取消</button>
+        </div>
+    </form>
+
+</div>

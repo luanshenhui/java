@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblVendorRatioModel">
+    <resultMap id="TblVendorRatioMap" type="TblVendorRatioModel">
+        <result property="id" column="id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="period" column="period"/>
+        <result property="fixedfeehtFlag" column="fixedfeeht_flag"/>
+        <result property="fixedamtFee" column="fixedamt_fee"/>
+        <result property="feeratio1" column="feeratio1"/>
+        <result property="ratio1Precent" column="ratio1_precent"/>
+        <result property="feeratio2" column="feeratio2"/>
+        <result property="ratio2Precent" column="ratio2_precent"/>
+        <result property="feeratio2Bill" column="feeratio2_bill"/>
+        <result property="feeratio3" column="feeratio3"/>
+        <result property="ratio3Precent" column="ratio3_precent"/>
+        <result property="feeratio3Bill" column="feeratio3_bill"/>
+        <result property="reducerateFrom" column="reducerate_from"/>
+        <result property="reducerateTo" column="reducerate_to"/>
+        <result property="reducerate" column="reducerate"/>
+        <result property="htflag" column="htflag"/>
+        <result property="htant" column="htant"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,vendor_id,period,fixedfeeht_flag,fixedamt_fee,feeratio1,ratio1_precent,feeratio2,ratio2_precent,feeratio2_bill,feeratio3,ratio3_precent,feeratio3_bill,reducerate_from,reducerate_to,reducerate,htflag,htant,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="TblVendorRatioModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_vendor_ratio
+        (vendor_id
+        ,period
+        ,fixedfeeht_flag
+        ,fixedamt_fee
+        ,feeratio1
+        ,ratio1_precent
+        ,feeratio2
+        ,ratio2_precent
+        ,feeratio2_bill
+        ,feeratio3
+        ,ratio3_precent
+        ,feeratio3_bill
+        ,reducerate_from
+        ,reducerate_to
+        ,reducerate
+        ,htflag
+        ,htant
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{vendorId}
+        ,#{period}
+        ,#{fixedfeehtFlag}
+        ,#{fixedamtFee}
+        ,#{feeratio1}
+        ,#{ratio1Precent}
+        ,#{feeratio2}
+        ,#{ratio2Precent}
+        ,#{feeratio2Bill}
+        ,#{feeratio3}
+        ,#{ratio3Precent}
+        ,#{feeratio3Bill}
+        ,#{reducerateFrom}
+        ,#{reducerateTo}
+        ,#{reducerate}
+        ,#{htflag}
+        ,#{htant}
+        ,'0'
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="TblVendorRatioModel">
+        update tbl_vendor_ratio set
+            <if test="vendorId !=null">vendor_id = #{vendorId}
+                ,</if>
+            <if test="period !=null">period = #{period}
+                ,</if>
+            <if test="fixedfeehtFlag !=null">fixedfeeht_flag = #{fixedfeehtFlag}
+                ,</if>
+            <if test="fixedamtFee !=null">fixedamt_fee = #{fixedamtFee}
+                ,</if>
+            <if test="feeratio1 !=null">feeratio1 = #{feeratio1}
+                ,</if>
+            <if test="ratio1Precent !=null">ratio1_precent = #{ratio1Precent}
+                ,</if>
+            <if test="feeratio2 !=null">feeratio2 = #{feeratio2}
+                ,</if>
+            <if test="ratio2Precent !=null">ratio2_precent = #{ratio2Precent}
+                ,</if>
+            <if test="feeratio2Bill !=null">feeratio2_bill = #{feeratio2Bill}
+                ,</if>
+            <if test="feeratio3 !=null">feeratio3 = #{feeratio3}
+                ,</if>
+            <if test="ratio3Precent !=null">ratio3_precent = #{ratio3Precent}
+                ,</if>
+            <if test="feeratio3Bill !=null">feeratio3_bill = #{feeratio3Bill}
+                ,</if>
+            <if test="reducerateFrom !=null">reducerate_from = #{reducerateFrom}
+                ,</if>
+            <if test="reducerateTo !=null">reducerate_to = #{reducerateTo}
+                ,</if>
+            <if test="reducerate !=null">reducerate = #{reducerate}
+                ,</if>
+            <if test="htflag !=null">htflag = #{htflag}
+                ,</if>
+            <if test="htant !=null">htant = #{htant}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="period !=null">and period = #{period}</if>
+            <if test="fixedfeehtFlag !=null">and fixedfeeht_flag = #{fixedfeehtFlag}</if>
+            <if test="fixedamtFee !=null">and fixedamt_fee = #{fixedamtFee}</if>
+            <if test="feeratio1 !=null">and feeratio1 = #{feeratio1}</if>
+            <if test="ratio1Precent !=null">and ratio1_precent = #{ratio1Precent}</if>
+            <if test="feeratio2 !=null">and feeratio2 = #{feeratio2}</if>
+            <if test="ratio2Precent !=null">and ratio2_precent = #{ratio2Precent}</if>
+            <if test="feeratio2Bill !=null">and feeratio2_bill = #{feeratio2Bill}</if>
+            <if test="feeratio3 !=null">and feeratio3 = #{feeratio3}</if>
+            <if test="ratio3Precent !=null">and ratio3_precent = #{ratio3Precent}</if>
+            <if test="feeratio3Bill !=null">and feeratio3_bill = #{feeratio3Bill}</if>
+            <if test="reducerateFrom !=null">and reducerate_from = #{reducerateFrom}</if>
+            <if test="reducerateTo !=null">and reducerate_to = #{reducerateTo}</if>
+            <if test="reducerate !=null">and reducerate = #{reducerate}</if>
+            <if test="htflag !=null">and htflag = #{htflag}</if>
+            <if test="htant !=null">and htant = #{htant}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblVendorRatioMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_vendor_ratio
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="TblVendorRatioMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_ratio
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblVendorRatioMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_ratio
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblVendorRatioModel">
+        delete from tbl_vendor_ratio where id = id
+    </delete>
+
+    <select id="findVendorRatioInfo" parameterType="Map" resultMap="TblVendorRatioMap">
+        select <include refid="columns"/>
+        from tbl_vendor_ratio
+        where vendor_id = #{vendorId}
+          and period = #{period}
+          and del_flag = '0'
+    </select>
+
+    <select id="findRaditListByVendorId" parameterType="String" resultMap="TblVendorRatioMap">
+        select <include refid="columns"/>
+        from tbl_vendor_ratio
+        where vendor_id = #{vendorId} and del_flag = 0
+    </select>
+
+    <!--逻辑删除-->
+    <update id="updateForDelete" parameterType="java.lang.Long">
+        update tbl_vendor_ratio set
+        del_flag
+        = '1'
+        where id = #{id}
+    </update>
+
+    <!--供应商编辑查询分期费率-->
+    <select id="findStageByVendorId" parameterType="java.lang.String" resultMap="TblVendorRatioMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_vendor_ratio
+        where vendor_id=#{vendorId} and del_flag='0'
+    </select>
+</mapper>
+
+

@@ -1,0 +1,17 @@
+package com.yulin.dangdang.service;
+
+import java.util.List;
+
+import com.yulin.dangdang.bean.Product;
+import com.yulin.dangdang.bean.SearchKey;
+import com.yulin.dangdang.dao.daoimpl.SearchImpl;
+
+public class SearchService {
+	public List<Product> keyWord(SearchKey search){
+		return new SearchImpl().keyWord(search);
+	}
+	public static void main(String[] args) {
+		SearchService ss = new SearchService();
+		
+	}
+}

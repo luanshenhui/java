@@ -1,0 +1,225 @@
+{{#component "admin-top js-component"}}
+    <div class="top-left-top margin-bottom-15 clearfix">
+        <div class="top-title2 test-btn"><span>广发商城</span></div>
+        <div class="left-480">
+            <div class="top-title top-title-flag" data-flag="{{isFirst}}">待办事项</div>
+            {{#authorial "goodsBrand_look"}}
+                <div class="admin-num brand-count">
+            {{else}}
+                <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approve.BrandCount}}
+                    <div class="number">{{_DATA_.approve.BrandCount}}</div>
+                {{/if}}
+                <i class="icon-icons-cat"></i>
+                品牌审核
+            </div>
+            {{#authorial "goodsMan_look"}}
+            <div class="admin-num first_count">
+            {{else}}
+            <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approve.waitFirstCount}}
+                    <div class="number">{{_DATA_.approve.waitFirstCount}}</div>
+                {{/if}}
+                <i class="icon-icons-one"></i>
+                商品初审
+            </div>
+            {{#authorial "goodsMan_look"}}
+            <div class="admin-num margin-right-0 second_count">
+            {{else}}
+            <div class="admin-num margin-right-0 no-power">
+            {{/authorial}}
+                {{#if _DATA_.approve.waitSecondCount}}
+                    <div class="number">{{_DATA_.approve.waitSecondCount}}</div>
+                {{/if}}
+                <i class="icon-icons-item"></i>
+                商品复审
+            </div>
+            <div class="clear"></div>
+            {{#authorial "goodsMan_look"}}
+            <div class="admin-num wait-up">
+            {{else}}
+            <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approve.waitUpCount}}
+                    <div class="number">{{_DATA_.approve.waitUpCount}}</div>
+                {{/if}}
+                <i class="icon-icons-pull"></i>
+                商品上架
+            </div>
+            {{#authorial "goodsMan_look"}}
+            <div class="admin-num price-count">
+            {{else}}
+            <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approve.changeCount}}
+                    <div class="number">{{_DATA_.approve.changeCount}}</div>
+                {{/if}}
+                <i class="icon-icons-price"></i>
+                商品变更审核
+            </div>
+            {{#authorial "goodsMan_look"}}
+            <div class="admin-num margin-right-0 wait-down">
+            {{else}}
+            <div class="admin-num margin-right-0 no-power">
+            {{/authorial}}
+                {{#if _DATA_.approve.shelfApproveCount}}
+                    <div class="number">{{_DATA_.approve.shelfApproveCount}}</div>
+                {{/if}}
+                <i class="icon-icons-down"></i>
+                商品下架审核
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="right-480">
+            <div class="top-title">商品交易TOP3</div>
+            {{#each _DATA_.goods}}
+                <div class="rank-box">
+                    <div class="r-one">{{add @index 1}}</div>
+                    <div class="r-pic"><img data-original="{{image}}" width="35" height="44"></div>
+                    <div class="r-title">
+                        <a  href="/mall/goods/{{goodsCode}}?itemCode={{itemCode}}" class="font-color-black">{{goodsName}}</a>
+                        <span><strong class="font-color-red">￥{{prices}}</strong> ×{{maxInstallmentNumber}}期</span></div>
+                    <div class="r-num">{{statNum}}</div>
+                    <div class="clear"></div>
+                </div>
+            {{/each}}
+        </div>
+        <div class="clear"></div>
+        <div class="margin-top-50"></div>
+        <div class="left-480">
+            <div class="top-title brand-order" data-brand="{{json _DATA_.brand}}">热销品类TOP5</div>
+            <div id="echarts_categories" style="width: 430px;height:248px;"></div>
+        </div>
+        <div class="right-480">
+            <div class="top-title vendor-order" data-vendor="{{json _DATA_.vendor}}">供应商销量TOP5</div>
+            <div id="echarts_order" style="width: 430px;height:248px;"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="top-left-top margin-bottom-15 clearfix">
+        <div class="top-title2 test-btn"><span>积分商城</span></div>
+        <div class="left-480">
+            <div class="top-title top-title-flag" data-flag="{{isFirst}}">待办事项</div>
+            {{#authorial "giftbrand_look"}}
+            <div class="admin-num brand-countp">
+            {{else}}
+            <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approvePoint.BrandCount}}
+                    <div class="number">{{_DATA_.approvePoint.BrandCount}}</div>
+                {{/if}}
+                <i class="icon-icons-cat"></i>
+                品牌审核
+            </div>
+            {{#authorial "giftpresent_look"}}
+            <div class="admin-num first_countp">
+            {{else}}
+            <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approvePoint.waitFirstCount}}
+                    <div class="number">{{_DATA_.approvePoint.waitFirstCount}}</div>
+                {{/if}}
+                <i class="icon-icons-one"></i>
+                礼品初审
+            </div>
+            {{#authorial "giftpresent_look"}}
+            <div class="admin-num margin-right-0 second_countp">
+            {{else}}
+            <div class="admin-num margin-right-0 no-power">
+            {{/authorial}}
+                 {{#if _DATA_.approvePoint.waitSecondCount}}
+                    <div class="number">{{_DATA_.approvePoint.waitSecondCount}}</div>
+                 {{/if}}
+                <i class="icon-icons-item"></i>
+                礼品复审
+            </div>
+            <div class="clear"></div>
+            {{#authorial "giftpresent_look"}}
+            <div class="admin-num wait-upp">
+            {{else}}
+            <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approvePoint.waitUpCount}}
+                    <div class="number">{{_DATA_.approvePoint.waitUpCount}}</div>
+                {{/if}}
+                <i class="icon-icons-pull"></i>
+                礼品上架
+            </div>
+            {{#authorial "giftpresent_look"}}
+            <div class="admin-num price-countp">
+            {{else}}
+            <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approvePoint.changeCount}}
+                    <div class="number">{{_DATA_.approvePoint.changeCount}}</div>
+                {{/if}}
+                <i class="icon-icons-price"></i>
+                礼品变更审核
+            </div>
+            {{#authorial "giftpresent_look"}}
+            <div class="admin-num margin-right-0 wait-downp">
+            {{else}}
+            <div class="admin-num margin-right-0 no-power">
+            {{/authorial}}
+                {{#if _DATA_.approvePoint.shelfApproveCount}}
+                    <div class="number">{{_DATA_.approvePoint.shelfApproveCount}}</div>
+                {{/if}}
+                <i class="icon-icons-down"></i>
+                礼品下架审核
+            </div>
+            <div class="clear"></div>
+            {{#authorial "giftpresent_look"}}
+            <div class="admin-num set-price">
+            {{else}}
+            <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approvePoint.waitForPriceCount}}
+                    <div class="number">{{_DATA_.approvePoint.waitForPriceCount}}</div>
+                {{/if}}
+                <i class="icon-icons-price2"></i>
+                定价
+            </div>
+            {{#authorial "giftpresent_look"}}
+            <div class="admin-num set-price-audit">
+            {{else}}
+            <div class="admin-num no-power">
+            {{/authorial}}
+                {{#if _DATA_.approvePoint.priceAudit}}
+                    <div class="number">{{_DATA_.approvePoint.priceAudit}}</div>
+                {{/if}}
+                <i class="icon-icons-price3"></i>
+                定价审核
+            </div>
+        </div>
+        <div class="right-480">
+            <div class="top-title">礼品交易TOP3</div>
+            {{#each _DATA_.goodsPoint}}
+                <div class="rank-box">
+                    <div class="r-one">{{add @index 1}}</div>
+                    <div class="r-pic"><img data-original="{{image}}" width="35" height="44"></div>
+                    <div class="r-title">
+                        <a  href="/mall/goods/{{goodsCode}}?itemCode={{itemCode}}" class="font-color-black">{{goodsName}}</a>
+                        <span><strong class="font-color-red">{{minPoint}}分
+                            {{#if prices}}
+                                +￥{{prices}}
+                            {{/if}}</strong></span></div>
+                    <div class="r-num">{{statNum}}</div>
+                    <div class="clear"></div>
+                </div>
+            {{/each}}
+        </div>
+        <div class="clear"></div>
+        <div class="margin-top-50"></div>
+        <div class="left-480">
+            <div class="top-title brand-orderp" data-brand="{{json _DATA_.brandPoint}}">热销品类TOP5</div>
+            <div id="echarts_categoriesp" style="width: 430px;height:248px;"></div>
+        </div>
+        <div class="right-480">
+            <div class="top-title vendor-orderp" data-vendor="{{json _DATA_.vendorPoint}}">供应商销量TOP5</div>
+            <div id="echarts_orderp" style="width: 430px;height:248px;"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+{{/component}}

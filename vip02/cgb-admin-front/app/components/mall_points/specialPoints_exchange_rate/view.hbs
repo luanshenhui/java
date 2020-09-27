@@ -1,0 +1,59 @@
+{{#component "special-points js-component"}}
+    <p class="components-title"><strong>- 特殊积分兑换比例设置 -</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <div class="m-b-10">
+                {{#authorial "pointsSpecial_add"}}
+                    <button class="btn btn-info btn-small js-special-new">+ 新增</button>
+                {{/authorial}}
+                {{#authorial "pointsSpecial_delete"}}
+                    <button class="btn btn-info btn-small js-special-delete" data-toggle="confirm"
+                            data-title="您确定删除吗?" data-content="删除之后无法恢复,确定删除吗?"
+                            data-event="confirm:all-special-points">删除</button>
+                {{/authorial}}
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="4%"></th>
+                    <th width="25%">特殊积分最高支付比例</th>
+                    <th width="25%">类别</th>
+                    <th width="25%">供应商/品牌/后台类目</th>
+                    <th width="21%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                        <td><input type="checkbox" name="checkRate" class="js-check-this" data-id="{{id}}"/></td>
+                        <td class="special-rate">{{scale}}</td>
+                        <td class="special-supplier">
+                            {{#equals type "0"}}供应商{{/equals}}
+                            {{#equals type "1"}}品牌{{/equals}}
+                            {{#equals type "2"}}类目{{/equals}}
+                            <!--{{#equals type "3"}}商品{{/equals}}-->
+                        </td>
+                        <td class="special-brand">{{typeVal}}</td>
+                        <td>
+                            {{#authorial "pointsSpecial_edit"}}
+                                <button class="btn btn-info btn-sm js-special-edit">编辑</button>
+                            {{/authorial}}
+                            {{#authorial "pointsSpecial_delete"}}
+                                <button id="{{id}}" class="btn btn-info btn-sm" data-toggle="confirm"
+                                        data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                        data-event="confirm:delete-special-points">
+                                    删除
+                                </button>
+                            {{/authorial}}
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="m-l-10 m-b-10">
+                <input class="js-all-check" type="checkbox" name="checkAll"/><span>全选</span>
+            </div>
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+    </div>
+{{/component}}

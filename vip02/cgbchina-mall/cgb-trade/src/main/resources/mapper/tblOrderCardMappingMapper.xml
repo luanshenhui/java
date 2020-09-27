@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblOrderCardMappingModel">
+    <resultMap id="TblOrderCardMappingMap" type="TblOrderCardMappingModel">
+        <result property="id" column="id"/>
+        <result property="ordermainId" column="ordermain_id"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="txnDate" column="txn_date"/>
+        <result property="serialNo" column="serial_no"/>
+        <result property="defrayType" column="defray_type"/>
+        <result property="amount" column="amount"/>
+        <result property="bonusType" column="bonus_type"/>
+        <result property="bonusValue" column="bonus_value"/>
+        <result property="bonusTxnCode" column="bonus_txn_code"/>
+        <result property="checkStatus" column="check_status"/>
+    </resultMap>
+    <sql id="columns">
+    id,ordermain_id,card_no,txn_date,serial_no,defray_type,amount,bonus_type,bonus_value,bonus_txn_code,check_status
+    </sql>
+
+    <insert id="insert" parameterType="TblOrderCardMappingModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_card_mapping
+        (ordermain_id
+        ,card_no
+        ,txn_date
+        ,serial_no
+        ,defray_type
+        ,amount
+        ,bonus_type
+        ,bonus_value
+        ,bonus_txn_code
+        ,check_status)
+        values(#{ordermainId}
+        ,#{cardNo}
+        ,#{txnDate}
+        ,#{serialNo}
+        ,#{defrayType}
+        ,#{amount}
+        ,#{bonusType}
+        ,#{bonusValue}
+        ,#{bonusTxnCode}
+        ,#{checkStatus})
+    </insert>
+
+    <update id="update" parameterType="TblOrderCardMappingModel">
+        update tbl_order_card_mapping set
+            <if test="ordermainId !=null">ordermain_id = #{ordermainId}
+                ,</if>
+            <if test="cardNo !=null">card_no = #{cardNo}
+                ,</if>
+            <if test="txnDate !=null">txn_date = #{txnDate}
+                ,</if>
+            <if test="serialNo !=null">serial_no = #{serialNo}
+                ,</if>
+            <if test="defrayType !=null">defray_type = #{defrayType}
+                ,</if>
+            <if test="amount !=null">amount = #{amount}
+                ,</if>
+            <if test="bonusType !=null">bonus_type = #{bonusType}
+                ,</if>
+            <if test="bonusValue !=null">bonus_value = #{bonusValue}
+                ,</if>
+            <if test="bonusTxnCode !=null">bonus_txn_code = #{bonusTxnCode}
+                ,</if>
+            <if test="checkStatus !=null">check_status = #{checkStatus}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordermainId !=null">and ordermain_id = #{ordermainId}</if>
+            <if test="cardNo !=null">and card_no = #{cardNo}</if>
+            <if test="txnDate !=null">and txn_date = #{txnDate}</if>
+            <if test="serialNo !=null">and serial_no = #{serialNo}</if>
+            <if test="defrayType !=null">and defray_type = #{defrayType}</if>
+            <if test="amount !=null">and amount = #{amount}</if>
+            <if test="bonusType !=null">and bonus_type = #{bonusType}</if>
+            <if test="bonusValue !=null">and bonus_value = #{bonusValue}</if>
+            <if test="bonusTxnCode !=null">and bonus_txn_code = #{bonusTxnCode}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblOrderCardMappingMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_order_card_mapping
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="TblOrderCardMappingMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_card_mapping
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblOrderCardMappingMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_card_mapping
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblOrderCardMappingModel">
+        delete from tbl_order_card_mapping where id = id
+    </delete>
+
+    <select id="findCCCheckAccOrder" parameterType="Map" resultMap="TblOrderCardMappingMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_card_mapping
+        where ordermain_id in
+        <foreach collection="orderMainIdList" item="item" index="index" open="(" separator="," close=")">
+          #{item.ordermainId}
+        </foreach>
+        and bonusValue > 0
+    </select>
+    
+    <select id="findByOrderMainIdOrCardNo" parameterType="Map" resultMap="TblOrderCardMappingMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_card_mapping
+        <where>
+        	ordermain_id is not null
+            <if test="orderMainId !=null">and ordermain_id = #{orderMainId}</if>
+            <if test="cardNo !=null">and card_no = #{cardNo} </if>
+        </where>
+    </select>
+</mapper>
+
+

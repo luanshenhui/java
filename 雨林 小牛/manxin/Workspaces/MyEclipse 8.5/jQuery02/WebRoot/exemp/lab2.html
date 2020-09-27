@@ -1,0 +1,64 @@
+<html>
+ <head>
+    <title>e8.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+   <style>
+   		.s1{
+   			width: 120px;
+   		}
+   		#d1{
+   			width: 510px;
+   			height: 320px;
+   			background-color: #F5DEB3;
+   		}
+   		#d2{
+   			height: 30px;
+   			font-size: 24px;
+   			background-color: blue;
+   			color: white;
+   		}
+   		#d3{
+   			padding-left: 30px;
+   		}
+   </style>
+    <script type="text/javascript" src="../js/jquery-1.4.3.js"></script>
+	
+  </head>
+  <body style="font-size: 30px;">
+    <div id="d1">
+    	<div id="d2">选课</div>
+    	<div id="d3">
+    		<table cellpadding="0" cellspacing="0">
+    			<tr><td>可选课程</td><td>&nbsp;</td><td>选择课程</td></tr>
+    			<tr>
+					<td>
+						<select id="s1" name="s1" style="width: 150px;height: 220px;" multiple="multiple">
+							<option value="zsf">嵌入式开发</option>
+							<option value="xrr">中间件</option>
+							<option value="hh">图形处理</option>
+						</select>
+					</td>  
+					<td>
+						<p>
+							<input id="b1" type="button" class="s1" value="--&gt;"/>
+						</p>
+						<p>
+							<input id="b2" type="button" class="s1" value="--&gt;&gt;"/>
+						</p>
+						<p>
+							<input id="b3" type="button" class="s1" value="&lt;--"/>
+						</p>
+						<p>
+							<input id="b4" type="button" class="s1" value="&lt;&lt;--"/>
+						</p>
+					</td> 
+					<td>
+						<select id="s2" name="s2" style="width: 150px;height: 220px" multiple="multiple">
+						</select>
+					</td> 			
+    			</tr>
+    		</table>
+    	</div>
+    </div>
+  </body>
+</html>

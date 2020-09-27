@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Dict" table="Dict">
+        <id name="ID" type="integer" >
+            <column name="ID"/>
+        </id>
+        <property name="Name" type="string">
+            <column name="Name"/>
+        </property>
+        <property name="CategoryID" type="integer">
+            <column name="CategoryID"/>
+        </property>
+        <property name="Code" type="string">
+            <column name="Code" length="40" />
+        </property>
+        <property name="Extension" type="string">
+            <column name="Extension" length="2000" />
+        </property>
+        <property name="SequenceNo" type="integer">
+            <column name="SequenceNo"/>
+        </property>
+        <property name="ParentID" type="integer">
+            <column name="ParentID"/>
+        </property>
+        <property name="StatusID" type="integer">
+            <column name="StatusID"/>
+        </property>
+        <property name="ConstDefine" type="string">
+            <column name="ConstDefine"/>
+        </property>
+        <property name="Ecode" type="string">
+            <column name="Ecode"/>
+        </property>
+        <property name="ExclusionGroupID" type="integer">
+            <column name="ExclusionGroupID"/>
+        </property>
+        <property name="MediumGroupID" type="integer">
+            <column name="MediumGroupID"/>
+        </property>
+        <property name="IsDefault" type="integer">
+            <column name="IsDefault"/>
+        </property>
+        <property name="BodyType" type="string">
+            <column name="BodyType"/>
+        </property>
+        <property name="Memo" type="string">
+            <column name="Memo"/>
+        </property>
+        <property name="Zindex" type="integer">
+            <column name="Zindex" />
+        </property>
+        <property name="ColorLinkIDs" type="string">
+            <column name="ColorLinkIDs" />
+        </property>
+        <property name="ShapeLinkIDs" type="string">
+            <column name="ShapeLinkIDs" />
+        </property>
+        <property name="IsElement" type="integer">
+            <column name="IsElement" />
+        </property>
+        <property name="en" type="string">
+            <column name="en"/>
+        </property>
+        <property name="de" type="string">
+            <column name="de"/>
+        </property>
+        <property name="fr" type="string">
+            <column name="fr"/>
+        </property>
+        <property name="ja" type="string">
+            <column name="ja"/>
+        </property>
+        <property name="IsSingleCheck" type="integer">
+            <column name="IsSingleCheck" />
+        </property>
+        <property name="OccupyFabric" type="double">
+            <column name="OccupyFabric" />
+        </property>
+        <property name="Price" type="double">
+            <column name="Price"   />
+        </property>
+        <property name="DollarPrice" type="double">
+            <column name="DollarPrice"   />
+        </property>
+        <property name="AffectedAllow" type="string">
+            <column name="AffectedAllow"/>
+        </property>
+        <property name="AffectedDisabled" type="string">
+            <column name="AffectedDisabled"/>
+        </property>
+        <property name="NotShowOnFront" type="integer">
+            <column name="NotShowOnFront"/>
+        </property>
+        <property name="ParentFabric" type="string">
+            <column name="ParentFabric"/>
+        </property>
+        <property name="Position" type="string">
+            <column name="Position"/>
+        </property>
+        <property name="IsShow" type="integer">
+            <column name="IsShow"/>
+        </property>
+    </class>
+</hibernate-mapping>

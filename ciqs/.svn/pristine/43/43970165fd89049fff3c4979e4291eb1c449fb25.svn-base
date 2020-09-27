@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SQL.WARNING">
+
+<!-- 分页查询列表 -->
+	<select id="findWarningList"  parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto"  resultType="com.dpn.ciqqlc.standard.model.WarningRuleDto">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+		*
+		 from WARNING_RULE t
+		 where 1=1
+		<if test="good_type != null and good_type != ''" >
+			and t.good_type = #{good_type}
+		</if>
+		<if test="good_category != null and good_category != ''">
+			and t.good_category = #{good_category}
+		</if>
+		<if test="ruld_id != null and ruld_id != ''">
+			and t.ruld_id  = #{ruld_id}
+		</if>
+		 ) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+
+
+	<!-- 查询列表记录数 -->
+	<select id="findWarinCount"  parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto"  resultType="java.lang.Integer">
+		select count(*) 
+		 	from WARNING_RULE t
+		   	where 1=1
+		<if test="good_type != null and good_type != ''" >
+			and t.good_type = #{good_type}
+		</if>
+		<if test="good_category != null and good_category != ''">
+			and t.good_category = #{good_category}
+		</if>
+		<if test="ruld_id != null and ruld_id != ''">
+			and t.ruld_id  = #{ruld_id}
+		</if>
+	</select>
+	
+	<insert id="insertWarning" parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto" >
+		insert into WARNING_RULE (
+			RULD_ID,
+			GOOD_TYPE,
+			GOOD_CATEGORY,
+			MIN_TIME,
+			AVERAGE_TIME,
+			MAX_TIME
+		) values (
+			CreateGUID(),
+			#{good_type,jdbcType=VARCHAR},
+			#{good_category,jdbcType=VARCHAR},
+			#{min_time,jdbcType=VARCHAR},
+			#{average_time,jdbcType=VARCHAR},
+			#{max_time,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="updateWarning" parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto">
+	  UPDATE WARNING_RULE
+       <set>
+       		<if test="good_type != null">good_type = #{good_type},</if>
+       		<if test="good_category != null">good_category = #{good_category},</if>
+       		<if test="min_time != null">min_time = #{min_time},</if>
+       		<if test="average_time != null">average_time = #{average_time},</if>
+       		<if test="max_time != null">max_time = #{max_time},</if>
+       		ruld_id = #{ruld_id}
+       </set>
+        WHERE ruld_id = #{ruld_id} 
+	</update>
+	
+	<delete id="deleteWarning" parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto">
+		delete from WARNING_RULE where ruld_id = #{ruld_id} 
+	</delete>
+	
+	
+	
+	
+	
+	<!-- 	规范 -->
+	<select id="findGuifanList"  parameterType="com.dpn.ciqqlc.standard.model.WarningStandardEventDto"  resultType="com.dpn.ciqqlc.standard.model.WarningStandardEventDto">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+			standard_id        as  standardId,         
+			warning_id         as  warningId,         
+			warning_batch_id   as  warningBatchId,   
+			warning_no         as  warningNo,         
+			business_type      as  businessType,      
+			(select c.name from CODE_LIBRARY c where c.code=t.business_type  and c.type='WARING_DP') as businessName,   
+			first_module_type  as  firstModuleType,  
+			first_module_name  as  firstModuleName,  
+			second_module_type as  secondModuleType, 
+			second_module_name as  secondModuleName, 
+			third_module_type  as  thirdModuleType,  
+			third_module_name  as  thirdModuleName,  
+			content            as  content,            
+			warning_type       as  warningType,       
+			warning_flag       as  warningFlag,       
+			update_time        as  updateTime,        
+			create_time        as  createTime,        
+			source_time        as  sourceTime,        
+			source_other_time  as  sourceOtherTime,  
+			user_name          as  userName,          
+			partner_code       as  partnerCode,       
+			department_code    as  departmentCode,    
+			partner_name       as  partnerName,       
+			department_name    as  departmentName    
+		 from WARNING_STANDARD_EVENT t
+		 where 1=1
+		<if test="businessType != null and businessType != ''" >
+			and t.business_type = #{businessType}
+		</if>
+		<if test="warningType != null and warningType != ''">
+			and t.warning_type = #{warningType}
+		</if>
+		<if test="warningFlag != null and warningFlag != ''">
+			and t.warning_flag  = #{warningFlag}
+		</if>
+		<if test="date_begin != null and date_begin != ''">
+			<![CDATA[ and t.create_time >= to_date(#{date_begin}, 'yyyy-mm-dd hh24:mi:ss') ]]>
+		</if>
+		<if test="date_over != null and date_over != ''">
+			<![CDATA[ and t.create_time <= to_date(#{date_over}, 'yyyy-mm-dd hh24:mi:ss') ]]>
+		</if>
+		 ) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+
+
+	<!-- 查询列表记录数 -->
+	<select id="findGuifanCount"  parameterType="com.dpn.ciqqlc.standard.model.WarningStandardEventDto"  resultType="java.lang.Integer">
+		select count(*) 
+		 	from WARNING_STANDARD_EVENT t
+		   	where 1=1
+		<if test="businessType != null and businessType != ''" >
+			and t.business_type = #{businessType}
+		</if>
+		<if test="warningType != null and warningType != ''">
+			and t.warning_type = #{warningType}
+		</if>
+		<if test="warningFlag != null and warningFlag != ''">
+			and t.warning_flag  = #{warningFlag}
+		</if>
+		<if test="date_begin != null and date_begin != ''">
+			<![CDATA[ and t.create_time >= to_date(#{date_begin}, 'yyyy-mm-dd hh24:mi:ss') ]]>
+		</if>
+		<if test="date_over != null and date_over != ''">
+			<![CDATA[ and t.create_time <= to_date(#{date_over}, 'yyyy-mm-dd hh24:mi:ss') ]]>
+		</if>
+	</select>
+	
+	
+		<!-- 	规范维护列表 -->
+	<select id="findGuifanWeihuList"  parameterType="com.dpn.ciqqlc.http.form.WarningLinkRuleForm"  resultType="com.dpn.ciqqlc.http.form.WarningLinkRuleForm">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+			id              as  id,
+			businesss_type  as  businessType,
+			businesss_name  as  businessName,
+			good_type       as  goodType,
+			link_type       as  linkType,
+			link_name       as  linkName,
+			dic_type        as  dicType,
+			dic_name        as  dicName,
+			warning         as  warning,
+			edn_flag        as  ednFlag,
+			dic_num         as  dicNum
+		 from WARNING_LINK_RULE 
+		 where 1=1
+		<if test="businessType != null and businessType != ''" >
+			and t.business_type = #{businessType}
+		</if>
+		<if test="linkType != null and linkType != ''">
+			and t.link_type = #{linkType}
+		</if>
+		order by dic_type desc
+		 ) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+
+
+	<!-- 查询列表记录数 -->
+	<select id="findGuifanWeihuCount"  parameterType="com.dpn.ciqqlc.http.form.WarningLinkRuleForm"  resultType="java.lang.Integer">
+		select count(*) 
+		 	from WARNING_LINK_RULE t
+		   	where 1=1
+		<if test="businessType != null and businessType != ''" >
+			and t.business_type = #{businessType}
+		</if>
+		<if test="linkType != null and linkType != ''">
+			and t.link_type = #{linkType}
+		</if>
+	</select>
+	<select id="findTypeRuleList"  parameterType="com.dpn.ciqqlc.http.form.WarningLinkRuleForm"  resultType="com.dpn.ciqqlc.http.form.WarningLinkRuleForm">
+		select t.link_type as linkType,t.link_name as linkName,t.businesss_type as businessType from WARNING_LINK_RULE t 
+		where 1=1 
+		<if test="businessType != null and businessType != ''" >
+			and t.business_type = #{businessType}
+		</if>
+		 group by t.link_type,t.link_name,t.businesss_type
+	</select>
+	
+	<select id="findWarningLinkRuleFormById"  parameterType="com.dpn.ciqqlc.http.form.WarningLinkRuleForm"  resultType="com.dpn.ciqqlc.http.form.WarningLinkRuleForm">
+		select 
+		    id              as  id,
+			businesss_type  as  businessType,
+			businesss_name  as  businessName,
+			good_type       as  goodType,
+			link_type       as  linkType,
+			link_name       as  linkName,
+			dic_type        as  dicType,
+			dic_name        as  dicName,
+			warning         as  warning,
+			edn_flag        as  ednFlag,
+			dic_num         as  dicNum
+		 from WARNING_LINK_RULE t 
+		where id=#{id}
+	</select>
+	
+	<select id="findCodeLibrary"  parameterType="com.dpn.ciqqlc.standard.model.SelectModel"  resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+		select 
+			code,
+			name,
+			type
+		 from CODE_LIBRARY t
+		   	where 1=1
+		<if test="type != null and type != ''" >
+			and t.type = #{type}
+		</if>
+	</select>
+	
+	<update id="updateWeihu">
+		update WARNING_LINK_RULE
+	 	<set>
+       		<if test="warning != null">warning = #{warning},</if>
+       		<if test="dicNum != null">dic_num = #{dicNum},</if>
+       		id = #{id}
+       </set>
+        WHERE id = #{id} 
+	</update>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="ht	tp://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>add</servlet-name>
+  	<servlet-class>web.AddServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>add</servlet-name>
+  	<url-pattern>/add</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>select</servlet-name>
+  	<servlet-class>web.ListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>select</servlet-name>
+  	<url-pattern>/list</url-pattern> 
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>del</servlet-name>
+  	<servlet-class>web.DelServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>del</servlet-name>
+  	<url-pattern>/del</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>load</servlet-name>
+  	<servlet-class>web.LoadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>load</servlet-name>
+  	<url-pattern>/load</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>up</servlet-name>
+  	<servlet-class>web.UpServlet</servlet-class>
+  </servlet> 
+  <servlet-mapping>
+  	<servlet-name>up</servlet-name>
+  	<url-pattern>/update</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+	<servlet-name>pageup</servlet-name>
+	<servlet-class>web.PageUpServlet</servlet-class>  
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>pageup</servlet-name>
+  	<url-pattern>/topageUp</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+	<servlet-name>pagedown</servlet-name>
+	<servlet-class>web.PageDownServlet</servlet-class>  
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>pagedown</servlet-name>
+  	<url-pattern>/topageDown</url-pattern>
+  </servlet-mapping>
+    
+</web-app>

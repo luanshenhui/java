@@ -1,0 +1,7 @@
+package com.yulin.dangdang.dao;
+
+import java.util.List;
+
+public interface SerachDao {
+	public List<SearchKey> keyWord(Search search);
+}

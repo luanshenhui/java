@@ -1,0 +1,29 @@
+<div class="category category-{{extras.level}} js-component" id="{{extras.level}}" data-type="backCategory">
+  <div class="category-header">
+    <p class="item-name-p"><strong class="item-name">
+      {{#equals extras.level 1}}一级类目{{/equals}}
+      {{#equals extras.level 2}}二级类目{{/equals}}
+      {{#equals extras.level 3}}三级类目{{/equals}}
+      {{#equals extras.level 4}}四级类目{{/equals}}
+      {{#equals extras.level 5}}产品{{/equals}}
+    </strong></p>
+  </div>
+  <div class="form category-body">
+    <div class="search-item">
+      <div class=" search-item-group">
+          <i class="fa fa-fw fa-search"></i>
+        <input type="text" class="search-item-input js-search-item" placeholder="搜索关键字" >
+      </div>
+    </div>
+    <ul class="divide-ul {{#equals extras.level 5}}spu-ul{{/equals}}">
+      {{#each data.data}}
+        <li class="divide-li" data-category="{{json this}}">
+          <span class="normal-status">
+            {{#equals hasChild "true"}}<i class="fa fa-fw fa-angle-right next "></i>{{/equals}}
+            <a href="javascript:void(0);" class="item-pop"><span title="{{name}}">{{name}}</span></a>
+          </span>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>

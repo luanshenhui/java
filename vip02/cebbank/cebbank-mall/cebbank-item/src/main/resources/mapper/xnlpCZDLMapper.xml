@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="XnlpCZDLModel">
+    <resultMap id="XnlpCZDLMap" type="XnlpCZDLModel">
+        <result property="custName" column="cust_name"/>
+        <result property="certNbr" column="cert_nbr"/>
+        <result property="card4" column="card_4"/>
+        <result property="serverStart" column="server_start"/>
+        <result property="serverEnd" column="server_end"/>
+        <result property="type" column="type"/>
+        <result property="area" column="area"/>
+        <result property="hisUpdateInd" column="his_update_ind"/>
+        <result property="txDate" column="tx_date"/>
+    </resultMap>
+    <sql id="columns">
+    cust_name,cert_nbr,card_4,server_start,server_end,type,area,his_update_ind,tx_date
+    </sql>
+	<select id="findCZDLByCertAndCard" parameterType="map" resultMap="XnlpCZDLMap" >
+    	select 
+    		<include refid="columns"/>
+        from tbl_xnlp_czdl
+        where cert_nbr=#{certNo}
+        and card_4=#{cardNo}
+    </select>
+
+    <sql id="conditions">
+        <where>
+            <if test="custName !=null">and cust_name = #{custName}</if>
+            <if test="certNbr !=null">and cert_nbr = #{certNbr}</if>
+            <if test="card4 !=null">and card_4 = #{card4}</if>
+            <if test="serverStart !=null">and server_start = #{serverStart}</if>
+            <if test="serverEnd !=null">and server_end = #{serverEnd}</if>
+            <if test="type !=null">and type = #{type}</if>
+            <if test="area !=null">and area = #{area}</if>
+            <if test="hisUpdateInd !=null">and his_update_ind = #{hisUpdateInd}</if>
+            <if test="txDate !=null">and tx_date = #{txDate}</if>
+            <if test="id !=null">and id = #{id}</if>
+        </where>
+    </sql>
+
+    <select id="findByNo" parameterType="Map" resultMap="XnlpCZDLMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_xnlp_czdl
+        <include refid="conditions"/>
+    </select>
+</mapper>

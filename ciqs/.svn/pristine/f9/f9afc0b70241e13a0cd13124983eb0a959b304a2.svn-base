@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- Mybatis Mapper config for SYSTEM. @author zhanglin@dpn.com.cn @since 
+	1.0.0 zhanglin@dpn.com.cn @version 1.0.0 zhanglin@dpn.com.cn -->
+<!-- *************************************************************************** 
+	备忘记录 -> ******************************************************************************** 
+	变更履历 -> 1.0.0 2016-07-07 zhanglin@dpn.com.cn : 初建。 **************************************************************************** -->
+
+<mapper namespace="SQL.BELONGINGS">
+
+    <!-- **** select ******************************************************* -->
+    <!--  查询拦截物信息 -->
+		<select id="selectIntercepe" parameterType="com.dpn.ciqqlc.http.form.IntercepeForm" resultType="com.dpn.ciqqlc.standard.model.IntercepeModel">
+		  select * from (
+		  select a.*,rownum rid from 
+		    (select 
+		        distinct 
+		        qcu.id
+		        ,tco.id as key
+			  	,qcu.card_no
+	          	,qcu.name 
+	          	,qcu.cag_name
+	          	,qcu.reg_date
+	          	,qcu.num_unit
+	            ,qcu.weight_unit
+	            ,qcu.deal_disc
+	            ,qcu.insp_opr
+	            ,GET_qlc_code(tco.port_zs_org_code,'QLC_ORGANIZES') port_zs_org_code
+	          	,GET_qlc_code(tco.port_org_code,'QLC_DEPTMENTS') port_org_code
+	          	,GET_qlc_code(qcu.deal_type,'QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE') as deal_type
+	          	,tco.prod_main_id
+	         <!-- from QLC_CHK_UNIFY qcu
+	            left join QLC_TRAV_CARRY_OBJ tco on qcu.card_no = tco.card_no
+	            left join QLC_CODE_LIBRARY qcl on qcl.code = qcu.deal_type and qcl.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+	            left join QLC_CODE_LIBRARY qcl2 on qcl2.code = tco.port_zs_org_code and qcl2.type='QLC_ORGANIZES'
+	            left join QLC_CODE_LIBRARY qcl3 on qcl3.code = tco.port_org_code and qcl3.type='QLC_DEPTMENTS' -->
+	            from QLC_CHK_UNIFY qcu,QLC_TRAV_CARRY_OBJ tco
+	            where qcu.card_no = tco.card_no
+				<if test="cardNo != null and cardNo != ''">
+				and qcu.card_no = #{cardNo}
+				</if>
+				<if test="interceptDate1 != null and interceptDate1 != ''">
+				<![CDATA[ and qcu.reg_date >= to_date(#{interceptDate1}, 'yyyy-mm-dd') ]]>
+				</if>
+				<if test="interceptDate2 != null and interceptDate2 != ''">
+				<![CDATA[ and qcu.reg_date < to_date(#{interceptDate2}, 'yyyy-mm-dd')+1 ]]>
+				</if>
+				<if test="portOrg != null and portOrg != ''">
+				and tco.port_zs_org_code = #{portOrg}
+				</if>
+				<if test="portOrgUmder != null and portOrgUmder != ''">
+				and tco.port_org_code = #{portOrgUmder} 
+				</if>
+				<if test="declNo != null and declNo != ''">
+				and tco.prod_main_id = #{declNo} 
+				</if>
+				<if test="goodsItemName != null and goodsItemName != ''">
+				and qcu.cag_name like '%'||#{goodsItemName}||'%' 
+				</if>
+				order by qcu.reg_date desc) a 
+     	    where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+		</select>
+		
+		<select id="findIntercepeCount"  resultType="java.lang.Integer">
+		 select count(qcu.id) 
+		<!--  from QLC_CHK_UNIFY qcu
+           left join QLC_TRAV_CARRY_OBJ tco on qcu.card_no = tco.card_no
+           left join QLC_CODE_LIBRARY qcl on qcl.code = qcu.deal_type and qcl.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+           left join QLC_CODE_LIBRARY qcl2 on qcl2.code = tco.port_zs_org_code and qcl2.type='QLC_ORGANIZES'
+           left join QLC_CODE_LIBRARY qcl3 on qcl3.code = tco.port_org_code and qcl3.type='QLC_DEPTMENTS' -->
+		from QLC_CHK_UNIFY qcu,QLC_TRAV_CARRY_OBJ tco
+	            where qcu.card_no = tco.card_no
+		<if test="cardNo != null and cardNo != ''">
+		and qcu.card_no = #{cardNo}
+		</if>
+		<if test="interceptDate1 != null and interceptDate1 != ''">
+		<![CDATA[ and qcu.reg_date >= to_date(#{interceptDate1}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="interceptDate2 != null and interceptDate2 != ''">
+		<![CDATA[ and qcu.reg_date < to_date(#{interceptDate2}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="portOrg != null and portOrg != ''">
+		and tco.port_zs_org_code = #{portOrg}
+		</if>
+		<if test="portOrgUmder != null and portOrgUmder != ''">
+		and tco.port_org_code = #{portOrgUmder} 
+		</if>
+		<if test="declNo != null and declNo != ''">
+		and tco.prod_main_id = #{declNo} 
+		</if>
+		<if test="goodsItemName != null and goodsItemName != ''">
+		and qcu.cag_name like '%'||#{goodsItemName}||'%' 
+		</if>
+	    </select>
+	
+	    <!-- 查询详细信息 -->	
+		<select id="selectIntercepeDetails" resultType="com.dpn.ciqqlc.standard.model.IntercepeModel">
+		    select 
+		    qcu.id
+			,qcu.card_no
+			,qcu.name
+			,qcu.sex 
+			,qcu.birth
+			,c.cnname 
+			,qcu.live_plc
+			,qcu.card_pic
+			,qcu.chk_rcd_no
+			,qcu.insp_opr
+			,qcu.tra_tool_no
+			,qcu.reg_date
+			,qcu.cag_type
+			,qcu.prhb_enter
+			,qcu.cag_name
+			,qcu.unqf_rsn
+			,qcu.num_unit
+			,qcu.weight_unit
+			,qcu.is_samp
+			,qcu.rsv_samp_dpt
+			,qcu.check_item
+			,qcu.from_plc
+			,qcu.its_type
+			,qcu.cag_pic
+			,qcu.voc_no
+			,qcu.deal_disc
+			,qcu.plc_cn
+			,qcu.plc_tel
+			,qcu.deal_date
+			,qcu.use_to
+			,qcu.its_no
+			,qcl.name deal_type 
+			,qcu.rmk
+			,qy.decl_no
+			,qy.type_kind
+			,qy.status
+			,qy.dec_org
+			,qy.ciq_code
+			,qy.cag_name as yiqing_cag_name
+			,qy.ori_plc
+			,qy.exp_plc
+			,qy.enter_port
+			,qy.enter_date
+			,qy.dec_date
+			,qy.smt_date
+			,qy.brk_law_cas
+			,qy.deal_meth
+			,qy.rmk as yiqing_rmk
+			,o.yjw_status
+			,o.bldw_status
+		from QLC_CHK_UNIFY qcu 
+           left join QLC_TRAV_CARRY_OBJ o on o.card_no = qcu.card_no
+           left join QLC_ECIQ qe on qe.decl_no = o.prod_main_id
+           left join QLC_YIQING qy on qy.decl_no = o.prod_main_id
+           left join QLC_CODE_LIBRARY qcl on qcl.code = qcu.deal_type and qcl.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+           left join COUNTRY c on qcu.nation = c.num_code
+		where 1=1
+		<if test="card_no != null and card_no != ''">
+			and qcu.card_no = #{card_no}
+		</if>
+		<if test="prod_main_id != null and prod_main_id != ''">
+			and o.prod_main_id = #{prod_main_id}
+		</if>
+			
+		</select>
+		
+		<!-- 移动端查询拦截物信息	 -->
+		<select id="selectMoveIntercepe" parameterType="com.dpn.ciqqlc.http.form.IntercepeForm" resultType="com.dpn.ciqqlc.standard.model.IntercepeModel">
+			select 
+			    qcu.id
+				,qcu.card_no
+				,qcu.name
+				,qcu.sex 
+				,qcu.birth
+				,c.cnname 
+				,qcu.live_plc
+				,qcu.card_pic
+				,qcu.chk_rcd_no
+				,qcu.insp_opr
+				,qcu.tra_tool_no
+				,qcu.reg_date
+				,qcu.cag_type
+				,qcu.prhb_enter
+				,qcu.cag_name
+				,qcu.unqf_rsn
+				,qcu.num_unit
+				,qcu.weight_unit
+				,qcu.is_samp
+				,qcu.rsv_samp_dpt
+				,qcu.check_item
+				,qcu.from_plc
+				,qcu.its_type
+				,qcu.cag_pic
+				,qcu.voc_no
+				,qcu.deal_disc
+				,qcu.plc_cn
+				,qcu.plc_tel
+				,qcu.deal_date
+				,qcu.use_to
+				,qcu.its_no
+				,qcl.name deal_type 
+				,qcu.rmk
+				,qy.decl_no
+				,qy.type_kind
+				,qy.status
+				,qy.dec_org
+				,qy.ciq_code
+				,qy.cag_name as yiqing_cag_name
+				,qy.ori_plc
+				,qy.exp_plc
+				,qy.enter_port
+				,qy.enter_date
+				,qy.dec_date
+				,qy.smt_date
+				,qy.brk_law_cas
+				,qy.deal_meth
+				,qy.rmk as yiqing_rmk
+			from QLC_CHK_UNIFY qcu 
+	           left join QLC_TRAV_CARRY_OBJ o on o.card_no = qcu.card_no
+	           left join QLC_ECIQ qe on qe.decl_no = o.prod_main_id
+	           left join QLC_YIQING qy on qy.decl_no = o.prod_main_id
+	           left join QLC_CODE_LIBRARY qcl on qcl.code = qcu.deal_type and qcl.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+	           left join COUNTRY c on qcu.nation = c.num_code
+				where qcu.card_no not in(select proc_main_id from qlc_chk_rcd where proj_code='IN_C_M')
+				<if test="interceptDate1 != null and interceptDate1 != ''">
+				<![CDATA[ and qcu.reg_date >= to_date(#{interceptDate1}, 'yyyy-mm-dd') ]]>
+				</if>
+				<if test="interceptDate2 != null and interceptDate2 != ''">
+				<![CDATA[ and qcu.reg_date < to_date(#{interceptDate2}, 'yyyy-mm-dd')+1 ]]>
+				</if>
+				<if test="goodsItemName != null and goodsItemName != ''">
+				and qcu.cag_name like '%'||#{goodsItemName}||'%' 
+				</if>
+				order by qcu.reg_date desc
+		</select> 
+		
+		<!-- 移动端查询拦截物信息	 -->
+		<select id="selectMoveIntercepeByCardNo" parameterType="com.dpn.ciqqlc.http.form.IntercepeForm" resultType="com.dpn.ciqqlc.standard.model.IntercepeModel">
+			select 
+			    qcu.id
+				,qcu.card_no
+				,qcu.name
+				,qcu.sex 
+				,qcu.birth
+				,c.cnname 
+				,qcu.live_plc
+				,qcu.card_pic
+				,qcu.chk_rcd_no
+				,qcu.insp_opr
+				,qcu.tra_tool_no
+				,qcu.reg_date
+				,qcu.cag_type
+				,qcu.prhb_enter
+				,qcu.cag_name
+				,qcu.unqf_rsn
+				,qcu.num_unit
+				,qcu.weight_unit
+				,qcu.is_samp
+				,qcu.rsv_samp_dpt
+				,qcu.check_item
+				,qcu.from_plc
+				,qcu.its_type
+				,qcu.cag_pic
+				,qcu.voc_no
+				,qcu.deal_disc
+				,qcu.plc_cn
+				,qcu.plc_tel
+				,qcu.deal_date
+				,qcu.use_to
+				,qcu.its_no
+				,qcl.name deal_type 
+				,qcu.rmk
+				,qy.decl_no
+				,qy.type_kind
+				,qy.status
+				,qy.dec_org
+				,qy.ciq_code
+				,qy.cag_name as yiqing_cag_name
+				,qy.ori_plc
+				,qy.exp_plc
+				,qy.enter_port
+				,qy.enter_date
+				,qy.dec_date
+				,qy.smt_date
+				,qy.brk_law_cas
+				,qy.deal_meth
+				,qy.rmk as yiqing_rmk
+			from QLC_CHK_UNIFY qcu 
+	           left join QLC_TRAV_CARRY_OBJ o on o.card_no = qcu.card_no
+	           left join QLC_ECIQ qe on qe.decl_no = o.prod_main_id
+	           left join QLC_YIQING qy on qy.decl_no = o.prod_main_id
+	           left join QLC_CODE_LIBRARY qcl on qcl.code = qcu.deal_type and qcl.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+	           left join COUNTRY c on qcu.nation = c.num_code
+			where  qcu.card_no not in(select proc_main_id from qlc_chk_rcd where proj_code='IN_C_M')
+				<if test="cardNo != null and cardNo != ''">
+				and qcu.card_no = #{cardNo}
+				</if>
+				order by qcu.reg_date desc
+		</select>
+		
+		<!-- 移动查询详细信息 -->
+		<select id="selectMoveDetails" resultType="com.dpn.ciqqlc.standard.model.IntercepeModel">
+			select 
+			    qcu.id
+				,qcu.card_no
+				,qcu.name
+				,qcu.sex 
+				,qcu.birth
+				,c.cnname 
+				,qcu.live_plc
+				,qcu.card_pic
+				,qcu.chk_rcd_no
+				,qcu.insp_opr
+				,qcu.tra_tool_no
+				,qcu.reg_date
+				,qcu.cag_type
+				,qcu.prhb_enter
+				,qcu.cag_name
+				,qcu.unqf_rsn
+				,qcu.num_unit
+				,qcu.weight_unit
+				,qcu.is_samp
+				,qcu.rsv_samp_dpt
+				,qcu.check_item
+				,qcu.from_plc
+				,qcu.its_type
+				,qcu.cag_pic
+				,qcu.voc_no
+				,qcu.deal_disc
+				,qcu.plc_cn
+				,qcu.plc_tel
+				,qcu.deal_date
+				,qcu.use_to
+				,qcu.its_no
+				,qcl.name deal_type 
+				,qcu.rmk
+				,qy.decl_no
+				,qy.type_kind
+				,qy.status
+				,qy.dec_org
+				,qy.ciq_code
+				,qy.cag_name as yiqing_cag_name
+				,qy.ori_plc
+				,qy.exp_plc
+				,qy.enter_port
+				,qy.enter_date
+				,qy.dec_date
+				,qy.smt_date
+				,qy.brk_law_cas
+				,qy.deal_meth
+				,qy.rmk as yiqing_rmk
+			from QLC_CHK_UNIFY qcu 
+	           left join QLC_TRAV_CARRY_OBJ o on o.card_no = qcu.card_no
+	           left join QLC_ECIQ qe on qe.decl_no = o.prod_main_id
+	           left join QLC_YIQING qy on qy.decl_no = o.prod_main_id
+	           left join QLC_CODE_LIBRARY qcl on qcl.code = qcu.deal_type and qcl.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+	           left join COUNTRY c on qcu.nation = c.num_code
+			where 1=1
+			<if test="card_no != null and card_no != ''">
+				and qcu.card_no = #{card_no}
+			</if>
+			<if test="prod_main_id != null and prod_main_id != ''">
+				and o.prod_main_id = #{prod_main_id}
+			</if>
+		</select>
+		
+		<!-- 查询直属局-->
+		<select id="allOrgList"  resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+			select code,name 
+			from QLC_CODE_LIBRARY 
+			where type = 'QLC_ORGANIZES' 
+		</select>
+		
+		<!-- 查询分支机构 -->
+		<select id="allDepList"  resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+			select code,name 
+		    from QLC_CODE_LIBRARY where type = 'QLC_DEPTMENTS'
+		</select>
+		
+		<!-- 查询物品类别 -->
+		<select id="allGoodsTypeList"  resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+			select code,name 
+			from QLC_CODE_LIBRARY 
+			where type = 'QLC_ECIQ_C_GOODS_TYPE'
+		</select>
+		
+        <select id="getDzqm"  resultType="java.lang.String">
+			select OPTION_1 from QLC_CHECK_DOCS_RCD r
+ 			where dec_date = (select max(dec_date) from QLC_CHECK_DOCS_RCD  
+ 			where DOC_TYPE = #{doc_type} and PROC_MAIN_ID = #{card_no})
+		</select>
+     
+	<!-- 查询图片视频列表 -->
+	<select id="videoFileEventList"  resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+		select file_name,u.name create_user,to_char(create_date, 'yyyy-MM-dd HH24:mi:ss') create_date_str,proc_type
+		from QLC_VIDEO_FILE_EVENT v
+		inner join USERS_CIQ u on u.id = v.create_user
+		where proc_main_id = #{card_no}
+		order by proc_type,create_date desc
+	</select>
+	
+    <!-- **** insert ******************************************************* -->
+	<insert id="insertItravCarryObj" parameterType="com.dpn.ciqqlc.http.form.TravCarryObjForm">
+		insert into QLC_TRAV_CARRY_OBJ
+		(
+			id, card_no, prod_main_id, port_zs_org_code,port_org_code, port_dept_code, create_user, create_date
+		)
+		values
+		(
+			CreateGUID(), #{card_no}, #{prod_main_id}, #{port_zs_org_code},#{port_org_code}, #{port_dept_code} , #{create_user}, #{create_date}
+		)
+	</insert>
+	
+	<insert id="insertDzqm" >
+		insert into QLC_CHECK_DOCS_RCD
+		(
+			doc_id, proc_main_id, doc_type,option_1,dec_date
+		)
+		values
+		(
+			CreateGUID(), #{proc_main_id}, #{doc_type}, #{option_1},sysdate
+		)
+	</insert>	
+		
+    <!-- **** update ******************************************************* -->
+	<update id="updateItravCarryObj">
+			update QLC_TRAV_CARRY_OBJ set 
+			prod_main_id=#{prod_main_id} 
+			where id=#{id}
+	</update>
+	
+	<update id="updateImgYjwStatus">
+			update qlc_trav_carry_obj set 
+			yjw_status=#{status} 
+			where card_no=#{card_no}
+	</update>
+	
+	<update id="updateImgBldwStatus">
+			update qlc_trav_carry_obj set 
+			bldw_status=#{status} 
+			where card_no=#{card_no}
+	</update>
+    <!-- **** delete ******************************************************* -->
+
+</mapper>

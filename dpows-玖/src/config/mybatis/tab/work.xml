@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work">
+ 
+
+    <!--
+        特殊字段的处理
+    -->
+    <!--
+        <if test="beginDate != null and beginDate != ''"> AND fieldName >= TO_DATE( #{beginDate} ,'YYYY-MM-DD') </if>
+        <if test="endDate != null and endDate != ''"> AND fieldName &lt; TO_DATE( #{endDate} ,'YYYY-MM-DD') + 1 </if>
+        <if test="action_date != null">,TO_DATE(TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:mi:ss'),'YYYY-MM-DD HH24:mi:ss')</if>
+        <if test="vsl_en != null and vsl_en != ''"> AND vsl_en LIKE '%${vsl_en}%'</if>
+    -->
+
+    <!-- columns -->
+    <sql id="workDeclareGoodsDtoColumns">port_loading_name,packing,decode(work_mehtod,'BM1006MTGDCG','码头-管道-储罐','BM1006CGGDMT','储罐-管道-码头','BM1006CGGDCG','储罐-管道-储罐') work_mehtodStr,work_mehtod,num,reactivity,imdg_no,imdg_name,port_unloading,category,port_loading,decode(status,0,'待审批',1,'审批中',2,'通过',3,'未通过',4,'撤销') statusStr,explain,declare_id,security_defense_measures,id,type,attached_id,physical_and_chemical,special_requirements,port_unloading_name,weight,cntr_info,loading_type,transport_method,lading_no,address</sql>    <sql id="workDeclareDtoColumns">enterprise_name,applicant_user_id,feedback_user_name,applicant_user_name,TO_CHAR(gmt_created,'YYYY-MM-DD HH24:mi') gmt_created,district_name,remarks,employees_names,feedback_status,enterprise_id,verify_opinion,city_code,province_name,feedback_user_id,entry_port_flag,port_area_id, declare_type,CASE declare_type WHEN 'A' THEN '码头作业' WHEN 'B' THEN '堆场作业' ELSE  '储罐作业' END declareTypeStr,ship_id,TO_CHAR(gmt_modified,'YYYY-MM-DD HH24:mi') gmt_modified, CASE  exit_flag   WHEN 1 THEN '内贸' ELSE '外贸' END exitFlagStr ,contacts,id,port,current_user_id,manager_user_id,port_name,port_area_name,ship_name,district_code,TO_CHAR(time_end,'YYYY-MM-DD HH24:mi') time_end,TO_CHAR(time_start,'YYYY-MM-DD HH24:mi') time_start,department_id,department_name,verify_status,province_code,city_name,bailor,current_user_name,ship_english_name,is_deleted,voyage_number,declare_no,manager_user_name</sql>
+
+    <!-- where -->
+	<sql id="workDeclareGoodsDtoWhereCondition">
+    	<if test="port_loading_name != null and port_loading_name != ''"> AND port_loading_name = #{port_loading_name} </if>    	<if test="packing != null and packing != ''"> AND packing = #{packing} </if>    	<if test="work_mehtod != null and work_mehtod != ''"> AND work_mehtod = #{work_mehtod} </if>    	<if test="num != null and num != ''"> AND num = #{num} </if>    	<if test="reactivity != null and reactivity != ''"> AND reactivity = #{reactivity} </if>    	<if test="imdg_no != null and imdg_no != ''"> AND imdg_no = #{imdg_no} </if>    	<if test="imdg_name != null and imdg_name != ''"> AND imdg_name = #{imdg_name} </if>    	<if test="port_unloading != null and port_unloading != ''"> AND port_unloading = #{port_unloading} </if>    	<if test="category != null and category != ''"> AND category = #{category} </if>    	<if test="port_loading != null and port_loading != ''"> AND port_loading = #{port_loading} </if>    	<if test="status != null and status != ''"> AND status = #{status} </if>    	<if test="explain != null and explain != ''"> AND explain = #{explain} </if>    	<if test="declare_id != null and declare_id != ''"> AND declare_id = #{declare_id} </if>    	<if test="security_defense_measures != null and security_defense_measures != ''"> AND security_defense_measures = #{security_defense_measures} </if>    	<if test="id != null and id != ''"> AND id = #{id} </if>    	<if test="type != null and type != ''"> AND type = #{type} </if>    	<if test="attached_id != null and attached_id != ''"> AND attached_id = #{attached_id} </if>    	<if test="physical_and_chemical != null and physical_and_chemical != ''"> AND physical_and_chemical = #{physical_and_chemical} </if>    	<if test="special_requirements != null and special_requirements != ''"> AND special_requirements = #{special_requirements} </if>    	<if test="port_unloading_name != null and port_unloading_name != ''"> AND port_unloading_name = #{port_unloading_name} </if>    	<if test="weight != null and weight != ''"> AND weight = #{weight} </if>    	<if test="cntr_info != null and cntr_info != ''"> AND cntr_info = #{cntr_info} </if>    	<if test="loading_type != null and loading_type != ''"> AND loading_type = #{loading_type} </if>    	<if test="transport_method != null and transport_method != ''"> AND transport_method = #{transport_method} </if>    	<if test="lading_no != null and lading_no != ''"> AND lading_no = #{lading_no} </if>    	<if test="address != null and address != ''"> AND address = #{address} </if>	</sql>
+
+	<sql id="workDeclareDtoWhereCondition">
+    	<if test="enterprise_name != null and enterprise_name != ''"> AND enterprise_name = #{enterprise_name} </if>    	<if test="applicant_user_id != null and applicant_user_id != ''"> AND applicant_user_id = #{applicant_user_id} </if>    	<if test="feedback_user_name != null and feedback_user_name != ''"> AND feedback_user_name = #{feedback_user_name} </if>    	<if test="applicant_user_name != null and applicant_user_name != ''"> AND applicant_user_name = #{applicant_user_name} </if>    	<if test="gmt_created != null and gmt_created != ''"> AND gmt_created = #{gmt_created} </if>    	<if test="district_name != null and district_name != ''"> AND district_name = #{district_name} </if>    	<if test="remarks != null and remarks != ''"> AND remarks = #{remarks} </if>    	<if test="employees_names != null and employees_names != ''"> AND employees_names = #{employees_names} </if>    	<if test="feedback_status != null and feedback_status != ''"> AND feedback_status = #{feedback_status} </if>    	<if test="enterprise_id != null and enterprise_id != ''"> AND enterprise_id = #{enterprise_id} </if>    	<if test="verify_opinion != null and verify_opinion != ''"> AND verify_opinion = #{verify_opinion} </if>    	<if test="city_code != null and city_code != ''"> AND city_code = #{city_code} </if>    	<if test="province_name != null and province_name != ''"> AND province_name = #{province_name} </if>    	<if test="feedback_user_id != null and feedback_user_id != ''"> AND feedback_user_id = #{feedback_user_id} </if>    	<if test="entry_port_flag != null and entry_port_flag != ''"> AND entry_port_flag = #{entry_port_flag} </if>    	<if test="port_area_id != null and port_area_id != ''"> AND port_area_id = #{port_area_id} </if>    	<if test="declare_type != null and declare_type != ''"> AND declare_type = #{declare_type} </if>    	<if test="ship_id != null and ship_id != ''"> AND ship_id = #{ship_id} </if>    	<if test="gmt_modified != null and gmt_modified != ''"> AND gmt_modified = #{gmt_modified} </if>    	<if test="exit_flag != null and exit_flag != ''"> AND exit_flag = #{exit_flag} </if>    	<if test="contacts != null and contacts != ''"> AND contacts = #{contacts} </if>    	<if test="id != null and id != ''"> AND id = #{id} </if>    	<if test="port != null and port != ''"> AND port = #{port} </if>    	<if test="current_user_id != null and current_user_id != ''"> AND current_user_id = #{current_user_id} </if>    	<if test="manager_user_id != null and manager_user_id != ''"> AND manager_user_id = #{manager_user_id} </if>    	<if test="port_name != null and port_name != ''"> AND port_name = #{port_name} </if>    	<if test="port_area_name != null and port_area_name != ''"> AND port_area_name = #{port_area_name} </if>    	<if test="ship_name != null and ship_name != ''"> AND ship_name = #{ship_name} </if>    	<if test="district_code != null and district_code != ''"> AND district_code = #{district_code} </if>    	<if test="time_end != null and time_end != ''"> AND time_end = #{time_end} </if>    	<if test="time_start != null and time_start != ''"> AND time_start = #{time_start} </if>    	<if test="department_id != null and department_id != ''"> AND department_id = #{department_id} </if>    	<if test="department_name != null and department_name != ''"> AND department_name = #{department_name} </if>    	<if test="verify_status != null and verify_status != ''"> AND verify_status = #{verify_status} </if>    	<if test="province_code != null and province_code != ''"> AND province_code = #{province_code} </if>    	<if test="city_name != null and city_name != ''"> AND city_name = #{city_name} </if>    	<if test="bailor != null and bailor != ''"> AND bailor = #{bailor} </if>    	<if test="current_user_name != null and current_user_name != ''"> AND current_user_name = #{current_user_name} </if>    	<if test="ship_english_name != null and ship_english_name != ''"> AND ship_english_name = #{ship_english_name} </if>    	<if test="is_deleted != null and is_deleted != ''"> AND is_deleted = #{is_deleted} </if>    	<if test="voyage_number != null and voyage_number != ''"> AND voyage_number = #{voyage_number} </if>    	<if test="declare_no != null and declare_no != ''"> AND declare_no = #{declare_no} </if>    	<if test="manager_user_name != null and manager_user_name != ''"> AND manager_user_name = #{manager_user_name} </if>	</sql>
+
+
+
+
+	
+	
+	
+	
+
+
+	<!-- ################################################  < work_declare >  ################################################ -->
+	<!--  -->
+	<select id="getListWorkDeclareDto" parameterType="map" resultType="workDeclareDto">
+        <if test="moreRow != null and moreRow != ''">
+		SELECT * FROM (
+			SELECT ROWNUM rnm, a.* FROM (
+        </if>
+			SELECT <include refid="workDeclareDtoColumns"/> FROM work_declare
+				<where>
+
+                    <include refid="workDeclareDtoWhereCondition"/>
+
+					<!--<if test="vsl_name != null and vsl_name != ''"> AND c.vsl_name LIKE '%' || #{vsl_name} || '%'  </if>-->
+
+					<if test="states != null and states != ''"> AND state IN ($states$) </if>
+
+                    <if test="oneRow != null and oneRow != ''"> AND ROWNUM = 1 </if>
+
+				</where>
+				<!--ORDER BY update_time DESC, state -->
+        <if test="moreRow != null and moreRow != ''">
+				) a WHERE  ROWNUM &lt; #{high}
+			) WHERE rnm &gt;= #{low}
+        </if>
+	</select>
+
+	
+
+	
+
+	
+
+	<select id="getSizeWorkDeclareDto" parameterType="map" resultType="int">
+		SELECT COUNT(ROWID) FROM work_declare
+			<where>
+                <include refid="workDeclareDtoWhereCondition"/>
+			</where>
+	</select>
+
+	
+
+	
+
+	
+
+	<insert id="insertWorkDeclareDto" parameterType="workDeclareDto">
+		INSERT INTO work_declare(id
+		    <if test="enterprise_name != null">,enterprise_name</if>
+		    <if test="applicant_user_id != null">,applicant_user_id</if>
+		    <if test="feedback_user_name != null">,feedback_user_name</if>
+		    <if test="applicant_user_name != null">,applicant_user_name</if>
+		    <if test="gmt_created != null">,gmt_created</if>
+		    <if test="district_name != null">,district_name</if>
+		    <if test="remarks != null">,remarks</if>
+		    <if test="employees_names != null">,employees_names</if>
+		    <if test="feedback_status != null">,feedback_status</if>
+		    <if test="enterprise_id != null">,enterprise_id</if>
+		    <if test="verify_opinion != null">,verify_opinion</if>
+		    <if test="city_code != null">,city_code</if>
+		    <if test="province_name != null">,province_name</if>
+		    <if test="feedback_user_id != null">,feedback_user_id</if>
+		    <if test="entry_port_flag != null">,entry_port_flag</if>
+		    <if test="port_area_id != null">,port_area_id</if>
+		    <if test="declare_type != null">,declare_type</if>
+		    <if test="ship_id != null">,ship_id</if>
+		    <if test="gmt_modified != null">,gmt_modified</if>
+		    <if test="exit_flag != null">,exit_flag</if>
+		    <if test="contacts != null">,contacts</if>
+<!-- 		    <if test="id != null">,id</if> -->
+		    <if test="port != null">,port</if>
+		    <if test="current_user_id != null">,current_user_id</if>
+		    <if test="manager_user_id != null">,manager_user_id</if>
+		    <if test="port_name != null">,port_name</if>
+		    <if test="port_area_name != null">,port_area_name</if>
+		    <if test="ship_name != null">,ship_name</if>
+		    <if test="district_code != null">,district_code</if>
+		    <if test="time_end != null">,time_end</if>
+		    <if test="time_start != null">,time_start</if>
+		    <if test="department_id != null">,department_id</if>
+		    <if test="department_name != null">,department_name</if>
+		    <if test="verify_status != null">,verify_status</if>
+		    <if test="province_code != null">,province_code</if>
+		    <if test="city_name != null">,city_name</if>
+		    <if test="bailor != null">,bailor</if>
+		    <if test="current_user_name != null">,current_user_name</if>
+		    <if test="ship_english_name != null">,ship_english_name</if>
+		    <if test="is_deleted != null">,is_deleted</if>
+		    <if test="voyage_number != null">,voyage_number</if>
+		    <if test="declare_no != null">,declare_no</if>
+		    <if test="manager_user_name != null">,manager_user_name</if>
+		)VALUES(#{id}
+			<if test="enterprise_name != null">,#{enterprise_name}</if>
+			<if test="applicant_user_id != null">,#{applicant_user_id}</if>
+			<if test="feedback_user_name != null">,#{feedback_user_name}</if>
+			<if test="applicant_user_name != null">,#{applicant_user_name}</if>
+			<if test="gmt_created != null">,TO_DATE(#{gmt_created},'YYYY-MM-DD HH24:mi:ss')</if>
+			<if test="district_name != null">,#{district_name}</if>
+			<if test="remarks != null">,#{remarks}</if>
+			<if test="employees_names != null">,#{employees_names}</if>
+			<if test="feedback_status != null">,#{feedback_status}</if>
+			<if test="enterprise_id != null">,#{enterprise_id}</if>
+			<if test="verify_opinion != null">,#{verify_opinion}</if>
+			<if test="city_code != null">,#{city_code}</if>
+			<if test="province_name != null">,#{province_name}</if>
+			<if test="feedback_user_id != null">,#{feedback_user_id}</if>
+			<if test="entry_port_flag != null">,#{entry_port_flag}</if>
+			<if test="port_area_id != null">,#{port_area_id}</if>
+			<if test="declare_type != null">,#{declare_type}</if>
+			<if test="ship_id != null">,#{ship_id}</if>
+			<if test="gmt_modified != null">,TO_DATE(#{gmt_modified},'YYYY-MM-DD HH24:mi:ss')</if>
+			<if test="exit_flag != null">,#{exit_flag}</if>
+			<if test="contacts != null">,#{contacts}</if>
+<!-- 			<if test="id != null">,#{id}</if> -->
+			<if test="port != null">,#{port}</if>
+			<if test="current_user_id != null">,#{current_user_id}</if>
+			<if test="manager_user_id != null">,#{manager_user_id}</if>
+			<if test="port_name != null">,#{port_name}</if>
+			<if test="port_area_name != null">,#{port_area_name}</if>
+			<if test="ship_name != null">,#{ship_name}</if>
+			<if test="district_code != null">,#{district_code}</if>
+			<if test="time_end != null">,TO_DATE(#{time_end},'YYYY-MM-DD HH24:mi:ss')</if>
+			<if test="time_start != null">,TO_DATE(#{time_start},'YYYY-MM-DD HH24:mi:ss')</if>
+			<if test="department_id != null">,#{department_id}</if>
+			<if test="department_name != null">,#{department_name}</if>
+			<if test="verify_status != null">,#{verify_status}</if>
+			<if test="province_code != null">,#{province_code}</if>
+			<if test="city_name != null">,#{city_name}</if>
+			<if test="bailor != null">,#{bailor}</if>
+			<if test="current_user_name != null">,#{current_user_name}</if>
+			<if test="ship_english_name != null">,#{ship_english_name}</if>
+			<if test="is_deleted != null">,#{is_deleted}</if>
+			<if test="voyage_number != null">,#{voyage_number}</if>
+			<if test="declare_no != null">,#{declare_no}</if>
+			<if test="manager_user_name != null">,#{manager_user_name}</if>
+		)
+	</insert>
+
+	
+
+	
+
+	
+
+	
+
+	<update id="updateWorkDeclareDto" parameterType="workDeclareDto">
+		UPDATE work_declare
+			<set>
+				<if test="enterprise_name != null">enterprise_name = #{enterprise_name},</if>
+				<if test="applicant_user_id != null">applicant_user_id = #{applicant_user_id},</if>
+				<if test="feedback_user_name != null">feedback_user_name = #{feedback_user_name},</if>
+				<if test="applicant_user_name != null">applicant_user_name = #{applicant_user_name},</if>
+				<if test="gmt_created != null">gmt_created = TO_DATE(#{gmt_created},'YYYY-MM-DD HH24:mi:ss'),</if>
+				<if test="district_name != null">district_name = #{district_name},</if>
+				<if test="remarks != null">remarks = #{remarks},</if>
+				<if test="employees_names != null">employees_names = #{employees_names},</if>
+				<if test="feedback_status != null">feedback_status = #{feedback_status},</if>
+				<if test="enterprise_id != null">enterprise_id = #{enterprise_id},</if>
+				<if test="verify_opinion != null">verify_opinion = #{verify_opinion},</if>
+				<if test="city_code != null">city_code = #{city_code},</if>
+				<if test="province_name != null">province_name = #{province_name},</if>
+				<if test="feedback_user_id != null">feedback_user_id = #{feedback_user_id},</if>
+				<if test="entry_port_flag != null">entry_port_flag = #{entry_port_flag},</if>
+				<if test="port_area_id != null">port_area_id = #{port_area_id},</if>
+				<if test="declare_type != null">declare_type = #{declare_type},</if>
+				<if test="ship_id != null">ship_id = #{ship_id},</if>
+				<if test="gmt_modified != null">gmt_modified = TO_DATE(#{gmt_modified},'YYYY-MM-DD HH24:mi:ss'),</if>
+				<if test="exit_flag != null">exit_flag = #{exit_flag},</if>
+				<if test="contacts != null">contacts = #{contacts},</if>
+				<if test="port != null">port = #{port},</if>
+				<if test="current_user_id != null">current_user_id = #{current_user_id},</if>
+				<if test="manager_user_id != null">manager_user_id = #{manager_user_id},</if>
+				<if test="port_name != null">port_name = #{port_name},</if>
+				<if test="port_area_name != null">port_area_name = #{port_area_name},</if>
+				<if test="ship_name != null">ship_name = #{ship_name},</if>
+				<if test="district_code != null">district_code = #{district_code},</if>
+				<if test="time_end != null">time_end = TO_DATE(#{time_end},'YYYY-MM-DD HH24:mi:ss'),</if>
+				<if test="time_start != null">time_start = TO_DATE(#{time_start},'YYYY-MM-DD HH24:mi:ss'),</if>
+				<if test="department_id != null">department_id = #{department_id},</if>
+				<if test="department_name != null">department_name = #{department_name},</if>
+				<if test="verify_status != null">verify_status = #{verify_status},</if>
+				<if test="province_code != null">province_code = #{province_code},</if>
+				<if test="city_name != null">city_name = #{city_name},</if>
+				<if test="bailor != null">bailor = #{bailor},</if>
+				<if test="current_user_name != null">current_user_name = #{current_user_name},</if>
+				<if test="ship_english_name != null">ship_english_name = #{ship_english_name},</if>
+				<if test="is_deleted != null">is_deleted = #{is_deleted},</if>
+				<if test="voyage_number != null">voyage_number = #{voyage_number},</if>
+				<if test="declare_no != null">declare_no = #{declare_no},</if>
+				<if test="manager_user_name != null">manager_user_name = #{manager_user_name},</if>
+			<!--<if test="valid_date != null">valid_date = TO_DATE(#valid_date#,'YYYY-MM-DD')</if>-->
+			</set>
+			<where>
+                <if test="id != null and id != ''"> AND id = #{id} </if>
+			</where>
+	</update>
+
+	
+
+
+	
+
+	<delete id="deleteWorkDeclareDto" parameterType="map">
+		DELETE FROM work_declare WHERE id = #{id}
+	</delete>
+	
+	
+	
+
+	<!-- ################################################  < work_declare_goods >  ################################################ -->	<!--  -->
+	<select id="getListWorkDeclareGoodsDto" parameterType="map" resultType="workDeclareGoodsDto">        <if test="moreRow != null and moreRow != ''">		SELECT * FROM (
+			SELECT ROWNUM rnm, a.* FROM (
+        </if>
+			SELECT <include refid="workDeclareGoodsDtoColumns"/> FROM work_declare_goods				<where>
+                    <include refid="workDeclareGoodsDtoWhereCondition"/>
+					<!--<if test="vsl_name != null and vsl_name != ''"> AND c.vsl_name LIKE '%' || #{vsl_name} || '%'  </if>-->
+					<if test="states != null and states != ''"> AND state IN ($states$) </if>
+                    <if test="oneRow != null and oneRow != ''"> AND ROWNUM = 1 </if>
+				</where>
+				<!--ORDER BY update_time DESC, state -->
+        <if test="moreRow != null and moreRow != ''">
+				) a WHERE  ROWNUM &lt; #{high}
+			) WHERE rnm &gt;= #{low}
+        </if>
+	</select>
+	
+	
+	<select id="getSizeWorkDeclareGoodsDto" parameterType="map" resultType="int">
+		SELECT COUNT(ROWID) FROM work_declare_goods
+			<where>
+                <include refid="workDeclareGoodsDtoWhereCondition"/>
+			</where>
+	</select>
+	
+	
+	
+	<insert id="insertWorkDeclareGoodsDto" parameterType="workDeclareGoodsDto">
+		INSERT INTO work_declare_goods(id
+		    <if test="port_loading_name != null">,port_loading_name</if>
+		    <if test="packing != null">,packing</if>
+		    <if test="work_mehtod != null">,work_mehtod</if>
+		    <if test="num != null">,num</if>
+		    <if test="reactivity != null">,reactivity</if>
+		    <if test="imdg_no != null">,imdg_no</if>
+		    <if test="imdg_name != null">,imdg_name</if>
+		    <if test="port_unloading != null">,port_unloading</if>
+		    <if test="category != null">,category</if>
+		    <if test="port_loading != null">,port_loading</if>
+		    <if test="status != null">,status</if>
+		    <if test="explain != null">,explain</if>
+		    <if test="declare_id != null">,declare_id</if>
+		    <if test="security_defense_measures != null">,security_defense_measures</if>
+		    <if test="type != null">,type</if>
+		    <if test="attached_id != null">,attached_id</if>
+		    <if test="physical_and_chemical != null">,physical_and_chemical</if>
+		    <if test="special_requirements != null">,special_requirements</if>
+		    <if test="port_unloading_name != null">,port_unloading_name</if>
+		    <if test="weight != null">,weight</if>
+		    <if test="cntr_info != null">,cntr_info</if>
+		    <if test="loading_type != null">,loading_type</if>
+		    <if test="transport_method != null">,transport_method</if>
+		    <if test="lading_no != null">,lading_no</if>
+		    <if test="address != null">,address</if>
+		)VALUES(#{id}
+			<if test="port_loading_name != null">,#{port_loading_name}</if>
+			<if test="packing != null">,#{packing}</if>
+			<if test="work_mehtod != null">,#{work_mehtod}</if>
+			<if test="num != null">,#{num}</if>
+			<if test="reactivity != null">,#{reactivity}</if>
+			<if test="imdg_no != null">,#{imdg_no}</if>
+			<if test="imdg_name != null">,#{imdg_name}</if>
+			<if test="port_unloading != null">,#{port_unloading}</if>
+			<if test="category != null">,#{category}</if>
+			<if test="port_loading != null">,#{port_loading}</if>
+			<if test="status != null">,#{status}</if>
+			<if test="explain != null">,#{explain}</if>			<if test="declare_id != null">,#{declare_id}</if>
+			<if test="security_defense_measures != null">,#{security_defense_measures}</if>
+			<if test="type != null">,#{type}</if>
+			<if test="attached_id != null">,#{attached_id}</if>
+			<if test="physical_and_chemical != null">,#{physical_and_chemical}</if>
+			<if test="special_requirements != null">,#{special_requirements}</if>
+			<if test="port_unloading_name != null">,#{port_unloading_name}</if>
+			<if test="weight != null">,#{weight}</if>
+			<if test="cntr_info != null">,#{cntr_info}</if>
+			<if test="loading_type != null">,#{loading_type}</if>
+			<if test="transport_method != null">,#{transport_method}</if>
+			<if test="lading_no != null">,#{lading_no}</if>
+			<if test="address != null">,#{address}</if>
+		)	</insert>
+	
+	
+	<update id="updateWorkDeclareGoodsDto" parameterType="workDeclareGoodsDto">
+		UPDATE work_declare_goods
+			<set>				<if test="port_loading_name != null">port_loading_name = #{port_loading_name},</if>				<if test="packing != null">packing = #{packing},</if>				<if test="work_mehtod != null">work_mehtod = #{work_mehtod},</if>				<if test="num != null">num = #{num},</if>				<if test="reactivity != null">reactivity = #{reactivity},</if>				<if test="imdg_no != null">imdg_no = #{imdg_no},</if>				<if test="imdg_name != null">imdg_name = #{imdg_name},</if>				<if test="port_unloading != null">port_unloading = #{port_unloading},</if>				<if test="category != null">category = #{category},</if>				<if test="port_loading != null">port_loading = #{port_loading},</if>				<if test="status != null">status = #{status},</if>				<if test="explain != null">explain = #{explain},</if>				<if test="declare_id != null">declare_id = #{declare_id},</if>				<if test="security_defense_measures != null">security_defense_measures = #{security_defense_measures},</if>				<if test="type != null">type = #{type},</if>				<if test="attached_id != null">attached_id = #{attached_id},</if>				<if test="physical_and_chemical != null">physical_and_chemical = #{physical_and_chemical},</if>				<if test="special_requirements != null">special_requirements = #{special_requirements},</if>				<if test="port_unloading_name != null">port_unloading_name = #{port_unloading_name},</if>				<if test="weight != null">weight = #{weight},</if>				<if test="cntr_info != null">cntr_info = #{cntr_info},</if>				<if test="loading_type != null">loading_type = #{loading_type},</if>				<if test="transport_method != null">transport_method = #{transport_method},</if>				<if test="lading_no != null">lading_no = #{lading_no},</if>				<if test="statusStr != null">status = #{statusStr},</if>
+				<if test="verify_user_id != null">verify_user_id = #{verify_user_id},</if>
+				<if test="verify_opinion != null">verify_opinion = #{verify_opinion},</if>
+				<if test="gmt_verify != null">gmt_verify = #{gmt_verify},</if>
+			<!--<if test=valid_date != null">valid_date = TO_DATE(#valid_date#,'YYYY-MM-DD')</if>-->			</set>
+			<where>
+                <if test="id != null and id != ''"> AND id = #{id} </if>
+			</where>
+	</update>
+	
+	
+	
+	<delete id="deleteWorkDeclareGoodsDto" parameterType="map">
+		DELETE FROM work_declare_goods WHERE id = #{id}
+	</delete>
+	<insert id="insertWorkSealDto" parameterType="workSealDto">
+		INSERT INTO work_seal(
+			id,name,path,opt_user_id,gmt_created,gmt_modified
+		)VALUES(
+			#{id},#{name},#{path},#{opt_user_id},#{gmt_created},#{gmt_modified}
+		)
+	</insert>	<update id="updateWorkSealDto" parameterType="workSealDto" >
+		UPDATE work_seal 
+		SET name=#{name},path=#{path},opt_user_id=#{opt_user_id},gmt_created=#{gmt_created},gmt_modified=#{gmt_modified}
+		WHERE id = #{id}
+	</update>
+	<select id="selectWorkSealDtoPath" parameterType="String" resultType="workSealDto">
+		SELECT path,name
+		FROM work_seal
+		WHERE id = #{id}
+	</select>
+	<select id="selectWorkSealDtoId" resultType="workSealDto">
+		SELECT id
+		FROM work_seal
+	</select>  
+	
+	
+	
+	
+	<!-- ################################################  < work_declare_goods and work_declare >  ################################################ -->
+	<!-- 货表 单表 反馈表 查询 -->
+	<select id="getListWorkDeclareAndGoods" parameterType="map" resultType="workDeclareDto">
+        <if test="moreRow != null and moreRow != ''">
+		SELECT * FROM (
+			SELECT ROWNUM rnm, a.* FROM (
+        </if>
+			SELECT <include refid="workDeclareColumns"/>  FROM work_declare d inner join work_declare_goods g on d.id = g.declare_id left join work_declare_feedback f on f.declare_id = d.id and f.declare_goods_id = g.id			
+				<where>
+                    <include refid="workDeclareWhereCondition"/>
+
+					<!--<if test="vsl_name != null and vsl_name != ''"> AND c.vsl_name LIKE '%' || #{vsl_name} || '%'  </if>-->
+
+					<if test="states != null and states != ''"> AND state IN ($states$) </if>
+
+                    <if test="oneRow != null and oneRow != ''"> AND ROWNUM = 1 </if>
+
+				</where>
+				<!--ORDER BY update_time DESC, state -->
+        <if test="moreRow != null and moreRow != ''">
+				) a WHERE  ROWNUM &lt; #{high}
+			) WHERE rnm &gt;= #{low}
+        </if>
+	</select>
+
+	
+	<select id="getSizeWorkDeclareAndGoods" parameterType="map" resultType="int">
+		SELECT COUNT(1) FROM work_declare d inner join work_declare_goods g on d.id = g.declare_id left join work_declare_feedback f on f.declare_id = d.id and f.declare_goods_id = g.id
+			<where>
+                <include refid="workDeclareWhereCondition"/>
+			</where>
+	</select>
+	
+																																																															<!-- feedback_user_id 查的是货表 -->																	
+	<sql id="workDeclareColumns">enterprise_name,applicant_user_id,feedback_user_name,applicant_user_name,TO_CHAR(gmt_created,'YYYY-MM-DD HH24:mi') gmt_created,district_name,remarks,employees_names,enterprise_id,verify_opinion,city_code,province_name,<!-- g.feedback_user_id, -->entry_port_flag,port_area_id,declare_type,ship_id,TO_CHAR(gmt_modified,'YYYY-MM-DD HH24:mi') gmt_modified,exit_flag,contacts,g.id,port,current_user_id,manager_user_id,port_name,port_area_name,ship_name,district_code,TO_CHAR(time_end,'YYYY-MM-DD HH24:mi') time_end,TO_CHAR(time_start,'YYYY-MM-DD HH24:mi') time_start,department_id,department_name,verify_status,province_code,city_name,bailor,current_user_name,ship_english_name,is_deleted,voyage_number,declare_no,manager_user_name,g.imdg_name,work_mehtod,
+	f.feedback_status,
+	decode(status,1,'审批中',2,'通过',3,'未通过',4,'撤销') status </sql>
+	<sql id="workDeclareWhereCondition">
+    	<if test="enterprise_name != null and enterprise_name != ''"> AND enterprise_name = #{enterprise_name} </if>
+    	<if test="applicant_user_id != null and applicant_user_id != ''"> AND applicant_user_id = #{applicant_user_id} </if>
+    	<if test="feedback_user_name != null and feedback_user_name != ''"> AND feedback_user_name = #{feedback_user_name} </if>
+    	<if test="applicant_user_name != null and applicant_user_name != ''"> AND applicant_user_name = #{applicant_user_name} </if>   	
+    	<if test="gmt_created != null and gmt_created != ''"> AND gmt_created = #{gmt_created} </if>
+    	<if test="gmt_created_begin != null and gmt_created_begin != ''">
+				<![CDATA[ and gmt_created >= to_date(#{gmt_created_begin}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="gmt_created_over != null and gmt_created_over != ''">
+				<![CDATA[ and gmt_created <= to_date(#{gmt_created_over}, 'yyyy-mm-dd') ]]>
+		</if>
+    	<if test="district_name != null and district_name != ''"> AND district_name = #{district_name} </if>
+    	<if test="remarks != null and remarks != ''"> AND remarks = #{remarks} </if>
+    	<if test="employees_names != null and employees_names != ''"> AND employees_names = #{employees_names} </if>
+    	<if test="feedback_status != null and feedback_status != ''"> AND feedback_status = #{feedback_status} </if>
+    	<if test="enterprise_id != null and enterprise_id != ''"> AND enterprise_id = #{enterprise_id} </if>
+    	<if test="verify_opinion != null and verify_opinion != ''"> AND verify_opinion = #{verify_opinion} </if>
+    	<if test="city_code != null and city_code != ''"> AND city_code = #{city_code} </if>
+    	<if test="province_name != null and province_name != ''"> AND province_name = #{province_name} </if>
+    	<if test="feedback_user_id != null and feedback_user_id != ''"> AND feedback_user_id = #{feedback_user_id} </if>
+    	<if test="entry_port_flag != null and entry_port_flag != ''"> AND entry_port_flag = #{entry_port_flag} </if>
+    	<if test="port_area_id != null and port_area_id != ''"> AND port_area_id = #{port_area_id} </if>
+    	<if test="declare_type != null and declare_type != ''"> AND declare_type = #{declare_type} </if>
+    	<if test="ship_id != null and ship_id != ''"> AND ship_id = #{ship_id} </if>
+    	<if test="gmt_modified != null and gmt_modified != ''"> AND gmt_modified = #{gmt_modified} </if>
+    	<if test="exit_flag != null "> AND exit_flag = #{exit_flag} </if>
+    	<if test="contacts != null and contacts != ''"> AND contacts = #{contacts} </if>
+    	<if test="id != null and id != ''"> AND id = #{id} </if>
+    	<if test="port != null and port != ''"> AND port = #{port} </if>
+    	<if test="current_user_id != null and current_user_id != ''"> AND current_user_id = #{current_user_id} </if>
+    	<if test="manager_user_id != null and manager_user_id != ''"> AND manager_user_id = #{manager_user_id} </if>
+    	<if test="port_name != null and port_name != ''"> AND port_name = #{port_name} </if>
+    	<if test="port_area_name != null and port_area_name != ''"> AND port_area_name = #{port_area_name} </if>
+    	<if test="ship_name != null and ship_name != ''"> AND ship_name like '%' || #{ship_name} || '%' </if>
+    	<if test="district_code != null and district_code != ''"> AND district_code = #{district_code} </if>
+    	<if test="time_end != null and time_end != ''"> AND time_end = #{time_end} </if>
+    	<if test="time_start != null and time_start != ''"> AND time_start = #{time_start} </if>
+    	<if test="department_id != null and department_id != ''"> AND department_id = #{department_id} </if>
+    	<if test="department_name != null and department_name != ''"> AND department_name = #{department_name} </if>
+    	<if test="verify_status != null and verify_status != ''"> AND verify_status = #{verify_status} </if>
+    	<if test="province_code != null and province_code != ''"> AND province_code = #{province_code} </if>
+    	<if test="city_name != null and city_name != ''"> AND city_name = #{city_name} </if>
+    	<if test="bailor != null and bailor != ''"> AND bailor = #{bailor} </if>
+    	<if test="current_user_name != null and current_user_name != ''"> AND current_user_name = #{current_user_name} </if>
+    	<if test="ship_english_name != null and ship_english_name != ''"> AND ship_english_name like '%' || #{ship_english_name} || '%'</if>
+    	<if test="is_deleted != null and is_deleted != ''"> AND is_deleted = #{is_deleted} </if>
+    	<if test="voyage_number != null and voyage_number != ''"> AND voyage_number = #{voyage_number} </if>
+    	<if test="declare_no != null and declare_no != ''"> AND declare_no = #{declare_no} </if>
+    	<if test="manager_user_name != null and manager_user_name != ''"> AND manager_user_name = #{manager_user_name} </if>
+    	<if test="lading_no != null and lading_no != ''"> AND lading_no = #{lading_no} </if>
+	</sql>
+	
+	<!-- ################################################  < WorkDeclareFeedback >  ################################################ -->
+	<!--  -->
+	<select id="getListWorkDeclareFeedbackDto" parameterType="map" resultType="WorkDeclareFeedbackDto">
+        <if test="moreRow != null and moreRow != ''">
+		SELECT * FROM (
+			SELECT ROWNUM rnm, a.* FROM (
+        </if>
+			SELECT <include refid="WorkDeclareFeedbackDtoColumns"/> FROM work_declare_feedback
+				<where>
+                    <include refid="WorkDeclareFeedbackDtoWhereCondition"/>
+
+					<!--<if test="vsl_name != null and vsl_name != ''"> AND c.vsl_name LIKE '%' || #{vsl_name} || '%'  </if>-->
+
+					<if test="states != null and states != ''"> AND state IN ($states$) </if>
+
+                    <if test="oneRow != null and oneRow != ''"> AND ROWNUM = 1 </if>
+
+				</where>
+				<!--ORDER BY update_time DESC, state -->
+        <if test="moreRow != null and moreRow != ''">
+				) a WHERE  ROWNUM &lt; #{high}
+			) WHERE rnm &gt;= #{low}
+        </if>
+	</select>
+	
+	
+	<sql id="WorkDeclareFeedbackDtoColumns"> TO_CHAR(gmt_created,'YYYY-MM-DD HH24:mi:ss') gmt_created, feedback_not_text,id,TO_CHAR(real_time_start,'YYYY-MM-DD HH24:mi:ss') real_time_start, TO_CHAR(real_time_end,'YYYY-MM-DD HH24:mi:ss') real_time_end,feedback_user_id,feedback_status,work_num,declare_num,imdg_name,imdg_no,declare_id,declare_goods_id</sql>
+	
+	<sql id="WorkDeclareFeedbackDtoWhereCondition">
+    	<!-- <if test="gmt_created != null and gmt_created != ''"> AND gmt_created = #{gmt_created} </if> -->
+    	<if test="feedback_not_text != null and feedback_not_text != ''"> AND feedback_not_text = #{feedback_not_text} </if>
+    	<if test="declare_iddeclare_goods_id != null and declare_iddeclare_goods_id != ''"> AND declare_iddeclare_goods_id = #{declare_iddeclare_goods_id} </if>
+    	<if test="declare_id != null and declare_id != ''"> AND declare_id = #{declare_id} </if>
+    	<if test="id != null and id != ''"> AND id = #{id} </if>
+    	<!-- <if test="real_time_start != null and real_time_start != ''"> AND real_time_start = #{real_time_start} </if>
+    	<if test="real_time_end != null and real_time_end != ''"> AND real_time_end = #{real_time_end} </if> -->
+    	<if test="feedback_user_id != null and feedback_user_id != ''"> AND feedback_user_id = #{feedback_user_id} </if>
+    	<if test="feedback_status != null and feedback_status != ''"> AND feedback_status = #{feedback_status} </if>
+    	<if test="work_num != null and work_num != ''"> AND work_num = #{work_num} </if>
+    	<if test="declare_num != null and declare_num != ''"> AND declare_num = #{declare_num} </if>
+    	<if test="imdg_name != null and imdg_name != ''"> AND imdg_name = #{imdg_name} </if>
+    	<if test="imdg_no != null and imdg_no != ''"> AND imdg_no = #{imdg_no} </if>
+	</sql>
+	
+	
+	<insert id="insertworkDeclareFeedbackDto" parameterType="WorkDeclareFeedbackDto">
+		INSERT INTO work_declare_feedback(id
+		    <if test="declare_goods_id != null">,declare_goods_id</if>
+		    <if test="declare_id != null">,declare_id</if>
+		    <if test="imdg_no != null">,imdg_no</if>
+		    <if test="imdg_name != null">,imdg_name</if>
+		    <if test="declare_num != null">,declare_num</if>
+		    <if test="work_num != null">,work_num</if>
+		    <if test="real_time_start != null">,real_time_start</if>
+		    <if test="real_time_end != null">,real_time_end</if>
+		    <if test="feedback_user_id != null">,feedback_user_id</if>
+		    <if test="feedback_status != null">,feedback_status</if>
+		    <if test="feedback_not_text != null">,feedback_not_text</if>
+		    <if test="gmt_created != null">,gmt_created</if>
+		)VALUES(#{id}
+			<if test="declare_goods_id != null">,#{declare_goods_id}</if>
+		    <if test="declare_id != null">,#{declare_id}</if>
+		    <if test="imdg_no != null">,#{imdg_no}</if>
+		    <if test="imdg_name != null">,#{imdg_name}</if>
+		    <if test="declare_num != null">,#{declare_num}</if>
+		    <if test="work_num != null">,#{work_num}</if>
+		    <if test="real_time_start != null">,#{real_time_start}</if>
+		    <if test="real_time_end != null">,#{real_time_end}</if>
+		    <if test="feedback_user_id != null">,#{feedback_user_id}</if>
+		    <if test="feedback_status != null">,#{feedback_status}</if>
+		    <if test="feedback_not_text != null">,#{feedback_not_text}</if>
+			<if test="gmt_created != null">,#{gmt_created}</if>	
+		)
+	</insert>
+	
+
+</mapper>

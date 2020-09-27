@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PromotionPeriodModel">
+    <resultMap id="PromotionPeriodMap" type="PromotionPeriodModel">
+        <result property="id" column="id"/>
+        <result property="promotionId" column="promotion_id"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+    </resultMap>
+    <sql id="columns">
+        id,promotion_id,begin_date,end_date
+    </sql>
+
+    <insert id="insert" parameterType="PromotionPeriodModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_promotion_period
+        (promotion_id
+        ,begin_date
+        ,end_date)
+        values(#{promotionId}
+        ,#{beginDate}
+        ,#{endDate})
+    </insert>
+
+    <update id="update" parameterType="PromotionPeriodModel">
+        update tbl_promotion_period set
+        <if test="promotionId !=null">promotion_id = #{promotionId}
+            ,
+        </if>
+        <if test="beginDate !=null">begin_date = #{beginDate}
+            ,
+        </if>
+        <if test="endDate !=null">end_date = #{endDate}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="promotionId !=null">and promotion_id = #{promotionId}</if>
+            <if test="beginDate !=null">and begin_date = #{beginDate}</if>
+            <if test="endDate !=null">and end_date = #{endDate}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="PromotionPeriodMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_promotion_period
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="PromotionPeriodMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_promotion_period
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="PromotionPeriodMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_promotion_period
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="PromotionPeriodModel">
+        delete from tbl_promotion_period where id = id
+    </delete>
+    <insert id="insertAll" parameterType="List">
+        insert into tbl_promotion_period
+        (promotion_id
+        ,begin_date
+        ,end_date)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.promotionId}
+            ,#{item.beginDate}
+            ,#{item.endDate})
+        </foreach>
+    </insert>
+    <select id="getForBatch" resultMap="PromotionPeriodMap" parameterType="Map">
+        SELECT id,promotion_id,begin_date,end_date FROM tbl_promotion_period
+        <where>
+            begin_date    <![CDATA[ > ]]> #{left} AND begin_date <![CDATA[ <  ]]> #{right}
+        </where>
+    </select>
+
+    <!-- 查询正在进行的活动 by geshuo 20160712 -->
+    <select id="findNowPromotionIds" resultType="Integer">
+        SELECT DISTINCT(promotion_id)
+        FROM tbl_promotion_period
+        WHERE now() <![CDATA[>]]> begin_date
+        AND now() <![CDATA[<]]> end_date
+    </select>
+</mapper>
+
+

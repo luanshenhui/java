@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <util:properties id="app" location="classpath:app.properties"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="fileEncoding" value="utf-8" />
+        <property name="locations">
+            <list>
+                <value>classpath:excel.properties</value>
+            </list>
+        </property>
+    </bean>
+    <dubbo:application name="batch-provider" logger="slf4j"/>
+    <!-- registry address, used for service to register itself -->
+    <dubbo:registry address="#{app.dubboRegistry}"/>
+    <dubbo:protocol serialization="nativejava" name="dubbo" port="#{app.dubboPort}" threads="#{app.dubboThreads}"
+                    heartbeat="#{app.dubboHeartBeats}"/>
+
+    <dubbo:service interface="cn.com.cgbchina.batch.service.BatchOrderService" ref="batchOrderServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.ClearQueryService" ref="clearQueryServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.DealBestRateService" ref="dealBestRateServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.InitPointPoolService" ref="initPointPoolServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.IvrRankService" ref="ivrRankServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.MakeCheckAccCheckErrService" ref="makeCheckAccCheckErrServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.MakeCheckAccRenewService" ref="makeCheckAccRenewServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.MakeCheckAccService" ref="makeCheckAccServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.OpsOrderProgressSearchService" ref="opsOrderProgressSearchServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.OrderStatusQueryService" ref="orderStatusQueryServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.PromotionSyncService" ref="promotionSyncServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.SendOutSystemService" ref="sendOutSystemServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.SynBonusService" ref="synBonusServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.BatchDayReportService" ref="batchDayReportServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.BatchWeekReportService" ref="batchWeekReportServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.BatchMonthReportService" ref="batchMonthReportServiceImpl" timeout="60000"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.BatchGoodsDownService" ref="batchGoodsDownServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.HotRankService" ref="hotRankServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.DataTransferFlowService" ref="dataTransferFlowServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.ClearOrderOutSysService" ref="clearOrderOutSysServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.RepairReportService" ref="repairReportServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.BatchEspActRemindService" ref="batchEspActRemindServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.BatchSmspCustService" ref="batchSmspCustServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.batch.service.ApplyPaymentExportService" ref="applyPaymentExportServiceImpl"/>
+
+
+    <!-- 服务消费端配置 -->
+    <dubbo:consumer timeout="50000" loadbalance="leastactive" check="false" />
+    <import resource="batch-context.xml"/>
+
+    <bean class="cn.com.cgbchina.common.utils.ExcelUtilAgency">
+        <property name="maxLimitNum" value="${excel.maxLimitNum}" />
+        <property name="diskPath" value="#{app.excelDiskPath}" />
+    </bean>
+    
+    <bean class="cn.com.cgbchina.batch.util.ReportTaskUtil">
+        <property name="reportUrl" value="#{app.reportUrl}" />
+        <property name="diskPath" value="#{app.excelDiskPath}" />
+    </bean>
+    <context:component-scan base-package="cn.com.cgbchina.batch"/>
+
+    <import resource="scheduler.xml"/>
+    <import resource="batchmq.xml"/>
+</beans>

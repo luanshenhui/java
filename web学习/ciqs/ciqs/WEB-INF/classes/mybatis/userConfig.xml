@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for USERMANEGE.
+
+@author 
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.USERCONFIG">
+
+	<insert id="insertUserConfiguration" parameterType="com.dpn.ciqqlc.standard.model.UserConfigurationDTO">
+		insert into users_configuration
+		  (id, user_id, visit_id, order_by)
+		values
+		  (CreateGUID(), #{userId}, #{visitId}, (select vc.order_by from visit_configuration vc where vc.id = #{visitId}))
+	</insert>
+	
+	<update id="updateUserConfiguration" parameterType="com.dpn.ciqqlc.standard.model.UserConfigurationDTO">
+		update users_configuration
+		<set>
+			<if test="userId != null and userId != ''">
+				user_id = #{userId},
+			</if>
+			<if test="visitId != null and visitId != ''">
+				visit_id = #{visitId},
+			</if>
+			<if test="orderBy != null and orderBy != ''">
+				order_by = #{orderBy},
+			</if>
+		</set>
+		where 1=1
+		<if test="id != null and id != ''">
+			and id = #{id} 
+		</if>
+		<if test="userId != null and userId != ''">
+			and user_id = #{userId}
+		</if>
+		<if test="visitId != null and visitId != ''">
+			and visit_id = #{visitId}
+		</if>
+	</update>
+	
+	<delete id="delUserConfiguration" parameterType="com.dpn.ciqqlc.standard.model.UserConfigurationDTO">
+		delete from users_configuration where id=#{id}
+	</delete>
+	<delete id="bathcDelUserConfiguration">
+		delete from users_configuration where 1=1
+		<if test="ids != null">
+			and id in 
+			<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+				#{item}
+			</foreach>  
+		</if>
+		<if test="vids != null and vids != ''">
+			and visit_id in
+			<foreach item="item" index="index" collection="vids" open="(" separator="," close=")">
+				#{item}
+			</foreach>  
+		</if>
+		<if test="not_vids != null">
+			and visit_id not in
+			<foreach item="item" index="index" collection="not_vids" open="(" separator="," close=")">
+				#{item}
+			</foreach>		
+		</if>
+		<if test="uids != null and uids != ''">
+			and user_id in
+			<foreach item="item" index="index" collection="uids" open="(" separator="," close=")">
+				#{item}
+			</foreach>  
+		</if>
+		<if test="uidAlls != null and uidAlls != ''">
+			and user_id in
+			<foreach item="item" index="index" collection="uidAlls" open="(" separator="," close=")">
+				#{item}
+			</foreach>  
+		</if>
+		<if test="visitId != null and visitId != ''">
+			and visit_id = #{visitId}
+		</if>
+		<if test="userId != null and userId != ''">
+			and user_id = #{userId}
+		</if>
+	</delete>
+
+	<!-- 访问路径操作 -->
+	<insert id="insertVisitConf" parameterType="com.dpn.ciqqlc.standard.model.VisitConfigurationDTO">
+		insert into visit_configuration
+			(id,name,code,path,create_time,create_user,order_by,local_web_type)
+		values
+		  (CreateGUID(), #{name}, #{code}, #{path}, #{createTime}，#{createUser},#{orderBy},#{localWebType})
+	</insert>
+	<update id="UpdateVisitConf"  parameterType="com.dpn.ciqqlc.standard.model.VisitConfigurationDTO">
+		update visit_configuration
+		set
+			id = #{id}
+		<if test="name != null and name != ''">
+			,name = #{name}
+		</if>
+		<if test="code != null and code != ''">
+			,code = #{code}
+		</if>
+		<if test="path != null and path != ''">
+			,path = #{path}
+		</if>
+		<if test="createTime != null">
+			,create_time = #{createTime}
+		</if>
+		<if test="createUser != null and createUser != ''">
+			,create_user = #{createUser}
+		</if>
+		<if test="orderBy != null and orderBy != ''">
+			,order_by = #{orderBy}
+		</if>
+		where id = #{id}
+	</update>
+	<delete id="batchDelVisitConf">
+		delete from visit_configuration
+		<if test="vids != null and vids != ''">
+			<foreach item="item" index="index" collection="vids" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</delete>
+	
+<!--     <select id="fetchUserConfigListByWhere" resultType="String" parameterType="Map">
+		select uc.id from users_configuration uc
+		where 1=1
+		<if test="uIds != null">
+		
+		</if>
+	</select> -->
+	
+	<select id="findVisitConfigById" resultType="com.dpn.ciqqlc.standard.model.VisitConfigurationDTO" parameterType="com.dpn.ciqqlc.standard.model.VisitConfigurationDTO">
+		select 
+		id,name,code,path,create_time createTime,create_user createUser,order_by orderBy
+		from VISIT_CONFIGURATION 
+		where id = #{id}
+	</select>
+	
+	<sql id="findUserConfigList_where">
+		<if test="userId != null and userId != ''">
+			and uc.user_id = '${userId}'
+		</if>
+		<if test="visitCode != null and visitCode != ''">
+			and vc.code like '%${visitCode}%'
+		</if>
+	</sql>
+	<select id="findUserConfigList" resultType="com.dpn.ciqqlc.standard.model.UserConfigurationModel" parameterType="com.dpn.ciqqlc.standard.model.UserConfigurationModel">
+		select *
+        from(
+        	select a.*,rownum rid from  (
+				select 
+					 uc.id ucId,
+					 uc.user_id userId,
+					 uc.visit_id visitId,
+					 vc.name visitName,
+					 vc.path visitPath,
+					 vc.code visitCode,
+					 uc.order_by orderBy,
+					 vc.local_web_type localWebType
+				from
+					users_configuration uc
+				left join visit_configuration vc on uc.visit_Id = vc.id
+				where 1=1
+				<include refid="findUserConfigList_where"/>
+				<if test="orderBy != null and orderBy != ''">
+					order by uc.order_by asc
+				</if>
+             )a 
+             <if test="lastRcd != null and lastRcd != ''">
+	     	     where rownum &lt;#{lastRcd}
+             </if>
+        )
+        <if test="firstRcd != null and firstRcd != ''">
+		    where rid>=#{firstRcd}
+        </if>
+	</select>
+	<select id="findUserConfigListCount" resultType="int" parameterType="com.dpn.ciqqlc.standard.model.UserConfigurationModel">
+			select count(0)
+			from
+				users_configuration uc
+			left join visit_configuration vc on uc.visit_Id = vc.id
+			where 1=1
+			<include refid="findUserConfigList_where"/>
+	</select>
+	
+	<select id="findVisitConfigList" resultType="com.dpn.ciqqlc.standard.model.VisitConfigurationDTO" parameterType="com.dpn.ciqqlc.standard.model.VisitConfigurationDTO">
+		select 
+		vc.id,name,vc.code,vc.path,create_time createTime,create_user createUser,vc.order_by orderBy
+		<if test="userId != null and userId != ''">
+			,uc.user_id userId
+		</if>
+		from VISIT_CONFIGURATION vc
+		<if test="userId != null and userId != ''">
+			left join users_configuration uc on uc.user_id = #{userId} and uc.visit_id = vc.id
+		</if>
+		where 1=1
+		<if test="name != null and name != ''">
+			and name like '%${name}%'
+		</if>
+		<if test="code != null and code != ''">
+			and code like '%${code}%'
+		</if>
+		<if test="path != null and path != ''">
+			and path like '%${path}%'
+		</if>
+	</select>
+	
+	<!-- 分页查询用户列表 -->
+	<select id="findUsersV" resultType="com.dpn.ciqqlc.standard.model.UserVisit">
+		select dto.*,
+               (select name from deptments t where t.code=dto.dept_code and rownum=1) as depot_name
+        from(
+    		 select a.*,rownum rid
+             from(
+                  select t.id,
+        		 	     t.name,
+                         t.flag_op,
+            		 	 t.org_code,
+                         t.dept_code,
+                         t.level_code,
+                         t.manage_sign,
+            			 t.fixed_phone,
+                         t.modify_date,
+                         f.name org_name,
+            			 t.mobile_phone_no,
+            			 t.created_date as create_date,
+            			 t.card_no,
+            			 t.duties,
+            			 (select uc.id from users_configuration uc where uc.user_id=t.id and uc.visit_id=#{visitId}) ucId
+        		 from users_ciq t, organizes_ciq f
+        		 where t.org_code=f.org_code
+        		 <if test="name != null and name != ''">
+        			 and t.name=#{name}
+        		 </if>
+        		 <if test="id != null and id != ''">
+        			 and id=#{id}
+        		 </if>
+                 order by t.created_date desc,id
+             ) a 
+         	 where rownum &lt;#{lastRcd}
+        ) dto
+        where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询用户列表记录数 -->
+	<select id="findUsersCountV" resultType="java.lang.Integer">
+		select count(t.id) 
+		from users_ciq t,organizes_ciq f
+		where t.flag_op='A'
+          and t.org_code=f.org_code
+		<if test="id != null and id != ''"> and t.id=#{id} </if>
+        <if test="name != null and name != ''"> and t.name=#{name} </if>
+	</select>
+</mapper>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Organise">
+    <resultMap id="OrganiseMap" type="OrganiseModel">
+        <result property="code" column="code"/>
+        <result property="fullName" column="full_name"/>
+        <result property="simpleName" column="simple_name"/>
+        <result property="level" column="level"/>
+        <result property="descript" column="descript"/>
+        <result property="status" column="status"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="refuseDesc" column="refuse_desc"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        code,full_name,simple_name,level,descript,status,check_status,refuse_desc,create_oper,modify_oper,create_time,modify_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="OrganiseModel">
+        insert into local_organise
+        (code
+        ,full_name
+        ,simple_name
+        ,level
+        ,descript
+        ,status
+        ,check_status
+        ,refuse_desc
+        ,create_oper
+        ,create_time)
+        values(#{code}
+        ,#{fullName}
+        ,#{simpleName}
+        ,#{level}
+        ,#{descript}
+        ,#{status}
+        ,#{checkStatus}
+        ,#{refuseDesc}
+        ,#{createOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="OrganiseModel">
+        update local_organise set
+        <if test="fullName !=null">full_name = #{fullName}
+            ,
+        </if>
+        <if test="simpleName !=null">simple_name = #{simpleName}
+            ,
+        </if>
+        <if test="level !=null">level = #{level}
+            ,
+        </if>
+        <if test="descript !=null">descript = #{descript}
+            ,
+        </if>
+        <if test="status !=null">status = #{status}
+            ,
+        </if>
+        <if test="checkStatus !=null">check_status = #{checkStatus}
+            ,
+        </if>
+        <if test="refuseDesc !=null">refuse_desc = #{refuseDesc}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        modify_time = now()
+        where code = #{code} and del_flag = 0
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag = 0
+            <if test="code !=null">and code like concat(concat('%',#{code}),'%')</if>
+            <if test="fullName !=null">and full_name = #{fullName}</if>
+            <if test="simpleName !=null">and simple_name = #{simpleName}</if>
+            <if test="level !=null">and level = #{level}</if>
+            <if test="descript !=null">and descript = #{descript}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="refuseDesc !=null">and refuse_desc = #{refuseDesc}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="sName !=null">and simple_name like concat(concat('%',#{sName}),'%')</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="OrganiseMap">
+        SELECT
+        <include refid="columns"/>
+        from local_organise
+        where code=#{code} and del_flag = 0
+    </select>
+
+    <select id="findByIdAll" parameterType="Map" resultMap="OrganiseMap">
+        SELECT
+        <include refid="columns"/>
+        from local_organise
+        where code=#{code}
+    </select>
+    <select id="findAll" resultMap="OrganiseMap">
+        select
+        <include refid="columns"/>
+        from local_organise
+        where del_flag = 0
+        and status = '0'
+    </select>
+
+    <!--add by liuhan-->
+    <select id="findBySimpleName" parameterType="String" resultType="String">
+        select
+        code
+        from local_organise
+        where simple_name LIKE concat(concat('%',#{simpleName}),'%')
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="OrganiseMap">
+        select
+        <include refid="columns"/>
+        from local_organise
+        <include refid="conditions"/>
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from local_organise
+        <include refid="conditions"/>
+    </select>
+
+    <delete id="delete" parameterType="String">
+        update local_organise set del_flag = 1 where code = #{code}
+    </delete>
+</mapper>
+
+

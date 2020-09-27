@@ -1,0 +1,52 @@
+package com.yulin.pm;
+
+public class Shape {
+	private int r;	//°ë¾¶
+	private int w;	//¿í
+	private int h;	//¸ß
+	private int b;	//µ×
+	private int a;
+	private int c;
+	
+	public Shape(int r){
+		this.r = r;
+	}
+	
+	public Shape(int w,int h){
+		this.w = w;
+		this.h = h;
+	}
+	
+	public double zhouChang(){
+		return 0;
+	}
+	
+	public double mianJi(){
+		return 0;
+	}
+	
+	public int getR(){
+		return this.r;
+	}
+	
+	public int getW(){
+		return this.w;
+	}
+	
+	public int getH(){
+		return this.h;
+	}
+	
+	public int getA(){
+		return this.h;
+	}
+	
+	public int getB(){
+		return this.h;
+	}
+	
+	public int getC(){
+		return this.h;
+	}
+
+}

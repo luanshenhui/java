@@ -1,0 +1,43 @@
+<div class="modal points-discount-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned points-discount-form">
+        <!--隐藏传递该条数据的id，编辑时会用到-->
+        <input id="id" name="id" type="hidden" value="{{data.id}}">
+        <!--体系id、体系名称、其他参数、当前状态-->
+        <input id="pricesystemId" name="pricesystemId" type="hidden" value="0000">
+        <input id="pricesystemNm" name="pricesystemNm" type="hidden" value="金普">
+        <input id="argumentOther" name="argumentOther" type="hidden" value="0.000000">
+        <input id="curStatus" name="curStatus" type="hidden" value="0102">
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="downLimit">基础下限:</label>
+                {{#equals '金普卡积分系数新增' title}}
+                    <input id="downLimit" name="downLimit" type="text" value="{{data.downLimit}}" maxlength="9"/>
+                {{else}}
+                <input id="downLimit" name="downLimit" type="text"
+                {{#if data.downLimit }} value="{{data.downLimit}}" {{else}} value="0"{{/if}}
+                       maxlength="9" readonly/>
+                {{/equals}}
+            </div>
+
+            <div class="control-group">
+                <label for="upLimit">基础上限:</label>
+                <input id="upLimit" name="upLimit" type="text" value="{{data.upLimit}}" maxlength="9"
+                    {{#equals '金普卡积分系数编辑' title}} readonly {{/equals}}>
+            </div>
+
+            <div class="control-group">
+                <label for="argumentNormal">金普卡参数:</label>
+                <input id="argumentNormal" name="argumentNormal"  type="text" value="{{data.argumentNormal}}" maxlength="6">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="保存">
+            <button class="btn btn-close btn-small close">取消</button>
+        </div>
+    </form>
+</div>

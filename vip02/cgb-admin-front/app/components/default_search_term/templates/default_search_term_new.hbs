@@ -1,0 +1,30 @@
+<div class="modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>默认搜索词</h2>
+    </div>
+    <form class="form form-aligned default-term-form">
+        <div class="default-term-new modal-body">
+            <div class="control-group">
+                <label for="defaultTermName">搜索词名称:</label>
+                {{#if title}}
+                    <input id="termName" name="name" class="form-control js-default-term-name" data-id="{{data.id}}"
+                           type="text" maxlength="50" value="{{data.name}}" required/>
+                {{else}}
+                    <input id="termName" name="name" class="form-control js-default-term-name" data-id="{{data.id}}"
+                           type="text" maxlength="50" placeholder="请输入搜索词名称" value="{{data.name}}" required/>
+                {{/if}}
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="termStatus">状态:</label>
+                <input id="status" name="status" class="form-control" type="checkbox" value="{{data.status}}">开启
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small js-default-term-edit" value="确定">
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

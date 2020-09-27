@@ -1,0 +1,100 @@
+{{#component "activitys-add js-component"}}
+    <form class="newPointActivity-form">
+    <div>
+        <div class="control-group">
+            <label for="roleName"><span class="required">*</span>活动主题:</label>
+            <input id="activityTheme" name="activityTheme"class="form-control" type="text" placeholder="请输入活动主题" required>
+            <label>最多输入50个字符</label>
+        </div>
+        <div class="control-group">
+            <label for="roleName"><span class="required">*</span>活动简称:</label>
+            <input id="activityName" name="activityName"class="form-control" type="text" placeholder="请输入活动简称" required>
+            <label>最多输入5个字符</label>
+        </div>
+    </div>
+    <div>
+        <h2>活动基本条件</h2>
+        <div class="control-group">
+            <label for="role"><span class="required">*</span>渠道:</label>
+            <input type="checkbox">商城活动
+            <input type="checkbox">App活动
+            <input type="checkbox">手机活动
+            <input type="checkbox">微信活动
+        </div>
+        <div class="control-group">
+            <label for="roleName"><span class="required">*</span>活动报名时间:</label>
+            <input class="form-control js-date-start"/>
+            ----<input class="form-control js-date-end"/>
+        </div>
+        <div class="control-group">
+            <label for="roleName"><span class="required">*</span>活动时间:</label>
+            <input class="form-control js-date-start1"/>
+            ----<input class="form-control js-date-end1"/>
+        </div>
+    </div>
+    <div>
+        <h2>活动优惠规则</h2>
+        <div class="control-group">
+            <label for="roleName"><span class="required">*</span>优惠类型:</label>
+            <input type="radio" id="ForDiscount" name="ForCheck" checked>折扣
+            <input type="radio"id="ForGroup" name="ForCheck">团购
+            <input type="radio" id="ForChange" name="ForCheck">礼品分群
+        </div>
+        <div class="control-group discount">
+            <label for="roleName"><span class="required">*</span>折扣比例:</label>
+            <input id="discount" name="discount"class="form-control" type="text"  required
+                  >折
+            <label>
+                如果享受7.5折，则填写7.5
+            </label>
+            <input id="buyNum" name="buyNum"class="form-control" type="text"  required
+                   >
+            <label>
+                每个人的限购数量（大于等于1的正整数）
+            </label>
+        </div>
+        <div class="control-group groupBuy">
+            <label for="roleName"><span class="required">*</span>团购:</label>
+            最低团购人数<input id="inNum" name="inNum"class="form-control" type="text"  required
+                >人
+            减<input id="inAmount" name="inAmount"class="form-control" type="text"  required
+                >元
+            <label>
+                能否使用优惠券
+            </label>
+            <input id="inUse" name="inUse"class="form-control" type="radio"  required checked
+            value="1">能
+            <input id="offUse" name="inUse"class="form-control" type="radio"  required
+            value="0">不能
+        </div>
+        <div class="control-group change">
+            <label for="roleName"><span class="required">*</span>用户卡号:</label>
+            <button>导入</button><label>导入可以兑换的人群</label>
+            <label for="roleName"><span class="required">*</span>兑换数量:</label>
+            <input id="buyAmount" name="buyAmount"class="form-control" type="text"  required
+                    >
+        </div>
+    </div>
+    <div>
+        <h2>活动范围</h2>
+        <thead>
+        <tr>
+            <th width="20%">供应商名称</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+            <td class="sid" id="sid">{{id}}</td>
+        </tr>
+        </tbody>
+    </div>
+    <div>
+        <h2>促销内容</h2>
+
+    </div>
+    </form>
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-success btn-sm js-activity-create" value="确定">
+        <button class="btn btn-info btn-sm close">取消</button>
+    </div>
+{{/component}}

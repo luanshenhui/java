@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd"
+       default-lazy-init="true">
+    <bean name="sqlApi" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="index1_leftbar1_demo">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+
+                <entry key="index1_leftbar1_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+				 <entry key="index1_leftbar2_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_leftbar3_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_leftbar4_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_rightbox_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_centerpie1_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_centerbar2_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_centerpie3_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_centerline4_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_centerline5_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_centerbar6_1">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+                <entry key="index1_table">
+                    <bean class="com.hepowdhc.dcapp.api.bean.MapperBean">
+                        <property name="file" value="true"></property>
+                        <property name="ds" ref="dcapp"></property>
+                        <property name="debug" value="true"></property>
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+</beans>

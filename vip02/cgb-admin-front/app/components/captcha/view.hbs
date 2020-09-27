@@ -1,0 +1,6 @@
+{{#component "captchas js-component"}}
+    <p class="captcha-title"><strong>验证码测试</strong></p>
+    <input type="text" placeholder="输入验证码" value="">
+    <img id="captchaImg" src="{{_HREF_.context}}/api/admin/captcha" width="85" height="45" style="vertical-align:middle">
+    <button id="changeImg">看不清楚换一个</button>
+{{/component}}

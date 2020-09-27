@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CfgPriceSystemModel">
+    <resultMap id="CfgPriceSystemMap" type="CfgPriceSystemModel">
+        <result property="id" column="id"/>
+        <result property="pricesystemId" column="pricesystem_id"/>
+        <result property="pricesystemNm" column="pricesystem_nm"/>
+        <result property="upLimit" column="up_limit"/>
+        <result property="downLimit" column="down_limit"/>
+        <result property="argumentNormal" column="argument_normal"/>
+        <result property="argumentOther" column="argument_other"/>
+        <result property="curStatus" column="cur_status"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,pricesystem_id,pricesystem_nm,up_limit,down_limit,argument_normal,argument_other,cur_status,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="CfgPriceSystemModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_cfg_pricesystem
+        (pricesystem_id
+        ,pricesystem_nm
+        ,up_limit
+        ,down_limit
+        ,argument_normal
+        ,argument_other
+        ,cur_status
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{pricesystemId}
+        ,#{pricesystemNm}
+        ,#{upLimit}
+        ,#{downLimit}
+        ,#{argumentNormal}
+        ,#{argumentOther}
+        ,#{curStatus}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="CfgPriceSystemModel">
+        update tbl_cfg_pricesystem set
+        modify_time = now(),
+        <if test="pricesystemId !=null">pricesystem_id = #{pricesystemId}
+                ,</if>
+            <if test="pricesystemNm !=null">pricesystem_nm = #{pricesystemNm}
+                ,</if>
+            <if test="upLimit !=null">up_limit = #{upLimit}
+                ,</if>
+            <if test="downLimit !=null">down_limit = #{downLimit}
+                ,</if>
+            <if test="argumentNormal !=null">argument_normal = #{argumentNormal}
+                ,</if>
+            <if test="argumentOther !=null">argument_other = #{argumentOther}
+                ,</if>
+            <if test="curStatus !=null">cur_status = #{curStatus}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            cur_status = '0102'
+            <if test="id !=null">and id = #{id}</if>
+            <if test="type == 1">and pricesystem_id = '0000'</if>
+            <if test="type == 2">and (pricesystem_id = '0001' or pricesystem_id = '0002' or pricesystem_id = '0003' or pricesystem_id = '0004')</if>
+            <if test="type == 3">and pricesystem_id = '0005'</if>
+            <if test="pricesystemNm !=null">and pricesystem_nm = #{pricesystemNm}</if>
+            <if test="upLimit !=null">and up_limit = #{upLimit}</if>
+            <if test="downLimit !=null">and down_limit = #{downLimit}</if>
+            <if test="argumentNormal !=null">and argument_normal = #{argumentNormal}</if>
+            <if test="argumentOther !=null">and argument_other = #{argumentOther}</if>
+            <if test="curStatus !=null">and cur_status = #{curStatus}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="CfgPriceSystemMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_cfg_pricesystem
+       where id=#{id}
+    </select>
+    <select id="findByPriceSystemId" parameterType="Map" resultMap="CfgPriceSystemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_cfg_pricesystem
+        where pricesystem_id=#{priceSystemId} and cur_status='0102'
+    </select>
+    <select id="findAll" resultMap="CfgPriceSystemMap">
+        select
+        <include refid="columns"/>
+        from tbl_cfg_pricesystem
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="CfgPriceSystemMap">
+        select
+        <include refid="columns"/>
+        from tbl_cfg_pricesystem
+        <include refid="conditions"/>
+        <![CDATA[ order by down_limit limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_cfg_pricesystem
+        <include refid="conditions"/>
+    </select>
+
+    <update id="updateForDel" parameterType="CfgPriceSystemModel">
+        update tbl_cfg_pricesystem set
+        cur_status = #{curStatus},
+        modify_oper = #{modifyOper},
+        modify_time = now()
+        where id=#{id}
+    </update>
+</mapper>
+
+

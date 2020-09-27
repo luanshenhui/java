@@ -1,0 +1,20 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th width="5%"></th>
+        <th width="5%"></th>
+        <th width="10%">手机号码</th>
+        <th width="50%">卡号</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each data.data}}
+        <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td class="phone">{{phone}}</td>
+            <td class="cardNo">{{cardNo}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

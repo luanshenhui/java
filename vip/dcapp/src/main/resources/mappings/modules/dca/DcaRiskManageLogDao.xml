@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.riskmanage.dao.DcaRiskManageLogDao">
+    
+	<sql id="dcaRiskManageLogColumns">
+		a.UUID AS "uuid",
+		a.RISK_MANAGE_ID AS "riskManageId",
+		a.BIZ_ROLE_ID AS "bizRoleId",
+		a.POWER_ID AS "powerId",
+		a.RISK_ID AS "riskId",
+		a.BIZ_FLOW_ID AS "bizFlowId",
+		a.BIZ_FLOW_NAME AS "bizFlowName",
+		a.BIZ_OPER_PERSON AS "bizOperPerson",
+		a.BIZ_OPER_POST AS "bizOperPost",
+		a.BIZ_DATA_ID AS "bizDataId",
+		a.BIZ_DATA_NAME AS "bizDataName",
+		a.INSTANCE_ID AS "instanceId",
+		a.TASK_ID AS "taskId",
+		a.TASK_NAME AS "taskName",
+		a.ALARM_LEVEL AS "alarmLevel",
+		a.ALARM_TYPE AS "alarmType",
+		a.RISK_LEVEL AS "riskLevel",
+		a.CPU_RESULT AS "cpuResult",
+		a.RISK_MSG AS "riskMsg",
+		a.RISK_TRANS_FLAG AS "riskTransFlag",
+		a.DEFINE_BY_MANUAL AS "defineByManual",
+		a.ACTION AS "action",
+		a.DEFINE_PERSON AS "definePerson",
+		a.DEFINE_STATUS AS "defineStatus",
+		a.DEFINE_DATE AS "defineDate",
+		a.EVIDENCE AS "evidence",
+		a.EXPLAINS AS "explains",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks"
+	</sql>
+	
+	<sql id="dcaRiskManageLogJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaRiskManageLog">
+		SELECT 
+			<include refid="dcaRiskManageLogColumns"/>
+		FROM DCA_RISK_MANAGE_LOG a
+		<include refid="dcaRiskManageLogJoins"/>
+		WHERE a.ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="DcaRiskManageLog">
+		SELECT 
+			<include refid="dcaRiskManageLogColumns"/>
+		FROM DCA_RISK_MANAGE_LOG a
+		<include refid="dcaRiskManageLogJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="riskManageId != null and riskManageId != ''">
+				AND a.RISK_MANAGE_ID = #{riskManageId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaRiskManageLog">
+		SELECT 
+			<include refid="dcaRiskManageLogColumns"/>
+		FROM DCA_RISK_MANAGE_LOG a
+		<include refid="dcaRiskManageLogJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO DCA_RISK_MANAGE_LOG(
+			UUID,
+			RISK_MANAGE_ID,
+			BIZ_ROLE_ID,
+			POWER_ID,
+			RISK_ID,
+			BIZ_FLOW_ID,
+			BIZ_FLOW_NAME,
+			BIZ_OPER_PERSON,
+			BIZ_OPER_POST,
+			BIZ_DATA_ID,
+			BIZ_DATA_NAME,
+			INSTANCE_ID,
+			TASK_ID,
+			TASK_NAME,
+			ALARM_LEVEL,
+			ALARM_TYPE,
+			RISK_LEVEL,
+			CPU_RESULT,
+			RISK_MSG,
+			RISK_TRANS_FLAG,
+			DEFINE_BY_MANUAL,
+			ACTION,
+			DEFINE_PERSON,
+			DEFINE_STATUS,
+			DEFINE_DATE,
+			EVIDENCE,
+			EXPLAINS,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS
+		) VALUES (
+			#{uuid},
+			#{riskManageId},
+			#{bizRoleId},
+			#{powerId},
+			#{riskId},
+			#{bizFlowId},
+			#{bizFlowName},
+			#{bizOperPerson},
+			#{bizOperPost},
+			#{bizDataId},
+			#{bizDataName},
+			#{instanceId},
+			#{taskId},
+			#{taskName},
+			#{alarmLevel},
+			#{alarmType},
+			#{riskLevel},
+			#{cpuResult},
+			#{riskMsg},
+			#{riskTransFlag},
+			#{defineByManual},
+			#{action},
+			#{definePerson},
+			#{defineStatus},
+			#{defineDate},
+			#{evidence},
+			#{explains},
+			#{delFlag},
+			#{createPerson},
+			SYSDATE,
+			#{updatePerson},
+			SYSDATE,
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dca_risk_manage_log SET 	
+			UUID = #{uuid},
+			RISK_MANAGE_ID = #{riskManageId},
+			BIZ_ROLE_ID = #{bizRoleId},
+			POWER_ID = #{powerId},
+			RISK_ID = #{riskId},
+			BIZ_FLOW_ID = #{bizFlowId},
+			BIZ_FLOW_NAME = #{bizFlowName},
+			BIZ_OPER_PERSON = #{bizOperPerson},
+			BIZ_OPER_POST = #{bizOperPost},
+			BIZ_DATA_ID = #{bizDataId},
+			BIZ_DATA_NAME = #{bizDataName},
+			INSTANCE_ID = #{instanceId},
+			TASK_ID = #{taskId},
+			TASK_NAME = #{taskName},
+			ALARM_LEVEL = #{alarmLevel},
+			ALARM_TYPE = #{alarmType},
+			RISK_LEVEL = #{riskLevel},
+			CPU_RESULT = #{cpuResult},
+			RISK_MSG = #{riskMsg},
+			RISK_TRANS_FLAG = #{riskTransFlag},
+			DEFINE_BY_MANUAL = #{defineByManual},
+			ACTION = #{action},
+			DEFINE_PERSON = #{definePerson},
+			DEFINE_STATUS = #{defineStatus},
+			DEFINE_DATE = #{defineDate},
+			EVIDENCE = #{evidence},
+			EXPLAINS = #{explains},
+			CREATE_PERSON = #{createPerson},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = SYSDATE,
+			REMARKS = #{remarks}
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<update id="delete">
+		UPDATE DCA_RISK_MANAGE_LOG SET 
+			DEL_FLAG = #{DEL_FLAG_DELETE}
+		WHERE UUID = #{uuid}
+	</update>
+	
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="cn.com.cgbchina.item.model.AuditLoggingModel" alias="AuditLoggingModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.Bank" alias="Bank"/>
+        <typeAlias type="cn.com.cgbchina.item.model.BrandAuthorizeModel" alias="BrandAuthorizeModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.BusinessConfig" alias="BusinessConfig"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsModel" alias="GoodsModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsBrandModel" alias="GoodsBrandModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsConsultModel" alias="GoodsConsultModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.ItemModel" alias="ItemModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.ProductModel" alias="ProductModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.PointPoolModel" alias="PointPoolModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.CouponScaleModel" alias="CouponScaleModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.ServicePromiseModel" alias="ServicePromiseModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.SpecialPointScaleModel" alias="SpecialPointScaleModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.TblGoodsRecommendationYgModel"
+                   alias="TblGoodsRecommendationYgModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsOperateDetailModel" alias="GoodsOperateDetailModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.TblCfgIntegraltypeModel" alias="TblCfgIntegraltypeModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.TblGoodsPaywayModel" alias="TblGoodsPaywayModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsPointRegionModel" alias="GoodsPointRegionModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsPriceRegionModel" alias="GoodsPriceRegionModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.EspAreaInfModel"  alias="EspAreaInfModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsBrandAdvertiseModel"  alias="GoodsBrandAdvertiseModel"/>
+        <typeAlias type="cn.com.cgbchina.item.model.GoodsRecommendationJfModel"  alias="GoodsRecommendationJfModel"/>
+    </typeAliases>
+</configuration>

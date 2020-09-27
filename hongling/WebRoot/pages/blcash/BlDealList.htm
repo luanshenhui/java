@@ -1,0 +1,53 @@
+<script src="../blcash/common.js"></script>
+<script src="../blcash/BlDealList.js"></script>
+<div id="BlDealListSearch" class="list_search">
+<input type="hidden" id="blmemberid" name="blmemberid">
+<input type="hidden" id="blcashid" name="blcashid">
+<input type="hidden" id="from" name="from">
+	<h1></h1>
+	<span id="blLblStatistic"></span>
+	<label class="blLblKeyword"></label>
+	<input type="text" id="blKeyword"/>
+	<label class="blLblTimePeriod"></label>
+	<input type="text" id="blFromDate" class="date"/>
+	<input type="text" id="blToDate" class="date"/>
+	<!-- <a id="blBtnExportCash"></a> -->
+	<a id="blBtnSearch"></a>
+	<a id="blBtnDuizhangdan"></a>
+	<a id="blBtnAdd"></a>
+</div>
+<div id="BlDealListResult"></div>
+<div id="BlDealListStatistic"></div>
+<div id="BlDealListPagination" class="paging"></div>
+<textarea  id="BlDealListTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="blLblDealDate"></td>
+			<td class="blLblClientCompanyName"></td>
+			<!-- <td class="blLblCompanyShortName"></td> -->
+			<td class="blLblAccountName"></td>
+			<td class="blLblDealProject"></td>
+			<td class="blLblMoneyKind"></td>
+			<td class="blLblInAccount"></td>
+			<td class="blLblOutAccount"></td>
+			<td class="blLblOrderIdTrackingId"></td>
+			<!-- <td class="blLblRemainMoney"></td> -->
+			<td class="blLblRemark"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr>
+			<td class="center" width="130">{$T.row.dealDate}</td>
+			<td class="center" width="150">{$T.row.companyName}</td>
+			<!-- <td class="center" width="50">{$T.row.companyShortName}</td> -->
+			<td class="center" width="50">{$T.row.username}</td>
+			<td class="center" width="70">{$T.row.dealItemName}</td>
+			<td class="center" width="50">{$T.row.moneySignName}</td>
+			<td class="center" width="100">{$T.row.accountIn}</td>
+			<td class="center" width="100">{$T.row.accountOut}</td>
+			<td class="center" width="100">{$T.row.ordenId}</td>
+			<!-- <td class="center" width="50">{$T.row.num}</td> -->
+			<td class="center" width="50">{$T.row.memo}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

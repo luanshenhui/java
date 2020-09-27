@@ -1,0 +1,56 @@
+<div class="modal modal-promise-new">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <div class="modal-title">{{title}}</div>
+    </div>
+    <form class="form form-aligned service-promise-form">
+
+        <div class="modal-body js-promise-data" data-data="{{json data}}">
+            <div class="control-group">
+                <label for="icon"><span class="required">*</span>服务承诺名称：</label>
+                {{#equals "新增服务承诺" title}}
+                    <input type="text" value="{{data.name}}" id="name" name="name" data-id="{{data.code}}"
+                           class="control-group js-name-promise" maxlength="100" required/>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                {{else}}
+                    <input type="text" value="{{data.name}}" id="name" name="name" data-id="{{data.code}}"
+                           class="form-control order-form col-3 js-name-promise" readonly/>
+                {{/equals}}
+            </div>
+            <div class="control-group">
+                <label for="icon"><span class="required">*</span>服务承诺图标：</label>
+
+                <input type="button" class="btn btn-success upload-btn btn-small " value="上传图片"/>
+                <input type="file" class="img-upload js-icon-upload" name="files"/>
+                <input type="hidden" id="icon" name="icon" value="{{data.icon}}">
+
+                <!--<input id="fileimg" type="file" name="icon" class="ipt" style="width:170px;"/>-->
+                <!--<input type="button" class="btn btn-success btn-sm js-image-upload" value="上传"/>-->
+                <!--<input type="hidden" id="icon" name="icon" value="{{data.icon}}">-->
+            </div>
+
+            <div class="control-group">
+                <label for="brandImageView">图标预览：</label>
+                {{#if data.icon}}
+                    <img data-original="{{data.icon}}" class="js-promise-img brand-img brandbigshow" src="{{data.icon}}"/>
+                {{else}}
+                    <span class="promise-img-none">暂无图片</span>
+                    <img data-original="{{data.icon}}" class="js-promise-img brand-img brandbigshow" style="display: none"/>
+                {{/if}}
+            </div>
+            <div class="control-group">
+                <label for="sort">显示顺序：</label>
+                <input type="text" value="{{data.sort}}" id="sort" name="sort"
+                       class="form-control order-form col-3 js-sort-promise" maxlength="11">
+            </div>
+        </div>
+        <div class="modal-footer">
+            {{#equals add true}}
+                    <input type="submit" class="btn btn-success btn-small" value="保 存">
+            {{else}}
+                    <input type="submit" class="btn btn-success btn-small" value="保 存">
+            {{/equals}}
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

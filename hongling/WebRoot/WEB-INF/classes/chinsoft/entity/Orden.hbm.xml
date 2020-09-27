@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="chinsoft.entity.Orden" table="Orden">
+		<id name="OrdenID" type="string">
+			<column name="OrdenID" />
+			<generator class="assigned" />
+		</id>
+		<property name="SysCode" type="string">
+			<column name="SysCode" />
+		</property>
+		<property name="CustomerID" type="string">
+			<column name="CustomerID" />
+		</property>
+		<property name="ClothingID" type="integer">
+			<column name="ClothingID" />
+		</property>
+		<property name="FabricID" type="integer">
+			<column name="FabricID" />
+		</property>
+		<property name="FabricCode" type="string">
+			<column name="FabricCode" />
+		</property>
+		<property name="Components" type="string">
+			<column name="Components" />
+		</property>
+		<property name="ComponentTexts" type="string">
+			<column name="ComponentTexts" />
+		</property>
+		<property name="SizeBodyTypeValues" type="string">
+			<column name="SizeBodyTypeValues" />
+		</property>
+		<property name="SizeCategoryID" type="integer">
+			<column name="SizeCategoryID" />
+		</property>
+		<property name="StatusID" type="integer">
+			<column name="StatusID" />
+		</property>
+		<property name="PubMemberID" type="string">
+			<column name="PubMemberID" />
+		</property>
+		<property name="SizeAreaID" type="integer">
+			<column name="SizeAreaID" />
+		</property>
+		<property name="SizeSpec" type="string">
+			<column name="SizeSpec" />
+		</property>
+		<property name="SizePartValues" type="string">
+			<column name="SizePartValues" />
+		</property>
+		<property name="PubDate" type="date">
+			<column name="PubDate" />
+		</property>
+		<property name="DeliveryDate" type="date">
+			<column name="DeliveryDate" />
+		</property>
+		<property name="SizeUnitID" type="integer">
+			<column name="SizeUnitID" />
+		</property>
+		<property name="MorePants" type="integer">
+			<column name="MorePants" />
+		</property>
+		<property name="DeliveryID" type="string">
+			<column name="DeliveryID" />
+		</property>
+		<property name="AutoID" type="integer">
+			<column name="AutoID" />
+		</property>
+		<property name="Memo" type="string">
+			<column name="Memo" />
+		</property>
+		<property name="StyleID" type="integer">
+			<column name="StyleID" />
+		</property>
+		<property name="IsStop" type="integer">
+			<column name="IsStop" />
+		</property>
+		<property name="StopCause" type="integer">
+			<column name="StopCause" />
+		</property>
+		<property name="Jhrq" type="date">
+			<column name="Jhrq" />
+		</property>
+		<property name="UserordeNo" type="string">
+			<column name="UserordeNo" />
+		</property>
+		<property name="ChukudanId" type="string">
+			<column name="ChukudanId" />
+		</property>
+		<property name="Bxlb" type="string">
+			<column name="Bxlb" />
+		</property>
+		<property name="IsAlipay" type="integer">
+			<column name="IsAlipay" />
+		</property>
+		<property name="OrdenPrice" type="double">
+			<column name="OrdenPrice" />
+		</property>
+		<property name="SendStatus" type="integer">
+			<column name="SENDSTATUS" />
+		</property>
+		<property name="CompanysCode" type="string">
+			<column name="COMPANYSCODE" />
+		</property>
+		<property name="StyleDY" type="string">
+			<column name="StyleDY" />
+		</property>
+		<property name="Photo" type="string">
+			<column name="Photo" />
+		</property>
+		<property name="jtSize" type="string">
+			<column name="JTSize" />
+		</property>
+	</class>
+</hibernate-mapping>

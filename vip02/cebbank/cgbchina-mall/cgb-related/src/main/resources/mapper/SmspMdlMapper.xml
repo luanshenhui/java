@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SmspMdlModel">
+    <resultMap id="SmspMdlMap" type="SmspMdlModel">
+        <result property="smspId" column="smsp_id"/>
+        <result property="smspMess" column="smsp_mess"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createOper" column="create_oper"/>
+    </resultMap>
+    <sql id="columns">
+    smsp_id,smsp_mess,create_time,create_oper
+    </sql>
+
+    <insert id="insert" parameterType="SmspMdlModel" useGeneratedKeys="true"
+            keyProperty="smspId" keyColumn="smsp_id">
+        insert into tbl_smsp_mdl
+        (smsp_mess
+        ,create_time
+        ,create_oper)
+        values(#{smspMess}
+        ,#{createTime}
+        ,#{createOper})
+    </insert>
+
+    <update id="update" parameterType="SmspMdlModel">
+        update tbl_smsp_mdl set
+            <if test="smspMess !=null">smsp_mess = #{smspMess}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                </if>
+        where smsp_id = #{smspId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="smspId !=null">and smsp_id = #{smspId}</if>
+            <if test="smspMess !=null">and smsp_mess = #{smspMess}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="SmspMdlMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_smsp_mdl
+       where smsp_id=#{smspId}
+    </select>
+    <select id="findAll" resultMap="SmspMdlMap">
+        select
+        <include refid="columns"/>
+        from tbl_smsp_mdl
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="SmspMdlMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_smsp_mdl
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="SmspMdlModel">
+        delete from tbl_smsp_mdl where id = smspId
+    </delete>
+</mapper>
+
+

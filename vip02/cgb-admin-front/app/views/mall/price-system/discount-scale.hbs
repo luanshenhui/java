@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}价格体系维护{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "mall_price_system/discount_scale" true}}
+            {
+            "type":"2"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

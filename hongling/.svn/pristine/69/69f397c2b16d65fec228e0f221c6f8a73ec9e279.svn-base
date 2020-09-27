@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript" src="../../scripts/import.js"></script>
+<link rel="stylesheet" href="style.css" type="text/css"></link>
+<script type="text/javascript" src="fashion.js"></script>
+<link rel="stylesheet" href="pic.css" type="text/css"></link>
+<script type="text/javascript" src="pic.js"></script><!-- 滚动图片 -->
+
+</head>
+
+<body>
+	<div id="title_right">
+		<a id="professional_edition" href="../common/orden.htm"></a> | <a id="myorden"></a> | <a id="myfabric"></a> | <a id="blDelivery"></a> | <a id="blCash"></a> | <a id="myuser"></a> |  <a id="mymessage"></a> | <a id="myinformation"></a> | <a id="signOut"></a>  <select id="versions"></select>
+	</div>
+	<table>
+		<tr>
+			<!-- <td>
+				<img id="b" src="../../fashionIMG/img/b.gif" alt=""/>
+				<img id="bb" src="../../fashionIMG/img/logo.png" alt=""/>
+			</td> -->
+			<td id="logo"></td>
+			<td>
+				<ul id="nav">
+					<li id="selected"><a id="jdsw" onclick="$.csFashion.showImg(1)" onmouseover="$.csFashion.changeColor('jdsw')"></a></li>
+					<li><a id="sssw" onclick="$.csFashion.showImg(2)" onmouseover="$.csFashion.changeColor('sssw')"></a></li>
+					<li><a id="jdlf" onclick="$.csFashion.showImg(3)" onmouseover="$.csFashion.changeColor('jdlf')"></a></li>
+					<li><a id="sslf" onclick="$.csFashion.showImg(4)" onmouseover="$.csFashion.changeColor('sslf')"></a></li>
+				</ul>
+			</td>
+		</tr>
+	</table>
+	<div id="into_img">
+	
+	
+ 	 <div id="imageFlow">
+		<div class="bank" id="bank">
+		</div>
+
+		<div class="text">
+			<div class="title">Loading</div>
+			<div class="legend">Please wait...</div>
+		</div>
+		<div class="scrollbar" style="display: none;">
+			<img class="track" src="../../fashionIMG/img/sb.gif" alt=""/>
+			<img class="arrow-left" src="../../fashionIMG/img/sl.gif" alt=""/>
+			<img class="arrow-right" src="../../fashionIMG/img/sr.gif" alt=""/>
+			<img class="bar" src="../../fashionIMG/img/sc.gif" alt=""/>
+		</div>
+	</div> 
+	
+	</div>
+</body> 
+</html>
+<!-- 导航栏 -->
+<script type="text/javascript" src="jquery-ui.min.js"></script>
+<script type="text/javascript" src="jquery.spasticNav.js"></script>
+<script type="text/javascript">
+    $('#nav').spasticNav();
+</script>

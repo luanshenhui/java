@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EsphtmInfModel">
+    <resultMap id="EsphtmInfMap" type="EsphtmInfModel">
+        <result property="actId" column="act_id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="browsePath" column="browse_path"/>
+        <result property="pageType" column="page_type"/>
+        <result property="pageId" column="page_id"/>
+        <result property="actName" column="act_name"/>
+        <result property="publishStatus" column="publish_status"/>
+        <result property="actFilename" column="act_filename"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="remark" column="remark"/>
+        <result property="subKeyCd1" column="sub_key_cd1"/>
+        <result property="subKeyCd2" column="sub_key_cd2"/>
+        <result property="subKeyCd3" column="sub_key_cd3"/>
+        <result property="miscTx" column="misc_tx"/>
+        <result property="lastUpdTxnId" column="last_upd_txn_id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    act_id,ordertype_id,browse_path,page_type,page_id,act_name,publish_status,act_filename,start_time,end_time,remark,sub_key_cd1,sub_key_cd2,sub_key_cd3,misc_tx,last_upd_txn_id,vendor_id,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="EsphtmInfModel" useGeneratedKeys="true"
+            keyProperty="actId" keyColumn="act_id">
+        insert into tbl_esp_htm_inf
+        (act_id
+        ,ordertype_id
+        ,browse_path
+        ,page_type
+        ,page_id
+        ,act_name
+        ,publish_status
+        ,act_filename
+        ,start_time
+        ,end_time
+        ,remark
+        ,sub_key_cd1
+        ,sub_key_cd2
+        ,sub_key_cd3
+        ,misc_tx
+        ,last_upd_txn_id
+        ,vendor_id
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{actId}
+        ,#{ordertypeId}
+        ,#{browsePath}
+        ,#{pageType}
+        ,#{pageId}
+        ,#{actName}
+        ,#{publishStatus}
+        ,#{actFilename}
+        ,#{startTime}
+        ,#{endTime}
+        ,#{remark}
+        ,#{subKeyCd1}
+        ,#{subKeyCd2}
+        ,#{subKeyCd3}
+        ,#{miscTx}
+        ,#{lastUpdTxnId}
+        ,#{vendorId}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="EsphtmInfModel">
+        update tbl_esp_htm_inf set
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="browsePath !=null">browse_path = #{browsePath}
+                ,</if>
+            <if test="pageType !=null">page_type = #{pageType}
+                ,</if>
+            <if test="pageId !=null">page_id = #{pageId}
+                ,</if>
+            <if test="actName !=null">act_name = #{actName}
+                ,</if>
+            <if test="publishStatus !=null">publish_status = #{publishStatus}
+                ,</if>
+            <if test="actFilename !=null">act_filename = #{actFilename}
+                ,</if>
+            <if test="startTime !=null">start_time = #{startTime}
+                ,</if>
+            <if test="endTime !=null">end_time = #{endTime}
+                ,</if>
+            <if test="remark !=null">remark = #{remark}
+                ,</if>
+            <if test="subKeyCd1 !=null">sub_key_cd1 = #{subKeyCd1}
+                ,</if>
+            <if test="subKeyCd2 !=null">sub_key_cd2 = #{subKeyCd2}
+                ,</if>
+            <if test="subKeyCd3 !=null">sub_key_cd3 = #{subKeyCd3}
+                ,</if>
+            <if test="miscTx !=null">misc_tx = #{miscTx}
+                ,</if>
+            <if test="lastUpdTxnId !=null">last_upd_txn_id = #{lastUpdTxnId}
+                ,</if>
+            <if test="vendorId !=null">vendor_id = #{vendorId}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            modify_time = now()
+        where act_id = #{actId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="actId !=null">and act_id like concat(concat('%',#{actId}),'%')</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="browsePath !=null">and browse_path = #{browsePath}</if>
+            <if test="pageType !=null">and page_type = #{pageType}</if>
+            <if test="pageId !=null">and page_id = #{pageId}</if>
+            <if test="actName !=null">and act_name like concat(concat('%',#{actName}),'%')</if>
+            <if test="publishStatus !=null">and publish_status = #{publishStatus}</if>
+            <if test="actFilename !=null">and act_filename = #{actFilename}</if>
+            <if test="startTime !=null">and start_time = #{startTime}</if>
+            <if test="endTime !=null">and end_time = #{endTime}</if>
+            <if test="remark !=null">and remark = #{remark}</if>
+            <if test="subKeyCd1 !=null">and sub_key_cd1 = #{subKeyCd1}</if>
+            <if test="subKeyCd2 !=null">and sub_key_cd2 = #{subKeyCd2}</if>
+            <if test="subKeyCd3 !=null">and sub_key_cd3 = #{subKeyCd3}</if>
+            <if test="miscTx !=null">and misc_tx = #{miscTx}</if>
+            <if test="lastUpdTxnId !=null">and last_upd_txn_id = #{lastUpdTxnId}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="oper !=null">
+              <if test="oper ==0">and vendor_id is null</if><if test="oper ==1">and vendor_id is not null</if>
+            </if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EsphtmInfMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_esp_htm_inf
+       where act_id=#{actId}
+    </select>
+    <select id="findAll" resultMap="EsphtmInfMap">
+        select
+        <include refid="columns"/>
+        from tbl_esp_htm_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="EsphtmInfMap">
+        select
+        <include refid="columns"/>
+        from tbl_esp_htm_inf
+        <include refid="conditions"/>
+        <![CDATA[ order by page_type desc ,create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_esp_htm_inf
+        <include refid="conditions"/>
+    </select>
+    <delete id="delete" parameterType="String">
+        delete from tbl_esp_htm_inf where act_id=#{actId}
+    </delete>
+
+    <update id="updateVendorId" parameterType="EsphtmInfModel">
+        update tbl_esp_htm_inf set
+            publish_status = #{publishStatus},
+            modify_oper = #{modifyOper},
+            vendor_id = #{vendorId},
+            modify_time = now()
+        where act_id=#{actId}
+    </update>
+
+    <!--<update id="updateVendorId" parameterType="EsphtmInfModel">-->
+        <!--update tbl_esp_htm_inf set-->
+        <!--<if test="vendorId !=null">-->
+          <!--<if test="vendorId ==''">vendor_id = null,</if><if test="vendorId !=''">vendor_id = #{vendorId},</if>-->
+        <!--</if>-->
+        <!--<if test="publishStatus !=null">publish_status = #{publishStatus},-->
+        <!--</if>-->
+        <!--<if test="modifyOper !=null">modify_oper = #{modifyOper},-->
+        <!--</if>-->
+        <!--modify_time = now()-->
+        <!--where act_id=#{actId}-->
+    <!--</update>-->
+
+    <select id="findEndHtml" parameterType="EsphtmInfModel" resultMap="EsphtmInfMap">
+        SELECT
+        act_id, end_time
+        from tbl_esp_htm_inf
+        <where>
+            <if test="vendorId !=null">vendor_id = #{vendorId}
+            </if>
+        </where>
+    </select>
+</mapper>
+
+

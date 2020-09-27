@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="cn.com.cgbchina.trade.model.DeadlineModel" alias="DeadlineModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderSubModel" alias="OrderSub"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderMainModel" alias="OrderMain"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderTransModel" alias="OrderTrans"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderGoodsDetailModel" alias="OrderGoodsDetail"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderDoDetailModel" alias="OrderDoDetail"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderPartBackModel" alias="OrderPartBackModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderPartBackModel" alias="OrderPartBackModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderReturnTrackModel" alias="OrderReturnTrackModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblOrderHistoryModel" alias="TblOrderHistoryModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblOrdermainHistoryModel" alias="TblOrdermainHistoryModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblOrderExtend1Model" alias="TblOrderExtend1Model"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderCheckModel" alias="OrderCheckModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderClearModel" alias="OrderClearModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblMakecheckjobHistoryModel" alias="TblMakecheckjobHistoryModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderClearModel" alias="OrderClearModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderReturnTrackDetailModel" alias="OrderReturnTrackDetailModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderOutSystemModel" alias="OrderOutSystemModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.BuyCountModel" alias="BuyCountModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderVirtualModel" alias="OrderVirtualModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblOrderCardMappingModel" alias="TblOrderCardMappingModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblEspCustCartModel" alias="TblEspCustCartModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblOrderCancelModel" alias="TblOrderCancelModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblOrderExtend2Model" alias="TblOrderExtend2Model"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblCfgSysparamModel" alias="TblCfgSysparamModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.AuctionRecordModel" alias="AuctionRecordModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderCancelModel" alias="OrderCancelModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblOrderMainBackupModel"  alias="TblOrderMainBackupModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.OrderBackupModel"  alias="OrderBackupModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblBatchStatusModel"  alias="TblBatchStatusModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.TblOrderMainHisModel"  alias="TblOrderMainHisModel"/>
+        <typeAlias type="cn.com.cgbchina.trade.model.SaleRankModel"  alias="SaleRankModel"/>
+    </typeAliases>
+</configuration>

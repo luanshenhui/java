@@ -1,0 +1,16 @@
+package cn.rkylin.oms.system.appClient.dao;
+
+import cn.rkylin.oms.system.appClient.domain.App;
+import cn.rkylin.oms.system.appClient.vo.AppVo;
+
+public interface IAppDAO {
+
+	void saveApp(App app) throws Exception;
+
+	void deleteApp(App app) throws Exception;
+
+	AppVo getAppDetail(App app) throws Exception;
+
+	void updateApp(App app) throws Exception;
+
+}

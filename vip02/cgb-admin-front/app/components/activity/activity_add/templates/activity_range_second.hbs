@@ -1,0 +1,31 @@
+{{#each this}}
+    <tr class="activeRuleTr" data-component="" data-id="{{index}}">
+        <td class="NO">{{index}}</td>
+        <td class="sequence"><input type="text" class="form-label-15" maxlength="3" value="{{seq}}"></td>
+        <td class="category" data-category="{{backCategory}}">{{backCategoryName}}</td>
+        <td class="goodsBrandName">{{goodsBrandName}}</td>
+        <td class="itemCode">{{itemCode}}</td>
+        <td class="goodsName">{{goodsName}}</td>
+        <td class="suppliers">{{venderName}}</td>
+        <td class="sid">
+            {{#equals costBy "1"}}
+                <input type="radio" name="cost{{index}}" value="行方">行方
+                <input type="radio" name="cost{{index}}" value="供应商" checked>供应商
+            {{else}}
+                <input type="radio" name="cost{{index}}" value="行方" checked>行方
+                <input type="radio" name="cost{{index}}" value="供应商">供应商
+            {{/equals}}
+        </td>
+        <td class="sid"><input type="text" class="form-control form-label-35" maxlength="10" value="{{price}}"></td>
+        <td class="sid"><input type="text" class="form-control form-label-35" maxlength="10" value="{{stock}}"></td>
+
+        {{#equals couponEnable "1"}}
+            <td class="sid"><input type="checkbox" class="second-checkbox" checked="checked"></td>
+        {{else}}
+            <td class="sid"><input type="checkbox" class="second-checkbox" ></td>
+        {{/equals}}
+
+        <td class="sid"><a class="btn btn-info btn-small js-content-delete">删除</a></td>
+        <td class="goodsCode" style="display: none">{{goodsCode}}</td>
+    </tr>
+{{/each}}

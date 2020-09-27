@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CouponInfModel">
+    <resultMap id="CouponInfMap" type="CouponInfModel">
+        <result property="id" column="id"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="couponNm" column="coupon_nm"/>
+        <result property="backCategoryId" column="back_category_id"/>
+        <result property="backCategoryNm" column="back_category_nm"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="vendorNms" column="vendor_nms"/>
+        <result property="brandId" column="brand_id"/>
+        <result property="brandName" column="brand_name"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="isManual" column="is_manual"/>
+        <result property="isFirstlogin" column="is_firstlogin"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="backCategoryNm" column="back_category_nm"/>
+        <result property="vendorNms" column="vendor_nms"/>
+        <result property="brandName" column="brand_name"/>
+        <result property="goodsName" column="goods_name"/>
+    </resultMap>
+    <sql id="columns">
+    id,coupon_id,coupon_nm,back_category_id,back_category_nm,vendor_id,vendor_nms,brand_id,brand_name,goods_id,goods_name,is_manual,is_firstlogin,start_time,end_time,del_flag,create_oper,create_time,modify_oper,modify_time,back_category_nm,vendor_nms,brand_name,goods_name
+    </sql>
+
+    <insert id="insert" parameterType="CouponInfModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_coupon_inf
+        (coupon_id
+        ,coupon_nm
+        ,back_category_id
+        ,back_category_nm
+        ,vendor_id
+        ,vendor_nms
+        ,brand_id
+        ,brand_name
+        ,goods_id
+        ,goods_name
+        ,is_manual
+        ,is_firstlogin
+        ,start_time
+        ,end_time
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        )
+        values(#{couponId}
+        ,#{couponNm}
+        ,#{backCategoryId}
+        ,#{backCategoryNm}
+        ,#{vendorId}
+        ,#{vendorNms}
+        ,#{brandId}
+        ,#{brandName}
+        ,#{goodsId}
+        ,#{goodsName}
+        ,#{isManual}
+        ,#{isFirstlogin}
+        ,#{startTime}
+        ,#{endTime}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        )
+    </insert>
+
+    <update id="update" parameterType="CouponInfModel">
+        update tbl_coupon_inf set
+        <if test="couponId !=null">coupon_id = #{couponId}
+            ,
+        </if>
+        <if test="couponNm !=null">coupon_nm = #{couponNm}
+            ,
+        </if>
+        <if test="backCategoryId !=null and backCategoryId != ''">back_category_id = #{backCategoryId}
+            ,
+        </if>
+        <if test="backCategoryNm !=null and backCategoryNm != ''">back_category_nm = #{backCategoryNm}
+            ,
+        </if>
+        <if test="vendorId !=null and vendorId != ''">vendor_id = #{vendorId}
+            ,
+        </if>
+        <if test="vendorNms !=null and vendorNms != ''">vendor_nms = #{vendorNms}
+            ,
+        </if>
+        <if test="brandId !=null and brandId != ''">brand_id = #{brandId}
+            ,
+        </if>
+        <if test="brandName !=null and brandName != ''">brand_name = #{brandName}
+            ,
+        </if>
+        <if test="goodsId !=null and goodsId != ''">goods_id = #{goodsId}
+            ,
+        </if>
+        <if test="goodsName !=null and goodsName != ''">goods_name = #{goodsName}
+            ,
+        </if>
+        <if test="isManual !=null">is_manual = #{isManual}
+            ,
+        </if>
+        <if test="isFirstlogin !=null">is_firstlogin = #{isFirstlogin}
+            ,
+        </if>
+        <if test="startTime !=null">start_time = #{startTime}
+            ,
+        </if>
+        <if test="endTime !=null">end_time = #{endTime}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        create_time = now()
+        , modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="couponId !=null">and coupon_id = #{couponId}</if>
+            <if test="couponNm !=null">and coupon_nm = #{couponNm}</if>
+            <if test="backCategoryId !=null">and back_category_id = #{backCategoryId}</if>
+            <if test="backCategoryNm !=null">and back_category_nm = #{backCategoryNm}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="vendorNms !=null">and vendor_nms = #{vendorNms}</if>
+            <if test="brandId !=null">and brand_id = #{brandId}</if>
+            <if test="brandName !=null">and brand_name = #{brandName}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="goodsName !=null">and goods_name = #{goodsName}</if>
+            <if test="isManual !=null">and is_manual = #{isManual}</if>
+            <if test="isFirstlogin !=null">and is_firstlogin = #{isFirstlogin}</if>
+            <if test="startTime !=null">and start_time = #{startTime}</if>
+            <if test="endTime !=null">and end_time = #{endTime}</if>
+            and del_flag = 0
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="backCategoryNm !=null">and back_category_nm = #{backCategoryNm}</if>
+            <if test="vendorNms !=null">and vendor_nms = #{vendorNms}</if>
+            <if test="brandName !=null">and brand_name = #{brandName}</if>
+            <if test="goodsName !=null">and goods_name = #{goodsName}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="CouponInfMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        where id=#{id}
+    </select>
+    <select id="findByCouponId" parameterType="Map" resultMap="CouponInfMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        where coupon_id = #{couponId}
+    </select>
+    <select id="findAll" resultMap="CouponInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="CouponInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="CouponInfModel">
+        delete from tbl_coupon_inf where id = id
+    </delete>
+
+    <select id="findByFirstLogin" resultMap="CouponInfMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        where del_flag = 0 and is_firstlogin = 1 and <![CDATA[start_time < now()]]> and <![CDATA[now() < end_time]]>
+    </select>
+
+    <!--我的优惠券，详细-->
+    <select id="detailedCoupon" parameterType="Integer" resultMap="CouponInfMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_coupon_inf
+        where id=#{projectNO}
+    </select>
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_coupon_inf
+        <include refid="conditions"/>
+    </select>
+</mapper>
+
+

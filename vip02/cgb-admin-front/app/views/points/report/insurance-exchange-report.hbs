@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（中国人寿保险标准卡旅行意外）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF21",
+            "reportCode":"JF21,JF52"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

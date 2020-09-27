@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblEspKeywordRecordModel">
+    <resultMap id="TblEspKeywordRecordMap" type="TblEspKeywordRecordModel">
+        <result property="id" column="id"/>
+        <result property="keyWords" column="key_words"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,key_words,ordertype_id,source_id,create_oper,create_time
+    </sql>
+
+    <insert id="insert" parameterType="TblEspKeywordRecordModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_esp_keyword_record
+        (key_words
+        ,ordertype_id
+        ,source_id
+        ,create_oper
+        ,create_time)
+        values(#{keyWords}
+        ,#{ordertypeId}
+        ,#{sourceId}
+        ,#{createOper}
+        ,#{createTime})
+    </insert>
+
+    <update id="update" parameterType="TblEspKeywordRecordModel">
+        update tbl_esp_keyword_record set
+        <if test="keyWords !=null">key_words = #{keyWords}
+            ,
+        </if>
+        <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+            ,
+        </if>
+        <if test="sourceId !=null">source_id = #{sourceId}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="keyWords !=null">and key_words = #{keyWords}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="sourceId !=null">and source_id = #{sourceId}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+        </where>
+    </sql>
+
+    <sql id="conditionsLike">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="keyWords !=null">and key_words LIKE concat(concat('%',#{keyWords}),'%')</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="sourceId !=null">and source_id = #{sourceId}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+        </where>
+    </sql>
+
+    <select id="findById" parameterType="Map" resultMap="TblEspKeywordRecordMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_keyword_record
+        where id=#{id}
+    </select>
+
+    <select id="findByKeyWords" parameterType="Map" resultMap="TblEspKeywordRecordMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_keyword_record
+        where key_words=#{keyWords}
+    </select>
+
+    <select id="findAll" resultMap="TblEspKeywordRecordMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_keyword_record
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblEspKeywordRecordMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_keyword_record
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="pagerLike" parameterType="Map" resultMap="TblEspKeywordRecordMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_keyword_record
+        <include refid="conditionsLike"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_esp_keyword_record
+        <include refid="conditions"/>
+    </select>
+
+    <select id="countLike" resultType="Long">
+        select count(1)
+        from tbl_esp_keyword_record
+        <include refid="conditionsLike"/>
+    </select>
+
+    <delete id="delete" parameterType="TblEspKeywordRecordModel">
+        delete from tbl_esp_keyword_record where id = id
+    </delete>
+</mapper>
+
+

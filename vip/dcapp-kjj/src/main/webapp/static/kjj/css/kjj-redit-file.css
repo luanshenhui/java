@@ -1,0 +1,132 @@
+.box-all{
+    width: 1840px;
+    margin-left: 0;
+}
+.box-all .box-right-title{
+    width: 1837px;
+    margin-left: 0;
+}
+.redit-main .redit-table{
+    width: 100%;
+    background: url("../image/redit-table-bg.png") repeat-x;
+}
+.redit-table thead tr {
+    background: url("../image/redit-title-line.png") repeat-x;
+    height: 50px;
+}
+.redit-table thead th{
+    font-size: 20px;
+}
+.redit-table tbody tr:nth-child(1){
+    border-top: 3px solid #000;
+}
+.redit-table tbody tr{
+    height: 230px;
+}
+.redit-table tbody tr td{
+    border-bottom: 3px solid #000;
+    border-top: 1px solid #404141;
+}
+.redit-table tbody td{
+    text-align: center;
+    font-size: 18px;
+}
+.redit-table .width240{
+    width: 240px;
+}
+.redit-table a.redit-detail{
+    position: relative;
+    display: inline-block;
+    height: 45px;
+    line-height: 45px;
+    cursor: pointer;
+    color: #fff;
+    width: 135px;
+    background: url("../image/redit-a-line.png") repeat-x;
+}
+.redit-table a.redit-detail:before,.redit-table a.redit-detail:after{
+    position: absolute;
+    width: 15px;
+    height: 45px;
+    top:0;
+    content: '';
+}
+.redit-table a.redit-detail:before{
+    left:-15px;
+    background: url("../image/redit-a-left.png");
+}
+.redit-table a.redit-detail:after{
+    right:-15px;
+    background: url("../image/redit-a-right.png");
+}
+.redit-table a.redit-detail:hover,.redit-table a.redit-detail.on{
+    background:url("../image/left-btn-on-line.png");
+}
+.redit-table a.redit-detail:hover:before,.redit-table a.redit-detail.on:before{
+    background:url("../image/left-btn-on-left.png");
+}
+.redit-table a.redit-detail:hover:after,.redit-table a.redit-detail.on:after{
+    background:url("../image/left-btn-on-right.png");
+}
+.redit-pop{
+    position: fixed;
+    top:50%;
+    left: 50%;
+    margin-left: -477px;
+    margin-top: -455px;
+    width: 955px;
+    height: 910px;
+    background: #343637;
+    border:2px solid #000;
+    display: none;
+}
+.redit-pop-title{
+    position: relative;
+    margin-top:4px;
+    font-size: 18px;
+    padding-left: 20px;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    background: url("../image/redit-pop-head-bg.png") repeat-x;
+}
+.redit-pop-title>i.shut{
+    position: absolute;
+    top:13px;
+    right:20px;
+    width:24px;
+    height: 24px;
+    background: url("../image/plus-icon.png");
+    cursor: pointer;
+}
+.redit-pop .redit-detail-table{
+    width: 955px;
+    border-collapse: collapse;
+}
+.redit-pop .redit-detail-table tr{
+    height: 60px;
+    line-height: 60px;
+}
+.redit-pop .redit-detail-table tr td{
+    border:2px solid #000;
+    padding-left: 15px;
+}
+.redit-pop .redit-detail-table tr.pop-table-bg2 td{
+    background: #282828;
+}
+.height165 td{
+    height: 162px;
+}
+.pop-bg-none{
+    background: none !important;
+}
+.redit-pop .redit-detail-table .detail-photo{
+    width: 180px;
+    height: 180px;
+    text-align: center;
+}
+.redit-pop .redit-detail-table .detail-photo img{
+    width: 128px;
+    height: 150px;
+}
+

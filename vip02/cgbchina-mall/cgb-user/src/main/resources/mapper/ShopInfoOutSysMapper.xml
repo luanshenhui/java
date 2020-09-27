@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ShopinfOutsystem">
+    <resultMap id="ShopInfoOutSysMap" type="ShopinfOutsystemModel">
+        <result property="id" column="id"/>
+        <result property="shopId" column="shop_id"/>
+        <result property="name" column="name"/>
+        <result property="outsystemId" column="outsystem_id"/>
+        <result property="actionUrl" column="action_url"/>
+        <result property="shopKey" column="shop_key"/>
+        <result property="key" column="key"/>
+        <result property="remark" column="remark"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="extend1" column="extend1"/>
+        <result property="extend2" column="extend2"/>
+        <result property="extend3" column="extend3"/>
+    </resultMap>
+    <sql id="columns">
+        id,shop_id,name,outsystem_id,action_url,shop_key,`key`,remark,create_oper,create_time,modify_oper,modify_time,extend1,extend2,extend3
+    </sql>
+
+    <insert id="insert" parameterType="ShopinfOutsystemModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_shopinf_outsystem
+        (shop_id
+        ,name
+        ,outsystem_id
+        ,action_url
+        ,shop_key
+        ,remark
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,extend1
+        ,extend2
+        ,extend3)
+        values(#{shopId}
+        ,#{name}
+        ,#{outsystemId}
+        ,#{actionUrl}
+        ,#{shopKey}
+        ,#{remark}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3})
+    </insert>
+
+    <update id="update" parameterType="ShopinfOutsystemModel">
+        update tbl_shopinf_outsystem set
+        shop_id
+        = #{shopId},name
+        = #{name},outsystem_id
+        = #{outsystemId},action_url
+        = #{actionUrl},shop_key
+        = #{shopKey},remark
+        = #{remark},create_oper
+        = #{createOper},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime},extend1
+        = #{extend1},extend2
+        = #{extend2},extend3
+        = #{extend3}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="shopId !=null">and shop_id = #{shopId}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="outsystemId !=null">and outsystem_id = #{outsystemId}</if>
+            <if test="actionUrl !=null">and action_url = #{actionUrl}</if>
+            <if test="shopKey !=null">and shop_key = #{shopKey}</if>
+            <if test="remark !=null">and remark = #{remark}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="extend1 !=null">and extend1 = #{extend1}</if>
+            <if test="extend2 !=null">and extend2 = #{extend2}</if>
+            <if test="extend3 !=null">and extend3 = #{extend3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="ShopInfoOutSysMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_shopinf_outsystem
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="ShopInfoOutSysMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_shopinf_outsystem
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="ShopInfoOutSysMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_shopinf_outsystem
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="ShopinfOutsystemModel">
+        delete from tbl_shopinf_outsystem where id = id
+    </delete>
+    <select id="findInfoById" parameterType="Map" resultMap="ShopInfoOutSysMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_shopinf_outsystem
+        where id=#{id}
+    </select>
+    <select id="findByVendorId" parameterType="String" resultMap="ShopInfoOutSysMap">
+    	select <include refid="columns"/> from tbl_shopinf_outsystem
+    	where shop_id=#{id} and type=1
+    </select>
+    
+    <select id="findMallKey" resultMap="ShopInfoOutSysMap">
+    	select <include refid="columns"/> from tbl_shopinf_outsystem
+    	where type=2
+    </select>
+    
+    <select id="findByOutSysId" parameterType="String" resultMap="ShopInfoOutSysMap">
+    	select <include refid="columns"/> from tbl_shopinf_outsystem
+    	where outsystem_id=#{id} and type=1
+    </select>
+</mapper>
+
+

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=EDGE;" />
+    <title>H4C2页面样式示例（IFRAME）</title>
+    <link type="text/css" rel="stylesheet" href="../../../styles/dpn.h4c2.css" />
+    <style type="text/css">
+        
+    </style>
+    <script type="text/javascript" src="../../../styles/dpn.h4c2.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+</head>
+<body>
+    <!-- **** head ********************************************************* -->
+
+    <!-- **** menu ********************************************************* -->
+
+    <!-- **** content ****************************************************** -->
+    <div class="dpn-content">
+        <div class="crumb">当前位置&nbsp;:&nbsp;基本组件&nbsp;&gt;&nbsp;对话框和提示框</div>
+        <div class="title">对话框样式示例</div>
+        <div class="tip">
+            <p class="success">提示信息对话框，单击<a id="show_info" class="zebratooltips" href="javascript:void(0);" title="提示信息对话框"><strong>这里</strong></a>。</p>
+            <p class="success">确认信息对话框，单击<a id="show_conf" class="zebratooltips" href="javascript:void(0);" title="确认信息对话框"><strong>这里</strong></a>。</p>
+            <p class="success">选择信息对话框，单击<a id="show_ques" class="zebratooltips" href="javascript:void(0);" title="选择信息对话框"><strong>这里</strong></a>。</p>
+            <p class="failure">警示信息对话框，单击<a id="show_warn" class="zebratooltips" href="javascript:void(0);" title="警示信息对话框"><strong>这里</strong></a>。</p>
+            <p class="failure">错误信息对话框，单击<a id="show_error" class="zebratooltips" href="javascript:void(0);" title="错误信息对话框"><strong>这里</strong></a>。</p>
+        </div>
+    </div>
+    <!-- **** foot ********************************************************* -->
+
+    <!-- **** javascript *************************************************** -->
+    <script type="text/javascript">
+        jQuery(function () {
+        	new jQuery.Zebra_Tooltips(jQuery('.zebratooltips'));
+        	
+            jQuery("#show_info").bind("click", function () {
+                jQuery.Zebra_Dialog("<strong>DPN对话框</strong>，提示信息。", {
+                    'type'          : 'information',
+                    'title'         : '提示信息对话框',
+                    'overlay_close' : false,
+                    'buttons'       : ['确认'],
+                    'onClose'       : function () {
+                        alert('进行对话框关闭后的处理。');
+                    }
+                });
+            });
+            
+            jQuery("#show_conf").bind("click", function () {
+                jQuery.Zebra_Dialog("<strong>DPN对话框</strong>，确认信息。", {
+                    'type'          : 'confirmation',
+                    'title'         : '确认信息对话框',
+                    'overlay_close' : false,
+                    'buttons'       : ['确认'],
+                    'onClose'       : function () {
+                        alert('进行对话框关闭后的处理。');
+                    }
+                });
+            });
+            
+            jQuery("#show_warn").bind("click", function () {
+                jQuery.Zebra_Dialog("<strong>DPN对话框</strong>，警示信息。", {
+                    'type'          : 'warning',
+                    'title'         : '警示信息对话框',
+                    'overlay_close' : false,
+                    'buttons'       : ['确认'],
+                    'onClose'       : function () {
+                        alert('进行对话框关闭后的处理。');
+                    }
+                });
+            });
+            
+            jQuery("#show_error").bind("click", function () {
+                jQuery.Zebra_Dialog("<strong>DPN对话框</strong>，错误信息。", {
+                    'type'          : 'error',
+                    'title'         : '错误信息对话框',
+                    'overlay_close' : false,
+                    'buttons'       : ['确认'],
+                    'onClose'       : function () {
+                        alert('进行对话框关闭后的处理。');
+                    }
+                });
+            });
+            
+            jQuery("#show_ques").bind("click", function () {
+                jQuery.Zebra_Dialog("<strong>DPN对话框</strong>，选择信息。", {
+                    'type'          : 'question',
+                    'title'         : '选择信息对话框',
+                    'overlay_close' : false,
+                    'buttons'       : ['确认', '取消'],
+                    'onClose'       : function (caption) {
+                        alert('进行选择' + (caption != '' ? '"' + caption + '"' : 'nothing') + '的处理。');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

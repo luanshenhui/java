@@ -1,0 +1,127 @@
+{{#component "activitys-add js-component"}}
+    <link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+
+    <p>
+        <strong class="main-box-title" data-type=true>- 新增活动 -</strong>
+    </p>
+    <form class="form form-information form-aligned newActivity-form newActivity-add-form form-inline">
+        <div>
+            <div class="control-group form-information active-name-check">
+                <label for="roleName"><span class="required">*</span>活动名称:</label>
+                <input name="name" class="form-control active-name" maxlength="100" type="text" placeholder="请输入活动主题"
+                       required>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+
+            </div>
+            <div class="control-group form-information">
+                <label for="roleName"><span class="required">*</span>活动简称:</label>
+                <input name="shortName" class="form-control shortName" type="text" maxlength="50" placeholder="请输入活动简称" required>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group form-information">
+                <label for="requestMoneyState"><span class="required">*</span>活动类型:</label>
+                <select id="ForType" name="promType" class="width-164" required >
+                    <option selected="selected" value="">请选择</option>
+                    <option value="10">折扣</option>
+                    <option value="20">满减</option>
+                    <option value="30">秒杀</option>
+                    <option value="40">团购</option>
+                    <option value="50">荷兰拍</option>
+                </select>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+        </div>
+        <div class="calculate-Time">
+            <h3>- 活动基本条件 -</h3>
+        <span class="control-group form-information sale-channel">
+            <label for="role"><span class="required">*</span>销售渠道:</label>
+            <input type="checkbox" name="sourceId" class="source">广发商城
+            <input type="checkbox" name="sourceId" class="source">CC
+            <input type="checkbox" name="sourceId" class="source">IVR
+            <input type="checkbox" name="sourceId" class="source">手机商城
+            <input type="checkbox" name="sourceId" class="source">短信
+            <input type="checkbox" name="sourceId" class="source">微信广发银行
+            <input type="checkbox" name="sourceId" class="source">微信广发信用卡
+            <input type="checkbox" name="sourceId" class="source hidden-display">
+            <input type="checkbox" name="sourceId" class="source hidden-display">
+            <input type="checkbox" name="sourceId" class="source">App
+        </span>
+
+            <div class="control-group form-information activeSignUpTime hideStyle m-t-10">
+                <label for="roleName"><span class="required">*</span>活动报名时间:</label>
+                <input class="beginEntryDate cursor-pointer" id="js-date-startEntry" name="beginEntryDate" required>
+                - <input class="endEntryDate cursor-pointer" id="js-date-endEntry" name="endEntryDate" required>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group form-information">
+                <label for="roleName"><span class="required">*</span>活动时间:</label>
+                <input class="beginDate cursor-pointer" id="js-date-start" name="beginDate" required>
+                - <input class="endDate cursor-pointer" id="js-date-end" name="endDate" required/>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div>
+            <span class="control-group form-information">
+                <label for="role">是否循环执行:</label>
+                <div class="input-padding">
+                    <input type="checkbox" class="recycleActivity" name="loopType">循环执行
+                </div>
+            </span>
+            </div>
+            <div class="padding-left-160 recycleActive">
+                <div class="dayWeekMonth"></div>
+                <div class="everyWeekOrMonth"></div>
+                <div class="loopTime"></div>
+            </div>
+        </div>
+        <div>
+            <h3>- 活动优惠规则 -</h3>
+            <a class="btn btn-info btn-small fullDown-add-btn hideStyle">新增</a>
+
+            <div class="control-group1 active-sale-rule"></div>
+        </div>
+
+        <div>
+            <h3 class="activity-range">- 活动范围 -</h3>
+
+            <div class="activeRangeAddBtn hideStyle">
+                <a class="btn btn-info btn-small js—add—content">新增</a>
+            </div>
+            <div class="activeRangeAddBtn-discount hideStyle">
+                <a class="btn btn-info btn-small range-add-btn">新增</a>
+            </div>
+            <div class="activeRangeAddBtn-fullDown hideStyle">
+                <a class="btn btn-info btn-small range-add-btn">新增</a>
+            </div>
+            <div class="activeRange scroll-800">
+
+            </div>
+        </div>
+        <div>
+            <h3>- 促销内容 -</h3>
+
+            <div class="" id="text-content">
+                <script type="text/plain" id="myEditor" style="width:950px;height:240px;"></script>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <div class="margin-center">
+            <input type="submit" class="btn btn-success btn-medium js-activity-create new-active-save" value="保存">
+            <input type="submit" class="btn btn-success btn-medium js-activity-create new-active-submit-auditing"
+                   value="提交审核">
+            <button class="alert-confirm" style="display: none"
+                    data-toggle="confirm"
+                    data-title="您确定提交吗?" data-content="提交之后无法恢复,确定要提交吗？"
+                    data-event="confirm:submitAjax">
+            </button>
+
+            <button class="btn btn-info btn-medium active-add-close">取消</button>
+        </div>
+    </div>
+    <script src="/static/scripts/laydate/laydate.js"></script>
+{{/component}}

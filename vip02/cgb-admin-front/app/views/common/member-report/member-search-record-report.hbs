@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}会员搜索记录报表{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"HY03",
+            "reportCode":"HY03,HY04"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

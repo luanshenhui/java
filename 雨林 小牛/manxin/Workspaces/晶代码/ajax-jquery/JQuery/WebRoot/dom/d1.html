@@ -1,0 +1,39 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	function f1(){
+		//html()方法等价于innerHTML属性
+		//alert($('#d1').html());
+		//text()方法等价于innerText属性
+		//alert($('#d1').text());
+		$('#d1').text('hello java');
+	}
+	
+	function f2(){
+		$('#d1').html('hello java');
+	}
+	
+	function f3(){
+		//alert($('#d1').attr('id'));
+		$('#d1').attr('style','color:red;font-size:60px;');
+	}
+	
+	function f4(){
+		//alert($(':input').val());
+		$(':input').val('小月');
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+		<div id="d1"><span>hello jQuery</span></div>
+		username:<input name="username"/><br/>
+		<a href="javascript:;" 
+	onclick="f4();">ClickMe</a>
+		
+		
+</body>
+</html>

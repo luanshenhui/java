@@ -1,0 +1,56 @@
+<div class="modal special-points-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>特殊积分兑换倍率设置</h2></div>
+
+    <form class="form specialPoints-form">
+        <input type="hidden" id="id" name="id" value="{{data.id}}">
+        <div class="modal-body" {{#equals "edit" title}} style="min-height:0" {{else}} style="height: 360px" {{/equals}}>
+            <table class="modal-body-table">
+                <col width="17%"/>
+                <col width="30%"/>
+                <col width="17%"/>
+                <col width="30%"/>
+                <tr>
+                    <th>最高支付比例：</th>
+                    <td><input type="text" id="scale" name="scale" value="{{data.scale}}"  data-type="{{data.type}}"
+                               class="form-control order-form col-3">
+                    </td>
+                    {{#equals "edit" title}}
+                    {{else}}
+                        <th>类别：</th>
+                        <td><span class="col-box col-left-goods form-width">
+                            <select name="type" id="special-type" class="form-width-313 js-category-select">
+                                <option value="0">供应商</option>
+                                <option value="1">品牌</option>
+                                <option value="2">类目</option>
+                                <!--<option value="3">商品</option>-->
+                            </select>
+                            </span></td>
+                    {{/equals}}
+                </tr>
+                <tr id="only-tr" {{#equals data.scale '1'}}
+                                    {{#equals data.type '3'}}{{else}}class="display-none"{{/equals}}
+                                 {{else}}class="display-none"{{/equals}}>
+                    <!--<td colspan="4">-->
+                        <!--<input value="{{data.type}}" type="hidden" />-->
+                        <!--<input type="checkbox" name="displayFlag" id="displayFlag"-->
+                            <!--{{#equals data.displayFlag '1'}} checked {{/equals}}/>-->
+                        <!--<span>是否只展示全积分支付</span>-->
+                    <!--</td>-->
+                </tr>
+                {{#equals "edit" title}}
+                {{else}}
+                    <tr class="special-points-item" style="padding: 0 10px;">
+                        <td class="js-select-result" colspan="4"></td>
+                    </tr>
+                {{/equals}}
+            </table>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small js-specil-confirm" value="确定">
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+
+</div>

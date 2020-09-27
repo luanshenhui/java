@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yulin.userMapping">
+	<select id="findUserById" parameterType="int" resultType="com.yulin.dangdang.bean.User">
+		select * from d_user where id = #{id};
+	</select>
+	<insert id="insert" parameterType="com.yulin.dangdang.bean.User">
+		insert into d_user values(#{id},#{email},#{nickname},#{password},#{user_integral},
+		#{is_email_verify},#{email_verify_code},#{last_login_time},#{last_login_ip});
+	</insert>
+	
+	<select id="findByLogin" parameterType="map" resultType="com.yulin.dangdang.bean.User">
+		select * from d_user where email = #{email} and password = #{pwd};
+	</select>
+	
+	<select id="findByEmail" parameterType="map" resultType="com.yulin.dangdang.bean.User">
+		select email from d_user where email = #{email};
+	</select>
+	<update id="updateCode" parameterType="string">
+		update d_user set is_email_verify = 'y' where email = #{email};
+	</update>
+</mapper>

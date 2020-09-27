@@ -1,0 +1,135 @@
+package cn.rkylin.oms.system.storage.dao;
+
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.storage.domain.OMS_STOR;
+import cn.rkylin.oms.system.storage.vo.StorVO;
+
+/**
+ * <p>
+ * Module : 仓库管理
+ * </p>
+ * <p>
+ * Description: 仓库业务对象
+ * </p>
+ * <p>
+ * Remark :
+ * </p>
+ */
+@Repository(value = "storDAO")
+public class StorDAOImpl implements IStorDAO {
+	
+	/**
+	 * 自定义baseDao 增删改查方法
+	 */
+	@Autowired
+	protected IDataBaseFactory dao;
+	
+	/**
+	 * 自定义baseDao 增删改查方法
+	 */
+	@Autowired
+	private IDataBaseFactory dataBaseFactory;
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getStorByCondition(OMS_STOR storVO, int page, int rows) throws Exception {
+		// List<WF_ORG_ROLE> resultList = new ArrayList();
+		StorVO vo = new StorVO();
+		BeanUtils.copyProperties(storVO, vo);
+		return dataBaseFactory.findPage(page, rows, "getStorByCondition", vo).getList();
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 删除仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@Override
+	public void delete(String string) throws Exception {
+		dao.delete("deleteStor", string);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@Override
+	public List getStorByCondition(StorVO storVO) throws Exception {
+		return dao.findAllList("getStorByCondition", storVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 添加仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@Override
+	public void insert(StorVO storVO) throws Exception {
+		dao.insert("insertStor", storVO);
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	public OMS_STOR findByid(String storId) throws Exception {
+		List<StorVO> resultList = dao.findList("selectById", storId);
+		if (resultList != null && resultList.size() > 0) {
+			return resultList.get(0);
+		}
+		return null;
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 修改仓库
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 */
+	@Override
+	public void update(OMS_STOR ur) throws Exception {
+		dao.update("updateStor", ur);
+	}
+
+}

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BusinessConfig">
+    <resultMap id="BusinessConfigMap" type="BusinessConfig">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="value1" column="value1"/>
+        <result property="value2" column="value2"/>
+        <result property="value3" column="value3"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,code,value1,value2,value3,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="BusinessConfig" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_business_config
+        (code
+        ,value1
+        ,value2
+        ,value3
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{code}
+        ,#{value1}
+        ,#{value2}
+        ,#{value3}
+        ,#{delFlag}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="BusinessConfig">
+        update tbl_business_config set
+        code
+        = #{code},value1
+        = #{value1},value2
+        = #{value2},value3
+        = #{value3},del_flag
+        = #{delFlag},create_oper
+        = #{createOper},create_time
+        = #{createTime},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="code !=null">and code = #{code}</if>
+            <if test="value1 !=null">and value1 = #{value1}</if>
+            <if test="value2 !=null">and value2 = #{value2}</if>
+            <if test="value3 !=null">and value3 = #{value3}</if>
+            <if test="delFlag !=null">and delFlag = #{delFlag}</if>
+            <if test="createOper !=null">and createOper = #{createOper}</if>
+            <if test="createTime !=null">and createTime = #{createTime}</if>
+            <if test="modifyOper !=null">and modifyOper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modifyTime = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="BusinessConfigMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_business_config
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="BusinessConfigMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_business_config
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="BusinessConfigMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_business_config
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="BusinessConfig">
+        delete from tbl_business_config where id = id
+    </delete>
+</mapper>
+
+

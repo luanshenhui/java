@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderCheckModel">
+    <resultMap id="OrderCheckMap" type="OrderCheckModel">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="curStatusId" column="cur_status_id"/>
+        <result property="curStatusNm" column="cur_status_nm"/>
+        <result property="doDate" column="do_date"/>
+        <result property="doTime" column="do_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="doDesc" column="do_desc"/>
+        <result property="ischeck" column="ischeck"/>
+        <result property="ispoint" column="ispoint"/>
+        <result property="jfRefundSerialno" column="jf_refund_serialno"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+    id,order_id,cur_status_id,cur_status_nm,do_date,do_time,modify_time,do_desc,ischeck,ispoint,jf_refund_serialno,create_oper,modify_oper,create_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="OrderCheckModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_check
+        (order_id
+        ,cur_status_id
+        ,cur_status_nm
+        ,do_date
+        ,do_time
+        ,modify_time
+        ,do_desc
+        ,ischeck
+        ,ispoint
+        ,jf_refund_serialno
+        ,create_oper
+        ,modify_oper
+        ,create_time
+        ,del_flag)
+        values(#{orderId}
+        ,#{curStatusId}
+        ,#{curStatusNm}
+        ,#{doDate}
+        ,#{doTime}
+        ,now()
+        ,#{doDesc}
+        ,#{ischeck}
+        ,#{ispoint}
+        ,#{jfRefundSerialno}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,now()
+        ,#{delFlag})
+    </insert>
+
+    <update id="update" parameterType="OrderCheckModel">
+        update tbl_order_check set
+            <if test="orderId !=null">order_id = #{orderId}
+                ,</if>
+            <if test="curStatusId !=null">cur_status_id = #{curStatusId}
+                ,</if>
+            <if test="curStatusNm !=null">cur_status_nm = #{curStatusNm}
+                ,</if>
+            <if test="doDate !=null">do_date = #{doDate}
+                ,</if>
+            <if test="doTime !=null">do_time = #{doTime}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = now()
+                ,</if>
+            <if test="doDesc !=null">do_desc = #{doDesc}
+                ,</if>
+            <if test="ischeck !=null">ischeck = #{ischeck}
+                ,</if>
+            <if test="ispoint !=null">ispoint = #{ispoint}
+                ,</if>
+            <if test="jfRefundSerialno !=null">jf_refund_serialno = #{jfRefundSerialno}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="curStatusId !=null">and cur_status_id = #{curStatusId}</if>
+            <if test="curStatusNm !=null">and cur_status_nm = #{curStatusNm}</if>
+            <if test="doDate !=null">and do_date = #{doDate}</if>
+            <if test="doTime !=null">and do_time = #{doTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="doDesc !=null">and do_desc = #{doDesc}</if>
+            <if test="ischeck !=null">and ischeck = #{ischeck}</if>
+            <if test="ispoint !=null">and ispoint = #{ispoint}</if>
+            <if test="jfRefundSerialno !=null">and jf_refund_serialno = #{jfRefundSerialno}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="OrderCheckMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_order_check
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="OrderCheckMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_check
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="OrderCheckMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_check
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="OrderCheckModel">
+        delete from tbl_order_check where id = id
+    </delete>
+
+    <select id="orderCancelService" resultMap="OrderCheckMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_check
+        <include refid="conditions"/> and ispoint in ('0','1')
+    </select>
+
+    <!--批量插入-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tbl_order_check
+        (order_id
+        ,cur_status_id
+        ,cur_status_nm
+        ,do_date
+        ,do_time
+        ,modify_time
+        ,do_desc
+        ,ischeck
+        ,ispoint
+        ,jf_refund_serialno
+        ,create_oper
+        ,modify_oper
+        ,create_time
+        ,del_flag)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.orderId}
+        ,#{item.curStatusId}
+        ,#{item.curStatusNm}
+        ,#{item.doDate}
+        ,#{item.doTime}
+        ,now()
+        ,#{item.doDesc}
+        ,#{item.ischeck}
+        ,#{item.ispoint}
+        ,#{item.jfRefundSerialno}
+        ,#{item.createOper}
+        ,#{item.modifyOper}
+        ,now()
+        ,#{item.delFlag})
+        </foreach>
+    </insert>
+
+    <select id="findOrderChecks" parameterType="String" resultMap="OrderCheckMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_check
+        where ispoint in('0','1') and
+        cur_status_id in ('0305','0308') and
+        <![CDATA[date_format(do_date,'%Y-%m-%d') = #{create_date} ]]>
+        <![CDATA[ order by id desc]]>
+    </select>
+    <select id="findOrderChecks1" parameterType="String" resultMap="OrderCheckMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_check
+        where ispoint in('0','1') and
+        cur_status_id in ('0312','0327','0307','0380','0381') and
+        <![CDATA[date_format(do_date,'%Y-%m-%d') = #{create_date} ]]>
+        <![CDATA[ order by id desc]]>
+    </select>
+    <update id="updatePoint" parameterType="Map">
+        UPDATE tbl_order_check SET
+        ispoint = '1',
+        modify_time = now()
+        WHERE
+        id <![CDATA[<=]]> #{id} and
+        ispoint  in ('0','1') and
+        curStatusId in ('0305','0308') and
+        <![CDATA[date_format(do_date,'%Y-%m-%d') = #{create_date} ]]>
+    </update>
+    <update id="updatePoint1" parameterType="Map">
+        UPDATE tbl_order_check SET
+        ispoint = '1',
+        modify_time = now()
+        WHERE
+        id <![CDATA[<=]]> #{id} and
+        ispoint  in ('0','1') and
+        curStatusId in ('0312','0327','0307','0380','0381') and
+        <![CDATA[date_format(do_date,'%Y-%m-%d') = #{create_date} ]]>
+    </update>
+    <select id="findDoDate" resultMap="OrderCheckMap">
+        select
+        do_date
+        from tbl_order_check
+        where
+        ispoint = '0' and
+        <![CDATA[do_date != date_format(now(),'%Y-%m-%d')]]>
+    </select>
+</mapper>
+
+

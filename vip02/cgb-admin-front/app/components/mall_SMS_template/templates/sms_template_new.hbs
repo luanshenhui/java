@@ -1,0 +1,86 @@
+<div class="modal sms-template-new">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>设置界面</h2>
+    </div>
+    <form class="form form-aligned sms-template-form" data-id="{{id}}">
+        <div class="modal-body">
+            <div class="add-sms-template">
+                <!--隐藏传递id编辑的时候传值用-->
+                <input id="id" name="id" type="hidden" value="{{data.id}}"/>
+                <div class="control-group">
+                    <label for="itemCode"><span class="required">*</span>单品编码:</label>
+                    <input id="itemCode" name="itemCode" type="text" value="{{data.itemCode}}" maxlength="100"
+                           required/>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group">
+                    <label for="smspId"><span class="required">*</span>短信模板:</label>
+                    <select name="smspId" id="smspId" class="js-select-template">
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="time"><span class="required">*</span>有效期:</label>
+                    <input class="form-control application_date js-date-start" id="beginDate" name="beginDate" type="text"
+                           value="{{#formatDate data.beginDate 'day'}}{{/formatDate}}">
+                    <em>-</em>
+                    <input class="form-control authorize_date js-date-end" id="endDate" name="endDate" type="text"
+                           value="{{#formatDate data.endDate 'day'}}{{/formatDate}}">
+                </div>
+                <div class="control-group">
+                    <label for="voucherPrice">优惠券金额:</label>
+                    <input id="voucherPrice" name="voucherPrice" type="text" value="{{data.voucherPrice}}"
+                           maxlength="5"/>
+                </div>
+                <div class="control-group">
+                    <label for="ifPoint">是否使用积分:</label>
+                    <select name="ifPoint">
+                        <option value="1" {{#equals data.ifPoint "1" }} selected {{/equals}}>是</option>
+                        <option value="0" {{#equals data.ifPoint "0" }} selected {{/equals}}>否</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="couponId">优惠券项目名称:</label>
+                    <select  name="couponId" id="couponId">
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="sendDatetime"><span class="required">*</span>短信发送时间:</label>
+                    {{#equals data.sendDatetime "0"}}
+                        <input onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+                               id="sendDatetime" name="sendDatetime" class="form-control" type="text"
+                               value="" disabled/>
+                        <input class="send-now" type="checkbox" value="" checked >立即发送
+                    {{else}}
+                        <input onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+                               id="sendDatetime" name="sendDatetime" class="form-control" type="text"
+                               value="{{data.sendDatetime}}"/>
+                        <input class="send-now" type="checkbox" value="" >立即发送
+                    {{/equals}}
+                </div>
+                <div class="control-group">
+                    <label for="otherMess" class="detail-address"><span class="required">*</span>手工参数:</label>
+                    <textarea id="otherMess" name="otherMess" class="form-control"
+                              maxlength="200" required>{{data.otherMess}}</textarea>
+                    <span class="note"><i>&times;</i> 必填 不得为空</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                </div>
+                <div class="control-group">
+                    <label for="smsTemplate" class="smsTemplate">短信样例:</label>
+                    <textarea id="smsTemplate" name="smsTemplate" class="form-control css-textarea"
+                              maxlength="200"></textarea>
+                </div>
+                <div class="control-group">
+                    <span class="sms-template-notice">注：手工参数有多个，请用" | " 隔开</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" id="submit" class="btn btn-success btn-small" value="保存">
+            <button class="btn btn-close btn-small close">取消</button>
+        </div>
+    </form>
+</div>
+<script src="/static/scripts/laydate/laydate.js"></script>

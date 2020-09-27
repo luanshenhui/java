@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.messageDefine.dao.MessageDefineDaoImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.messageDefine.vo.MessageDefineVo">
+		<id column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="app_key" jdbcType="VARCHAR" property="appKey" />
+		<result column="app_secret" jdbcType="VARCHAR" property="appSecret" />
+		<result column="token" jdbcType="VARCHAR" property="token" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="deleted" jdbcType="VARCHAR" property="deleted" />
+		<result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+		<result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+		<result column="app_type" jdbcType="VARCHAR" property="appType" />
+        <result column="chk" jdbcType="VARCHAR" property="chk" />
+        <result column="operation" jdbcType="VARCHAR" property="operation" />
+	</resultMap>
+
+	<sql id="Base_Column_AppClient">
+	</sql>
+	
+</mapper>

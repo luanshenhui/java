@@ -1,0 +1,34 @@
+<script src="../information/common.js"></script>
+<script src="../information/list.js"></script>
+<div id="InformationSearch" class="list_search">
+	<h1></h1>
+	<label class="lblKeyword"></label><input type="text" id="keyword"/>
+	<a id="btnSearch"></a>
+	<a id="btnRemoveInformation"></a>
+	<a id="btnCreateInformation"></a>
+</div>
+<div id="InformationResult"></div>
+<div id="InformationStatistic"></div>
+<div id="InformationPagination" class="paging"></div>
+<textarea  id="InformationTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class='check'><input type="checkbox" onclick="$.csControl.checkAll('chkRow', this.checked);"/></td>
+			<td class="lblTitle"></td>
+			<td class="lblCategory"></td>
+			<td class="lblGroup"></td>
+			<td class="lblPubDate"></td>
+			<td class="lblEdit"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ID}">
+			<td class="center check"><input type="checkbox" value="{$T.row.ID}" name="chkRow"/></td>
+			<td class="link" onclick="$.csInformationList.openView('{$T.row.ID}')">{$T.row.title}</td>
+			<td>{$T.row.categoryName}</td>
+			<td>{$T.row.accessGroupNames}</td>
+			<td class="center">{$.csDate.formatMillisecondDate($T.row.pubDate)}</td>
+			<td class="center"><a class="edit" onclick="$.csInformationList.openPost('{$T.row.ID}')"></a></td>
+		</tr>
+		{#/for}
+	</table>
+</textarea >

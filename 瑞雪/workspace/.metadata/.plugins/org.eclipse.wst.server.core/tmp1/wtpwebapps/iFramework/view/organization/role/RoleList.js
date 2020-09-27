@@ -1,0 +1,152 @@
+jQuery(document).ready(function(){
+
+});
+
+function doQuery(queryFormName,listFormName){
+	var queryPara={
+			"roleName" : jQuery("#txtRoleName").val(),
+			"isAdminRole" : jQuery("#selIsAdminRole").val()
+		};
+	ECSideUtil.queryECForm(listFormName,queryPara,true);
+}
+
+function addRole(){
+	var sURL = webpath + "/view/organization/role/RoleDetail.jsp?opFlag=0";
+	window.parent.dialogPopup_L2(sURL,ROLE_DETAIL,280,400,true,"saveRole");
+	//opFlag ： 0 为新增保存；1为修改保存
+	//var sURL = webpath + "/view/organization/role/RoleDetail.jsp?opFlag=0";
+	//document.getElementById("roleDetailFrame").src=sURL;
+	//jQuery("#roleDetailDialog").dialog('open');
+	//var sendPara = new Object();
+	//sendPara.opFlag = 0; // 0 为新增保存；1为修改保存
+	//var returnObj = window.showModalDialog(webpath + '/view/organization/role/RoleDetail.jsp',sendPara,'dialogWidth=450px;status:no;scroll:no;dialogHeight=280px');
+	//if (returnObj){
+		//新建成功以后，没有任何操作。
+		//var jsonObj = eval('(' + returnObj + ')');
+		//alert(jsonObj.roleDetail.roleId);
+	//}
+}
+
+function updateRole(){
+	var sendPara = new Object();
+	var ecsideObj=ECSideUtil.getGridObj("ec");
+	var crow=ecsideObj.selectedRow;
+	if (crow == null || crow.cells[0] == undefined){
+		alert(SELECT_ROLE_TO_EDIT);
+		return;
+	}
+	var selectedRoleID = ECSideUtil.getPropertyValue(crow,"roleId","ec");
+	
+	
+	var sURL = webpath + "/view/organization/role/RoleDetail.jsp?opFlag=1&roleID=" + selectedRoleID;
+	window.parent.dialogPopup_L2(sURL,ROLE_DETAIL,280,400,true,"saveRole");
+	
+	
+	//var sURL = webpath + "/view/organization/role/RoleDetail.jsp?opFlag=1&roleID=" + selectedRoleID;
+	//document.getElementById("roleDetailFrame").src=sURL;
+	//jQuery("#roleDetailDialog").dialog('open');
+	//sendPara.roleID = selectedRoleID;
+	//sendPara.opFlag = 1; // 0 为新增保存；1为修改保存
+	//var returnObj = window.showModalDialog(webpath + '/view/organization/role/RoleDetail.jsp',sendPara,'dialogWidth=450px;status:no;scroll:no;dialogHeight=280px');
+	//if (returnObj){
+		//保存成功不刷新
+	//}
+}
+
+function deleteRole(queryFormName,listFormName){
+	//存放最终在删除的所有checked角色
+	var idString = "";
+	//用于存放当前页的id，历史页的id不在这里存放
+	var currentPageIDs ="";
+	var allcheckarray =ECSideUtil.getPageCheckValue("checkBoxID");
+	for(var i=0;i<allcheckarray.length;i++){
+		if(allcheckarray[i]== "adminRole"){
+			alert(ADMINROLE_CANT_DELETE);
+			return;
+		}
+	}
+	if(allcheckarray)
+		currentPageIDs = allcheckarray.join(",");
+	//表示hashtable中没有数据
+	if (hashTable.hashtable.length == 0){
+		idString = currentPageIDs;
+	} else {
+		//把每一页中选定的那些id都拼成一个串
+		for(i=0; i<hashTable.hashtable.length; i++){
+			if (hashTable.hashtable[i]){
+				idString += hashTable.hashtable[i];
+				if (i<hashTable.hashtable.length-1){
+					idString += ",";
+				}
+			}
+		}
+		if (ECSideUtil.trimString(currentPageIDs) != "")
+			idString += ("," + currentPageIDs);
+		idString = idString.split(",").uniq().join(",");
+		//alert(idString);
+	}
+	
+	//去除空格
+	idString = ECSideUtil.trimString(idString);
+	if (idString == ","){
+		idString = null;
+	}
+	//删除所选的角色id
+	if (idString == null || idString==undefined || idString==""){
+		alert(SELECT_ROLE_TO_DELETE);
+		return;
+	}
+	var roleIds = idString;
+	confirm(PROMPT_CONFIRM_DELETE,function(){
+		//alert(roleName + "，" +  roleDesc + "，" + roleMax + "，" + isAdminRole + "，" + roleUsers + "，" + roleUnits)
+		var sURL = webpath + "/RoleAction.do?method=deleteRole";
+		jQuery.ajax( {
+			url : sURL,
+			async : false,
+			type : "post",
+			dataType : "json",
+			data : {
+				roleIds : roleIds
+			},
+			success : function(data) {
+				if(data.errorMessage==null || data.errorMessage==undefined){
+					alert(DELETE_OK);
+					//删除后重新查询一下，相当于刷新 
+					var queryForm=$(queryFormName);
+					var queryPara={
+						"roleName" : queryForm["txtRoleName"].value != "" ? "%"+queryForm["txtRoleName"].value+"%" : "",
+						"isAdminRole" : queryForm["selIsAdminRole"].value
+					};
+					ECSideUtil.queryECForm(listFormName,queryPara,true);
+				} else {
+					if (data.errorMessage == "session timeout")
+						window.location.href = webpath + "/login.jsp";
+					else
+						alert(data.errorMessage);
+				}
+			},
+			error : function(XMLHttpRequest,textStatus,errorThrown){
+				alert(NET_FAILD);
+				// 通常 textStatus 和 errorThrown 之中 
+			    // 只有一个会包含信息 
+			    //this;  调用本次AJAX请求时传递的options参数
+			}
+		});
+	});
+}
+
+//选择用户
+function userSelect(){
+	var sURL = webpath + "/UserAction.do?method=getUser&forward=userSelect";
+	document.getElementById("userSelectFrame").src=sURL;
+	jQuery("#userSelectDialog").dialog('open');
+	//var returnObj = window.showModalDialog(webpath + '/UserAction.do?method=getUser&forward=userSelect',null,'dialogWidth=500px;status:no;scroll:no;dialogHeight=380px');
+	//if (returnObj){
+		//alert(returnObj.userIds);
+		//alert(returnObj.userTexts);
+	//	var itemIds = returnObj.itemIds;
+	//	var itemTexts = returnObj.itemTexts;
+	//	jQuery("#txtRoleUsers").val(itemTexts);
+	//	jQuery("#txtRoleUsersValue").val(itemIds);
+	//}
+}

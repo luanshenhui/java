@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.GroupMenu" table="GroupMenu">
+        <id name="ID" type="int">
+            <column name="ID"/>
+            <generator class="assigned" />
+        </id>
+        <property name="MenuIDs" type="text">
+            <column name="MenuIDs" />
+        </property>
+        <property name="QorderMenuIDs" type="text">
+            <column name="QorderMenuIDs" />
+        </property>
+    </class>
+</hibernate-mapping>

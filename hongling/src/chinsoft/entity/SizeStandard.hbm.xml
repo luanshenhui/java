@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.SizeStandard" table="SizeStandard">
+        <id name="ID">
+            <column name="ID"/>
+            <generator class="assigned" />
+        </id>
+        <property name="SingleClothingID" type="integer">
+            <column name="SingleClothingID"/>
+        </property>
+        <property name="SizeCategoryID" type="integer">
+            <column name="SizeCategoryID"/>
+        </property>
+        <property name="AreaID" type="integer">
+            <column name="AreaID"/>
+        </property>
+        <property name="PartID" type="integer">
+            <column name="PartID"/>
+        </property>
+        <property name="SpecHeight" type="string">
+            <column name="SpecHeight"/>
+        </property>
+        <property name="SpecChest" type="string">
+            <column name="SpecChest"/>
+        </property>
+        <property name="DefaultValue" type="float">
+            <column name="DefaultValue"/>
+        </property>
+        <property name="SizeFrom" type="float">
+            <column name="SizeFrom"/>
+        </property>
+        <property name="SizeTo" type="float">
+            <column name="SizeTo"/>
+        </property>
+		<property name="IsRequired" type="integer">
+            <column name="IsRequired"/>
+        </property>
+		<property name="SequenceNo" type="integer">
+            <column name="SequenceNo"/>
+        </property>
+        <property name="IsReadonly" type="integer">
+            <column name="IsReadonly"/>
+        </property>
+        <property name="Ecode" type="string">
+            <column name="Ecode"/>
+        </property>
+         <property name="PleatID" type="string">
+            <column name="PleatID"/>
+        </property>
+         <property name="GroupID" type="integer">
+            <column name="GroupID"/>
+        </property>
+        <property name="RangeStart" type="float">
+            <column name="RangeStart"/>
+        </property>
+        <property name="RangeStep" type="float">
+            <column name="RangeStep"/>
+        </property>
+    </class>
+</hibernate-mapping>

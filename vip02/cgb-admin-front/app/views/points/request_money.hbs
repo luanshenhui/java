@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}请款管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "points_request" true}}
+            {
+                "orderType":"JF",
+                "tabNumber": "1"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

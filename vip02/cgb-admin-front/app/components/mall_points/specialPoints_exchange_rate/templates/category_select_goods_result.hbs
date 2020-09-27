@@ -1,0 +1,25 @@
+<table class="table-0 border" width="0" border="0">
+    <tr>
+        <td>选择商品：
+            <input type="text" value="{{searchKey}}" class="form-control order-form col-3  js-search-value1" placeholder="请输入商品编码或名称">
+            <input type="button" class="btn btn-small btn-info margin-left-10 js-search-btn" value="搜索"/></td>
+
+    </tr>
+    <tr>
+        <td>
+            <div class="setting-scrll">
+                <table class="table-list">
+                    {{#each list}}
+                        <tbody>
+                        <tr>
+                            <td width="5%"><input type="checkbox" name="checkbox3"    id="{{this.code}}" data-value="{{this.name}}"></td>
+                            <td width="30%">{{this.code}}</td>
+                            <td width="65%" class="breakWords">{{this.name}}</td>
+                        </tr>
+                        </tbody>
+                    {{/each}}
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>

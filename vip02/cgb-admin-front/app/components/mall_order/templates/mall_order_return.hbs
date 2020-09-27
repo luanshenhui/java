@@ -1,0 +1,59 @@
+<div class="modal orderReturn">
+
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>退货详情</h2>
+    </div>
+
+    <div class="modal-body2">
+        <table>
+            <col width="20%"/>
+            <col width="80%"/>
+            <tr>
+                <th class="text-rg"><strong>当前退货状态：</strong></th>
+                <td class="font-color-red">{{status}}</td>
+            </tr>
+        </table>
+        <div class="main-box-title margin-top-10">操作历史</div>
+
+        <ul class="tmtimeline js-check-lastChild">
+            <li class="line"></li>
+            {{#each this.orderRrturnTrackDetailModels}}
+                {{#equals @index 0}}
+                    <li class="new">
+                        <i class="icon-p-new"></i>
+
+                        <p class="point">{{#formatDate this.createTime}}{{/formatDate}}</p>
+
+                        <div class="list">
+                            <p>退货原因：{{memo}}</p>
+                            {{#if memoExt}}
+                                <p>补充说明：{{memoExt}}</p>
+                            {{/if}}
+                            <p> {{doDesc}}</p>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </li>
+                {{else}}
+                    <li>
+                        <i class="icon-p-old"></i>
+
+                        <p class="point">{{#formatDate this.createTime}}{{/formatDate}}</p>
+
+                        <div class="list">
+                            <p>退货原因：{{memo}}</p>
+                            {{#if memoExt}}
+                                <p>补充说明：{{memoExt}}</p>
+                            {{/if}}
+                            <p> {{doDesc}}</p>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </li>
+                {{/equals}}
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="modal-footer"><a class="btn btn-success btn-small close">关 闭</a></div>
+</div>

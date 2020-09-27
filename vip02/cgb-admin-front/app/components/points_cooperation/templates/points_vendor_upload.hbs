@@ -1,0 +1,27 @@
+<div class="modal points-vendor-download">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>导入供应商</h2>
+    </div>
+    <form class="form form-aligned vendor-form-add" component-id="{{id}}">
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="file">导入文件：</label>
+                <!--<input type="text" class="input-width-270 file-input" readonly/>-->
+                <!--<input type="button" class="btn btn-success upload-btn btn-small upload-vendor-btn" value="上传文件"/>-->
+                <!--<input type="file"  class="img-upload upload-file  ipt" name="files" id="vendorfile"/>-->
+                <input type="text" class="input-width-270 file-input" readonly/>
+                <input type="button" class="btn btn-success upload-btn btn-small upload-vendor-btn" value="上传文件"/>
+                <input type="file"  class="img-upload upload-file  ipt" name="files" id="vendorfile"/>
+                <input type="button" class="btn btn-success btn-sm js-file-upload-btn" value="开始上传" />
+            </div>
+
+            <p class="font-size-12 font-color-gray">说明：上传文件格式必须是excel，请按照下载导入模板格式上传，否则文件录入无效。</p>
+            <div class="js-import-result"></div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-sm" value="确 定">
+            <button class="btn btn-small btn-info close">返 回</button>
+        </div>
+    </form>
+</div>

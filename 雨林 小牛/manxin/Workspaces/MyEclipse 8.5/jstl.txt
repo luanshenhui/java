@@ -1,0 +1,117 @@
+一、jstl与el表达式
+	1、jstl是什么?
+	java standard taglib(java标准标签库)。
+	2、标签是什么?
+		sun公司制订的一种技术规范，用来将jsp页面
+		中的java代码使用类似于html当中的标记来替换
+		的一种技术。这样做的目的，是为了使jsp页面
+		更好维护以及更好的测试。
+	3、el表达式是什么?
+		sun制订的一种用于计算的一种规则，早期只能
+		用于给标签的属性赋值，现在也可以直接输出。
+	4、el表达式的基本语法
+			${el表达式}
+			第一种：访问bean的属性
+				${user.name}:jsp引擎会依次从pageContext
+				、request、session、application查找绑订
+				名为"user"的对象，如果找到了，就不再向下
+				查找，否则，继续向下查找。
+				找到后，调用该对象的getName()，并输出其
+				值。
+				找不到，则输出""。
+				或者也可以使用
+				${user["name"]}或者是${user[propname]}
+				此外，[]里面还可以是0,1..这样的下标，作用
+				是输出数组里的元素值。
+				可以使用pageScope,requestScope,sessionScope
+				,applicationScope四个关键字指定查找的范围。
+				${requestScope.user.name}
+			第二种:获得请求参数值
+				${param.username}:等价于 
+				request.getParameter("username");
+				${paramValues.interest}:等价于
+				request.getParameterValues("interest");
+			第三种：计算一个表达式，将结果作为
+			标签的属性值或者直接输出。
+				算术运算："+","-","*","/","%", 但是要注意
+				，"+"号不能连接字符串。
+				关系运算："==","!=",">","<",">=","<=",
+				可以使用对应的"eq","nq","lt","gt","le",
+				"ge"代替。
+				逻辑运算："&&","||","!",可以使用"and","or",
+				"not"代替。
+				empty运算：判断一个字符串是否为空，集合
+				内容是否为空，以及绑订的对象是否存在。
+		5、核心标签的使用
+			1)使用步骤
+			需要将jstl标准标签库相关的jar文件copy
+			WEB-INF\lib。
+			D:\czh\MyEclipse 5.5.1 GA\
+			eclipse\
+			plugins\
+			com.genuitec.eclipse.j2eedt.core_5.5.1\
+			data\
+			libraryset\
+			JSTL1.1\
+			lib
+			jstl.jar standard.jar
+			2)在jsp文件当中，使用taglib指令导入标签。
+			3)使用标签。
+			<c:if test="${user.id == 1001}" var="" scope="">
+				test属性：当值为true，执行标签体的内容，
+				为false，则不执行。
+				var属性：指定一个绑订名。
+				scope属性：指定一个绑订范围。
+				var属性和scope属性用于将test的结果绑订到
+				指定的对象(pageContext,request,session,
+			application)上。
+			<c:choose>
+				用于分支，当某个条件满足，执行某一个分支。
+				每一个分支条件用when标签来表示。
+			<c:when test="">
+				test属性：当值为true，执行标签体的内容
+			<c:otherwise>
+				当其它分支都不满足条件，则执行该标签体的
+				内容。
+			
+			for(User u : list)  for(int i ; i < list.size9); i++)
+			<c:forEach var="u" items="list" varStatus="i">
+				姓名:${u.name} 年龄:${u.age} 工资:${u.salary}
+				用于遍历集合
+				items属性：指定要遍历的集合。
+				var属性：指定一个绑订名，jsp引擎会从
+				集合当中取一个对象，绑订到pageContext
+				对象上。
+				varStatus属性：指定一个绑订名，对应的
+				绑订值是一个java对象，封装了遍历时的一些
+				信息，包括当前遍历的对象的下标(index)以
+				及是第几次(count)遍历。
+			<c:url>
+				当用户禁止cookie以后，会自动在地址后面
+				添加sessionId。
+				当使用绝对路径时，会自动在地址前添加应用
+				名。
+				value属性：指定地址。
+				在表单提交、链接当中，可以使用该标签。
+			<c:set var="" scope="" value="">
+				绑订一个对象到指定的范围。
+				value属性：绑订值。
+				<c:remove var="" scope="">
+				解除绑订
+			<c:catch var="">
+				处理异常，会将异常信息封装成一个对象，绑
+				订到pageContext对象上。
+			<c:import url="">
+				url指定一个jsp文件的地址，jsp会在运行时
+				调用这个jsp。
+			<c:redirect url="">
+				重定向到另外一个地址。
+				url属性指定重定向的地址。
+			<c:out value="" default="" escapeXml="">
+				用于输出el表达式的值。
+				value指定输出的值，default指定缺省值。
+				escapeXml设置成true，会将value中的特殊字
+				符替换成相应的实体。缺省值就是true。
+			
+
+				

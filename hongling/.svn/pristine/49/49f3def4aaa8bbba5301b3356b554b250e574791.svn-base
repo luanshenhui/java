@@ -1,0 +1,107 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+<session-factory>
+	<property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>
+	<!-- <property name="connection.url">jdbc:oracle:thin:@172.16.7.33:1521:orcl</property> -->
+	<!-- <property name="connection.url">jdbc:oracle:thin:@172.16.7.4:1521:hongling</property> -->
+	<!-- <property name="connection.url">jdbc:oracle:thin:@192.168.206.188:1521:gdex200</property> -->
+	<!-- <property name="connection.url">jdbc:oracle:thin:@127.0.0.1:1521:orcl</property> -->
+<!-- 	<property name="connection.url">jdbc:oracle:thin:@172.16.7.33:1521:hongling</property> -->
+	<property name="connection.url">jdbc:oracle:thin:@172.16.7.94:1521:hongling</property>
+<!-- 	<property name="connection.url">jdbc:oracle:thin:@172.17.3.2:1521:orcl</property> -->
+	<property name="connection.username">hongling01</property>
+	<property name="connection.password">hongling01</property>
+<!-- 	<property name="connection.url">jdbc:oracle:thin:@localhost:1521:rcmtm</property> -->
+<!-- 	<property name="connection.url">jdbc:oracLE:THIN:@172.17.3.2:1521:RCMTM</PROPERTY> -->
+<!-- 	<PROPERTY NAME="CONNECTION.USERNAME">hongling</PROPERTY> -->
+<!-- 	<PROPERTY NAME="CONNECTION.PASSWORD">HONGLING</PROPerty> -->
+	<property name="connection.driver_class">
+		oracle.jdbc.driver.OracleDriver
+	</property>
+	<property name="myeclipse.connection.profile">hongling</property>
+	<property name="hibernate.connection.SetBigStringTryClob">
+		true
+	</property>
+	<property name="hibernate.connection.provider_class">
+		org.hibernate.connection.C3P0ConnectionProvider
+	</property>
+	<property name="hibernate.c3p0.max_size">30</property>
+	<property name="hibernate.c3p0.min_size">10</property>
+	<property name="hibernate.c3p0.timeout">120</property>
+	<property name="hibernate.c3p0.max_statements">0</property>
+	<property name="hibernate.c3p0.idle_test_period">1800</property>
+	<property name="hibernate.c3p0.acquire_increment">2</property>
+	<property name="show_sql">false</property>
+	<property name="format_sql">false</property>
+	<!-- 指定二级缓存策略为EHCache -->
+	<property name="hibernate.cache.provider_class">
+		org.hibernate.cache.EhCacheProvider
+	</property>
+	<!-- 指定启用查询缓存 -->
+	<property name="hibernate.cache.use_query_cache">true</property>
+	<mapping resource="chinsoft/entity/Message.hbm.xml" />
+	<mapping resource="chinsoft/entity/Member.hbm.xml" />
+	<mapping resource="chinsoft/entity/Dict.hbm.xml" />
+	<mapping resource="chinsoft/entity/Attachment.hbm.xml" />
+	<mapping resource="chinsoft/entity/DictCategory.hbm.xml" />
+	<mapping resource="chinsoft/entity/Information.hbm.xml" />
+	<mapping resource="chinsoft/entity/Fabric.hbm.xml" />
+	<mapping resource="chinsoft/entity/Orden.hbm.xml" />
+	<mapping resource="chinsoft/entity/OrdenDetail.hbm.xml" />
+	<mapping resource="chinsoft/entity/Customer.hbm.xml" />
+	<mapping resource="chinsoft/entity/SizeStandard.hbm.xml" />
+	<mapping resource="chinsoft/entity/Cash.hbm.xml" />
+	<mapping resource="chinsoft/entity/Delivery.hbm.xml" />
+	<mapping resource="chinsoft/entity/EcodeRedirect.hbm.xml" />
+	<mapping resource="chinsoft/entity/CrossRule.hbm.xml" />
+	<mapping resource="chinsoft/entity/ComponentPageSize.hbm.xml" />
+	<mapping resource="chinsoft/entity/GroupMenu.hbm.xml" />
+	<mapping resource="chinsoft/entity/Contrast.hbm.xml" />
+	<mapping resource="chinsoft/entity/SizeRange.hbm.xml" />
+	<mapping resource="chinsoft/entity/ElementColor.hbm.xml" />
+	<mapping resource="chinsoft/entity/ElementFont.hbm.xml" />
+	<mapping resource="chinsoft/entity/FixedStyle.hbm.xml" />
+	<mapping resource="chinsoft/entity/Lapel.hbm.xml" />
+	<mapping resource="chinsoft/entity/FashionDict.hbm.xml" />
+	<mapping resource="chinsoft/entity/RealmName.hbm.xml" />
+	<mapping resource="chinsoft/entity/Receiving.hbm.xml" />
+	<mapping resource="centling/entity/Deal.hbm.xml" />
+	<mapping resource="centling/entity/DealItem.hbm.xml" />
+	<mapping resource="centling/entity/DeliveryPlus.hbm.xml" />
+	<mapping resource="centling/entity/DHLCountry.hbm.xml" />
+	<mapping resource="centling/entity/DHLDict.hbm.xml" />
+	<mapping resource="centling/entity/DHLState.hbm.xml" />
+	<mapping resource="centling/entity/DHLCity.hbm.xml" />
+	<mapping resource="centling/entity/Discount.hbm.xml" />
+	<mapping resource="centling/entity/ExpressCom.hbm.xml" />
+	<mapping resource="centling/entity/FabricPrice.hbm.xml"/>
+	<mapping resource="centling/entity/FabricDiscount.hbm.xml"/>
+	<mapping resource="centling/entity/FabricDiscountDetail.hbm.xml"/>
+	<mapping resource="chinsoft/entity/Fabricconsume.hbm.xml" />
+	<mapping resource="chinsoft/entity/Userdictprice.hbm.xml" />
+	<mapping resource="chinsoft/entity/Userdiscount.hbm.xml" />
+	<mapping resource="chinsoft/entity/Dictprice.hbm.xml" />
+	<mapping resource="rcmtm/entity/OrdenBatch.hbm.xml" />
+	<mapping resource="chinsoft/entity/CurableStyle.hbm.xml" />
+	<mapping resource="hongling/entity/Assemble.hbm.xml" />
+	<mapping resource="hongling/entity/Logistics.hbm.xml"/>
+	<mapping resource="hongling/entity/LogisticsCompany.hbm.xml"/>
+	<mapping resource="hongling/entity/FabricTrader.hbm.xml"/>
+	<mapping resource="hongling/entity/FabricWareroom.hbm.xml"/>
+	<mapping resource="hongling/entity/KitStyle.hbm.xml"/>
+	<mapping resource="chinsoft/entity/Companys.hbm.xml" />
+	<mapping resource="chinsoft/entity/Logistic.hbm.xml" />
+	<mapping resource="chinsoft/entity/Receipt.hbm.xml" />
+	<mapping resource="hongling/entity/StyleProcess.hbm.xml" />
+	<mapping resource="rcmtm/entity/Geo.hbm.xml" />
+	<mapping resource="chinsoft/entity/Dict1.hbm.xml" />
+	<mapping resource="chinsoft/entity/MixSelected.hbm.xml"/>
+	<mapping resource="chinsoft/entity/Mix.hbm.xml"/>
+	<mapping resource="hongling/entity/OrderAppraise.hbm.xml" />
+	<mapping resource="hongling/entity/ShippingList.hbm.xml" />
+	<mapping resource="chinsoft/entity/RepairOrder.hbm.xml" />
+</session-factory>
+</hibernate-configuration>

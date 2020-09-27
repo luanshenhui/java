@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=EDGE;" />
+    <title>H4C2页面样式示例（页面）</title>
+    <link type="text/css" rel="stylesheet" href="../../../styles/dpn.h4c2.css" />
+    <style type="text/css">
+        div.dpn-content div.welcome
+        {
+            width         : 1000px;
+            margin-top    : 0px;
+            margin-right  : auto;
+            margin-bottom : 0px;
+            margin-left   : auto;
+            padding-left  : 0px;
+            text-align    : left;
+        }
+    </style>
+    <script type="text/javascript" src="../../../styles/dpn.h4c2.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+</head>
+<body>
+    <!-- **** head ********************************************************* -->
+    <div class="dpn-frame-head">
+        <span class="logo">
+            <a href="javascript:void(0);"><img src="../../../images/h4c2/dpn.logo.jpg" /></a>
+        </span>
+        <span class="tollbar">
+            <span id="sso_header_user_name">管理员</span>&nbsp;&nbsp;[<span id="sso_header_orga_name">口岸物流网有限公司</span>]&nbsp;&nbsp;<a id="header_config" href="javascript:void(0);" target="_blank">设置</a>&nbsp;|&nbsp;<a id="header_help" href="javascript:void(0);">帮助</a>&nbsp;|&nbsp;<a id="header_exit" href="javascript:void(0);">退出</a>
+        </span>
+        <span class="jump">
+            <select id="sso_products"></select>
+        </span>
+    </div>
+    <script type="text/javascript" src="http://apollo.dpn.com.cn/sso/sso.js"></script>
+    <script type="text/javascript">
+        addProdAutoSwitch("sso_products", "DAWD");
+        var ssoHeaderUserNameNode = document.getElementById("sso_header_user_name");
+        var ssoHeaderOrgaNameNode = document.getElementById("sso_header_orga_name");
+        if (document.all) {
+            var ssoHeaderUserName = ssoHeaderUserNameNode.innerText;
+            var ssoHeaderOrgaName = ssoHeaderOrgaNameNode.innerText;
+            var ssoHeaderNameSumLength = ssoHeaderUserName.length + ssoHeaderOrgaName.length;
+            if (ssoHeaderNameSumLength > 15) {
+                if (ssoHeaderUserName.length > 8) {
+                    ssoHeaderUserNameNode.innerText = ssoHeaderUserName.substring(0, 6) + "...";
+                    ssoHeaderOrgaNameNode.innerText = ssoHeaderOrgaName.substring(0, 6) + "...";
+                } else {
+                    ssoHeaderOrgaNameNode.innerText = ssoHeaderOrgaName.substring(0, (ssoHeaderOrgaName.length - (ssoHeaderNameSumLength - 15) - 2)) + "...";
+                }
+            }
+        } else {
+            var ssoHeaderUserName = ssoHeaderUserNameNode.textContent;
+            var ssoHeaderOrgaName = ssoHeaderOrgaNameNode.textContent;
+            var ssoHeaderNameSumLength = ssoHeaderUserName.length + ssoHeaderOrgaName.length;
+            if (ssoHeaderNameSumLength > 15) {
+                if (ssoHeaderUserName.length > 8) {
+                    ssoHeaderUserNameNode.textContent = ssoHeaderUserName.substring(0, 6) + "...";
+                    ssoHeaderOrgaNameNode.textContent = ssoHeaderOrgaName.substring(0, 6) + "...";
+                } else {
+                    ssoHeaderOrgaNameNode.textContent = ssoHeaderOrgaName.substring(0, (ssoHeaderOrgaName.length - (ssoHeaderNameSumLength - 15) - 2)) + "...";
+                }
+            }
+        }
+    </script>
+    <!-- **** menu ********************************************************* -->
+    <div class="dpn-frame-menu">
+        <div class="loca">
+            <ul class="nav">
+                <li>
+                    <a href="javascript:void(0);">基本组件</a>
+                    <ul>
+                        <li><a href="javascript:void(0);">信息提示</a></li>
+                        <li><a href="javascript:void(0);">查询条件</a></li>
+                        <li><a href="javascript:void(0);">表单提交</a></li>
+                        <li><a href="javascript:void(0);">表格</a></li>
+                        <li><a href="javascript:void(0);">对话框和提示框</a></li>
+                        <li><a href="javascript:void(0);">弹出层</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">地图服务</a>
+                    <ul>
+                        <li><a href="javascript:void(0);">谷歌地图</a></li>
+                        <li><a href="javascript:void(0);">百度地图</a></li>
+                        <li><a href="javascript:void(0);">腾讯地图</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">关于我们</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- **** content ****************************************************** -->
+    <div class="dpn-content">
+        <div class="welcome">
+            <img src="../../../images/h4c2/dpn.welcome.jpg" />
+        </div>
+    </div>
+    <!-- **** foot ********************************************************* -->
+    <div class="dpn-frame-foot" style="position : relative;">技术支持：大连口岸物流网有限公司&nbsp;&nbsp;7*24小时客户服务热线：400-668-5666&nbsp;86-0411-82731333</div>
+    <!-- **** javascript *************************************************** -->
+    <script type="text/javascript">
+        jQuery(function () {
+            
+        });
+    </script>
+</body>
+</html>

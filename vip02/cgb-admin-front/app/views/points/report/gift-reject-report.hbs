@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}退货报表{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF02",
+            "reportCode":"JF02,JF05,JF07"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

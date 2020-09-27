@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+<!-- 框架数据源JNDI方式 
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/jdbc/iframework</value>
+		</property>
+	</bean>-->
+	
+	<!-- 框架数据源直连方式  begin-->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>				
+				<value>WEB-INF/jdbc.properties</value>			
+			</list>
+		</property>
+	</bean> 
+
+    <!-- 框架数据源直连方式 end -->
+	<bean id="iframeworkSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="configLocation" value="WEB-INF/conf/others/sql-map-config-MySQL5.xml"/>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<bean id="unitDAO" class="com.dhc.organization.unit.dao.ibatis.UnitDAOImpl">
+		<property name="sqlMapClient" ref="iframeworkSqlMapClient"/>
+	</bean>
+	<!-- Organization management End -->
+	<bean id="stationDAO" class="com.dhc.organization.position.dao.ibatis.StationDAOImpl">
+		<property name="sqlMapClient" ref="iframeworkSqlMapClient"/>
+	</bean>
+	<bean id="userDAO" class="com.dhc.organization.user.dao.ibatis.UserDAOImpl">
+		<property name="sqlMapClient" ref="iframeworkSqlMapClient"/>
+	</bean>
+	<bean id="roleDAO" class="com.dhc.organization.role.dao.ibatis.RoleDAOImpl">
+		<property name="sqlMapClient" ref="iframeworkSqlMapClient"/>
+	</bean>
+	<bean id="menuDAO" class="com.dhc.authorization.resource.menu.dao.ibatis.MenuDAOImpl">
+		<property name="sqlMapClient" ref="iframeworkSqlMapClient"/>
+	</bean>
+	<bean id="privilegeDAO" class="com.dhc.authorization.resource.privilege.dao.ibatis.PrivilegeDAOImpl">
+		<property name="sqlMapClient" ref="iframeworkSqlMapClient"/>
+	</bean>
+		<bean id="delegateDAO" class="com.dhc.authorization.delegate.dao.ibatis.DelegateDAOImpl">
+		<property name="sqlMapClient" ref="iframeworkSqlMapClient"/>
+	</bean>
+	<bean id="menuTreeDAO" class="com.dhc.authorization.resource.menu.dao.ibatis.MenuTreeDAOImpl">
+		<property name="sqlMapClient" ref="iframeworkSqlMapClient"/>
+	</bean>
+</beans>

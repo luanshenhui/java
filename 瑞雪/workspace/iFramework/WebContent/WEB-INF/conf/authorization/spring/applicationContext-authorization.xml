@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+
+	<bean id="authorizationTransactionProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">PROPAGATION_REQUIRED,-ServiceException</prop>
+				<prop key="update*">PROPAGATION_REQUIRED,-ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED,-ServiceException</prop>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!--
+		========================= BUSINESS OBJECT DEFINITIONS
+		========================
+	-->
+	<!-- static resource load -->
+
+	
+	<!-- Menu management Start -->
+	<bean id="TP_MenuService" parent="authorizationTransactionProxy">
+		<property name="target">
+			<ref bean="MenuService" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="save*">PROPAGATION_REQUIRED, -ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED, -ServiceException</prop>
+			</props>
+		</property>
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+	</bean>
+	<bean id="MenuService"
+		class="com.dhc.authorization.resource.menu.service.MenuService">
+		<property name="imenuDAO" ref="menuDAO" />
+		<property name="menuGrantDAO" ref="privilegeDAO" />
+	</bean>
+	<!-- Menu management End -->
+
+	<!-- Privilege Start -->
+	<bean id="TP_PrivilegeService" parent="authorizationTransactionProxy">
+		<property name="target">
+			<ref bean="PrivilegeService" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="is*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="save*">PROPAGATION_REQUIRED, -ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED, -ServiceException</prop>
+			</props>
+		</property>
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+	</bean>
+	<bean id="PrivilegeService"
+		class="com.dhc.authorization.resource.privilege.service.PrivilegeService">
+		<property name="menuGrantDAO" ref="privilegeDAO" />
+	</bean>
+	<!-- Privilege End -->
+	
+	<!-- Delegate Start -->
+	<bean id="TP_DelegateService" parent="authorizationTransactionProxy">
+		<property name="target">
+			<ref bean="DelegateService" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="save*">PROPAGATION_REQUIRED, -ServiceException</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED, -ServiceException</prop>
+			</props>
+		</property>
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+	</bean>
+	<bean id="DelegateService"
+		class="com.dhc.authorization.delegate.service.DelegateService">
+		<property name="idelegateDAO" ref="delegateDAO" />
+	</bean>
+	<!-- Delegate End -->
+	<bean id="privilegeFacade"
+		class="com.dhc.authorization.resource.facade.impl.PrivilegeFacadeImpl">
+		<property name="menuService" ref="MenuService" />
+		<property name="privilegeService" ref="PrivilegeService" />
+	</bean>
+	<bean id="frameworkMainService" parent="authorizationTransactionProxy">
+		<property name="target">
+			<bean
+				class="com.dhc.base.security.service.impl.iFrameworkMainServiceImpl">
+				<property name="privilegeFacade" ref="privilegeFacade" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="TP_passwordManager" parent="authorizationTransactionProxy">
+		<property name="target">
+			<bean class="com.dhc.base.security.service.impl.PasswordServiceImpl">
+				<property name="passwordManager" ref="passwordManager" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="passwordManager" class="com.dhc.base.security.ibatis.PasswordManagerImpl">
+		<property name="passwordEncoder" ref="passwordEncoder" />
+		<property name="sqlMapClient" ref="securitySqlMapClient"/>
+	</bean>
+	
+	<bean id="menuTreeService" parent="authorizationTransactionProxy">
+		<property name="target">
+			<bean
+				class="com.dhc.base.menu.service.impl.MenuTreeServiceImpl">
+				<property name="privilegeFacade" ref="privilegeFacade" />
+				<property name="menuTreeDAO" ref="menuTreeDAO" />
+			</bean>
+		</property>
+	</bean>
+</beans>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.DictCategory" table="DictCategory">
+        <id name="ID" type="int">
+            <column name="ID" precision="22" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="Name" type="string">
+            <column name="Name" length="200" not-null="true" />
+        </property>
+        <property name="Readonly" type="integer">
+            <column name="Readonly" precision="22" scale="0" />
+        </property>
+        <property name="Levels" type="integer">
+            <column name="Levels" precision="22" scale="0" />
+        </property>
+        <property name="ConstDefine" type="string">
+            <column name="ConstDefine" length="200" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

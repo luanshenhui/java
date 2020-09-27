@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    <bean id="schedulerFactoryBean"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <description>定时任务调度器工厂</description>
+        <property name="schedulerName" value="cgb-Batch-Scheduler"/>
+        <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+        <property name="configLocation" value="classpath:quartz.properties"/>
+    </bean>
+
+    <bean id="jobListener" class="cn.com.cgbchina.scheduler.manager.TaskListener"/>
+    <bean id="triggerLoader" class="cn.com.cgbchina.scheduler.manager.TriggerLoader"/>
+    <bean id="defaultSchedulerManager" class="cn.com.cgbchina.scheduler.manager.DefaultSchedulerManager">
+        <property name="scheduler" ref="schedulerFactoryBean"/>
+        <property name="triggerLoader" ref="triggerLoader"/>
+        <property name="jobListener" ref="jobListener"/>
+    </bean>
+
+</beans>

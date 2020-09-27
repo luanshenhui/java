@@ -1,0 +1,35 @@
+<script src="../blcash/common.js"></script>
+<script src="../blcash/BlDealItemList.js"></script>
+<div id="BlDealItemListSearch" class="list_search">
+	<h1></h1>
+	<span id="blLblStatistic"></span>
+	<label class="blLblDealItemKeyword"></label>
+	<input type="text" id="blKeyword"/>
+	<a id="blBtnSearchDealItem"></a>
+	<a id="blBtnAddDealItem"></a>
+</div>
+<div id="BlDealItemListResult"></div>
+<div id="BlDealItemListStatistic"></div>
+<div id="BlDealItemListPagination" class="paging"></div>
+<textarea  id="BlDealItemListTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="blLblDealItemID"></td>
+			<td class="blLblDealItemName"></td>
+			<td class="blLblIOFlag"></td>
+			<td class="blLblDealItemMemo"></td>
+			<td class="blLblDealItemEn"></td>
+			<td class="lblEdit"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ID}">
+			<td class="center">{$T.row.ID}</td>
+			<td class="center">{$T.row.name}</td>
+			<td class="center">{$T.row.ioFlagName}</td>
+			<td class="center">{$T.row.memo}</td>
+			<td class="center">{$T.row.en}</td>
+			<td class='center'><a class="edit" onclick="$.csBlDealItemList.openPost('{$T.row.ID}')"></a></td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

@@ -1,0 +1,23 @@
+{
+  "item": {
+    "_all": {
+      "enabled": false
+    },
+    "_source": {
+      "compress": true
+    },
+    "_id": {
+      "path": "itemCode"
+    },
+    "properties": {
+      "itemCode": {
+        "type": "String"
+      },
+      "name": {
+        "type": "string",
+        "indexAnalyzer": "ik_max_word",
+        "searchAnalyzer": "ik"
+      }
+    }
+  }
+}

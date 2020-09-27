@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yulin.searchMapping">
+	<select id="findSearch" parameterType="com.yulin.dangdang.bean.SearchKey"
+		 resultMap="Product">
+			select * from d_product p join d_book b on p.id=b.id
+		<where>
+			<if test="product_name != null">product_name like #{product_name}</if>
+			<if test="description != null"> or description like #{description}</if>
+			<if test="author != null"> or author like #{author}</if>
+			<if test="publishing != null"> or publishing like #{publishing}</if>
+			<if test="which_edtion != null"> or which_edtion like #{which_edtion}</if>
+			<if test="isbn != null"> or isbn like #{isbn}</if>
+			<if test="catalogue != null"> or catalogue like #{catalogue}</if>
+			<if test="print_number != null"> or print_number like #{print_number}</if>
+			<if test="min != null and min != 0">and p.dang_price &lt;= #{min}</if>
+			<if test="max != null and max != 0">and p.dang_price &gt;= #{max}</if>
+		</where>
+	</select>
+	<resultMap type="com.yulin.dangdang.bean.Product" id="Product">
+			<id property="id" column="id"/>
+			<result property="product_name" column="product_name"/>
+			<result property="description" column="description"/>
+			<result property="add_time" column="add_time"/>
+			<result property="fixed_price" column="fixed_price"/>
+			<result property="dang_price" column="dang_price"/>
+			<result property="keywords" column="keywords"/>
+			<result property="has_deleted" column="has_deleted"/>
+			<result property="product_pic" column="product_pic"/>
+			<result property="product_pic" column="product_pic"/>
+				<association property="book" javaType="com.yulin.dangdang.bean.Book">
+					<id property="id" column="id"/>
+					<result property="author" column="author"/>
+					<result property="publishing" column="publishing"/>
+					<result property="publish_time" column="publish_time"/>
+					<result property="word_number" column="word_number"/>
+					<result property="which_edtion" column="which_edtion"/>
+					<result property="total_page" column="total_page"/>
+					<result property="print_time" column="print_time"/>
+					<result property="print_number" column="print_number"/>
+					<result property="isbn" column="isbn"/>
+					<result property="author_summary" column="author_summary"/>
+					<result property="catalogue" column="catalogue"/>
+				</association>
+			</resultMap>
+</mapper>

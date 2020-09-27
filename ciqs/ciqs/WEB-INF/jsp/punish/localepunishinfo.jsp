@@ -1,0 +1,422 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>简易处罚</title>
+<%@ include file="/common/resource_show.jsp"%>
+<link rel="stylesheet" href="${ctx}/static/viewer/dist/viewer.css" />
+<link rel="stylesheet" href="${ctx}/static/viewer/demo/css/main.css" />
+<script src="${ctx}/static/viewer/dist/viewer.js"></script>
+<script src="${ctx}/static/viewer/demo/js/main.js"></script>
+<script type="text/javascript" src="/ciqs/cuplayer/Images/swfobject.js"></script>
+<script type="text/javascript">
+
+
+
+	$(function() {
+		$("#imgd1").hide();
+		$("#CuPlayerMiniV").hide();
+
+		$.ajax({
+			url : "localepunishinfo" + location.search,
+			type : "get",
+			dataType : "json",
+			success : function(data) {
+				console.log('请求的数据',data);
+				if (data.status == "OK") {
+					var results = data.results;
+					document.getElementById("searchDetailA").href='searchDetail?punishId=' + results.punish_id
+					var childOne = $("table").eq(0).find("tr").eq(1)
+							.children();
+					childOne.eq(0).text(
+							results.punish_time == null ? ""
+									: new Date(results.punish_time)
+											.toLocaleDateString()
+											.replace("/", "-").replace(
+													"/", "-"));
+					childOne.eq(1).text(
+							results.party_name == null ? ""
+									: results.party_name);
+					childOne
+							.eq(2)
+							.html(
+									(results.identifi_style == null ? ""
+											: results.identifi_style)
+											+ "</br>"
+											+ (results.identifi_number == null ? ""
+													: results.identifi_number));
+					childOne.eq(3).text(
+							results.address == null ? ""
+									: results.address);
+					childOne.eq(4).text(
+							results.legal_represent == null ? ""
+									: results.legal_represent);
+					childOne.eq(5).html(
+							results.legal_represent_phone == null ? ""
+									: results.legal_represent_phone);
+					childOne.eq(6).html(
+							results.illegal_object == null ? ""
+									: results.illegal_object);
+					childOne.eq(7).html(
+							results.illegal_address == null ? ""
+									: results.illegal_address);
+					var childTwo = $("table").eq(0).find("tr").eq(3)
+							.children();
+					childTwo.eq(0).text(
+							results.illegal_time == null ? ""
+									: new Date(results.illegal_time)
+											.toLocaleDateString()
+											.replace("/", "-").replace(
+													"/", "-"));
+					//childTwo.eq(1).text(results.party_represent==null?"":results.party_represent);
+					childTwo
+							.eq(1)
+							.html(
+									"<span>"
+											+ results.party_represent
+											+ "</span>");
+													//<img src='/ciqs/showVideo?imgPath=" + (results.cur_psn_sign == null ? "" : results.cur_psn_sign) + "' width='60' height='30' onclick='showPic(\"" + (results.cur_psn_sign == null ? "" : results.cur_psn_sign) + "\")'/>
+					childTwo.eq(2).text(
+							results.party_represent_phone == null ? ""
+									: results.party_represent_phone);
+					childTwo.eq(3).text(
+							results.survey_content == null ? ""
+									: results.survey_content);
+					childTwo.eq(4).text(
+							results.illegal_act == null ? ""
+									: results.illegal_act);
+					childTwo.eq(5).text(
+							results.punish_style == '0' ? "警告" : "罚款");
+					childTwo.eq(6).text(
+							results.port_org_code == null ? ""
+									: results.port_org_code);
+					childTwo.eq(7).text(
+							results.port_dept_code == null ? ""
+									: results.port_dept_code);
+					var childThree = $("table").eq(1).find("tr").eq(1)
+							.children();
+					childThree.eq(0).text(
+							results.punish_time == null ? ""
+									: new Date(results.punish_time)
+											.toLocaleDateString()
+											.replace("/", "-").replace(
+													"/", "-"));
+					//childThree.eq(1).find("td").eq(1).text(results.law_executor==null?"":results.law_executor);
+					childThree.eq(1).html(
+									"<img src='/ciqs/showVideo?imgPath="
+											+ (results.law_executor == null ? ""
+													: results.law_executor)
+											+ "' width='60' height='30' onclick='showPic(\""
+											+ (results.law_executor == null ? ""
+													: results.law_executor)
+											+ "\")'/>");
+					childThree.eq(2).text(results.punish_style == '0' ? "警告" : "罚款");
+					childThree.eq(3).text(results.forfeit_status == '1' ? "已交" : "未交");
+				}
+				if (data.localePunishFiles != "") {
+					for (var i = 0; i < data.localePunishFiles.length; i++) {
+						if (data.localePunishFiles[i].file_type == 1) {
+						console.log("photo");
+							$("table")
+									.eq(2)
+									.append(
+											"<tr>"
+													+ "<td width='25%' class='table_xqlbbj2'>现场照片</td>"
+													+ "<td align='center'>"
+													+ "操作时间:&nbsp;&nbsp;&nbsp;&nbsp;"
+													+ "<span class='blue'>"
+													+ (null == data.localePunishFiles[i].create_date_str ? ""
+															: data.localePunishFiles[i].create_date_str)
+													+ "</span>"
+													+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;"
+													+ "<span class='blue'>"
+													+ (null == data.localePunishFiles[i].create_user_name ? ""
+															: data.localePunishFiles[i].create_user_name)
+													+ "</span>"
+													+ "</td>"
+													+ "<td width='25%' align='center' valign='middle'>"
+													+ "<img style='cursor: pointer;' src='/ciqs/static/show/images/photo-btn.png' width='42' height='42' title='照片查看' onclick='showPic(\""
+													+ data.localePunishFiles[i].file_name
+													+ "\")'/>"
+													+ "</td>" + "</tr>")
+						} else {
+/* 							$("table").eq(2).find("tr").eq(5)
+									.find("td").eq(0).text("查看录像");
+							$("table")
+									.eq(2)
+									.find("tr")
+									.eq(5)
+									.find("td")
+									.eq(1)
+									.html(
+											"<div style='width:100%;height:60px;border-top: solid 1px #e4e4e4;padding-left:20px;'>"
+													+ "<div style='float:right;margin-right:60px'>"
+													+ "<img src='/ciqs/static/show/images/video-btn.png' width='42' height='42' onclick='showVideo(\""
+													+ data.localePunishFiles[i].file_name
+													+ "\")'/>"
+													+ "</div>"
+													+ "</div>");
+													
+																				$("table") */
+									$("table").eq(2)
+									.append(
+											"<tr>"
+													+ "<td width='25%' class='table_xqlbbj2'>查看录像</td>"
+													+ "<td align='center'>"
+													+ "操作时间:&nbsp;&nbsp;&nbsp;&nbsp;"
+													+ "<span class='blue'>"
+													+ (null == data.localePunishFiles[i].create_date_str ? ""
+															: data.localePunishFiles[i].create_date_str)
+													+ "</span>"
+													+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作人员:&nbsp;&nbsp;&nbsp;&nbsp;"
+													+ "<span class='blue'>"
+													+ (null == data.localePunishFiles[i].create_user_name ? ""
+															: data.localePunishFiles[i].create_user_name)
+													+ "</span>"
+													+ "</td>"
+													+ "<td width='25%' align='center' valign='middle'>"
+													+ "<img style='cursor: pointer;' src='/ciqs/static/show/images/video-btn.png' width='42' height='42' title='照片查看' onclick='showVideo(\""
+													+ data.localePunishFiles[i].file_name
+													+ "\")'/>"
+													+ "</td>" + "</tr>")
+													
+						}
+					}
+				}
+				
+				if (data.localePunishDocs.length > 0) {
+					$("table").eq(2).find("tr").eq(6).find("td").eq(1).html(
+									"<div style='width:100%;height:60px;border-top: solid 1px #e4e4e4;padding-left:20px;'>"
+											+ "<div style='float:right;margin-right:60px'>"
+											+ "<img src='/ciqs/static/show/images/photo-btn.png' width='42' height='42' onclick='showTemplate(\""
+											+ data.localePunishDocs[0].name
+											+ "\")'/>"
+											+ "</div>"
+											+ "</div>");
+				}
+			},
+		});
+	});
+	//图片预览
+	function showPic(path) {
+		$("#imgd1").attr("src", "/ciqs/showVideo?imgPath=" + path).click();
+	}
+	//打开模板表格
+	function showTemplate(doc_id) {
+		window.open("transportstemplate?doc_id=" + doc_id);
+	}
+	//视频观看
+
+	//关闭视频
+	function hideVideo() {
+		$("#CuPlayerMiniV").hide();
+	}
+	//上传视频
+	function uploadVideo() {
+		var upload_file = $("form").find("input").eq(0).val();
+		if (upload_file == null || upload_file == "") {
+			alert("请选择文件后在上传");
+		} else {
+			upload_file = upload_file.substring(
+					upload_file.lastIndexOf('.') + 1, upload_file.length)
+					.toLowerCase();
+			if (upload_file == "mp4") {
+				$("form").attr(
+						"action",
+						"/ciqs/punish/uploadvideo" + location.search
+								+ "&proc_type="
+								+ $("form").closest("td").attr("id"));
+				$("form").submit();
+			} else {
+				alert("请选择正确的视频格式");
+			}
+		}
+	}
+</script>
+</head>
+<body class="bg-gary" id="body">
+	<div class="freeze_div_dtl"
+		style="position: fixed; width: 100%; background-color: #f0f2f5; top: 0px; height: 306px;">
+		<div class="title-bg">
+			<div class=" title-position margin-auto white">
+				<div class="title">
+					<span class="font-24px" style="color: white;">行政处罚 /</span><a
+						style="color: white;" href="localepunishes">简易处罚</a>
+				</div>
+				<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+			</div>
+		</div>
+		<div class="flow-bg" style="height: 235px; background-color: #f0f2f5;">
+			<div class="flow-position2 margin-auto" style="height: 235px;">
+
+				<ul class="white font-18px flow-height font-weight">
+					<li>申报</li>
+					<li>现场处罚</li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				<ul class="flow-icon">
+					<li id="icon1" class="icongreen"><div class="hour white font-12px"><span id="hour1" class="writeHour"></span></div> <a href="#tab1"><img src="${ctx}/static/show/images/punish/punish1.png" width="80" height="80" onclick="getPlace('module_1')" /></a></li>
+					<li id="icon2" class="icongreen"><div class="hour white font-12px"><span id="hour2" class="writeHour"></span></div> <a href="#tab2"><img src="${ctx}/static/show/images/punish/punish2.png" width="80" height="80" onclick="getPlace('module_2')" /></a></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li class="white font-18px font-weight"><br />历时：<span
+						id="totalHour">0</span></li>
+				</ul>
+				<ul class="flow-info">
+					<li><div id="qtw_1"></div> <br /> <span id="qt_1" class="font-10px"></span></li>
+					<li><div id="qtw_2"></div> <br /> <span id="qt_2" class="font-10px"></span></li>
+					<li><div id="qtw_3"></div> <br /> <span id="qt_3" class="font-10px"></span></li>
+					<li><div id="qtw_4"></div> <br /> <span id="qt_4" class="font-10px"></span></li>
+				</ul>
+				<input type="hidden" id="procArray" value="${procArray }" />
+				<ul class="flow-info">
+					<li><span id="psn1"></span><br /> <span class="font-10px"><span id="date1"></span></span></li>
+					<li><span id="psn2"></span><br /> <span class="font-10px"><span id="date2"></span></span></li>
+					<li><span id="psn3"></span><br /> <span class="font-10px"><span id="date3"></span></span></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li class="font-10px"></li>
+					<li class="font-10px"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="blank_div_dtl" style="margin-top: 290px;"></div>
+
+
+	<div class="margin-chx">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"
+			class="table-xqlb">
+			<tr class="table_xqlbbj">
+				<td width="148px" align="center" valign="bottom">处罚时间</td>
+				<td width="148px" align="center" valign="bottom">当事人名称</td>
+				<td width="148px" align="center" valign="bottom">证件类型<br />号码
+				</td>
+				<td width="148px" align="center" valign="bottom">地址</td>
+				<td width="148px" align="center" valign="bottom">法定代表人</td>
+				<td width="148px" align="center" valign="bottom">联系电话</td>
+				<td width="148px" align="center" valign="bottom">违法事实</td>
+				<td width="148px" align="center" valign="bottom">违法行为发生地</td>
+			</tr>
+			<tr class="table_xqlbnr">
+				<td width="200" height="90" align="center"></td>
+				<td width="100" height="90" align="center"></td>
+				<td width="200" height="90" align="center"></td>
+				<td width="150" height="90" align="center"></td>
+				<td width="100" height="90" align="center"></td>
+				<td width="150" height="90" align="center"></td>
+				<td width="150" height="90" align="center"></td>
+				<td height="90" align="center" valign="middle"></td>
+			</tr>
+			<tr class="table_xqlbbj">
+				<td width="148px" align="center">违法行为发生时间</td>
+				<td width="148px" align="center" valign="bottom">当事人现场代表</td>
+				<td width="148px" align="center" valign="bottom">联系电话</td>
+				<td width="148px" align="center" valign="bottom">调查内容</td>
+				<td width="148px" align="center" valign="bottom">违反法规内容</td>
+				<td width="148px" align="center" valign="bottom">处罚方式</td>
+				<td width="148px" align="center" valign="bottom">直属局</td>
+				<td width="148px" align="center" valign="bottom">分支机构</td>
+			</tr>
+			<tr class="table_xqlbnr">
+				<td width="200" height="90" align="center"></td>
+				<td width="100" height="90" align="center"></td>
+				<td width="200" height="90" align="center"></td>
+				<td width="150" height="90" align="center"></td>
+				<td width="100" height="90" align="center" class=" green"></td>
+				<td width="150" height="90" align="center"></td>
+				<td width="150" height="90" align="center"></td>
+				<td height="90" align="center" valign="middle"><span></span></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="margin-auto width-1200 tips" id="module_first">现场处罚环节</div>
+	<div class="margin-chx">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"
+			class="table-xqlb">
+			<tr class="table_xqlbbj">
+				<td width="25%" align="center" valign="bottom">处罚时间</td>
+				<td width="25%" align="center" valign="bottom">执法人员</td>
+				<td width="25%" align="center" valign="bottom">处罚方式</td>
+				<td align="center" valign="bottom">缴费状态</td>
+			</tr>
+			<tr class="table_xqlbnr">
+				<td width="25%" height="90" align="center"></td>
+				<td width="25%" height="90" align="center"></td>
+				<td width="25%" height="90" align="center"></td>
+				<td height="90" align="center"></td>
+			</tr>
+		</table>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"
+			class="table-xqlb">
+
+		</table>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"
+			class="table-xqlb">
+			<tr>
+				<td width="25%" class="table_xqlbbj2">上传录像</td>
+				<td align="center" valign="bottom" id="V_CF_J_Y_1">
+					<div
+						style='width: 100%; height: 60px; border-top: solid 1px #e4e4e4;'>
+						<div style='padding-top: 12px;'>
+							<form action="" method="post" id="form" name="form"
+								enctype="multipart/form-data">
+								<input type="file" name="file" />
+								<button type="button" onclick="uploadVideo()" 
+									style="width: 60px; height: 24px;">提交</button>
+							</form>
+						</div>
+						<div>
+							<img src="" onclick="uploadVideo()" />
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"
+			class="table-xqlb">
+			<tr>
+				<td width="25%" class="table_xqlbbj2">处罚决定书</td>
+				<td align="center" valign="bottom"><a id="searchDetailA"><button>查看</button></a></td>
+				<td width="25%" align="center" valign="bottom"></td>
+			</tr>
+		</table>
+	</div>
+
+	<div
+		style="text-align: center; margin: auto; margin-top: 10px; width: 200px; padding-bottom: 10px;">
+		<input type="button" class="search-btn" value="返回"
+			onclick="JavaScript:history.go(-1);" />
+	</div>
+
+	<!-- 图片查看 -->
+	<div class="row" style="z-index: 200000;">
+		<div class="col-sm-8 col-md-6" style="z-index: 200000;">
+			<div class="docs-galley" style="z-index: 200000;">
+				<ul class="docs-pictures clearfix" style="z-index: 200000;">
+					<li><img id="imgd1" style="z-index: 200000;"
+						<%-- data-original="${ctx}/static/viewer/assets/img/tibet-1.jpg" --%> 
+         			src="${ctx}/static/viewer/assets/img/thumbnails/tibet-3.jpg"
+						alt="Cuo Na Lake" /></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<%@ include file="/common/player.jsp"%>
+</body>
+</html>

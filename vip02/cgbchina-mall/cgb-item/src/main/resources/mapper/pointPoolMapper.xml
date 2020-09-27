@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PointPool">
+    <resultMap id="PointPoolMap" type="PointPoolModel">
+        <result property="id" column="id"/>
+        <result property="curMonth" column="cur_month"/>
+        <result property="maxPoint" column="max_point"/>
+        <result property="singlePoint" column="single_point"/>
+        <result property="pointRate" column="point_rate"/>
+        <result property="usedPoint" column="used_point"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        id,cur_month,max_point,single_point,point_rate,used_point,create_oper,create_time,modify_oper,modify_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="PointPoolModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_point_pool
+        (cur_month
+        ,max_point
+        ,single_point
+        ,point_rate
+        ,used_point
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag)
+        values(#{curMonth}
+        ,#{maxPoint}
+        ,#{singlePoint}
+        ,#{pointRate}
+        ,'0'
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,'0')
+    </insert>
+
+    <update id="update" parameterType="PointPoolModel">
+        update tbl_point_pool set
+        <if test="curMonth !=null">cur_month = #{curMonth}
+            ,
+        </if>
+        <if test="maxPoint !=null">max_point = #{maxPoint}
+            ,
+        </if>
+        <if test="singlePoint !=null">single_point = #{singlePoint}
+            ,
+        </if>
+        <if test="usedPoint !=null">used_point = #{usedPoint}
+            ,
+        </if>
+        <if test="pointRate !=null">point_rate = #{pointRate}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        modify_time = now()
+        where id=#{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag = '0'
+            <if test="id !=null">and id = #{id}</if>
+            <if test="curMonth !=null">and cur_month = #{curMonth}</if>
+            <if test="maxPoint !=null">and max_point = #{maxPoint}</if>
+            <if test="singlePoint !=null">and single_point = #{singlePoint}</if>
+            <if test="pointRate !=null">and point_rate = #{pointRate}</if>
+            <if test="usedPoint !=null">and used_point = #{usedPoint}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="PointPoolMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_point_pool
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="PointPoolMap">
+        select
+        <include refid="columns"/>
+        from tbl_point_pool
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="PointPoolMap">
+        select
+        <include refid="columns"/>
+        from tbl_point_pool
+        <include refid="conditions"/>
+        <![CDATA[ order by cur_month desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_point_pool
+        <include refid="conditions"/>
+    </select>
+
+    <update id="updateFordelete" parameterType="java.lang.Long">
+        update tbl_point_pool set
+        del_flag
+        = '1'
+        where id=#{id}
+    </update>
+    <!--月份唯一性校验-->
+    <select id="curMonthCheck" resultMap="PointPoolMap">
+        select
+        <include refid="columns"/>
+        from tbl_point_pool
+        where cur_month=#{curMonth} AND del_flag = '0'
+    </select>
+    <!--最近记录-->
+    <select id="lastInfo" resultMap="PointPoolMap">
+        select
+        <include refid="columns"/>
+        from tbl_point_pool
+        where del_flag = '0'
+        order by cur_month desc LIMIT 1
+    </select>
+
+    <!-- 获取当月积分池，如果当月未设置积分池信息，则找距离最近的一个月-->
+    <select id="getCurOrLastInfo" resultMap="PointPoolMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_point_pool WHERE del_flag = '0' AND
+        cur_month  <![CDATA[ <= ]]>
+        DATE_FORMAT(now(),"%Y%m")
+        ORDER BY cur_month desc
+        LIMIT 1
+    </select>
+
+    <update id="dealPointPoolForDate" parameterType="Map">
+        update tbl_point_pool set
+        used_point = used_point-#{used_point}
+        where cur_month = #{cur_month} and del_flag ='0'
+    </update>
+    <update id="dealPointPool" parameterType="Map">
+        update tbl_point_pool set
+        used_point = used_point - #{used_point}
+        where cur_month = #{cur_month} and del_flag ='0'
+    </update>
+    <!--当月记录-->
+    <select id="getCurMonthInfo" resultMap="PointPoolMap">
+        select
+        <include refid="columns"/>
+        from tbl_point_pool
+        where del_flag = '0' and cur_month = date_format(now(),"%Y%m")
+    </select>
+    
+    <select id="getPointPool" resultMap="PointPoolMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_point_pool
+        where cur_Month=#{curMonth} and del_Flag = '0' 
+    </select>
+
+    <update id="subtractPointPool" parameterType="Map">
+        update tbl_point_pool
+        set used_point = used_point + #{used_point}
+        where
+            cur_month = #{cur_month}
+        and del_flag = '0'
+    </update>
+    
+    <update id="updateById" parameterType="PointPoolModel">
+        update tbl_point_pool set
+        used_point = used_point + #{usedPoint},
+        modify_time = now()
+        where id=#{id}
+    </update>
+
+</mapper>
+
+

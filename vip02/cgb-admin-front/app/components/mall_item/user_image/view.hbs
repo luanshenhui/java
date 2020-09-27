@@ -1,0 +1,36 @@
+{{#component "js-component image-container"}}
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix" data-type="{{type}}">
+            <li data-role="nav" class="active">
+                <a href="javascript:void(0);">图片空间<span style="color: #cc003a;">（共{{_DATA_.total}}张）</span></a>
+            </li>
+            <li data-role="nav">
+                <a href="javascript:void(0);">本地图片上传</a>
+            </li>
+
+        </ul>
+    </div>
+    <div data-role="content" class="tab-content image-selector">
+        <ul class="image-ul">
+            {{#each _DATA_.data}}
+                <li>
+                    <img data-original="{{_HREF_.main}}{{fileName}}_160x160.jpg">
+                    <div class="img-oper">
+                        <a href="javascript:void(0);" class="js-clip" data-url="{{_HREF_.main}}{{fileName}}"><i class="fa fa-fw fa-paperclip"></i>复制链接</a>
+                        <a href="{{_HREF_.main}}{{fileName}}" target="_blank"><i class="fa fa-fw fa-picture-o"></i>查看原图</a>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    </div>
+
+    <div data-role="content" class="tab-content image-selector hide">
+        <div class="cloud-upload">
+            <a href="javascript:void(0);">
+                <i class="fa fa-fw fa-cloud-upload"></i>本地图片上传
+                <input id="file" type="file" class="js-image-upload" name="files" multiple="multiple"/>
+            </a>
+        </div>
+    </div>
+{{/component}}

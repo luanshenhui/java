@@ -1,0 +1,645 @@
+package cn.rkylin.oms.system.user.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.core.controller.ApolloController;
+import cn.rkylin.oms.common.context.CurrentUser;
+import cn.rkylin.oms.common.context.WebContextFactory;
+import cn.rkylin.oms.system.config.OrgI18nConsts;
+import cn.rkylin.oms.system.facade.IOrganizationFacade;
+import cn.rkylin.oms.system.position.domain.WF_ORG_STATION;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_UNIT;
+import cn.rkylin.oms.system.user.dao.UserDAOImpl;
+import cn.rkylin.oms.system.user.domain.WF_ORG_USER;
+import cn.rkylin.oms.system.user.service.IUserService;
+import cn.rkylin.oms.system.user.vo.UserVO;
+
+/**
+ * 用户控制器
+ * 
+ * @author wangxiaoyi
+ * @version 1.0
+ * @created 2017年2月15日
+ */
+@Controller
+@RequestMapping("/user")
+public class UserController extends ApolloController {
+    private static final Log logger = LogFactory.getLog(UserController.class);
+    // 常量定义
+    private static final String GOTO_LOGIN = "redirect:/login.html";
+
+    /**
+     * 用户业务服务对象
+     */
+    @Autowired
+    private IUserService userService;
+    
+    @Autowired
+    private IOrganizationFacade orgFacade;
+
+    /**
+     * 构造函数
+     */
+    public UserController() {
+
+    }
+
+    /**
+     * 跳转到店铺列表
+     */
+    @RequestMapping(value = "/gotoIndex")
+    public String gotoShopList() {
+        return GOTO_LOGIN;
+    }
+
+    /**
+     * 登录
+     * 
+     * @param account
+     *            登录帐户
+     * @param password
+     *            登录密码
+     * @param captcha
+     *            验证码
+     * @return 成功转到首页 失败给出错误提示
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Map<String, Object> login(String account, String password, String captcha) throws Exception {
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        try {
+            CurrentUser currUser = orgFacade.getCurrentUser(account, password, true, true, false, true, false);
+            if (currUser == null) {
+                returnMap.put(JSON_RESULT, FAILED);
+                returnMap.put("LOGON_USER", currUser);
+                returnMap.put(JSON_MSG, "登录失败");
+            } else {
+                WebContextFactory.getWebContext().setCurrentUser(currUser);
+                returnMap.put(JSON_RESULT, SUCCESS);
+            }
+        } catch (Exception ex) {
+            logger.error(ex);
+            returnMap.put(JSON_RESULT, FAILED);
+            returnMap.put(JSON_MSG, ex.getMessage());
+        }
+        return returnMap;
+    }
+    
+    /**
+     * 登录
+     * 
+     * @return 转到登录页
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        CurrentUser currUser = WebContextFactory.getWebContext().getCurrentUser();
+        if (currUser != null) {
+            WebContextFactory.getWebContext().setCurrentUser(null);
+        }
+        response.sendRedirect(request.getContextPath() + "/login.html");
+    }
+
+    /**
+     * 跳转到用户列表
+     * 
+     * @param formJson
+     *            高级检索条件
+     * @param quickSearch
+     *            快速查询条件
+     * @return 返回值JSON格式字符串
+     * @Param start 第几页
+     * @Param length 每页多少行
+     */
+    @ResponseBody
+    @RequestMapping(value = "/userList", method = RequestMethod.GET)
+    public Map<String, Object> userList(String quickSearch, String formJson,HttpServletRequest request,
+            @RequestParam(required = false, defaultValue = "0") int start,
+            @RequestParam(required = false, defaultValue = "10") int length) throws Exception {
+        // 用于返回值的json对象
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        CurrentUser currentUser = WebContextFactory.getWebContext().getCurrentUser();
+
+        try {
+            // 前台搜索条件
+            UserVO param = new UserVO();
+//            String unitID = request.getParameter("itemId");
+//            unitID = (unitID == null || unitID.equals("")) ? null : unitID;
+//            String userAccount = request.getParameter("userAccount");
+//            userAccount = (userAccount == null || userAccount.equals("")) ? null : userAccount;
+//            String userName = request.getParameter("userName");
+//            userName = (userName == null || userName.equals("")) ? null : userName;
+            boolean needUserRole = (request.getParameter("needUserRole") == null
+                    || request.getParameter("needUserRole").equals("")) ? false : true;
+            String userType = request.getParameter("userType");
+            userType = (userType == null || userType.equals("")) ? null : userType;
+//            String lockFlag = request.getParameter("cmbLockFlag");
+//            lockFlag = (lockFlag == null || lockFlag.equals("")) ? null
+//                    : (lockFlag.equalsIgnoreCase("true") ? "1" : "0");
+            boolean needAllUser = false;
+            String tempAllUser = request.getParameter("needAllUser");
+            tempAllUser = (tempAllUser == null || tempAllUser.equals("")) ? "false" : tempAllUser;
+            needAllUser = tempAllUser.equalsIgnoreCase("true") ? true : false;
+            String stationUserIDs = request.getParameter("stationUserIDs");
+            stationUserIDs = (stationUserIDs == null || stationUserIDs.equals("")) ? "" : stationUserIDs;
+
+            if (null != quickSearch) {
+                quickSearch = URLDecoder.decode(quickSearch, "UTF-8");
+            } else if (null != formJson) {
+                // 高级查询检索条件
+                formJson = URLDecoder.decode(formJson, "UTF-8");
+                UserVO param1 = JSONObject.parseObject(formJson, UserVO.class);
+                if (param1 != null) {
+                    if (StringUtils.isNotEmpty(param1.getUserAccount())) {
+                        param.setUserAccount(param1.getUserAccount());
+                    }
+                    if (StringUtils.isNotEmpty(param1.getUserFullname())) {
+                        param.setUserFullname(param1.getUserFullname());
+                    }
+                    if (StringUtils.isNotEmpty(param1.getUserAccountLocked())) {
+                        param.setUserAccountLocked(param1.getUserAccountLocked());
+                    }
+                    if (StringUtils.isNotEmpty(param1.getUnitID())) {
+                        param.setUnitID(param1.getUnitID().split("@")[0]);
+                    }
+                }
+            }
+            // 处理分页
+            if (length == -1) {
+                length = Integer.MAX_VALUE;
+            }
+            int page = start / length + 1;
+            // 处理快速查询条件
+            if (StringUtils.isNotEmpty(quickSearch)) {
+                param.setSearchCondition(quickSearch);
+                param.setUserFullname(quickSearch);
+            }
+            String currentUserID = currentUser.getId();
+            if (needAllUser) {
+                currentUserID = "adminUser";
+            }
+            WF_ORG_ROLE adminRole = currentUser.getAdminRole();
+            String adminRoleID = adminRole == null ? null : adminRole.getRoleId();
+//            param.setUnitID(unitID);
+//            param.setUserAccount(userAccount);
+//            param.setUserFullname(userName);
+//            param.setUserAccountLocked(lockFlag);
+            param.setUserType(userType);
+            param.setAdminRoleID(adminRoleID);
+            param.setCurrentLoginUserID(currentUserID);
+
+            // 处理转义的字段
+            Map<String, String> replaceFieldsMap = new HashMap<String, String>();
+            replaceFieldsMap.put("validateStatus", "validate");
+            replaceFieldsMap.put("status", "enable");
+            replaceFieldsMap.put("userAccountLocked", "locked");
+
+            // 排序语句生成
+            String orderStatement = getOrderString(UserDAOImpl.class.getName(), "pageSelectUserList", replaceFieldsMap);
+            if (StringUtils.isNotEmpty(orderStatement)) {
+                param.setOrderBy(orderStatement);
+            }
+
+            // 获取分页数据
+            PageInfo<UserVO> userVOList = userService.findByWhere(page, length, param, true, false, needUserRole, false);
+
+            // 设置返回结果内容
+            returnMap.put(JSON_RESULT, SUCCESS);
+            returnMap.put(RECORDS_FILTERED, userVOList.getTotal());
+            returnMap.put(RECORDS_TOTAL, userVOList.getTotal());
+            returnMap.put(RETURN_DATA, userVOList.getList());
+        } catch (Exception ex) {
+            logger.error(ex);
+            returnMap.put(JSON_RESULT, FAILED);
+            returnMap.put(JSON_MSG, ex.getMessage());
+        }
+        // 生成返回结果json串，null内容也需要返回
+        return returnMap;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getExtendDetail", method = RequestMethod.POST)
+    public void getExtendDetail(HttpServletRequest request, HttpServletResponse response) {
+        // if (SecurityUtil.existUnavailableChar(request, "type")) {
+        // return mapping.findForward("unpermitted-character");
+        // }
+        JSONObject jsonObject = new JSONObject();
+        String type = request.getParameter("type").toString();
+        // if (type.equals("user")) {
+        // BizTypeDefine bizTypeDefine =
+        // OrgnizationConfig.getBizTypeDefine(type);
+        // jsonObject.put("BizTypeDefine", bizTypeDefine);
+        // try {
+        // response.getWriter().println(jsonObject.toString());
+        // } catch (IOException e) {
+        // jsonObject.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+        // e.printStackTrace();
+        // }
+        // }
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 保存用户（新建保存、修改保存）。根据saveType来确定是新建保存还是修改保存
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @ResponseBody
+    @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
+    public Map<String, Object> saveUser(HttpServletRequest request, HttpServletResponse response) {
+        // if (SecurityUtil.existUnavailableChar(request,
+        // "opFlag,userId,userDesc," +
+        // "userPass,userName,userAccount,userUnits,termId")) {
+        // return mapping.findForward("unpermitted-character");
+        // }
+        PrintWriter writer = null;
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        try {
+            String saveType = request.getParameter("opFlag");
+
+            // userVO赋值
+            WF_ORG_USER userVO = new WF_ORG_USER();
+            if (saveType == null || saveType.equals("0")) {
+                userVO.setUserId(java.util.UUID.randomUUID().toString().replaceAll("-", ""));
+                userVO.setUserAccountEnabled("1");
+                userVO.setUserAccountLocked("0");
+                userVO.setUserAccountCreated(new Date());
+            } else {
+                userVO.setUserId(request.getParameter("userId"));
+            }
+
+            userVO.setUserDescription(request.getParameter("userDesc"));
+            String password = request.getParameter("userPass");
+            if (password == null || password.equals("")) {
+                password = null;
+            }
+            userVO.setUserPassword(password);// md5Encrypt(request.getParameter("userPass"),OrgnizationConfig.CRYPTOGRAM_ALGORITHM));
+            userVO.setUserFullname(request.getParameter("userName"));
+            userVO.setUserAccount(request.getParameter("userAccount"));
+
+            String userUnits = request.getParameter("userUnits");
+            // 处理用户的组织单元和岗位
+            if (userUnits != null && !userUnits.equals("")) {
+                List unitAndStationList = Arrays.asList(userUnits.split(","));
+                List unitStringList = new ArrayList();
+                List stationStringList = new ArrayList();
+                if (unitAndStationList != null && unitAndStationList.size() > 0) {
+                    for (int i = 0; i < unitAndStationList.size(); i++) {
+                        String temp = (String) unitAndStationList.get(i);
+                        if (temp.indexOf("@") < 0) {
+                            unitStringList.add(temp);
+                        } else if (temp.indexOf("@UNIT") >= 0) {
+                            unitStringList.add(temp.substring(0, temp.lastIndexOf("@UNIT")));
+                        } else if (temp.indexOf("@STATION") >= 0) {
+                            stationStringList.add(temp.substring(0, temp.lastIndexOf("@STATION")));
+                        }
+                    }
+                    userVO.setUserUnitList(unitStringList);
+                    userVO.setUserStationList(stationStringList);
+                }
+            } else {
+                userVO.setUserUnitList(null);
+                userVO.setUserStationList(null);
+            }
+            // 处理用户的角色
+            String userRoles = request.getParameter("userRoles");
+            if (userRoles != null && !userRoles.equals("")) {
+                userVO.setUserRoleList(Arrays.asList(userRoles.split(",")));
+            } else {
+                userVO.setUserRoleList(null);
+            }
+
+            String extInfo = request.getParameter("extInfo"); // 获取扩展信息
+            Map map = new HashMap();
+            String info[] = extInfo.split("&");
+            for (int j = 0; j < info.length; j++) {
+                int s = info[j].lastIndexOf("=");
+                map.put(info[j].substring(0, s), info[j].substring(s + 1, info[j].length()));
+            }
+
+            // BizTypeDefine bizTypeDefine =
+            // OrgnizationConfig.getBizTypeDefine("user");
+            // ArrayList list = bizTypeDefine.getElementList();
+            Map finalElementMap = new HashMap();
+            // String idColumnName = "";
+            // for (int i = 0; i < list.size(); i++) {
+            // ElementDefine ed = (ElementDefine) list.get(i);
+            // Iterator mapIter = map.keySet().iterator();
+            // if (ed.getName().equalsIgnoreCase("id")) {
+            // idColumnName = ed.getColumn();
+            // }
+            // while (mapIter.hasNext()) {
+            // String extInfoName = mapIter.next().toString().trim();
+            // if (extInfoName.equals(ed.getName().trim())) {
+            // if (ed.getType().equalsIgnoreCase("DateField")) {
+            // String temp = map.get(extInfoName).toString();
+            // temp = temp.replaceAll("[+]", " ");
+            // // temp = temp.replaceAll("%3A", ":");
+            // finalElementMap.put(ed.getColumn(), temp);
+            // } else {
+            // finalElementMap.put(ed.getColumn(), map.get(extInfoName));
+            // }
+            //
+            // }
+            // }
+            // }
+            userVO.setExtInfoMap(finalElementMap);// 扩展信息hashMap
+
+            userService.saveUser(userVO, saveType, null, null);
+            // String userDetail =
+            // net.sf.json.JSONObject.fromObject(userVO).toString();
+            // jsonObject.put("userDetail", userDetail);
+            returnMap.put("userDetail", userVO);
+        } catch (IOException e) {
+            returnMap.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+            e.printStackTrace();
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 锁定用户
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - 请求对象
+     * @param response
+     *            - 答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/lockUser", method = RequestMethod.POST)
+    public Map<String, Object> lockUser(HttpServletRequest request, HttpServletResponse response) {
+        // if (SecurityUtil.existUnavailableChar(request, "userId,isLocked")) {
+        // return mapping.findForward("unpermitted-character");
+        // }
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String userID = request.getParameter("userId");
+        String isLocked = request.getParameter("isLocked");
+//        PrintWriter writer = null;
+//        JSONObject returnJSON = new JSONObject();
+        try {
+//            response.setContentType("text/json");
+//            response.setCharacterEncoding("UTF-8");
+//            writer = response.getWriter();
+            userService.lockUser(userID, isLocked);
+        } catch (IOException e) {
+            returnMap.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+            e.printStackTrace();
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 删除用户，如果角色已经被使用，则该组织单元不能被删除
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @SuppressWarnings("rawtypes")
+    @ResponseBody
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
+    public Map<String, Object> deleteUser(HttpServletRequest request, HttpServletResponse response) {
+        // if (SecurityUtil.existUnavailableChar(request, "userIds")) {
+        // return mapping.findForward("unpermitted-character");
+        // }
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        String userID = request.getParameter("userIds");
+//        PrintWriter writer = null;
+        // 扩展表的表名
+        // String extTableName = "";
+        // // 扩展表的主键字段名
+        // String idColumnName = "";
+//        JSONObject returnJSON = new JSONObject();
+        try {
+            // BizTypeDefine bizTypeDefine =
+            // OrgnizationConfig.getBizTypeDefine("user");
+            // extTableName = bizTypeDefine.getTable();
+            // if (bizTypeDefine.getElementList() != null ||
+            // bizTypeDefine.getElementList().size() > 0) {
+            // for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+            // ElementDefine ed = (ElementDefine)
+            // bizTypeDefine.getElementList().get(j);
+            // if (ed.getName().equalsIgnoreCase("id")) {
+            // idColumnName = ed.getColumn();
+            // break;
+            // }
+            // }
+            // }
+//            response.setContentType("text/json");
+//            response.setCharacterEncoding("UTF-8");
+//            writer = response.getWriter();
+            List delUserIdList = Arrays.asList(userID.split(","));
+            userService.deleteUser(delUserIdList, null, null);
+        } catch (IOException e) {
+            returnMap.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+            e.printStackTrace();
+        } catch (Exception e) {
+            returnMap.put("errorMessage", e.getMessage());
+            e.printStackTrace();
+        } 
+        return returnMap;
+    }
+
+    /**
+     * 方法简要描述信息.
+     * <p>
+     * 描述: 获取用户明细
+     * </p>
+     * <p>
+     * 备注: 详见顺序图<br>
+     * </p>
+     * 
+     * @param mapping
+     *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+     * @param form
+     *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+     * @param request
+     *            - jsp请求对象
+     * @param response
+     *            - jsp答复对象
+     * @throws 无
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getUserDetail", method = RequestMethod.POST)
+    public void getUserDetail(HttpServletRequest request, HttpServletResponse response) {
+        // if (SecurityUtil.existUnavailableChar(request, "userID")) {
+        // return mapping.findForward("unpermitted-character");
+        // }
+        String userID = request.getParameter("userID");
+        PrintWriter writer = null;
+        JSONObject returnJSON = new JSONObject();
+        try {
+            String userAdminRoleID = "";
+            String userAdminRoleName = "";
+            response.setContentType("text/json");
+            response.setCharacterEncoding("UTF-8");
+            writer = response.getWriter();
+            WF_ORG_USER userDetail = userService.getUserDetail(userID);
+            if (userDetail == null) {
+                returnJSON.put("errorMessage", OrgI18nConsts.USER_NOT_EXIST);
+            } else {
+                // 拼出人员角色~~~~~~~~~~~~~~~~~~
+                String userRolesKEY = "";
+                String userRolesVALUE = "";
+                if (userDetail.getRoleList() != null && userDetail.getRoleList().size() > 0) {
+                    // 从角色列表中取出业务角色
+                    List bizRoleList = new ArrayList();
+                    for (int i = 0; i < userDetail.getRoleList().size(); i++) {
+                        WF_ORG_ROLE roleVO = (WF_ORG_ROLE) userDetail.getRoleList().get(i);
+                        if (roleVO.getIsAdminrole().equals("否")) {
+                            bizRoleList.add(roleVO);
+                        } else {
+                            userAdminRoleID = roleVO.getRoleId();
+                            userAdminRoleName = roleVO.getRoleName();
+                        }
+                    }
+                    for (int i = 0; i < bizRoleList.size(); i++) {
+                        WF_ORG_ROLE roleVO = (WF_ORG_ROLE) bizRoleList.get(i);
+                        userRolesKEY += roleVO.getRoleId();
+                        userRolesVALUE += roleVO.getRoleName();
+                        // 最后一个字符串后面就不要加“,”了
+                        if (i == bizRoleList.size() - 1)
+                            break;
+                        userRolesKEY += ",";
+                        userRolesVALUE += ",";
+                    }
+                }
+                returnJSON.put("userRolesKEY", userRolesKEY);
+                returnJSON.put("userRolesVALUE", userRolesVALUE);
+                returnJSON.put("userAdminRoleKEY", userAdminRoleID);
+                returnJSON.put("userAdminRoleVALUE", userAdminRoleName);
+                // 拼出用户所属的组织~~~~~~~~~~~~~~~~~~
+                String userUnitsKEY = "";
+                String userUnitsVALUE = "";
+                if (userDetail.getUnitList() != null && userDetail.getUnitList().size() > 0) {
+                    for (int i = 0; i < userDetail.getUnitList().size(); i++) {
+                        WF_ORG_UNIT unitVO = (WF_ORG_UNIT) userDetail.getUnitList().get(i);
+                        userUnitsKEY += unitVO.getUnitId() + "@UNIT";
+                        userUnitsVALUE += unitVO.getUnitName();
+                        // 最后一个字符串后面就不要加“,”了
+                        if (i == userDetail.getUnitList().size() - 1)
+                            break;
+                        userUnitsKEY += ",";
+                        userUnitsVALUE += ",";
+                    }
+                }
+                // 拼出用户所属的岗位~~~~~~~~~~~~~~~~~~
+                String userStationsKEY = "";
+                String userStationsVALUE = "";
+                if (userDetail.getStationList() != null && userDetail.getStationList().size() > 0) {
+                    for (int i = 0; i < userDetail.getStationList().size(); i++) {
+                        WF_ORG_STATION unitVO = (WF_ORG_STATION) userDetail.getStationList().get(i);
+                        userStationsKEY += unitVO.getStationId() + "@STATION";
+                        userStationsVALUE += unitVO.getStationName();
+                        // 最后一个字符串后面就不要加“,”了
+                        if (i == userDetail.getStationList().size() - 1)
+                            break;
+                        userStationsKEY += ",";
+                        userStationsVALUE += ",";
+                    }
+                }
+                if (!userStationsKEY.equals("")) {
+                    returnJSON.put("userUnitsKEY",
+                            userUnitsKEY.equals("") ? userStationsKEY : userUnitsKEY + "," + userStationsKEY);
+                    returnJSON.put("userUnitsVALUE",
+                            userUnitsVALUE.equals("") ? userStationsVALUE : userUnitsVALUE + "," + userStationsVALUE);
+                } else {
+                    returnJSON.put("userUnitsKEY", userUnitsKEY);
+                    returnJSON.put("userUnitsVALUE", userUnitsVALUE);
+                }
+
+                userDetail.setUnitList(null);
+                userDetail.setRoleList(null);
+                // returnJSON.put("userDetail",
+                // net.sf.json.JSONObject.fromObject(userDetail).toString());
+                returnJSON.put("userDetail", userDetail);
+
+            }
+            // 测试代码
+            // BizTypeDefine bizTypeDefine =
+            // OrgnizationConfig.getBizTypeDefine("user");
+            // returnJSON.put("BizTypeDefine",
+            // JSONObject.fromObject(bizTypeDefine));
+        } catch (IOException e) {
+            returnJSON.put("errorMessage", OrgI18nConsts.EXCEPTION_UNKNOWN);
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            writer.println(returnJSON.toString());
+            writer.flush();
+            writer.close();
+        }
+    }
+
+}

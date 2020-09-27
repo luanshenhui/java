@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-1.8.3.js"></script>
+</head>
+
+<script>
+
+    $(function () {
+
+//        $.getJSON("/a/index/api", {
+//
+//            ds: 'dcapp',
+//
+//            fn: 'gzw_demo_test_2.sql',
+//
+////            arg:['thinkgem','huangr']
+//
+//            'arg[]': ''
+//
+//        }, function (res1) {
+//
+//
+//        })
+
+        $.getJSON("/a/index/api", {
+
+            _id: 'gzw_demo_test_1',
+
+            login_name: 'thinkgem',
+
+            login_id: 'huangr'
+
+        }, function (res2) {
+
+            console.info("=======111==========", arguments)
+        });
+
+
+        $.getJSON("/a/index/api", {
+
+            _id: 'gzw_demo_test_2',
+
+            login_name: 'thinkgem',
+
+            login_id: 'huangr'
+
+        }, function (res2) {
+
+            console.info("=======222==========", arguments)
+        });
+
+    })
+</script>
+
+
+<body>
+
+</body>
+</html>

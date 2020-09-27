@@ -1,0 +1,8 @@
+{{#each data}}
+    <div class="admin-big-box margin-bottom-0 pro-rg clearfix js-goods-info">
+        <div class="admin-big-box-sub admin-big-box-sub-w" data-data="{{json this}}">
+            <input name="code" class="js-item-id" type="radio" data-goods="{{itemModel.goodsCode}}"
+                   data-code="{{itemModel.code}}" value="{{itemModel.code}}">{{itemDescription}}
+        </div>
+    </div>
+{{/each}}

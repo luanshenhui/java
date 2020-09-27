@@ -1,0 +1,22 @@
+package com.yulin.dangdang.dao.daoimpl;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.yulin.dangdang.bean.Product;
+import com.yulin.dangdang.bean.SearchKey;
+import com.yulin.dangdang.common.MyBatisUtil;
+import com.yulin.dangdang.dao.SerachDao;
+
+public class SearchImpl implements SerachDao{
+
+	private String namespace = "com.yulin.searchMapping";
+	@Override
+	public List<Product> keyWord(SearchKey search) {
+		SqlSession session = MyBatisUtil.getSession();
+		List<Product> list = session.selectList(namespace + ".findSearch", search);
+		return null;
+	}
+	
+}

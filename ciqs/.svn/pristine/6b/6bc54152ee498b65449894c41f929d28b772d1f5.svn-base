@@ -1,0 +1,85 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<div class="freeze_div_dtl" style="position: fixed;top:0px;width:100%" >
+<div class="title-bg" >
+<div class=" title-position margin-auto white">
+<div class="title">
+<!-- <a href="#" style="color:white; text-decoration: none;"><span  class="font-24px">原产地证书签发确认</span></a> -->
+<span class="font-24px" style="color:white;">行政确认 /</span><a id="title_a" href="/ciqs/origplace/origList">原产地证书签发确认</a>
+</div>
+<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+</div>
+</div>
+<div class="flow-bg"  style=" height:235px;background-color: #f0f2f5;" >
+<div class="flow-position2 margin-auto"  style=" height:235px;" >
+<ul class="white font-18px flow-height font-weight">
+<li>电子审单</li>
+<li>签证调查</li>
+<li>签证</li>
+<li style="width:165px">证书发放及归档</li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<ul class="flow-icon" id="flow_color">
+  <li class="icongreen" data-id="time_1"><div class="hour white font-12px"></div><img src="${ctx}/static/show/images/origplace/org1.png" width="80" height="80" onclick="getPlace('module_1')"/></li>
+  <li class="iconyellow" data-id="time_2"><div class="hour white font-12px"></div><img src="${ctx}/static/show/images/origplace/org2.png" width="80" height="80" onclick="getPlace('module_2')"/></li>
+  <li class="iconyellow" data-id="time_4"><div class="hour white font-12px"></div><img src="${ctx}/static/show/images/origplace/org3.png" width="80" height="80" onclick="getPlace('module_3')"/></li> 
+  <li class="iconyellow" data-id="time_5"><div class="hour white font-12px"></div><img src="${ctx}/static/show/images/origplace/org4.png" width="80" height="80" onclick="getPlace('module_4')"/></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li class="white font-17px font-weight" > <br />
+    <!-- 历时：<span id="flow_origplace">0</span> --></li>
+</ul>
+<ul class="flow-info" >
+	<li><span id="name_1"></span><br /><span id="time_1" class="font-10px" ></span></li>
+	<li><span id="name_2"></span><br /><span id="time_2" class="font-10px" ></span></li>
+<!-- 	<li><span id="name_3">张一山</span><br /><span id="time_3" class="font-10px" >2017-07-26  15:34</span></li> -->
+	<li><span id="name_4"></span><br /><span id="time_4" class="font-10px" ></span></li>
+	<li><span id="name_5"></span><br /><span id="time_5" class="font-10px" ></span></li>
+	<li><span id="name_6"></span><br /><span id="time_6" class="font-10px" ></span></li>
+</ul>
+</div>
+</div>
+</div> 
+<script type="text/javascript">
+$.fn.getHour=function(startDate,endDate,flg,b){
+		if(!endDate || !startDate){
+			return $(this).html("-");
+		}
+		var date1 = new Date(startDate.replace(/-/g,"/")); 
+		var date2;
+		if(b){
+			date2=new Date();
+		}else{
+			date2 = new Date(endDate.replace(/-/g,"/"));
+		}
+		if(!flg){
+			flg="";
+		}
+		
+		var hour = null;
+		if(typeof(b)!='undefined'){
+// 			hour = (date2.getTime() - date1.getTime())/(1000 * 60 * 60 );
+			hour = daysBetween(date1,date2);
+		}else{
+			hour = (date2.getTime() - date1.getTime())/(1000 * 60 * 60 );
+		}
+		hour = hour.toFixed(2);
+		if(hour){
+			$(this).html(flg+hour);
+		}else{
+			$(this).html("-");
+		}
+	};
+	
+	function daysBetween(DateOne,DateTwo){
+		var time= (DateTwo.getTime() - DateOne.getTime())/(1000 * 60 * 60 );
+        return time;
+	}
+	
+	
+</script> 

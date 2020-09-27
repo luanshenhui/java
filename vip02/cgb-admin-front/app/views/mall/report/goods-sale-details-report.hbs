@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}商品销售明细报表{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"YG09",
+            "reportCode":"YG09,YG13,YG17"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

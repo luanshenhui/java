@@ -1,0 +1,176 @@
+
+
+Collection和Collections有什么区别
+Collection是接口  Collections是类
+
+					Collection(接口)              map(接口)
+				List (接口)       Set(接口)
+	ArrayList  Likedlist   hashset treeset    hashmap  treemap
+				
+list是有序的  可以重复的
+set 是无序的  不可以重复
+map 是键值对   key value   （key是不可以重复的 value是可以重复的）
+
+java为什么是跨平台的 八种基本数据类型  if else for while dowhile
+switch case 数组  为什么使用面向对象   构造器 封装 继承 多态 抽象
+final static string 日期 集合框架
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+String   Date  Calendar之间的相互转换
+
+String与Date之间的转换需要SimpleDateFormat，后面简称sdf
+
+String ---sdf.parse()---> Date
+Date  ---sdf.format()---> String
+
+Date与Calendar之间的转换
+
+Date to Calendar
+Calendar的setTime(Date date)
+
+Calendar to Date
+Calendar的Date getTime()
+
+
+
+java是面向对象的语言，但是java中支持的8个基本类型不是面向对象的。
+他们是以值的形式存在的，而不是对象的形式。在面向对象开发过程中及其不方便。
+为了将基本类型变成以对象形式存在，java对8个基本类型提供了引用类型。
+这8个引用类型称为基本类型的“包装类”
+
+基本类型                包装类
+int	          java.lang.Integer        Integer
+char	          java.lang.Character  Character
+byte                Byte
+shor                Short
+long                 Long
+float                Float
+double              Double
+boolean             Boolean
+
+包装类带来的好处，除了可以以对象的形式存在参与面向对象开发外，
+因为对象还可以含有方法，所以包装类提供了一些对基本类型数据操作的方法。
+最常用的就是将字符串转换为基本类型数据。
+例如：
+    "123123"如何转换为数字？
+包装类都提供了一个静态方法parseXXX(),用于将字符串转换为对应的基本类型数据
+    int a = Integer.parseInt("123123");
+    double d = Double.parseDouble("1.2");
+
+java1.5后支持了一个新的特性
+自动拆装箱
+自动装箱:可以自动的将一个基本类型数据变           成其包装类实例
+
+自动装箱的语法现象:
+          Integer a = 1;
+          或
+          int i = 1;
+          Integer a = i;
+
+自动拆箱:可以自动将一个包装类实例转变为            一个基本类型数据
+
+语法现象:
+         Integer i = Integer.valueOf(1);
+         int a = i;//自动拆箱
+       
+BigDecimal
+java中的double/float在计算时会有舍入误差。要想得到更加精确的结果，可以使用该类。
+java.math.BigDecimal
+
+该类定义了运算方法 + - * /
+add() 用当前浮点数加上另一个浮点数
+subtract()  减法
+multiply()   乘法
+divide()     除法
+
+使用一个BigDecimal实例来表示一个精确的小数，构造方法通常传入一个可以描述该小数的字符串。
+
+BigInteger
+描述更长位数的整数。
+java.math.BigInteger
+也支持加减乘数，用法和BigDecimal一样
+BigInteger的存储范围理论上只受内存容量限制。
+java的集合框架
+
+Collection接口
+java中所有集合的顶级父接口
+
+集合分为两类
+List:是一个接口
+     List规定了子类实现的特征为有序且元素      可重复集
+
+Set:是一个接口
+     Set规定了子类实现的特征为无序且不重     复集
+
+Collection接口定义的方法
+在该接口中定义的方法是每个集合都具备的！
+boolean add(Object o):
+向集合中添加新元素
+返回值:true添加元素成功。
+
+boolean remove(Object o)
+将给定元素从集合中删除
+返回值:true删除成功
+
+int size():
+返回当前集合的元素总数
+
+boolean isEmpty()
+判断集合中是否含有元素。
+
+boolean contains(Object obj)
+判断集合是否包含给定的元素
+
+void clear()
+清空集合
+
+boolean addAll(Collection c)
+将给定集合中的所有元素添加到当前集合
+
+boolean removeAll(Collection c)
+删除当前集合中与给定集合相同的元素
+
+Iterator iterator()
+返回当前集合的迭代器
+
+List集合
+有序且可重复集
+两个常用的实现类
+ArrayList和LinkedList
+
+用法完全一样，只是因为实现方式不同，各有千秋
+ArrayList使用数组实现，所以更适合读取存储的数据
+LinkedList使用链表实现，所以更适合插入和删除元素。
+
+List接口中定义的独有方法
+Object get(int index):
+获取给定索引出的元素
+
+Object set(int index,Object obj)
+将给定的元素存入集合指定位置
+
+add(int index ,Object obj)
+向集合指定位置插入元素
+
+remove(int index)
+删除指定位置的元素
+
+
+
+
+

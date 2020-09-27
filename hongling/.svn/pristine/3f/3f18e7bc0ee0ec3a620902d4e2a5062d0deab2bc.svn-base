@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.MixSelected" table="MixSelected">
+        <id name="id" column="ID" type="string">
+        	<generator class="uuid.hex" />
+        </id>
+        <property name="memberid" column="MEMBERID" type="string"/>
+        <property name="mixcodes" column="MIXCODES" type="text"/>
+    </class>
+</hibernate-mapping>

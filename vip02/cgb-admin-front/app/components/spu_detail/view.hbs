@@ -1,0 +1,100 @@
+{{#component "js-component"}}
+    <div class="mall-item-publish operation-platform" data-comp-path="spu_detail/view">
+        <div class="selected-category">
+            <span class="selected-category-span">
+              <span>您当前选择的spu是：</span>
+              <span class="selected-path"></span>
+            </span>
+        </div>
+        <div class="spu-title" data-isupdate="{{#if _DATA_.defaultItem.id}}true{{else}}false{{/if}}">
+            <label>产品基本信息</label>
+        </div>
+        <form class="form form-horizontal publish-form" data-spu-id="{{spuId}}">
+            {{#if spuId}}
+                <input type="hidden" name="spuId" value="{{spuId}}"/>
+            {{/if}}
+            <div class="left">
+                <div class="image-manage" data-default-detail="{{_DATA_.defaultItem.id}}">
+                    <div class="main-image">
+                        <img alt="{{_DATA_.defaultItem.mainImage}}" src="{{_DATA_.defaultItem.mainImage}}"/>
+                    </div>
+                    <ul class="images clearfix">
+                        <li class="selected">
+                            <div class="sharp"></div>
+                            <img id="itemMainImage" class="thumbnail" src="{{_DATA_.defaultItem.mainImage}}"/>
+                            <a href="javascript:void(0);">删除</a>
+                        </li>
+                        <li>
+                            <div class="sharp"></div>
+                            <img id="itemImage1" class="thumbnail" src="{{_DATA_.defaultItem.image1}}"/>
+                            <a href="javascript:void(0);" class="hide">删除</a>
+                        </li>
+                        <li>
+                            <div class="sharp"></div>
+                            <img id="itemImage2" class="thumbnail" src="{{_DATA_.defaultItem.image2}}"/>
+                            <a href="javascript:void(0);" class="hide">删除</a>
+                        </li>
+                        <li>
+                            <div class="sharp"></div>
+                            <img id="itemImage3" class="thumbnail" src="{{_DATA_.defaultItem.image3}}"/>
+                            <a href="javascript:void(0);" class="hide">删除</a>
+                        </li>
+                        <li>
+                            <div class="sharp"></div>
+                            <img id="itemImage4" class="thumbnail" src="{{_DATA_.defaultItem.image4}}"/>
+                            <a href="javascript:void(0);" class="hide">删除</a>
+                        </li>
+                    </ul>
+                    <div style="clear:both;"></div>
+                    <div class="submit">
+                        <button type="button" class="btn btn-success btn-small"
+                                id="replace-image-button">{{#if _DATA_.defaultItem.mainImage}}替换图片{{else}}
+                            上传图片{{/if}}</button>
+                        <div>请上传小于1MB的PNG或JPG的图片</div>
+                    </div>
+                </div>
+            </div>
+            <div class="right item">
+                {{!-- <form class="form form-aligned"> --}}
+                <div class="control-group">
+                    <label class="control-label" for="input-name">产品标题：</label>
+                    <div class="controls">
+                        <input type="text" id="input-name" class="input-text long-text" name="name" maxLength="200"
+                               value="{{_DATA_.defaultItem.name}}"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="input-price">参考价：</label>
+                    <div class="controls">
+                        <input type="number" id="input-price" class="input-text short-text" name="price" min="0"
+                               value="{{formatPrice _DATA_.defaultItem.price}}"/>&nbsp;&nbsp;&nbsp;元
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+                {{!-- </form> --}}
+                <div class="control-group">
+                    <label class="control-label" id="min-price" data-price>关键属性：</label>
+                    <div class="controls controls-attr">
+                        <div class="main-attr">
+                            <div class="spu base-attr clearfix">
+                                {{! spu_properties.hbs}}
+                            </div>
+                            <div class="skus attr-full clearfix" data-skus="{{json _DATA_.skus}}">
+                                {{! sku_properties.hbs}}
+                            </div>
+                            <div class="skus-table">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+            <div class="line"></div>
+            <div class="item-publish">
+                <input class="btn btn-success btn-large" id="publish-item-button" type="submit"
+                       {{#if _DATA_.defaultItem.id}}{{else}}disabled{{/if}}
+                       value="{{#if _DATA_.defaultItem.id}}保存产品{{else}}发布产品{{/if}}">
+            </div>
+        </form>
+    </div>
+{{/component}}

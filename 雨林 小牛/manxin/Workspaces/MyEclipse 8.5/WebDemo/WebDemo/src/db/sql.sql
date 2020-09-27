@@ -1,0 +1,10 @@
+drop table jsp_User;
+create database jsp_User
+create table jsp_User(
+	u_loginId varchar(100) primary key,
+	u_pwd varchar(100) not null,
+	u_name varchar(20) not null,
+	u_salary int not null,
+	u_age int not null
+);
+select * from jsp_User

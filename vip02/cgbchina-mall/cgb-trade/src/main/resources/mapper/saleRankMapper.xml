@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SaleRankModel">
+    <resultMap id="SaleRankMap" type="SaleRankModel">
+        <result property="id" column="id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="jfType" column="jf_type"/>
+        <result property="rank" column="rank"/>
+        <result property="saleNum" column="sale_num"/>
+        <result property="rankTime" column="rank_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="extend1" column="extend1"/>
+        <result property="extend2" column="extend2"/>
+        <result property="extend3" column="extend3"/>
+    </resultMap>
+    <sql id="columns">
+    id,goods_id,jf_type,rank,sale_num,rank_time,del_flag,extend1,extend2,extend3
+    </sql>
+
+    <insert id="insert" parameterType="SaleRankModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_sale_rank
+        (goods_id
+        ,jf_type
+        ,rank
+        ,sale_num
+        ,rank_time
+        ,del_flag
+        ,extend1
+        ,extend2
+        ,extend3)
+        values(#{goodsId}
+        ,#{jfType}
+        ,#{rank}
+        ,#{saleNum}
+        ,#{rankTime}
+        ,#{delFlag}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3})
+    </insert>
+
+    <update id="update" parameterType="SaleRankModel">
+        update tbl_sale_rank set
+            <if test="goodsId !=null">goods_id = #{goodsId}
+                ,</if>
+            <if test="jfType !=null">jf_type = #{jfType}
+                ,</if>
+            <if test="rank !=null">rank = #{rank}
+                ,</if>
+            <if test="saleNum !=null">sale_num = #{saleNum}
+                ,</if>
+            <if test="rankTime !=null">rank_time = #{rankTime}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="extend1 !=null">extend1 = #{extend1}
+                ,</if>
+            <if test="extend2 !=null">extend2 = #{extend2}
+                ,</if>
+            <if test="extend3 !=null">extend3 = #{extend3}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="jfType !=null">and jf_type = #{jfType}</if>
+            <if test="rank !=null">and rank = #{rank}</if>
+            <if test="saleNum !=null">and sale_num = #{saleNum}</if>
+            <if test="rankTime !=null">and rank_time = #{rankTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="extend1 !=null">and extend1 = #{extend1}</if>
+            <if test="extend2 !=null">and extend2 = #{extend2}</if>
+            <if test="extend3 !=null">and extend3 = #{extend3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="SaleRankMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_sale_rank
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="SaleRankMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_sale_rank
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="SaleRankMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_sale_rank
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="SaleRankModel">
+        delete from tbl_sale_rank where id = id
+    </delete>
+     <select id="findByJfType" parameterType="Map" resultMap="SaleRankMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_sale_rank
+       where jf_type=#{jfType} and del_flag!=#{delFlag}
+    </select>
+</mapper>
+
+

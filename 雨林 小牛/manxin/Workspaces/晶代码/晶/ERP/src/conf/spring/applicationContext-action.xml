@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<bean id="loginuserWebAction" class="com.market.action.LoginuserWebAction"
+		scope="prototype">
+		<property name="loginuserService">
+			<ref bean="loginuserService" />
+		</property>
+	</bean>
+
+	<bean id="employeeWebAction" class="com.market.action.EmployeeWebAction"
+		scope="prototype">
+		<property name="employeeService">
+			<ref bean="employeeService" />
+		</property>
+	</bean>
+	<bean id="memberWebAction" class="com.market.action.MemberWebAction"
+		scope="prototype">
+		<property name="memberService">
+			<ref bean="memberService" />
+		</property>
+	</bean>
+	<bean id="cardWebAction" class="com.market.action.CardWebAction"
+		scope="prototype">
+		<property name="cardService">
+			<ref bean="cardService" />
+		</property>
+		<property name="memberService">
+			<ref bean="memberService" />
+		</property>
+	</bean>
+	<bean id="brandWebAction" class="com.market.action.BrandWebAction"
+		scope="prototype">
+		<property name="brandService">
+			<ref bean="brandService" />
+		</property>
+	</bean>
+	<bean id="goodsWebAction" class="com.market.action.GoodsWebAction"
+		scope="prototype">
+		<property name="goodsService">
+			<ref bean="goodsService" />
+		</property>
+		<property name="brandService">
+			<ref bean="brandService" />
+		</property>
+		<property name="employeeService">
+			<ref bean="employeeService" />
+		</property>
+	</bean>
+	<bean id="stockWebAction" class="com.market.action.StockWebAction"
+		scope="prototype">
+		<property name="stockService">
+			<ref bean="stockService" />
+		</property>
+		<property name="employeeService">
+			<ref bean="employeeService" />
+		</property>
+		<property name="stockDetailService">
+			<ref bean="stockDetailService" />
+		</property>
+		<property name="goodsService">
+			<ref bean="goodsService" />
+		</property>
+	</bean>
+	<bean id="salesDetailWebAction" class="com.market.action.SalesDetailWebAction"
+		scope="prototype">
+		<property name="salesDetailService">
+			<ref bean="salesDetailService" />
+		</property>
+	</bean>
+	<bean id="salesWebAction" class="com.market.action.SalesWebAction"
+		scope="prototype">
+		<property name="salesService">
+			<ref bean="salesService" />
+		</property>
+		<property name="employeeService">
+			<ref bean="employeeService" />
+		</property>
+		<property name="salesDetailService">
+			<ref bean="salesDetailService" />
+		</property>
+		<property name="goodsService">
+			<ref bean="goodsService" />
+		</property>
+	</bean>
+	<bean id="stockDetailWebAction" class="com.market.action.StockDetailWebAction"
+		scope="prototype">
+		<property name="stockDetailService">
+			<ref bean="stockDetailService" />
+		</property>
+	</bean>
+
+</beans>

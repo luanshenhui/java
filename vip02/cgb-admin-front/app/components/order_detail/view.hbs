@@ -1,0 +1,84 @@
+{{#component "order_detail js-component"}}
+    <p class="components-title"><strong>订单详情</strong></p>
+    <div>
+        <p>订单状态</p>
+        <p>订单编号：201603230039990701</p>
+        <p>订单状态：已发货</p>
+    </div>
+    <div>
+        <p>订单渠道：广发商城</p>
+        <p>分期数：3</p>
+        <p>分期每期金额：192.00</p>
+        <p>优惠券：192.00</p>
+        <p>积分：20000</p>
+        <p>下单时间：2014-12-07 15：22：12</p>
+        <p>供应商：上海海牙湾贸易有限公司</p>
+    </div>
+    <div>
+        <p>收货信息</p>
+        <p>收货人姓名：王大大</p>
+        <p>收货人证件号码：230221199813301</p>
+        <p>收货人电话1：13945614347</p>
+        <p>收货人电话2：13944445555</p>
+        <p>收货人邮编：134201</p>
+        <p>收货人地址：广东省广州市越秀区黄海路1-1号23栋105室</p>
+        <p>送货时间要求：只有工作日送货</p>
+        <p>订单留言：尽快发货</p>
+    </div>
+    <div>
+        <p>商品信息</p>
+        <table>
+            <thead>
+                <td>商品</td>
+                <td>积分抵扣</td>
+                <td>优惠券</td>
+                <td>单价（元）</td>
+                <td>数量</td>
+                <td>小计（元）</td>
+            </thead>
+            <tr>
+                <td>苹果6sPlus</td>
+                <td>30000</td>
+                <td>100.00</td>
+                <td>
+                    <p>2099.33×3期</p>
+                    <p>优惠活动</p>
+                </td>
+                <td>1</td>
+                <td>6088.00</td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <p>物流信息</p>
+        <p>物流公司：中通快递</p>
+        <p>物流单号：876555582624444</p>
+        <p>发货时间：2016-03-12 12：00：00</p>
+        <p>物流跟踪：<a href="" class="">物流跟踪</a></p>
+        <p>O2O商品兑换码：23222233333</p>
+    </div>
+    <div>
+        <p>操作历史</p>
+        <p>2016年3月19日 15：50：00 下单成功</p>
+        <p>2016年3月19日 15：55：12 支付成功</p>
+        <p>2016年3月20日 00：00：00 发货成功</p>
+    </div>
+    <div>
+        <p>审核信息</p>
+        {{#equals type 1}}
+            <p>审核意见:通过</p>
+        {{/equals}}
+        {{#equals type 2}}
+            <p>审核意见:<input type="text" class="form-control js-appprove-comment"></p>
+        {{/equals}}
+    </div>
+    <div class="order-etm">
+        {{#equals type 1}}
+            <button class="btn btn-sm js-return">返回</button>
+        {{/equals}}
+        {{#equals type 2}}
+            <button class="btn btn-sm js-pass">通过</button>
+            <button class="btn btn-sm js-refuse">拒绝</button>
+        {{/equals}}
+    </div>
+{{/component}}

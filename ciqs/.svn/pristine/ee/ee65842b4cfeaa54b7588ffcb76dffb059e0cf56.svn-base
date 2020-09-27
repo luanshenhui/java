@@ -1,0 +1,642 @@
+package com.dpn.ciqqlc.common.util;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.dpn.ciqqlc.http.form.WarningLinkRuleForm;
+
+public enum WarningEnum {
+
+
+	/**一般处罚*/
+	
+	/**线索移送 - 检验检疫涉嫌案件申报单*/
+	ql1101001("GP_AJ_SBD",WarningEnum.fetchRule(Constants.ql1100000, "ql1101001")),
+	
+	
+	/**立案申报 - 行政处罚案件立案审批表*/
+	ql1102001("D_GP_L_S_1",WarningEnum.fetchRule(Constants.ql1100000, "ql1102001")),
+	/**立案申报 - 案件移送函*/
+	ql1102002("D_GP_A_Y_1",WarningEnum.fetchRule(Constants.ql1100000, "ql1102002")),
+	
+	
+	/**调查取证 - 调查询问-调查通知书*/
+	ql1103001("gp_file_dcxw",WarningEnum.fetchRule(Constants.ql1100000, "ql1103001")),
+	/**调查取证 - 调查询问-调查笔录*/
+	ql1103002("gp_file_dcxw",WarningEnum.fetchRule(Constants.ql1100000, "ql1103002")),
+	/**调查取证 - 现场勘验-现场勘验笔录、现场勘验照片、现场勘验音像*/
+	ql1103003("gp_file_xcky",WarningEnum.fetchRule(Constants.ql1100000, "ql1103003")),
+	ql1103004("gp_file_xcky",WarningEnum.fetchRule(Constants.ql1100000, "ql1103004")),
+	ql1103005("gp_file_xcky",WarningEnum.fetchRule(Constants.ql1100000, "ql1103005")),
+	/**调查取证 - 调查报告*/
+	ql1103006("D_GP_DCBG",WarningEnum.fetchRule(Constants.ql1100000, "ql1103006")),
+	/**调查取证 - 延期办理审批表*/
+	ql1103007("D_GP_DCBG_XZCFAJ_SPB",WarningEnum.fetchRule(Constants.ql1100000, "ql1103007")),
+	
+	/**审理决定 - 行政处罚案件办理审批表*/
+	ql1104001("D_GP_XZCFAJ_SPB",WarningEnum.fetchRule(Constants.ql1100000, "ql1104001")),
+	/**审理决定 - 行政处罚报告书*/
+	ql1104002("D_GP_XZCF_GZS",WarningEnum.fetchRule(Constants.ql1100000, "ql1104002")),
+	/**审理决定 - 送达回证*/
+	ql1104003("gp_file_sdhz",WarningEnum.fetchRule(Constants.ql1100000, "ql1104003")),
+	/**审理决定 - 案件移送函*/
+	//TODO D_GP_A_Y_1
+	ql1104004("D_GP_A_Y_1",WarningEnum.fetchRule(Constants.ql1100000, "ql1104004")),
+	
+	/**审理决定 - 听证程序 - 行政处罚听证通知书、行政处罚听证会笔录、听证意见书*/
+	ql1104005("gp_file_tzcx",WarningEnum.fetchRule(Constants.ql1100000, "ql1104005")),
+	ql1104006("gp_file_tzcx",WarningEnum.fetchRule(Constants.ql1100000, "ql1104006")),
+	ql1104007("gp_file_tzcx",WarningEnum.fetchRule(Constants.ql1100000, "ql1104007")),
+	
+	/**送达执行 - 行政处罚决定书*/
+	ql1105001("D_GP_XZCF_JDS",WarningEnum.fetchRule(Constants.ql1100000, "ql1105001")),
+	/**送达执行 - 送达回证*/
+	ql1105002("gp_file_sdhz_sdzx",WarningEnum.fetchRule(Constants.ql1100000, "ql1105002")),
+	
+	/**归档 - 行政处罚结案报告*/
+	ql1106001("D_GP_XZCF_JABG",WarningEnum.fetchRule(Constants.ql1100000, "ql1106001")),
+	ql1106002("D_GP_XZCF_AJFKB",WarningEnum.fetchRule(Constants.ql1100000, "ql1106002")),
+	
+	/**原产地*/
+//	ql0501001("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0501002("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0501003("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0502001("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0502002("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0502003("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+	ql0502004("V_OC_C_M_1",WarningEnum.fetchRule(Constants.ql0500000, "ql0502004")),
+	ql0502005("V_OC_C_M_2",WarningEnum.fetchRule(Constants.ql0500000, "ql0502005")),
+	ql0502006("V_OC_C_M_3",WarningEnum.fetchRule(Constants.ql0500000, "ql0502006")),
+	ql0502007("V_OC_C_M_4",WarningEnum.fetchRule(Constants.ql0500000, "ql0502007")),
+	ql0502008("V_OC_C_M_7",WarningEnum.fetchRule(Constants.ql0500000, "ql0502008")),
+	ql0502009("V_OC_C_M_10",WarningEnum.fetchRule(Constants.ql0500000, "ql0502009")),
+	ql0502003("D_OC_C_M_1",WarningEnum.fetchRule(Constants.ql0500000, "ql0502003")),
+//	ql0503001("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+//	ql0503002("",WarningEnum.fetchRule(Constants.ql1100000, "")),
+	ql0504001("V_OC_C_M_5",WarningEnum.fetchRule(Constants.ql0500000, "ql0504001")), 
+	ql0502002("V_OC_C_M_11",WarningEnum.fetchRule(Constants.ql0500000, "ql0502002")),
+	
+	/**隔离留验*/
+	ql0602001("D_DD_T_L_1",WarningEnum.fetchRule(Constants.ql0600000, "ql0602001")),
+	ql0602003("D_DD_T_L_2",WarningEnum.fetchRule(Constants.ql0600000, "ql0602003")),
+	ql0602002("D_DD_T_L_4",WarningEnum.fetchRule(Constants.ql0600000, "ql0602002")),
+	ql0604001("D_DD_T_L_3",WarningEnum.fetchRule(Constants.ql0600000, "ql0604001")),
+	
+	/**简易处罚*/
+	ql1201001("PHOTO_V_CF_J_Y_1",WarningEnum.fetchRule(Constants.ql1200000, "ql1201001")),
+	ql1202001("DOC_V_CF_J_Y_1",WarningEnum.fetchRule(Constants.ql1200000, "ql1202001")),
+	ql1202002("VIDEO_V_CF_J_Y_1",WarningEnum.fetchRule(Constants.ql1200000, "ql1202002")),
+	
+	/**
+	 * 口岸卫生许可证核发
+	 * 带有ZDY的都没有环节类型都是自定义的
+	 */
+	ql0901001("V_PT_H_L_ZDY_1",WarningEnum.fetchRule(Constants.ql0900000, "ql0901001")),//  企业申请材料
+	ql0901002("V_PT_H_L_ZDY_2",WarningEnum.fetchRule(Constants.ql0900000, "ql0901002")),//  卫生许可证申请书
+	ql0902001("D_SL_GZ",WarningEnum.fetchRule(Constants.ql0900000, "ql0902001")),//  质量监督检验检疫行政许可受理单及送达回证
+	ql0902002("D_BY_GZ",WarningEnum.fetchRule(Constants.ql0900000, "ql0902002")),//  质量监督检验检疫行政许可不予受理决定书及送达回证
+	ql0902003("D_SQ_BZ",WarningEnum.fetchRule(Constants.ql0900000, "ql0902003")),//  质量监督检验检疫行政许可申请材料补正告知书及送达回证
+	
+//	ql0902003("D_SDHZ",WarningEnum.fetchRule(Constants.ql0900000, "ql0902003")),//送达回证
+	
+	ql0902004("F_CARD",WarningEnum.fetchRule(Constants.ql0900000, "ql0902004")),//  国境口岸卫生许可工作“流程卡”
+	ql0902005("D_ACC_FORM",WarningEnum.fetchRule(Constants.ql0900000, "ql0902005")),//  质量监督检验检疫行政许可申请材料接收清单
+	
+	ql0903001("D_PT_H_L_7",WarningEnum.fetchRule(Constants.ql0900000, "ql0903001")),//  现场评审表
+	
+	ql0903002("D_PT_H_L_12",WarningEnum.fetchRule(Constants.ql0900000, "ql0903002")),//  电子笔录
+	ql0903003("D_SQ_SHRY",WarningEnum.fetchRule(Constants.ql0900000, "ql0903003")),//  国境口岸卫生许可现场审查派员申请书
+	
+	ql0903004_1("V_PT_H_L_1_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_2("V_PT_H_L_2_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_3("V_PT_H_L_3_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_4("V_PT_H_L_4_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_5("V_PT_H_L_5_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_6("V_PT_H_L_6_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_7("V_PT_H_L_7_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_8("V_PT_H_L_8_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_9("V_PT_H_L_9_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_10("V_PT_H_L_10_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_11("V_PT_H_L_11_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_12("V_PT_H_L_12_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_13("V_PT_H_L_13_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_14("V_PT_H_L_14_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_15("V_PT_H_L_15_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_16("V_PT_H_L_16_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_17("V_PT_H_L_17_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_18("V_PT_H_L_18_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_19("V_PT_H_L_19_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_20("V_PT_H_L_20_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_21("V_PT_H_L_21_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_22("V_PT_H_L_22_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_23("V_PT_H_L_23_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_24("V_PT_H_L_24_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_25("V_PT_H_L_25_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_26("V_PT_H_L_26_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_27("V_PT_H_L_27_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_28("V_PT_H_L_28_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_29("V_PT_H_L_29_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_30("V_PT_H_L_30_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_31("V_PT_H_L_31_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_32("V_PT_H_L_32_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_33("V_PT_H_L_33_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_34("V_PT_H_L_34_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_35("V_PT_H_L_35_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_36("V_PT_H_L_36_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_37("V_PT_H_L_37_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_38("V_PT_H_L_38_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_39("V_PT_H_L_39_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_40("V_PT_H_L_40_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_41("V_PT_H_L_41_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_42("V_PT_H_L_42_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_43("V_PT_H_L_43_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_44("V_PT_H_L_44_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_45("V_PT_H_L_45_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_46("V_PT_H_L_46_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_47("V_PT_H_L_47_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_48("V_PT_H_L_48_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_49("V_PT_H_L_49_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_50("V_PT_H_L_50_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_51("V_PT_H_L_51_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_52("V_PT_H_L_52_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_53("V_PT_H_L_53_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_54("V_PT_H_L_54_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_55("V_PT_H_L_55_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_56("V_PT_H_L_56_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_57("V_PT_H_L_57_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_58("V_PT_H_L_58_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_59("V_PT_H_L_59_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_60("V_PT_H_L_60_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_61("V_PT_H_L_61_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_62("V_PT_H_L_62_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_63("V_PT_H_L_63_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_64("V_PT_H_L_64_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_65("V_PT_H_L_65_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_66("V_PT_H_L_66_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_67("V_PT_H_L_67_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_68("V_PT_H_L_68_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_69("V_PT_H_L_69_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_70("V_PT_H_L_70_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_71("V_PT_H_L_71_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_72("V_PT_H_L_72_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_73("V_PT_H_L_73_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_74("V_PT_H_L_74_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_75("V_PT_H_L_75_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_76("V_PT_H_L_76_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_77("V_PT_H_L_77_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_78("V_PT_H_L_78_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_79("V_PT_H_L_79_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_80("V_PT_H_L_80_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_81("V_PT_H_L_81_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_82("V_PT_H_L_82_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_83("V_PT_H_L_83_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_84("V_PT_H_L_84_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_85("V_PT_H_L_85_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_86("V_PT_H_L_86_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_87("V_PT_H_L_87_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_88("V_PT_H_L_88_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_89("V_PT_H_L_89_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_90("V_PT_H_L_90_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_91("V_PT_H_L_91_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_92("V_PT_H_L_92_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_93("V_PT_H_L_93_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_94("V_PT_H_L_94_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_95("V_PT_H_L_95_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_96("V_PT_H_L_96_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_97("V_PT_H_L_97_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_98("V_PT_H_L_98_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_99("V_PT_H_L_99_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_100("V_PT_H_L_100_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_101("V_PT_H_L_101_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_103("V_PT_H_L_103_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_104("V_PT_H_L_104_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_105("V_PT_H_L_105_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_106("V_PT_H_L_106_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_107("V_PT_H_L_107_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_108("V_PT_H_L_108_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_109("V_PT_H_L_109_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_110("V_PT_H_L_110_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_111("V_PT_H_L_111_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_112("V_PT_H_L_112_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_113("V_PT_H_L_113_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_114("V_PT_H_L_114_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_115("V_PT_H_L_115_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_116("V_PT_H_L_116_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_117("V_PT_H_L_117_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_118("V_PT_H_L_118_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_119("V_PT_H_L_119_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_120("V_PT_H_L_120_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_121("V_PT_H_L_121_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	ql0903004_122("V_PT_H_L_122_P",WarningEnum.fetchRule(Constants.ql0900000, "ql0903004")),//  现场审查图像记录
+	
+	
+	ql0903005_1("V_PT_H_L_1_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_2("V_PT_H_L_2_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_3("V_PT_H_L_3_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_4("V_PT_H_L_4_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_5("V_PT_H_L_5_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_6("V_PT_H_L_6_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_7("V_PT_H_L_7_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_8("V_PT_H_L_8_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_9("V_PT_H_L_9_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_10("V_PT_H_L_10_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_11("V_PT_H_L_11_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_12("V_PT_H_L_12_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_13("V_PT_H_L_13_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_14("V_PT_H_L_14_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_15("V_PT_H_L_15_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_16("V_PT_H_L_16_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_17("V_PT_H_L_17_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_18("V_PT_H_L_18_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_19("V_PT_H_L_19_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_20("V_PT_H_L_20_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_21("V_PT_H_L_21_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_22("V_PT_H_L_22_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_23("V_PT_H_L_23_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_24("V_PT_H_L_24_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_25("V_PT_H_L_25_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_26("V_PT_H_L_26_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_27("V_PT_H_L_27_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_28("V_PT_H_L_28_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_29("V_PT_H_L_29_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_30("V_PT_H_L_30_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_31("V_PT_H_L_31_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_32("V_PT_H_L_32_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_33("V_PT_H_L_33_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_34("V_PT_H_L_34_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_35("V_PT_H_L_35_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_36("V_PT_H_L_36_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_37("V_PT_H_L_37_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_38("V_PT_H_L_38_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_39("V_PT_H_L_39_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_40("V_PT_H_L_40_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_41("V_PT_H_L_41_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_42("V_PT_H_L_42_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_43("V_PT_H_L_43_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_44("V_PT_H_L_44_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_45("V_PT_H_L_45_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_46("V_PT_H_L_46_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_47("V_PT_H_L_47_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_48("V_PT_H_L_48_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_49("V_PT_H_L_49_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_50("V_PT_H_L_50_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_51("V_PT_H_L_51_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_52("V_PT_H_L_52_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_53("V_PT_H_L_53_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_54("V_PT_H_L_54_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_55("V_PT_H_L_55_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_56("V_PT_H_L_56_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_57("V_PT_H_L_57_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_58("V_PT_H_L_58_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_59("V_PT_H_L_59_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_60("V_PT_H_L_60_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_61("V_PT_H_L_61_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_62("V_PT_H_L_62_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_63("V_PT_H_L_63_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_64("V_PT_H_L_64_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_65("V_PT_H_L_65_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_66("V_PT_H_L_66_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_67("V_PT_H_L_67_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_68("V_PT_H_L_68_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_69("V_PT_H_L_69_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_70("V_PT_H_L_70_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_71("V_PT_H_L_71_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_72("V_PT_H_L_72_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_73("V_PT_H_L_73_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_74("V_PT_H_L_74_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_75("V_PT_H_L_75_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_76("V_PT_H_L_76_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_77("V_PT_H_L_77_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_78("V_PT_H_L_78_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_79("V_PT_H_L_79_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_80("V_PT_H_L_80_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_81("V_PT_H_L_81_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_82("V_PT_H_L_82_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_83("V_PT_H_L_83_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_84("V_PT_H_L_84_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_85("V_PT_H_L_85_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_86("V_PT_H_L_86_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_87("V_PT_H_L_87_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_88("V_PT_H_L_88_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_89("V_PT_H_L_89_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_90("V_PT_H_L_90_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_91("V_PT_H_L_91_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_92("V_PT_H_L_92_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_93("V_PT_H_L_93_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_94("V_PT_H_L_94_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_95("V_PT_H_L_95_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_96("V_PT_H_L_96_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_97("V_PT_H_L_97_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_98("V_PT_H_L_98_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_99("V_PT_H_L_99_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_100("V_PT_H_L_100_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_101("V_PT_H_L_101_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_103("V_PT_H_L_103_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_104("V_PT_H_L_104_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_105("V_PT_H_L_105_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_106("V_PT_H_L_106_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_107("V_PT_H_L_107_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_108("V_PT_H_L_108_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_109("V_PT_H_L_109_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_110("V_PT_H_L_110_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_111("V_PT_H_L_111_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_112("V_PT_H_L_112_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_113("V_PT_H_L_113_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_114("V_PT_H_L_114_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_115("V_PT_H_L_115_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_116("V_PT_H_L_116_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_117("V_PT_H_L_117_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_118("V_PT_H_L_118_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_119("V_PT_H_L_119_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_120("V_PT_H_L_120_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_121("V_PT_H_L_121_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_122("V_PT_H_L_122_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	ql0903005_123("V_PT_H_L_123_V",WarningEnum.fetchRule(Constants.ql0900000, "ql0903005")),//  现场审查音像记录
+	
+	ql0903006("D_PT_H_L_0",WarningEnum.fetchRule(Constants.ql0900000, "ql0903006")),//  限期卫生整改通知书及送达回证（现场审查不合格时必有）
+//	ql0903007("D_DD_T_L_3",WarningEnum.fetchRule(Constants.ql0900000, "ql0903007")),//  跟踪审查（现场审查不合格时必有）
+	ql0904001("D_SQ_SL",WarningEnum.fetchRule(Constants.ql0900000, "ql0904001")),//  质量监督检验检疫准予行政许可决定书及送达回证
+	ql0904002("D_BU_SL",WarningEnum.fetchRule(Constants.ql0900000, "ql0904002")),//  质量监督检验检疫不予行政许可决定书及送达回证
+	//TODO
+//	ql0904003("D_DD_T_L_3",WarningEnum.fetchRule(Constants.ql0900000, "ql0904003")),//  国境口岸卫生许可证（证书）
+	ql0905001("V_PT_H_L_ZDY_3",WarningEnum.fetchRule(Constants.ql0900000, "ql0905001")),//  口岸卫生许可工作时限与结果公示
+	
+	ql0906001("V_PT_H_L_ZDY_4",WarningEnum.fetchRule(Constants.ql0900000, "ql0906001")),//  企业撤回卫生许可申请的流转记录(企业撤销申请时必有)
+	ql0906002("V_PT_H_L_ZDY_5",WarningEnum.fetchRule(Constants.ql0900000, "ql0906002")),//  企业主动注销申请材料(企业申请注销时必有)
+	ql0906003("V_PT_H_L_ZDY_6",WarningEnum.fetchRule(Constants.ql0900000, "ql0906003")),//  检验检疫部门撤销卫生许可时的佐证材料(根据文件中规定的相应情形需要撤销卫生许可时必有)
+	//TODO
+	//	ql0906004("D_DD_T_L_3",WarningEnum.fetchRule(Constants.ql0900000, "ql0906004")), //  处理结果公示
+	
+	//TODO	
+	/****************************************货轮********************************************************************************/
+	ql0101001("",WarningEnum.fetchRule(Constants.ql0100000, "ql0101001")),//审批-申请检疫方式
+	ql0102001("V_JC_T_T_23",WarningEnum.fetchRule(Constants.ql0100000, "ql0102001")),//检疫查验-船舶是否悬挂检疫黄旗和检疫信号灯
+	ql0102002("V_JC_T_T_24",WarningEnum.fetchRule(Constants.ql0100000, "ql0102002")),//检疫查验-船舶是否采取悬挡鼠板等病媒生物防控措施
+	ql0102003("V_JC_T_T_25",WarningEnum.fetchRule(Constants.ql0100000, "ql0102003")),//检疫查验-船舶是否存在未经检疫合格人员及货物上下的情况
+	ql0102004("V_JC_T_T_9",WarningEnum.fetchRule(Constants.ql0100000, "ql0102004")),//检疫查验-疫情疫病医学排查-照片
+	ql0102005("V_JC_T_T_10",WarningEnum.fetchRule(Constants.ql0100000, "ql0102005")),//检疫查验-疫情疫病医学排查-视频
+	ql0102006("V_JC_T_T_6",WarningEnum.fetchRule(Constants.ql0100000, "ql0102006")),//检疫查验-检疫查验视频
+	ql0102007("D_JC_T_T_2",WarningEnum.fetchRule(Constants.ql0100000, "ql0102007")),//检疫查验-《口岸传染病可疑病例流行病学调查表》
+	ql0102008("V_JC_T_T_12",WarningEnum.fetchRule(Constants.ql0100000, "ql0102008")),//检疫查验-《采样知情同意书》
+	ql0102009("V_JC_T_T_11",WarningEnum.fetchRule(Constants.ql0100000, "ql0102009")),//检疫查验-《口岸传染病可疑病例医学排查记录表》
+	ql0102010("V_JC_T_T_13",WarningEnum.fetchRule(Constants.ql0100000, "ql0102010")),//检疫查验-《口岸传染病疑似病例转诊单》、
+	ql0102011("V_JC_T_T_14",WarningEnum.fetchRule(Constants.ql0100000, "ql0102011")),//检疫查验-《方便就诊卡》
+	ql0103001("V_JC_T_T_15",WarningEnum.fetchRule(Constants.ql0100000, "ql0103001")),//卫生监督-卫生监督照片
+	ql0103002("V_JC_T_T_16",WarningEnum.fetchRule(Constants.ql0100000, "ql0103002")),//卫生监督-卫生监督视频
+	ql0103003("D_JC_T_T_14",WarningEnum.fetchRule(Constants.ql0100000, "ql0103003")),//卫生监督-船舶卫生监督评分表
+	ql0103004("V_JC_T_T_36",WarningEnum.fetchRule(Constants.ql0100000, "ql0103004")),//卫生监督-证据报告表照片
+	ql0104001("V_JC_T_T_17",WarningEnum.fetchRule(Constants.ql0100000, "ql0104001")),//卫生处理-检验检疫处理通知书照片
+	ql0104002("V_JC_T_T_18",WarningEnum.fetchRule(Constants.ql0100000, "ql0104002")),//卫生处理-卫生处理单位卫生处理单据照片
+	ql0104003("V_JC_T_T_38",WarningEnum.fetchRule(Constants.ql0100000, "ql0104003")),//卫生处理-处理单位及相关人员处理资质的确定照片
+	ql0104004("V_JC_T_T_19",WarningEnum.fetchRule(Constants.ql0100000, "ql0104004")),//卫生处理-卫生处理监督及评价照片
+	ql0104005("V_JC_T_T_20",WarningEnum.fetchRule(Constants.ql0100000, "ql0104005")),//卫生处理-卫生处理监督及评价视频
+	ql0104006("D_JC_T_T_4",WarningEnum.fetchRule(Constants.ql0100000, "ql0104006")),//卫生处理-交通工具熏蒸操作(除虫、除鼠)检查考核
+	ql0104007("D_JC_T_T_5",WarningEnum.fetchRule(Constants.ql0100000, "ql0104007")),//卫生处理-交通工具喷洒操作(消毒、除虫)检查考核
+	ql0104008("D_JC_T_T_6",WarningEnum.fetchRule(Constants.ql0100000, "ql0104008")),//卫生处理-交通工具垃圾(废弃物)消毒操作检查考核
+	ql0105001("V_JC_T_T_21",WarningEnum.fetchRule(Constants.ql0100000, "ql0105001")),//证书签发-证书签发照片
+	ql0106001("D_JC_T_T_9",WarningEnum.fetchRule(Constants.ql0100000, "ql0106001")), //归档-归档详细列表
+	
+	
+	/**进境邮寄物检疫*/
+	ql0301001("V_KBQ_C_M_1",WarningEnum.fetchRule(Constants.ql0300000, "ql0301001")),//信息采集照片
+	ql0302001("V_KB_C_M_1",WarningEnum.fetchRule(Constants.ql0300000, "ql0302001")),//开包查验照片
+	ql0302002("V_KB_C_M_2",WarningEnum.fetchRule(Constants.ql0300000, "ql0302002")),//开包查验视频况
+	ql0303001("V_JL_C_M_3",WarningEnum.fetchRule(Constants.ql0300000, "ql0303001")),//未知
+	ql0303002("V_JL_C_M_3",WarningEnum.fetchRule(Constants.ql0300000, "ql0303002")),//未知
+	ql0304001("V_CYSJ_C_M_1",WarningEnum.fetchRule(Constants.ql0300000, "ql0304001")),//抽样送检照片
+	ql0304002("V_CYSJ_C_M_2",WarningEnum.fetchRule(Constants.ql0300000, "ql0304002")),//抽样送检视频
+	ql0304003("D_CYPZ",WarningEnum.fetchRule(Constants.ql0300000, "ql0304003")),//抽样凭证
+	ql0304004("D_WTJY",WarningEnum.fetchRule(Constants.ql0300000, "ql0304004")),//委托检验申请单
+	ql0305001("V_KB_C_M_4",WarningEnum.fetchRule(Constants.ql0300000, "ql0305001")),//放行照片
+	ql0306001("V_TH_C_M_5",WarningEnum.fetchRule(Constants.ql0300000, "ql0306001")),//对退回邮寄物外包装拍照
+	ql0307001("V_XH_C_M_6",WarningEnum.fetchRule(Constants.ql0300000, "ql0307001")),//销毁列表
+	ql0307002("V_XH_C_M_6",WarningEnum.fetchRule(Constants.ql0300000, "ql0307002")),//集中销毁视频
+	ql0308001("",WarningEnum.fetchRule(Constants.ql0300000, "ql0308001")),//未知,归档
+	
+	
+	/**邮轮*/
+	ql0201001("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0201001")),//申报 -申请检疫方式
+	ql0202001("V_JC_T_Y_D_8",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0202001")),//准备 -仪器领用表
+	ql0203001("V_JC_T_Y_D_9",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203001")),//登轮检疫-登轮前事项
+	ql0203002("V_JC_T_Y_D_5",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203002")),//登轮检疫-《入境船舶检疫查验记录表》
+	ql0203003("D_JC_T_Y_3",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203003")),//登轮检疫-《船舶卫生监督登记表》
+	
+	ql0203004_1("V_MS_E_R",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203004")),//登轮检疫-卫生监督图像、音响记录
+//	ql0203004_2("D_MS_SP_GD",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203004")),//登轮检疫-卫生监督图像、音响记录
+	ql0203004_3("V_JC_T_Y_D_1",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203004")),//登轮检疫-卫生监督图像、音响记录
+	ql0203004_4("V_JC_T_Y_D_2",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203004")),//登轮检疫-卫生监督图像、音响记录
+//	ql0203004_5("D_MS_SP_GD",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203004")),//登轮检疫-卫生监督图像、音响记录
+	
+	//这个类型是自行加的
+	ql0203005("V_JC_T_Y_CY_ZDY",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203005")),//登轮检疫-样品采集与送检
+	
+	ql0203006("V_JC_T_Y_JYJGBGD_ZDY",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203006")),//登轮检疫-《检验结果报告单》
+	ql0203007("V_JC_T_Y_JYCL_ZDY",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203007")),//登轮检疫-结果评价
+	ql0203008("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203008")),//登轮检疫-检疫处理
+	
+	ql0203009_1("V_MS_OP_ZS_QF",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203009")),//登轮检疫-签发证书
+	ql0203009_2("V_JC_T_Y_D_6",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0203009")),//登轮检疫-签发证书
+//	ql0204001("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0204001")),//上报通报-信息、风险评估结果及疫情上报
+//	ql0204002("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0204002")),//上报通报-通报下一港信息材料
+//	ql0204003("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0204003")),//上报通报-图像记录
+//	ql0205001("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0205001")),//行政处罚-《检验检疫涉嫌违法申报单》
+//	ql0206001("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE02, "ql0206001")),//归档 -归档详细列表
+	
+	/**行政检查*/
+	ql1001002("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001002")),//备案出口食品生产企业名录库
+	ql1002001("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1002001")),//审查结果、审查意见
+
+	ql1001003("",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001003")),//备案出口食品生产企业的质量安全管理体系运行情况执法检查人员名录库
+	ql1001004("V_XCCY_QD_JH",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001004")),//年度现场检查计划
+	ql1001005("V_XCCY_QD_SP",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001005")),//行政监督检查审批
+	ql1001008("V_SP_RP_1",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001008")),//行政监督检查审批
+	ql1001009("V_SP_RP_2",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001009")),//行政监督检查通知
+	ql1001010("V_SP_RP_3",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001010")),//送达回证
+	ql1002002("V_SP_RP_4",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1002002")),//现场检查记录
+	ql1002003("V_SP_RP_5",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1002003")),//首次会议签到表
+	ql1002004("V_SP_RP_7",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1002004")),//末次会议签到表
+	ql1003001("V_SP_RP_6",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1003001")),//整改报告照片
+	ql1003003("V_SP_CZ_QT",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1003003")),//其他
+	ql1001006("V_SP_A_C_JDB_ZDY",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001006")),//行政检查企业监督表（专项）
+	ql1001007("V_SP_A_C_BFX_ZDY",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001007")),//行政检查不符合报告（专项）
+	ql1002005("V_SP_A_D_JDB_ZDY",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1002005")),//行政检查企业监督表（后续）
+	ql1003002("V_SP_A_D_BFX_ZDY",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1003002")),//行政检查不符合报告（后续）
+	ql1001001("XZJC_NDBG_ZDY",WarningEnum.fetchRule(Constants.BUSINESS_TYPE10, "ql1001001")),//年度报告）
+	;                                                                               
+
+	private WarningEnum(){}
+	private WarningEnum(String code,WarningLinkRuleForm warningLinkRuleForm){
+		this.code = code;
+		this.warningLinkRuleForm = warningLinkRuleForm;
+		
+	}
+//	private WarningEnum(String code,String step,WarningLinkRuleForm warningLinkRuleForm){
+//		this.code = code;
+//		this.warningLinkRuleForm = warningLinkRuleForm;
+//		this.step = step;
+//		
+//	}
+	private WarningEnum(String code,String step){}
+	
+	/**
+	 * old业务code
+	 */
+	private String code;
+	
+	/**
+	 * 环节流程备用 某些系统多个环节用同一个环节类型时需要传递此字段
+	 */
+	private String step;
+	
+	private List<String> steps;
+	
+	private WarningLinkRuleForm warningLinkRuleForm;
+	
+	
+	
+	public static WarningLinkRuleForm fetchRule(String busType,String dic_type){
+		Map<String, List<WarningLinkRuleForm>> mr = LazySingleton.getInstance().getRules();
+		List<WarningLinkRuleForm> ls = mr.get(busType);
+		for (WarningLinkRuleForm warningLinkRuleForm : ls) {
+			if(warningLinkRuleForm.getDicType().equals(dic_type)) return warningLinkRuleForm;
+			else continue;
+		}
+		return null;
+	}
+	
+	public static WarningEnum getWarByStep(String str,String step){
+
+		WarningEnum we = null;
+		switch (step) {
+		
+		//线索移送
+		case Constants.AUDIT_STEP_1:
+		case Constants.AUDIT_STEP_2:
+			we = WarningEnum.ql1101001;
+ 			break;
+ 			
+ 		//立案申报
+		case Constants.AUDIT_STEP_3:
+		case Constants.AUDIT_STEP_16:
+		case Constants.AUDIT_STEP_4:
+		case Constants.AUDIT_STEP_5:
+		case Constants.AUDIT_STEP_17:
+		case Constants.AUDIT_STEP_7:
+			we = WarningEnum.ql1102001;
+			break;
+			
+		//调查取证
+		case Constants.AUDIT_STEP_9:
+		case Constants.AUDIT_STEP_18:
+		case Constants.AUDIT_STEP_19:
+			we = WarningEnum.ql1103001;
+			break;
+			
+		//审理决定	
+		case Constants.AUDIT_STEP_10:
+		case Constants.AUDIT_STEP_20:
+		case Constants.AUDIT_STEP_11:
+		case Constants.AUDIT_STEP_12:
+			we = WarningEnum.ql1104001;
+			break;
+			
+		//送达回证
+		case Constants.AUDIT_STEP_13:
+			we = WarningEnum.ql1105001;
+			break;
+			
+		//结案归档
+		case Constants.AUDIT_STEP_14:
+			we = WarningEnum.ql1106001;
+ 			break;
+ 			
+		default:
+			we = null;
+			break;
+		}
+
+		return we;
+	}
+	/**
+	 * 
+	 * @param str
+	 * @param likeFlag 是否需要模糊查找如果需要传true
+	 * @return
+	 */
+    public static WarningEnum getRuleCode(String str, boolean likeFlag){
+
+    	EnumSet<WarningEnum> esSet = EnumSet.allOf(WarningEnum.class);
+    	
+    	for (WarningEnum warningEnum : esSet) {
+    		if(likeFlag && warningEnum.code.contains(str)) return warningEnum;
+    		if(str.equals(warningEnum.getCode())) return warningEnum;
+		}
+    	return null;
+    	
+//    	switch (str) {
+//    	
+//			case "V_OC_C_M_1":
+//				b = ql0502004;
+//				break;
+//			case "V_OC_C_M_2":
+//				b = ql0502005;
+//				break;
+//			case "V_OC_C_M_3":
+//				b = ql0502006;
+//				break;
+//			case "V_OC_C_M_4":
+//				b = ql0502007;
+//				break;
+//			case "V_OC_C_M_5":
+//				b = ql0504001;
+//				break;	
+//			case "V_OC_C_M_7":
+//				b = ql0502008;
+//				break;	
+//			case "V_OC_C_M_10":
+//				b = ql0502009;
+//				break;
+//			case "V_OC_C_M_11":
+//				b = ql0502002;
+//				break;
+//				
+//				
+//			default:
+//				break;
+//		}
+    }
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getStep() {
+		return step;
+	}
+
+	public void setStep(String step) {
+		this.step = step;
+	}
+
+	public WarningLinkRuleForm getWarningLinkRuleForm() {
+		return warningLinkRuleForm;
+	}
+
+	public void setWarningLinkRuleForm(WarningLinkRuleForm warningLinkRuleForm) {
+		this.warningLinkRuleForm = warningLinkRuleForm;
+	}
+	public List<String> getSteps() {
+		return steps;
+	}
+	public void setSteps(List<String> steps) {
+		this.steps = steps;
+	}
+	
+	
+}

@@ -1,0 +1,46 @@
+{{#component "activitys-detail js-component"}}
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="10%">活动编号</th>
+            <th width="10%">优惠类型</th>
+            <th width="10%">开始时间</th>
+            <th width="10%">结束时间</th>
+            <th width="10%">降价频率(秒)</th>
+            <th width="10%">降价金额</th>
+            <th width="10%">渠道</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                <td class="activity-id">{{id}}</td>
+                <td class="activity-type">{{activityType}}</td>
+                <td class="activity-beginTime">{{beginTime}}</td>
+                <td class="activity-endTime">{{endTime}}</td>
+                <td class="sale-time">{{saleTime}}</td>
+                <td class="sale-price">{{salePrice}}</td>
+                <td class="role">{{role}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="30%">报名时间</th>
+            <th width="30%">商品名称</th>
+            <th width="30%">供应商名称</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                <td class="begin-time">{{beginTime}}</td>
+                <td class="goods-name">{{goodsName}}</td>
+                <td class="supplier-name">{{supplierName}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="pagination" data-total="{{_DATA_.total}}">
+    </div>
+{{/component}}

@@ -1,0 +1,28 @@
+<div class="modal editItem">
+    <div class="modal-header">
+        <a href="javascript:void(0)" class="close">×</a>
+        <h2>编辑顺序</h2>
+    </div>
+    <form class="form form-aligned js-wx-form">
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="code">单品编码：</label>
+                <span>{{data.mid}}</span>
+                <input type="hidden" id="itemcode" name="code" value="{{data.code}}">
+            </div>
+            <div class="control-group">
+                <label for="name">商品名称：</label>
+                <span>{{data.name}}</span>
+            </div>
+            <div class="control-group">
+                <label for="wxOrder">显示顺序：</label>
+                <input type="text" name="wxOrder" id="wxOrder"  pattern="^$|^[1-9][0-9]*$" class="form-control" value="{{data.wxOrder}}" maxlength="9">
+                <span class="note-error wxOrder-note-error"><i>&times;</i> 请输入数字</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="保 存">
+            <button class="btn btn-small btn-info close">取 消</button>
+        </div>
+    </form>
+</div>

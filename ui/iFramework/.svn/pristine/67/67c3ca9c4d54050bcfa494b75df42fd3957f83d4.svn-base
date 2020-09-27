@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process id="" version="" name="">
+    <!-- 泳道定义  -->
+    <lanes laneType="horizontal|vertical">
+        <lane id="" name="" width="" height="" color="" />
+    </lanes>
+    <!-- 注释的定义 -->
+    <annotation id=""  activityID="" desc="" width="" height="" x="" y=""/>
+    
+    <!-- 节点定义  -->
+    <activity id="1" name="A" x="300" y="20"   imgUrl="finished" activityType=""/>
+    <activity id="2" name="B.1" x="150" y="70" imgUrl="processing" activityType=""/>
+    <activity id="3" name="B.2" x="450" y="70" imgUrl="waitting" activityType=""/>
+    <activity id="4" name="C.1" x="75" y="120" imgUrl="waitting" activityType="">test\n测试中文</activity>
+    <activity id="5" name="C.2" x="225" y="120" imgUrl="waitting" activityType=""/>
+    <activity id="6" name="C.3" x="375" y="120" imgUrl="waitting" activityType=""/>
+    <activity id="7" name="C.4" x="525" y="120" imgUrl="waitting" activityType="" />
+  
+    <!-- 连接线定义 -->
+    <transition id="1" fromActivity="1" toActivity="2" name=""/>  
+    <transition id="2" fromActivity="1" toActivity="3" name=""/>
+    <transition id="3" fromActivity="2" toActivity="4" name=""/>
+    <transition id="4" fromActivity="2" toActivity="5" name=""/>
+    <transition id="5" fromActivity="3" toActivity="6" name="" />
+    <transition id="6" fromActivity="3" toActivity="7" name="" />
+    <transition id="6" fromActivity="1" toActivity="2" name="">
+  	    <segment x="300" y="40" x2="50" y2="40"/>
+  	    <segment x="50" y="40" x2="50" y2="90"/>
+  	    <segment x="50" y="90" x2="150" y2="90"/>
+    </transition>
+</process>

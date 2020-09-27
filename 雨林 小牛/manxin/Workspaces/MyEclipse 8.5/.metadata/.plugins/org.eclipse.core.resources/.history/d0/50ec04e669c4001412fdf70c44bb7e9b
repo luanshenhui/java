@@ -1,0 +1,37 @@
+package com.yulin.text6;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.util.List;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import com.yulin.text2.Dept;
+
+public class Main {
+
+	/**
+	 * 一对多
+	 */
+	public static void main(String[] args) {
+		String path = "com/yulin/DB/cfg.xml";
+		try {
+			Reader rd = Resources.getResourceAsReader(path);
+			SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(rd);
+			SqlSession session = factory.openSession();
+			/* 一对多的查询 */
+			List<Dept> depts = session.selectList("com.yulin.text6.DeptMapping2.findDept");
+			for(Dept d : depts){
+				System.out.println(d);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}

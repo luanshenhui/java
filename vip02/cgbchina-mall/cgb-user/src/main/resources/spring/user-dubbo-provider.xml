@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:properties id="app" location="classpath:app.properties"/>
+
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+	
+    <import resource="user-service-context.xml"/>
+    <import resource="mybatis-context.xml"/>
+	<import resource="classpath*:/spring/generator-context.xml"/>
+	<dubbo:provider retries="0"/>
+    <!-- Application name -->
+    <dubbo:application name="user-provider" logger="slf4j"/>
+    <!-- registry address, used for service to register itself -->
+    <dubbo:registry address="#{app.dubboRegistry}"/>
+    <!-- expose this service through dubbo protocol, through port 20880 -->
+    <dubbo:protocol serialization="nativejava" name="dubbo" port="#{app.dubboPort}" threads="#{app.dubboThreads}"
+                    heartbeat="#{app.dubboHeartBeats}"/>
+
+    <dubbo:service interface="cn.com.cgbchina.user.service.AddressService" ref="addressServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.ImageService" ref="imageServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.AdminMenuMagService" ref="adminMenuMagServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.EspPublishInfService" ref="espPublishInfServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.AdminRoleService" ref="adminRoleServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.LogonHistoryService" ref="logonHistoryServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.MailStatesService" ref="mailStatesServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.LogsService" ref="logsServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.MallUserService" ref="mallUserServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.MemberAddressService" ref="memberAddressServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.NewMessageService" ref="newMessageServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.OrganiseService" ref="organiseServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.PersonalMessageService" ref="personalMessageServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.UserBrowseHistoryService" ref="userBrowseHistoryServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.UserFavoriteService" ref="userFavoriteServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.UserInfoService" ref="userInfoServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.UserRoleService" ref="userRoleServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.VendorMenuService" ref="vendorMenuServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.VendorRoleMenuService" ref="vendorRoleMenuServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.VendorRoleRefService" ref="vendorRoleRefServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.VendorRoleService" ref="vendorRoleServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.VendorService" ref="vendorServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.VendorUserService" ref="vendorUserServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.ACardCustToelectronbankService" ref="aCardCustToelectronbankServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.ACustToelectronbankService" ref="aCustToelectronbankServiceImpl" timeout="60000"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.CardProService" ref="cardProServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.CustInfoCommonService" ref="custInfoCommonServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.LocalCardRelateService" ref="localCardRelateServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.LocalProcodeService" ref="localProcodeServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.ACardLevelToelectronbankService" ref="aCardLevelToelectronbankServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.EspCustNewService" ref="espCustNewServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.OutSysVendorInfoService" ref="outSysVendorInfoServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.user.service.VendorMessageService" ref="vendorMessageServiceImpl"/>
+
+</beans>

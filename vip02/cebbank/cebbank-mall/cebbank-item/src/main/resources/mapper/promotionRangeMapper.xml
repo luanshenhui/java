@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PromotionRangeModel">
+    <resultMap id="PromotionRangeMap" type="PromotionRangeModel">
+        <result property="id" column="id"/>
+        <result property="promotionId" column="promotion_id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="rangeType" column="range_type"/>
+        <result property="selectId" column="select_id"/>
+        <result property="selectCode" column="select_code"/>
+        <result property="selectName" column="select_name"/>
+        <result property="goodsCode" column="goods_code"/>
+        <result property="backCategory1Id" column="back_category1_id"/>
+        <result property="backCategory2Id" column="back_category2_id"/>
+        <result property="backCategory3Id" column="back_category3_id"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="seq" column="seq"/>
+        <result property="price" column="price"/>
+        <result property="stock" column="stock"/>
+        <result property="costBy" column="costBy"/>
+        <result property="couponEnable" column="couponEnable"/>
+        <result property="levelMinCount" column="levelMinCount"/>
+        <result property="levelPrice" column="levelPrice"/>
+        <result property="startPrice" column="startPrice"/>
+        <result property="minPrice" column="minPrice"/>
+        <result property="feeRange" column="feeRange"/>
+        <result property="createOperType" column="create_oper_type"/>
+        <result property="modifyOperType" column="modify_oper_type"/>
+        <result property="auditLog" column="audit_log"/>
+        <result property="auditOper" column="audit_oper"/>
+        <result property="auditDate" column="audit_date"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="saleCount" column="saleCount"/>
+        <result property="perStock" column="perStock"/>
+        <result property="groupClassify" column="groupClassify"/>
+    </resultMap>
+    <sql id="columns">
+        id,promotion_id,vendor_id,range_type,select_id,select_code,select_name,goods_code,back_category1_id,back_category2_id,back_category3_id,check_status,is_valid,seq,price,stock,costBy,couponEnable,levelMinCount,levelPrice,startPrice,minPrice,feeRange,create_oper_type,modify_oper_type,audit_log,audit_oper,audit_date,create_oper,create_time,modify_oper,modify_time,perStock,groupClassify
+    </sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="promotionId !=null">and promotion_id = #{promotionId}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="rangeType !=null">and range_type = #{rangeType}</if>
+            <if test="selectId !=null">and select_id = #{selectId}</if>
+            <if test="selectCode !=null">and select_code = #{selectCode}</if>
+            <if test="selectName !=null">and select_name = #{selectName}</if>
+            <if test="goodsCode !=null">and goods_code = #{goodsCode}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="isValid !=null">and is_valid = #{isValid}</if>
+            <if test="seq !=null">and seq = #{seq}</if>
+            <if test="price !=null">and price = #{price}</if>
+            <if test="stock !=null">and stock = #{stock}</if>
+            <if test="costBy !=null">and costBy = #{costBy}</if>
+            <if test="couponEnable !=null">and couponEnable = #{couponEnable}</if>
+            <if test="levelMinCount !=null">and levelMinCount = #{levelMinCount}</if>
+            <if test="levelPrice !=null">and levelPrice = #{levelPrice}</if>
+            <if test="startPrice !=null">and startPrice = #{startPrice}</if>
+            <if test="minPrice !=null">and minPrice = #{minPrice}</if>
+            <if test="feeRange !=null">and feeRange = #{feeRange}</if>
+            <if test="createOperType !=null">and create_oper_type = #{createOperType}</if>
+            <if test="modifyOperType !=null">and modify_oper_type = #{modifyOperType}</if>
+            <if test="auditLog !=null">and audit_log = #{auditLog}</if>
+            <if test="auditOper !=null">and audit_oper = #{auditOper}</if>
+            <if test="auditDate !=null">and audit_date = #{auditDate}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="PromotionRangeMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_promotion_range
+        where id=#{id}
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="PromotionRangeMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion_range
+        <include refid="conditions"/>
+        order by id desc limit #{offset}, #{limit}
+    </select>
+    <delete id="delete" parameterType="PromotionRangeModel">
+        delete from tbl_promotion_range where id = #{id}
+    </delete>
+
+    <!--批量插入数据(供应商) add by wangqi-->
+    <insert id="insertAllForVendor" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index">
+            insert into tbl_promotion_range
+            (promotion_id
+            ,vendor_id
+            ,range_type
+            ,select_id
+            ,select_code
+            ,select_name
+            ,goods_code
+            ,back_category1_id
+            ,back_category2_id
+            ,back_category3_id
+            ,check_status
+            ,is_valid
+            ,seq
+            ,price
+            ,stock
+            ,costBy
+            ,couponEnable
+            ,levelMinCount
+            ,levelPrice
+            ,startPrice
+            ,minPrice
+            ,feeRange
+            ,create_oper_type
+            ,create_oper
+            ,create_time,
+            perStock)
+            values(#{item.promotionId}
+            ,#{item.vendorId}
+            ,#{item.rangeType}
+            ,#{item.selectId}
+            ,#{item.selectCode}
+            ,#{item.selectName}
+            ,#{item.goodsCode}
+            ,#{item.backCategory1Id}
+            ,#{item.backCategory2Id}
+            ,#{item.backCategory3Id}
+            ,#{item.checkStatus}
+            ,#{item.isValid}
+            ,#{item.seq}
+            ,#{item.price}
+            ,#{item.stock}
+            ,#{item.costBy}
+            ,#{item.couponEnable}
+            ,#{item.levelMinCount}
+            ,#{item.levelPrice}
+            ,#{item.startPrice}
+            ,#{item.minPrice}
+            ,#{item.feeRange}
+            ,#{item.createOperType}
+            ,#{item.createOper}
+            ,NOW(),
+            #{item.perStock});
+        </foreach>
+    </insert>
+    <select id="findByPromId" parameterType="Integer" resultMap="PromotionRangeMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion_range
+        where promotion_id = #{_parameter} AND is_valid=1
+    </select>
+    <select id="findByParams" parameterType="Map" resultMap="PromotionRangeMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion_range
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="promotionId !=null">and promotion_id = #{promotionId}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="rangeType !=null">and range_type = #{rangeType}</if>
+            <if test="selectId !=null">and select_id = #{selectId}</if>
+            <if test="selectCode !=null">and select_code = #{selectCode}</if>
+            <if test="selectName !=null">and select_name like CONCAT("%",CONCAT(#{selectName},"%"))</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="createOperType !=null">and create_oper_type = #{createOperType}</if>
+            <if test="modifyOperType !=null">and modify_oper_type = #{modifyOperType}</if>
+            <if test="vendorIds !=null">and vendor_id in
+                <foreach collection="vendorIds" open="(" close=")" separator="," item="vendorid">#{vendorid}</foreach>
+            </if>
+            AND is_valid=1
+        </where>
+        ORDER BY `seq`
+        <if test="offset != null and limit !=null">
+            limit #{offset},#{limit}
+        </if>
+    </select>
+    <insert id="insertAllForAdmin" parameterType="List">
+        insert into tbl_promotion_range
+        (promotion_id,
+        vendor_id
+        ,range_type
+        ,select_code
+        ,select_name
+        ,goods_code
+        ,back_category1_id
+        ,back_category2_id
+        ,back_category3_id
+        ,check_status
+        ,is_valid
+        ,seq
+        ,price
+        ,stock
+        ,costBy
+        ,couponEnable
+        ,levelPrice
+        ,startPrice
+        ,minPrice
+        ,feeRange
+        ,create_oper_type
+        ,create_oper
+        ,create_time
+        ,perStock
+        ,groupClassify)
+        values
+        <foreach collection="list" item="adminInsert" separator=",">
+            (#{adminInsert.promotionId},
+            #{adminInsert.vendorId}
+            ,#{adminInsert.rangeType}
+            ,#{adminInsert.selectCode}
+            ,#{adminInsert.selectName}
+            ,#{adminInsert.goodsCode}
+            ,#{adminInsert.backCategory1Id}
+            ,#{adminInsert.backCategory2Id}
+            ,#{adminInsert.backCategory3Id}
+            ,#{adminInsert.checkStatus}
+            ,#{adminInsert.isValid}
+            ,#{adminInsert.seq}
+            ,#{adminInsert.price}
+            ,#{adminInsert.stock}
+            ,#{adminInsert.costBy}
+            ,#{adminInsert.couponEnable}
+            ,#{adminInsert.levelPrice}
+            ,#{adminInsert.startPrice}
+            ,#{adminInsert.minPrice}
+            ,#{adminInsert.feeRange}
+            ,#{adminInsert.createOperType}
+            ,#{adminInsert.createOper}
+            ,NOW(),
+            #{adminInsert.perStock}
+            ,#{adminInsert.groupClassify})
+        </foreach>
+    </insert>
+    <update id="updateCheckStatus" parameterType="Map">
+        UPDATE tbl_promotion_range SET check_status=#{checkStatus},audit_oper=#{auditOper},audit_log=#{auditLog},audit_date=NOW() WHERE
+        id=#{id} AND promotion_id=#{promotionId} AND is_valid=1
+    </update>
+    <select id="findPromotionId" parameterType="Map" resultType="Integer">
+        SELECT promotion_id FROM tbl_promotion_range WHERE select_code=#{selectCode} AND is_valid=1
+    </select>
+    <update id="updateStatusByPromotion" parameterType="Map">
+        UPDATE tbl_promotion_range SET check_status=#{checkStatus},audit_oper=#{auditOper},audit_date=NOW()
+        WHERE promotion_id=#{promotionId}
+    </update>
+    <select id="findSelectCodeByPromId" parameterType="Map" resultType="String">
+        SELECT select_code FROM tbl_promotion_range
+        WHERE is_valid=1
+        <if test="promotionId !=null">and promotion_id=#{promotionId}
+        </if>
+        <if test="vendorId !=null">and vendor_id=#{vendorId}
+        </if>
+    </select>
+    <update id="updateAll" parameterType="List">
+        <foreach collection="list" item="updateModel" separator=";">
+            update tbl_promotion_range
+            <set>
+                <if test="updateModel.seq !=null">seq = #{updateModel.seq}
+                    ,
+                </if>
+                price = #{updateModel.price}
+                ,
+                stock = #{updateModel.stock}
+                ,
+                <if test="updateModel.costBy !=null">costBy = #{updateModel.costBy}
+                    ,
+                </if>
+                couponEnable = #{updateModel.couponEnable}
+                ,
+                levelMinCount = #{updateModel.levelMinCount}
+                ,
+                levelPrice = #{updateModel.level1Price}
+                ,
+                startPrice = #{updateModel.startPrice}
+                ,
+                minPrice = #{updateModel.minPrice}
+                ,
+                feeRange = #{updateModel.feeRange}
+                ,
+                <if test="updateModel.createOperType !=null">create_oper_type = #{updateModel.createOperType}
+                    ,
+                </if>
+                <if test="updateModel.modifyOperType !=null">modify_oper_type = #{updateModel.modifyOperType}
+                    ,
+                </if>
+                <if test="updateModel.auditLog !=null">audit_log = #{updateModel.auditLog}
+                    ,
+                </if>
+                <if test="updateModel.auditOper !=null">audit_oper = #{updateModel.auditOper}
+                    ,
+                </if>
+                <if test="updateModel.auditDate !=null">audit_date = #{updateModel.auditDate}
+                    ,
+                </if>
+                <if test="updateModel.createOper !=null">create_oper = #{updateModel.createOper}
+                    ,
+                </if>
+                <if test="updateModel.createTime !=null">create_time = #{updateModel.createTime}
+                    ,
+                </if>
+                <if test="updateModel.modifyOper !=null">modify_oper = #{updateModel.modifyOper}
+                    ,
+                </if>
+                <if test="updateModel.modifyTime !=null">modify_time = NOW()
+                </if>
+            </set>
+            where id = #{updateModel.id}
+        </foreach>
+    </update>
+    <select id="rangeStatus" parameterType="Integer" resultType="cn.com.cgbchina.item.dto.RangeStatusDto">
+        SELECT(SELECT COUNT(1) FROM tbl_promotion_range WHERE check_status = 0 AND promotion_id = #{_parameter}
+        ) AS "ready",
+        (SELECT COUNT(1)
+        FROM
+        tbl_promotion_range WHERE
+        check_status = 1 AND is_valid=1
+        AND promotion_id = #{_parameter}
+        )AS "already",
+        (
+        SELECT
+        COUNT(1)
+        FROM
+        tbl_promotion_range
+        WHERE
+        check_status = 2 AND is_valid=1
+        AND promotion_id = #{_parameter}
+        ) AS "refuse",
+        (
+        SELECT
+        COUNT(1)
+        FROM
+        tbl_promotion_range
+        WHERE
+        promotion_id = #{_parameter} AND is_valid=1
+        ) AS "all"
+    </select>
+    <select id="promRangeByParamCount" parameterType="Map" resultType="Integer">
+        select
+        COUNT(1)
+        from tbl_promotion_range
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="promotionId !=null">and promotion_id = #{promotionId}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="rangeType !=null">and range_type = #{rangeType}</if>
+            <if test="selectId !=null">and select_id = #{selectId}</if>
+            <if test="selectCode !=null">and select_code = #{selectCode}</if>
+            <if test="selectName !=null">and select_name like CONCAT("%",CONCAT(#{selectName},"%"))</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="createOperType !=null">and create_oper_type = #{createOperType}</if>
+            <if test="modifyOperType !=null">and modify_oper_type = #{modifyOperType}</if>
+            <if test="vendorIds !=null">and vendor_id in
+                <foreach collection="vendorIds" open="(" close=")" separator="," item="vendorid">#{vendorid}</foreach>
+            </if>
+            AND is_valid=1
+        </where>
+    </select>
+    <update id="updateAllForAdmin" parameterType="Map">
+        <foreach collection="rangeList" separator=";" item="adminUpdate" close=";">
+            UPDATE tbl_promotion_range SET seq = #{adminUpdate.seq},price = #{adminUpdate.price},stock =
+            #{adminUpdate.stock},costBy = #{adminUpdate.costBy}
+            ,couponEnable = #{adminUpdate.couponEnable}, levelPrice = #{adminUpdate.levelPrice} ,startPrice =
+            #{adminUpdate.startPrice}
+            ,minPrice = #{adminUpdate.minPrice}
+            ,feeRange = #{adminUpdate.feeRange}
+            , modify_oper_type = #{adminUpdate.modifyOperType}
+            , modify_oper = #{adminUpdate.modifyOper}
+            ,modify_time = NOW(),perStock=#{adminUpdate.adminUpdate},perStock=#{adminUpdate.perStock},groupClassify=#{adminUpdate.groupClassify}
+            where select_code = #{adminUpdate.selectCode} AND promotion_id=#{adminUpdate.promotionId}
+        </foreach>
+    </update>
+
+    <select id="findItemCodes" parameterType="Map" resultType="String">
+        SELECT DISTINCT select_code FROM tbl_promotion_range WHERE
+        range_type =0 AND check_status=1 AND is_valid=1
+        <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+        <if test="promotionIds !=null">and promotion_id in
+            <foreach collection="promotionIds" open="(" close=")" separator="," item="promotionId">#{promotionId}
+            </foreach>
+        </if>
+    </select>
+    <update id="logicDelete" parameterType="Map">
+        <foreach collection="removeCode" separator=";" close=";" item="rmSelectCode">
+            UPDATE tbl_promotion_range SET is_valid=0 WHERE promotion_id=#{promotionId} AND select_code=#{rmSelectCode}
+        </foreach>
+    </update>
+
+    <!-- 根据活动id查询活动单品列表  by geshuo 20160713 -->
+    <select id="findRangeListByParams" parameterType="Map" resultMap="PromotionRangeMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion_range
+        where check_status=1 AND is_valid=1
+        <if test="promotionIdList != null">
+            and promotion_id in
+            <foreach collection="promotionIdList" item="promotionId" index="index" open="(" separator="," close=")">
+                #{promotionId}
+            </foreach>
+        </if>
+        <if test="itemIdList != null">
+            and select_code in
+            <foreach collection="itemIdList" item="itemCode" index="index" open="(" separator="," close=")">
+                #{itemCode}
+            </foreach>
+        </if>
+        <if test="categoryIdList != null">
+            and back_category3_id in
+            <foreach collection="categoryIdList" item="categoryId" index="index" open="(" separator="," close=")">
+                #{categoryId}
+            </foreach>
+        </if>
+        order by promotion_id, seq
+    </select>
+
+    <!-- 根据活动id列表查询所有三级后台类目 by geshuo 20160719 -->
+    <select id="findBackCategory3IdList" parameterType="List" resultType="Long">
+        select distinct(back_category3_id)
+        from tbl_promotion_range
+        where check_status=1 AND is_valid=1
+        and promotion_id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findByRangIds" resultMap="PromotionRangeMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion_range
+        where is_valid=1
+        and id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by FIELD(id,
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item}
+        </foreach>)
+    </select>
+    <select id="getPerStockByPromItem" parameterType="Map" resultType="Long">
+        SELECT perStock FROM tbl_promotion_range WHERE promotion_id=#{promotionId} AND select_code=#{selectCode}
+    </select>
+    <update id="updateSaleCount" parameterType="Map">
+        UPDATE tbl_promotion_range SET saleCount=IFNULL(saleCount,0)+#{saleCount} WHERE promotion_id=#{promotionId}
+        AND select_code=#{selectCode}
+    </update>
+    <select id="findRangeForStatisticsCount" parameterType="Map" resultType="Long">
+        SELECT COUNT(1) FROM tbl_promotion_range WHERE
+        is_valid=1 AND check_status=1 AND promotion_id =#{promId}
+        <if test="selectCode != null">
+            AND select_code=#{selectCode}
+        </if>
+        <if test="selectName != null">
+            AND select_name LIKE CONCAT("%",CONCAT(#{selectName},"%"))
+        </if>
+        limit #{offset}, #{limit}
+    </select>
+    <select id="findRangeForStatistics" parameterType="Map" resultMap="PromotionRangeMap">
+        SELECT id,promotion_id,select_code,select_name,saleCount,stock,goods_code,perStock FROM tbl_promotion_range WHERE
+        is_valid=1 AND check_status=1 AND promotion_id =#{promId}
+        <if test="selectCode != null">
+            AND select_code=#{selectCode}
+        </if>
+        <if test="selectName != null">
+            AND select_name LIKE CONCAT("%",CONCAT(#{selectName},"%"))
+        </if>
+        <![CDATA[limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="getPromByItemIds" parameterType="List" resultType="Integer">
+        SELECT promotion_id FROM tbl_promotion_range WHERE
+        is_valid=1 AND select_code IN
+        <foreach collection="list" separator="," open="(" close=")" item="itemId">
+            #{itemId}
+        </foreach>
+    </select>
+    <select id="getPromByItemId" parameterType="String" resultType="Integer">
+        SELECT promotion_id FROM tbl_promotion_range WHERE select_code =#{_parameter} AND is_valid=1
+    </select>
+
+    <select id="findSaleOverByRangIds" parameterType="Map" resultMap="PromotionRangeMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion_range
+        where is_valid=1
+        and promotion_id=#{promotionId}
+        and id not in
+        <foreach collection="rangeList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="findByPromIdAndVendor" parameterType="Map" resultMap="PromotionRangeMap">
+        SELECT <include refid="columns"/>
+        FROM tbl_promotion_range WHERE is_valid=1 AND promotion_id=#{promotionId}
+        AND vendor_id=#{vendorId}
+    </select>
+    <update id="updateRangesByIds" parameterType="List">
+        <foreach collection="list" item="range">
+            UPDATE tbl_promotion_range SET stock=#{range.stock},modify_oper=#{range.modifyOper},
+            modify_time=#{range.modifyTime},check_status=#{range.checkStatus},perStock=#{range.perStock},groupClassify=#{range.groupClassify}
+            <if test="range.seq !=null">
+                ,seq=#{range.seq}
+            </if>
+            WHERE id=#{range.id};
+        </foreach>
+    </update>
+    <delete id="deleteByIds" parameterType="List">
+        DELETE FROM tbl_promotion_range WHERE id in
+        <foreach collection="list" item="temp" open="(" close=")" separator=",">
+            #{temp}
+        </foreach>
+    </delete>
+
+    <update id="updatePromotionStok" parameterType="Map">
+        update tbl_promotion_range set
+        stock = stock - #{itemCount}
+        where promotion_id=#{promotionId}
+        and select_code=#{selectCode}
+        and stock >= #{itemCount}
+    </update>
+
+
+    <update id="updateRollbackPromotionStok" parameterType="Map">
+        update tbl_promotion_range set
+        stock = stock + #{itemCount}
+        where promotion_id=#{promotionId}
+        and select_code=#{selectCode}
+    </update>
+
+    <select id="findWorkPromByItem" parameterType="List" resultType="Integer">
+        SELECT promotion_id FROM tbl_promotion_range WHERE
+        is_valid=1 AND select_code IN
+        <foreach collection="list" separator="," open="(" close=")" item="itemId">
+            #{itemId}
+        </foreach>
+        AND check_status !="2"
+    </select>
+    <select id="findByPromIdAndClassify" parameterType="Map" resultMap="PromotionRangeMap">
+        SELECT  <include refid="columns"/> FROM  tbl_promotion_range
+        WHERE promotion_id=#{promotionId}
+        <if test="groupClassify !=null">
+        AND groupClassify=#{groupClassify}
+        </if>
+    </select>
+
+
+
+</mapper>

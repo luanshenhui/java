@@ -1,0 +1,30 @@
+.components{
+  .add-component{
+    h1{
+      color: #000;
+    }
+    padding: 10px 0;
+  }
+  table.components-config{
+    tbody{
+      overflow: scroll;
+    }
+  }
+}
+.component-new{
+  padding: 30px 60px 0 50px;
+  form{
+    .control-group{
+      label{
+        width: 6em;
+      }
+      textarea{
+        width: 172px;
+        height: 100px;
+      }
+      .controls{
+        margin-left: 90px;
+      }
+    }
+  }
+}

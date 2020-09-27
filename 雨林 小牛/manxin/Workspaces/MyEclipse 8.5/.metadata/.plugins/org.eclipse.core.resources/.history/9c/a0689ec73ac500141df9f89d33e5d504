@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EmpMapping">
+	<select id="findAll" parameterType="com.yulin.web.entity.User" resultType="com.yulin.web.entity.User">
+		select * from jsp_User;
+	</select>
+	
+	<insert id="insertUser" parameterType="com.yulin.web.entity.User">
+		insert into jsp_User values(#{u_loginId},#{u_pwd},#{u_name},#{u_salary},#{u_age})
+	</insert>
+	
+	<update id="updateUser" parameterType="com.yulin.web.entity.User">
+		update jsp_User
+		<set>
+			<if test="u_pwd != null">u_pwd = #{u_pwd},</if>
+			<if test="u_name != null">u_name = #{u_name},</if>
+			<if test="u_salary != null and u_salary != 0">u_salary = #{u_salary},</if>
+			<if test="u_age != null and u_age != 0">u_age = #{u_age}</if>
+		</set>
+		where u_loginId = #{u_loginId};
+	</update>
+	
+	<select id="findSalary" parameterType="com.yulin.web.entity.SearchKey" resultType="com.yulin.web.entity.User">
+		select * from jsp_User
+		<where>
+			
+			<if test="min != null and min != 0">
+				salary >= #{min}
+			</if>
+			<if test="max != null and max != 0">
+				salary &lt; #{max}
+			</if>
+			<if test="min != null and min != 0 and max != null max !=0">
+				salary gte #{min} and salary lte #{max}
+			</if>
+		</where>
+	</select>
+	
+</mapper>

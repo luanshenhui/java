@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for USERMANEGE.
+
+@author 
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.USER">
+
+    <!-- **** select ******************************************************* -->
+	<!-- 获取用户URL，包括全部和当前用户的URL -->
+	<select id="getUserUrl" resultType="com.dpn.ciqqlc.standard.model.ResourcesDTO">
+		select t.res_string from resources t 
+		<if test="_parameter != null and _parameter != ''">
+		where t.id in
+    		         (
+                      select r.res_id
+    		          from res_role r
+    		          where r.role_id in (select a.role_id from authorities a where a.user_id = #{_parameter})
+                     )
+	    </if>
+	</select>
+	
+	<!-- 用户登录 -->
+    <!-- ,o.type org_type -->
+	<select id="userLogin" resultType="com.dpn.ciqqlc.standard.model.UsersDTO">
+		select t.id,
+			   t.name,
+               t.flag_op,
+               t.org_code,
+               o.port_code,
+		       t.dept_code,
+		       t.level_code,
+               t.fixed_phone,
+               t.manage_sign,
+               t.mobile_phone_no,
+		       o.name as org_name,
+		       t.directy_under_org,
+		       t.level_code,
+		       t.card_no,
+		       t.duties
+		 from users_ciq t, organizes_ciq o
+		 where t.id=#{userid}
+		   and t.password=#{pwd}
+           and t.org_code = o.org_code
+	</select>
+	
+	<!-- 分页查询组织列表 -->
+	<select id="findOrganizes" resultType="com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select *
+        from(
+		     select a.*,rownum rid
+             from(
+                  select t.org_code,t.name,t.created_date as create_date,t.port_code,t.modify_date
+                  from organizes_ciq t
+                  where 1=1
+                  <if test="code != null and code != ''"> and t.org_code=#{code} </if>
+                  <if test="name != null and name != ''"> and t.name like '%'||#{name}||'%' </if>
+		          order by  t.created_date desc
+             ) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询组织列表记录数 -->
+	<select id="findOrganizeCount" resultType="java.lang.Integer">
+		select count(org_code)
+        from organizes_ciq t
+		where 1=1
+        <if test="code != null and code != ''"> and t.org_code=#{code} </if>
+        <if test="name != null and name != ''"> and t.name like '%'||#{name}||'%' </if>
+	</select>
+	
+	<!-- 按组织代码查询组织 -->
+	<select id="findOrganizesByCode" resultType="com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select t.name,
+               t.org_code,
+    		   t.port_code,
+    		   t.modify_date,
+               t.created_date
+		from organizes_ciq t
+		where  t.org_code=#{orgcode}
+	</select>
+	
+	
+	<!-- 分页查询用户列表 -->
+	<select id="findUsers" resultType="com.dpn.ciqqlc.standard.model.UsersDTO">
+		select dto.*,
+               (select name from deptments t where t.code=dto.dept_code and rownum=1) as depot_name
+        from(
+    		 select a.*,rownum rid
+             from(
+                  select t.id,
+        		 	     t.name,
+                         t.flag_op,
+            		 	 t.org_code,
+                         t.dept_code,
+                         t.level_code,
+                         t.manage_sign,
+            			 t.fixed_phone,
+                         t.modify_date,
+                         f.name org_name,
+            			 t.mobile_phone_no,
+            			 t.created_date as create_date,
+            			 t.card_no,
+            			 t.duties
+        		 from users_ciq t, organizes_ciq f
+        		 where t.org_code=f.org_code
+        		 <if test="name != null and name != ''">
+        			 and t.name=#{name}
+        		 </if>
+        		 <if test="id != null and id != ''">
+        			 and t.id=#{id}
+        		 </if>
+                 order by t.created_date desc,id
+             ) a 
+         	 where rownum &lt;#{lastRcd}
+        ) dto
+        where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询用户列表记录数 -->
+	<select id="findUsersCount" resultType="java.lang.Integer">
+		select count(t.id) 
+		from users_ciq t,organizes_ciq f
+		where t.flag_op='A'
+          and t.org_code=f.org_code
+		<if test="id != null and id != ''"> and t.id=#{id} </if>
+        <if test="name != null and name != ''"> and t.name=#{name} </if>
+	</select>
+	
+	<!-- 查询组织代码列表 -->
+	<select id="getAllOrgList" resultType="com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select name,org_code
+		from organizes_ciq 
+		group by org_code, name 
+		order by name 
+	</select>
+	
+	<!-- 查询科室代码列表 -->
+	<select id="getAllDeptList" resultType="com.dpn.ciqqlc.standard.model.DeptmentsDTO">
+		select code,
+    		   name,
+    		   org_code
+		from deptments 
+		where flag_op='A'
+		group by code, name, org_code
+		order by code
+	</select>
+	
+	
+	<!-- 查询单个用户By 用户ID -->
+	<select id="findUsersByCode" resultType="com.dpn.ciqqlc.standard.model.UsersDTO">
+		select t.id,
+    		   t.name,
+               t.flag_op,
+    		   t.org_code,
+               t.dept_code,
+               t.level_code,
+    		   t.fixed_phone,
+               t.modify_date,
+               t.manage_sign,
+               t.created_date,
+               f.name org_name,
+    		   t.mobile_phone_no,
+    		   f.port_code,
+		       t.directy_under_org,
+    		   t.card_no,
+    		   t.duties
+		 from users_ciq t,organizes_ciq f
+		where t.id=#{id}
+		  and t.org_code=f.org_code
+	</select>
+	
+	<!-- 分页查询角色列表 -->
+	<select id="findRoles"  resultType="com.dpn.ciqqlc.standard.model.RolesDTO">
+		select *
+        from(
+             select a.*,rownum rid
+             from(
+                  select id,
+                         name,
+                         created_date as create_date
+                  from roles t
+		          where 1=1
+		          <if test="code != null and code != ''"> and t.id=#{code} </if>
+                  <if test="name != null and name != ''"> and t.name=#{name}</if>
+		          order by t.created_date desc
+              ) a 
+     	      where rownum &lt;#{lastRcd}
+        )
+        where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询角色列表记录数 -->
+	<select id="findRolesCount"  resultType="java.lang.Integer">
+		select count(id)
+        from roles t
+		where 1=1
+		<if test="code != null and code != ''"> and t.id=#{code} </if>
+        <if test="name != null and name != ''"> and t.name=#{name} </if>
+	</select>
+	
+	<!-- 分页查询资源列表 -->
+	<select id="findRes"  resultType="com.dpn.ciqqlc.standard.model.ResourcesDTO">
+		select *
+        from(
+             select a.*,rownum rid
+             from(
+                  select t.id,
+                         t.name,
+                         t.res_desc,
+                         t.res_string,
+                         t.create_time as create_date
+			      from resources t
+			      where 1=1
+    			  <if test="name != null and name != ''"> and t.name=#{name} </if>
+    			  <if test="resid != null and resid != ''"> and t.res_string=#{resid} </if>
+    			  <if test="roleId != null and roleId != ''">
+    			      and t.id in (select r.res_id from res_role r where r.role_id=#{roleId})
+    			  </if>
+		          order by t.create_time desc
+            ) a 
+     	    where rownum &lt;#{lastRcd}
+        )
+        where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询资源列表记录数 -->
+	<select id="findResCount"  resultType="java.lang.Integer">
+		select count(distinct t.id)  
+		from resources t
+		where 1=1
+		<if test="name != null and name != ''"> and t.name=#{name} </if>
+		<if test="resid != null and resid != ''"> and t.res_string=#{resid} </if>
+		<if test="roleId != null and roleId != ''">
+			and t.id in (select r.res_id from res_role r where r.role_id=#{roleId})
+		</if>
+	</select>
+	
+	<!--查询单个资源列表 -->
+	<select id="findResByCode"  resultType="com.dpn.ciqqlc.standard.model.ResourcesDTO">
+		select t.id, 
+			   t.name, 
+			   t.res_desc,
+               t.res_string, 
+			   t.create_time as create_date 
+ 	 	from resources t
+ 	 	where id=#{code}
+	</select>
+
+	<!-- 分页查询权限列表 -->
+	<select id= "findAuths"  resultType = "com.dpn.ciqqlc.standard.model.AuthoritiesDTO">
+		select *
+        from(
+             select a.*,rownum rid
+             from(
+		          select user_id,
+                         role_id,
+                         created_date as create_date
+                  from authorities t
+		          where 1 = 1
+        		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+        		  <if test = "roleId != null and roleId != ''"> and role_id = #{roleId} </if>
+                  order by created_date desc
+             )a 
+     	     where rownum &lt;#{lastRcd}
+        )
+        where rid>=#{firstRcd}
+	</select>
+    
+	<!-- 查询权限个数 -->
+	<select id = "findAuthCounts" resultType="java.lang.Integer">
+		select count(*)
+        from authorities t
+		where 1=1
+		<if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		<if test="roleId != null and roleId != ''"> and role_id = #{roleId} </if>
+	</select>
+	
+	<!-- 查询对应用户ID和组织的用户信息 -->
+	<select id="selectUserOrg" resultType="com.dpn.ciqqlc.standard.model.UsersDTO">
+	    select *
+        from(
+		     select a.*,rownum rid
+             from(
+                  select t.id,t.org_code
+                  from users_ciq t
+                  where t.id not in (select d.user_id from authorities d where d.role_id=#{rolesCode})
+		          <if test = "userCode != null and userCode != ''"> and t.id = #{userCode} </if>
+		          <if test = "orgCode != null and orgCode != ''"> and t.org_code = #{orgCode} </if>
+             ) a
+		     where rownum &lt;#{lastRcd}
+        )
+        where rid>=#{firstRcd}
+	</select>	
+	
+	<select id="selectUserOrgCount" resultType="java.lang.Integer">
+		select count(t.id)
+        from users_ciq t 
+		where t.id not in (select d.user_id from authorities d where d.role_id=#{rolesCode})
+		<if test = "userCode != null and userCode != ''"> and t.id = #{userCode} </if>
+		<if test = "orgCode != null and orgCode != ''"> and t.org_code = #{orgCode} </if>
+	</select>
+	
+	<select id="findUserListByOrgCode" resultType="com.dpn.ciqqlc.standard.model.UsersDTO">
+		select t.id,t.org_code,t.name
+        from users_ciq t
+        where t.org_code = #{org_code}
+        <if test="dept_code != null and dept_code != ''"> and t.dept_code = #{dept_code} </if>
+        
+	</select>
+	<!-- 查询当前用户未赋予的角色列表 -->
+	<select id = "selectUnAuthRole" resultType = "com.dpn.ciqqlc.standard.model.RolesDTO">
+		select t.id,t.name
+        from roles t  
+		where t.id not in (select t.role_id from authorities t where t.user_id=#{userId})
+	</select>
+	<!-- 查询当前用户已赋予的角色个数 -->
+	<select id="selectAuthor" resultType="java.lang.Integer">
+		select count(*)
+        from authorities t
+        where t.user_id=#{usercode} and t.role_id=#{rolesbox}
+	</select>
+	
+	<!-- 查询当前资源下未被赋予的角色ID列表 -->
+	<select id="find_Roles" resultType ="com.dpn.ciqqlc.standard.model.RolesDTO">
+		select id,name,created_date create_date
+        from roles t
+        where t.id not in (select t.role_id from res_role t where t.res_id=#{code})
+	</select>
+	
+	<!-- 查询对应于当前RES_ID的角色列表 -->
+	<select id="getRes_role" resultType="com.dpn.ciqqlc.standard.model.RolesDTO">
+		select r.*
+        from res_role t ,roles r
+        where t.role_id = r.id and t.res_id=#{code}
+	</select>	
+
+	<!-- 根据id获取用户信息 -->
+	<select id="findUserListByUid" resultType="com.dpn.ciqqlc.standard.model.UserInfoAppDTO">
+		select id,name
+        from  users_ciq
+        where dept_code in (select dept_code from users_ciq where id=#{uid})
+	</select>
+    	
+	<select id="findUserInfoAppByUid" resultType="com.dpn.ciqqlc.standard.model.UserInfoAppDTO">
+		select id,name,dept_code,org_code
+        from  users_ciq
+        where id=#{uid}
+	</select>
+    
+	<select id="findOrganizesByType" resultType="com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select name, org_code
+	    from organizes_ciq 
+		where type=#{type}
+	</select>
+	
+	<!-- 登录时查询单个用户-->
+	<select id="findUsersByCodeLogin" resultType="com.dpn.ciqqlc.standard.model.UsersDTO">
+		select t.id,
+			   t.name,
+               t.flag_op,
+               t.password,
+               t.org_code,
+    		   t.dept_code,
+    		   t.level_code,
+    		   t.fixed_phone,
+    		   t.modify_date,
+               t.manage_sign,
+    		   t.created_date,
+    		   f.name org_name,
+               t.mobile_phone_no,
+               t.duties,
+               t.directy_under_org
+		 from users_ciq t, organizes_ciq f
+		where t.id=#{uid}
+		  and t.flag_op='A'
+          and t.org_code=f.org_code
+	</select>
+	
+    <!-- **** insert ******************************************************* -->
+	<!-- 新建组织 -->
+	<insert id="addOrganizes">
+		insert into organizes_ciq t 
+		(
+			t.org_code,
+			t.name,
+			t.port_code,
+			t.created_date,
+			t.DIRECTY_UNDER_ORG
+		)
+		values 
+		(
+			#{code},
+			#{orgname},
+			#{portcode},
+			sysdate,
+			#{directyUnderOrg}
+		)
+	</insert>
+	
+	<!-- 新建用户 -->
+	<insert id="addUsers">
+		insert into users_ciq
+		(
+			id,
+			password,
+			name,
+			dept_code,
+			level_code,
+			org_code,
+			fixed_phone,
+			mobile_phone_no,
+			created_date,
+			flag_op,
+			card_no,
+			manage_sign,
+			duties
+		)
+		values 
+		(
+			#{id},
+			'111111',
+			#{name},
+			#{dept_code},
+			#{level_code},
+			#{org_code},
+			#{fixed_phone},
+			#{mobile_phone_no},
+			sysdate,
+			'A',
+			#{card_no},
+			'N',
+			#{duties}
+		)
+	</insert>
+
+	<!-- 新建角色 -->
+	<insert id="addRoles">
+		insert into roles t 
+		(
+			t.id,
+			t.name,
+			t.created_date
+		)
+		values 
+		(
+			#{code},
+			#{name},
+			sysdate
+		)
+	</insert>
+
+	<!-- 新加权限 -->
+	<insert id="addUserAuth">
+	   insert into authorities t
+       (
+           t.user_id,
+           t.role_id,
+           t.created_date
+       )
+       values
+       (
+           #{usercode},
+           #{rolesbox},
+           sysdate
+       )
+	</insert>
+	
+	<!-- 新建资源 -->
+	<insert id="addRes">
+		insert into resources t 
+		(
+			t.id,
+			t.name,
+			t.res_string,
+			t.res_desc,
+			t.create_time
+		)
+		values 
+		(
+			#{id},
+			#{name},
+			#{res_string},
+			#{res_desc},
+			sysdate
+		)
+	</insert>
+
+	<!-- 新建资源角色关系 -->
+	<insert id="addResRole">
+		insert into res_role t 
+		(
+			t.res_id,
+			t.role_id,
+			t.created_date
+		)
+		values 
+		(
+			#{res_id},
+			#{role_id},
+			sysdate
+		)
+	</insert>
+	
+	<insert id="addAuthRoles">
+		insert into authorities t
+        (
+            t.user_id,
+            t.role_id,
+            t.created_date
+        ) 
+		values
+        (
+            #{isbuy},
+            #{rolescode},
+            sysdate
+        )
+	</insert>	
+
+    <!-- **** update ******************************************************* -->
+	<!-- 修改组织 -->
+	<update id="updateOrganizes">
+		update organizes_ciq
+        set name=#{orgname},
+		    modify_date=sysdate,
+            port_code=#{portcode},
+            DIRECTY_UNDER_ORG=#{directyUnderOrg}
+		where org_code=#{code}
+	</update>
+	
+	<!-- 修改用户 -->
+	<update id="updateUsers">
+		update users_ciq
+        set name=#{name},
+            modify_date=sysdate,
+			org_code=#{org_code},
+            dept_code=#{dept_code},
+            level_code=#{level_code},
+            card_no=#{card_no},
+            duties = #{duties}
+			<if test="fixed_phone != null and fixed_phone != ''"> ,fixed_phone=#{fixed_phone} </if>
+			<if test="mobile_phone_no != null and mobile_phone_no != ''"> ,mobile_phone_no=#{mobile_phone_no} </if>
+		where id=#{id}
+	</update>
+    
+    <!-- 启停用户 -->
+    <update id="updateUsersFlagOp">
+        update users_ciq
+        set flag_op=#{flag_op}
+        where id=#{id}
+    </update>
+	
+	<!-- 重置密码 -->
+	<update id="resetPwd">
+		update users_ciq
+        set password='111111',
+            modify_date=sysdate
+	    where id=#{id}
+	</update>
+	
+	<!-- 修改密码 -->
+	<update id="resetPwdByUser">
+		update users_ciq
+        set password=#{np},
+            modify_date=sysdate
+		where id = #{uid}
+          and password=#{op}
+	</update>
+	
+	<!-- 修改资源 -->
+	<update id="updateRes">
+		update resources
+        set name=#{name},
+            res_desc=#{res_desc},
+            res_string=#{res_string}
+		where id = #{id}
+	</update>
+    
+    <!-- **** delete ******************************************************* -->
+	
+    <!-- 删除组织 -->
+	<delete id="delOrganizes">
+		delete from organizes_ciq t where t.org_code=#{orgcode} 
+	</delete>
+	
+	<!-- 删除用户 -->
+	<delete id="delUsers">
+		delete from users_ciq t where t.id=#{uid} 
+	</delete>
+	
+	<!-- 删除角色 -->
+	<delete id="delRoles">
+		delete from roles t where t.id=#{code} 
+	</delete>
+	
+	<!-- 删除资源 -->
+	<delete id="delRes">
+		delete from resources t where t.id=#{code} 
+	</delete>
+	
+	<!-- 删除权限 -->
+	<delete id="delAuth">
+		delete authorities t
+        where t.user_id=#{userid}
+        <if test="rolesid != null and rolesid != ''"> and t.role_id=#{rolesid} </if>
+	</delete>	
+	
+	<!-- 删除角色资源对应关系 -->
+	<delete id="delResRole">
+		delete res_role t where t.res_id = #{resId}
+	</delete>
+</mapper>

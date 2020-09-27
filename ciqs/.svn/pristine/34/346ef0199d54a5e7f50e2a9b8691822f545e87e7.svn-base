@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- Mybatis Mapper config for SYSTEM. @author zhanglin@dpn.com.cn @since 
+	1.0.0 zhanglin@dpn.com.cn @version 1.0.0 zhanglin@dpn.com.cn -->
+<!-- *************************************************************************** 
+	备忘记录 -> ******************************************************************************** 
+	变更履历 -> 1.0.0 2016-07-07 zhanglin@dpn.com.cn : 初建。 **************************************************************************** -->
+<mapper namespace="SQL.QUARTN">
+	<resultMap id="ProsasResultMap" type="com.dpn.ciqqlc.standard.model.ProsasModel">
+		<result column="id" property="id" />
+		<result column="CARD_TYPE" property="cardType" />
+		<result column="CARD_NO" property="cardNo" />
+		<result column="NAME" property="name" />
+		<result column="SEX" property="sex" />
+		<result column="BIRTH" property="birth" />
+		<result column="NATION" property="nation" />
+		<result column="LIVE_PLC" property="livePlc" />
+		<result column="TEL_CN" property="telCn" />
+		<result column="OCCUPATION" property="occupation" />
+		<result column="PORT_ORG" property="portOrg" />
+		<result column="PORT_ORG_UNDER" property="portOrgUnder" />
+		<result column="ENTER_EXP_PORT" property="enterExpPort" />
+		<result column="ENTER_EXP_PLC" property="entereExpPlc" />
+		<result column="ENTER_EXP_TYPE" property="enterExpType" />
+		<result column="ENTER_EXP_DATE" property="enterExpDate" />
+		<result column="ENTER_EXP_MOD" property="enterExpMod" />
+		<result column="FLIGHT_NO" property="flightNo" />
+		<result column="ENTER_EXP_COUS" property="enterExpCous" />
+		<result column="DISCOVER_WAY" property="discoverWay" />
+		<result column="COMP_PLC" property="compPlc" />
+		<result column="FIR_DEAL" property="firDeal" />
+		<result column="FIR_DEL_STU" property="firDelStu" />
+		<result column="MED_DEL_STU" property="medDelStu" />
+		<result column="FIN_CHK_STU" property="finChkStu" />
+		<result column="CERT_ACCE" property="chkWanPic" />
+		<result column="CHK_WAN_PIC" property="firDeal" />
+		<result column="CARD_TYPE_RMK" property="cardTypeRmk" />
+<!-- 		<association property="list" column="CARD_NO" select="findByCno"/> -->
+	</resultMap>
+
+
+
+	<!-- **** select ******************************************************* -->
+	
+	<select id="findById" parameterType="String" resultMap="ProsasResultMap">
+		SELECT
+		q.id,
+		(select name from qlc_code_library qlc where qlc.code = q.CARD_TYPE and qlc.type='QLC_PROSAS_C_CARD_TYPE' ) as cardType,
+		q.CARD_NO,
+		NAME,
+		SEX,
+		BIRTH,
+		NATION,
+		LIVE_PLC,
+		TEL_CN,
+		OCCUPATION,
+		(select name from QLC_CODE_LIBRARY qcl where qcl.code= '210000' and qcl.type='QLC_ORGANIZES') as portOrg, 
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code= q.PORT_ORG_CODE and qcl.type='QLC_DEPTMENTS') as portOrgUnder,
+		ENTER_EXP_PORT,
+		ENTER_EXP_PLC,
+		ENTER_EXP_TYPE,
+		ENTER_EXP_DATE,
+		ENTER_EXP_MOD,
+		FLIGHT_NO,
+		ENTER_EXP_COUS,
+		(select name from qlc_code_library where code =q.DISCOVER_WAY) as DISCOVER_WAY,
+		COMP_PLC,
+		FIR_DEAL,
+		FIR_DEL_STU,		
+		MED_DEL_STU,
+		FIN_CHK_STU,
+		CERT_ACCE,
+		CARD_TYPE_RMK,
+		CHK_WAN_PIC 
+		FROM
+		QLC_QUARTN_CHECK q LEFT JOIN QLC_PROSAS p ON q.CARD_NO = p.CARD_NO
+		WHERE q.ID =#{id}	
+	</select>
+	
+	<select id="findByFileEvent" parameterType="Map"
+		resultType="com.dpn.ciqqlc.standard.model.VideoEventModel">
+		SELECT
+		t.id,
+		t.proc_Main_Id as procMainId,
+		t.proc_Type as procType,
+		t.file_Type as fileType,
+		t.file_Name as fileName,
+		t.port_Dept_Code as portDeptCode,
+		t.port_Org_Code as portOrgCode,
+		t.create_User as createUser,
+		t.create_Date as createDate
+		FROM
+		qlc_video_file_event t
+		WHERE 1=1
+		<if test='cardNo != null and cardNo != ""'>
+		AND
+		t.PROC_MAIN_ID = #{cardNo} 
+		</if>
+		<if test='procType != null and procType != ""'>		
+		AND 
+		t.PROC_TYPE=#{procType}
+		</if>
+		  AND EXISTS (
+	              SELECT 
+	                        PROC_TYPE
+	              FROM 
+	                        QLC_C_VIDEO_PROC_TYPE
+	              WHERE   
+	                        PROJ_CODE=#{proj_code}
+	              AND 
+	                        PROC_TYPE=t.PROC_TYPE
+    	) 
+	</select> 
+	
+	<select id="findQuartnList" parameterType="com.dpn.ciqqlc.standard.model.QuartnModel" resultType="com.dpn.ciqqlc.standard.model.QuartnModel">
+	SELECT 
+	q.id as id,
+	p.id as p_id,
+	(select name from qlc_code_library qlc where qlc.code = q.CARD_TYPE and qlc.type='QLC_PROSAS_C_CARD_TYPE' ) as cardType,
+	q.CARD_NO as cardNo,
+	q.card_type_rmk, 
+	p.NAME as name,
+  	(select name from QLC_CODE_LIBRARY qcl where qcl.code= '210000' and qcl.type='QLC_ORGANIZES') as portOrg, 
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code= q.PORT_ORG_CODE and qcl.type='QLC_DEPTMENTS') as portOrgUnder,
+	p.ENTER_EXP_PORT as enterExpPort,
+	p.ENTER_EXP_PLC as enterExpPlc,
+	p.ENTER_EXP_DATE as enterExpDate,
+	(select name from qlc_code_library where code =q.DISCOVER_WAY) as discoverWay,
+	(select name from USERS_CIQ u where q.CREATE_USER=u.id) as createUser
+	FROM 
+	QLC_QUARTN_CHECK q LEFT JOIN QLC_PROSAS p ON q.CARD_NO = p.CARD_NO
+	where q.id not in(
+		  SELECT PROC_MAIN_ID FROM  QLC_CHK_RCD  where PROJ_CODE='DD_T_L')
+	<if test='cardNo != null and cardNo != ""'>
+	and q.CARD_NO like '%'||#{cardNo}||'%'
+	</if>
+	<if test='cardType != null and cardType != ""'>
+		and q.CARD_TYPE =#{cardType}
+	</if>
+ 	<if test='id != null and id != ""'>
+ 		and q.id =#{id} 
+ 	</if> 
+ 	<if test='p_id != null and p_id != ""'>
+ 		and p_id =#{p_id} 
+ 	</if> 
+	<if test='portOrgCode != null and portOrgCode != ""'>
+		and q.PORT_ORG_CODE =#{portOrgCode}
+	</if>
+	<if test='portDeptCode != null and portDeptCode != ""'>
+		and q.PORT_DEPT_CODE =#{portDeptCode}
+	</if>
+		<if test="enterExpDate_begin != null and enterExpDate_begin != ''">
+			<![CDATA[ and p.ENTER_EXP_DATE >= to_date(#{enterExpDate_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="enterExpDate_over != null and enterExpDate_over != ''">
+			<![CDATA[ and p.ENTER_EXP_DATE <= to_date(#{enterExpDate_over}, 'yyyy-mm-dd') ]]>
+		</if>
+	<if test='enterExpMod != null and enterExpMod != ""'>
+	and p.ENTER_EXP_MOD =#{enterExpMod}
+	</if>
+	<if test='discoverWay != null and discoverWay != ""'>
+	and	q.DISCOVER_WAY =#{discoverWay}
+	</if>
+	<if test='createUser != null and createUser != ""'>
+	and	q.CREATE_USER =#{createUser}
+	</if>
+	order by q.CREATE_DATE desc
+	</select>
+	
+	<select id="findByList" parameterType="com.dpn.ciqqlc.standard.model.QuartnModel" resultType="com.dpn.ciqqlc.standard.model.QuartnModel">
+		select * from (
+		select a.*,rownum rid from 
+	(
+	SELECT 
+	q.id as id,
+	q.card_type_rmk,
+	(select name from qlc_code_library qlc where qlc.code = q.CARD_TYPE and qlc.type='QLC_PROSAS_C_CARD_TYPE' ) as cardType,
+	q.CARD_NO as cardNo, 
+	p.NAME as name,
+  	(select name from QLC_CODE_LIBRARY qcl where qcl.code= '210000' and qcl.type='QLC_ORGANIZES') as portOrg, 
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code= q.PORT_ORG_CODE and qcl.type='QLC_DEPTMENTS') as portOrgUnder,
+	p.ENTER_EXP_PORT as enterExpPort,
+	p.ENTER_EXP_PLC as enterExpPlc,
+	p.ENTER_EXP_DATE as enterExpDate,
+	(select name from qlc_code_library where code =q.DISCOVER_WAY) as discoverWay,
+	(select name from USERS_CIQ u where q.CREATE_USER=u.id) as createUser
+	FROM 
+	QLC_QUARTN_CHECK q LEFT JOIN QLC_PROSAS p ON q.CARD_NO = p.CARD_NO
+	-- where q.CARD_NO not in(select proc_main_id from qlc_chk_rcd where proj_code='DD_T_L')
+	where 1=1
+	<if test='cardNo != null and cardNo != ""'>
+	and q.CARD_NO like '%'||#{cardNo}||'%'
+	</if>
+	<if test='cardType != null and cardType != ""'>
+		and q.CARD_TYPE =#{cardType}
+	</if>
+<!-- 	<if test='directyUnderOrg != null and directyUnderOrg != ""'> -->
+<!-- 		and q.DIRECTY_UNDER_ORG =#{directyUnderOrg} -->
+<!-- 	</if> -->
+	<if test='portOrgCode != null and portOrgCode != ""'>
+		and q.PORT_ORG_CODE =#{portOrgCode}
+	</if>
+	<if test='portDeptCode != null and portDeptCode != ""'>
+		and q.PORT_DEPT_CODE =#{portDeptCode}
+	</if>
+		<if test="enterExpDate_begin != null and enterExpDate_begin != ''">
+			<![CDATA[ and p.ENTER_EXP_DATE >= to_date(#{enterExpDate_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="enterExpDate_over != null and enterExpDate_over != ''">
+			<![CDATA[ and p.ENTER_EXP_DATE <= to_date(#{enterExpDate_over}, 'yyyy-mm-dd') ]]>
+		</if>
+	<if test='enterExpMod != null and enterExpMod != ""'>
+	and p.ENTER_EXP_MOD =#{enterExpMod}
+	</if>
+	<if test='discoverWay != null and discoverWay != ""'>
+	and	q.DISCOVER_WAY =#{discoverWay}
+	</if>
+	<if test='createUser != null and createUser != ""'>
+	and	q.CREATE_USER =#{createUser}
+	</if>
+	order by q.CREATE_DATE desc
+	 ) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+
+	<select id="findQuartnCount" parameterType="com.dpn.ciqqlc.standard.model.QuartnModel"  resultType="java.lang.Integer">
+			SELECT 
+				count(q.id) 
+			FROM 
+			QLC_QUARTN_CHECK q LEFT JOIN QLC_PROSAS p ON q.CARD_NO = p.CARD_NO
+			-- where q.CARD_NO not in(select proc_main_id from qlc_chk_rcd where proj_code='DD_T_L')
+			where 1=1
+			<if test='cardNo != null and cardNo != ""'>
+			and q.CARD_NO like '%'||#{cardNo}||'%'
+			</if>
+			<if test='cardType != null and cardType != ""'>
+			and q.CARD_TYPE =#{cardType}
+			</if>
+			<if test='portOrgCode != null and portOrgCode != ""'>
+			and q.PORT_ORG_CODE =#{portOrgCode}
+			</if>
+			<if test='portDeptCode != null and portDeptCode != ""'>
+			and q.PORT_DEPT_CODE =#{portDeptCode}
+			</if>
+				<if test="enterExpDate_begin != null and enterExpDate_begin != ''">
+					<![CDATA[ and p.ENTER_EXP_DATE >= to_date(#{enterExpDate_begin}, 'yyyy-mm-dd') ]]>
+				</if>
+				<if test="enterExpDate_over != null and enterExpDate_over != ''">
+					<![CDATA[ and p.ENTER_EXP_DATE <= to_date(#{enterExpDate_over}, 'yyyy-mm-dd') ]]>
+				</if>
+			<if test='enterExpMod != null and enterExpMod != ""'>
+			and p.ENTER_EXP_MOD =#{enterExpMod}
+			</if>
+			<if test='discoverWay != null and discoverWay != ""'>
+			and	q.DISCOVER_WAY =#{discoverWay}
+			</if>
+			<if test='createUser != null and createUser != ""'>
+			and	q.CREATE_USER =#{createUser}
+			</if>
+	</select>
+
+
+	<!-- **** insert ******************************************************* -->
+	<insert id="insert" parameterType="com.dpn.ciqqlc.standard.model.QuartnModel" statementType="CALLABLE">
+			insert into qlc_quartn_check
+				(
+					id,
+					<if test="cardType != null and cardType != ''" >
+					card_type,
+					</if>
+					<if test="cardNo != null and cardNo != ''" >
+					card_no,
+					</if>
+					<if test="discoverWay != null and discoverWay != ''" >
+					discover_way,
+					</if>
+					<if test="portOrgCode != null and portOrgCode != ''" >
+					port_org_code,
+					</if>
+					<if test="portDeptCode != null and portDeptCode != ''" >
+					port_dept_code,
+					</if>
+					<if test="card_type_rmk != null and card_type_rmk != ''" >
+					card_type_rmk,
+					</if>
+					<if test="createUser != null and createUser != ''" >
+					create_user,
+					</if>
+					<if test="createDate != null " >
+					create_date
+					</if>
+				)
+			values 
+				(
+					#{id},
+					<if test="cardType != null and cardType != ''" >
+					#{cardType},
+					</if>
+					<if test="cardNo != null and cardNo != ''" >
+					#{cardNo},
+					</if>
+					<if test="discoverWay != null and discoverWay != ''" >
+					#{discoverWay},
+					</if>
+					<if test="portOrgCode != null and portOrgCode != ''" >
+					#{portOrgCode},
+					</if>
+					<if test="portDeptCode != null and portDeptCode != ''" >
+					#{portDeptCode},
+					</if>					
+					<if test="card_type_rmk != null and card_type_rmk != ''" >
+					#{card_type_rmk},
+					</if>
+					<if test="createUser != null and createUser != ''" >
+					#{createUser},
+					</if>
+					<if test="createDate != null " >
+					#{createDate}
+					</if>
+				)
+	</insert>
+
+	<!-- **** update ******************************************************* -->
+	    <update id="updateQuartnCheck">
+        UPDATE QLC_QUARTN_CHECK
+       <set>
+       		<if test="id != null">id = #{id},</if>
+       		<if test="card_type != null">cardType = #{card_type},</if>
+       		<if test="card_no != null">card_no = #{card_no},</if>
+       		<if test="discover_way != null">discover_way = #{discover_way},</if>
+       		id = #{p_id}
+       </set>
+        WHERE id = #{p_id}
+    </update>
+    
+    
+     <update id="updateProsas">
+        UPDATE QLC_PROSAS
+       <set>
+       		<if test="card_type != null">card_type = #{card_type},</if>
+       		<if test="card_no != null">card_no = #{card_no},</if>
+       		<if test="name != null">name = #{name},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="birth != null">birth = #{birth},</if>
+			<if test="nation != null">nation = #{nation},</if>
+			<if test="live_plc != null">live_plc = #{live_plc},</if>
+			<if test="tel_cn != null">tel_cn = #{tel_cn},</if>
+			<if test="occupation != null">occupation = #{occupation},</if>
+			<if test="port_org != null">port_org = #{port_org},</if>
+			<if test="port_org_under != null">port_org_under = #{port_org_under},</if>
+			<if test="enter_exp_port != null">enter_exp_port = #{enter_exp_port},</if>
+			<if test="enter_exp_plc != null">enter_exp_plc = #{enter_exp_plc},</if>
+			<if test="enter_exp_type != null">enter_exp_type = #{enter_exp_type},</if>
+			<if test="enter_exp_date != null">enter_exp_date = #{enter_exp_date},</if>
+			<if test="enter_exp_mod != null">enter_exp_mod = #{enter_exp_mod},</if>
+			<if test="flight_no != null">flight_no = #{flight_no},</if>
+			<if test="enter_exp_cous != null">enter_exp_cous = #{enter_exp_cous},</if>
+			<if test="discover_way != null">discover_way = #{discover_way},</if>
+			<if test="comp_plc != null">comp_plc = #{comp_plc},</if>
+			<if test="fir_deal != null">fir_deal = #{fir_deal},</if>
+			<if test="fir_del_stu != null">fir_del_stu = #{fir_del_stu},</if>
+			<if test="med_del_stu != null">med_del_stu = #{med_del_stu},</if>
+			<if test="fin_chk_stu != null">fin_chk_stu = #{fin_chk_stu},</if>
+			<if test="cert_acce != null">cert_acce = #{cert_acce},</if>
+			<if test="chk_wan_pic != null">chk_wan_pic = #{chk_wan_pic},</if>
+       		id = #{id}
+       </set>
+        WHERE id = #{id}
+    </update>
+
+	<!-- **** delete ******************************************************* -->
+
+</mapper>

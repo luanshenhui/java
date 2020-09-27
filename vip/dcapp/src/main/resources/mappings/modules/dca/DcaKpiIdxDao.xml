@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.kpi.dao.DcaKpiIdxDao">
+    
+	<sql id="dcaKpiIdxColumns">
+		a.idx_id AS "idxId",
+		a.idx_name AS "idxName",
+		a.idx_type AS "idxType",
+		a.idx_result AS "idxResult",
+		a.criticality_value AS "criticalityValue",
+		a.del_flag AS "delFlag",
+		a.create_person AS "createPerson",
+		a.create_date AS "createDate",
+		a.update_person AS "updatePerson",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.uuid AS "uuId"
+	</sql>
+	
+	<sql id="dcaKpiIdxJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaKpiIdx">
+		SELECT 
+			<include refid="dcaKpiIdxColumns"/>
+		FROM dca_kpi_idx a
+		<include refid="dcaKpiIdxJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByIdxId" resultType="DcaKpiIdx">
+		SELECT 
+			<include refid="dcaKpiIdxColumns"/>
+		FROM DCA_KPI_IDX a
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			AND a.IDX_ID = #{idxId}	
+		</where>
+		ORDER BY a.IDX_RESULT
+	</select>
+	
+	<select id="findList" resultType="DcaKpiIdx">
+		SELECT 
+			<include refid="dcaKpiIdxColumns"/>
+		FROM dca_kpi_idx a
+		<include refid="dcaKpiIdxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaKpiIdx">
+		SELECT 
+			<include refid="dcaKpiIdxColumns"/>
+		FROM dca_kpi_idx a
+		<include refid="dcaKpiIdxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dca_kpi_idx(
+			idx_id,
+			idx_name,
+			idx_type,
+			idx_result,
+			criticality_value,
+			del_flag,
+			create_person,
+			create_date,
+			update_person,
+			update_date,
+			remarks
+		) VALUES (
+			#{idxId},
+			#{idxName},
+			#{idxType},
+			#{idxResult},
+			#{criticalityValue},
+			#{delFlag},
+			#{createPerson},
+			#{createDate},
+			#{updatePerson},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<!-- 批量插入 -->
+	<insert id="insertBatch">
+		begin
+		<foreach collection="list" item="item" index="index" separator=";">
+			INSERT INTO DCA_KPI_IDX(
+			IDX_ID,
+			IDX_NAME,
+			IDX_TYPE,
+			IDX_RESULT,
+			CRITICALITY_VALUE,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS,
+			UUID
+		) VALUES (
+			#{item.idxId},
+			#{item.idxName},
+			#{item.idxType},
+			#{item.idxResult},
+			#{item.criticalityValue},
+			#{item.delFlag},
+			#{item.createPerson},
+			SYSDATE,
+			#{item.updatePerson},
+			SYSDATE,
+			#{item.remarks},
+			#{item.uuId}
+		)
+		</foreach>
+		;end;		
+	</insert>
+		
+	<update id="update">
+		UPDATE dca_kpi_idx SET 	
+			idx_id = #{idxId},
+			idx_name = #{idxName},
+			idx_type = #{idxType},
+			idx_result = #{idxResult},
+			criticality_value = #{criticalityValue},
+			create_person = #{createPerson},
+			update_person = #{updatePerson},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 根据idxId删除 -->
+	<update id="deleteByIdxId">
+		UPDATE DCA_KPI_IDX SET 
+			DEL_FLAG = #{DEL_FLAG_DELETE}
+		WHERE IDX_ID = #{idxId}	
+	</update>
+	
+	<delete id="deleteDataByIdxId">
+		DELETE FROM DCA_KPI_IDX WHERE IDX_ID = #{idxId}
+	</delete>
+
+	<select id="getData" resultType="DcaKpiIdx">
+		SELECT a.IDX_ID AS idxId, 
+			a.IDX_TYPE AS idxType, 
+			a.IDX_NAME AS idxName, 
+			a.IDX_RESULT AS idxResult, 
+			a.CRITICALITY_VALUE AS criticalityValue, 
+			s.LABEL as idxTypeName
+		FROM DCA_KPI_IDX a
+		LEFT JOIN SYS_DICT_CUSTOM s ON s.VALUE = a.IDX_TYPE and s.TYPE = 'kpi_idx_type'
+		WHERE a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		ORDER BY a.IDX_TYPE, a.IDX_ID, a.IDX_RESULT DESC
+	</select>
+	<!-- 获取绩效考核类目 -->
+	<select id="findNameList" resultType="DcaKpiIdx">
+		SELECT G.idxId, k.KPI_RESULT as kpiResult, G.idxType, G.idxName,G.colName
+		FROM (SELECT
+				DISTINCT (D .IDX_ID) as idxId,
+				D .IDX_TYPE as idxType,
+				D .IDX_NAME as idxName,
+				s.LABEL as colName
+			FROM
+				DCA_KPI_IDX D
+			LEFT JOIN SYS_DICT_CUSTOM s ON s.VALUE = D.IDX_TYPE AND s. TYPE = 'kpi_idx_type' WHERE D.DEL_FLAG = #{DEL_FLAG_NORMAL}) G
+		
+		LEFT JOIN DCA_KPI k 
+		ON (G.idxId = k.IDX_ID and k.DEL_FLAG =#{DEL_FLAG_NORMAL})
+	</select>
+	
+	<!-- 根据指标类型和指标名称查询数据 -->
+	<select id="findByIdxTypeAndIdxName" resultType="DcaKpiIdx">
+	    SELECT
+	    	<include refid="dcaKpiIdxColumns"/> 
+		FROM DCA_KPI_IDX a
+		WHERE a.DEL_FLAG = #{DEL_FLAG_NORMAL} 
+		AND a.IDX_TYPE = #{idxType}
+		AND a.IDX_NAME = #{idxName}	
+	</select>
+</mapper>

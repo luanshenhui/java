@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    
+    <!-- 
+    	1.name指定包名，包与包之间的名称不能重复
+    	2.namespace包命名空间，用于拼我们访问包的路径，即URL，不要忘记/线
+     -->
+     <package name="day01" namespace="/day01" extends="struts-default">
+     	<!-- 
+			1.action是我们自己要写的业务组件，用于封装业务逻辑代码
+			2.name是指定action的名称的，该名称会用于我们访问action  ,
+			  同一包下可以有多个action,action名不能重复   	
+     	 -->
+     </package>

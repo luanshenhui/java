@@ -1,0 +1,244 @@
+{{#component "report_manage js-component"}}
+    <p class="report_manage components-title">
+        <strong>
+            {{#equals reportType "HY01"}}
+                - 会员总数报表 -
+            {{/equals}}
+            {{#equals reportType "HY03"}}
+                - 会员搜索记录报表 -
+            {{/equals}}
+            {{#equals reportType "HY05"}}
+                - 会员购物车报表 -
+            {{/equals}}
+            {{#equals reportType "HY07"}}
+                - 会员收藏夹报表 -
+            {{/equals}}
+            {{#equals reportType "HY09"}}
+                会员足迹报表
+            {{/equals}}
+            {{#equals reportType "YG07"}}
+                - 商户销售明细报表 -
+            {{/equals}}
+            {{#equals reportType "YG06"}}
+                - 商户销售统计报表 -
+            {{/equals}}
+            {{#equals reportType "YG09"}}
+                - 商品销售明细报表 -
+            {{/equals}}
+            {{#equals reportType "YG02"}}
+                - 分期请款报表 -
+            {{/equals}}
+            {{#equals reportType "YG18"}}
+                - 分期退货报表 -
+            {{/equals}}
+            {{#equals reportType "JF01"}}
+                - 普通礼品销售报表 -
+            {{/equals}}
+            {{#equals reportType "JF02"}}
+                - 退货报表 -
+            {{/equals}}
+            {{#equals reportType "JF03"}}
+                - 结算报表 -
+            {{/equals}}
+            {{#equals reportType "JF08"}}
+                - 兑换统计报表 -
+            {{/equals}}
+            {{#equals reportType "JF13"}}
+                - 积分兑换报表（南航里程）-
+            {{/equals}}
+            {{#equals reportType "JF14"}}
+                - 积分兑换报表（ALL常旅客会员消费）-
+            {{/equals}}
+            {{#equals reportType "JF15"}}
+                - 积分兑换报表（车主卡道路救援）-
+            {{/equals}}
+            {{#equals reportType "JF17"}}
+                - 积分兑换报表（白金卡换年费）-
+            {{/equals}}
+            {{#equals reportType "JF20"}}
+                - 积分兑换报表（录入组赠品代码）-
+            {{/equals}}
+            {{#equals reportType "JF21"}}
+                - 积分兑换报表（中国人寿保险标准卡旅行意外）-
+            {{/equals}}
+            {{#equals reportType "JF22"}}
+                - 积分兑换报表（中国人寿保险标准卡重大疾病）-
+            {{/equals}}
+            {{#equals reportType "JF23"}}
+                - 积分兑换报表（中国人寿保险真情卡女性疾病）-
+            {{/equals}}
+            {{#equals reportType "JF24"}}
+                - 积分兑换报表（中国人寿保险真情卡旅行意外）-
+            {{/equals}}
+            {{#equals reportType "JF25"}}
+                - 积分兑换报表（中国人寿保险真情卡重大疾病）-
+            {{/equals}}
+            {{#equals reportType "JF26"}}
+                - 积分兑换报表（中国人寿保险真情卡购物保障）-
+            {{/equals}}
+            {{#equals reportType "JF27"}}
+                - 积分兑换报表（中国人寿保险车主卡驾驶员意外）-
+            {{/equals}}
+            {{#equals reportType "JF28"}}
+                - 积分兑换报表（中国人民财产保险车主卡旅行交通意外）-
+            {{/equals}}
+            {{#equals reportType "JF60"}}
+                - 积分兑换报表（爱•宠普卡宠物饲养责任保险）-
+            {{/equals}}
+            {{#equals reportType "JF30"}}
+                - 积分兑换报表（联通卡）-
+            {{/equals}}
+            {{#equals reportType "JF33"}}
+                - 积分兑换报表（人保粤通卡积分兑换）-
+            {{/equals}}
+            {{#equals reportType "JF34"}}
+                - 积分兑换报表（DIY卡免还款签账额）-
+            {{/equals}}
+            {{#equals reportType "JF35"}}
+                - 普通积分兑换报表（南航里程）-
+            {{/equals}}
+            {{#equals reportType "JF16"}}
+                - 积分兑换报表（新旧聪明卡兑换签帐额）-
+            {{/equals}}
+            {{#equals reportType "JF64"}}
+                - 商户兑换统计报表 -
+            {{/equals}}
+        </strong>
+    </p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form item-form-search form-inline">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large" style="display: none;">
+                          <label for="reportNm">报表名称:</label>
+                         <input class="form-control" type="text" name="reportNm" value="{{reportNm}}" maxlength="100">
+                        </span>
+                        {{#of reportType "JF01,YG18,JF02"}}<!--YG06,YG02,-->
+                            <span class="span4 span-large">
+                              <label for="vendorName">供应商简称:</label>
+                              <input class="form-control" type="text" name="vendorName" value="{{vendorName}}"
+                                     maxlength="20">
+                            </span>
+                        {{/of}}
+                        {{#of reportType "YG02,JF03,JF08,JF15,JF20,JF33,JF34,JF16,JF64"}}
+                        {{else}}
+                            <span class="span4 span-large">
+                               <label for="reportDesc">报表类型:</label>
+                                <select name="reportDesc">
+                                    <option value="">请选择</option>
+                                    {{#of reportType "YG07,YG06,YG09,YG18,JF01,JF02"}}
+                                        <option value="01" {{#equals reportDesc "01"}}selected{{/equals}}>日报表</option>
+                                    {{/of}}
+                                    <option value="02" {{#equals reportDesc "02"}}selected{{/equals}}>周报表</option>
+                                    <option value="03" {{#equals reportDesc "03"}}selected{{/equals}}>月报表</option>
+
+                                </select>
+                            </span>
+                        {{/of}}
+                        <span class="span4 span-large">
+                           <label for="reportDate">报表日期:</label>
+                              <input class="form-control application_date js-date-start span-width" type="text"
+                                     value="{{startDate}}" name="startDate">
+                            <em>-</em>
+                          <input class="form-control application_date js-date-end span-width" type="text"
+                                 value="{{endDate}}" name="endDate">
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                        <input class="btn btn-success btn-small pull-right margin-right-10" type="submit" value="查询"/>
+                    </p>
+                </fieldset>
+            </form>
+            <div class="main-box-table margin-top-10">
+                {{#equals _DATA_.total "0"}}
+                    <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+                {{else}}
+                    <table class="table">
+                        <thead>
+                        {{#of reportType "YG02,YG06,YG10,YG14,HY01,HY03,HY05,HY07,HY09,YG07,YG09,JF13,JF14,JF17,JF21,JF22,JF23,JF24,JF25,JF26,JF27,JF28,JF60,JF30,JF35"}}
+                            <tr> <!--不以供应商为单位，多种类型的报表-->
+                                <th width="10%">报表名称</th>
+                                <th width="10%">报表类型</th>
+                                <th width="10%">日期</th>
+                                <th width="30%">链接</th>
+                            </tr>
+                        {{/of}}
+                        {{#of reportType "YG18,JF01,JF02"}}<!--以供应商为单位，多种类型的报表-->
+                        <tr>
+                            <th width="10%">供应商简称</th>
+                            <th width="10%">报表名称</th>
+                            <th width="10%">报表类型</th>
+                            <th width="10%">日期</th>
+                            <th width="20%">链接</th>
+                        </tr>
+                        {{/of}}
+                        {{#of reportType "JF64"}}<!--以供应商为单位，且只有一种类型的报表-->
+                        <tr>
+                            <th width="15%">供应商简称</th>
+                            <th width="15%">报表名称</th>
+                            <th width="15%">日期</th>
+                            <th width="25%">链接</th>
+                        </tr>
+                        {{/of}}
+                        {{#of reportType "JF03,JF08,JF15,JF20,JF33,JF34,JF16,JF33,JF34"}} <!--不以供应商为单位，且只有一种类型的报表-->
+                        <tr>
+                            <th width="25%">报表名称</th>
+                            <th width="25%">日期</th>
+                            <th width="25%">链接</th>
+                        </tr>
+                        {{/of}}
+                        </thead>
+                        <tbody>
+                        {{#each _DATA_.data}}
+                            {{#of reportModel.reportCode "YG02,YG06,YG10,YG14,HY01,HY02,HY03,HY04,HY05,HY06,HY07,HY08,HY09,HY10,YG07,YG11,YG15,YG09,YG13,YG17,JF13,JF49,JF14,JF50,JF17,JF51,JF21,JF52,JF22,JF53,JF23,JF54,JF24,JF55,JF25,JF56,JF26,JF57,JF27,JF58,JF28,JF59,JF60,JF61,JF30,JF62,JF35,JF63"}}
+                                <tr data-id="{{reportModel.reportId}}"> <!--不以供应商为单位，多种类型的报表-->
+                                    <td class="reportNm">{{reportModel.reportNm}}</td>
+                                    <td class="reportDesc">{{reportModel.reportDesc}}</td>
+                                    <td class="reportDate">{{reportModel.reportDate}}</td>
+                                    <td class="reportPath"><a
+                                            href=JavaScript:location.href=encodeURI("{{_HREF_.context}}/api/admin/report/excel?fileUrl={{reportModel.reportPath}}")>{{fileName}}</a>
+                                    </td>
+                                </tr>
+                            {{/of}}
+                            {{#of reportModel.reportCode "YG18,YG19,YG60,JF01,JF04,JF06,JF02,JF05,JF07"}}<!--以供应商为单位，多种类型的报表-->
+                            <tr>
+                                <td class="simpleName">{{simpleName}}</td>
+                                <td class="reportNm">{{reportModel.reportNm}}</td>
+                                <td class="reportDesc">{{reportModel.reportDesc}}</td>
+                                <td class="reportDate">{{reportModel.reportDate}}</td>
+                                <td class="reportPath"><a
+                                        href=JavaScript:location.href=encodeURI("{{_HREF_.context}}/api/admin/report/excel?fileUrl={{reportModel.reportPath}}")>{{fileName}}</a>
+                                </td>
+                            </tr>
+                            {{/of}}
+                            {{#of reportModel.reportCode "JF64"}}<!--以供应商为单位，且只有一种类型的报表-->
+                            <tr>
+                                <td class="simpleName">{{simpleName}}</td>
+                                <td class="reportNm">{{reportModel.reportNm}}</td>
+                                <td class="reportDate">{{reportModel.reportDate}}</td>
+                                <td class="reportPath"><a
+                                        href=JavaScript:location.href=encodeURI("{{_HREF_.context}}/api/admin/report/excel?fileUrl={{reportModel.reportPath}}")>{{fileName}}</a>
+                                </td>
+                            </tr>
+                            {{/of}}
+                            {{#of reportModel.reportCode "JF03,JF08,JF15,JF20,JF33,JF34,JF16,JF33,JF34"}}
+                                <!--不以供应商为单位，且只有一种类型的报表-->
+                                <tr>
+                                    <td class="reportNm">{{reportModel.reportNm}}</td>
+                                    <td class="reportDate">{{reportModel.reportDate}}</td>
+                                    <td class="reportPath"><a
+                                            href=JavaScript:location.href=encodeURI("{{_HREF_.context}}/api/admin/report/excel?fileUrl={{reportModel.reportPath}}")>{{fileName}}</a>
+                                    </td>
+                                </tr>
+                            {{/of}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                {{/equals}}
+            </div>
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+    </div>
+
+{{/component}}

@@ -1,0 +1,156 @@
+一：概述
+	1、如何定义样式：
+		html标记的某些属性： border="1" width="" height=""
+		CSS
+
+	2、CSS 的优点：
+		html语言，为一些标记定义了一些用于定义样式的属性
+	--不统一，也不通用
+		a、需要一种统一的定义所有元素的样式的方式---CSS
+		b、内容和表现的分离
+
+二：CSS 的基础语法（怎么写，怎么用）
+	1、内联方式：将样式定义写到元素的 style 属性中
+			style="属性名：值;"
+	2、内部样式表：将样式定义写到 head 里的 style 里
+			p{属性名：值；}
+	3、外部样式表：
+			将样式定义到单独的文件里，后缀 .css，添加样式定义
+			页面引入样式文件
+				<link href="url" type="text/css" rel="stylesheet" />
+
+三：相关应用
+	1、优先建议使用 外部样式表，实现内容和表现分离，提高可重用性和可维护性
+	2、重复定义：不冲突的取并集；冲突的按优先级
+		优先级：内联>外部=内部
+		如果优先级相同：以后定义的为准
+
+四：选择器---谁使用样式
+	1、元素选择器：以html 标签的名称--某类标签定义统一的样式
+			p/h1{}
+			input {}
+
+	2、类选择器：为不同的标签定义样式
+			CSS中：		.s1 {...}
+			html页面中：	<元素 class="s1" >
+
+	3、元素 ID 选择器：为页面上的某一个元素定义特有的样式
+			CSS中：			#aaa{...}
+			html页面中：   <元素 id="aaa" />
+
+	4、分类选择器：同一种标签中细分不同的样式
+			CSS 中：			input.txt {}
+							input.btn {}
+							input.file {}
+			html 页面中：
+					<p class="txt" ></p>--error
+					<input type="text" class="txt" />
+
+	5、分组选择器：为各种不同的选择器定义它们相同的部分
+			CSS 中：		h1,h2,.s1,#aaa,div.small
+						{
+							color:red;
+						}
+			html页面中：h1/h2等皆使用样式
+
+	6、派生选择器：使用元素的父子关系
+			CSS 中：		div a {...}
+						#navi a {}
+						#navi ul li a {}
+						table tr td a{}
+
+			html 中：		<div>aa<a>ss</a>bb</div>
+
+	7、伪类选择器：不同状态下的样式
+			
+						:link		未访问过
+						:active	激活
+						:visited	访问过的
+						:hover	悬浮--鼠标移入
+						:focus	获得焦点
+五：各种样式---应用角度
+	尺寸的单位
+	颜色的单位
+
+六：布局
+	1、尺寸
+			width/height
+			overflow：内容溢出包含框时
+				visible：默认取值，总是可见
+				hidden：隐藏
+				scroll：总是显示滚动条
+				auto：如果溢出，则显示滚动条
+	2、边框
+			border:width style red;--四个边
+			border-top/left/right/bottom--单边
+			如果这么写：
+				border-top-width:
+				border-bottom-style:
+				border-right-color:
+	
+	3、box modal（框模型、盒子模型）
+		a、使用 padding 和 margin 定义内/外边距
+			padding:20px;--以左上角
+			padding-top/right/left/bottom：
+		
+		b、占用的面积：
+
+		c、使用中：布局时，关注高度和宽度以外，关注边距
+
+		d、各种写法：
+				margin:10px;
+				margin:10px 20px 30px 40px;
+					     top    right  bottom  left
+				margin:10px   20px;
+					  top/bottom   left/right
+				margin:10px auto;
+					auto：自动计算左右外边距=(页面-div)/2
+						--实现框居中显示
+七：背景
+	background-color:red/#ccc/#f23d4a;
+	background-image: url(a.jpg) ;--默认情况下，双向平铺
+	background-repeat:repeat/no-repeat/repeat-x/repeat-y;
+	background-position:x/left y/top；
+						10px  20px;
+						20%   50%;
+		--背景图像的位置
+	background-attachment:scroll/fixed;
+			fixed：背景固定，实现水印的效果
+		--设置背景图像的附着方式
+
+八：文本
+		color:;--文本的颜色
+		font-size:;--字体的大小
+		font-family:;--字型
+		font-weight:normal/bold；--加粗显示
+		text-align:left/center/right;
+		text-decoration:none/underline;--是否显示下划线
+		text-indent：；---首行文本缩进
+		line-height:;---常用来设置文本在某行内垂直方向上居中
+
+九：表格--表格所特有的样式属性
+		border-collapse:separate/collapse;
+		vertical-align:top/middle/bottom;---单元格中垂直方向的对齐
+		border-spacing:;--单元格分开时，设置之间的距离
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+练习1：新建一个html页面，首先使用内联方式为 h1 
+	元素定义样式：红字，蓝色边框；
+	使用内部样式表为 p 元素定义样式：绿字，黑色框
+	使用外部样式表为 h2 定义样式：黄色字，30磅大
+
+

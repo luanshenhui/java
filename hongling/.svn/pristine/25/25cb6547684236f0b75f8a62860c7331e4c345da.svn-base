@@ -1,0 +1,53 @@
+<script src="../fabric/common.js"></script>
+<script src="../fabric/post.js"></script>
+<form id="form" class="form_template">
+<input type="hidden" id="ID"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label lblFabricSupplyCategory"></td>
+		<td><select id="fabricSupplyCategoryID"></select></td>
+		<td class="label lblIsStop"></td>
+		<td><select id="isStop"></select></td>
+	</tr>
+	<tr>
+		<td class="label lblCategory"></td>
+		<td><select id="categoryID"></select></td>
+		<td class="label lblCode star"></td>
+		<td><input type="text" id="code"  class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblPrice"></td>
+		<td><input type="text" style="width: 80px" id="price"  class="textbox"/>(RMB)<input type="text" style="width: 80px" id="dollarPrice"  class="textbox"/>($)</td>
+		<td class="label lblWeight"></td>
+		<td><input type="text" id="weight"  class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblSeries star"></td>
+		<td><select id="seriesID"></select></td>
+		<td class="label lblColor star"></td>
+		<td><select id="colorID"></select></td>
+	</tr>
+	<tr>
+		<td class="label lblFlower star"></td>
+		<td><select id="flowerID"></select></td>
+		<td class="label lblComposition star"></td>
+		<td><select id="compositionID"></select></td>
+	</tr>
+	<tr>
+		<td class="label lblFabricSupply"></td>
+		<td><input type="text" id="fabricSupplyID" class="textbox"/></td>
+		<td class="label lblFabricSupplyCode"></td>
+		<td><input type="text" id="fabricSupplyCode" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblShaZhi"></td>
+		<td><input type="text" id="shaZhi" class="textbox"/></td>
+		<td class="label lblSequenceNo"></td>
+		<td><input type="text" id="sequenceNo" class="textbox"/></td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="btnSaveFabric"/> <a id="btnCancelFabric"/>
+</div>
+</form>

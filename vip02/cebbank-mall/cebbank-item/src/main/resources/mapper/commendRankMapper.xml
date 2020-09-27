@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommendRankModel">
+    <resultMap id="CommendRankMap" type="CommendRankModel">
+        <result property="id" column="id"/>
+        <result property="statType" column="stat_type"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="price" column="price"/>
+        <result property="installmentNumber" column="installment_number"/>
+        <result property="image1" column="image1"/>
+        <result property="backCategory1Id" column="back_category1_id"/>
+        <result property="backCategory1Name" column="back_category1_name"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="vendorName" column="vendor_name"/>
+        <result property="rank" column="rank"/>
+        <result property="statNum01" column="stat_num_01"/>
+        <result property="statNum02" column="stat_num_02"/>
+        <result property="rankDate" column="rank_date"/>
+        <result property="rankTime" column="rank_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="extend1" column="extend1"/>
+        <result property="extend2" column="extend2"/>
+        <result property="extend3" column="extend3"/>
+    </resultMap>
+    <sql id="columns">
+    id,stat_type,ordertype_id,item_code,goods_name,price,installment_number,image1,back_category1_id,back_category1_name,vendor_id,vendor_name,rank,stat_num_01,stat_num_02,rank_date,rank_time,del_flag,extend1,extend2,extend3
+    </sql>
+
+    <insert id="insert" parameterType="CommendRankModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_commend_rank
+        (stat_type
+        ,ordertype_id
+        ,item_code
+        ,goods_name
+        ,price
+        ,installment_number
+        ,image1
+        ,back_category1_id
+        ,back_category1_name
+        ,vendor_id
+        ,vendor_name
+        ,rank
+        ,stat_num_01
+        ,stat_num_02
+        ,rank_date
+        ,rank_time
+        ,del_flag
+        ,extend1
+        ,extend2
+        ,extend3)
+        values(#{statType}
+        ,#{ordertypeId}
+        ,#{itemCode}
+        ,#{goodsName}
+        ,#{price}
+        ,#{installmentNumber}
+        ,#{image1}
+        ,#{backCategory1Id}
+        ,#{backCategory1Name}
+        ,#{vendorId}
+        ,#{vendorName}
+        ,#{rank}
+        ,#{statNum01}
+        ,#{statNum02}
+        ,#{rankDate}
+        ,#{rankTime}
+        ,#{delFlag}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3})
+    </insert>
+
+    <update id="update" parameterType="CommendRankModel">
+        update tbl_commend_rank set
+            <if test="statType !=null">stat_type = #{statType}
+                ,</if>
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="itemCode !=null">item_code = #{itemCode}
+                ,</if>
+            <if test="goodsName !=null">goods_name = #{goodsName}
+                ,</if>
+            <if test="price !=null">price = #{price}
+                ,</if>
+            <if test="installmentNumber !=null">installment_number = #{installmentNumber}
+                ,</if>
+            <if test="image1 !=null">image1 = #{image1}
+                ,</if>
+            <if test="backCategory1Id !=null">back_category1_id = #{backCategory1Id}
+                ,</if>
+            <if test="backCategory1Name !=null">back_category1_name = #{backCategory1Name}
+                ,</if>
+            <if test="vendorId !=null">vendor_id = #{vendorId}
+                ,</if>
+            <if test="vendorName !=null">vendor_name = #{vendorName}
+                ,</if>
+            <if test="rank !=null">rank = #{rank}
+                ,</if>
+            <if test="statNum01 !=null">stat_num_01 = #{statNum01}
+                ,</if>
+            <if test="statNum02 !=null">stat_num_02 = #{statNum02}
+                ,</if>
+            <if test="rankDate !=null">rank_date = #{rankDate}
+                ,</if>
+            <if test="rankTime !=null">rank_time = #{rankTime}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="extend1 !=null">extend1 = #{extend1}
+                ,</if>
+            <if test="extend2 !=null">extend2 = #{extend2}
+                ,</if>
+            <if test="extend3 !=null">extend3 = #{extend3}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="statType !=null">and stat_type = #{statType}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="itemCode !=null">and item_code = #{itemCode}</if>
+            <if test="goodsName !=null">and goods_name = #{goodsName}</if>
+            <if test="price !=null">and price = #{price}</if>
+            <if test="installmentNumber !=null">and installment_number = #{installmentNumber}</if>
+            <if test="image1 !=null">and image1 = #{image1}</if>
+            <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+            <if test="backCategory1Name !=null">and back_category1_name = #{backCategory1Name}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="vendorName !=null">and vendor_name = #{vendorName}</if>
+            <if test="rank !=null">and rank = #{rank}</if>
+            <if test="statNum01 !=null">and stat_num_01 = #{statNum01}</if>
+            <if test="statNum02 !=null">and stat_num_02 = #{statNum02}</if>
+            <if test="rankDate !=null">and rank_date = #{rankDate}</if>
+            <if test="rankTime !=null">and rank_time = #{rankTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="extend1 !=null">and extend1 = #{extend1}</if>
+            <if test="extend2 !=null">and extend2 = #{extend2}</if>
+            <if test="extend3 !=null">and extend3 = #{extend3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="CommendRankMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_commend_rank
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="CommendRankMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_commend_rank
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="CommendRankMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_commend_rank
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="findCommendRank" resultMap="CommendRankMap">
+        select
+        <include refid="columns"/>
+        from tbl_commend_rank
+        <include refid="conditions"/>
+        order by rank_date DESC , rank ASC LIMIT 10
+    </select>
+
+</mapper>
+
+

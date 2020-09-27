@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.apollo.mapper.ruixueMapper">
+	<sql id="T_RUIXUE_CUST_columns">RUIXUE_CUST_GUID as VALUE,RUIXUE_CUST_NAME as TEXT</sql>
+	<sql id="T_ONLINE_SHOP_columns">ONLINE_SHOP_GUID as VALUE,ONLINE_SHOP_NAME as TEXT</sql>
+	<sql id="T_RUIXUE_CUST_table">T_RUIXUE_CUST</sql>
+	<sql id="T_ONLINE_SHOP_table">T_ONLINE_SHOP</sql>
+	<select id="findRXProject" resultType="cn.rkylin.core.ApolloRet" parameterType="cn.rkylin.core.ApolloMap" conn="slave">
+		select
+		<include refid="T_RUIXUE_CUST_columns" />
+		from
+		<include refid="T_RUIXUE_CUST_table" />
+		WHERE
+		USE_YN = 'Y'
+		order by
+		CREATE_TIME DESC
+	</select>
+
+
+	<select id="findRXProjShop" resultType="cn.rkylin.core.ApolloRet" parameterType="cn.rkylin.core.ApolloMap" conn="slave">
+		select
+		<include refid="T_ONLINE_SHOP_columns" />
+		from
+		T_ONLINE_SHOP
+		WHERE
+		RUIXUE_CUST_GUID = '${ruixueCustGuid}'
+		order by
+		ONLINE_SHOP_GUID DESC
+	</select>
+</mapper>

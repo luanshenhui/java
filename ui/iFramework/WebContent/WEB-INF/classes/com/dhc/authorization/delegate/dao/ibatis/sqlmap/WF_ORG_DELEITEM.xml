@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="WF_ORG_DELEITEM" >
+  <resultMap id="WF_ORG_DELEITEMResultMap" class="com.dhc.authorization.delegate.domain.WF_ORG_DELEITEM" >
+    <result column="DELE_ID" property="deleId" jdbcType="VARCHAR" />
+    <result column="DI_PRIV_ID" property="diPrivId" jdbcType="VARCHAR" />
+    <result column="DI_PRIV_TYPE" property="diPrivType" jdbcType="VARCHAR" />
+    <result column="DI_PRIV_NAME" property="diPrivName" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectDeleitemDetail" resultMap="WF_ORG_DELEITEMResultMap" parameterClass="java.lang.String" >
+    select DELE_ID, DI_PRIV_ID, DI_PRIV_TYPE, DI_PRIV_NAME
+    from WF_ORG_DELEITEM where DELE_ID = #deleId#
+  </select>
+  <delete id="deleteForUpdate" parameterClass="java.lang.String" >
+    delete from WF_ORG_DELEITEM where DELE_ID = #deleId#
+  </delete>
+  <delete id="delete" parameterClass="java.lang.String" >
+    delete from WF_ORG_DELEITEM where DELE_ID = #deleId#
+  </delete>
+  <insert id="insert" parameterClass="com.dhc.authorization.delegate.domain.WF_ORG_DELEITEM" >
+    insert into WF_ORG_DELEITEM (DELE_ID, DI_PRIV_ID, DI_PRIV_TYPE, DI_PRIV_NAME)
+    values (#deleId#, #diPrivId#, #diPrivType#, #diPrivName#)
+  </insert>
+  <update id="update" parameterClass="com.dhc.authorization.delegate.domain.WF_ORG_DELEITEM" >
+    update WF_ORG_DELEITEM
+    set DELE_ID = #deleId#,
+      DI_PRIV_ID = #diPrivId#,
+      DI_PRIV_TYPE = #diPrivType#,
+      DI_PRIV_NAME = #diPrivName#
+  </update>
+</sqlMap>

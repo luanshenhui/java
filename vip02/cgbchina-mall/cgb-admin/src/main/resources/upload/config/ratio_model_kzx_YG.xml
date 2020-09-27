@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+    <worksheet idx="0">
+        <!--保留空白位置，保证loop开始读取位置正确-->
+        <section startRow="0" endRow="1">
+        </section>
+        <!-- items:对应Java里面的Map<> bean的key -->
+        <loop startRow="2" endRow="2" items="vendorRatios" var="vendorRatio" varType="cn.com.cgbchina.user.dto.VendorRatioUploadDto">
+            <section startRow="2" endRow="2">
+                <mapping row="2" col="0">vendorRatio.uploadFlag</mapping>
+                <mapping row="2" col="1">vendorRatio.uploadFailedReason</mapping>
+                <mapping row="2" col="2">vendorRatio.vendorId</mapping>
+                <mapping row="2" col="3">vendorRatio.period</mapping>
+                <mapping row="2" col="4">vendorRatio.fixedfeehtFlag</mapping>
+                <mapping row="2" col="5">vendorRatio.fixedamtFee</mapping>
+                <mapping row="2" col="6">vendorRatio.feeratio1</mapping>
+                <mapping row="2" col="7">vendorRatio.ratio1Precent</mapping>
+                <mapping row="2" col="8">vendorRatio.feeratio2</mapping>
+                <mapping row="2" col="9">vendorRatio.ratio2Precent</mapping>
+                <mapping row="2" col="10">vendorRatio.feeratio2Bill</mapping>
+                <mapping row="2" col="11">vendorRatio.feeratio3</mapping>
+                <mapping row="2" col="12">vendorRatio.ratio3Precent</mapping>
+                <mapping row="2" col="13">vendorRatio.feeratio3Bill</mapping>
+                <mapping row="2" col="14">vendorRatio.reducerateFrom</mapping>
+                <mapping row="2" col="15">vendorRatio.reducerateTo</mapping>
+                <mapping row="2" col="16">vendorRatio.reducerate</mapping>
+                <mapping row="2" col="17">vendorRatio.htflag</mapping>
+                <mapping row="2" col="18">vendorRatio.htant</mapping>
+            </section>
+            <!--循环结束条件 最后离结束内容的偏移-->
+            <loopbreakcondition>
+                <!--offset 行偏移 正数n为读取当前行时先判断往下n行是否符合结束条件 负数测试过，走不通读取数据-->
+                <rowcheck offset="0">
+                    <!--offset 为判断该行那一列(个)单元格内容 -->
+                    <cellcheck offset="3"></cellcheck>
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>

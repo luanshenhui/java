@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ACustToelectronbankModel">
+    <resultMap id="ACustToelectronbankMap" type="ACustToelectronbankModel">
+        <result property="dataDt" column="data_dt"/>
+        <result property="certNbr" column="cert_nbr"/>
+        <result property="cardLevelCd" column="card_level_cd"/>
+        <result property="vipTpCd" column="vip_tp_cd"/>
+        <result property="birthDay" column="birth_day"/>
+        <result property="custAddr" column="cust_addr"/>
+        <result property="etlSysDttime" column="etl_sys_dttime"/>
+        <result property="engName" column="eng_name"/>
+        <result property="incrInd" column="incr_ind"/>
+        <result property="hisAddInd" column="his_add_ind"/>
+        <result property="custName" column="cust_name"/>
+        <result property="hisUpdateInd" column="his_update_ind"/>
+        <result property="txDate" column="tx_date"/>
+    </resultMap>
+    <sql id="columns">
+    data_dt,cert_nbr,card_level_cd,vip_tp_cd,birth_day,cust_addr,etl_sys_dttime,eng_name,incr_ind,his_add_ind,cust_name,his_update_ind,tx_date
+    </sql>
+
+    <insert id="insert" parameterType="ACustToelectronbankModel" useGeneratedKeys="true"
+            keyProperty="certNbr" keyColumn="cert_nbr">
+        insert into a_cust_toelectronbank
+        (data_dt
+        ,card_level_cd
+        ,vip_tp_cd
+        ,birth_day
+        ,cust_addr
+        ,etl_sys_dttime
+        ,eng_name
+        ,incr_ind
+        ,his_add_ind
+        ,cust_name
+        ,his_update_ind
+        ,tx_date)
+        values(#{dataDt}
+        ,#{cardLevelCd}
+        ,#{vipTpCd}
+        ,#{birthDay}
+        ,#{custAddr}
+        ,#{etlSysDttime}
+        ,#{engName}
+        ,#{incrInd}
+        ,#{hisAddInd}
+        ,#{custName}
+        ,#{hisUpdateInd}
+        ,#{txDate})
+    </insert>
+
+    <update id="update" parameterType="ACustToelectronbankModel">
+        update a_cust_toelectronbank set
+        <if test="dataDt !=null">data_dt = #{dataDt}
+            ,
+        </if>
+        <if test="cardLevelCd !=null">card_level_cd = #{cardLevelCd}
+            ,
+        </if>
+        <if test="vipTpCd !=null">vip_tp_cd = #{vipTpCd}
+            ,
+        </if>
+        <if test="birthDay !=null">birth_day = #{birthDay}
+            ,
+        </if>
+        <if test="custAddr !=null">cust_addr = #{custAddr}
+            ,
+        </if>
+        <if test="etlSysDttime !=null">etl_sys_dttime = #{etlSysDttime}
+            ,
+        </if>
+        <if test="engName !=null">eng_name = #{engName}
+            ,
+        </if>
+        <if test="incrInd !=null">incr_ind = #{incrInd}
+            ,
+        </if>
+        <if test="hisAddInd !=null">his_add_ind = #{hisAddInd}
+            ,
+        </if>
+        <if test="custName !=null">cust_name = #{custName}
+            ,
+        </if>
+        <if test="hisUpdateInd !=null">his_update_ind = #{hisUpdateInd}
+            ,
+        </if>
+        <if test="txDate !=null">tx_date = #{txDate}
+            ,
+        </if>
+        where cert_nbr = #{certNbr}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="dataDt !=null">and data_dt = #{dataDt}</if>
+            <if test="certNbr !=null">and cert_nbr = #{certNbr}</if>
+            <if test="cardLevelCd !=null">and card_level_cd = #{cardLevelCd}</if>
+            <if test="vipTpCd !=null">and vip_tp_cd = #{vipTpCd}</if>
+            <if test="birthDay !=null">and birth_day = #{birthDay}</if>
+            <if test="custAddr !=null">and cust_addr = #{custAddr}</if>
+            <if test="etlSysDttime !=null">and etl_sys_dttime = #{etlSysDttime}</if>
+            <if test="engName !=null">and eng_name = #{engName}</if>
+            <if test="incrInd !=null">and incr_ind = #{incrInd}</if>
+            <if test="hisAddInd !=null">and his_add_ind = #{hisAddInd}</if>
+            <if test="custName !=null">and cust_name = #{custName}</if>
+            <if test="hisUpdateInd !=null">and his_update_ind = #{hisUpdateInd}</if>
+            <if test="txDate !=null">and tx_date = #{txDate}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="ACustToelectronbankMap">
+        SELECT id,
+        <include refid="columns"/>
+        from a_cust_toelectronbank
+        where id=#{certNbr}
+    </select>
+    <select id="findAll" resultMap="ACustToelectronbankMap">
+        select id,
+        <include refid="columns"/>
+        from a_cust_toelectronbank
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="ACustToelectronbankMap">
+        select id,
+        <include refid="columns"/>
+        from a_cust_toelectronbank
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="ACustToelectronbankModel">
+        delete from a_cust_toelectronbank where id = certNbr
+    </delete>
+
+    <select id="selectBirthDay" resultMap="ACustToelectronbankMap" parameterType="String">
+        select
+        <include refid="columns"/>
+        from a_cust_toelectronbank
+        where cert_nbr = #{certNo}
+    </select>
+
+    <select id="findMaxCardLevelInfo" resultMap="ACustToelectronbankMap" parameterType="String">
+        select
+        data_dt,cert_nbr,MAX(card_level_cd) AS
+        card_level_cd,vip_tp_cd,birth_day,cust_addr,etl_sys_dttime,eng_name,incr_ind,his_add_ind,his_update_ind,tx_date
+        from a_cust_toelectronbank
+        where cert_nbr = #{certNbr}
+    </select>
+</mapper>
+
+

@@ -1,0 +1,190 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/common/taglibs.jsp" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>风险预警</title>
+    <%@ include file="/common/resource_show.jsp" %>
+    <style type="text/css">
+        input.datepick {
+            background: #FFF url(/ciqs/static/dec/images/dpn.date.pick.gif) no-repeat right
+        }
+
+        #title_a {
+            color: #ccc
+        }
+
+        #title_a:hover {
+            color: white;
+        }
+
+        .box-img-bg {
+            background-image: url(../static/show/disc/bg.png);
+            box-sizing: border-box;
+            width: 1198px;
+            height: 164px;
+            padding: 0 200px;
+            position: absolute;
+            display: none;
+            font-size: 20px;
+            line-height: 35px;
+            color: white;
+        }
+
+        .box-content-style {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+        
+        .hr{
+	        text-decoration: none;
+		    width: 140px;
+		    height: 50px;
+		    line-height: 75px;
+		    text-align: center;
+		    list-style-type: none;
+		    font-size: 18px;
+		    color: #FFF;
+		    float: right;
+        }
+    </style>
+    <script type="text/javascript">
+        function pageUtil(page) {
+            $("#warning").attr("action", "/ciqs/warning/warningList?page=" + page);
+            $("#warning").submit();
+        }
+        
+        function add(){
+       		window.location.href="/ciqs/warning/addJsp";
+        }
+    </script>
+</head>
+<body class="bg-gary">
+<div class="freeze_div_list">
+    <div class="title-bg">
+        <div class=" title-position margin-auto white">
+            <div class="title">
+                <span class="font-24px" style="color:white;">预警时长规则维护 /查询</span>
+            </div>
+            <%@ include file="/WEB-INF/jsp/userinfo.jsp" %>
+        </div>
+    </div>
+    <div class="margin-auto" style="background-color: #1b5ea8;height: 80px">
+        <div class=" title-position margin-auto white" style="display: inline;">
+        	<a class="hr"  style="margin-right:80px;color: white"  href="${ctx}/warning/guifanList">规范执法</a>
+        	<a class="hr" style="color: white">风险预警</a>
+        	<a class="hr" style="color: white">超流程预警</a>
+        </div>
+        <div style="width: 420px; height: 30px;float: left;display: inline;">
+         <span style="color:white;height: 50px;display: block;font-size: 16px;padding-top: 20px;padding-left: 110px;">当前位置：预警时长规则维护 </span>
+        </div>
+    </div>
+</div>
+<div class="blank_div_list">
+<!-- 	<div class="margin-auto width-1200" style="height: 50px;margin-top: 20px">当前位置：预警时长规则维护 - 查询</div> -->
+</div>
+<div class="margin-auto width-1200 search-box">
+    <div id="alertBoxId" class="box-img-bg"><span class="box-content-style" id="alertContentId"></span></div>
+    <form action="/ciqs/warning/warningList" method="post" id="warning">
+        <table width="100%" border="0" class="table-search margin-auto">
+            <tr>
+                <td height="25" align="left">货物类别：</td>
+                <td height="25" align="left" style="padding-left: 25px;">贸易类型：</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td width="200px" height="50"><input name="org_reg_no" type="text" class="search-input input-440px" style="width:250px"
+                                                   id="org_reg_no" value=""/></td>
+                <td width="300px" height="50">
+<!--                 <input name="cert_no" type="text" class="search-input input-440px" style="width:250px" id="cert_no" value=""/> -->
+                <select name="cert_no" id="cert_no"  class="search-input input-440px" style="width:250px" >
+                   	 <option value="">全部</option>
+                   	 <option value="1">进口</option>
+                 	 <option value="0">出口</option>
+                </select>                                  
+               	</td>
+                <td style="width:250px">
+                    <input type="submit" class="search-btn fo" value="搜索" style="cursor: pointer;"
+                           onclick="pageUtil('')"/>
+                </td>
+                <td>
+                    <input type="reset" class="search-btn fo" value="清空" style="cursor: pointer;"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="margin-auto width-1200 tips">共找到<span class="yellow font-18px">
+	<c:if test="${not empty list }">
+        ${counts}
+    </c:if>
+	<c:if test="${empty list }">
+        0
+    </c:if>
+	</span>条记录
+</div>
+<div class="margin-auto width-1200  data-box">
+    <div class="margin-cxjg">
+        <table class="margin-cxjg_table" border="0" cellspacing="0" cellpadding="0">
+            <tr class="thead">
+                <td height="25">货物类别</td>
+                <td height="25">贸易类型</td>
+                <td height="25">最小平均时长</td>
+                <td height="25">标准平均时长</td>
+                <td height="25">最大平均时长</td>
+                <td height="25">操作</td>
+            </tr>
+            <c:if test="${not empty list }">
+                <c:forEach items="${list}" var="row">
+                    <tr class="thead_nr">
+                        <td width="17%" height="50" align="center">${row.good_type}</td>
+                        <td width="17%" height="50" align="center">
+	                        <c:if test="${row.good_category eq '0'}">
+	                        	出口
+	                        </c:if>
+	                        <c:if test="${row.good_category eq '1'}">
+	                        	进口
+	                        </c:if>
+                        </td>
+                        <td width="17%" height="50" align="center">${row.min_time}</td>
+                        <td width="17%" height="50" align="center">${row.average_time}</td>
+                        <td width="17%" height="50" align="center">${row.max_time}</td>
+                        <td height="50" align="center" valign="middle">
+                            <a href='javascript:jumpPage("/ciqs/warning/edit?ruld_id=${row.ruld_id}");'>
+                                <span class="data-btn margin-auto" style="display:inline">编辑+</span></a>
+                             <a href='javascript:jumpPage("/ciqs/warning/del?ruld_id=${row.ruld_id}");'>
+                                <span class="data-btn margin-auto"  style="display:inline" onclick="javascript:return confirm('是否确定执行此操作？');">删除+</span></a>    
+                       	</td> 
+                    </tr>
+                </c:forEach>
+            </c:if>
+            <tfoot>
+            <jsp:include page="/common/pageUtil.jsp" flush="true"/>
+            </tfoot>
+        </table>
+        <div style="text-align: center;margin: auto;margin-top: 10px;width:200px;padding-bottom: 10px;">
+			<input type="button" class="search-btn" value="创建"  onclick="add();"/>
+		</div>
+    </div>
+</div>
+<div class="margin-auto width-1200 tips"></div>
+</body>
+<script type="text/javascript">
+    $("li").mouseenter(function () {
+        var img = this.getElementsByTagName("img")[0];
+        var str = img.getAttribute("content");
+        var alertBox = document.getElementById("alertBoxId");
+        var alertContent = document.getElementById("alertContentId");
+        alertContent.innerText = str;
+        alertBox.style.display = 'table';
+    });
+
+    $("li").mouseleave(function () {
+        var alertBox = document.getElementById("alertBoxId")
+        alertBox.style.display = 'none';
+    });
+</script>
+</html>

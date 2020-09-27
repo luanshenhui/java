@@ -1,0 +1,129 @@
+{
+  "flowId": "qDp0yQLR",
+  "title": "重大事项申请",
+  "nodes": {
+    "d748682a0f546d3e58b7de640f68e790": {
+      "name": "开始",
+      "left": 10,
+      "top": 17,
+      "type": "start round",
+      "width": 50,
+      "height": 50,
+      "alt": true
+    },
+    "888e0d2efef84d9f391660ea6acc68bc": {
+      "name": "结束",
+      "left": 79,
+      "top": 314,
+      "type": "end round",
+      "width": 50,
+      "height": 50,
+      "alt": true
+    },
+    "7facc46aa5ce9f1a248fb661aa346947": {
+      "name": "办公室（重大事项判断）",
+      "left": 219,
+      "top": 91,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "a677eeb3ff65cc6482c75b002d7af165": {
+      "name": "会议（决议）",
+      "left": 472,
+      "top": 92,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "93ff7f66f70799134512e96722dd0ff6": {
+      "name": "办公室判断意见",
+      "left": 738,
+      "top": 98,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "1f2d4919d4e32e3b6d7b542019594363": {
+      "name": "重新审定",
+      "left": 508,
+      "top": 316,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "657d710cca8c41ba75365debf933d404": {
+      "name": "上报监管部门",
+      "left": 215,
+      "top": 315,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    },
+    "923fef75cff1b8a97f734c86384727f7": {
+      "name": "申请开始",
+      "left": 42,
+      "top": 95,
+      "type": "mutiselect",
+      "width": 160,
+      "height": 50,
+      "alt": true
+    }
+  },
+  "lines": {
+    "workFlowContent_line_9": {
+      "type": "sl",
+      "from": "7facc46aa5ce9f1a248fb661aa346947",
+      "to": "a677eeb3ff65cc6482c75b002d7af165"
+    },
+    "workFlowContent_line_10": {
+      "type": "sl",
+      "from": "a677eeb3ff65cc6482c75b002d7af165",
+      "to": "93ff7f66f70799134512e96722dd0ff6"
+    },
+    "workFlowContent_line_11": {
+      "type": "sl",
+      "from": "93ff7f66f70799134512e96722dd0ff6",
+      "to": "1f2d4919d4e32e3b6d7b542019594363"
+    },
+    "workFlowContent_line_12": {
+      "type": "sl",
+      "from": "1f2d4919d4e32e3b6d7b542019594363",
+      "to": "657d710cca8c41ba75365debf933d404"
+    },
+    "workFlowContent_line_13": {
+      "type": "sl",
+      "from": "1f2d4919d4e32e3b6d7b542019594363",
+      "to": "a677eeb3ff65cc6482c75b002d7af165"
+    },
+    "workFlowContent_line_14": {
+      "type": "sl",
+      "from": "93ff7f66f70799134512e96722dd0ff6",
+      "to": "657d710cca8c41ba75365debf933d404"
+    },
+    "workFlowContent_line_15": {
+      "type": "sl",
+      "from": "657d710cca8c41ba75365debf933d404",
+      "to": "888e0d2efef84d9f391660ea6acc68bc"
+    },
+    "workFlowContent_line_17": {
+      "type": "sl",
+      "from": "d748682a0f546d3e58b7de640f68e790",
+      "to": "923fef75cff1b8a97f734c86384727f7",
+      "name": ""
+    },
+    "workFlowContent_line_18": {
+      "type": "sl",
+      "from": "923fef75cff1b8a97f734c86384727f7",
+      "to": "7facc46aa5ce9f1a248fb661aa346947",
+      "name": ""
+    }
+  },
+  "areas": {},
+  "initNum": 20
+}

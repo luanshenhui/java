@@ -1,0 +1,112 @@
+sqlserver  top   mysql  limit   oracle  rownum
+1、分页
+	(1)什么是分页
+		依据每页多少条记录(pageSize)以及第几页(pages)
+	查询数据库，获得一定数量的记录。
+		之所以要分页，最主要的原因是，如果数据库中的
+	记录很多(一般情况下，大多数的表，记录数都是比较大
+	),直接查询出来，内存空间放不下，会严重影响系统
+	的性能。另外，分页也会改善用户的体验。
+	(2)如何分页
+		1)真分页
+			a,什么是真分页?
+			依据pageSize和pages去查询数据库，返回一定
+		数量的记录。
+			b,如何真分页?
+			b1, mysql
+				sql语句:
+					select * from 表名 limit start,pageSize;
+					start: 记录的下标，从0开始的。
+					pageSize:每页多少条记录。
+					另外，我们还需要获得总的页数,就必须要
+					知道一共有多少条记录
+					sql: select count(*) from 表名;
+					
+					方法的参数是  pages第几页  pagesize一个多少条
+					查询出来那页的数据
+				编程:
+					sql: select * from t_user limit ?,?
+					PreparedStatement prep = 
+					conn.preparestatement(sql);
+					prep.setInt(1,pageSize*(pages - 1));
+					prep.setInt(2,pageSize);
+					prep.executeQuery();
+					5 * 0     5
+					 5 * 1    5 
+					 
+			b2,oracle
+				sql语句:
+					select * from
+						(
+						select a.*,rownum rn
+						from
+							(select * from t_user) a
+						where rownum < 6
+						)where rn>=1;
+				编程:
+					String sql = "select * from
+						(
+						select a.*,rownum rn
+						from
+							(select * from t_user) a
+						where rownum < ?
+						)where rn>=?";
+					int start = pageSize * (pages - 1) + 1;
+					int end = start + pageSize;	
+					PreparedStatement prep = 
+					conn.preparestatement(sql);
+					prep.setInt(1,end);
+					prep.setInt(2,start);
+					prep.executeQuery();
+		2)假分页
+			一次性地查询所有的记录，放到内存，然后再
+		向用户显示部分的记录。
+			假分页适用于记录数比较少的情况，优点是，
+		只需要查询一次数据库，以后都是从内存当中进行
+		分页，速度比较快。
+			在实际使用当中用得比较少，因为表中的记录
+		一般都比较多。
+		
+2、dao的完整写法
+		step1, 实体类
+		step2, DAO接口
+				在该接口当中，声明一系列用来访问数据库的方法。
+				比如:
+					IAccountDAO接口
+					public Account findByAccountNo(
+					String accountNo) throws Exception;
+				注意：
+					接口中声明的方法不应该涉及任何具体的实现技术。
+			step3,DAO实现
+					使用具体的数据库访问技术(比如,jdbc技术)
+				来实现DAO接口中声明的一系列方法。
+				比如:
+					class AccountDAOImpl implements 
+					IAccountDAO{
+					}	
+			step4,工厂类
+				"工厂"是一种设计模式,所谓设计模式，是
+			设计人员在面对一些相似的问题提出的一套
+			通用的解决方案，为了方便交流，给这些解决方案
+			命名，比如"工厂“就是一个设计模式。
+				工厂模式的核心思想是：工厂为调用者提供
+			符合接口要求的对象(产品)，调用者不用了解对象的
+			创建的细节。
+			
+		买股票:
+			create table t_account(
+				id int primary key auto_increment,
+				accountNo varchar(16) unique,
+				balance int
+			)type=innodb;
+			insert into t_account(accountNo,balance) 
+			values('6225881003192000',1000);
+			create table t_stock(
+				id int primary key auto_increment,
+				stockNo varchar(6) unique,
+				qty int
+			)type=innodb;
+			insert into t_stock(stockNo,qty) 
+			values('600015',10);
+			假设，600015股票价格是10元一股
+3、事务的封装

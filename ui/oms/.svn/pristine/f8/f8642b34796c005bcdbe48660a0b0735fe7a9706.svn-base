@@ -1,0 +1,20 @@
+package cn.rkylin.oms.system.position.dao;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.position.domain.WF_ORG_STATION;
+@Repository(value = "positionDAO")
+public class PositionDAOImpl implements IPositionDAO {
+	@Autowired
+	protected IDataBaseFactory dao;
+
+	@Override
+	public List getStationByCondition(WF_ORG_STATION stationParam) throws Exception {
+		return dao.getStationByCondition(stationParam);
+	}
+
+}

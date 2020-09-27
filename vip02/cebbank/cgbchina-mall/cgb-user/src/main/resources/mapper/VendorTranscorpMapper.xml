@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VendorTranscorp">
+    <resultMap id="VendorTranscorpMap" type="VendorTranscorpModel">
+        <result property="id" column="id"/>
+        <result property="vendorInfId" column="vendor_inf_id"/>
+        <result property="transcorpName" column="transcorp_name"/>
+        <result property="contact" column="contact"/>
+        <result property="mobile" column="mobile"/>
+        <result property="phone" column="phone"/>
+        <result property="fax" column="fax"/>
+        <result property="address" column="address"/>
+        <result property="email" column="email"/>
+        <result property="servicePhone" column="service_phone"/>
+        <result property="serviceUrl" column="service_url"/>
+        <result property="transCorpDesc" column="trans_corp_desc"/>
+        <result property="status" column="status"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="reserved1" column="reserved1"/>
+    </resultMap>
+    <sql id="columns">
+        id,vendor_inf_id,transcorp_name,contact,mobile,phone,fax,address,email,service_phone,service_url,trans_corp_desc,status,create_oper,modify_oper,create_time,modify_time,reserved1
+    </sql>
+
+    <insert id="insert" parameterType="VendorTranscorpModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_vendor_transcorp
+        (vendor_inf_id
+        ,transcorp_name
+        ,contact
+        ,mobile
+        ,phone
+        ,fax
+        ,address
+        ,email
+        ,service_phone
+        ,service_url
+        ,trans_corp_desc
+        ,status
+        ,create_oper
+        ,modify_oper
+        ,create_time
+        ,modify_time
+        ,reserved1)
+        values(#{vendorInfId}
+        ,#{transcorpName}
+        ,#{contact}
+        ,#{mobile}
+        ,#{phone}
+        ,#{fax}
+        ,#{address}
+        ,#{email}
+        ,#{servicePhone}
+        ,#{serviceUrl}
+        ,#{transCorpDesc}
+        ,#{status}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,#{createTime}
+        ,#{modifyTime}
+        ,#{reserved1})
+    </insert>
+
+    <update id="update" parameterType="VendorTranscorpModel">
+        update tbl_vendor_transcorp set
+        <if test="vendorInfId !=null">vendor_inf_id = #{vendorInfId}
+            ,
+        </if>
+        <if test="transcorpName !=null">transcorp_name = #{transcorpName}
+            ,
+        </if>
+        <if test="contact !=null">contact = #{contact}
+            ,
+        </if>
+        <if test="mobile !=null">mobile = #{mobile}
+            ,
+        </if>
+        <if test="phone !=null">phone = #{phone}
+            ,
+        </if>
+        <if test="fax !=null">fax = #{fax}
+            ,
+        </if>
+        <if test="address !=null">address = #{address}
+            ,
+        </if>
+        <if test="email !=null">email = #{email}
+            ,
+        </if>
+        <if test="servicePhone !=null">service_phone = #{servicePhone}
+            ,
+        </if>
+        <if test="serviceUrl !=null">service_url = #{serviceUrl}
+            ,
+        </if>
+        <if test="transCorpDesc !=null">trans_corp_desc = #{transCorpDesc}
+            ,
+        </if>
+        <if test="status !=null">status = #{status}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+            ,
+        </if>
+        <if test="reserved1 !=null">reserved1 = #{reserved1}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="vendorInfId !=null">and vendor_inf_id = #{vendorInfId}</if>
+            <if test="transcorpName !=null">and transcorp_name = #{transcorpName}</if>
+            <if test="contact !=null">and contact = #{contact}</if>
+            <if test="mobile !=null">and mobile = #{mobile}</if>
+            <if test="phone !=null">and phone = #{phone}</if>
+            <if test="fax !=null">and fax = #{fax}</if>
+            <if test="address !=null">and address = #{address}</if>
+            <if test="email !=null">and email = #{email}</if>
+            <if test="servicePhone !=null">and service_phone = #{servicePhone}</if>
+            <if test="serviceUrl !=null">and service_url = #{serviceUrl}</if>
+            <if test="transCorpDesc !=null">and trans_corp_desc = #{transCorpDesc}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="reserved1 !=null">and reserved1 = #{reserved1}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="VendorTranscorpMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_vendor_transcorp
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="VendorTranscorpMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_transcorp
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="VendorTranscorpMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_transcorp
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="VendorTranscorpModel">
+        delete from tbl_vendor_transcorp where id = id
+    </delete>
+</mapper>
+
+

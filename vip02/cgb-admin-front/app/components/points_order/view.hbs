@@ -1,0 +1,225 @@
+{{#component "pointsOrder_manage js-component"}}
+    <p class="components-title"><strong>- 订单管理 -</strong></p>
+    <form class="form form-inline pointsOrder-search-form">
+        <fieldset>
+            <input type="hidden" class="search-type" name="searchType" value="{{searchType}}">
+            <input type="hidden" class="ordertypeId" name="ordertypeId" value="JF">
+            <p class="filter-name">
+                <span class="span4 span-large">
+                    <label class="field-group-label">订单编号：</label>
+                    <input type="text" class="form-control" name="orderId" value="{{orderId}}">
+                </span>
+                <span class="span4 span-large">
+                    <label class="field-group-label">礼品类型：</label>
+                    <select class="form-control" name="goodsType">
+                        <option value="">请选择</option>
+                        <option value="00" {{#equals goodsType "00"}}selected{{/equals}}>实物</option>
+                        <option value="01" {{#equals goodsType "01"}}selected{{/equals}}>虚拟</option>
+                        <option value="02" {{#equals goodsType "02"}}selected{{/equals}}>O2O</option>
+                    </select>
+                </span>
+                <span class="span4 span-large">
+                    <label class="field-group-label">订单状态：</label>
+                    <select class="form-control" name="curStatusId">
+                        <option value="">请选择</option>
+                        <option value="0301" {{#equals curStatusId "0301"}}selected{{/equals}}>待付款</option>
+                        <option value="0304" {{#equals curStatusId "0304"}}selected{{/equals}}>已废单</option>
+                        <option value="0360" {{#equals curStatusId "0360"}}selected{{/equals}}>已取消</option>
+                        <option value="0316" {{#equals curStatusId "0316"}}selected{{/equals}}>订单状态未明</option>
+                        <option value="0305" {{#equals curStatusId "0305"}}selected{{/equals}}>处理中</option>
+                        <option value="0307" {{#equals curStatusId "0307"}}selected{{/equals}}>支付失败</option>
+                        <option value="0308" {{#equals curStatusId "0308"}}selected{{/equals}}>支付成功</option>
+                        <option value="0312" {{#equals curStatusId "0312"}}selected{{/equals}}>已撤单</option>
+                        <option value="0306" {{#equals curStatusId "0306"}}selected{{/equals}}>发货处理中</option>
+                        <option value="0309" {{#equals curStatusId "0309"}}selected{{/equals}}>已发货</option>
+                        <option value="0310" {{#equals curStatusId "0310"}}selected{{/equals}}>已签收</option>
+                        <option value="0380" {{#equals curStatusId "0380"}}selected{{/equals}}>拒绝签收</option>
+                        <option value="0381" {{#equals curStatusId "0381"}}selected{{/equals}}>无人签收</option>
+                        <option value="0334" {{#equals curStatusId "0334"}}selected{{/equals}}>退货申请</option>
+                        <option value="0327" {{#equals curStatusId "0327"}}selected{{/equals}}>退货成功</option>
+                        <option value="0335" {{#equals curStatusId "0335"}}selected{{/equals}}>拒绝退货申请</option>
+                        <option value="0382" {{#equals curStatusId "0382"}}selected{{/equals}}>系统拒绝该订单</option>
+                    </select>
+                </span>
+            </p>
+            <p class="filter-name">
+                <span class="span4 span-large">
+                    <label class="field-group-label">渠道：</label>
+                    <select class="form-control" name="sourceId">
+                        <option value="">请选择</option>
+                        <option value="00" {{#equals sourceId "00"}}selected{{/equals}}>积分商城</option>
+                        <option value="03" {{#equals sourceId "03"}}selected{{/equals}}>手机商城</option>
+                        <option value="01" {{#equals sourceId "01"}}selected{{/equals}}>CallCenter</option>
+                        <option value="02" {{#equals sourceId "02"}}selected{{/equals}}>IVR渠道</option>
+                        <option value="04" {{#equals sourceId "04"}}selected{{/equals}}>短信渠道</option>
+                        <option value="09" {{#equals sourceId "09"}}selected{{/equals}}>APP渠道</option>
+                        <option value="05" {{#equals sourceId "05"}}selected{{/equals}}>广发银行（微信）</option>
+                        <option value="06" {{#equals sourceId "06"}}selected{{/equals}}>广发信用卡（微信）</option>
+                    </select>
+                </span>
+                <span class="span4 span-large">
+                    <label class="field-group-label">礼品编码：</label>
+                    <input type="text" class="form-control" name="goodsId" value="{{goodsId}}">
+                </span>
+                <span class="span4 span-large">
+                    <label class="field-group-label">客户名称：</label>
+                    <input type="text" class="form-control" name="memberName" value="{{memberName}}">
+                </span>
+            </p>
+            <p class="filter-name">
+                <span class="span4 span-large">
+                    <label class="field-group-label">供应商名称：</label>
+                    <input type="text" class="form-control" name="vendorSnm" value="{{vendorSnm}}">
+                </span>
+                <span class="span4 span-large">
+                    <label class="field-group-label">银行卡号：</label>
+                    <input type="text" class="form-control" name="cardno" value="{{cardno}}">
+                </span>
+                <span class="span4 span-large">
+                    <label class="field-group-label">客户级别：</label>
+                    <select class="form-control" name="custType">
+                        <option value="">请选择</option>
+                        <option value="A" {{#equals custType "A"}}selected{{/equals}}>金普</option>
+                        <option value="B" {{#equals custType "B"}}selected{{/equals}}>钛金/臻享白金</option>
+                        <option value="C" {{#equals custType "C"}}selected{{/equals}}>顶级/增值白金</option>
+                        <option value="D" {{#equals custType "D"}}selected{{/equals}}>VIP</option>
+                    </select>
+                </span>
+            </p>
+            <p class="filter-name">
+                <span class="span4 span-large">
+                    <label for="startTime">下单日期：</label>
+                    <input class="form-control application_date js-date-start pointsOrder-date-width" id="startTime"
+                           type="text" value="{{startTime}}" name="startTime">
+                    <em>-</em>
+                    <input class="form-control authorize_date js-date-end pointsOrder-date-width" id="endTime"
+                           type="text" value="{{endTime}}" name="endTime">
+                </span>
+            </p>
+            <p class="filter-name">
+                <span class="span-new">
+                    更多：
+                    <input type="checkbox" name="limitFlag" id="checkbox" {{#if limitFlag}}checked{{/if}}>
+                    可查6个月以上的数据&emsp;
+                </span>
+            </p>
+            <p class="filter-name">
+                <span class="span4 span-large search">
+                    <input class="btn btn-success btn-small js-btn-search" type="submit" value="查询"/>
+                </span>
+            </p>
+        </fieldset>
+    </form>
+    <div>
+        <button id="2" class="btn btn-info btn-small js-batchOutOrder">批量导出</button>
+        <span class="outOrder-state"></span>
+        <span class="outorder-download"></span>
+    </div>
+    <div class="main-box-table" data-url="{{_HREF_.expressUrl}}">
+        <table width="98%" border="0" cellspacing="0" cellpadding="0" class="list-table-title">
+            <tr>
+                <th width="34%">礼品</th>
+                <th width="6%">数量</th>
+                <th width="12%">总金额</th>
+                <th width="12%">总积分</th>
+                <th width="12%">订单状态</th>
+                <th width="10%">客户级别</th>
+                <th width="12%">交易操作</th>
+            </tr>
+        </table>
+        {{#equals _DATA_.total "0"}}
+            <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+        {{else}}
+            {{#each _DATA_.data}}
+                <div class="order-tab">
+                    <div class="list-detail">
+                        {{#equals orderSubModel.isTieinSale "1"}}
+                            <p><i class="icon-icon-label"></i></p>
+                        {{/equals}}
+                        <p>订单编号：{{orderSubModel.orderId}}</p>
+
+                        <p>下单时间：{{#formatDate orderSubModel.createTime}}{{/formatDate}}</p>
+
+                        <p>礼品类型：{{orderSubModel.goodsTypeName}}</p>
+
+                        <p>渠道：{{orderSubModel.sourceNm}}</p>
+
+                        <p>客户名称：{{orderSubModel.memberName}}</p>
+                    </div>
+                    <table width="98%" border="0" cellspacing="0" cellpadding="0" class="list-table-con">
+                        <tr data-component="" data-id="{{orderSubModel.orderId}}">
+                            <td width="10%">
+                                <a href="{{_HREF_.main}}/mall/goods/{{orderSubModel.goodsCode}}?itemCode={{orderSubModel.goodsId}}"
+                                   target="_blank">
+                                    {{#if orderSubModel.itemSmallPic}}<img
+                                            data-original="{{orderSubModel.itemSmallPic}}"
+                                            alt="暂无图片"/>
+                                    {{else}}
+                                        <img alt="暂无图片"/>
+                                    {{/if}}
+                                </a>
+                            </td>
+                            <td width="24%" class="text-left">
+                                <a href="{{_HREF_.main}}/mall/goods/{{orderSubModel.goodsCode}}?itemCode={{orderSubModel.goodsId}}"
+                                   target="_blank" class="word03">{{orderSubModel.goodsNm}}</a>
+                                <strong>礼品编码：{{xid}}</strong>
+                            </td>
+                            <td width="6%">{{orderSubModel.goodsNum}}</td>
+                            <td width="12%">￥{{orderSubModel.totalMoney}}</td>
+                            <td width="12%">{{orderSubModel.bonusTotalvalue}}</td>
+                            <td width="12%">
+                                <strong>{{orderSubModel.curStatusNm}}</strong>
+                                <a href="{{_HREF_.mainContext}}/points/order/orderInfo?id={{orderSubModel.orderId}}"
+                                   class="word03">订单详情</a>
+                            </td>
+                            <td width="10%">
+                                {{#equals orderSubModel.custType "A"}}
+                                    金普
+                                {{/equals}}
+                                {{#equals orderSubModel.custType "B"}}
+                                    钛金/臻享白金
+                                {{/equals}}
+                                {{#equals orderSubModel.custType "C"}}
+                                    顶级/增值白金
+                                {{/equals}}
+                                {{#equals orderSubModel.custType "D"}}
+                                    VIP
+                                {{/equals}}
+                            </td>
+                            <td width="12%">
+                                {{#equals orderSubModel.curStatusId "0312"}}
+                                    {{#authorial "pointOrder_backGoods"}}
+                                        <a class="btn btn-info btn-sm js-orderManage-revoke">撤单原因</a>
+                                    {{/authorial}}
+                                {{/equals}}
+                                {{#equals orderSubModel.curStatusId "0334"}}
+                                    {{#authorial "pointOrder_backGoods"}}
+                                        <a class="btn btn-info btn-sm js-orderManage-orderReturn">退货详情</a><br>
+                                    {{/authorial}}
+                                {{else}}
+                                    {{#equals orderSubModel.curStatusId "0327"}}
+                                        {{#authorial "pointOrder_backGoods"}}
+                                            <a class="btn btn-info btn-sm js-orderManage-orderReturn">退货详情</a><br>
+                                        {{/authorial}}
+                                    {{else}}
+                                        {{#equals orderSubModel.curStatusId "0335"}}
+                                            {{#authorial "pointOrder_backGoods"}}
+                                                <a class="btn btn-info btn-sm js-orderManage-orderReturn">退货详情</a><br>
+                                            {{/authorial}}
+                                        {{/equals}}
+                                    {{/equals}}
+                                {{/equals}}
+                                {{#if orderTransFlag}}
+                                    {{#authorial "pointOrder_logistics"}}
+                                        <a class="btn btn-info btn-sm js-orderManage-trans">查看物流</a>
+                                    {{/authorial}}
+                                {{/if}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {{/each}}
+        {{/equals}}
+    </div>
+    <div class="pagination" data-total={{_DATA_.total}}></div>
+{{/component}}

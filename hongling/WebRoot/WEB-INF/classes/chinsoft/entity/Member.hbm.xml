@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Member" table="Member">
+        <id name="ID" column="ID" type="string">
+            <generator class="uuid.hex" />
+        </id>
+        <property name="Code" column="Code" type="string"/>
+        <property name="password" column="password" type="string"/>
+        <property name="Username" column="Username" type="string"/>
+        <property name="Name" column="Name" type="string"/>
+        <property name="GroupID" column="GroupID" type="integer"/>
+        <property name="StatusID" column="StatusID" type="integer"/>
+        <property name="RegistDate" column="RegistDate" type="date"/>
+        <property name="LastLoginDate" column="LastLoginDate" type="date"/>
+        <property name="ClientIP" column="ClientIP" type="string"/>
+        <property name="ParentID" column="ParentID" type="string"/>
+        <property name="PayTypeID" column="PayTypeID" type="integer" />
+        <property name="OrdenPre" column="OrdenPre" type="string"/>
+        <property name="CompanyName" column="CompanyName" type="string"/>
+        <property name="Contact" column="Contact" type="string"/>
+        <property name="CompanyShortName" column="CompanyShortName" type="string"/>
+        <property name="ReceiveAddress" column="ReceiveAddress" type="string"/>
+        <property name="Account" column="Account" type="string"/>
+        <property name="ContractNo" column="ContractNo" type="string"/>
+        <property name="CmtPrice" column="CmtPrice" type="string"/>
+        <property name="Memo" column="Memo" type="string"/>
+        <property name="OwnedPartner" column="OwnedPartner" type="string"/>
+        <property name="OwnedStore" column="OwnedStore" type="string"/>
+        <property name="ApplyDeliveryTypeID" column="ApplyDeliveryTypeID"  type="integer"/>
+        <property name="ApplyDeliveryDays" column="ApplyDeliveryDays" type="string"/>
+        <property name="ApplyDeliveryAddress" column="ApplyDeliveryAddress" type="string"/>
+        <property name="MoneySignID" column="MoneySignID" type="integer"/>
+        <property name="FabricPre" column="FabricPre" type="string"/>
+        <property name="IsMTO" column="IsMTO" type="integer"/>
+        <property name="HomePage" column="HomePage" type="integer"/>
+        <property name="expressComId" column="expressComId" type="string"/>
+        <property name="IsDiscount" column="IsDiscount" type="integer"/>
+        <property name="IsUserNo" column="IsUserNo" type="integer"/>
+        <property name="semiFinished" column="semiFinished" type="integer"/>
+        <property name="MenuIDs" type="text">
+            <column name="MenuIDs" />
+        </property>
+        <property name="AddressLine1" column="AddressLine1" type="string"/>
+        <property name="AddressLine2" column="AddressLine2" type="string"/>
+        <property name="City" column="City" type="string"/>
+        <property name="Division" column="Division" type="string"/>
+        <property name="DivisionCode" column="DivisionCode" type="string"/>
+        <property name="PostalCode" column="PostalCode" type="string"/>
+        <property name="CountryCode" column="CountryCode" type="string"/>
+        <property name="CountryName" column="CountryName" type="string"/>
+        <property name="FederalTaxID" column="FederalTaxID" type="string"/>
+        <property name="PhoneNumber" column="PhoneNumber" type="string"/>
+        <property name="PhoneExtension" column="PhoneExtension" type="string"/>
+        <property name="FaxNumber" column="FaxNumber" type="string"/>
+        <property name="Telex" column="Telex" type="string"/>
+        <property name="Email" column="Email" type="string"/>
+        <property name="ShippingPaymentType" column="ShippingPaymentType" type="integer"/>
+        <property name="BusinessUnit" column="BusinessUnit" type="integer"/>
+        <property name="PriceType" column="PriceType" type="integer"/>
+        <property name="RetailDiscountRate" column="RetailDiscountRate" type="double"/>
+        <property name="srUserID" column="srUserID" type="string"/>
+        <property name="companyID" column="companyID" type="integer"/>
+        <property name="liningType" column="liningType" type="string"/>
+        <property name="cmt100" column="cmt100" type="string"/>
+        <property name="cmt300" column="cmt300" type="string"/>
+        <property name="logo" column="logo" type="integer"/>
+         <property name="Qordermenuids" type="text">
+            <column name="Qordermenuids" />
+        </property>
+        <property name="fabricMenuids" type="text">
+      		<column name="fabricMenuids" />
+        </property>
+        <property name="fabricType" column="fabricType" type="integer"/>
+        <property name="LTNo" column="LTNo" type="string"/>
+    </class>
+</hibernate-mapping>

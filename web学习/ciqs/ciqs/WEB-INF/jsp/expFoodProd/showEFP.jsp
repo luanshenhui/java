@@ -1,0 +1,282 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>出口食品生产企业备案</title>
+<%@ include file="/common/resource_show.jsp"%>
+<style type="text/css">
+input.datepick {
+	background: #FFF url(/ciqs/static/dec/images/dpn.date.pick.gif)
+		no-repeat right
+}
+.box-img-bg {
+	background-image: url(../static/show/disc/bg.png);
+	box-sizing: border-box;
+	width: 1198px;
+	height: 164px;
+	padding: 0 200px;
+	position: absolute;
+	display: none;
+	font-size: 20px;
+	line-height: 35px;
+	color: white;
+}
+
+.box-content-style {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+</style>
+<link rel="stylesheet" href="${ctx}/static/viewer/assets/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="${ctx}/static/viewer/dist/viewer.css"/>
+<link rel="stylesheet" href="${ctx}/static/viewer/demo/css/main.css"/>
+
+<script src="${ctx}/static/viewer/demo/js/main.js"></script>
+<script src="${ctx}/static/viewer/assets/js/bootstrap.min.js"></script>
+<script src="${ctx}/static/viewer/dist/viewer.js"></script>
+<script type="text/javascript" src="/ciqs/cuplayer/Images/swfobject.js"></script> 
+<script type="text/javascript"> 
+	$(function(){
+	  $("#imgd1").hide();
+	});
+	
+	function pageUtil(page) {
+			$("#select_form").attr("action", "/ciqs/expFoodPOF/expFoodList?page="+page);
+			$("#select_form").submit();
+	}
+	/**
+	 * 显示图片浏览
+	 * path 数据库保存的图片地址 201708/20170823/1B083FEA24D6E00004df8.jpg
+	 * wangzhy
+	 */
+	function toImgDetail(path){
+	    //var url ="/ciqs/showVideo?imgPath=201708/20170823/tibet-1.jpg";
+		var url = "/ciqs/showVideo?imgPath="+path;
+		$("#imgd1").attr("src",url);
+		$("#imgd1").click();
+	}
+	
+	function toLoacation(apply_no){
+		window.location.href="/ciqs/expFoodPOF/toLoacation?apply_no="+apply_no;
+	}
+	
+	function toLookPdf(applyid){
+		window.location.href="${ctx}/expFoodPOF/lookPdf?applyId="+applyid;
+	}
+	
+	/**
+	 * 图片和视频文件上传
+	 * formId form表单Id
+	 * uploadFileId input file标签Id
+	 * procMainId 业务主键Id
+	 * procType 环节类型
+	 * fileType 文件类型 1图片 2视频 3音频
+	 * package_no 业务单号
+	 * wangzhy
+	 */
+	function fileSubmit(e,uploadFileId,applyNo){
+		if(typeof $("#"+uploadFileId).val() == 'undefined' || $("#"+uploadFileId).val() == ''){
+			alert("请选择一个文件!");
+			return;
+		}
+		var path = $("#"+uploadFileId).val();
+		var type = path.substring(path.lastIndexOf('.')+1,path.length);
+		if(type != 'jpg' && type != 'jpeg' && type != 'png' && type != 'gif' && type != 'bmp'){
+			alert("请选择一个图片文件!");
+			return;
+		}
+		var url ='/ciqs/expFoodPOF/fileVideoOrImg?&applyNo='+applyNo;
+		$(e).parent().parent().parent().attr("action",url);
+		$(e).parent().parent().parent().submit();
+// 		$("#"+formId).attr("action",url);
+// 		$("#"+formId).submit();
+	}
+// 	function FormSubmit(){
+// 		$("#select_form").attr("action", "/ciqs/expFoodPOF/expFoodList");
+// 		$("#Intercepe_form").attr("method", "get");
+// 		$("#select_form").submit();
+// 	}
+	
+	function utclear(){
+		$("#applycode").val("");
+		$("#orgname").val("");
+		$("#applyDate1").val("");
+		$("#applyDate2").val("");
+		$("#portOrg").val("");
+	}
+</script>
+</head>
+<body class="bg-gary">
+	<div class="row" style="z-index:200000;">
+		 	<div class="col-sm-8 col-md-6" style="z-index:200000;">
+		      <div class="docs-galley" style="z-index:200000;">
+		        	<ul class="docs-pictures clearfix" style="z-index:200000;">
+		          	<li>
+		          	<img id="imgd1" style="z-index:200000;display: none" src="${ctx}/static/viewer/assets/img/thumbnails/tibet-3.jpg" alt="Cuo Na Lake" />
+		          	</li>
+		        	</ul>
+		      </div>
+		   	</div> 
+		</div>
+	<%@ include file="mylistorg.jsp"%>
+	<div class="blank_div_list"></div>
+	<div class="margin-auto width-1200 search-box">
+	<div id="alertBoxId" class="box-img-bg"><span class="box-content-style" id="alertContentId"></span></div>
+		<form method="post" id="select_form">
+			<table border="0" cellspacing="0" cellpadding="0" class="table-search margin-auto">
+				<tr>
+					<td align="left" valign="middle" width="285">企业名称</td>
+					<td align="left" valign="middle" width="285">开始时间</td>
+					<td align="left" valign="middle" width="285">结束时间</td>
+					<td align="left" valign="middle" width="285">申请号</td>
+				</tr>
+				<tr>
+					<td align="left" valign="middle"><input type="text" class="search-input input-200px"  id="orgname" name="orgname" value="${obj.orgname}"/></td>
+					<td align="left"><input name="applyDate1" type="text" class="search-input input-200px datepick" id="applyDate1" value="${applyDate1}"/></td>	
+					<td align="left"><input name="applyDate2" type="text" class="search-input input-200px datepick" id="applyDate2" value="${applyDate2}"/></td>	
+					<td align="left" valign="middle"><input name="applycode" type="text" class="search-input input-200px" id="applycode" value="${obj.applycode}"  /></td>
+				</tr>
+				<tr>
+					<td align="left" valign="middle">所属机构</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td width="180" height="50" align="left" valign="middle">
+						<select id="portOrg" name="<!-- portOrg -->" class="search-input input-105px">
+							<option selected="selected"  value="CIQGVLN">辽宁出入境检验检疫局</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="submit" class="search-btn fo" value="搜索" />
+					</td>
+					<td>	
+						<input type="button" class="search-btn fo" value="清空" onclick="utclear()" />
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<div class="margin-auto width-1200 tips">
+		共找到<span class="yellow font-18px"> <c:if
+				test="${not empty list }">
+	${counts} 
+	</c:if> <c:if test="${empty list }">
+	0
+	</c:if>
+		</span>条记录
+	</div>
+
+	<div class="margin-auto width-1200  data-box">
+	<div class="margin-cxjg">
+		<table class="margin-cxjg_table" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;word-break:break-all">
+  			<tr class="thead">
+				<td width="100px;">申请编号</td>
+				<td width="80px;">申请时间</td>
+				<td width="140px;">企业名称</td>
+				<td width="80px;">申请形式</td>
+				<td width="80px;">流程环节</td>
+				<td width="60px;">处理人</td>
+				<td width="80px;">处理类型</td>
+				<td width="80px;">审批结果</td>
+				<td width="110px;">人员随机</td>
+				<td width="70px;">评审任务<br/>通知书</td>
+				<td width="80px;">评审组状态</td>
+<!-- 				<td width="80px;">不符合项跟踪报告</td> -->
+				<td width="100px;">现场检查记录</td>
+				<td width="80px;">详情</td>
+			</tr>
+			<c:if test="${not empty list }">
+				<c:forEach items="${list}" var="row">
+					<tr class="thead_nr">
+						<td width="12%" height="90" align="center">${row.applycode}</td>
+						<td width="7%" height="90" align="center"><fmt:formatDate
+								value="${row.startdate}" type="both" pattern="yyyy-MM-dd" /></td>
+						<td width="7%" height="90" align="center">${row.orgname}</td>
+						<td width="5%" height="90" align="center">${row.applytypename}</td>
+						<td width="7%" height="90" align="center">${row.applynotename}</td>
+						<td width="9%" height="90" align="center">${row.username}</td>
+						<td width="5%" height="90" align="center">
+						<c:if test="${row.dualtype eq '01' }">岗内流转</c:if> 
+						<c:if test="${row.dualtype eq '02' }">受理补充补正</c:if> 
+						<c:if test="${row.dualtype eq '03' }">不予受理</c:if> 
+						<c:if test="${row.dualtype eq '04' }">予以受理</c:if> 
+						<c:if test="${row.dualtype eq '05' }">同意审批决定</c:if> 
+						<c:if test="${row.dualtype eq '06' }">退回</c:if> 
+						<c:if test="${row.dualtype eq '0101' }">文审岗位内流转</c:if>
+						<c:if test="${row.dualtype eq '0102' }">文审补充补正</c:if>
+						<c:if test="${row.dualtype eq '0103' }">文审结束</c:if>
+						<c:if test="${row.dualtype eq '0301' }">合格,无需整改</c:if>
+						<c:if test="${row.dualtype eq '0302' }">基本合格,仍需整改</c:if>
+						<c:if test="${row.dualtype eq '0303' }">不合格</c:if>
+						</td>
+						<td width="5%" height="90" align="center">${row.dualcontent}</td>
+						<td width="5%" height="90" align="center">
+							<!-- 修改处 -->
+							<c:if test="${ not empty row.psnName}">${row.psnName}</c:if>
+							<c:if test="${row.psnName==' '}"><a href='javascript:jumpPage("/ciqs/expFoodPOF/pesoninit?apply_no=${row.applycode}");'>人员随机</a></c:if>
+						</td>
+						<td width="9%" height="90" align="center"><c:if test="${not empty row.applynotename}">
+<!-- 							<a href="javascript:onclick='toImgDetail('${row.applycode}')'">查看</a> -->
+<!-- 							<a href="#this" onclick="toImgDetail('${row.applycode}')" style="color:#014ccc;">查看</a> -->
+							<a href="#this" onclick="toLookPdf('${row.applyid}')" style="color:#014ccc;">查看</a>
+							</c:if> <c:if test="${empty row.applynotename}">
+								<form id="uploadForm1" method="post" enctype="multipart/form-data">
+									<div>
+										<div style="display: inline-block">
+											<input id="file1" type="file" name="file" style="width: 73px;float: right;" />
+										</div>
+										<div style="display: inline-block">
+											<button id="upload1" style="height:24px;line-height:21px;float:right" onclick="fileSubmit(this,'file1','${row.applycode}')">上传</button>
+										</div>
+									</div>
+								</form>
+							</c:if>
+						</td>
+						<td width="7%" height="90" align="center">
+							<a href="#this" onclick="toLoacation('${row.applycode}')" style="color:#014ccc;">${row.status}</a>
+						</td>
+<!-- 						<td width="8%" height="90" align="center"><a -->
+<!-- 							href='javascript:jumpPage("/ciqs/expFoodPOF/unPassable?apply_no=${row.applycode}&compName=${row.orgname}");'>不符合项跟踪报告 -->
+<!-- 						</a></td> -->
+						<td width="12%" align="center"><a
+							href='javascript:jumpPage("/ciqs/expFoodPOF/toTextList?apply_no=${row.applycode}&compName=${row.orgname}");'>现场检查记录</a></td>
+						<td width="9%" height="90" align="center"><a
+							href='javascript:jumpPage("/ciqs/expFoodPOF/detailsList?applyid=${row.applyid}&apply_no=${row.applycode}&activityid=${row.activityid}");'>
+							<span class="title-cxjg_xq">详细+</span></a></td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			 <tfoot>
+		       <jsp:include page="/common/pageUtil.jsp" flush="true"/>
+		 	</tfoot>
+		</table>
+		</div>
+	</div>
+	<div class="margin-auto width-1200 tips" ></div>
+</body>
+<script type="text/javascript">
+$("li").mouseenter(function () {
+	var img = this.getElementsByTagName("img")[0];
+	var str = img.getAttribute("content");
+	var alertBox = document.getElementById("alertBoxId");
+	var alertContent = document.getElementById("alertContentId");
+	alertContent.innerText = str;
+	alertBox.style.display = 'table';
+});
+
+$("li").mouseleave(function () {
+	var alertBox = document.getElementById("alertBoxId")
+	alertBox.style.display = 'none';
+});
+</script>
+</html>

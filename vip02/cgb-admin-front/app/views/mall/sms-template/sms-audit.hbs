@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}短信模板审核{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "mall_SMS_audit" true}}
+            {
+            "type":"2"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

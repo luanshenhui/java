@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PersonalMessage">
+    <resultMap id="PersonalMessageMap" type="PersonalMessageModel">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="type" column="type"/>
+        <result property="content" column="content"/>
+        <result property="isRead" column="is_read"/>
+        <result property="pushTime" column="push_time"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createDate" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="orderId" column="order_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="userType" column="user_type"/>
+    </resultMap>
+    <sql id="columns">
+        id,cust_id,type,content,is_read,push_time,create_oper,create_time,modify_oper,modify_time,order_id,del_flag,user_type
+    </sql>
+
+    <insert id="insert" parameterType="PersonalMessageModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_personal_message
+        (cust_id
+        ,type
+        ,content
+        ,is_read
+        ,push_time
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,order_id
+        ,del_flag
+        ,user_type)
+        values(#{custId}
+        ,#{type}
+        ,#{content}
+        ,#{isRead}
+        ,now()
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        ,#{orderId}
+        ,0
+        ,#{userType})
+    </insert>
+
+    <update id="update" parameterType="PersonalMessageModel">
+        update tbl_personal_message set
+        cust_id
+        = #{custId},type
+        = #{type},content
+        = #{content},is_read
+        = #{isRead},push_time
+        = #{pushTime},create_oper
+        = #{createOper},create_time
+        = #{createDate},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime},order_id
+        = #{orderId},del_flag
+        = #{delFlag},user_type
+        = #{userType}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag = 0
+            <if test="id !=null">and id = #{id}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="type !=null">and type = #{type}</if>
+            <if test="content !=null">and content = #{content}</if>
+            <if test="isRead !=null">and is_read = #{isRead}</if>
+            <if test="pushTime !=null">and push_time = #{pushTime}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createDate !=null">and create_time = #{createDate}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="userType !=null">and user_type = #{userType}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="PersonalMessageMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_personal_message
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="PersonalMessageMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_personal_message
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="PersonalMessageMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_personal_message
+        <include refid="conditionsElse"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="PersonalMessageModel">
+        delete from tbl_personal_message where id = id
+    </delete>
+
+    <!--全部消息已读操作-根据消息类型和会员ID-->
+    <update id="updateMessage" parameterType="PersonalMessageModel">
+        update tbl_personal_message set
+        is_read = "1"
+        ,modify_time
+        = now()
+        <include refid="conditions"/>
+    </update>
+    <!--条件-->
+    <sql id="conditionsElse">
+        <where>
+            <if test="type !=null">and type = #{type}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="lastDate !=null"><![CDATA[and create_time >= #{lastDate}]]></if>
+        </where>
+    </sql>
+
+    <!--查询条数-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_personal_message
+        <include refid="conditionsElse"/>
+    </select>
+
+    <update id="updateToRead" parameterType="Long" >
+        UPDATE tbl_personal_message  set is_read = "1"
+        WHERE  id = #{id}
+    </update>
+</mapper>
+
+

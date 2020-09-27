@@ -1,0 +1,71 @@
+//����Ԥ����ʽ
+.modal-sms-style {
+  width: 450px;
+  height: 500px;
+}
+
+.sms-preview-style {
+  width: 400px;
+  height: 200px;
+}
+
+.sms-template-notice {
+  color: red;
+}
+
+.sms-template {
+  .other-mess {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    word-wrap: normal !important;
+
+  }
+}
+
+//����ģ̬����ʽ
+.import-name-list-modal {
+  width: 730px;
+  .modal-body {
+    min-height: 100px;
+
+    .upload-btn {
+      width: 120px;
+      height: 28px;
+      z-index: 2;
+    }
+    .upload-file {
+      position: absolute;
+      left: 106px;
+      top: 75px;
+      height: 28px;
+      width: 120px;
+      opacity: 0;
+      z-index: 2;
+      filter: alpha(opacity=0);
+      -moz-opacity: 0;
+    }
+    .font-size-12 {
+      font-size: 12px;
+    }
+  }
+}
+
+.modal-import-result-style {
+  width: 700px;
+  height: 500px;
+}
+
+// 创建模板弹框样式
+.sms-template-new {
+  .css-textarea {
+    width: 300px !important;
+    height: 80px;
+  }
+}
+
+
+
+
+
+

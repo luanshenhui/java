@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BatchOrder">
+
+    <select id="getCountOverOrder" parameterType="String" resultType="Integer">
+        select
+          count(1)
+        from tbl_order
+        where
+            cur_status_id in ('0301','0316')
+            and create_time <![CDATA[<=]]> #{create_time}
+    </select>
+
+    <select id="getOverOrders" parameterType="map" resultType="cn.com.cgbchina.batch.model.BatchOrderModel">
+        select
+            order_id orderId,
+            ordertype_id ordertypeId,
+            cur_status_id curStatusId,
+            ordermain_id orderMainId,
+            vendor_id vendorId,
+            act_id actId,
+            act_type actType,
+            goods_id goodsId,
+            goods_num goodsNum,
+            goods_nm goodsNm,
+            bonus_totalvalue bonusTotalvalue,
+            member_level memberLevel,
+            create_oper createOper,
+            create_time createTime
+        from tbl_order
+        where
+            cur_status_id in ('0301','0316')
+            and create_time <![CDATA[<=]]> #{create_time}
+        limit #{offset},#{limit}
+    </select>
+
+    <update id="updateOrderStatus" parameterType="Map">
+        update tbl_order
+        set
+            cur_status_id=#{cur_status_id},
+            cur_status_nm=#{cur_status_nm},
+            modify_time=#{modify_time},
+            modify_oper=#{modify_oper}
+        where
+          order_id=#{order_id}
+    </update>
+
+    <select id="orderCancelService" parameterType="String" resultType="cn.com.cgbchina.batch.model.OrderCheckModel">
+        select
+            id "id",
+            order_id orderId,
+            cur_status_id curStatusId,
+            cur_status_nm curStatusNm
+        from tbl_order_check
+        where
+            order_id = #{orderId}
+            and ispoint in ('0','1')
+    </select>
+
+    <insert id="insertOrderCheckModel" parameterType="cn.com.cgbchina.batch.model.OrderCheckModel"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into tbl_order_check
+            (order_id
+            ,cur_status_id
+            ,cur_status_nm
+            ,do_date
+            ,do_time
+            ,ispoint
+            ,create_oper
+            ,modify_time
+            ,modify_oper
+            ,create_time
+            ,del_flag)
+        values (#{orderId}
+            ,#{curStatusId}
+            ,#{curStatusNm}
+            ,#{doDate}
+            ,#{doTime}
+            ,#{ispoint}
+            ,#{createOper}
+            ,now()
+            ,#{modifyOper}
+            ,now()
+            ,0)
+    </insert>
+
+    <update id="update" parameterType="Map">
+        update tbl_order_main
+        <set>
+            <if test="curStatusId != null">
+                cur_status_id = #{curStatusId},
+            </if>
+            <if test="curStatusNm != null">
+                cur_status_nm = #{curStatusNm},
+            </if>
+            <if test="modifyOper != null">
+                modify_oper = #{modifyOper},
+            </if>
+            <if test="modifytime != null">
+                modify_time = #{modifytime}
+            </if>
+        </set>
+        where ordermain_id = #{ordermainId}
+    </update>
+
+    <update id="updateGoodsJF" parameterType="cn.com.cgbchina.batch.model.ItemModel">
+        update tbl_item
+        set
+        stock = stock + #{stock}
+        where
+        code = #{code} and <![CDATA[(stock + #{stock}) < 9999 ]]>
+    </update>
+
+    <update id="updateGoodsYG" parameterType="cn.com.cgbchina.batch.model.ItemModel">
+        update tbl_item
+        set
+         stock = stock + #{stock}
+        where code=#{code}
+    </update>
+
+    <update id="dealPointPoolForDate" parameterType="Map">
+        update tbl_point_pool
+        set
+          used_point = used_point - #{used_point}
+        where
+          cur_month = #{cur_month} and del_flag ='0'
+    </update>
+
+    <insert id="insertOrderDoDetail" parameterType="cn.com.cgbchina.batch.model.OrderDoDetailModel"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into tbl_order_dodetail
+            (order_id
+            ,do_time
+            ,do_userid
+            ,user_type
+            ,status_id
+            ,status_nm
+            ,msg_content
+            ,do_desc
+            ,rule_id
+            ,rule_nm
+            ,create_oper
+            ,create_time
+            ,modify_oper
+            ,modify_time
+            ,del_flag)
+        values(#{orderId}
+            ,now()
+            ,#{doUserid}
+            ,#{userType}
+            ,#{statusId}
+            ,#{statusNm}
+            ,#{msgContent}
+            ,#{doDesc}
+            ,#{ruleId}
+            ,#{ruleNm}
+            ,#{createOper}
+            ,now()
+            ,#{modifyOper}
+            ,#{modifyTime}
+            ,#{delFlag})
+    </insert>
+
+    <select id="getTblEspCustNew" parameterType="String" resultType="Integer">
+        select
+            birth_used_count
+        from
+            tbl_esp_cust_new
+        where cust_id=#{cust_id}
+    </select>
+
+    <update id="updateTblEspCustNew" parameterType="Map">
+        update tbl_esp_cust_new
+        set
+          birth_used_count = birth_used_count - #{birth_used_count}
+        where cust_id=#{cust_id}
+          and birth_used_count >= #{birth_used_count}
+    </update>
+
+    <update id="updateTblEspCustNew0" parameterType="Map">
+        update tbl_esp_cust_new
+        set
+           birth_used_count = 0
+        where cust_id=#{cust_id}
+    </update>
+
+</mapper>
+
+

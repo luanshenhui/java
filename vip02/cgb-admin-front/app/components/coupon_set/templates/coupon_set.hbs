@@ -1,0 +1,32 @@
+<div class="modal" xmlns="http://www.w3.org/1999/html">
+  <div class="modal-header">
+    <h2>首次登录优惠券</h2>
+  </div>
+  <form class="coupon-form">
+    <div class="coupon-new modal-body">
+      <div class="control-group">
+        <label for="id">优惠券项目编号:</label>
+        <input id="id" name="id"  class="form-control" type="text" placeholder="请输入优惠券项目编号" >
+      </div>
+      <div class="control-group">
+        <label for="couponName">优惠券项目名称:</label>
+        <input id="couponName" name="couponName" class="form-control" type="text" placeholder="请输入优惠券项目名称" >
+      </div>
+      <div class="control-group">
+          <label>有效日期:</label>
+          <input class="form-control js-date-start"/>
+          ----<input class="form-control js-date-end"/>
+          <label>本次优惠券有效日期</label>
+      </div>
+      <div class="control-group">
+        <label for="mall_ notice">是否开启</label>
+        <input type = "radio" id = "couponOn" name="isOpen" value="是" class="form-controla" checked  />是
+        <input type = "radio" id = "couponOff" name="isOpen" value="否" class="form-controla" />否
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-success btn-small js-coupon-create" value="确定">
+      <button class="btn btn-info btn-small close">取消</button>
+    </div>
+  </form>
+</div>

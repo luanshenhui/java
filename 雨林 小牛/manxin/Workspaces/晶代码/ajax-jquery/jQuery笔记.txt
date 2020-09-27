@@ -1,0 +1,221 @@
+1、使用ajax发送同步请求
+	1)什么是同步请求?
+		ajax对象在向服务器发送请求的时候，浏览器会将页面锁定，此时，用户不能做其它操作。
+	2)如何发送同步请求?
+		open(请求方式，请求地址,false);
+
+2、jQuery基础
+	1)jQuery是什么?
+	是一个js框架，其最大的特点是，利用选择器查找节点，查找到的节点会被jQuery框架封装成一个jQuery对象。通过调用jQuery对象的属性和方法，来实现对底层dom节点的操作。这样做的好处是：可以屏蔽浏览器之间的差异，另外，代码也会变得更加简洁。
+	2)编程的基本步骤
+	step1 利用选择器查找节点
+	step2 调用jQuery对象的方法或者属性，实现对节点的操作。
+	3)jQuery对象与dom对象的转换
+		a, dom对象转换成jQuery对象$(dom对象)
+		b, jQuery对象转换成dom对象$obj.get(0)或者$obj.get()[0]
+3、jQuery选择器
+	 1)基本选择器
+		#id:依据id查找节点
+		.class: 依据class属性值
+		element: 依据标记的名称
+		selector1,select2..selectn: 将多个选择器的结果进行合并。
+		*：所有的节点。
+	 2)层次选择器
+		select1 select2: 查找所有后代
+		select1>select2: 只查找子节点
+		select1+select2: 下一个兄弟
+		select1~select2: 下面所有的兄弟
+		
+	3)过滤选择器
+		(1)基本过滤选择器
+		:first  第一个
+		:last		最后一个
+		:not(selector)  排除满足selector的节点
+		:even 下标为偶数(下标从0开始)
+		:odd		下标为奇数
+		:eq(index) 下标等于index
+		:gt(index)		下标大于index
+		:lt(index)		下标小于index
+
+		(2)内容过滤选择器
+			:contains(text):包含指定文本(text)的节点。
+			:empty : 没有子节点或者没有内容的节点
+			:has(selector): 包含有selector节点的节点
+			:parent : 有子节点或者有内容的节点
+
+		(3)可见性过滤选择器
+			:hidden  隐含的节点
+			:visible	  可见的节点
+			
+		(4)属性过滤选择器
+			[attribute] : 具有attribute属性的节点
+			[attribute=value] 属性值等于value的节点
+			[attribute!=value]	属性值不等于value的节点
+			
+		(5)子元素过滤选择器
+			:nth-child(index/even/odd): 对符合条件的所有节点采取相同的操作。注意index下标从1开始。
+
+		(6)表单对象属性过滤选择器
+			:enabled :可用的表单域
+			:disabled :不可用的表单域
+			:checked ：单选、多选 被选中的
+			:selected : 下拉列表被选中的
+
+		
+	
+	4)表单选择器
+		:input  input节点,select,textarea
+		:text  文本输入框
+		:pasword 密码输入框
+		:radio 单选
+		:checkbox 多选
+		:submit 提交
+		:reset 重置
+		:button 按钮
+		:file 文件上传
+		:hidden 隐藏域
+4、DOM操作
+		1)查询
+			利用选择器找到某个节点之后，如何获得或者修改节点的值、节点之间的文本内容、节点的html内容、属性值。
+			a,节点的html内容 : html()
+			b,节点之间的文本内容:text()
+			c,节点的值:val()
+			d,属性值: attr()
+		2)创建
+			$(html);
+		3)插入节点
+			append():向每个匹配的节点内部追加内容
+			prepend():向每个匹配的节点内部前置内容
+			after():在每个匹配的节点之后插入内容
+			before():在每个匹配的节点之前插入内容
+		4)删除节点
+			remove()
+			remove(selector):删除满足selector要求的节点。
+			empty():清空节点
+
+		5)复制节点
+			clone():
+			clone(true):使复制的节点也具有行为(将事件处理函数一块复制)
+
+		6)属性操作
+			读取：attr('');
+			设置：	attr('','') 或者一次设置多个attr({"":"","":""});
+			删除：removeAttr('')
+		7)样式操作
+			获取和设置: attr("class","")	
+			追加:addClass('')
+			移除:removeClass('') 或者removeClass('s1 s2') 
+			或者removeClass()//会删除所有样式
+			切换样式：toggleClass
+			是否有某个样式 hasClass('')
+			读取css('')
+			设置css('','')或者css({'':'','':''})//设置多个样式
+		8)遍历节点
+			children()/children(selector)只考虑子元素，不考虑其它后代元素。
+			next()/next(selector):下一个兄弟
+			prev()/prev(selector):前一个兄弟
+			siblings()/siblings(selector):其它兄弟
+			find(selector):查找满足selector条件的后代元素。
+			parent():父节点
+	
+5、事件处理
+	1)事件绑订
+		bind(type,fn)
+	2)绑订方式的简写形式
+		click(function(){
+		});
+	3)合成事件
+		hover(enter,leave) : 模拟光标悬停事件
+		toggle(fn1,fn2...)：模拟鼠标连续单击事件
+	4)事件冒泡
+		a,获得事件对象
+			click(function(event){
+			});
+		b,停止冒泡
+			event.stopPropagation()
+		c,停止默认行为
+			event.preventDefault()
+		b,事件对象的属性
+			event.type:事件类型
+			event.target:返回事件源（是dom对象!!!）
+			event.pageX/pageY:获得点击的坐标
+	5)模拟操作
+		trigger('click')
+
+6、动画
+	1)show()/ hide()	
+		作用：显示/隐藏 (通过改变宽度和高度)
+		用法:
+			show(速度，[回调函数]);
+			速度可以是'slow','normal','fast',也可以是数字，比如900(单位是毫秒)回调函数会在动画执行完毕之后执行。		
+	2)fadeIn() fadeOut():
+		作用：显示/隐藏(改变不透明度)
+		用法:
+		fadeIn(速度，[回调函数]);
+		速度可以是'slow','normal','fast',也可以是数字，比如900(单位是毫秒)回调函数会在动画执行完毕之后执行。
+	3)slideUp() /slideDown() 
+		作用：显示/隐藏(改变元素的高度)
+		用法:
+		slideUp(速度，[回调函数]);
+		速度可以是'slow','normal','fast',也可以是数字，比如900(单位是毫秒)回调函数会在动画执行完毕之后执行。
+	4)自定义动画 animate(params,speed,callback)
+		用法:
+		params:是一个javascript对象，描述动画执行完毕之后元素的样式。
+		speed: 是一个数字，单位是毫秒，表示动画执行所需要的时间。
+		callback:动画执行完成之后，会调用这个函数。
+	
+7、类数组的使用
+		jQuery在作查询时，如果返回多个节点(dom节点),会将这些节点封装成一个类数组，可以调用jQuery提供的方法来对这个数组进行相应的操作。
+	1)each(fn(i)):循环遍历每一个元素,this代表被迭代的
+	dom对象，$(this)代表被迭代的jquery对象。
+	2)eq(index)：返回index+1位置处的jquery对象
+	3)index(obj)：返回obj在类数组中的下标，其中obj可以是dom对象或者jquery对象。
+	4)length属性：类数组中dom节点的个数。
+	5)get()：返回dom对象组成的数组。
+	6)get(index)：返回index+1个dom对象。
+	
+
+
+
+一、jQuery对ajax的支持
+	1、load(url)：
+		作用：将服务器返回的数据直接添加到符合要求的节点之上(采用get方式)。
+		用法: 
+		$obj.load(url,[data]);
+		url:string类型，请求地址。
+		data(请求参数):可以是请求字符串，比如"name=zs&age=22",或者是一个javascript对象，比如{'name':'zs','age':22}。
+		
+	2、$.get(url,[data],[callback],[type]):
+		作用：以get方式向服务器发请求。
+		用法:
+		url:string类型，请求地址。
+		data(请求参数):请求字符串，比如"name=zs&age=22",或者是一个javascript对象，比如{'name':'zs','age':22}。
+		callback(回调函数): 格式 function(data,statusText),其中,data是服务器返回的数据，statusText是状态的描述。
+		type:字符串类型，服务器返回的数据的类型，类型可以是
+			a, html: 返回的是一个html内容。
+			b, json: 返回的是一个json字符串。
+			c, xml: 返回的是一个xml数据。
+			d, script:返回的是一个javascript脚本。
+			e, text:返回的是一个字符串。
+	$.post与$.get用法完全一样。
+	3、$.ajax(options):
+	options是一个形如{key1:value1,key2,value2...}的js对象，用于指定发送请求的选项。
+	选项参数如下：
+	url(string):请求地址
+	type(string):get/post
+	data(请求参数):请求字符串，比如"name=zs&age=22",
+	或者是一个javascript对象，比如{'name':'zs','age':22}。 
+	dataType(string) :服务器返回的数据类型,类型可以是
+		a, html: 返回的是一个html内容。
+		b, json: 返回的是一个json字符串。
+		c, xml: 返回的是一个xml数据。
+		d, script:返回的是一个javascript脚本。
+		e, text:返回的是一个字符串。
+	success(function):请求成功后调用的回调函数，有两个参数：function(data,textStatus),其中，data是服务器返回的数据。
+	error(function):请求失败时调用的函数，有三个参数function(xhr,textStatus,errorThrown)
+	async: false(发送同步请求),true(发送异步请求)
+	
+	4、序列化元素：
+	serialize():将jquery对象包含的表单或者表单控件转换成查询字符串。
+	serializeArray()：转换为一个数组，每个数组元素形如{name:fieldName,value:fieldVal}的对象。
+	序列化元素的作用，主要是用于ajax请求中，给data赋值。

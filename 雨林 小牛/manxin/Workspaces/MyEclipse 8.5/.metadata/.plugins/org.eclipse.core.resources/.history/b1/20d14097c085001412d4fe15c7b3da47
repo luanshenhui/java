@@ -1,0 +1,171 @@
+package com.yulin.web.userLet;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Random;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.yulin.web.entity.User;
+import com.yulin.web.service.*;
+
+public class UserServiceLet extends HttpServlet{
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		req.setCharacterEncoding("utf-8");
+		resp.setCharacterEncoding("utf-8");
+		resp.setContentType("text/html; charset = utf-8");
+		String path = req.getRequestURI();
+		path = path.substring(path.lastIndexOf("/"), path.lastIndexOf("."));
+		UserService us = new UserService();
+		
+		HttpSession session = req.getSession();//获得session
+		session.removeAttribute("msg_login");//删除session中的错误提示
+		
+		String loginName = "";
+		String loginPwd = "";
+		
+		if("/regist".equals(path)){
+			String checkCode = session.getAttribute("checkCode").toString();
+			String number = req.getParameter("number");
+			if(number.equals(checkCode)){
+				if(!(us.regist(req.getParameter("loginId"), req.getParameter("pwd"), req.getParameter("name"))))
+				{
+					System.out.println("注册失败!");
+				}else{
+					System.out.println("注册成功！");
+					resp.sendRedirect("login.jsp");
+				}
+			}else{
+				System.out.println("验证码错误！");
+				resp.sendRedirect("regist.html");
+			}
+		}else if("/login".equals(path)){
+			/*利用session*/
+			String id = req.getParameter("loginId");
+			String pwd = req.getParameter("pwd");
+			User u = us.Ligon(id, pwd);
+			if(u != null){
+				
+				//手动添加cookie
+				Cookie newCookie = new Cookie("cookie", id + "," + pwd);
+				newCookie.setMaxAge(1000);//cookie存在的周期(秒)
+//				newCookie.setPath("/WenDemo");//设置cookie路径 (默认地址)
+				resp.addCookie(newCookie);
+				
+				//获得cookie
+
+				
+				
+				
+				session.setAttribute("user",u);//将用户对象保存至session
+				resp.sendRedirect("emplist.do");//重定向到emplist.jsp
+				
+			}else{
+				session.setAttribute("msg_login", "用户名或密码错误");
+				resp.sendRedirect("login.jsp");
+			}
+		}else if("/emplist".equals(path)){
+			//自动登录
+			Cookie[] cookie = req.getCookies();
+			for(Cookie c : cookie){
+				System.out.println("name:" + c.getName());
+				System.out.println("value:" + c.getValue());
+				String[] str = c.getValue().split(",");
+				String 
+			}
+			User u = (User)session.getAttribute("user");
+			if(u == null){
+				//跳转到登录页面
+				resp.sendRedirect("login.jsp");
+			}else{
+				/*
+				 * 获得所有员工的信息显示在页面 将登陆者的姓名显示在页面中 提示：
+				 * 1.转发到emplist.jsp
+				 * 2.在页面中利用java代码完成循环输出表格
+				 * 3.表格中的数据利用EL表达式获得
+				 */
+				ArrayList<User> list = (ArrayList<User>) us.findAll();
+				req.setAttribute("list", list); 
+				req.getRequestDispatcher("emplist.jsp").forward(req, resp);//转发
+			}
+			
+		}else if("/addEmp".equals(path)){
+			if(!(us.insert(req.getParameter("loginId"),"1234",req.getParameter("name"),
+					Integer.parseInt(req.getParameter("salary")),Integer.parseInt(req.getParameter("age"))))){
+				System.out.println("添加失败");
+				
+			}else{
+				System.out.println("添加成功");
+				resp.sendRedirect("emplist.do");
+			}
+			
+		}else if("/toUpdate".equals(path)){
+			String id = req.getParameter("loginId");
+			User u = us.findById(id);
+			req.setAttribute("user", u);
+			req.getRequestDispatcher("updateEmp.jsp").forward(req, resp);
+			
+		}else if("/updateEmp".equals(path)){
+			if(!(us.Update(req.getParameter("loginId"), req.getParameter("pwd"), req.getParameter("name"),
+					Integer.parseInt(req.getParameter("salary")), Integer.parseInt(req.getParameter("age"))))){
+				System.out.println("修改失败");
+			}else{
+				System.out.println("修改成功");
+				resp.sendRedirect("emplist.do");
+			}
+			
+		}else if("/delete".equals(path)){
+			if(!(us.Delete(req.getParameter("loginId")))){
+				System.out.println("删除失败");
+			}else{
+				System.out.println("删除成功");
+				resp.sendRedirect("emplist.do");
+			}
+		}else if("/image".equals(path)){
+			/* 做5位数字的验证码 */
+			/* 1. 验证码范围：10000~99999
+			 * 2. 生成一张图片，图片的内容是验证码
+			 * 3. 获得response对象的输出流
+			 * 4. 将图片发送到浏览器
+			 */
+			int checkCode = new Random().nextInt(89999) + 10001;
+			session.setAttribute("checkCode", checkCode);
+			BufferedImage image = new BufferedImage(60, 20, BufferedImage.TYPE_INT_RGB);//创建图片对象
+			Graphics g = image.getGraphics();//获得图片的画笔
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, 60, 20);//画一个矩形
+			g.setColor(Color.BLACK);
+			g.drawString(""+checkCode, 10, 15);
+			resp.setContentType("image/jpeg");//设置响应数据类型(image类型 jpeg后缀)
+			OutputStream os = resp.getOutputStream();//获得响应输出流
+			JPEGImageEncoder je = JPEGCodec.createJPEGEncoder(os);//创建一个解析图片的工具
+			je.encode(image);//将图片压缩成数据流
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+}

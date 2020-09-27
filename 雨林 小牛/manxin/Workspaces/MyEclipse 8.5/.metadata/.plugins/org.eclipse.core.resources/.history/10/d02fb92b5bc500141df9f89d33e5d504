@@ -1,0 +1,89 @@
+package com.yulin.dangdang.bean;
+
+public class SearchKey {
+	private String product_name;
+	private String description;
+	private String author;
+	private String publishing;
+	private String which_edtion;
+	private String isbn;
+	private String catalogue;
+	private String print_number;
+	
+	public String getProduct_name() {
+		return product_name;
+	}
+	public void setProduct_name(String productName) {
+		product_name = productName;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	public String getPublishing() {
+		return publishing;
+	}
+	public void setPublishing(String publishing) {
+		this.publishing = publishing;
+	}
+	public String getWhich_edtion() {
+		return which_edtion;
+	}
+	public void setWhich_edtion(String whichEdtion) {
+		which_edtion = whichEdtion;
+	}
+	public String getIsbn() {
+		return isbn;
+	}
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
+	public String getCatalogue() {
+		return catalogue;
+	}
+	public void setCatalogue(String catalogue) {
+		this.catalogue = catalogue;
+	}
+	public String getPrint_number() {
+		return print_number;
+	}
+	public void setPrint_number(String printNumber) {
+		print_number = printNumber;
+	}
+	
+	public SearchKey() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public SearchKey(String productName, String description, String author,
+			String publishing, String whichEdtion, String isbn,
+			String catalogue, String printNumber) {
+		super();
+		product_name = productName;
+		this.description = description;
+		this.author = author;
+		this.publishing = publishing;
+		which_edtion = whichEdtion;
+		this.isbn = isbn;
+		this.catalogue = catalogue;
+		print_number = printNumber;
+	}
+	@Override
+	public String toString() {
+		return "SearchKey [author=" + author + ", catalogue=" + catalogue
+				+ ", description=" + description + 
+				", isbn=" + isbn + ", print_number="
+				+ print_number + ", product_name=" + product_name
+				+ ", publishing=" + publishing + ", which_edtion="
+				+ which_edtion + "]";
+	}
+	
+}

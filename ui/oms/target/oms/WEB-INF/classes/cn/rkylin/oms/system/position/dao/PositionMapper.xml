@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.position.dao.PositionDAOImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.position.domain.WF_ORG_STATION">
+	 	<id column="STATION_ID" property="stationId"/>
+	    <result column="UNIT_ID" property="unitId"/>
+	    <result column="PARENT_STATION_ID" property="parentStationId"/>
+	    <result column="STATION_NAME" property="stationName"/>
+	    <result column="STATION_DESCRIPTION" property="stationDescription"/>
+	    <result column="STATION_TIME_BEGIN" property="stationTimeBegin"/>
+	    <result column="STATION_TIME_END" property="stationTimeEnd"/>
+	    <result column="USER_NUMBERS" property="userNumbers"/>
+	    <result column="MANAGABLE" property="managable"/>
+	</resultMap>
+
+	<sql id="Base_Column">
+	</sql>
+	
+	<select id="getStationByCondition" parameterType="cn.rkylin.oms.system.position.domain.WF_ORG_STATION" resultMap="BaseResultMap">
+	select STATION_ID, UNIT_ID, PARENT_STATION_ID, STATION_NAME, STATION_DESCRIPTION,
+      STATION_TIME_BEGIN, STATION_TIME_END, USER_NUMBERS
+      <if test="managable = true">
+	      ,(CASE
+	         WHEN 'adminUser' = #{userId} THEN
+	          1
+	         WHEN STATION_ID IN 
+	              (SELECT DISTINCT (STATION_ID)
+	                 FROM WF_ORG_USER_STATION RU
+	                WHERE RU.STATION_ID IN
+	                      (SELECT T.STATION_ID
+	                         FROM WF_ORG_USER_STATION T, WF_ORG_STATION R
+	                        WHERE R.STATION_ID = T.STATION_ID
+	                          AND T.USER_ID = #{userId})) THEN
+	          1
+	         ELSE
+	          0
+	      END) as MANAGABLE
+      </if>
+      <if test="managable = false">
+      	,'1' as MANAGABLE
+      </if>
+      <if test="managable = null">
+      	,'1' as MANAGABLE
+      </if>
+    from WF_ORG_STATION STATION
+	where 1=1
+		<if test="stationId != null">
+		and	STATION_ID = #{stationId}
+		</if>
+		<if test="unitId != null">
+		and	UNIT_ID = #{unitId}
+		</if>
+		<if test="parentStationId != null">
+		and	PARENT_STATION_ID = #{parentStationId}
+		</if>
+		<if test="stationName != null">
+		and	STATION_NAME = #{stationName}
+		</if>
+		<if test="managable = false">
+			<if test="userId != null">
+			and STATION.STATION_ID IN
+		       (SELECT A.STATION_ID
+		          FROM WF_ORG_USER_STATION A
+		         WHERE A.USER_ID = #{userId})
+			</if>
+		</if>
+		<if test="managable = null">
+			<if test="userId != null">
+			and	STATION.STATION_ID IN
+		       (SELECT A.STATION_ID
+		          FROM WF_ORG_USER_STATION A
+		         WHERE A.USER_ID = #{userId})
+			</if>
+		</if>
+		<if test="delegateStationIdList != null">
+			OR STATION.STATION_ID in
+				<foreach collection="array" item="delegateUnitIdList" index="index" close=")" open="(" separator=","> 
+				  #{delegateUnitIdList} 
+				</foreach>
+		</if>
+	</select>
+	
+	<insert id="insertUserStation" parameterType="cn.rkylin.oms.system.position.domain.WF_ORG_USER_STATION" >
+    insert into WF_ORG_USER_STATION (USER_ID,STATION_ID)
+    values (#{userId}, #{stationId} )
+  </insert>
+</mapper>

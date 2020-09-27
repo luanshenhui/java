@@ -1,0 +1,63 @@
+{{#component "default_search_term js-component"}}
+    <p class="components-title"><strong>- APP渠道默认搜索词管理 -</strong></p>
+    <form class="form form-aligned term-form-search form-inline">
+        <fieldset>
+            <p class="filter-name">
+            <div class="control-group">
+                <label for="termName">默认搜索词:</label>
+                <input name="name" id="defaultTermName" type="text" value="{{name}}" class="form-control"/>
+                <span class="span3 span-large  float-right margin-right-10">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-success btn-small" type="submit">查询</button>
+                </span>
+            </div>
+            </p>
+        </fieldset>
+    </form>
+    <div class="tab-condensed">
+        {{#authorial "defaultSearch_add"}}
+            <button class="btn btn-info btn-small js-default-term-new">新增</button>
+        {{/authorial}}
+    </div>
+    <table class="table m-t-10">
+        <thead>
+        <tr>
+            <th width="10%">热搜词名称</th>
+            <th width="20%">状态</th>
+            <th width="10%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#if _DATA_.data}}
+                {{#each _DATA_.data}}
+                <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                    <td class="term-name">{{name}}</td>
+                    <td class="term-status">{{#equals status "0"}}启用{{else}}禁用{{/equals}}</td>
+                    <td>
+                        {{#authorial "defaultSearch_edit"}}
+                            <button class="btn btn-info btn-small js-default-term-edit">编辑</button>
+                        {{/authorial}}
+                        {{#authorial "defaultSearch_delete"}}
+                            <button id="{{id}}" class="btn btn-info btn-small js-default-term-delete" data-toggle="confirm"
+                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                data-event="confirm:delete-item">删除
+                            </button>
+                        {{/authorial}}
+                    </td>
+                </tr>
+            {{/each}}
+            {{else}}
+                <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                       class="list-tabble-con table-list margin-bottom-20">
+                    <tr>
+                        <td>
+                            <p class="non-existent">没有符合条件的信息，请尝试其他搜索条件。</p>
+                        </td>
+                    </tr>
+                </table>
+            {{/if}}
+        </tbody>
+    </table>
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+
+{{/component}}

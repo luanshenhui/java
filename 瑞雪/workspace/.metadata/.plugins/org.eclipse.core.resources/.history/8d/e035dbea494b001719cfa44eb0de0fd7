@@ -1,0 +1,170 @@
+package cn.rkylin.oms.system.storage.domain;
+
+
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import cn.rkylin.oms.common.base.BaseEntity;
+
+/**
+ * 
+ * <p>
+ * 描述： 仓库访问对象
+ * </p>
+ */
+public class OMS_STOR extends BaseEntity {
+	/**
+	 * 序列
+	 */
+	private static final long serialVersionUID = 6888637244431821029L;
+
+	private String storId;
+	
+	private String storCode;
+	
+	private String storName;
+	
+	private String prjId;
+	
+	private String prjName;
+	
+	/**
+	 * 修改时间
+	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	private String updatetime;
+	
+	private String tel;
+	
+	private String mobile;
+	
+	private String addr;
+	
+	private String postcode;
+	
+	private String areacode;
+	
+	private String remark;
+	
+	/**
+	 * 开始时间
+	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	private Date createtime;
+	
+	private String deleted;
+	
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	public String getUpdatetime() {
+		return updatetime;
+	}
+
+	public void setUpdatetime(String updatetime) {
+		this.updatetime = updatetime;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getAddr() {
+		return addr;
+	}
+
+	public void setAddr(String addr) {
+		this.addr = addr;
+	}
+
+	public String getPostcode() {
+		return postcode;
+	}
+
+	public void setPostcode(String postcode) {
+		this.postcode = postcode;
+	}
+
+	public String getAreacode() {
+		return areacode;
+	}
+
+	public void setAreacode(String areacode) {
+		this.areacode = areacode;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(String deleted) {
+		this.deleted = deleted;
+	}
+
+	public String getStorId() {
+		return storId;
+	}
+
+	public void setStorId(String storId) {
+		this.storId = storId;
+	}
+
+	public String getStorCode() {
+		return storCode;
+	}
+
+	public void setStorCode(String storCode) {
+		this.storCode = storCode;
+	}
+
+	public String getStorName() {
+		return storName;
+	}
+
+	public void setStorName(String storName) {
+		this.storName = storName;
+	}
+
+	public String getPrjId() {
+		return prjId;
+	}
+
+	public void setPrjId(String prjId) {
+		this.prjId = prjId;
+	}
+
+	public String getPrjName() {
+		return prjName;
+	}
+
+	public void setPrjName(String prjName) {
+		this.prjName = prjName;
+	}
+}

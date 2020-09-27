@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Order SYSTEM "stand_orderDTD.dtd">
+<Order>
+	<!--订单信息-->
+	<OrderInformation>
+		<OrderDate>2008-10-17</OrderDate>
+		<!--日期-->
+		<CustomerOrdersNo>SW1094782</CustomerOrdersNo>
+		<!--客户订单号(12个字符)-->
+		<ContractSerialNumber>000001</ContractSerialNumber>
+		<!--订单Ecode-->
+		<ShipmentDate>2008-11-20</ShipmentDate>
+		<!--交货日期-->
+		<Createman>abc</Createman>
+		<!--创建人员代码-->
+	</OrderInformation>
+	<!--订单上顾客基本信息-->
+	<CustomerInformation>
+		<Customercode>1107001724</Customercode>
+		<CustomerName>宋富</CustomerName>
+		<!--顾客姓名(50个字符)-->
+		<Age>28</Age>
+		<!--年龄-->
+		<OwnedPartner>00000000</OwnedPartner>
+		<!--所属加盟商-->
+		<Gender type="male" />
+		<!--性别(male,Female)-->
+		<OwnedStore>K631H008</OwnedStore>
+		<!--所属门店-->
+		<Height>180</Height>
+		<!--身高(默认CM)-->
+		<Weight>90</Weight>
+		<!--体重(默认KG)-->
+		<Email>test@163.com</Email>
+		<!--首选邮箱-->
+		<ShipmentDestination>
+			11/F,141 Thomson RoadUPS Wan Chai HK
+		</ShipmentDestination>
+		<!--发货地址 -->
+		<ShipVia type="UPS" />
+		<!--发货方式(wuliu，keHuHuoDai，UPS，LianExpress，DHL) -->
+		<MobilePhone>1234567887654321</MobilePhone>
+		<!--移动电话(50个字符) -->
+		<Remark>文字描述信息</Remark>
+		<!--备注 -->
+	</CustomerInformation>
+	<!--订单上顾客量体信息 -->
+	<CustormerSize>
+		<CustormerCode type="15">50</CustormerCode>
+		<!--量体部位(type对应数据库) 值-->
+		<CustormerCode type="1">60</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="2">50</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="3">60</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="4">50</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="5">60</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="6">50</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="7">60</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="8">50</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="9">60</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="10">50</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="11">60</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="12">50</CustormerCode>
+		<!--量体部位 值-->
+		<CustormerCode type="13">60</CustormerCode>
+		<!--量体部位 值-->
+	</CustormerSize>
+
+	<!--订单明细 包括多个OrderDetail元素 -->
+	<OrderDetails>
+		<!--单条订单明细-->
+		<OrderDetail>
+			<ClothingSize>
+				<ClothingCode type="41">50</ClothingCode>
+				<!--成衣部位(type对应数据库) 值-->
+				<ClothingCode type="5">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="2">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="3">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="4">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="5">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="6">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="7">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="8">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="9">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="12">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="14">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="15">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="16">60</ClothingCode>
+				<!--成衣部位 值-->
+			</ClothingSize>
+			<!--单条订单明细刺绣信息-->
+			<EmbroideryProcess>
+				<Embroidery>
+					<EmbroideryLocation>72</EmbroideryLocation><!--左前片第五粒扣-->
+					<!--位置 -->
+					<EmbroideryFont>10</EmbroideryFont><!--书法字体-->
+					<!--字体 -->
+					<EmbroideryColor>18</EmbroideryColor><!--红色-->
+					<!--颜色 -->
+					<EmbroideryContent>LOVE</EmbroideryContent>
+					<!--内容 -->
+				</Embroidery>
+			</EmbroideryProcess>
+			<!--单条订单明细工艺信息 -->
+			<OrdersProcess>
+				<Process>
+					<Technology type="0980">KG048<Technology/>
+					<!--工艺要求(对应数据库) -->
+				</Process>
+				<Process>
+					<Technology type="3001" />
+					<!--工艺要求(对应数据库) -->
+				</Process>
+			</OrdersProcess>
+		</OrderDetail>
+		<OrderDetail>
+			<!--单条订单明细信息-->
+			<OrderDetailInformation>
+				<Model>HXKB021ffb</Model>
+				<!--款式 -->
+				<Categories>MXK</Categories>
+				<!--大类 -->
+				<InterliningType type="1" />
+				<!--衬类型 -->
+				<Fabrics>MBK708A<Fabrics/>
+				<!--面料-->
+				<Quantity>2</Quantity>
+				<!--数量 -->
+				<Price>70</Price>
+				<!--单价 -->
+				<Amount>140</Amount>
+				<!--金额 -->
+				<VersionStyle type="2" />
+				<!--版型风格 -->
+				<SpecialProcess>
+					用MY专用的LINEA吊牌,英文洗涤标.客户名牌：TJ PHILGRICK
+				</SpecialProcess>
+				<!--特殊工艺要求-->
+				<SemiFinishedProductFitting type="0" />
+				<!--半成品试衣(0否，1是) -->
+			</OrderDetailInformation>
+			<!--单条订单明细成衣尺寸信息 根据订单明细大类的不同ClothingSize元素包含的ClothingCode的元素数量与成衣部位不同-->
+			<ClothingSize>
+				<ClothingCode type="41">50</ClothingCode>
+				<!--成衣部位(type对应数据库) 值-->
+				<ClothingCode type="5">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="2">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="3">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="4">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="5">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="6">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="7">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="8">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="9">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="12">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="14">60</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="15">50</ClothingCode>
+				<!--成衣部位 值-->
+				<ClothingCode type="16">60</ClothingCode>
+				<!--成衣部位 值-->
+			</ClothingSize>
+			<!--单条订单明细刺绣信息-->
+			<EmbroideryProcess>
+				<Embroidery>
+					<EmbroideryLocation>72</EmbroideryLocation><!--左前片第五粒扣-->
+					<!--位置 -->
+					<EmbroideryFont>10</EmbroideryFont><!--书法字体-->
+					<!--字体 -->
+					<EmbroideryColor>18</EmbroideryColor><!--红色-->
+					<!--颜色 -->
+					<EmbroideryContent>LOasdasdaVE</EmbroideryContent>
+					<!--内容 -->
+				</Embroidery>
+				<Embroidery>
+					<EmbroideryLocation>72</EmbroideryLocation><!--左前片第五粒扣-->
+					<!--位置 -->
+					<EmbroideryFont>10</EmbroideryFont><!--书法字体-->
+					<!--字体 -->
+					<EmbroideryColor>18</EmbroideryColor><!--红色-->
+					<!--颜色 -->
+					<EmbroideryContent>LasdasdsadOVE</EmbroideryContent>
+					<!--内容 -->
+				</Embroidery>
+			</EmbroideryProcess>
+			<!--单条订单明细工艺信息 -->
+			<OrdersProcess>
+				<Process>
+					<Technology type="0001">dddddd</Technology>
+					<!--工艺要求(对应数据库) -->
+				</Process>
+				<Process>
+					<Technology type="06J2" />
+					<!--工艺要求(对应数据库) -->
+				</Process>
+			</OrdersProcess>
+		</OrderDetail>
+	</OrderDetails>
+</Order>

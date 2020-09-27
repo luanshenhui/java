@@ -1,0 +1,599 @@
+// 分单规则Datatable
+var splitRuleTable;
+//
+var splitRuleItemTable;
+//选择的商品数组
+var ecItemIdArry= [];
+
+var splitruleid = "";
+
+var isenable = "";
+
+var updateTime = "";
+
+var enableSplitruleid = "";
+var enableFlg = "";
+var enableModal = "";
+var enableUpdateTime = "";
+var shopType="";
+var projectName="";
+var shopName="";
+
+/**
+ * 页面初始化
+ */
+$(function () {
+	// 输入有效性验证
+	$("#splitRuleCreateForm , #splitShopForm").validate({
+		debug:true,
+        errorPlacement: function(error, element)
+        {
+            error.insertAfter(element);
+        }
+    });
+	
+	$.extend($.validator.defaults,{ignore:""}); //隐藏控件也校验，去掉此行不验证隐藏控件
+	
+	// 初始化表格控件
+	splitRuleTable = $('#splitRuleTable').DataTable({
+    	"processing": true,
+        "serverSide": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "dom": '<"bottom"rtflp>',
+        "searching": false,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+        "ajax": {
+            "url": "/split/splitRuleList.action",
+            "data": function ( d ) {
+                d.quickSearch = encodeURI($('#quickSearch').val());
+            }
+        },
+        "tableTools": {
+            "sRowSelect": "bootstrap"
+        },
+        "columns": [{
+            	"data": "ruleSelect"
+        	},{
+                "data": "prjName"
+            }, {
+                "data": "shopName"
+            }, {
+                "data": "shopType"
+            }, {
+                "data": "splitType"
+            }, {
+                "data": "status"
+            },{
+                "data": "operation"
+            }
+        ],
+        "columnDefs": [{
+	        	"orderable":false,
+	        	"targets":[0]
+        	}, {
+	        	"orderable":false,
+	        	"targets":[6]
+        	}
+        
+        ],
+        "order": [[ 1, "asc" ],[ 3, "asc" ],[ 2, "asc" ],[ 4, "asc" ]]
+    });
+    
+	//分单方式 TODO
+	$("#splitType option").remove();
+	$("#splitType").append("<option value=''>请选择</option>");
+	$("#splitType").append("<option value='按平台商品' selected>按平台商品</option>");
+	
+	// 初始化项目列表
+    $.ajax({
+        type:"GET",
+        url:"/projectManager/getSplitProjects.action",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        async: true,//同步
+        success:function(data) {
+            if (data.result == "success") {
+            	$("#prjId option").remove();
+            	$("#prjId").append("<option value=''>请选择</option>");
+                $.each(data.data, function (n, value) {
+                    $("#prjId").append("<option value='" + value.prjId + "'>" + value.prjName + "</option>");
+                });
+            } else {
+            	window.top.window.showModalAlert(data.msg);
+            }
+        },
+        error:function(XMLHttpRequest, textStatus) {
+            if (XMLHttpRequest.status == 500) {
+                var result = eval("(" + XMLHttpRequest.responseText + ")");
+                alert(result.errorObject.errorText);
+            }
+        }
+    });
+    
+    // 创建分单规则对话框关闭事件发生
+    $('#modalCreate').on('hide.bs.modal', function () {
+    	// 父窗体归还本页的编辑对话框
+    	window.top.window.returnCustomModalDialog();
+    })
+    
+ // 创建分单规则保存按钮点击事件绑定
+    $("#btnSplitRuleSave").click(function(){
+    	shopType = window.top.window.$("#shopId").find("option:selected").attr("shopType");
+    	projectName = window.top.window.$("#prjId").find("option:selected").text();
+    	shopName = window.top.window.$("#shopId").find("option:selected").text();
+    	createSplitRule();
+    });
+    
+ // 快速搜索，点击时提交表格刷新内容
+    $("#btnQuickSearch").click(function () {
+    	splitRuleTable.draw();
+    });
+    
+    // 快速搜索，点击时提交表格刷新内容
+    $("#btnQuickItemSearch").click(function () {
+    	splitRuleItemTable.draw();
+    });
+    
+ // 搜索框的回车事件
+    $('#quickSearch').keydown(function(e){
+		if(e.keyCode==13){
+			$("#btnQuickSearch").click();
+		}
+	});
+    
+ // 搜索框的回车事件
+    $('#quickItemSearch').keydown(function(e){
+		if(e.keyCode==13){
+			window.top.window.$("#btnQuickItemSearch").click();
+		}
+	});
+    
+ // 创建分单规则对话框关闭事件发生
+    $('#modalCreateInfo').on('hide.bs.modal', function () {
+    	// 父窗体归还本页的编辑对话框
+    	window.top.window.returnCustomModalDialog();
+    })
+    
+     // 设置规则详情对话框关闭事件发生
+    $('#showItemList').on('hide.bs.modal', function () {
+    	// 父窗体归还本页的编辑对话框
+    	window.top.window.returnCustomModalDialog();
+    })
+    
+    // 设置规则详情对话框关闭事件发生
+    $('#modalSplitShop').on('hide.bs.modal', function () {
+    	// 父窗体归还本页的编辑对话框
+    	window.top.window.returnCustomModalDialog();
+    	window.top.window.borrowCustomModalDialog($("#showItemList"));
+    })
+    
+    // 设置规则详情对话框关闭事件发生
+    $('#modalEnable').on('hide.bs.modal', function () {
+    	// 父窗体归还本页的编辑对话框
+    	window.top.window.returnCustomModalDialog();
+    })
+    
+    // 显示设置规则详情画面
+    $("#btnSplitRuleItemSet").click(function(){
+    	showItemList($("#shopId").val(),"");
+    });
+    
+    //设置分单店铺画面显示
+    $("#btnSetSplitShop").click(function(){
+    	showSetSplitShop();
+    });
+    
+    //设置分单店铺显示
+    $("#btnSplitShop").click(function(){
+    	//CheckBox选择check
+    	ecItemIdArry = new Array();
+    	window.top.window.$('input:checkbox[name=ecItemId]:checked').each(function(i){
+    		 ecItemIdArry.push($(this).attr("ecItemId"));
+    	 });
+    	
+    	 if(ecItemIdArry.length <= 0){
+    		 window.top.window.showModalAlert("请选择商品！");
+         	return false;
+    	 } 
+    	
+    	//子店铺取得
+        $.ajax({
+            type: "GET",
+            url: "/shop/childShopList.action?shopId=" + $("#hidShopId").val(),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            async: false,//同步
+            success: function (data) {
+                if (data.result == "success") {
+                	$("#splitShopId option").remove();
+                	$("#splitShopId").append("<option value=''>请选择</option>");
+                    $.each(data.data, function (n, value) {
+                    	$('#splitShopId').append("<option value='" + value.shopId + "' projectNm='"+value.prjName+"'>" + value.shopName + "</option>");
+                    });
+                    window.top.window.returnCustomModalDialog();
+                    var editDialog = window.top.window.borrowCustomModalDialog($("#modalSplitShop"));
+                	editDialog.modal({show:true, backdrop:'static'});
+                } else {
+                    window.top.window.showModalAlert(data.msg);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus) {
+                if (XMLHttpRequest.status == 500) {
+                    var result = eval("(" + XMLHttpRequest.responseText + ")");
+                    alert(result.errorObject.errorText);
+                }
+            }
+        });
+    });
+    
+    //确认信息画面显示
+    $("#btnCompleteInfo").click(function(){
+    	window.top.window.returnCustomModalDialog();    	
+    	// 输入有效性验证
+    	if(!$("#splitShopForm").valid()) {
+        	// 父窗体借用本页的编辑对话框
+        	window.top.window.borrowCustomModalDialog($("#modalSplitShop"));
+    		return false;
+    	}
+    	
+    	$('#modalSplitShop').modal('hide');
+    	window.top.window.returnCustomModalDialog();
+    	
+    	//设置提示语
+    	var projectNm = $("#splitShopId").find("option:selected").attr("projectNm");
+    	var shopNm = $("#splitShopId").find("option:selected").text();
+    	$("#infoMessage").html("所选平台商品将被分单至<span style='color:#FF0000;'>“"+projectNm+"”</span>的<span style='color:#FF0000;'>“"+shopNm+"”</span>，是否确认？");
+    	var editDialog = window.top.window.borrowCustomModalDialog($("#modalCompleteInfo"));
+    	editDialog.modal({show:true, backdrop:'static'});
+    });
+    
+ // 确认信息画面关闭事件发生
+    $('#modalCompleteInfo').on('hide.bs.modal', function () {
+    	// 父窗体归还本页的编辑对话框
+    	window.top.window.returnCustomModalDialog();
+    	splitRuleItemTable.draw();
+    	window.top.window.borrowCustomModalDialog($("#showItemList"));
+    })
+    
+    /**
+     *修改规则画面的是按钮
+     */
+    $("#btnconfirmInfo").click(function(){
+    	// 父窗体归还本页的编辑对话框
+    	window.top.window.returnCustomModalDialog();
+    	var params = {};
+    	params.splitruleid = splitruleid;  
+    	params.ecitemid = ecItemIdArry.join(',');  
+    	params.splitShopId = $("#splitShopId").val();
+    	
+    	$.ajax({
+    		type:"GET",
+    		url:"/split/createSplitRuleItem.action",
+    		data:params,
+    		contentType: "application/json;charset=utf-8",
+    		dataType: "json",
+    		async: false, // 同步
+    		success:function(data) {
+    			$('#modalCompleteInfo').modal('hide');
+    		    if (data.success == "Y") {
+    		    	//启用画面显示
+//    		    	if (isenable=='n'){
+//	    		    	//分单规则创建成功后的提示框显示
+//    		    		window.top.window.returnCustomModalDialog();
+//        		    	$('#showItemList').modal('hide');
+//	    		    	var editDialog = window.top.window.borrowCustomModalDialog($("#modalEnable"));
+//			    		editDialog.modal({show:true, backdrop:'static'});
+//    		    	} 
+    		    } else{
+    		    	window.top.window.showModalAlert(data.errormessage);
+//    		    	window.top.window.borrowCustomModalDialog($("#modalCompleteInfo"));
+    		    }
+    		},
+    		error:function(XMLHttpRequest, textStatus) {
+    		    if (XMLHttpRequest.status == 500) {
+    		        var result = eval("(" + XMLHttpRequest.responseText + ")");
+    		        alert(result.errorObject.errorText);
+    		    }
+    		}
+    		});
+    	
+    });
+    
+    /**
+     *分单规则启用
+     */
+    $("#btnEnable").click(function(){
+    	enableSplitruleid = splitruleid;
+    	enableFlg = 'n';
+    	enableModal = 'y';
+    	enableUpdateTime = updateTime;
+    	operationEnable();
+    });
+});
+
+/**
+ * 项目列表选择事件
+ */
+$("#prjId").change(function (e) {
+    //项目ID
+    var prjId = encodeURI(encodeURI($(this).val()));
+
+    // 初始化店铺列表
+    $.ajax({
+        type: "GET",
+        url: "/shop/getSplitShopList.action?prjId=" + prjId,
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        async: false,//同步
+        success: function (data) {
+            if (data.result == "success") {
+            	window.top.window.$("#shopId option").remove();
+            	window.top.window.$("#shopId").append("<option value=''>请选择</option>");
+                $.each(data.data, function (n, value) {
+                	
+                	window.top.window.$('#shopId').append("<option value='" + value.shopId + "' shopType = '"+value.shopType+"'>" + value.shopName + "</option>");
+                });
+            } else {
+                window.top.window.showModalAlert(data.msg);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus) {
+            if (XMLHttpRequest.status == 500) {
+                var result = eval("(" + XMLHttpRequest.responseText + ")");
+                alert(result.errorObject.errorText);
+            }
+        }
+    });
+});
+
+/**
+ * 打开创建分单规则的对话框
+ * @returns
+ */
+function newSplitRule() {
+	$("#splitRuleCreateForm")[0].reset();
+
+	var editDialog = window.top.window.borrowCustomModalDialog($("#modalCreate"));
+	editDialog.modal({show:true, backdrop:'static'});
+}
+
+function createSplitRule(){
+	// 父窗体归还本页的编辑对话框
+	window.top.window.returnCustomModalDialog();
+	
+    // 输入有效性验证
+	if(!$("#splitRuleCreateForm").valid()) {
+    	// 父窗体借用本页的编辑对话框
+    	window.top.window.borrowCustomModalDialog($("#modalCreate"));
+		return false;
+	}
+	//保存分担规则
+	var shopId = $("#shopId").val();
+	var shopName = $("#shopId").find("option:selected").text();
+	var splitType = $("#splitType").val();
+	var params = {};  
+    params.shopId = shopId;  
+    params.shopName = shopName;  
+    params.splitType = splitType;
+	$.ajax({
+	type:"GET",
+	url:"/split/createSplitRulet.action",
+	data:params,
+	contentType: "application/json;charset=utf-8",
+	dataType: "json",
+	async: false, // 同步
+	success:function(data) {
+	    if (data.success == "Y") {
+	    	$('#modalCreate').modal('hide');
+	    	splitRuleTable.draw();
+	    	splitruleid = data.splitruleid;
+	    	//分单规则创建成功后的提示框显示
+	    	newSplitRuleInfo();
+	    } else{
+	    	window.top.window.showModalAlert(data.errormessage);
+	    	window.top.window.borrowCustomModalDialog($("#modalCreate"));
+	    }
+	},
+	error:function(XMLHttpRequest, textStatus) {
+	    if (XMLHttpRequest.status == 500) {
+	        var result = eval("(" + XMLHttpRequest.responseText + ")");
+	        alert(result.errorObject.errorText);
+	    }
+	}
+	});
+}
+
+/**
+ * 分单规则创建成功后的提示框显示
+ * @returns
+ */
+function newSplitRuleInfo() {
+	
+	var editDialog = window.top.window.borrowCustomModalDialog($("#modalCreateInfo"));
+	editDialog.modal({show:true, backdrop:'static'});
+}
+
+/**
+ * 显示设置规则详情画面
+ * @returns
+ */
+function showItemList(shopId,splitRuleId) {
+	// 父窗体归还本页的编辑对话框
+	if (splitRuleId == ""){
+		window.top.window.returnCustomModalDialog();
+		$('#modalCreateInfo').modal('hide');
+	}
+	
+	$("#hidShopId").val(shopId);
+	$("#hidsplitRuleId").val(splitRuleId);
+	$("#showItemListTitle").html("设置规则详情(所属店铺："+shopName+"&nbsp;/&nbsp;所属项目："+projectName+"&nbsp;/&nbsp;来源平台："+shopType+")");
+	
+	//商品信息取得
+	splitRuleItemTable = $('#splitRuleItemTable').DataTable({
+    	"processing": true,
+        "serverSide": true,
+        "destroy":true,
+        "scrollY": '375px', //支持垂直滚动
+        "scrollCollapse": true,
+        "autoWidth": false,
+        "createdRow": function ( row, data, index ) {
+        		var value = $("td", row).eq(2).text();
+        		$("td", row).eq(2).attr("title",value);
+                $("td", row).eq(2).css("white-space","nowrap").css("overflow","hidden").css("text-overflow","ellipsis");
+                
+        },
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "dom": '<"bottom"rtflp>',
+        "searching": false,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+        "ajax": {
+            "url": "/split/splitRuleItemList.action",
+            "data": function ( d ) {
+            	var quickItemSearch = "";
+            	if (typeof($('#quickItemSearch').val())!='undefined'){
+            		quickItemSearch = encodeURI($('#quickItemSearch').val());
+            	} else {
+            		quickItemSearch = encodeURI(window.top.window.$('#quickItemSearch').val());
+            	}
+                d.quickSearch = quickItemSearch;
+                d.shopId = encodeURI(shopId);
+                d.splitRuleId = encodeURI(splitRuleId);
+            }
+        },
+        "tableTools": {
+            "sRowSelect": "bootstrap"
+        },
+        "columns": [{
+                "data": "itemSelect"
+            }, {
+                "data": "ecItemCode"
+            }, {
+                "data": "ecItemName"
+            }, {
+                "data": "outerCode"
+            }, {
+                "data": "splitShopName"
+            }
+        ],
+        "columnDefs": [{
+	        	"orderable":false,
+	        	"targets":[0]
+        	}
+        ],
+        "order": [[ 1, "asc" ],[ 2, "asc" ],[ 3, "asc" ],[ 4, "asc" ]]
+    });
+	var editDialog = window.top.window.borrowCustomModalDialog($("#showItemList"));
+	editDialog.modal({show:true, backdrop:'static'});
+}
+$('#showItemList').on('shown.bs.modal', function () {
+	splitRuleItemTable.draw();
+	});
+
+/**
+ * 
+ * @returns
+ */
+function showSetSplitShop() {
+	$('#modalCreateInfo').modal('show');
+}
+
+/**
+ * 设置详细按钮
+ * @param splitRuleId 分单规则的主键
+ * @returns
+ */
+function operationSetItem(shopId,splitRuleId,flg,checkTime,me) {
+	shopType = $(me).attr("shoptype");
+	projectName = $(me).attr("projectname");
+	shopName = $(me).attr("shopname");
+	showItemList(shopId,splitRuleId);
+	splitruleid = splitRuleId;
+	isenable = flg;
+	updateTime = checkTime;
+}
+
+/**
+ * 导出
+ */
+function exportSplitInfo(){
+	//特殊情况（附加导出字段）
+	var obj = new Object();	
+	obj.name = "项目名称";
+	obj.value = "prjName";
+	var obj1 = new Object();	
+	obj1.name = "店铺名称";
+	obj1.value = "shopName";
+	var obj2 = new Object();	
+	obj2.name = "所属平台";
+	obj2.value = "shopType";
+	var obj3 = new Object();	
+	obj3.name = "平台商品编码";
+	obj3.value = "ecItemCode";
+	var obj4 = new Object();	
+	obj4.name = "平台商品名称";
+	obj4.value = "ecItemName";
+	var obj5 = new Object();	
+	obj5.name = "商家编码";
+	obj5.value = "outerCode";
+	var obj6 = new Object();	
+	obj6.name = "分单店铺";
+	obj6.value = "splitShopName";
+	
+	var ob = [obj,obj1,obj2,obj3,obj4,obj5,obj6];
+	extraFieldJson = JSON.stringify(ob);
+	
+	exportList('','/split/exportCheck.action','/split/export.action','exportSplitInfo','ExportSplitInfo','',extraFieldJson)
+}
+
+function showEnableConfirm(id,flg,modal,updateTime,btnEnable){
+	enableSplitruleid = id;
+	enableFlg = flg;
+	enableModal = modal;
+	enableUpdateTime = updateTime;
+	var content = "";
+	if ($(btnEnable).text().indexOf("启用") > 0) {
+		content = "是否确认启用该分单规则？";
+	} else {
+		content = "是否确认停用该分单规则？";
+	}
+	window.top.window.showModalConfirm(content, operationEnable);
+}
+
+function operationEnable(){//id,flg,modal,updateTime
+	//启用，停用
+	//父窗体归还本页的编辑对话框
+	if ('n'!=enableModal){
+		window.top.window.returnCustomModalDialog();	
+	}
+
+	var params = {};
+	params.splitruleid = enableSplitruleid;
+	params.flg = enableFlg
+	params.updateTime = enableUpdateTime;
+	$.ajax({
+		type:"GET",
+		url:"/split/enableSplitRule.action",
+		data:params,
+		contentType: "application/json;charset=utf-8",
+		dataType: "json",
+		async: false, // 同步
+		success:function(data) {
+		    if (data.success == "Y") {
+		    	if ('n'!=enableModal){
+		    		$('#modalEnable').modal('hide');
+		    	}
+		    } else{
+		    	window.top.window.showModalAlert(data.errormessage);
+		    }
+		},
+		error:function(XMLHttpRequest, textStatus) {
+		    if (XMLHttpRequest.status == 500) {
+		        var result = eval("(" + XMLHttpRequest.responseText + ")");
+		        alert(result.errorObject.errorText);
+		    }
+		}
+		});
+	splitRuleTable.draw();
+}

@@ -1,0 +1,33 @@
+<div class="modal">
+    <div class="modal-header">
+        <a href="javascript:void(0)" class="close">×</a>
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned review-form">
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="auditLog"><span class="required">*</span>审核意见：</label>
+                <textarea class="information-textarea wh300 left" name="auditLog" id="auditLog"></textarea>
+                <span class="note"><i>&times;</i> 必填不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填不得为空</span>
+            </div>
+            <div class="control-group">
+                <label>审核履历：</label>
+                <div class="left">
+                    {{{auditLog}}}
+                </div>
+            </div>
+            <div>
+                <label for="id"></label>
+                <input name="id" type="hidden" value="{{id}}"/>
+                <label for="promotionId"></label>
+                <input name="promotionId" type="hidden" value="{{promotionId}}"/>
+                <label for="checkStatus"></label>
+                <input name="checkStatus" type="hidden" value="2"/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-medium save-review" value="确定">
+        </div>
+    </form>
+</div>

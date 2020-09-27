@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ <hibernate-mapping>
+ 	<class name="com.cost.entity.Cost_Admin" table="admin_info">
+ 		<id name="id" type="integer">
+ 			<column name="ID"></column>
+ 			<generator class="sequence">
+ 				<param name="sequence">
+ 					a_adminId
+ 				</param>
+ 			</generator>
+ 		</id>
+ 		
+ 		<property name="admin_code" type="string">
+ 			<column name="ADMIN_CODE"></column>
+ 		</property>
+ 		
+ 		<property name="password" type="string">
+ 			<column name="PASSWORD"></column>
+ 		</property>
+ 		
+ 		<property name="name" type="string">
+ 			<column name="NAME"></column>
+ 		</property>
+ 		
+ 		<property name="telephone" type="string">
+ 			<column name="TELEPHONE"></column>
+ 		</property>
+ 		
+ 		<property name="email" type="string">
+ 			<column name="EMAIL"></column>
+ 		</property>
+ 		
+ 		<property name="enrolldate" type="date">
+ 			<column name="ENROLLDATE"></column>
+ 		</property>
+ 	</class>
+ </hibernate-mapping>

@@ -1,0 +1,99 @@
+{{#component "coupons_set js-component"}}
+    <p><strong>优惠券设置</strong></p>
+    <div class="main-box col-box main-box-table-detail-t">
+        <form class="form form-aligned coupon-add-form" data-id="{{id}}">
+            <div class="main-box-title">使用范围设定</div>
+        <table>
+            {{#with _DATA_}}
+                <col width="20%"/>
+                <col width="80%"/>
+                <input name="couponId" value="{{couponId}}" type="hidden"/>
+                <input name="couponNm" value="{{couponNm}}" type="hidden"/>
+                <input id="vendorNms" name="vendorNms" value="{{vendorNms}}" type="hidden"/>
+                <input id="brandName" name="brandName" value="{{brandName}}" type="hidden"/>
+                <input id="goodsName" name="goodsName" value="{{goodsName}}" type="hidden"/>
+                <input id="vendorId" name="vendorId" value="{{vendorId}}" type="hidden"/>
+                <input id="brandId" name="brandId" value="{{brandId}}" type="hidden"/>
+                <input id="goodsId" name="goodsId" value="{{goodsId}}" type="hidden"/>
+                <input id="backCategoryNm" name="backCategoryNm" value="{{backCategoryNm}}" type="hidden"/>
+                <input id="backCategoryId" name="backCategoryId" value="{{backCategoryId}}" type="hidden"/>
+                <tr class="trData" data-id="{{id}}" data-data="{{json this}}">
+                    <th>优惠券编号：</th>
+                    <td>{{couponId}}</td>
+                </tr>
+                <tr>
+                    <th>优惠券名称：</th>
+                    <td>{{couponNm}}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <div class="col-right-common"><a href="javascript:void(0)" class="add-btn-link js-vendor-select"
+                                                         data-value="0">供应商</a></div>
+                    </th>
+                    <td id="vendorNmss" name="vendorNmss" data-id="{{vendorId}}">{{vendorNms}}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <div class="col-right-common"><a class="add-btn-link js-vendor-select" data-value="2">后台类目</a>
+                        </div>
+                    </th>
+                    <td id="backCategoryNmss" name="backCategoryNmss" data-id="{{backCategoryId}}"><span>{{backCategoryNm}}</span></td>
+                </tr>
+                <tr>
+                    <th>
+                        <div class="col-right-common"><a href="javascript:void(0)" class="add-btn-link js-vendor-select" data-value="1">品牌</a>
+                        </div>
+                    </th>
+                    <td id="brandNamess" name="brandNamess" data-id="{{brandId}}"><span>{{brandName}}</span></td>
+                </tr>
+                <tr>
+                    <th>
+                        <div class="col-right-common"><a href="javascript:void(0)" class="add-btn-link js-vendor-select" data-value="3">商品</a>
+                        </div>
+                    </th>
+                    <td id="goodsNamess" name="goodsNamess" data-id="{{goodsId}}"><span>{{goodsName}}</span></td>
+                </tr>
+                <tr>
+                    <th><strong>是否领取范围设定</strong>：</th>
+                    <td><input name="isManual" type="radio" value="1" class="is-manual"
+                               {{#equals _DATA_.isManual '1'}}checked{{/equals}}>
+                        <label for="isManual"></label>
+                        是
+                        <input name="isManual" type="radio" class="margin-left-20 is-manual" value="0"
+                               {{#equals _DATA_.isManual '1'}}{{else}}checked{{/equals}}>
+                        <label for="isManual"></label>
+                        否
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <div class="main-box-title margin-top-30 js-first-login">
+                    <div id="u9">
+                        <p>首次登录设定 <input id="isFirstlogin" data-manual="{{isManual}}" name="isFirstlogin" class="form-control js-checkBox-style"
+                                         type="checkbox" value="{{isFirstlogin}}" {{#equals isFirstlogin '1'}}checked{{/equals}}></p>
+
+                    </div>
+
+                </div>
+                <col width="20%"/>
+                <col width="80%"/>
+                <tr class="disStyle">
+                    <th><strong><em class="required">* </em>有效日期：</strong></th>
+                    <td><span class="col-box column-two">
+                    <input class="beginDate cursor-pointer js-date-start" type="text" id="startTimes"
+                           name="startTimes" value="{{#formatDate startTime}}{{/formatDate}}"/> -
+                    <input class="endDate cursor-pointer js-date-end" type="text" id="endTimes"
+                           name="endTimes"
+                           value="{{#formatDate endTime}}{{/formatDate}}"/>
+              </span></td>
+                </tr>
+            {{/with}}
+        </table>
+            <div class="admin-btn">
+                <input class="btn btn-success btn-medium js-coupon-save" type="submit" value="确 定">
+                <a href="{{_HREF_.mainContext}}/mall/coupon" class="btn btn-close btn-medium btn-info">取消</a>
+            </div>
+        </form>
+    </div>
+    <script src="/static/scripts/laydate/laydate.js"></script>
+{{/component}}

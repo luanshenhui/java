@@ -1,0 +1,145 @@
+.item-audit-detail{
+  td{
+    word-break: break-all;
+  }
+  .overflow-hidden{
+    overflow: hidden;
+  }
+  .wh150{
+    width:150px;
+  }
+  .margin-top-10 {
+    margin-top: 10px !important;
+  }
+  .margin-left-20 {
+    margin-left: 20px !important;
+  }
+  .text-right{
+    text-align:right;
+  }
+  .left{
+    float:left;
+  }
+  .main-box{
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 10px;
+    overflow: hidden;
+
+    .col-box span {
+      line-height: 32px;
+    }
+    .col-box span.d-col {
+      display: inline-block;
+      text-align: right;
+    }
+    .col-box span.e-col {
+      display: inline-block;
+      text-align: right;
+    }
+    .col-box em {
+      color: red;
+    }
+    .main-box-table-detail-t {
+      background-color: #fff;
+    }
+    .main-box-table-detail-t table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .main-box-table-detail-t table th {
+      padding: 10px;
+      text-align: right;
+    }
+    .main-box-table-detail-t table th.text-center {
+      text-align: center;
+    }
+    .main-box-table-detail-t table td {
+      padding: 5px;
+    }
+    //.main-box-title {
+    //  font-size: 16px;
+    //  font-weight: bold;
+    //  margin-bottom: 15px;
+    //}
+    .form-information{
+      margin-bottom:15px;
+      clear:both;
+      min-height:32px;
+      overflow:hidden;
+      span{
+        display:block;
+        float:left;
+        line-height:30px;
+      }
+      .wh150{
+        padding-right:10px;
+      }
+      textarea{
+        height:80px;
+      }
+      p{
+        margin: 0;
+        line-height: 30px;
+      }
+    }
+    .form-information-two{
+      width:460px;
+      float:left;
+      clear:none;
+      span{
+        max-width:300px;
+      }
+    }
+    .information-textarea{
+      width:700px;
+      height:75px;
+      line-height:25px;
+      padding:5px;
+      resize:none;
+    }
+    .clearfix:after {
+      content: "";
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+    }
+    .clearfix {
+      height: 1px;
+      min-height: 1px;
+    }
+    .hidden-style{
+      display: none;
+    }
+    .padding-left-100{
+      padding-left: 100px;
+    }
+    .admin-btn {
+      text-align: center;
+      padding-top: 50px;
+      padding-bottom: 10px;
+    }
+    .admin-btn a.send-btn {
+      display: inline-block;
+      background-color: #f01919;
+      color: #fff;
+      font-size: 16px;
+      border: 2px solid #f01919;
+      margin-right: 20px;
+    }
+    .admin-btn a.cancel-btn {
+      border: 2px solid #f01919;
+      display: inline-block;
+      color: #f01919;
+      font-size: 16px;
+    }
+    .admin-btn .btn-size {
+      width: 100px;
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+
+}
+

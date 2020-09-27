@@ -1,0 +1,29 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	function f1(){
+		//$('ul li:eq(1)').remove();
+		$('ul li:eq(1)').empty();
+	}
+	
+	function f2(){
+		$('ul li').remove('#l2');
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<ul>
+		<li>item1</li>
+		<li id="l2">item2</li>
+		<li>item3</li>
+	</ul>
+	<input type="button" value="ClickMe" 
+	onclick="f1();"/>
+	
+	
+</body>
+</html>

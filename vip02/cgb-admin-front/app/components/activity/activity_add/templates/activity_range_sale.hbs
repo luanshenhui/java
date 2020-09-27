@@ -1,0 +1,21 @@
+{{#each this}}
+    <tr class="activeRuleTr" data-component="" data-id="{{index}}">
+        <td class="NO">{{index}}</td>
+        <td class="sequence"><input type="text" class="form-label-15" maxlength="3" value="{{seq}}"></td>
+        <td class="category" data-category="{{backCategory}}" style="width: 100px;" title="{{backCategoryName}}">{{backCategoryName}}</td>
+        <td class="brand" title="{{goodsBrandName}}">{{goodsBrandName}}</td>
+        <td class="singleProductNO" title="{{itemCode}}">{{itemCode}}</td>
+        <td class="productName" title="{{goodsName}}">{{goodsName}}</td>
+        <td class="suppliers" title="{{venderName}}">{{venderName}}</td>
+        <td class="sid">
+                <input type="radio" name="cost{{index}}" value="行方" checked>行方
+        </td>
+        <td class="sid"><input type="text" class="form-control form-label-35" maxlength="10" value="{{startPrice}}"></td>
+        <td class="sid"><input type="text" class="form-control form-label-35" maxlength="10" value="{{minPrice}}"></td>
+        <td class="sid"><input type="text" class="form-control form-label-35" maxlength="10" value="{{feeRange}}"></td>
+        <td class="sid"><input type="text" class="form-control form-label-35" maxlength="10" value="{{stock}}"></td>
+        <td class="sid"><a class="btn btn-info btn-small js-content-delete">删除</a></td>
+        <td class="goodsCode" style="display: none">{{goodsCode}}</td>
+    </tr>
+{{/each}}
+

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GoodsOperateDetailModel">
+    <resultMap id="GoodsOperateDetailMap" type="GoodsOperateDetailModel">
+        <result property="id" column="id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="operateType" column="operate_type"/>
+        <result property="goodCode" column="good_code"/>
+        <result property="goodName" column="good_name"/>
+        <result property="backCategory1Id" column="back_category1_id"/>
+        <result property="backCategory1Nm" column="back_category1_nm"/>
+        <result property="backCategory2Id" column="back_category2_id"/>
+        <result property="backCategory2Nm" column="back_category2_nm"/>
+        <result property="backCategory3Id" column="back_category3_id"/>
+        <result property="backCategory3Nm" column="back_category3_nm"/>
+        <result property="goodsBrandId" column="goods_brand_id"/>
+        <result property="goodsBrandName" column="goods_brand_name"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,vendor_id,ordertype_id,operate_type,good_code,good_name,back_category1_id,back_category1_nm,back_category2_id,back_category2_nm,back_category3_id,back_category3_nm,goods_brand_id,goods_brand_name,create_oper,create_time
+    </sql>
+
+    <insert id="insert" parameterType="GoodsOperateDetailModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_goods_operate_detail
+        (vendor_id
+        ,ordertype_id
+        ,operate_type
+        ,good_code
+        ,good_name
+        ,back_category1_id
+        ,back_category1_nm
+        ,back_category2_id
+        ,back_category2_nm
+        ,back_category3_id
+        ,back_category3_nm
+        ,goods_brand_id
+        ,goods_brand_name
+        ,create_oper
+        ,create_time)
+        values(#{vendorId}
+        ,#{ordertypeId}
+        ,#{operateType}
+        ,#{goodCode}
+        ,#{goodName}
+        ,#{backCategory1Id}
+        ,#{backCategory1Nm}
+        ,#{backCategory2Id}
+        ,#{backCategory2Nm}
+        ,#{backCategory3Id}
+        ,#{backCategory3Nm}
+        ,#{goodsBrandId}
+        ,#{goodsBrandName}
+        ,#{createOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="GoodsOperateDetailModel">
+        update tbl_goods_operate_detail set
+            <if test="vendorId !=null">vendor_id = #{vendorId}
+                ,</if>
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="operateType !=null">operate_type = #{operateType}
+                ,</if>
+            <if test="goodCode !=null">good_code = #{goodCode}
+                ,</if>
+            <if test="goodName !=null">good_name = #{goodName}
+                ,</if>
+            <if test="backCategory1Id !=null">back_category1_id = #{backCategory1Id}
+                ,</if>
+            <if test="backCategory1Nm !=null">back_category1_nm = #{backCategory1Nm}
+                ,</if>
+            <if test="backCategory2Id !=null">back_category2_id = #{backCategory2Id}
+                ,</if>
+            <if test="backCategory2Nm !=null">back_category2_nm = #{backCategory2Nm}
+                ,</if>
+            <if test="backCategory3Id !=null">back_category3_id = #{backCategory3Id}
+                ,</if>
+            <if test="backCategory3Nm !=null">back_category3_nm = #{backCategory3Nm}
+                ,</if>
+            <if test="goodsBrandId !=null">goods_brand_id = #{goodsBrandId}
+                ,</if>
+            <if test="goodsBrandName !=null">goods_brand_name = #{goodsBrandName}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="operateType !=null">and operate_type = #{operateType}</if>
+            <if test="goodCode !=null">and good_code = #{goodCode}</if>
+            <if test="goodName !=null">and  good_name LIKE concat(concat('%',#{goodName}),'%')</if>
+            <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+            <if test="backCategory1Nm !=null">and back_category1_nm = #{backCategory1Nm}</if>
+            <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+            <if test="backCategory2Nm !=null">and back_category2_nm = #{backCategory2Nm}</if>
+            <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+            <if test="backCategory3Nm !=null">and back_category3_nm = #{backCategory3Nm}</if>
+            <if test="goodsBrandId !=null">and goods_brand_id = #{goodsBrandId}</if>
+            <if test="goodsBrandName !=null">and goods_brand_name = #{goodsBrandName}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="startTime !=null">and date_format(create_time,'%Y-%m-%d') &gt;= date_format(#{startTime},'%Y-%m-%d')</if>
+            <if test="endTime !=null">and date_format(create_time,'%Y-%m-%d') &lt;= date_format(#{endTime},'%Y-%m-%d')</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="GoodsOperateDetailMap">
+       SELECT <include refid="columns"/>
+        from tbl_goods_operate_detail
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="GoodsOperateDetailMap">
+        select <include refid="columns"/>
+        from tbl_goods_operate_detail
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="GoodsOperateDetailMap">
+        select <include refid="columns"/>
+        from tbl_goods_operate_detail
+        <include refid="conditions"/>
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="GoodsOperateDetailModel">
+        delete from tbl_goods_operate_detail where id = id
+    </delete>
+
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_goods_operate_detail
+        <include refid="conditions"/>
+    </select>
+</mapper>
+
+

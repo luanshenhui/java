@@ -1,0 +1,210 @@
+.mall-item-publish {
+  width: 100%;
+  .selected-category{
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    width: 870px;
+    background-color: #ffffff;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 10px;
+  }
+  li{
+    list-style: none;
+  }
+  .spu-title{
+    margin: 13px 0 0 0;
+    label{
+      font-size: 15px;
+    }
+  }
+  .publish-form{
+  	*zoom: 1;
+	  &:before, &:after {
+	    display: table;
+	    line-height: 0;
+	    content: "";
+	  }
+	  &:after {
+	    clear: both;
+	  }
+  }
+  .left {
+    width: 350px;
+    float: left;
+    display: inline;
+    img{
+      border: 1px solid #eee;
+    }
+  }
+  .right {
+    width: 520px;
+    float: left;
+    display: inline;
+    padding-top: 20px;
+    .control-group{
+      height: 40px;
+      .control-label {
+        float: left;
+        padding: 7px 0;
+        width: 70px;
+        text-align: right;
+      }
+      .controls {
+        float: left;
+        padding-left: 6px;
+        .long-text {
+          width: 424px;
+        }
+        img{
+          width: 60px;
+          height: 60px;
+          vertical-align: bottom;
+        }
+        .short-text {
+          width: 110px;
+          *width: 94px;
+        }
+      }
+      .controls-attr{
+        vertical-align: top;
+      }
+    }
+
+    .main-attr {
+      width: 440px;
+      height: auto !important;
+      height: 50px;
+      min-height: 50px;
+      background: #f6f6f6;
+      border: 1px solid #ddd;
+      .base-attr {
+        .attr-item {
+          width: 220px;
+          float: left;
+          display: inline;
+          padding-top: 12px;
+          padding-bottom: 12px;
+          .attr-label {
+            display: inline-block;
+            vertical-align: middle;
+            width: 70px;
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space:nowrap;
+          }
+
+          .attr-input {
+            width: 114px;
+          }
+        }
+      }
+
+      .attr-full {
+        margin-top: 5px;
+        .attr-label {
+          width: 80px;
+          text-align: right;
+          float: left;
+          margin-left: 5px;
+          font-size: 12px;
+        }
+        .attr-box {
+          float: left;
+          width: 350px;
+          .sku-list {
+            margin: 0;
+          }
+          .sku-item {
+            float: left;
+            width: 170px;
+            height: 25px;
+            overflow: hidden;
+            vertical-align: middle;
+          }
+          input {
+            float: left;
+            display: inline;
+          }
+          .labelname {
+            float: left;
+            display: inline;
+            font-size: 12px;
+            padding-left: 3px;
+          }
+        }
+      }
+      table{
+        margin-left: 4px;
+        width: 430px;
+        margin-bottom: 20px;
+      }
+    }
+  }
+  .image-manage {
+    margin-top: 20px;
+    .main-image {
+      width: 330px;
+      height: 330px;
+      img{
+        width: 330px;
+        height: 330px;
+      }
+    }
+    .sharp{
+      border-right: 5px solid transparent;
+      border-left: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      width: 0;
+      height: 0;
+      margin-left: 26px;
+    }
+    .images {
+      margin: 0;
+      padding: 0;
+      margin-top: 10px;
+      li {
+        list-style: none;
+        width: 60px;
+        height: 60px;
+        padding-left: 5px;
+        padding-top: 8px;
+        float: left;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+        img {
+          width: 60px;
+          height: 60px;
+
+          border: none;
+          cursor: pointer;
+          display: block;
+        }
+        a {
+          font-size: 12px;
+        }
+      }
+      .selected{
+        .sharp{
+          border-bottom: 5px solid #C1C1C1;
+        }
+      }
+    }
+    .submit {
+      margin-top: 40px;
+      text-align: center;
+      line-height: 30px;
+    }
+  }
+  .line{
+    margin-top: 10px;
+    background-color: #eee;
+    height: 1px;
+  }
+  .item-publish{
+    margin: 30px 0 40px 350px;
+  }
+}
+

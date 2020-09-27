@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}分期请款报表{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"YG02",
+            "reportCode":"YG02"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--
+Mybatis Framework config。
+
+@author zhanglin@dpn.com.cn
+@since 1.0.0 zhanglin@dpn.com.cn
+@version 1.0.11 zhanglin@dpn.com.cn 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> Mybatis Framework配置。
+********************************************************************************
+变更履历
+-> 1.0.0 2016-07-07 zhanglin@dpn.com.cn : 初建。
+**************************************************************************** -->
+<configuration>
+
+	<!-- **** type aliases ************************************************* -->
+	<typeAliases>
+        <typeAlias type="com.dpn.ciqqlc.standard.model.DpnBlankModel" alias="DpnBlankModel" />
+    </typeAliases>
+
+</configuration>

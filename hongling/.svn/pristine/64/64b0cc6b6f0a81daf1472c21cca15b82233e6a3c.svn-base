@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Mix" table="Mix">
+        <id name="code" column="code" type="string"></id>
+        <property name="art" column="art" type="string"/>
+        <property name="styles" column="styles" type="integer"/>
+        <property name="descs" column="descs" type="string"/>
+        <property name="img" column="img" type="string"/>
+        <property name="isdel" column="isdel" type="short"/>
+        <property name="remark" column="remark" type="string"/>
+        <property name="mix" column="mix" type="string"/>
+        <property name="createtime" column="createtime" type="date"/>
+        <property name="descsEn" column="descs_En" type="string"/>
+    </class>
+</hibernate-mapping>

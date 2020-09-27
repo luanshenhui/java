@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PromotionPeriodModel">
+    <resultMap id="PromotionPeriodMap" type="PromotionPeriodModel">
+        <result property="id" column="id"/>
+        <result property="promotionId" column="promotion_id"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+    </resultMap>
+    <sql id="columns">
+        id,promotion_id,begin_date,end_date
+    </sql>
+
+    <insert id="insert" parameterType="PromotionPeriodModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_promotion_period
+        (promotion_id
+        ,begin_date
+        ,end_date)
+        values(#{promotionId}
+        ,#{beginDate}
+        ,#{endDate})
+    </insert>
+
+    <update id="update" parameterType="PromotionPeriodModel">
+        update tbl_promotion_period set
+        <if test="promotionId !=null">promotion_id = #{promotionId}
+            ,
+        </if>
+        <if test="beginDate !=null">begin_date = #{beginDate}
+            ,
+        </if>
+        <if test="endDate !=null">end_date = #{endDate}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="promotionId !=null">and promotion_id = #{promotionId}</if>
+            <if test="beginDate !=null">and begin_date = #{beginDate}</if>
+            <if test="endDate !=null">and end_date = #{endDate}</if>
+            <if test="promotionIdList != null">
+                and promotion_id in
+                <foreach collection="promotionIdList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="nowDate != null">
+                and end_date <![CDATA[ > ]]> #{nowDate}
+            </if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="PromotionPeriodMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_promotion_period
+        where id=#{id}
+    </select>
+    <select id="findAll" parameterType="Map" resultMap="PromotionPeriodMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion_period
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="PromotionPeriodMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion_period
+        <include refid="conditions"/>
+        order by id desc limit #{offset}, #{limit}
+    </select>
+
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_promotion_period
+        <include refid="conditions"/>
+    </select>
+    <delete id="delete" parameterType="PromotionPeriodModel">
+        delete from tbl_promotion_period where id = #{id}
+    </delete>
+    <insert id="insertAll" parameterType="List">
+        insert into tbl_promotion_period
+        (promotion_id
+        ,begin_date
+        ,end_date)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.promotionId}
+            ,#{item.beginDate}
+            ,#{item.endDate})
+        </foreach>
+    </insert>
+    <!-- 查询正在进行的活动 by geshuo 20160712 -->
+    <select id="findNowPromotion" resultMap="PromotionPeriodMap">
+        select id,promotion_id,begin_date
+        from tbl_promotion_period
+        where now() <![CDATA[>]]> begin_date
+        and now() <![CDATA[<]]> end_date
+        <if test="list != null">
+            and promotion_id in
+            <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 根据参数查询活动时间  by geshuo 20160725 -->
+    <select id="findPeriodByParams" parameterType="Map" resultMap="PromotionPeriodMap">
+        select
+        <include refid="columns"/>
+        from tbl_promotion_period
+        <include refid="conditions"/>
+    </select>
+    <select id="findDuliCheck" parameterType="Map" resultType="Integer">
+        SELECT 1
+        FROM (select tbl_promotion_period.begin_date a,tbl_promotion_period.end_date b
+        from tbl_promotion_period
+        where tbl_promotion_period.promotion_id in
+        <foreach collection="promIdList" open="(" close=")" item="everyItem" separator=",">
+            #{everyItem}
+        </foreach>
+        ) a JOIN
+        <foreach collection="timeList" index="index" item="item" open="(" close=")">
+            <if test="index == 0">
+                select #{item.beginDate} as c,#{item.endDate} as d
+            </if>
+            <if test="index != 0">
+                union all
+                select #{item.beginDate},#{item.endDate}
+            </if>
+        </foreach>
+        b
+        on 1=1
+        where (a.a <![CDATA[<]]> b.d and a.a <![CDATA[>=]]> b.c) or
+        (a.b <![CDATA[<=]]> b.d and a.b <![CDATA[>]]> b.c) or (a.a <![CDATA[<=]]> b.c and a.b <![CDATA[>=]]> b.d)
+        limit 1
+    </select>
+    <select id="findPeriodByPromIds" parameterType="List" resultMap="PromotionPeriodMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_promotion_period WHERE promotion_id IN
+        <foreach collection="list" open="(" close=")" item="promId" separator=",">
+            #{promId}
+        </foreach>
+    </select>
+    <delete id="deletePeriodByPromId" parameterType="Integer">
+        DELETE FROM tbl_promotion_period WHERE promotion_id=#{_parameter}
+    </delete>
+
+    <!-- add by geshuo 20160901:查询未来的活动列表  -->
+    <select id="findFuturePeriod" resultMap="PromotionPeriodMap">
+        select id,promotion_id,begin_date,end_date
+        from tbl_promotion_period
+        where now() <![CDATA[<]]> begin_date
+        and now() <![CDATA[<]]> end_date
+        order by begin_date
+    </select>
+</mapper>
+
+

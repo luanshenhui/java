@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.risklist.dao.RiskTypeDetailDao">
+	<sql id="sysDictColumns">
+		a.id AS "id",
+		a.value AS "value",
+		a.label AS "label",
+		a.type AS "type",
+		a.description AS "description",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<select id="findriskListByType" resultType="SysDict">
+		SELECT  
+			<include refid="sysDictColumns"/>
+		FROM SYS_DICT a
+		WHERE 
+		 a.TYPE = #{type}
+		ORDER BY a.VALUE DESC
+	</select>
+	
+		<select id="getData" resultType="RiskTypeDetail">
+		select * from DCA_EFFICACY_CONFIG where del_flg = #{delFlg}
+	</select>
+	
+	<update id="updateriskTypeDetail">
+		UPDATE DCA_EFFICACY_CONFIG SET 
+			del_flg = #{delFlg}
+	</update>
+	
+
+	
+	<insert id="insertriskTypeDetail">
+		INSERT INTO DCA_EFFICACY_CONFIG(
+			id,
+			risk_type,
+			risk_level,
+			points,
+			del_flg,
+			create_person,
+			create_date,
+			update_person,
+			update_date,
+			remark
+		) VALUES (
+			#{id},
+			#{riskType},
+			#{riskLevel},
+			#{points},
+			#{delFlg},
+			#{createPerson},
+			#{createDate},
+			#{updatePerson},
+			#{updateDate},
+			#{remark}
+		) 
+	</insert>
+</mapper>

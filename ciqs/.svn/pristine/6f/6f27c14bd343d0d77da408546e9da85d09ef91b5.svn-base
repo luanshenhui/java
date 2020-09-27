@@ -1,0 +1,101 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>原始记录查看</title>
+<%@ include file="/common/resource_show.jsp"%>
+<link type="text/css" rel="stylesheet" href="${ctx}/static/dec/styles/dpn.css" />
+		
+<style type="text/css">
+	input.datepick{background:#FFF url(/ciqs/static/dec/images/dpn.date.pick.gif) no-repeat right}
+</style>
+<link rel="stylesheet" href="${ctx}/static/viewer/assets/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="${ctx}/static/viewer/dist/viewer.css"/>
+<link rel="stylesheet" href="${ctx}/static/viewer/demo/css/main.css"/>
+<style>
+a:link, a:visited {
+    color:white;
+    text-decoration: none;
+}
+td {
+    border: solid 1px #dcdcdc;
+}
+</style>
+ <script type="text/javascript">
+ jQuery(function(){
+	$("td[index]").each(function(k,v){
+	var index=$(v).attr("index");
+	var rop=$("td[index='"+index+"']").length;
+	if(rop>1){
+		$("td[index='"+index+"']").each(function(k,v){
+		if(k==0){
+			$(v).attr("rowspan",rop);
+		}else{
+			$(v).remove();
+		}
+		});
+		$("td[info='"+index+"']").each(function(k,v){
+		if(k==0){
+			$(v).attr("rowspan",rop);
+		}else{
+			$(v).remove();
+		}
+		});
+	}
+	});
+ });
+ </script>
+</head>
+<body>
+<div class="freeze_div_list" style="height: 0px">
+<div class="title-bg" >
+<div class=" title-position margin-auto white">
+<div class="title"><a href="#" class="white"><span  class="font-20px">原始记录查看</span></a></div>
+<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+</div>
+</div>
+</div>
+<!-- *************************************************************************************** -->
+	<div class="dpn-content" style="margin-top:60px">
+	<div><h3>原始记录查看</h3></div>
+		<div class="search">
+			<table width="100%" border="0" cellpadding="0" class="table-xqlb">
+				<tr>
+					<td colspan="3">备案编号</td>
+					<td colspan="9">${obj.proveaccid}</td>
+				</tr>
+				<tr>
+					<td colspan="3">证书生效日期</td>
+					<td colspan="3">
+					 <fmt:formatDate value="${obj.effectdate}" type="both"  pattern="yyyy-MM-dd"/>
+					</td>
+					<td colspan="3">证书截止日期</td>
+					<td  colspan="3">
+					 <fmt:formatDate value="${obj.cerasofdate}" type="both"  pattern="yyyy-MM-dd"/>
+					</td>
+				</tr>
+				<tr>
+				<td colspan="4">产品类别</td>
+				<td colspan="4">中类产品类别</td>
+				<td colspan="4">产品名称</td>
+				</tr>
+				 <c:forEach items="${list}" var="row">
+				<tr>
+					<td colspan="4" index="${row.productkind}">${row.kindname}</td>
+					<td colspan="4" >${row.headname}</td>
+					<td colspan="4" info="${row.productkind}">${row.productname}</td>
+				</tr>
+				</c:forEach>
+				<tr>
+					<td colspan="3">产品详细范围</td>
+					<td colspan="9"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div style="text-align: center;margin: auto;margin-top: 10px;width:200px;padding-bottom: 10px;">
+			<input type="button" class="search-btn" value="返回"  onclick="JavaScript:history.go(-1);"/>
+		</div>
+</body>
+</html>

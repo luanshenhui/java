@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for MailObjCheck.
+
+@author wangzhy
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.MAIL">
+
+    <!-- **** insert ******************************************************* -->
+	<!--新建 -->
+    <insert id="createMail">
+		insert into QLC_MAIL_OBJ_CHECK
+		(id
+		<if test="package_no != null and package_no != ''" >
+			,package_no
+		</if>
+		<if test="consignee_name != null and consignee_name != ''" >
+		,consignee_name
+		</if>
+		<if test="consignee_tel != null and consignee_tel != ''" >
+			,consignee_tel
+		</if>
+		<if test="package_plc != null and package_plc != ''" >
+			,package_plc
+		</if>
+		<if test="consignor_country != null and consignor_country != ''" >
+			,consignor_country
+		</if>
+		<if test="intrcept_date != null and intrcept_date != ''" >
+			,intrcept_date
+		</if>
+		<if test="cago_type != null and cago_type != ''" >
+			,cago_type
+		</if>
+		<if test="cago_name != null and cago_name != ''" >
+			,cago_name
+		</if>
+		<if test="cago_num != null and cago_num != ''" >
+			,cago_num
+		</if>
+		<if test="cago_weight != null and cago_weight != ''" >
+			,cago_weight
+		</if>
+		<if test="deal_type != null and deal_type != ''" >
+			,deal_type
+		</if>
+		<if test="insp_user != null and insp_user != ''" >
+			,insp_user
+		</if>
+		<if test="deal_date != null and deal_date != ''" >
+			,deal_date
+		</if>
+		<if test="port_org_code != null and port_org_code != ''" >
+			,port_org_code
+		</if>
+		<if test="port_dept_code != null and port_dept_code != ''" >
+			,port_dept_code
+		</if>
+		<if test="port_zsorg_code != null and port_zsorg_code != ''" >
+			,port_zsorg_code
+		</if>
+		<if test="create_user != null and create_user != ''" >
+			,create_user
+		</if>
+		,deal_status
+		,create_date
+		,isxgbmys
+		)
+		values (CreateGUID()
+		<if test="package_no != null and package_no != ''" >
+			,#{package_no}
+		</if>
+		<if test="consignee_name != null and consignee_name != ''" >
+			,#{consignee_name}
+		</if>
+		<if test="consignee_tel != null and consignee_tel != ''" >
+			,#{consignee_tel}
+		</if>
+		<if test="package_plc != null and package_plc != ''" >
+			,#{package_plc}
+		</if>
+		<if test="consignor_country != null and consignor_country != ''" >
+			,#{consignor_country}
+		</if>
+		<if test="intrcept_date != null and intrcept_date != ''" >
+			,#{intrcept_date}
+		</if>
+		<if test="cago_type != null and cago_type != ''" >
+			,#{cago_type}
+		</if>
+		<if test="cago_name != null and cago_name != ''" >
+			,#{cago_name}
+		</if>
+		<if test="cago_num != null and cago_num != ''" >
+			,#{cago_num}
+		</if>
+		<if test="cago_weight != null and cago_weight != ''" >
+			,#{cago_weight}
+		</if>
+		<if test="deal_type != null and deal_type != ''" >
+			,#{deal_type}
+		</if>
+		<if test="insp_user != null and insp_user != ''" >
+			,#{insp_user}
+		</if>
+		<if test="deal_date != null and deal_date != ''" >
+			,#{deal_date}
+		</if>
+		<if test="port_org_code != null and port_org_code != ''" >
+			,#{port_org_code}
+		</if>
+		<if test="port_dept_code != null and port_dept_code != ''" >
+			,#{port_dept_code}
+		</if>
+		<if test="port_zsorg_code != null and port_zsorg_code != ''" >
+			,#{port_zsorg_code}
+		</if>
+		<if test="create_user != null and create_user != ''" >
+			,#{create_user}
+		</if>
+		,#{deal_status}
+		,sysdate
+		,#{isxgbmys}
+		)
+	</insert>
+
+    <!-- **** select ******************************************************* -->
+    <!-- 分页查询列表 -->
+	<select id="findMail"  resultType="com.dpn.ciqqlc.standard.model.MailObjCheckModel">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+		    t.id,
+			t.package_no,
+			t.consignee_name,
+			t.cago_name,
+			g.cnname consignor_country,
+			t.cago_num,
+			t.cago_weight,
+			t.deal_type,
+			l.name as deal_name,
+			t.intrcept_date,
+			t.insp_user,
+			e.decl_no,
+			t.deal_status
+		 from QLC_MAIL_OBJ_CHECK t
+		 left join QLC_ECIQ e on t.package_no = e.decl_no
+		 left join QLC_CODE_LIBRARY l on l.code = t.deal_type and l.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+		 left join COUNTRY g on g.num_code = t.consignor_country 
+		 where 1=1
+		<if test="package_no != null and package_no != ''">
+			and t.package_no=#{package_no}
+		</if>
+		<if test="consignee_name != null and consignee_name != ''">
+			and t.consignee_name =#{consignee_name}
+		</if>
+		<if test="cago_name != null and cago_name != ''">
+			and t.cago_name like '%' || #{cago_name} || '%'
+		</if>
+		<if test="startIntrceptDate != null and startIntrceptDate != ''">
+			 and to_char(t.intrcept_date, 'yyyy-mm-dd') >=#{startIntrceptDate}
+		</if>
+		<if test="endIntrceptDate != null and endIntrceptDate != ''">
+			<![CDATA[ and to_char(t.intrcept_date, 'yyyy-mm-dd') <=#{endIntrceptDate} ]]>
+		</if>
+		<if test="deal_type != null and deal_type != ''">
+			and t.deal_type =#{deal_type}
+		</if>
+		<if test="port_org_code != null and port_org_code != ''">
+			and t.port_org_code =#{port_org_code}
+		</if>
+	    <if test="port_zsorg_code != null and port_zsorg_code != ''">
+			and t.port_zsorg_code =#{port_zsorg_code}
+		</if>  
+		order by  t.intrcept_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询记录数 -->
+	<select id="findMainCount"  resultType="java.lang.Integer">
+		select count(t.id) 
+		 from QLC_MAIL_OBJ_CHECK t
+		 left join QLC_ECIQ e on t.package_no = e.decl_no
+		 left join QLC_CODE_LIBRARY l on l.code = t.deal_type and l.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+		 left join COUNTRY g on g.num_code = t.consignor_country 
+		 where 1=1
+		<if test="package_no != null and package_no != ''">
+			and t.package_no=#{package_no}
+		</if>
+		<if test="consignee_name != null and consignee_name != ''">
+			and t.consignee_name =#{consignee_name}
+		</if>
+		<if test="cago_name != null and cago_name != ''">
+			and t.cago_name like '%' || #{cago_name} || '%'
+		</if>
+		<if test="startIntrceptDate != null and startIntrceptDate != ''">
+			<![CDATA[ and t.intrcept_date >= to_date(#{startIntrceptDate}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endIntrceptDate != null and endIntrceptDate != ''">
+			<![CDATA[ and t.intrcept_date <= to_date(#{endIntrceptDate}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="deal_type != null and deal_type != ''">
+			and t.deal_type =#{deal_type}
+		</if>
+		<if test="port_org_code != null and port_org_code != ''">
+			and t.port_org_code =#{port_org_code}
+		</if>
+	    <if test="port_zsorg_code != null and port_zsorg_code != ''">
+			and t.port_zsorg_code =#{port_zsorg_code}
+		</if>  
+	</select>
+	
+	<!-- 查询处理方式 -->
+	<select id="allDealType"  resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+		select code,name 
+		from QLC_CODE_LIBRARY 
+		where type = 'QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+	</select>
+	
+	<select id="pcxhList"  resultType="com.dpn.ciqqlc.standard.model.MailObjCheckModel">
+		select 
+		    t.id,
+			t.package_no,
+			to_char(t.intrcept_date, 'yyyy-mm-dd hh24:mi:ss') intrcept_date_str
+		 from QLC_MAIL_OBJ_CHECK t
+		 where t.ditroy_id=#{ditroy_id}
+		 order by intrcept_date desc
+	</select>
+	
+	<!-- 查询详情 -->
+	<select id="findUMailById"  resultType="com.dpn.ciqqlc.standard.model.MailObjCheckModel">
+		select 
+		    t.id,
+			t.package_no,
+			e.entry_port,
+			t.intrcept_date,
+			g.cnname consignor_country,
+			t.consignee_name,
+			t.consignee_tel,
+			t.package_plc,
+			e.sender_name,
+			e.send_tel,
+			e.sender_addr,
+			l2.name as cago_type_name,
+			t.cago_name,
+			e.carrier_source,
+			t.cago_num,
+			t.cago_weight,
+			l.name as deal_name,
+			t.insp_user,
+			t.deal_status,
+			t.ditroy_id,
+			t.message_content,
+			t.isxgbmys
+		 from QLC_MAIL_OBJ_CHECK t
+		 left join QLC_ECIQ e on t.package_no = e.decl_no
+		 left join QLC_CODE_LIBRARY l on l.code = t.deal_type and l.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+		 left join QLC_CODE_LIBRARY l2 on l2.code = t.cago_type and l2.type='QLC_ECIQ_C_GOODS_TYPE'
+		 left join COUNTRY g on g.num_code = t.consignor_country
+		 where t.id=#{id}
+	</select>
+	
+	<!-- 查询直属局-->
+	<select id="allOrgList"  resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+		select code,name 
+		from QLC_CODE_LIBRARY where type = 'QLC_ORGANIZES'
+		and code != '210000'
+	</select>
+	
+	<!-- 查询分支机构 -->
+	<select id="allDepList"  resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+		select code,name 
+		from QLC_CODE_LIBRARY where type = 'QLC_DEPTMENTS'
+		and code != '211940'
+	</select>
+	
+	<!-- 查询图片视频列表 -->
+	<select id="videoFileEventList"  resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+		select file_name,file_type,u.name create_user,to_char(create_date, 'yyyy-MM-dd HH24:mi:ss') create_date_str,proc_type
+		from QLC_VIDEO_FILE_EVENT v
+		left join USERS_CIQ u on u.id = v.create_user
+		where proc_main_id = #{package_no}
+		order by proc_type,file_type,create_date desc
+	</select>
+
+	<!-- 移动端列表查询 -->
+	<select id="selectMail"  resultType="com.dpn.ciqqlc.standard.model.MailObjCheckModel">
+		select 
+		    t.id,
+			t.package_no,
+			t.consignee_name,
+			t.consignee_tel,
+			g.cnname consignor_country,
+			t.cago_name,
+			l.name as deal_name,
+			t.intrcept_date,
+			t.insp_user,
+			l2.name as cago_type,
+			t.isxgbmys
+		 from QLC_MAIL_OBJ_CHECK t
+		 left join QLC_ECIQ e on t.package_no = e.decl_no
+		 left join QLC_CODE_LIBRARY l on l.code = t.deal_type and l.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+		 left join QLC_CODE_LIBRARY l2 on l2.code = t.cago_type and l2.type='QLC_ECIQ_C_GOODS_TYPE'
+		 left join COUNTRY g on g.num_code = t.consignor_country 
+		 where t.package_no not in(select proc_main_id from qlc_chk_rcd where proj_code='MM_C_M')
+		<if test="package_no != null and package_no != ''">
+			and t.package_no=#{package_no}
+		</if>
+		<if test="consignee_name != null and consignee_name != ''">
+			and t.consignee_name =#{consignee_name}
+		</if>
+		<if test="startIntrceptDate != null and startIntrceptDate != ''">
+			<![CDATA[ and t.intrcept_date >= to_date(#{startIntrceptDate}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endIntrceptDate != null and endIntrceptDate != ''">
+			<![CDATA[ and t.intrcept_date < to_date(#{endIntrceptDate}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		order by  t.intrcept_date desc
+	</select>
+	
+	<!-- 移动端详情查询 -->
+	<select id="selectMailDetail"  resultType="com.dpn.ciqqlc.standard.model.MailObjCheckModel">
+		select 
+		    t.id,
+			t.package_no,
+			t.consignee_name,
+			t.consignee_tel,
+			t.package_plc,
+			g.cnname consignor_country_name,
+			t.consignor_country,
+			l2.name as cago_type_name,
+			t.cago_type,
+			t.cago_name,
+			t.cago_num,
+			t.cago_weight,
+			l.name as deal_name,
+			t.deal_type,
+			t.intrcept_date,
+			t.insp_user,
+			t.isxgbmys
+		 from QLC_MAIL_OBJ_CHECK t
+		 left join QLC_ECIQ e on t.package_no = e.decl_no
+		 left join QLC_CODE_LIBRARY l on l.code = t.deal_type and l.type='QLC_MAIL_OBJ_CHECK_C_DEAL_TYPE'
+		 left join QLC_CODE_LIBRARY l2 on l2.code = t.cago_type and l2.type='QLC_ECIQ_C_GOODS_TYPE'
+		 left join COUNTRY g on g.num_code = t.consignor_country
+		 where t.id=#{id}
+	</select>
+	
+	
+	<!-- 移动端查询是否有邮寄物单号 -->
+	<select id="selectMailExist"  resultType="java.lang.Integer">
+		select 
+		    count(0)
+		 from QLC_MAIL_OBJ_CHECK t
+		 where t.package_no=#{package_no}
+	</select>
+	
+	<select id="getIsImg" resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+		select id from qlc_video_file_event 
+		where proc_main_id = #{package_no} 
+		and proc_type =#{proc_type} 
+		<if test="file_type != null and file_type != ''">
+			and file_type=#{file_type}
+		</if>
+	</select>
+	
+	<select id="xhList" resultType="com.dpn.ciqqlc.standard.model.MailObjCheckModel">
+		select t.package_no,t.deal_type,t.deal_status from QLC_MAIL_OBJ_CHECK t
+		where t.deal_type in  ('XH','CYSJ')
+		and t.deal_status = '0'
+		<if test="startIntrceptDate != null and startIntrceptDate != ''">
+			<![CDATA[ and t.intrcept_date >= to_date(#{startIntrceptDate}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endIntrceptDate != null and endIntrceptDate != ''">
+			<![CDATA[ and t.intrcept_date < to_date(#{endIntrceptDate}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		order by t.intrcept_date desc 
+	</select>
+	
+    <!-- **** update ******************************************************* -->
+	<update id="updateMail">
+		update  QLC_MAIL_OBJ_CHECK
+		set id=#{id}
+	    <if test="consignee_name != null and consignee_name != ''" >
+			,consignee_name=#{consignee_name}
+		</if>
+		<if test="consignee_tel != null and consignee_tel != ''" >
+			,consignee_tel=#{consignee_tel}
+		</if>
+		<if test="package_plc != null and package_plc != ''" >
+			,package_plc=#{package_plc}
+		</if>
+		<if test="consignor_country != null and consignor_country != ''" >
+			,consignor_country=#{consignor_country}
+		</if>
+		<!-- <if test="intrcept_date_str != null and intrcept_date_str != ''" >
+			,intrcept_date=#{intrcept_date_str}
+		</if> -->
+		<if test="cago_type != null and cago_type != ''" >
+			,cago_type=#{cago_type}
+		</if>
+		<if test="cago_name != null and cago_name != ''" >
+			,cago_name=#{cago_name}
+		</if>
+		<if test="cago_num != null and cago_num != ''" >
+			,cago_num=#{cago_num}
+		</if>
+		<if test="cago_weight != null and cago_weight != ''" >
+			,cago_weight=#{cago_weight}
+		</if>
+		<if test="deal_type != null and deal_type != ''" >
+			,deal_type=#{deal_type}
+		</if>
+		<if test="insp_user != null and insp_user != ''" >
+			,insp_user=#{insp_user}
+		</if>
+		<if test="deal_date != null and deal_date != ''" >
+			,deal_date=#{deal_date}
+		</if>
+		<if test="port_org_code != null and port_org_code != ''" >
+			,port_org_code=#{port_org_code}
+		</if>
+		<if test="port_dept_code != null and port_dept_code != ''" >
+			,port_dept_code=#{port_dept_code}
+		</if>
+		<if test="port_zsorg_code != null and port_zsorg_code != ''" >
+			,port_zsorg_code=#{port_zsorg_code}
+		</if>
+		<if test="isxgbmys != null and isxgbmys != ''" >
+			,isxgbmys=#{isxgbmys}
+		</if>
+		where id=#{id}
+	</update>
+	
+	<update id="updateStatus">
+		update QLC_MAIL_OBJ_CHECK set 
+		deal_status = '1'
+		<if test="deal_type != null and deal_type != ''" >
+			,deal_type=#{deal_type}
+		</if>
+		where package_no = #{package_no}
+	</update>
+	
+	<update id="updateMailObjCheckDitroyId">
+		update QLC_MAIL_OBJ_CHECK set 
+		ditroy_id=#{ditroy_id}
+		where package_no = #{package_no}
+	</update>
+	
+    <!-- **** delete ******************************************************* -->
+	
+	
+</mapper>

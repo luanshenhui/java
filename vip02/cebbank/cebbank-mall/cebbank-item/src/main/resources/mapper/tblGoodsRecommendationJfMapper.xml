@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblGoodsRecommendationJfModel">
+    <resultMap id="TblGoodsRecommendationJfMap" type="TblGoodsRecommendationJfModel">
+        <result property="id" column="id"/>
+        <result property="regionId" column="region_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsNm" column="goods_nm"/>
+        <result property="goodsXid" column="goods_xid"/>
+        <result property="jpPoint" column="jp_point"/>
+        <result property="goodsSeq" column="goods_seq"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createDate" column="create_date"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyDate" column="modify_date"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="keepField1" column="keep_field1"/>
+        <result property="keepField2" column="keep_field2"/>
+        <result property="keepField3" column="keep_field3"/>
+    </resultMap>
+    
+    <sql id="columns">
+    id,region_id,goods_id,goods_nm,goods_xid,jp_point,goods_seq,del_flag,create_oper,create_date,create_time,modify_oper,modify_date,modify_time,keep_field1,keep_field2,keep_field3
+    </sql>
+
+    <insert id="insert" parameterType="TblGoodsRecommendationJfModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_goods_recommendation_jf
+        (region_id
+        ,goods_id
+        ,goods_nm
+        ,goods_xid
+        ,jp_point
+        ,goods_seq
+        ,del_flag
+        ,create_oper
+        ,create_date
+        ,create_time
+        ,modify_oper
+        ,modify_date
+        ,modify_time
+        ,keep_field1
+        ,keep_field2
+        ,keep_field3)
+        values(#{regionId}
+        ,#{goodsId}
+        ,#{goodsNm}
+        ,#{goodsXid}
+        ,#{jpPoint}
+        ,#{goodsSeq}
+        ,#{delFlag}
+        ,#{createOper}
+        ,#{createDate}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyDate}
+        ,#{modifyTime}
+        ,#{keepField1}
+        ,#{keepField2}
+        ,#{keepField3})
+    </insert>
+
+    <update id="update" parameterType="TblGoodsRecommendationJfModel">
+        update tbl_goods_recommendation_jf set
+            <if test="regionId !=null">region_id = #{regionId}
+                ,</if>
+            <if test="goodsId !=null">goods_id = #{goodsId}
+                ,</if>
+            <if test="goodsNm !=null">goods_nm = #{goodsNm}
+                ,</if>
+            <if test="goodsXid !=null">goods_xid = #{goodsXid}
+                ,</if>
+            <if test="jpPoint !=null">jp_point = #{jpPoint}
+                ,</if>
+            <if test="goodsSeq !=null">goods_seq = #{goodsSeq}
+                ,</if>
+            <if test="delFlag !=null">del_flag = #{delFlag}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createDate !=null">create_date = #{createDate}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="modifyDate !=null">modify_date = #{modifyDate}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+                ,</if>
+            <if test="keepField1 !=null">keep_field1 = #{keepField1}
+                ,</if>
+            <if test="keepField2 !=null">keep_field2 = #{keepField2}
+                ,</if>
+            <if test="keepField3 !=null">keep_field3 = #{keepField3}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="regionId !=null">and region_id = #{regionId}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="goodsNm !=null">and goods_nm = #{goodsNm}</if>
+            <if test="goodsXid !=null">and goods_xid = #{goodsXid}</if>
+            <if test="jpPoint !=null">and jp_point = #{jpPoint}</if>
+            <if test="goodsSeq !=null">and goods_seq = #{goodsSeq}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createDate !=null">and create_date = #{createDate}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyDate !=null">and modify_date = #{modifyDate}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="keepField1 !=null">and keep_field1 = #{keepField1}</if>
+            <if test="keepField2 !=null">and keep_field2 = #{keepField2}</if>
+            <if test="keepField3 !=null">and keep_field3 = #{keepField3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblGoodsRecommendationJfMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_goods_recommendation_jf
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="TblGoodsRecommendationJfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_recommendation_jf
+        <include refid="conditions"/>
+    </select>
+    
+    <select id="findItemCodeListByRegionId"  parameterType="integer" resultType="String">
+        select 
+      	goods_id
+        from tbl_goods_recommendation_jf
+        where  del_flag!='1' and region_id=#{regionId}
+        order by goods_seq
+    </select>
+    
+
+    <select id="pager" parameterType="Map" resultMap="TblGoodsRecommendationJfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_recommendation_jf
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblGoodsRecommendationJfModel">
+        delete from tbl_goods_recommendation_jf where id = id
+    </delete>
+</mapper>
+
+

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblGoodsRecommendationYgModel">
+    <resultMap id="TblGoodsRecommendationYgMap" type="TblGoodsRecommendationYgModel">
+        <result property="id" column="id"/>
+        <result property="typePid" column="type_pid"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsNm" column="goods_nm"/>
+        <result property="goodsOid" column="goods_oid"/>
+        <result property="goodsMid" column="goods_mid"/>
+        <result property="goodsSeq" column="goods_seq"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createDate" column="create_date"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyDate" column="modify_date"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="keepField1" column="keep_field1"/>
+        <result property="keepField2" column="keep_field2"/>
+        <result property="keepField3" column="keep_field3"/>
+    </resultMap>
+    <sql id="columns">
+        id,type_pid,goods_id,goods_nm,goods_oid,goods_mid,goods_seq,del_flag,create_oper,create_date,create_time,modify_oper,modify_date,modify_time,keep_field1,keep_field2,keep_field3
+    </sql>
+
+    <!--添加网银商品推荐-->
+    <insert id="insert" parameterType="TblGoodsRecommendationYgModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_goods_recommendation_yg
+        (type_pid
+        ,goods_id
+        ,goods_nm
+        ,goods_oid
+        ,goods_mid
+        ,goods_seq
+        ,del_flag
+        ,create_oper
+        ,create_date
+        ,create_time
+        ,modify_oper
+        ,modify_date
+        ,modify_time
+        ,keep_field1
+        ,keep_field2
+        ,keep_field3)
+        values(#{typePid}
+        ,#{goodsId}
+        ,#{goodsNm}
+        ,#{goodsOid}
+        ,#{goodsMid}
+        ,#{goodsSeq}
+        ,0
+        ,#{createOper}
+        ,#{createDate}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyDate}
+        ,#{modifyTime}
+        ,#{keepField1}
+        ,#{keepField2}
+        ,#{keepField3})
+    </insert>
+
+    <update id="update" parameterType="TblGoodsRecommendationYgModel">
+        update tbl_goods_recommendation_yg set
+        <if test="typePid !=null">type_pid = #{typePid}
+            ,
+        </if>
+        <if test="goodsId !=null">goods_id = #{goodsId}
+            ,
+        </if>
+        <if test="goodsNm !=null">goods_nm = #{goodsNm}
+            ,
+        </if>
+        <if test="goodsOid !=null">goods_oid = #{goodsOid}
+            ,
+        </if>
+        <if test="goodsMid !=null">goods_mid = #{goodsMid}
+            ,
+        </if>
+        <if test="goodsSeq !=null">goods_seq = #{goodsSeq}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="createDate !=null">create_date = #{createDate}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="modifyDate !=null">modify_date = #{modifyDate}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+            ,
+        </if>
+        <if test="keepField1 !=null">keep_field1 = #{keepField1}
+            ,
+        </if>
+        <if test="keepField2 !=null">keep_field2 = #{keepField2}
+            ,
+        </if>
+        <if test="keepField3 !=null">keep_field3 = #{keepField3}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="typePid !=null">and type_pid = #{typePid}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="goodsNm !=null">and goods_nm = #{goodsNm}</if>
+            <if test="goodsOid !=null">and goods_oid = #{goodsOid}</if>
+            <if test="goodsMid !=null">and goods_mid = #{goodsMid}</if>
+            <if test="goodsSeq !=null">and goods_seq = #{goodsSeq}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createDate !=null">and create_date = #{createDate}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyDate !=null">and modify_date = #{modifyDate}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="keepField1 !=null">and keep_field1 = #{keepField1}</if>
+            <if test="keepField2 !=null">and keep_field2 = #{keepField2}</if>
+            <if test="keepField3 !=null">and keep_field3 = #{keepField3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblGoodsRecommendationYgMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_goods_recommendation_yg
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="TblGoodsRecommendationYgMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_recommendation_yg
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblGoodsRecommendationYgMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_recommendation_yg
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+        where del_flag = 0
+    </select>
+    <delete id="delete" parameterType="TblGoodsRecommendationYgModel">
+        delete from tbl_goods_recommendation_yg where id = #{goodsId}
+    </delete>
+
+    <!--查询数据总和-->
+    <select id="count" resultType="Integer">
+        select count(*)
+        <include refid="columns"/>
+        from tbl_goods_recommendation_yg
+        where del_flag = 0
+    </select>
+
+    <!--根据商品ID查询网银商品推荐商品-->
+    <select id="findGoodsRecommendation" parameterType="java.util.List" resultMap="TblGoodsRecommendationYgMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_recommendation_yg
+        where del_flag = 0 and goods_id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+    </select>
+
+    <!--删除网银商品推荐-->
+    <update id="deleteGoodsRe" parameterType="String">
+        update tbl_goods_recommendation_yg set
+        del_flag = 1
+        where goods_id = #{goodsId}
+    </update>
+
+    <!--交换顺序-->
+    <update id="changeCurrent" parameterType="map">
+        update tbl_goods_recommendation_yg set
+        goods_seq = #{changeDelFlag}
+        where goods_id = #{currentId}
+    </update>
+
+    <!--交换顺序-->
+    <update id="changeChange" parameterType="map">
+        update tbl_goods_recommendation_yg set
+        goods_seq =#{currentDelFlag}
+        where goods_id = #{changeId}
+    </update>
+
+    <!--校验商品Id是否重复-->
+    <select id="findCountById" parameterType="String" resultType="Integer">
+        SELECT count(*)
+        from tbl_goods_recommendation_yg
+        where goods_id=#{code}
+    </select>
+</mapper>
+
+

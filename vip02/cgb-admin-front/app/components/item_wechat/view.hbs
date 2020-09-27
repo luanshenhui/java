@@ -1,0 +1,87 @@
+{{#component "wechatItemManage js-component"}}
+    <p class="components-title"><strong>- 微信商品管理 -</strong></p>
+    <form class="form form-aligned wechat-manage-form">
+        <fieldset>
+            <p class="filter-name">
+                <span class="span4 span-large">
+                    <label for="code">单品编码:</label>
+                    <input class="form-control" id="code" type="text" name="code" value="{{code}}">
+                </span>
+                <span class="span4 span-large">
+                    <label for="name">商品名称:</label>
+                    <input class="form-control" id="name" type="text" name="name" value="{{name}}">
+                </span>
+                <span class="span4 span-large">
+                    <label for="vendorId">供应商名称:</label>
+                    <input class="form-control" id="vendorName" type="text" name="vendorName" value="{{vendorName}}">
+                </span>
+                <span class="span span-large">
+                    <label>&nbsp;</label>
+                    <input class="btn btn-success btn-small js-wechat-check padding" type="submit" value="查询"/>
+                </span>
+            </p>
+        </fieldset>
+    </form>
+    <div class="add-wechat">
+    {{#authorial "itemWechat_import"}}
+        <a class="btn btn-success btn-small js-wechat-upload">批量导入微信商品编号</a>
+    {{/authorial}}
+    </div>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="main-box-table margin-top-10">
+            <table  cellspacing="0" cellpadding="0" border="0" class="table-th">
+                <thead>
+                    <tr>
+                        <th width="20%">商品名称</th>
+                        <th width="15%">微信商品图片</th>
+                        <th width="15%">供应商名称</th>
+                        {{!--<th width="25%">后台类目</th>--}}
+                        <th width="10%">售价(元)</th>
+                        <th width="15%">显示顺序</th>
+                        <th width="10%">最高期数</th>
+                        <th width="15%">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        {{#each _DATA_.data}}
+        <div class="order-tab">
+            <div class="list-detail" data-id="{{code}}">
+                    <p>单品编码(5位)：{{mid}}</p>
+                    <p>微信广发银行：{{channelMallWx}}</p>
+                    <p>微信广发信用卡：{{channelCreditWx}}</p>
+            </div>
+            <table data-id="{{code}}" width="100%" cellspacing="0" cellpadding="0" border="0" class="list-tabble-con table-list margin-bottom-20">
+                <tbody>
+                    <tr data-id="{{code}}" data-data="{{json this}}">
+                        <td width="20%" class="name" title="{{name}}">{{name}}</td>
+                        <td width="15%"><img class="wxpic" src="{{image}}" style="display : inline;"></td>
+                        <td width="15%" class="vendorName">{{vendorName}}</td>
+                        {{!--<td width="25%" class="backCategory">{{!backCategory1Name}}>{{!backCategory2Name}}>{{!backCategory3Name}}</td>--}}
+                        <td width="10%" class="price">{{price}}</td>
+                        <td width="15%" class="wxOrder">{{wxOrder}}</td>
+                        <td width="10%" class="installmentNumber">{{installmentNumber}}</td>
+                        <td width="15%">
+                        {{#authorial "itemWechat_edit"}}
+                            <button class="btn btn-info btn-sm js-wechat-edit">编辑</button>
+                        {{/authorial}}
+                         {{!--{{#authorial "itemWechat_delete"}}
+                            <button class="btn btn-info btn-sm" id="{{code}}"
+                                    data-toggle="confirm"
+                                    data-title="您确定删除吗?"
+                                    data-content="删除之后无法恢复,确定要删除吗？"
+                                    data-event="confirm:delete-wechat">
+                                删除
+                            </button>
+                        {{/authorial}}--}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {{/each}}
+        </div>
+    {{/equals}}
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+{{/component}}

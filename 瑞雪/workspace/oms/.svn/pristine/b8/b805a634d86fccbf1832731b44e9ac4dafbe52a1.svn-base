@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <title>参数管理 | Rkylin OMS</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT" />
+        
+        <!-- 加载 bootstrap 样式-->
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css" />
+        
+        <!-- 加载本页需要的三方插件样式 -->
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/jquery.dataTables.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/dataTables.bootstrap.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-tablesorter/themes/blue/style-custom.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-bootstrap-wizard/custom.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-steps/css/jquery.steps.css">
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/animate.css/animate.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/iCheck/skins/all.css" />
+    	<link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+        
+        
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-markdown/css/bootstrap-markdown.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/summernote/summernote.css" />
+        <!-- 加载主题风格样式 -->
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" class="default-style" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change" class="style-change color-change" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/style-responsive.css" />
+        <style type="text/css">
+        #dictTable tbody tr td{
+            word-wrap: break-word;
+        }
+        </style>
+    </head>
+    <body class="">
+	    <!--BEGIN CONTENT-->
+	    <div class="page-content">
+	        <div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-8 col-xs-8 col-sm-8 col-md-8"></div>
+					<div class="col-lg-4 col-xs-4 col-sm-4 col-md-4" style="margin-bottom: 10px;">
+	                    <div class="input-group">
+	                        <input id="quickSearch" type="text" placeholder="参数名称、内部编码" class="form-control" />
+	                        <span class="input-group-btn">
+		                        <button id="btnQuickSearch" type="button" class="btn btn-primary">
+		                        	<i class="fa fa-search"></i>
+		                        </button>
+	                        </span>
+	                    </div>
+                    </div>
+				</div>
+				<div class="row">
+                    <div class="col-lg-12">
+				        <div class="portlet box portlet-blue" style="margin-bottom: 15px;">
+				            <div class="portlet-header">
+				                <div class="caption">参数列表</div>
+                                <div class="actions">
+                                	<a href="#" class="btn btn-xs btn-warning" data-toggle="modal" data-target="newDictWizard" onclick="addDict()">
+                                		<i class="fa fa-plus"></i>&nbsp;添加参数
+                                	</a>&nbsp;
+                                </div>
+				            </div>
+				            <div class="portlet-body">
+                                <table id="dictTable" class="table table-hover table-striped table-bordered table-advanced tb-sticky-header" width="100%"  style="table-layout: fixed;">
+                                    <thead>
+                                        <tr>
+                                            <th width="20%" colValue="dict_name">参数名称</th>
+                                            <th width="32%" colValue="dict_code">内部编码</th>
+                                            <th width="32%" colValue="value">参数值</th>
+                                            <th width="16%" colValue="operation">操作</th>
+                                        </tr>
+                                        <tbody>
+
+                                        </tbody>
+                                    </thead>
+                                </table>
+                                
+				            </div>
+				        </div>
+                    </div>
+                </div>
+	        </div>
+	    </div>
+<!-- -------------------------------------------------------------------------- -->
+		
+        <div id="creatDict" roleid="" tabindex="-1" role="dialog" aria-labelledby="modal-header-primary-label" data-backdrop="static"
+            aria-hidden="true" class="modal fade" width="600px">
+            <div class="modal-dialog">
+                <div class="modal-content" style ="width:900px;">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">
+                            <span id="createTitle">新建参数</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="dictDetailForm" role="form" action="" class="form-horizontal">
+                            <div class="form-group">
+                                <label for="txtDictName" class="col-sm-3 control-label">参数名称&nbsp;<span class='require'>*</span>
+                                </label>
+                                <div class="col-sm-9">
+                                    <input id="txtDictName" name="txtDictName" type="text" placeholder="" required maxlength="32"
+                                        class="form-control " /> <i class="alert alert-hide">项目是必选项！</i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtDictCode" class="col-sm-3 control-label">内部代码&nbsp;<span class='require'>*</span>
+                                </label>
+                                <div class="col-sm-9">
+                                    <input id="txtDictCode" name="txtDictCode" type="text" placeholder="" required maxlength="50"
+                                        class="form-control  " /> <i class="alert alert-hide">项目是必选项！</i>
+                                </div>
+                            </div>
+                            
+                            
+                             <div class="form-group">
+                                <label for="txtDictType" class="col-sm-3 control-label">参数类型&nbsp;<span class='require'>*</span>
+                                </label>
+                                <div class="col-sm-9">
+                                    <input id="txt_DictType" name="txt_DictType" list ="txtDictType"  required maxlength="255"
+                                        class="form-control  " />
+                                     <datalist  id="txtDictType" name="txtDictType" class="">
+                                         <option ></option>
+                                     </datalist>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtDictRemark" class="col-sm-3 control-label">描述&nbsp;<span class='require'></span>
+                                </label>
+                                <div class="col-sm-9">
+                                    <input id="txtDictRemark" name="txtDictRemark" type="text" placeholder="" maxlength="255" class="form-control " />
+                                </div>
+                            </div>
+                            <div class="form-group" id="radioType">
+                               <div class="col-sm-2 "></div>
+                              
+                               <div class="radio col-sm-8">
+                                    <label class="radio-inline">
+                                        <input id="dict_value_type0" type="radio" name="dict_value_type" value="0" checked="checked" />&nbsp; 文本
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input id="dict_value_type1" type="radio" name="dict_value_type" value="1" />&nbsp; 日期
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input id="dict_value_type2" type="radio" name="dict_value_type" value="2" />&nbsp; html
+                                    </label>
+                                </div>
+                                <div class="col-sm-2 "></div>
+                              
+                            </div>
+                            
+                            <div class="form-group" id="textPage">
+                                <label class="col-md-3 control-label">参数值&nbsp;</label>
+                                <div class="col-md-9">
+                                    <textarea id="textValue" name="textValue" rows="6" required class="form-control invalid" maxlength="2000"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="htmlPage2" hidden>
+                               <iframe id="dictIframe" src="/views/system/organization/dictionary/dictIframe.html" frameborder="0" noResize width="100%" scrolling="auto" height="200px"  vspale="0"></iframe>
+                            </div> 
+                            
+                            <div class="form-group" id="datePage" hidden>
+								<label for="divExpireTime" class="col-sm-3 control-label">日期&nbsp;
+								</label>
+								<div class="col-sm-9">
+                                    <div id="divExpireTime" class="input-group datetimepicker-default date ">
+                                        <input id="dateValue" name="dateValue required" type="text" class="form-control invalid greaterThenNow readonly" placeholder="" data-format="YYYY-MM-DD" readonly />
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+								</div>
+							</div>
+                            <input id="dictId" type="hidden" value="" />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
+                        <button id="dictSave" type="button" class="btn btn-primary">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+        <script src="/Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+        <script src="/Apollo/madmin/js/jquery-ui.js"></script>
+        <!-- 加载 bootstrap 和三方插件 js -->
+        <script src="/Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+        <script src="/Apollo/madmin/js/html5shiv.js"></script>
+        <script src="/Apollo/madmin/js/respond.min.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script>
+        <script src="/Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+        <script src="/Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-pace/pace.min.js"></script>
+        <script src="/Apollo/madmin/vendors/holder/holder.js"></script>
+        <script src="/Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script>
+        <script src="/Apollo/madmin/vendors/moment/moment.js"></script>
+        <script src="/Apollo/madmin/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="/Apollo/madmin/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+        <script src="/Apollo/madmin/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+        <script src="/Apollo/madmin/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-tablesorter/jquery.tablesorter.js"></script>
+        <script src="/Apollo/madmin/js/table-advanced.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-validate/jquery.validate.min.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-validate/message_zh.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+        
+        <script src="/Apollo/madmin/vendors/metisMenu/jquery.metisMenu.js"></script>
+        <script src="/Apollo/madmin/vendors/slimScroll/jquery.slimscroll.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-highcharts/highcharts.js"></script>
+        <script src="/Apollo/madmin/js/jquery.menu.js"></script>
+        <script src="/Apollo/madmin/vendors/jquery-news-ticker/jquery.newsTicker.min.js"></script>
+        <script src=" /Apollo/madmin/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script src="/Apollo/madmin/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <script src="/Apollo/madmin/vendors/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+        <script src="/Apollo/madmin/vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+        <script src="/Apollo/ckeditor/ckeditor.js"></script>
+        <script src="/Apollo/madmin/js/ui-editors.js"></script>
+        <script src="/Apollo/madmin/vendors/summernote/summernote.js"></script>
+        
+        <script src="dict.js"></script>
+        <script src="/views/static/js/export.js"></script>
+        <script src="/views/static/js/form.js"></script>
+    </body>
+</html>

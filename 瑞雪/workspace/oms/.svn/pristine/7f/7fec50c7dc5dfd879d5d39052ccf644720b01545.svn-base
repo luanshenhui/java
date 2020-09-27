@@ -1,0 +1,634 @@
+var tree;
+var checkFlag; //判断是修改保存还是新建保存，用以区分修改节点的后重画的方式
+var itemIds="";
+var itemTexts="";
+var selectOrgTable="";
+var selectOrgTable2="";
+$(function () {
+	$("#FrameUnitOrg").on('hide.bs.modal',function(){
+		window.top.window.returnCustomModalDialog();
+	});
+	$("#MyUnitSelect").on('hide.bs.modal',function(){
+		window.top.window.returnCustomModalDialog();
+		window.top.window.borrowCustomModalDialog($("#FrameUnitOrg"));
+	});
+	$("#manageSelect").on('hide.bs.modal',function(){
+		window.top.window.returnCustomModalDialog();
+		window.top.window.borrowCustomModalDialog($("#FrameUnitOrg"));
+	});
+	
+	 $('#moveLeftToRight').click(function () {
+		 moveLeftToRight();
+	 })
+	 $('#selectUnit').click(function () {
+		 selectUnit();
+	 })
+	 $('#postionSave').click(function () {
+		 postionSave();
+	 })
+	 $('#saveFormElement').click(function () {
+		 saveFormElement();
+	 })
+	 $('#outPut').click(function () {
+		 outPut();
+	 })
+	 $('#unitSelectSave').click(function () {
+		 unitSelectSave();
+	 })
+	 $('#showSta').click(function () {
+		 showSta();
+	 })
+});
+
+function selectUnit(){
+	window.top.window.returnCustomModalDialog();
+	var editDialog = window.top.window.borrowCustomModalDialog($("#MyUnitSelect"));
+	editDialog.modal({show:true, backdrop:'static'});
+}
+
+//点击保存带出左列表
+function unitSelectSave(){
+//	$("#OrgFrame").attr("src","../unit/UnitDetail.html") 
+//	$(window.parent.document).contents().find("#OrgFrame")[0].contentWindow.leftList();
+//	$("#OrgFrame").attr("src","../views/system/organization/unit/UnitDetail.html") 
+	var o=$(window.parent.document).contents().find("#UnitFrame")[0].contentWindow.unitSaveSelect();
+	window.top.window.returnCustomModalDialog();
+	$("#orgType").val(o.itemText);
+	$("#orgTypeValue").val(o.itemId);
+	if($("#selectOrgTable tbody").children().length==0){
+		leftList();
+	}else{
+		selectOrgTable.draw();
+	}
+	var div=window.top.window.borrowCustomModalDialog($("#MyUnitSelect"));
+	div.modal('hide');
+}
+
+jQuery(document).ready(function(){
+	//画iframe，由于 iframe与 jquery ajax不兼容的问题
+	//document.getElementById("dialog").innerHTML = '<iframe id="frame" src=""/>';
+	var orgTree = document.getElementById("orgTree");
+    tree =new dhtmlXTreeObject(document.getElementById("orgTree"),"100%","100%",0);
+    tree.setImagePath("/csh_books/");
+    //tree.enableCheckBoxes(true);
+    tree.attachEvent("onClick",onClickCheck); //点击节点事件
+    tree.setOnOpenEndHandler(checkSubNodes);  //解决节点请求回来无法展开
+	tree.setOnMouseInHandler(beforeOpenNode);
+    tree.setXMLAutoLoading("/unit/getSubUnitTree.action"); 
+	tree.loadXML("/unit/getUnitTree.action");
+	tree.openItem("RootUnit@UNIT");
+    if(tree.getSelectedItemId() == "RootUnit@UNIT"){
+		jQuery("#btnDel").attr('disabled',true);
+	}
+    window.setTimeout(function() {
+		//tree.closeAllItems(0);
+	}, 0);
+    getUnitTreeManageable();
+	onClickCheck();
+    //测试设置页面元素可用性,参数是页面的id
+    //setPageElementStatus("9039de2a9f0649ca842ea0db8fbde4fd");
+});
+function getUnitTreeManageable(){	
+	jQuery.ajax({
+		url:"/UnitAction.do?method=getUnitTreeManageable",
+		type:"post",
+		async:false,
+		dataType:"json",
+		success:function(data){
+			if(data.errorMessage==null || data.errorMessage==undefined){
+				for(var i=0;i<data.length;i++){
+					if(data[i].MANAGEABLE != 1){
+						tree.showItemCheckbox(data[i].UNIT_ID,false); //隐藏复选框
+						tree.setItemColor(data[i].UNIT_ID,"#aaaaaa","#aaaaaa");//节点字体颜色置灰
+					}
+				}
+			} else {
+				if (data.errorMessage == "session timeout")
+					window.location.href = "/login.jsp";
+				else
+					alert(data.errorMessage);
+			}
+		}
+	});
+	
+}
+
+/*
+ * 新建
+ * */
+function addOrg(){
+	debugger
+	$("#orgName").val("");
+	$("#orgDes").val("");
+	$("#orgSta").val("");
+	$("#orgType").val("");
+	$("#orgTypeValue").val("");
+//	$("#selectOrgTable tbody").children().remove();
+	$("#kbdy").children().remove();
+	var html="<table id='selectOrgTable' class='table table-hover'>"+
+			"<thead><tr><th width='15%'></th><th width='45%' colValue='userAccount'>用户账号</th>"+
+			"<th width='40%' colValue='userFullname'>用户姓名</th></tr></thead></table>";
+	$("#kbdy").html(html)
+	$("#selectOrgTable2 tbody").children().remove();
+	var sendPara = new Object();
+	if(!tree.getSelectedItemId()){
+		alert("UNIT_SELECT_NODE_FIRST");
+		return;
+	}
+	//sendPara.unitId = tree.getSelectedItemId();
+	//sendPara.flag = 0; // 0 为新增保存；1为修改保存
+	var sendunitId = tree.getSelectedItemId();
+	var itemColor = tree.getItemColor(sendunitId);	
+	//通过节点颜色判断是否有操作权限
+	if(itemColor.acolor == "#aaaaaa"){
+		alert("无操作权限");
+		return;
+	}
+	var sendflag = 0; // 0 为新增保存；1为修改保存
+	checkFlag = sendflag;
+	$("#sendunitId").val(sendunitId)
+	$("#sendflag").val(sendflag)
+	getUnitType();
+//	window.top.window.returnCustomModalDialog();
+//	$("#UnitFrame").attr("src","../views/system/organization/user/UnitSelect.html?check=true")
+	var editDialog = window.top.window.borrowCustomModalDialog($("#FrameUnitOrg"));
+	editDialog.modal({show:true, backdrop:'static'});
+}
+function addOrgCallback(returnValue){
+	if (returnValue){
+		if(checkFlag == "0"){
+			var obj = eval('(' + returnValue + ')');  //转换json
+			var parentId = obj.itemDetail.parentUnitId;
+			var itemId = obj.itemDetail.unitId;
+			var itemText = obj.itemDetail.unitName;	        		
+			//tree.insertNewItem(parentId,itemId,itemText);
+			tree.refreshItem(parentId);
+		}
+		if(checkFlag == "1"){
+			var obj = eval('(' + returnValue + ')');  //转换json
+			var itemId = obj.itemDetail.unitId;
+			var newLabel = obj.itemDetail.unitName;
+			var newTooltip = obj.itemDetail.unitName;	        		
+			tree.setItemText(itemId,newLabel,newTooltip);
+		}
+		alert(SAVE_OK);
+	}   		      					
+}
+/*
+ * 修改
+ * */
+function updateOrg(){
+	$("#selectOrgTable tbody").children().remove();
+	$("#selectOrgTable2 tbody").children().remove();
+	if(!tree.getSelectedItemId()){
+		alert("UNIT_SELECT_NODE_FIRST");
+		return;
+	}
+	//sendPara.unitId = tree.getSelectedItemId();
+	//sendPara.flag = 1; // 0 为新增保存；1为修改保存
+	var sendunitId = tree.getSelectedItemId();
+	var itemColor = tree.getItemColor(sendunitId);
+	//通过节点颜色判断是否有操作权限
+	if(itemColor.acolor == "#aaaaaa"){
+		alert("无权限操作");
+		return;
+	}
+	var sendflag = 1; // 0 为新增保存；1为修改保存
+	checkFlag = sendflag;
+	$("#sendunitId").val(sendunitId)
+	$("#sendflag").val(sendflag)
+	getUnitType();
+	showDetail(sendunitId)
+	var editDialog = window.top.window.borrowCustomModalDialog($("#FrameUnitOrg"));
+	editDialog.modal({show:true, backdrop:'static'});
+}
+
+/*
+ * 删除组织
+ * */
+function delOrg(){
+	var unitId = tree.getSelectedItemId();
+	if(!unitId){
+		alert("UNIT_SELECT_NODE_TO_DELETE");
+		return;
+	}
+	if(unitId == "RootUnit@UNIT"){
+		alert("UNIT_NODE_CANT_DELETE");
+		return;
+	}
+	var itemColor = tree.getItemColor(unitId);
+	//通过节点颜色判断是否有操作权限
+	if(itemColor.acolor == "#aaaaaa"){
+		alert("无权限操作");
+		return;
+	}
+	//删除提示
+	window.top.window.showModalConfirm( "你确定要删除用户吗？", delOrgYes);
+}
+
+function delOrgYes(){
+	var unitId = tree.getSelectedItemId();
+	jQuery.ajax({
+		url:"/unit/deleteUnit.action",
+		type:"post",
+//		async : false,
+		dataType:"json",
+		data:{itemId:unitId},
+		success:function(data){
+			console.log(data);
+			if(data.errorMessage==null || data.errorMessage==undefined){
+				tree.deleteItem(unitId,"");
+				window.top.window.showScoMessage('ok', '删除成功');
+			} else {
+				if (data.errorMessage == "session timeout")
+					window.location.href = "/login.jsp";
+				else
+					window.top.window.showScoMessage('ok', '删除失败');
+			}
+		}
+	});
+}
+
+/*
+ * tree设置节点展开
+ * */
+var nodeClickArray = new ArrayList(); //节点点击数组
+var beforeOpenSubNodes;
+function checkSubNodes(id,state){
+	//记录点击过的节点，第一次单击则请求数据，然后记录；当再次点击后则不再请求数据。
+	if(nodeClickArray.contains(id))
+		return true;
+	else{
+		nodeClickArray.add(id);
+		//debugger;
+		//2011年4月12日 wangxy
+		//如果父结点是灰的，则需要对子结点的使用状态进行判断
+		//如果父结点不是灰的，则所有子结点是可用状态。
+		var itemColor = tree.getItemColor(id);
+		//通过节点颜色判断是否有操作权限
+		if(itemColor.acolor == "#aaaaaa"){
+			getSubUnitTreeManageable(id);
+		}
+		//over
+	}
+	if(beforeOpenSubNodes>0)
+		return true;
+	if(beforeOpenSubNodes==0 && state == -1){
+		tree.openItem(id);
+	}
+    beforeOpenSubNodes = 1;
+	return true;
+}
+function beforeOpenNode(id){
+	beforeOpenSubNodes = tree.hasChildren(id);
+	return true;
+}
+function getSubUnitTreeManageable(id){
+	jQuery.ajax({
+		url:"/UnitAction.do?method=getSubUnitTreeManageable",
+		type:"post",
+		async:false,
+		dataType:"json",
+		data:{id:id},
+		success:function(data){
+			if(data.errorMessage==null || data.errorMessage==undefined){
+				for(var i=0;i<data.length;i++){
+					if(data[i].MANAGEABLE != 1){
+						tree.showItemCheckbox(data[i].UNIT_ID,false); //隐藏复选框
+						tree.setItemColor(data[i].UNIT_ID,"#aaaaaa","#aaaaaa");//节点字体颜色置灰
+					}
+				}
+			} else {
+				if (data.errorMessage == "session timeout")
+					window.location.href = "/login.jsp";
+				else
+					alert(data.errorMessage);
+			}
+		}
+	});
+	
+}
+/*
+ * 获取组织树
+ * */
+var nodeId; //组织树 id
+function showOrg(){
+	var sURL = "/view/organization/unit/UnitSelect.jsp";
+	document.getElementById("unitFrame").src=sURL;				
+	jQuery("#unitDialog").dialog('open');	
+}
+
+/*
+ * 获取上级领导岗位
+ * */
+function showSta(){
+//	var sURL = "/view/organization/unit/StationSelect.jsp";
+//	document.getElementById("staFrame").src=sURL;				
+//	jQuery("#staDialog").dialog('open');
+	window.top.window.returnCustomModalDialog();
+	var editDialog = window.top.window.borrowCustomModalDialog($("#manageSelect"));
+	editDialog.modal({show:true, backdrop:'static'});
+}
+
+//点击节点时，判断是否可用
+function onClickCheck(){
+	var unitId = tree.getSelectedItemId();
+	var itemColor = tree.getItemColor(unitId);
+	//通过节点颜色判断是否有操作权限
+	if(itemColor.acolor == "#aaaaaa"){
+		jQuery("#btnAdd").attr('disabled',true);
+		jQuery("#btnUpdate").attr('disabled',true);
+		jQuery("#btnDel").attr('disabled',true);
+	}else{
+		jQuery("#btnAdd").attr('disabled',false);
+		jQuery("#btnUpdate").attr('disabled',false);
+		jQuery("#btnDel").attr('disabled',false);
+		//var classString = jQuery("#btnDel").attr("class");
+		//可能存在bug，样式会不断变长
+		//jQuery("#btnDel").attr("class",classString +"ui-button ui-widget ui-state-default ui-corner-all");
+
+	}
+	//点击根节点时，删除按钮置灰
+	var selectedItemId = tree.getSelectedItemId();
+	if(selectedItemId == "RootUnit@UNIT"){
+		jQuery("#btnDel").attr('disabled',true);
+	}
+}
+
+function leftList(){
+	selectOrgTable = $('#selectOrgTable').DataTable({
+    	"processing": true,
+        "serverSide": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "dom": '<"bottom"rtflp>',
+        "searching": false,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+        "ajax": {
+            "url": "/user/userList.action",
+            "data": function ( d ) {
+            	 // 高级查询条件
+//            	var unitID = $('#orgTypeValue').val();//组织机构
+//                var advData = {
+//                    "unitID": unitID,
+//                };
+//                d.formJson = JSON.stringify(advData);
+            }
+        },
+        "tableTools": {
+            "sRowSelect": "bootstrap"
+        },
+        "columns": [
+        	{"data": "chk"},
+        	{"data": "userAccount"},
+        	{"data": "userFullname"}
+        ],
+        "columnDefs": [{
+        	"orderable":true,
+        	"targets":[1]
+    	}
+    ],
+        "order": [[ 1, "asc" ]]
+    });
+}
+
+function moveLeftToRight(){
+	window.top.window.returnCustomModalDialog();
+	$("#selectOrgTable tbody input[type='checkbox']:checked").each(function(k,v){
+		var tr=$(this).parent().parent();
+		if(nohaveThis(this)==0){
+			$("#newtbody").append('<tr>'+tr[0].innerHTML+'</tr>');
+		}
+	});
+	$("#selectOrgTable tbody input[type='checkbox']").attr("checked",false);
+	window.top.window.borrowCustomModalDialog($("#FrameUnitOrg"));
+}
+
+function nohaveThis(e){
+	var index=0;
+	$("#newtbody input[type='checkbox']").each(function(k,v){
+		if(this.getAttribute('userid')==e.getAttribute('userid')){
+			index+=1
+		}
+	});
+	return index;
+}
+
+function outPut(){
+	window.top.window.returnCustomModalDialog();
+	$("#newtbody input[type='checkbox']:checked").each(function(k,v){
+		$(this).parent().parent().remove();
+	});
+	window.top.window.borrowCustomModalDialog($("#FrameUnitOrg"));
+}
+
+function getUserID(){
+	var idString="";
+	$("#newtbody input[type='checkbox']").each(function(k,v){
+		if(idString==""){
+			idString=this.getAttribute('userid')
+		}else if(idString!=""){
+			idString+=","+this.getAttribute('userid')
+		}
+	});
+	return idString;
+}
+
+var stationId;//上级领导岗位id
+/*
+ * 新增保存和修改保存
+ * */
+function saveFormElement(){
+	window.top.window.returnCustomModalDialog();
+	if(!$("#userOrgDetailForm").valid()) {
+    	// 父窗体借用本页的编辑对话框
+    	window.top.window.borrowCustomModalDialog($("#FrameUnitOrg"));
+		return false;
+	}
+	var userIds=getUserID();
+	var flagType =$("#sendflag").val();
+	var returnValue;
+    if (flagType == 0||flagType == "0"){
+	     var name = jQuery("#orgName").val();
+	     var des = jQuery("#orgDes").val();
+	     var sta = jQuery("#stationIdHidden").val();
+	     var id = $("#sendunitId").val();
+	     if(!id || id==""){
+	    	 return ("id为空")
+	     }
+	     //var type = jQuery("#orgType").val();
+	     var type = jQuery("#orgType").find("option:selected").text();
+//	     getUserId();
+//	     if(userIdStr==""||userIdStr==null){
+//	    	 var userID="";
+//	     }else{
+//	    	 var userID=userIdStr;
+//	     }
+	     var userID=userIds;
+	     //序列化扩展信息
+	     var extInfo="";
+//	     var extInfo = jQuery("form").serialize();
+//	     extInfo = decodeURIComponent(extInfo,true);//对序列后信息进行解码，以解决乱码问题。但是时间中的空格问题无法解决
+		 var sURL = "/unit/saveUnit.action";
+	     //调用AJAX请求函数	
+		 jQuery.ajax({
+				url:sURL,
+				type:"post",
+//				async: false,
+				dataType:"text",
+				data:{orgName:name,orgDes:des,orgSta:sta,orgType:type,id:id,userId:userID,flag:"0",extInfo:extInfo
+			 			},
+		        success:function(data){
+		        	console.log(data)
+					if (data.indexOf("session timeout") != -1)
+						top.location.href = webpath + "/login.jsp";
+					else
+						tree.refreshItem(id);
+						var div=window.top.window.borrowCustomModalDialog($("#FrameUnitOrg"));
+		        		div.modal('hide');
+		        		
+//			 		returnValue = data;
+					//window.returnValue = data;
+					//window.close();
+				}	
+			});
+//		 return returnValue;
+    }
+    if(flagType == 1||flagType == "1"){
+    	var name = jQuery("#orgName").val();
+	    var des = jQuery("#orgDes").val();
+	    var sta = jQuery("#stationIdHidden").val();
+	    var unitId = $("#sendunitId").val();
+    	//var sta = stationId;
+    	var type = jQuery("#orgType").find("option:selected").text();
+    	var userID=userIds;
+//	     var extInfo = jQuery("form").serialize();
+//	     extInfo = decodeURIComponent(extInfo,true);//对序列后信息进行解码，以解决乱码问题。但是时间中的空格问题无法解决
+    	var sURL = "/unit/saveUnit.action";
+	     //调用AJAX请求函数	
+		 jQuery.ajax({
+				url:sURL,
+				type:"post",
+//				async: false,
+				dataType:"text",
+				data:{orgName:name,orgDes:des,orgSta:sta,orgType:type,id:unitId,userId:userID,flag:"1",extInfo:extInfo},
+		        success:function(data){
+					if (data.indexOf("session timeout") != -1)
+						top.location.href = "/login.jsp";
+					else
+						var newLabel = name;
+						var newTooltip = name;	        		
+						tree.setItemText(unitId,newLabel,newTooltip);
+						var div=window.top.window.borrowCustomModalDialog($("#FrameUnitOrg"));
+	        			div.modal('hide');
+//					returnValue = data;
+					//window.returnValue = data;
+					//window.close();
+				}	
+			});
+//		 return returnValue;
+    }
+}
+
+/*
+ * 修改  显示详细信息 
+ * */
+function showDetail(unitId){
+	getUnitType();
+	jQuery.ajax({
+		url:"/unit/getUnitDetail.action",
+		type:"post",
+		dataType:"json",
+		contentType:'application/x-www-form-urlencoded',
+	    encoding:'UTF-8',
+		data:{itemId:unitId,flag:"1"},
+		success:function(data){
+			        if(data){
+			        	window.top.window.returnCustomModalDialog();
+			        	jQuery("#orgName").val(data.unitDetail.unitName);
+			        	jQuery("#orgDes").val(data.unitDetail.unitDescription);
+			        	jQuery("#orgSta").val(data.unitDetail.stationName);
+			        	stationId = data.unitDetail.stationId;
+			        	jQuery("#stationIdHidden").val(stationId);
+			        	unitId = data.unitDetail.unitId;
+						for(var k=0;k<data.userDetail.length;k++){
+							var tr="<tr role='row' class='odd'><td><input id='chkItem' name='chkItem' type='checkbox' userid="+
+							data.userDetail[k].userId+"></td><td class='sorting_1'>"+data.userDetail[k].userAccount+"</td><td>"+data.userDetail[k].userFullname+"</td></tr>"			        	
+							$("#newtbody").append(tr);
+			       	    }			        	
+			        }
+//			        var queryPara={"itemId" : unitId};
+//			    	ECSideUtil.queryECForm("table2",queryPara,true);
+			    	
+			    	//给扩展信息赋值
+//			    	var mapData = data.unitDetail.extInfoMap;
+//			    	var dataExt = extendData;
+//			    	var obj = dataExt.BizTypeDefine.elementList;
+//			    	for(var i = 0 ; i<obj.length; i++){				
+//			    		if(obj[i].name !="id"){
+//			    			//document.getElementById(obj[i].name).value = mapData[obj[i].name];
+//			    			var eleId = "#"+obj[i].name;
+//			    			//jQuery(eleId).val(mapData[obj[i].name]);
+//			    			if(mapData[obj[i].name] == " "){
+//			    				jQuery(eleId).val("");
+//			    			}else{
+//			    				jQuery(eleId).val(mapData[obj[i].name]);
+//			    			}
+//			    		}
+//			    	}	
+	            }		        
+	});	
+}
+
+/*
+ * 获取组织类型
+ * */
+function getUnitType(){
+	jQuery.ajax({
+		url:"/unit/getUnitType.action",
+		type:"post",
+		dataType:"json",
+		data:{type:"unittype"}, //unittype在数据库wf_org_dictionary表中写死的字段值
+		success:function(data)
+		        {
+		           for(i=0;i<=data.length;i++){
+			           	if (i==0){
+			           		document.getElementById("orgType").options[i] = new Option("","");
+			           	}else{
+			           		document.getElementById("orgType").options[i] = new Option(data[i-1][1],data[i-1][0]);
+			           	}   	
+	               }
+	            }
+	});
+}
+
+function postionSave(){
+	var o=$(window.parent.document).contents().find("#postionIframe")[0].contentWindow.save();
+	window.top.window.returnCustomModalDialog();
+	jQuery("#orgSta").val(o.itemText);
+	jQuery("#stationIdHidden").val(o.itemId);
+	var div=window.top.window.borrowCustomModalDialog($("#manageSelect"));
+	div.modal('hide');
+}
+/*
+ * 保存数据
+ * */
+function save(){
+	//有效性检验
+	var returnValue;
+	if (checkValidate()&& checkExtendDetail() ){
+		returnValue = saveFormElement();
+		return returnValue;
+	}else{
+		returnValue = "false";
+	}
+	return returnValue;
+}
+
+function stationSelectCallback(returnObj){
+
+	if (returnObj != null){	
+	    jQuery("#orgSta").val(returnObj.itemText);
+	    jQuery("#stationIdHidden").val(returnObj.itemId);
+	}
+}

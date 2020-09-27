@@ -1,0 +1,16 @@
+<div class="front-category-bind js-component" data-comp-path="front_category_bind/view" data-frontid="{{json data.frontCategoryData}}" data-data="{{json data.channel}}">
+  <div class="bind-header">
+  	<span class="bind-header-span">后台类目</span>
+  </div>
+  {{#each data.data.data}}
+  <div class="binded-line" data-bind="{{json this}}">
+    <label class="binded-label">后台类目路径: <span title="{{path}}">{{path}}</span></label>
+    <button class="btn btn-small js-front-category-delete" id="bind-{{backCategoryId}}" data-toggle="confirm" data-title="您确定删除吗？" data-content="删除之后需要重新绑定,确定删除吗？" data-event="confirm:delete-bind">删除</button>
+  <br>
+  <br>
+  </div>
+  {{/each}}
+  <button class="btn btn-success btn-small js-front-category-bind" data-channel="{{channel}}">绑定后台类目</button>
+  
+  
+</div>

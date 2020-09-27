@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AcardLevelToelectronbankModel">
+    <resultMap id="AcardLevelToelectronbankMap" type="AcardLevelToelectronbankModel">
+        <result property="dataDt" column="data_dt"/>
+        <result property="cardLevelNbr" column="card_level_nbr"/>
+        <result property="cardLevelDesc" column="card_level_desc"/>
+        <result property="etlSysDttime" column="etl_sys_dttime"/>
+        <result property="hisUpdateInd" column="his_update_ind"/>
+        <result property="txDate" column="tx_date"/>
+    </resultMap>
+    <sql id="columns">
+    data_dt,card_level_nbr,card_level_desc,etl_sys_dttime,his_update_ind,tx_date
+    </sql>
+
+    <insert id="insert" parameterType="AcardLevelToelectronbankModel" useGeneratedKeys="true"
+            keyProperty="cardLevelNbr" keyColumn="card_level_nbr">
+        insert into a_card_level_toelectronbank
+        (data_dt
+        ,card_level_desc
+        ,etl_sys_dttime
+        ,his_update_ind
+        ,tx_date)
+        values(#{dataDt}
+        ,#{cardLevelDesc}
+        ,#{etlSysDttime}
+        ,#{hisUpdateInd}
+        ,#{txDate})
+    </insert>
+
+    <update id="update" parameterType="AcardLevelToelectronbankModel">
+        update a_card_level_toelectronbank set
+            <if test="dataDt !=null">data_dt = #{dataDt}
+                ,</if>
+            <if test="cardLevelDesc !=null">card_level_desc = #{cardLevelDesc}
+                ,</if>
+            <if test="etlSysDttime !=null">etl_sys_dttime = #{etlSysDttime}
+                ,</if>
+            <if test="hisUpdateInd !=null">his_update_ind = #{hisUpdateInd}
+                ,</if>
+            <if test="txDate !=null">tx_date = #{txDate}
+                </if>
+        where card_level_nbr = #{cardLevelNbr}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="dataDt !=null">and data_dt = #{dataDt}</if>
+            <if test="cardLevelNbr !=null">and card_level_nbr = #{cardLevelNbr}</if>
+            <if test="cardLevelDesc !=null">and card_level_desc = #{cardLevelDesc}</if>
+            <if test="etlSysDttime !=null">and etl_sys_dttime = #{etlSysDttime}</if>
+            <if test="hisUpdateInd !=null">and his_update_ind = #{hisUpdateInd}</if>
+            <if test="txDate !=null">and tx_date = #{txDate}</if>
+        </where>
+    </sql>
+    <!--TODO 该表无id字段 该生成的sql有问题-->
+    <select id="findById" parameterType="Map" resultMap="AcardLevelToelectronbankMap">
+       SELECT
+        <include refid="columns"/>
+        from a_card_level_toelectronbank
+       where id=#{cardLevelNbr}
+    </select>
+    <select id="findByCardLevelNbr" parameterType="String" resultMap="AcardLevelToelectronbankMap">
+        SELECT
+        <include refid="columns"/>
+        from a_card_level_toelectronbank
+        where card_level_nbr=#{cardLevelNbr}
+    </select>
+    <select id="findAll" resultMap="AcardLevelToelectronbankMap">
+        select
+        <include refid="columns"/>
+        from a_card_level_toelectronbank
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="AcardLevelToelectronbankMap">
+        select
+        <include refid="columns"/>
+        from a_card_level_toelectronbank
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="AcardLevelToelectronbankModel">
+        delete from a_card_level_toelectronbank where id = cardLevelNbr
+    </delete>
+
+    <!-- 根据id列表查询卡等级详细信息  add by geshuo 20160721 -->
+    <select id="findCardLevelByIdList" parameterType="List" resultMap="AcardLevelToelectronbankMap" >
+      select
+        <include refid="columns"/>
+      from a_card_level_toelectronbank
+      where card_level_nbr in
+        <foreach collection="list" open="(" close=")" separator="," item="idItem">
+            #{idItem}
+        </foreach>
+    </select>
+</mapper>
+
+

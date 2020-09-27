@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}品牌管理{{/partial}}
+{{#partial "realBody"}}
+        <div class="container-components">
+            {{#inject "mall_brands/brands_info" true}}
+                {
+                "type":"1",
+                "orderType":"YG"
+                }
+            {{/inject}}
+        </div>
+{{/partial}}
+{{> views/index_layout}}

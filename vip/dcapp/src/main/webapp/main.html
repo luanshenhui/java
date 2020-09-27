@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>数据铁笼综合服务平台</title>
+   	<script src="static/jquery/dist/jquery.min.js"></script>
+    <style type="text/css">
+    	.bg{
+    		width: 200px;
+    		height: 100px;
+    		line-height: 100px;
+    		text-align: center;
+    		margin-bottom: 20px;
+    		color:#FFF;
+    	}
+    	.bg-color1{
+    		background-color: #c32323;
+    	}
+    	.bg-color2{
+    		background-color: #e4873c;
+    	}
+    	.bg-color3{
+    		background-color: #78ab4f;
+    	}
+    	.bg-color4{
+    		background-color: #f5c254;
+    	}
+    	.bg-color5{
+    		background-color: #2195ff;
+    	}
+    </style>
+</head>
+
+<script>
+
+    $(function () {
+
+        $('.bg').on('click', function(){
+        	var href = $(this).data('href');
+        	setCookie('href', href);
+        	console.log(href);
+        	
+        	window.location = 'login.html';
+        })
+
+    })
+    
+    /* 
+	功能：保存cookies函数  
+	参数：name，cookie名字；value，值 
+	*/  
+	function setCookie(name, value){
+    	
+	    var Days = 30*12;   //cookie 将被保存一年  
+	    var exp  = new Date();  //获得当前时间  
+	    exp.setTime(exp.getTime() + Days*24*60*60*1000);  //换成毫秒  
+	    
+	    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+	}
+</script>
+
+
+<body>
+
+	<h1>数据铁笼综合服务平台</h1>
+	
+	<div data-id="oa" data-href="oa" class="bg bg-color1">
+		数据铁笼业务系统
+	</div>
+	<div data-id="dcapp" data-href="/a" class="bg bg-color2">
+		数据融汇分析平台
+	</div>
+	<div class="bg bg-color3">数据铁笼应用</div>
+	<div class="bg bg-color4">综合分析平台</div>
+	<div class="bg bg-color5">绩效系统</div>
+
+</body>
+</html>

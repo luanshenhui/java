@@ -1,0 +1,85 @@
+package cn.rkylin.oms.system.role.vo;
+
+
+
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+
+public class RoleVo extends WF_ORG_ROLE {
+	private static final String STATUS_CHK = "<input id=\"chkItem\" name=\"chkItem\" type=\"checkbox\" roleid=\"%s\" /></input>";
+	private static final String STATUS_RADIO = "<input id=\"statusRadio\" name=\"statusRadio\" type=\"radio\" radioId=\"%s\" /></input>";
+	//	"<input id=\"chkItem\" name=\"chkItem\" type=\"checkbox\" />%s</input>";
+	/**
+	* 序列
+	*/
+	private static final long serialVersionUID = 7261100665980740680L;
+	/**
+	* orderBy子句
+	*/
+	private String orderBy;
+	/**
+	* 搜索条件
+	*/
+	private String searchCondition;
+	/**
+	* checkbox
+	*/
+	private String txtRoleUnitsValue;
+	public String getTxtRoleUnitsValue() {
+		return txtRoleUnitsValue;
+	}
+	public void setTxtRoleUnitsValue(String txtRoleUnitsValue) {
+		this.txtRoleUnitsValue = txtRoleUnitsValue;
+	}
+	private String txtRoleUsers;
+	private String txtRoleUnits;
+	private String chk;
+	private String radio;
+	private String flg;
+	public String getFlg() {
+		return flg;
+	}
+	public void setFlg(String flg) {
+		this.flg = flg;
+	}
+	public String getTxtRoleUsers() {
+		return txtRoleUsers;
+	}
+	public String getTxtRoleUnits() {
+		return txtRoleUnits;
+	}
+	public void setTxtRoleUsers(String txtRoleUsers) {
+		this.txtRoleUsers = txtRoleUsers;
+	}
+	public void setTxtRoleUnits(String txtRoleUnits) {
+		this.txtRoleUnits = txtRoleUnits;
+	}
+	
+	public String getOrderBy() {
+		return orderBy;
+	}
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
+	}
+	
+	public String getChk() {
+		return this.chk;
+	}
+	
+	public void setChk(String chk) {
+		this.chk = String.format(STATUS_CHK, this.getRoleId()).toString();
+	}
+	public String getRadio() {
+		return radio;
+	}
+	public void setRadio(String radio) {
+		this.radio = String.format(STATUS_RADIO, this.getRoleId()).toString();
+	}
+	
+	
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ToolsItem">
+    <resultMap id="ItemMap" type="cn.com.cgbchina.batch.tools.ItemModelTool">
+        <result property="code" column="code"/>
+        <result property="attributeKey1" column="attribute_key1"/>
+        <result property="attributeName1" column="attribute_name1"/>
+        <result property="attributeValue1" column="attribute_value1"/>
+        <result property="attributeKey2" column="attribute_key2"/>
+        <result property="attributeName2" column="attribute_name2"/>
+        <result property="attributeValue2" column="attribute_value2"/>
+    </resultMap>
+    
+    <select id="findAllAttrKey1" resultMap="ItemMap">
+        SELECT
+   		code,attribute_key1
+   		FROM tbl_item
+    </select>
+	
+	<select id="findAllAttrKey2" resultMap="ItemMap">
+        SELECT
+   		code,attribute_key2
+   		FROM tbl_item
+    </select>
+	
+	<select id="findAllAttrName1" resultMap="ItemMap">
+        SELECT
+   		code,attribute_name1
+   		FROM tbl_item
+    </select>
+    
+    <select id="findAllAttrName2" resultMap="ItemMap">
+        SELECT
+   		code,attribute_name2
+   		FROM tbl_item
+    </select>
+    
+    <update id="updateAttrName1" parameterType="cn.com.cgbchina.batch.tools.ItemModelTool">
+       	update tbl_item set attribute_name1=#{attributeKey1}
+       	where code=#{code}
+    </update>
+    
+    <update id="updateAttrName2" parameterType="cn.com.cgbchina.batch.tools.ItemModelTool">
+       	update tbl_item set attribute_name2=#{attributeKey1}
+       	where code=#{code}
+    </update>
+    
+    <update id="updateAttrKey2" parameterType="cn.com.cgbchina.batch.tools.ItemModelTool">
+       	update tbl_item set attribute_key2=#{attributeKey1}
+       	where code=#{code}
+    </update>
+    
+    <update id="updateAttrKey1" parameterType="cn.com.cgbchina.batch.tools.ItemModelTool">
+       	update tbl_item set attribute_key1=#{attributeKey1}
+       	where code=#{code}
+    </update>
+</mapper>
+
+

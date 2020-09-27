@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderClearModel">
+    <resultMap id="OrderClearMap" type="OrderClearModel">
+        <result property="id" column="id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="statusId" column="status_id"/>
+        <result property="clearflag" column="clearflag"/>
+        <result property="cleartime" column="cleartime"/>
+        <result property="opertime" column="opertime"/>
+        <result property="extend1" column="extend1"/>
+        <result property="extend2" column="extend2"/>
+        <result property="extend3" column="extend3"/>
+    </resultMap>
+    <sql id="columns">
+    id,ordertype_id,order_id,status_id,clearflag,cleartime,opertime,extend1,extend2,extend3
+    </sql>
+
+    <insert id="insert" parameterType="OrderClearModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_clear
+        (ordertype_id
+        ,order_id
+        ,status_id
+        ,clearflag
+        ,cleartime
+        ,opertime
+        ,extend1
+        ,extend2
+        ,extend3)
+        values(#{ordertypeId}
+        ,#{orderId}
+        ,#{statusId}
+        ,#{clearflag}
+        ,#{cleartime}
+        ,#{opertime}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3})
+    </insert>
+
+    <!--批量插入清算表-->
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_order_clear
+        (ordertype_id
+        ,order_id
+        ,status_id
+        ,clearflag
+        ,cleartime
+        ,opertime
+        ,extend1
+        ,extend2
+        ,extend3)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.ordertypeId}
+            ,#{item.orderId}
+            ,#{item.statusId}
+            ,#{item.clearflag}
+            ,#{item.cleartime}
+            ,now()
+            ,#{item.extend1}
+            ,#{item.extend2}
+            ,#{item.extend3})
+        </foreach>
+    </insert>
+    <update id="update" parameterType="OrderClearModel">
+        update tbl_order_clear set
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="orderId !=null">order_id = #{orderId}
+                ,</if>
+            <if test="statusId !=null">status_id = #{statusId}
+                ,</if>
+            <if test="clearflag !=null">clearflag = #{clearflag}
+                ,</if>
+            <if test="cleartime !=null">cleartime = #{cleartime}
+                ,</if>
+            <if test="opertime !=null">opertime = #{opertime}
+                ,</if>
+            <if test="extend1 !=null">extend1 = #{extend1}
+                ,</if>
+            <if test="extend2 !=null">extend2 = #{extend2}
+                ,</if>
+            <if test="extend3 !=null">extend3 = #{extend3}
+                </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="statusId !=null">and status_id = #{statusId}</if>
+            <if test="clearflag !=null">and clearflag = #{clearflag}</if>
+            <if test="cleartime !=null">and cleartime = #{cleartime}</if>
+            <if test="opertime !=null">and opertime = #{opertime}</if>
+            <if test="extend1 !=null">and extend1 = #{extend1}</if>
+            <if test="extend2 !=null">and extend2 = #{extend2}</if>
+            <if test="extend3 !=null">and extend3 = #{extend3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="OrderClearMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_order_clear
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="OrderClearMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_clear
+        <include refid="conditions"/>
+    </select>
+    <select id="findByOrderId" parameterType="Map" resultMap="OrderClearMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_order_clear
+        where order_id=#{orderId}
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="OrderClearMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_clear
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="OrderClearModel">
+        delete from tbl_order_clear where id = id
+    </delete>
+</mapper>
+
+

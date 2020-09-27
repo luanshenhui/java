@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:properties id="app" location="classpath:app.properties"/>
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+	<dubbo:provider retries="0"/>
+    <!-- Application name -->
+    <dubbo:application name="trade-provider" logger="slf4j"/>
+    <!-- registry address, used for service to register itself -->
+    <dubbo:registry address="#{app.dubboRegistry}"/>
+    <!-- expose this service through dubbo protocol, through port 20880 -->
+    <dubbo:protocol serialization="nativejava" name="dubbo" port="#{app.dubboPort}" threads="#{app.dubboThreads}"
+                    heartbeat="#{app.dubboHeartBeats}"/>
+
+    <dubbo:service interface="cn.com.cgbchina.trade.service.CartService" ref="cartServiceImpl" timeout="100000"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.RedisService" ref="redisServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.CollocationSellService" ref="collocationSellServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.MakecheckjobService" ref="makecheckjobServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderCancelService" ref="orderCancelServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderPartBackService" ref="orderPartBackServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderReturnTrackService" ref="orderReturnTrackServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderService" ref="orderServiceImpl" timeout="60000"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.PointRelatedService" ref="pointRelatedServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.PointsOrderService" ref="pointsOrderServiceImpl" timeout="60000"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.RequestMoneyService" ref="requestMoneyServiceImpl" timeout="60000"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderReturnService" ref="orderReturnServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.TradeTimeRoleService" ref="tradeTimeRoleServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.VendorOrderService" ref="vendorOrderServiceImpl" timeout="60000"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.VendorTopService" ref="vendorTopServiceImpl"/>
+    <!-- bug-302129 fixed by ldk 超时时间不一定这么多就行，但是如果再次尝试时候，防止重复提交功能会让页面显示订单处理中 -->
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderDealService" ref="orderDealServiceImpl" timeout="60000"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.SmsMessageService" ref="smsMessageServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderIOService" ref="orderIOServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderOutSystemService" ref="orderOutSystemServiceImpl"/>
+
+    <dubbo:service interface="cn.com.cgbchina.trade.service.ResendCodeForO2OService" ref="resendCodeForO2OServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.DealO2OOrderService" ref="dealO2OOrderServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderSendForO2OService" ref="orderSendForO2OServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.RestOrderService" ref="restOrderServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderPushService" ref="orderPushServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.AuctionRecordService" ref="auctionRecordServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.PriceSystemService" ref="priceSystemServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderCheckService" ref="orderCheckServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderQueryService" ref="orderQueryServiceImpl" timeout="100000"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.TblOrderMainService" ref="tblOrderMainServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.TblOrderMainHistoryService" ref="tblOrderMainHistoryServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.TblOrderMainBackupService" ref="tblOrderMainBackupServiceImpl"/>
+
+    <dubbo:service interface="cn.com.cgbchina.trade.service.PayService" ref="payServiceImpl"/>
+    <dubbo:service interface="cn.com.cgbchina.trade.service.PriorJudgeService" ref="priorJudgeServiceImpl" />
+
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderFQMainService" ref="orderFQMainServiceImpl" />
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderJFMainService" ref="orderJFMainServiceImpl" />
+    <dubbo:service interface="cn.com.cgbchina.trade.service.OrderSubService" ref="orderSubServiceImpl" />
+
+    <import resource="trade-service-context.xml"/>
+    <import resource="mybatis-context.xml"/>
+    <!-- ID生成规则 -->
+    <import resource="classpath*:/spring/generator-context.xml"/>
+    <import resource="classpath*:/spring/event-spirit-context.xml"/>
+    <bean id="springTrade" class="com.spirit.event.creation.SpringBeanClassBasedListenerObjectCreator">
+        <property name="packageNames">
+            <list>
+                <value>cn.com.cgbchina.trade.service</value>
+            </list>
+        </property>
+        <property name="scanSubpackages" value="true" />
+    </bean>
+  <import resource="classpath:/spring/ordermq.xml"/>
+</beans>

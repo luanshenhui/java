@@ -1,0 +1,11 @@
+package cn.rkylin.oms.system.user.service;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.oms.system.user.vo.UserVO;
+
+public interface IUserService {
+
+	PageInfo<UserVO> findByWhere(int page, int length, UserVO param) throws Exception;
+
+}

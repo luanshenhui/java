@@ -1,0 +1,67 @@
+<script src="../bldelivery/common.js"></script>
+<script src="../bldelivery/BlDeliveryF.js"></script>
+<div id="BlDeliveryFSearch" class="list_search">
+	<h1></h1>
+	<div class="search_left">
+		<label class="blLblClothingCategory"></label>
+		<select id="blSearchClothingID"></select>
+		<label class="blLblStatus"></label>
+		<select id="blSearchStatusID"></select>
+		<label class="blLblName"></label>
+		<select id="blSearchClientID"></select>
+		<label class="blLblKeyword"></label>
+		<input type="text" id="blKeyword" style="width:50px;">
+		<br/>
+		<a id="blBtnDelivery"></a>
+		<a id="blBtnDeliverySetting"></a>
+		<a id="blBtnDeliveryDetail"></a>
+		<a id="blBtnExportOrdens"></a>
+	</div>
+	<div class="search_right">
+		<label class="blLblPubDate"></label>
+		<input type="text" id="blFromDate" class="date"/>
+		<input type="text" id="blToDate" class="date"/>
+		<br/>
+		<label class="blLblDealDate"></label>
+		<input type="text" id="blDealDate" class="date"/>
+		<input type="text" id="blDealToDate" class="date"/>
+		<a id="blBtnSearch"></a>
+	</div>
+</div>
+<div id="BlDeliveryFResult"></div>
+<div id="BlDeliveryFStatistic" class="pagingleft"></div>
+<div id="BlDeliveryFPagination" class="paging"></div>
+<textarea  id="BlDeliveryFTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td></td>
+			<td class="blLblNumber"></td>
+			<td class="blLblCode"></td>
+			<td class="blLblClothingCategory"></td>
+			<td class="blLblName"></td>
+			<td class="blLblFabric"></td>
+			<td class="blLblPubDate"></td>
+			<td class="blLblDeliveryDate"></td>
+			<td class="blLblDealDate"></td>
+			<td class="blLblDeliveryStatus"></td>
+			<td class="blLblStatus"></td>
+			<td class="blLblStopCause"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ordenID}">
+			<td class="center"><input type="checkbox" value="{$T.row.ordenID}" onclick="$.csControl.checkOnce(this);" name="chkRow"/></td>
+			<td class="center">{$T.row.number}</td>
+			<td class="link" onclick="$.csBlDeliveryFList.openView('{$T.row.ordenID}')">{$T.row.ordenID}</td>
+			<td>{$T.row.clothingName}</td>
+			<td>{$T.row.customer.name}</td>
+			<td>{$T.row.fabricCode}</td>
+			<td class="center {#if $T.row.isPubOverdue == DICT_YES}red{#/if}">{$.csDate.formatMillisecondDate($T.row.pubDate)}</td>
+			<td class="center">{$.csDate.formatMillisecondDate($T.row.deliveryDate)}</td>
+			<td class="center">{$.csDate.formatMillisecondDate($T.row.jhrq)}</td>
+			<td class="center">{$T.row.deliveryStatusName}</td>
+			<td class="center">{$T.row.statusName}</td>
+			<td>{$T.row.stopCauseName}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

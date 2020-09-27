@@ -1,0 +1,94 @@
+.rejectDetail {
+  .admin-btn {
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 30px;
+  }
+  .admin-btn a.send-btn {
+    display: inline-block;
+    background-color: #f01919;
+    color: #fff;
+    font-size: 16px;
+    border: 2px solid #f01919;
+    margin-right: 20px;
+  }
+  .admin-btn a.cancel-btn {
+    border: 2px solid #f01919;
+    display: inline-block;
+    color: #f01919;
+    font-size: 16px;
+  }
+  .admin-btn .btn-size {
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+  }
+  /*操作记录*/
+  .tmtimeline {
+    position: relative;
+    margin-left: 165px;
+  }
+  .tmtimeline li {
+    clear: both;
+  }
+  .tmtimeline li .groupimg {
+    margin-top: 10px;
+  }
+  .tmtimeline li .groupimg li {
+    clear: none;
+  }
+  .tmtimeline li.line {
+    position: absolute;
+    left: 5px;
+    top: 10px;
+    width: 2px;
+    height: 100%;
+  }
+  /*  .tmtimeline li p.point {
+      position: relative;
+      z-index: 10;
+
+      padding-left: 25px;
+      line-height: 25px;
+      background:url(../images/p-old.png) no-repeat left center;
+    }-->*/
+  .tmtimeline li.new p {
+    font-weight: bold
+  }
+  .tmtimeline li.new p.point {
+    font-weight: 100
+  }
+  .tmtimeline li i {
+    margin-right: 10px;
+    position: relative;
+  }
+  .tmtimeline li .list {
+    float: left;
+    width: 700px;
+    margin-left: 28px;
+    padding-bottom: 25px;
+    line-height: 25px;
+  }
+  .tmtimeline li .list .listspan {
+    display: block;
+    float: left;
+    padding-right: 10px;
+    line-height: 30px;
+  }
+
+  .tmtimeline li.line {
+    background: #ffa359;
+  }
+/*  .tmtimeline li p.point {
+
+  }*/
+  .tmtimeline li.new p {
+    color: #ffa359;
+    margin: 0;
+  }
+  /*  .tmtimeline li.new p.point {
+      color: #ffa359;
+      background: url(../image/p-new.png) no-repeat left center;
+    }*/
+
+}

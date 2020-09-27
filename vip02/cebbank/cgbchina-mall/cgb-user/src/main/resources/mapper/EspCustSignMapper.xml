@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EspCustSign">
+    <resultMap id="EspCustSignMap" type="EspCustSignModel">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="cardno" column="cardno"/>
+        <result property="createTime" column="create_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        id,cust_id,cardno,create_time,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="EspCustSignModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_esp_cust_sign
+        (cust_id
+        ,cardno
+        ,create_time
+        ,del_flag)
+        values(#{custId}
+        ,#{cardno}
+        ,#{createTime}
+        ,#{delFlag})
+    </insert>
+
+    <update id="update" parameterType="EspCustSignModel">
+        update tbl_esp_cust_sign set
+        cust_id
+        = #{custId},cardno
+        = #{cardno},create_time
+        = #{createTime},del_flag
+        = #{delFlag}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="cardno !=null">and cardno = #{cardno}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EspCustSignMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_cust_sign
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="EspCustSignMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_cust_sign
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="EspCustSignMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_cust_sign
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="EspCustSignModel">
+        delete from tbl_esp_cust_sign where id = id
+    </delete>
+</mapper>
+
+

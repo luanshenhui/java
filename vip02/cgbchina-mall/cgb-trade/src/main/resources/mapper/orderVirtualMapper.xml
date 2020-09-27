@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderVirtualModel">
+    <resultMap id="OrderVirtualMap" type="OrderVirtualModel">
+        <result property="orderVirtualId" column="order_virtual_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="goodsXid" column="goods_xid"/>
+        <result property="goodsMid" column="goods_mid"/>
+        <result property="goodsOid" column="goods_oid"/>
+        <result property="goodsBid" column="goods_bid"/>
+        <result property="entryCard" column="entry_card"/>
+        <result property="virtualCardType" column="virtual_card_type"/>
+        <result property="goodsType" column="goods_type"/>
+        <result property="virtualLimit" column="virtual_limit"/>
+        <result property="virtualSingleMileage" column="virtual_single_mileage"/>
+        <result property="virtualAllMileage" column="virtual_all_mileage"/>
+        <result property="virtualSinglePrice" column="virtual_single_price"/>
+        <result property="virtualAllPrice" column="virtual_all_price"/>
+        <result property="virtualMemberId" column="virtual_member_id"/>
+        <result property="virtualMemberNm" column="virtual_member_nm"/>
+        <result property="virtualAviationType" column="virtual_aviation_type"/>
+        <result property="tradecode" column="tradecode"/>
+        <result property="tradedesc" column="tradedesc"/>
+        <result property="extend1" column="extend1"/>
+        <result property="extend2" column="extend2"/>
+        <result property="extend3" column="extend3"/>
+        <result property="statusFlag" column="status_flag"/>
+        <result property="centerStatus" column="center_status"/>
+        <result property="centerErrormsg" column="center_errormsg"/>
+        <result property="perpaidMon" column="perpaid_mon"/>
+        <result property="prepaidMob" column="prepaid_mob"/>
+        <result property="handleFlag" column="handle_flag"/>
+        <result property="seqNo" column="seq_no"/>
+        <result property="transactionId" column="transaction_id"/>
+        <result property="attachName" column="attach_name"/>
+        <result property="attachIdentityCard" column="attach_identity_card"/>
+        <result property="serialno" column="serialno"/>
+    </resultMap>
+    <sql id="columns">
+    order_virtual_id,order_id,goods_xid,goods_mid,goods_oid,goods_bid,entry_card,virtual_card_type,goods_type,virtual_limit,virtual_single_mileage,virtual_all_mileage,virtual_single_price,virtual_all_price,virtual_member_id,virtual_member_nm,virtual_aviation_type,tradecode,tradedesc,extend1,extend2,extend3,status_flag,center_status,center_errormsg,perpaid_mon,prepaid_mob,handle_flag,seq_no,transaction_id,attach_name,attach_identity_card,serialno
+    </sql>
+
+    <insert id="insert" parameterType="OrderVirtualModel" useGeneratedKeys="true"
+            keyProperty="orderVirtualId" keyColumn="order_virtual_id">
+        insert into tbl_order_virtual
+        (order_id
+        ,goods_xid
+        ,goods_mid
+        ,goods_oid
+        ,goods_bid
+        ,entry_card
+        ,virtual_card_type
+        ,goods_type
+        ,virtual_limit
+        ,virtual_single_mileage
+        ,virtual_all_mileage
+        ,virtual_single_price
+        ,virtual_all_price
+        ,virtual_member_id
+        ,virtual_member_nm
+        ,virtual_aviation_type
+        ,tradecode
+        ,tradedesc
+        ,extend1
+        ,extend2
+        ,extend3
+        ,status_flag
+        ,center_status
+        ,center_errormsg
+        ,perpaid_mon
+        ,prepaid_mob
+        ,handle_flag
+        ,seq_no
+        ,transaction_id
+        ,attach_name
+        ,attach_identity_card
+        ,serialno)
+        values(#{orderId}
+        ,#{goodsXid}
+        ,#{goodsMid}
+        ,#{goodsOid}
+        ,#{goodsBid}
+        ,#{entryCard}
+        ,#{virtualCardType}
+        ,#{goodsType}
+        ,#{virtualLimit}
+        ,#{virtualSingleMileage}
+        ,#{virtualAllMileage}
+        ,#{virtualSinglePrice}
+        ,#{virtualAllPrice}
+        ,#{virtualMemberId}
+        ,#{virtualMemberNm}
+        ,#{virtualAviationType}
+        ,#{tradecode}
+        ,#{tradedesc}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3}
+        ,#{statusFlag}
+        ,#{centerStatus}
+        ,#{centerErrormsg}
+        ,#{perpaidMon}
+        ,#{prepaidMob}
+        ,#{handleFlag}
+        ,#{seqNo}
+        ,#{transactionId}
+        ,#{attachName}
+        ,#{attachIdentityCard}
+        ,#{serialno})
+    </insert>
+
+    <!--批量插入虚拟订单表-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tbl_order_virtual
+        (order_id
+        ,goods_xid
+        ,goods_mid
+        ,goods_oid
+        ,goods_bid
+        ,entry_card
+        ,virtual_card_type
+        ,goods_type
+        ,virtual_limit
+        ,virtual_single_mileage
+        ,virtual_all_mileage
+        ,virtual_single_price
+        ,virtual_all_price
+        ,virtual_member_id
+        ,virtual_member_nm
+        ,virtual_aviation_type
+        ,tradecode
+        ,tradedesc
+        ,extend1
+        ,extend2
+        ,extend3
+        ,status_flag
+        ,center_status
+        ,center_errormsg
+        ,perpaid_mon
+        ,prepaid_mob
+        ,handle_flag
+        ,seq_no
+        ,transaction_id
+        ,attach_name
+        ,attach_identity_card
+        ,serialno)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.orderId}
+            ,#{item.goodsXid}
+            ,#{item.goodsMid}
+            ,#{item.goodsOid}
+            ,#{item.goodsBid}
+            ,#{item.entryCard}
+            ,#{item.virtualCardType}
+            ,#{item.goodsType}
+            ,#{item.virtualLimit}
+            ,#{item.virtualSingleMileage}
+            ,#{item.virtualAllMileage}
+            ,#{item.virtualSinglePrice}
+            ,#{item.virtualAllPrice}
+            ,#{item.virtualMemberId}
+            ,#{item.virtualMemberNm}
+            ,#{item.virtualAviationType}
+            ,#{item.tradecode}
+            ,#{item.tradedesc}
+            ,#{item.extend1}
+            ,#{item.extend2}
+            ,#{item.extend3}
+            ,#{item.statusFlag}
+            ,#{item.centerStatus}
+            ,#{item.centerErrormsg}
+            ,#{item.perpaidMon}
+            ,#{item.prepaidMob}
+            ,#{item.handleFlag}
+            ,#{item.seqNo}
+            ,#{item.transactionId}
+            ,#{item.attachName}
+            ,#{item.attachIdentityCard}
+            ,#{item.serialno})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="OrderVirtualModel">
+        update tbl_order_virtual set
+            <if test="orderId !=null">order_id = #{orderId}
+                ,</if>
+            <if test="goodsXid !=null">goods_xid = #{goodsXid}
+                ,</if>
+            <if test="goodsMid !=null">goods_mid = #{goodsMid}
+                ,</if>
+            <if test="goodsOid !=null">goods_oid = #{goodsOid}
+                ,</if>
+            <if test="goodsBid !=null">goods_bid = #{goodsBid}
+                ,</if>
+            <if test="entryCard !=null">entry_card = #{entryCard}
+                ,</if>
+            <if test="virtualCardType !=null">virtual_card_type = #{virtualCardType}
+                ,</if>
+            <if test="goodsType !=null">goods_type = #{goodsType}
+                ,</if>
+            <if test="virtualLimit !=null">virtual_limit = #{virtualLimit}
+                ,</if>
+            <if test="virtualSingleMileage !=null">virtual_single_mileage = #{virtualSingleMileage}
+                ,</if>
+            <if test="virtualAllMileage !=null">virtual_all_mileage = #{virtualAllMileage}
+                ,</if>
+            <if test="virtualSinglePrice !=null">virtual_single_price = #{virtualSinglePrice}
+                ,</if>
+            <if test="virtualAllPrice !=null">virtual_all_price = #{virtualAllPrice}
+                ,</if>
+            <if test="virtualMemberId !=null">virtual_member_id = #{virtualMemberId}
+                ,</if>
+            <if test="virtualMemberNm !=null">virtual_member_nm = #{virtualMemberNm}
+                ,</if>
+            <if test="virtualAviationType !=null">virtual_aviation_type = #{virtualAviationType}
+                ,</if>
+            <if test="tradecode !=null">tradecode = #{tradecode}
+                ,</if>
+            <if test="tradedesc !=null">tradedesc = #{tradedesc}
+                ,</if>
+            <if test="extend1 !=null">extend1 = #{extend1}
+                ,</if>
+            <if test="extend2 !=null">extend2 = #{extend2}
+                ,</if>
+            <if test="extend3 !=null">extend3 = #{extend3}
+                ,</if>
+            <if test="statusFlag !=null">status_flag = #{statusFlag}
+                ,</if>
+            <if test="centerStatus !=null">center_status = #{centerStatus}
+                ,</if>
+            <if test="centerErrormsg !=null">center_errormsg = #{centerErrormsg}
+                ,</if>
+            <if test="perpaidMon !=null">perpaid_mon = #{perpaidMon}
+                ,</if>
+            <if test="prepaidMob !=null">prepaid_mob = #{prepaidMob}
+                ,</if>
+            <if test="handleFlag !=null">handle_flag = #{handleFlag}
+                ,</if>
+            <if test="seqNo !=null">seq_no = #{seqNo}
+                ,</if>
+            <if test="transactionId !=null">transaction_id = #{transactionId}
+                ,</if>
+            <if test="attachName !=null">attach_name = #{attachName}
+                ,</if>
+            <if test="attachIdentityCard !=null">attach_identity_card = #{attachIdentityCard}
+                ,</if>
+            <if test="serialno !=null">serialno = #{serialno}
+                </if>
+        where order_virtual_id = #{orderVirtualId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="orderVirtualId !=null">and order_virtual_id = #{orderVirtualId}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="goodsXid !=null">and goods_xid = #{goodsXid}</if>
+            <if test="goodsMid !=null">and goods_mid = #{goodsMid}</if>
+            <if test="goodsOid !=null">and goods_oid = #{goodsOid}</if>
+            <if test="goodsBid !=null">and goods_bid = #{goodsBid}</if>
+            <if test="entryCard !=null">and entry_card = #{entryCard}</if>
+            <if test="virtualCardType !=null">and virtual_card_type = #{virtualCardType}</if>
+            <if test="goodsType !=null">and goods_type = #{goodsType}</if>
+            <if test="virtualLimit !=null">and virtual_limit = #{virtualLimit}</if>
+            <if test="virtualSingleMileage !=null">and virtual_single_mileage = #{virtualSingleMileage}</if>
+            <if test="virtualAllMileage !=null">and virtual_all_mileage = #{virtualAllMileage}</if>
+            <if test="virtualSinglePrice !=null">and virtual_single_price = #{virtualSinglePrice}</if>
+            <if test="virtualAllPrice !=null">and virtual_all_price = #{virtualAllPrice}</if>
+            <if test="virtualMemberId !=null">and virtual_member_id = #{virtualMemberId}</if>
+            <if test="virtualMemberNm !=null">and virtual_member_nm = #{virtualMemberNm}</if>
+            <if test="virtualAviationType !=null">and virtual_aviation_type = #{virtualAviationType}</if>
+            <if test="tradecode !=null">and tradecode = #{tradecode}</if>
+            <if test="tradedesc !=null">and tradedesc = #{tradedesc}</if>
+            <if test="extend1 !=null">and extend1 = #{extend1}</if>
+            <if test="extend2 !=null">and extend2 = #{extend2}</if>
+            <if test="extend3 !=null">and extend3 = #{extend3}</if>
+            <if test="statusFlag !=null">and status_flag = #{statusFlag}</if>
+            <if test="centerStatus !=null">and center_status = #{centerStatus}</if>
+            <if test="centerErrormsg !=null">and center_errormsg = #{centerErrormsg}</if>
+            <if test="perpaidMon !=null">and perpaid_mon = #{perpaidMon}</if>
+            <if test="prepaidMob !=null">and prepaid_mob = #{prepaidMob}</if>
+            <if test="handleFlag !=null">and handle_flag = #{handleFlag}</if>
+            <if test="seqNo !=null">and seq_no = #{seqNo}</if>
+            <if test="transactionId !=null">and transaction_id = #{transactionId}</if>
+            <if test="attachName !=null">and attach_name = #{attachName}</if>
+            <if test="attachIdentityCard !=null">and attach_identity_card = #{attachIdentityCard}</if>
+            <if test="serialno !=null">and serialno = #{serialno}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="OrderVirtualMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_order_virtual
+       where order_virtual_id=#{orderVirtualId}
+    </select>
+    <select id="findListByIds" parameterType="java.util.List" resultMap="OrderVirtualMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_order_virtual
+        where order_id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="findAll" resultMap="OrderVirtualMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_virtual
+        <include refid="conditions"/>
+    </select>
+    <select id="findByCertNo" parameterType="Map" resultMap="OrderVirtualMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_virtual
+        <include refid="conditions"/>
+    </select>
+    <select id="pager" parameterType="Map" resultMap="OrderVirtualMap">
+        select
+        <include refid="columns"/>
+        from tbl_order_virtual
+        <include refid="conditions"/>
+        <![CDATA[ order by order_virtual_id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="OrderVirtualModel">
+        delete from tbl_order_virtual where order_virtual_id = order_virtual_id
+    </delete>
+
+    <select id="findByOrderId" resultMap="OrderVirtualMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_order_virtual
+        where order_id =#{orderId}
+    </select>
+</mapper>
+
+

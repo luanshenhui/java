@@ -1,0 +1,16 @@
+package com.yulin.am;
+
+public class JuXing {
+	//ÊôĞÔ
+	int w;
+	int h;
+	
+	//¹¦ÄÜ
+	public int mj(){	
+		return w*h;
+	}
+	public int zc(){
+		return w*2+h*2;
+	}
+
+}

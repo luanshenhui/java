@@ -1,0 +1,22 @@
+package cn.rkylin.oms.system.logistics.dao;
+
+import java.util.List;
+
+import cn.rkylin.oms.system.logistics.domain.OMS_LGST;
+import cn.rkylin.oms.system.logistics.vo.LogisticsVO;
+import cn.rkylin.oms.system.storage.domain.OMS_STOR;
+
+public interface ILogisticsDAO {
+
+	List getStorByCondition(OMS_LGST unitParam, int page, int rows) throws Exception;
+	
+	void delete(String stationParam,String string)throws Exception;
+	
+	List getStorByCondition(LogisticsVO lgstVO) throws Exception;
+	
+	public void insert(LogisticsVO lgstVO) throws Exception;
+	
+	void update(OMS_LGST ur)throws Exception;
+	
+	OMS_STOR findByid(String storId) throws Exception; 
+}

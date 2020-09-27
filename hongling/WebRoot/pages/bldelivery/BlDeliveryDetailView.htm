@@ -1,0 +1,47 @@
+<script src="../bldelivery/common.js"></script>
+<script src="../bldelivery/BlDeliveryDetailView.js"></script>
+<form id="form" class="form_template">
+	<input type="hidden" id="deliveryid" name="deliveryid" />
+<!-- <div id="BlDeliveryDetailHTitle" class="list_search"> -->
+	<h1></h1>
+	<table>
+		<tr>
+			<td class="label blLblUserName"></td>
+			<td id="username"></td>
+			<td class="label blLblDeliveryAddr"></td>
+			<td id="deliveryAddress"></td>
+			<td class="label blLblDeliveryDate"></td>
+			<td id="deliveryDate"></td>
+		</tr>
+	</table>
+<!-- </div> -->
+</form>
+<div id="BlDeliveryDetailViewResult"></div>
+<div id="BlDeliveryDetailViewStatistic" class="pagingleft"></div>
+<div id="BlDeliveryDetailViewPagination" class="paging"></div>
+<textarea  id="BlDeliveryDetailViewTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+		<!-- 	<td><input type="checkbox" onclick="$.csControl.checkAll('chkRowDetail', this.checked);"/></td> -->
+			<td class="blLblNumberView"></td>
+			<td class="blLblOrdenIDView"></td>
+			<td class="blLblAmountView"></td>
+			<td class="blLblCompositionNameView"></td>
+			<td class="blLblClosingTypeView"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ordenID}">
+			<!-- <td class="center"><input type="checkbox" value="{$T.row.ordenID}" name="chkRowDetail"/></td> -->
+			<td class="center">{$T.row.number}</td>
+			<td class="center">{$T.row.ordenID}</td>
+			<td class="center">{$T.row.amount}</td>
+			<td class="center">{$T.row.compositionName}</td>
+			<td class="center">{$T.row.closingType}</td>
+		</tr>
+		{#/for}
+		<tr>
+			<td class="label blLblMemo"></td>	
+			<td colspan="5" class="left" id="deliveryMemo"></td>
+		</tr>
+	</table>
+</textarea>

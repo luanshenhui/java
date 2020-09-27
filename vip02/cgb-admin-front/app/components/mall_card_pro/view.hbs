@@ -1,0 +1,70 @@
+{{#component "mall_card_pro js-component"}}
+    <p class="components-title"><strong>- 卡类卡板维护 -</strong></p>
+    {{#authorial "cardpro_add"}}
+    <button class="btn btn-info btn-small float-left js-add-btn" >+ 新增</button>
+    {{/authorial}}
+    {{#authorial "cardpro_delete"}}
+    <button class="btn btn-info btn-small float-left m-l-10 js-delete-all"
+            data-toggle="confirm"
+            data-title="确定删除选中的数据吗?" data-event="confirm:delete-all">删除</button>
+    {{/authorial}}
+    <div class="main-box-table margin-top-10">
+        <table cellspacing="0" cellpadding="0" border="0" class="table-th">
+            <th width="4%"></th>
+            <th width="8%">分行</th>
+            <th width="6%">分行号</th>
+            <th width="13%">联名卡代号</th>
+            <th width="5%">卡类</th>
+            <th width="9%">推广计划1</th>
+            <th width="9%">推广计划2</th>
+            <th width="9%">推广计划3</th>
+            <th width="9%">推广计划4</th>
+            <th width="9%">推广计划5</th>
+            <th width="7%">积分类型</th>
+            <th width="12%">操作</th>
+        </table>
+        {{#each _DATA_.data}}
+            <div class="order-tab">
+                <div class="list-detail">
+                    <p>卡产品名称：{{cardproNm}}</p>
+                    <p>卡等级：{{cardLevel}}</p>
+                    <p>卡等级编码：{{cardLevelId}}</p>
+                    <p>卡bin：{{cardBin}}</p>
+                    <p>第三级卡产品编号：{{formatId}}</p>
+                </div>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                       class="list-tabble-con table-list m-b-20">
+                    <tr class="card-block item-tr" data-id={{id}}>
+                        <td width="4%" style="padding-left: 5px;">
+                            <input class = "js_checkbox_item" type="checkbox" name="checkbox" id="checkbox">
+                            <label for="checkbox"></label>
+                        </td>
+                        <td width="8%">{{bankNm}}</td>
+                        <td width="6%">{{bankNo}}</td>
+                        <td width="13%">{{relacardNo}}</td>
+                        <td width="5%">{{pdtNbr}}</td>
+                        <td width="9%">{{plan1}}</td>
+                        <td width="9%">{{plan2}}</td>
+                        <td width="9%">{{plan3}}</td>
+                        <td width="9%">{{plan4}}</td>
+                        <td width="9%">{{plan5}}</td>
+                        <td width="7%">{{bounsType}}</td>
+                        <td width="12%">
+                        {{#authorial "cardpro_add"}}
+                            <button class="btn btn-info btn-sm js_idet_link">编辑</button>
+                        {{/authorial}}
+                        {{#authorial "cardpro_delete"}}
+                            <button class="btn btn-info btn-sm js_delete_link" data-toggle="confirm"  id="{{id}}"
+                                    data-title="确定删除吗?" data-event="confirm:delete-one"
+                                    >删除</button></td>
+                        {{/authorial}}
+                    </tr>
+                </table>
+            </div>
+        {{/each}}
+        <div class="all float-left">
+            <input name="" type="checkbox" value="" class="check_all" ><span>全选</span>
+        </div>
+    </div>
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+{{/component}}

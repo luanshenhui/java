@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IntegralExchange">
+    <resultMap id="IntegralExchangeMap" type="cn.com.cgbchina.batch.model.IntegralExchangeModel">
+        <result property="orderId" column="order_id"/>
+        <result property="goodsNm" column="goods_nm"/>
+        <result property="goodsNum" column="goods_num"/>
+        <result property="cardNo" column="cardno"/>
+        <result property="vendorSnm" column="vendor_snm"/>
+        <result property="createTime" column="create_time"/>
+        <result property="bonusTotalValue" column="bonus_totalvalue"/>
+        <result property="contNm" column="cont_nm"/>
+        <result property="contMobPhone" column="cont_mob_phone"/>
+        <result property="contIdCard" column="cont_idcard"/>
+        <result property="goodsXid" column="goods_xid"/>
+        <result property="goodsBid" column="goods_bid"/>
+        <result property="entryCard" column="entry_card"/>
+        <result property="virtualCardType" column="virtual_card_type"/>
+        <result property="virtualAllMileage" column="virtual_all_mileage"/>
+        <result property="virtualSinglePrice" column="virtual_single_price"/>
+        <result property="virtualAllPrice" column="virtual_all_price"/>
+        <result property="virtualMemberId" column="virtual_member_id"/>
+        <result property="virtualMemberNm" column="virtual_member_nm"/>
+        <result property="engName" column="eng_name"/>
+        <result property="virtualAviationType" column="virtual_aviation_type"/>
+        <result property="extend2" column="extend2"/>
+        <result property="serialNo" column="serialno"/>
+        <result property="cardCity" column="bank_city_nm"/>
+    </resultMap>
+    <sql id="columns">
+        o.order_id,o.goods_nm,o.goods_num,o.cardno,o.vendor_snm,o.create_time,o.bonus_totalvalue,m.cont_nm,m.cont_mob_phone,m.cont_idcard,v.goods_xid,v.goods_bid,v.entry_card,v.virtual_card_type,v.virtual_all_mileage,v.virtual_single_price,v.virtual_all_price,v.virtual_member_id,v.virtual_member_nm,v.virtual_aviation_type,v.extend2,v.serialno
+    </sql>
+	<sql id="subColumns">
+		o1.order_id,o1.ordermain_id,o1.ordertype_id,o1.cur_status_id,o1.goods_nm,o1.goods_num,o1.cardno,o1.vendor_snm,o1.create_time,o1.bonus_totalvalue
+	</sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="aviationType !=null">and v.virtual_aviation_type = #{aviationType}</if>
+            <if test="goodsXids !=null">
+	            and v.goods_xid in
+	            <foreach collection="goodsXids" item="goodsXid" open="(" close=")" separator=",">
+	            	#{goodsXid}
+	            </foreach>
+            </if>
+        </where>
+    </sql>
+    
+	<select id="count" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultType="Long">
+		select count(1)
+        from 
+        (select o1.order_id
+        from tbl_order o1,tbl_order_dodetail d 
+        where o1.order_id=d.order_id 
+            and d.status_id = '0308'
+           	and <![CDATA[ d.do_time >= #{startDate} ]]> 
+	       	and <![CDATA[ d.do_time < #{endDate} ]]>
+	       	and o1.cur_status_id='0308'
+            and o1.ordertype_id='JF') o
+        inner join tbl_order_virtual v on v.order_id=o.order_id
+        <include refid="conditions"/>
+	</select>
+
+    <select id="pager" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="IntegralExchangeMap">
+        select 
+        <include refid="columns"/>,ct.eng_name
+        from 
+        (select <include refid="subColumns"/>
+        from tbl_order o1,tbl_order_dodetail d 
+        where o1.order_id=d.order_id 
+            and d.status_id = '0308'
+           	and <![CDATA[ d.do_time >= #{startDate} ]]> 
+	       	and <![CDATA[ d.do_time < #{endDate} ]]>
+	       	and o1.cur_status_id='0308'
+            and o1.ordertype_id='JF') o
+        inner join tbl_order_main m on m.ordermain_id=o.ordermain_id
+        inner join tbl_order_virtual v on v.order_id=o.order_id
+        left join a_cust_toelectronbank ct on m.cont_idcard=ct.cert_nbr
+        <include refid="conditions"/>
+        <![CDATA[ order by o.create_time limit #{offset}, #{limit} ]]>
+    </select>
+    
+    <select id="findAll" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="IntegralExchangeMap">
+        select 
+        <include refid="columns"/>
+        from 
+        (select <include refid="subColumns"/>
+        from tbl_order o1,tbl_order_dodetail d
+        where o1.order_id=d.order_id 
+            and d.status_id = '0308'
+           	and <![CDATA[ d.do_time >= #{startDate} ]]> 
+       		and <![CDATA[ d.do_time < #{endDate} ]]>
+       		and o1.cur_status_id='0308'
+            and o1.ordertype_id='JF') o
+        inner join tbl_order_main m on m.ordermain_id=o.ordermain_id
+        inner join tbl_order_virtual v on v.order_id=o.order_id
+        <include refid="conditions"/>
+    </select>
+    
+    <select id="findBankCity" resultMap="IntegralExchangeMap">
+        select 
+        	b.code as cardno,b.bank_city_nm
+        from tbl_bank b
+        where b.del_flag=0
+    </select>
+</mapper>
+
+

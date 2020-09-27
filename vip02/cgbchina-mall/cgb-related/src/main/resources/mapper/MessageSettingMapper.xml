@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageSetting">
+    <resultMap id="MessageSettingMap" type="MessageSettingModel">
+        <result property="id" column="id"/>
+        <result property="swichType" column="swich_type"/>
+        <result property="isOpen" column="is_open"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,swich_type,is_open,del_flag,create_oper,modify_oper,modify_time,create_time
+    </sql>
+
+    <insert id="insert" parameterType="MessageSettingModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_message_setting
+        (swich_type
+        ,is_open
+        ,del_flag
+        ,create_oper
+        ,modify_oper
+        ,modify_time
+        ,create_time)
+        values(#{swichType}
+        ,#{isOpen}
+        ,#{delFlag}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{createTime})
+    </insert>
+
+    <update id="update" parameterType="MessageSettingModel">
+        update tbl_message_setting set
+        swich_type
+        = #{swichType},is_open
+        = #{isOpen},del_flag
+        = #{delFlag},create_oper
+        = #{createOper},modify_oper
+        = #{modifyOper},modify_time
+        = #{modifyTime},create_time
+        = #{createTime}
+        where id = #{id}
+    </update>
+    <!-- 开关sql重写-->
+    <update id="updateMessage" parameterType="MessageSettingModel">
+        update tbl_message_setting set
+        is_open
+        = #{isOpen},modify_oper
+        = #{modifyOper},modify_time
+        = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="swichType !=null">and swich_type = #{swichType}</if>
+            <if test="isOpen !=null">and is_open = #{isOpen}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="MessageSettingMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_message_setting
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="MessageSettingMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_message_setting
+        WHERE del_flag = 0
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="MessageSettingMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_message_setting
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="MessageSettingModel">
+        delete from tbl_message_setting where id = id
+    </delete>
+</mapper>
+
+

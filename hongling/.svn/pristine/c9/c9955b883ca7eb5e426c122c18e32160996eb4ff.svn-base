@@ -1,0 +1,49 @@
+<script src="../cash/list.js"></script>
+<div id="CashSearch" class="list_search">
+	<h1></h1>
+	<span id="lblStatistic"></span>
+	<label class="lblKeyword"></label><input type="text" id="keyword"/>
+	<input type="text" id="fromDate" class="date"/>
+	<input type="text" id="toDate" class="date"/>
+	<a id="btnSearch"></a>
+	<a id="btnExportCash"></a>
+	<a id="blBtnExcelImport"></a>
+	<a id="btnDealItemList"></a>
+</div>
+<div id="CashResult"></div>
+<div id="CashStatistic"></div>
+<div id="CashPagination" class="paging"></div>
+<textarea  id="CashTemplate" class="list_template">
+	<table class="list_result" id="table">
+		<tr class="header">
+			<td><input type="checkbox" onclick="$.csControl.checkAll('chkRow', this.checked);"/></td>
+			<td class="lblCompanyName"></td>
+			<td class="lblCompanyShortName"></td>
+			<td class="lblMemberName"></td>
+			<td class="lblName"></td>
+			<td class="lblNum"></td>
+			<td class="lblMemo"></td>
+			<td class="lblIsReconciliation"></td>
+			<td class="lblPubDate"></td>
+			<td class="blLblAddNum"></td>
+			<td class="lblEdit"></td>
+			<td class="blLblZhangkuanxiangdan"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ID}">
+			<td class="center"><input type="checkbox" value="{$T.row.ID}" name="chkRow"/></td>
+			<td class="center">{$T.row.member_companyName}</td>
+			<td class="center">{$T.row.userName}</td>
+			<td class="center">{$T.row.member_name}</td>
+			<td class="center">{$T.row.member_parentName}</td>
+			<td class="center">{$T.row.cash_num} ({$T.row.member_moneySignName})</td>
+			<td class="center">{$T.row.cash_memo}</td>
+			<td class="center">{$T.row.isReconciliationName}</td>
+			<td class="center">{$T.row.cash_pubDate}</td>
+			<td class='center'><a class="addNum" onclick="$.csCashList.openBlAddNum('{$T.row.ID}','{$T.row.member_ID}','1')"></a></td>
+			<td class='center'><a class="edit" onclick="$.csCashList.openPost('{$T.row.ID}')"></a></td>
+			<td class='center'><a class="zhangkuanxiangdan" onclick="$.csCashList.openZhangkuanqiangdan('{$T.row.ID}','{$T.row.member_ID}')"></a></td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

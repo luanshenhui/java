@@ -1,0 +1,129 @@
+{{#component "pointBrands-authorize js-component"}}
+    <p class="components-title"><strong>- 品牌授权管理 -</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals type "1"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/points/brands/brands-authorize-all">所有品牌</a></li>
+            <li {{#equals type "2"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/points/brands/brands-authorize-waitting">待审核</a>
+            </li>
+            <li {{#equals type "3"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/points/brands/brands-authorize-expiring">将过期</a>
+            </li>
+            <li {{#equals type "4"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/points/brands/brands-authorize-expired">已过期</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+
+            <form class="form form-inline form-aligned">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="brandName">品牌名称:</label>
+                            <input class="form-control" type="text" id="brandName" name="brandName"
+                                   value="{{brandName}}" maxlength="100"/>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="vendorName">供应商:</label>
+                            <input class="form-control" type="text" id="vendorName" name="vendorName"
+                                   value="{{vendorName}}" maxlength="100"/>
+                        </span>
+                        {{#equals type "1"}}
+                        <span class="span4 span-large">
+                            <label for="approveState">状态:</label>
+                            <select class="select" id="approveState" name="approveState" data-approveState="{{approveState}}">
+                                <option value="">请选择</option>
+                                <option value="00" {{#equals approveState "00"}}selected{{/equals}}>待审核</option>
+                                <option value="01" {{#equals approveState "01"}}selected{{/equals}}>审核通过</option>
+                                <option value="02" {{#equals approveState "02"}}selected{{/equals}}>审核拒绝</option>
+                            </select>
+                        </span>
+                        {{/equals}}
+                    </p>
+                    <p class="filter-name m-l-24">
+                        <span class="brands-span">
+                            <label for="modifyTime">申请时间:</label>
+                              <input class="form-control application_date js-date-startModify brands-date-width" id="v_startModifyTime" type="text"
+                                     value="{{v_startModifyTime}}" name="v_startModifyTime" maxlength="100">
+                            <em>-</em>
+                        <input class="form-control application_date js-date-endModify brands-date-width" id="v_endModifyTime" type="text"
+                               value="{{v_endModifyTime}}" name="v_endModifyTime" maxlength="100">
+                        </span>
+                        <span class="brands-span">
+                            <label for="authorizeTime">到期时间:</label>
+                            <input class="form-control authorize_date js-date-start brands-date-width" id="v_startTime" type="text"
+                                   name="v_startTime" value="{{v_startTime}}" maxlength="100">
+                                   <em>-</em>
+                              <input class="form-control authorize_date js-date-end brands-date-width" id="v_endTime" type="text"
+                                     name="v_endTime" value="{{v_endTime}}" maxlength="100">
+                            </span>
+                        <input class="btn btn-success btn-small pull-right" type="submit" value="查询"/>
+                    </p>
+                </fieldset>
+            </form>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="10%">申请时间</th>
+                    <th width="30%">品牌名称</th>
+                    <th width="10%">品牌图标</th>
+                    <th width="10%">供应商</th>
+                    <th width="10%">状态</th>
+                    <th width="10%">到期时间</th>
+                    <th width="20%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr data-data="{{json this}}">
+                        <td>{{formatDate createTime "day"}}</td>
+                        <td>{{brandName}}</td>
+                        {{#if brandImage}}
+                            <td><img data-original="{{brandImage}}" class="brands-icon" ></td>
+                        {{else}}
+                            <td>暂无图片</td>
+                        {{/if}}
+                        <td>{{simpleName}}</td>
+                        <td>
+                            {{#equals approveState '00'}}
+                                待审核
+                            {{/equals}}
+                            {{#equals approveState '01'}}
+                                审核通过
+                            {{/equals}}
+                            {{#equals approveState '02'}}
+                                审核拒绝
+                            {{/equals}}
+                            {{#equals approveState '03'}}
+                                将过期
+                            {{/equals}}
+                            {{#equals approveState '04'}}
+                                已过期
+                            {{/equals}}
+                        </td>
+                        <td>{{formatDate endTime "day"}}</td>
+                        <td>
+                            {{#equals approveState '00'}}
+                                <button class="btn btn-info btn-sm js-brand-view">查看</button>
+                                {{#authorial "giftbrandAuth_audit"}}
+                                    <button class="btn btn-info btn-sm js-brand-audit">审核</button>
+                                {{/authorial}}
+                            {{else}}
+                                <button class="btn btn-info btn-sm js-brand-view">查看</button>
+                            {{/equals}}
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            {{#equals _DATA_.total "0"}}
+                    <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+            {{/equals}}
+        </div>
+    </div>
+{{/component}}

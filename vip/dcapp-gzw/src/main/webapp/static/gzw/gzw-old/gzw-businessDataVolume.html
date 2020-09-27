@@ -1,0 +1,402 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据铁笼-融合分析-业务数据量</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/model.css" />
+<link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+<script src="js/echarts.min.js"></script>
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/js.js"></script>
+</head>
+
+<body>
+<div class="wrap">
+	<div class="container">
+        <div class="header">
+            <h1 class="header-log"><a href="/a" target="_blank" style="cursor:pointer"><img src="image/logo.png"></a></h1>
+            <div class="header-btn"><img src="image/header-icon-start.png"><span>自动播放</span></div>
+            <div class="header-nav header-nav-spac">
+                <ul class="header-nav-btn">
+                    <li class="next disable"><a href="javascript:void(0)" >&gt;</a></li>
+                    <li class="prev"><a href="javascript:void(0)" >&lt;</a></li>
+                </ul>
+                <ul>
+					<li><a href="gzw-businessDataVolume.html" title="融合分析"><i></i>融合分析</a> </li>
+                    <li><a href="gzw-threeImportant1.html" title="三重一大">三重一大</a> </li>
+                    <li><a href="javascript:void(0)" title="财务分析" >财务分析</a> </li>
+                    <li><a href="javascript:void(0)" title="产权分析"  >产权分析</a> </li>
+                </ul>
+            </div>
+            <div class="header-nav">
+                <ul>
+                    <li><a href="gzw-SupervisoryDutiy.html" title="监管职责"><i></i>监管职责</a> </li>
+                    <li><a href="gzw-workflowInstruction.html" title="流程说明">流程说明</a> </li>
+                    <li><a href="javascript:void(0)" title="风险点" target="_blank" >风险点</a> </li>
+                </ul>
+            </div>
+        </div>
+		<div class="box">
+			<div class="box-head">
+				<a href="firstpage.html" class="arrow-back"><i></i>首页</a>
+                <p class="box-title">融合分析</p>
+                <!--<a href="javascript:void(0)" class="arrow-left"><i></i></a>
+                <a href="javascript:void(0)" class="arrow-right"><i></i></a>-->
+			</div>
+            <div class="box-container">
+                <div class="box-left">
+                    <ul>
+                        <li class="on">
+                            <a href="gzw-businessDataVolume.html">业务数据量</a>
+                        </li>
+                        <li>
+                            <a href="gzw-riskLevel.html">风险等级</a>
+                        </li>
+                        <li>
+                            <a href="gzw-riskDefine.html">风险界定</a>
+                        </li>
+                        <li>
+                            <a href="gzw-alarmLevel.html" >告警等级</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="box-right">
+                    <div class="box-right-title">
+                        <p><i></i>业务数据量</p>
+                    </div>
+                    <div class="box-right-form risk-level">
+
+                        <div class="risk-form-main">
+                            <a href="gzw-alarmRiskStatistics.html" class="company-module" id="nong-tou"></a>
+                            <a href="javascript:void(0)" class="company-module" id="nong-shang-hang"></a>
+                            <a href="javascript:void(0)" class="company-module" id="gui-yang-bank"></a>
+                            <a href="javascript:void(0)" class="company-module" id="tie-tou"></a>
+                            <a href="javascript:void(0)" class="company-module" id="gong-tou"></a>
+                            <a href="javascript:void(0)" class="company-module" id="lv-wen-tou"></a>
+                            <a href="javascript:void(0)" class="company-module" id="cheng-tou"></a>
+                            <a href="javascript:void(0)" class="company-module" id="gong-shang"></a>
+                            <a href="javascript:void(0)" class="company-module" id="gui-dao"></a>
+                            <a href="javascript:void(0)" class="company-module" id="yang-guang-chan-quan"></a>
+                            <a href="javascript:void(0)" class="company-module" id="yi-guan"></a>
+                            <a href="javascript:void(0)" class="company-module" id="zhu-tou"></a>
+                            <a href="javascript:void(0)" class="company-module" id="cheng-fa"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+		</div>
+		<div class="clear"></div>
+		<div class="footer">截至2016年12月23日 12：00：00</div>
+	    	
+    </div>
+</div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var targetElement = echarts.init(document.getElementById("nong-tou"));
+    var targetElement1 = echarts.init(document.getElementById("nong-shang-hang"));
+    var targetElement2 = echarts.init(document.getElementById("gui-yang-bank"));
+    var targetElement3 = echarts.init(document.getElementById("tie-tou"));
+    var targetElement4 = echarts.init(document.getElementById("gong-tou"));
+    var targetElement5 = echarts.init(document.getElementById("lv-wen-tou"));
+    var targetElement8 = echarts.init(document.getElementById("cheng-tou"));
+    var targetElement9 = echarts.init(document.getElementById("gong-shang"));
+    var targetElement10 = echarts.init(document.getElementById("gui-dao"));
+    var targetElement11 = echarts.init(document.getElementById("yang-guang-chan-quan"));
+    var targetElement12 = echarts.init(document.getElementById("yi-guan"));
+    var targetElement13 = echarts.init(document.getElementById("zhu-tou"));
+    var targetElement14 = echarts.init(document.getElementById("cheng-fa"));
+
+    // 指定图表的配置项和数据
+    var dataStyle = {
+        normal: {
+            label: {
+                show: false
+            },
+            labelLine: {
+                show: false
+            },
+            shadowBlur: 40,
+            shadowColor: 'rgba(40, 40, 40,0.5)',
+        }
+    };
+    option = {
+        backgroundColor: '#f2f2f2',
+        color: ['#ffdb6d', '#89c9e1', '#ce77b6', '#f29e29'],
+
+        title: {
+            text: '农投公司',
+            x: 'center',
+            top: '0%',
+            textStyle: {
+                color: '#fff',
+                fontSize:20
+            }
+        },
+
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            x: '2%',
+            top: '40%',
+            data: ['重大项目安排', '重大事项决策', '重要人事任免', '大额资金使用'],
+            width:10,textStyle:{color:'#fff',fontSize:'12'}
+
+        },
+        series: [{
+            name: '农投公司',
+            type: 'pie',
+            center:[240,110],
+            radius: ['40%', '60%'],
+            avoidLabelOverlap: false,
+            itemStyle: dataStyle,
+            label: {
+                normal: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    show: true,
+                    formatter: function(param) {
+                        return param.percent.toFixed(0) + '%';
+                    },
+                    textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: true
+                }
+            },
+            data: [{
+                value: 480,
+                name: '重大项目安排'
+            }, {
+                value: 320,
+                name: '重大事项决策'
+            }, {
+                value: 250,
+                name: '重要人事任免'
+            }, {
+                value: 145,
+                name: '大额资金使用'
+            }]
+        }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    targetElement.setOption(option);
+    var option1 = option;
+    option1.title.text='农商行';
+    option1.series[0].data=[{
+        value: 180,
+        name: '重大项目安排'
+    }, {
+        value: 100,
+        name: '重大事项决策'
+    }, {
+        value: 200,
+        name: '重要人事任免'
+    }, {
+        value: 100,
+        name: '大额资金使用'
+    }];
+
+    targetElement1.setOption(option1);
+
+    var option2 = option;
+    option2.title.text='贵阳银行';
+    option2.series[0].data=[{
+        value: 30,
+        name: '重大项目安排'
+    }, {
+        value: 160,
+        name: '重大事项决策'
+    }, {
+        value: 200,
+        name: '重要人事任免'
+    }, {
+        value: 100,
+        name: '大额资金使用'
+    }];
+    targetElement2.setOption(option2);
+
+    var option3 = option;
+    option3.title.text='铁投';
+    option3.series[0].data=[{
+        value: 110,
+        name: '重大项目安排'
+    }, {
+        value: 120,
+        name: '重大事项决策'
+    }, {
+        value: 100,
+        name: '重要人事任免'
+    }, {
+        value: 100,
+        name: '大额资金使用'
+    }];
+    targetElement3.setOption(option3);
+
+    var option4 = option;
+    option4.title.text='工投';
+    option1.series[0].data=[{
+        value: 280,
+        name: '重大项目安排'
+    }, {
+        value: 50,
+        name: '重大事项决策'
+    }, {
+        value: 200,
+        name: '重要人事任免'
+    }, {
+        value: 50,
+        name: '大额资金使用'
+    }];
+    targetElement4.setOption(option4);
+
+    var option5 = option;
+    option5.title.text='旅文投';
+    option5.series[0].data=[{
+        value: 20,
+        name: '重大项目安排'
+    }, {
+        value: 100,
+        name: '重大事项决策'
+    }, {
+        value: 200,
+        name: '重要人事任免'
+    }, {
+        value: 200,
+        name: '大额资金使用'
+    }];
+    targetElement5.setOption(option5);
+
+    var option8 = option;
+    option8.title.text='城投';
+    option8.series[0].data=[{
+        value: 280,
+        name: '重大项目安排'
+    }, {
+        value: 300,
+        name: '重大事项决策'
+    }, {
+        value: 220,
+        name: '重要人事任免'
+    }, {
+        value: 100,
+        name: '大额资金使用'
+    }];
+    targetElement8.setOption(option8);
+
+    var option9 = option;
+    option9.title.text='工商';
+    option9.series[0].data=[{
+        value: 20,
+        name: '重大项目安排'
+    }, {
+        value: 100,
+        name: '重大事项决策'
+    }, {
+        value: 200,
+        name: '重要人事任免'
+    }, {
+        value: 800,
+        name: '大额资金使用'
+    }];
+    targetElement9.setOption(option9);
+
+    var option10 = option;
+    option10.title.text='轨道';
+    option10.series[0].data=[{
+        value: 180,
+        name: '重大项目安排'
+    }, {
+        value: 100,
+        name: '重大事项决策'
+    }, {
+        value: 800,
+        name: '重要人事任免'
+    }, {
+        value: 100,
+        name: '大额资金使用'
+    }];
+    targetElement10.setOption(option10);
+
+    var option11 = option;
+    option11.title.text='阳光产权';
+    option11.series[0].data=[{
+        value: 180,
+        name: '重大项目安排'
+    }, {
+        value: 800,
+        name: '重大事项决策'
+    }, {
+        value: 200,
+        name: '重要人事任免'
+    }, {
+        value: 100,
+        name: '大额资金使用'
+    }];
+    targetElement11.setOption(option11);
+
+    var option12 = option;
+    option12.title.text='医管';
+    option12.series[0].data=[{
+        value: 180,
+        name: '重大项目安排'
+    }, {
+        value: 800,
+        name: '重大事项决策'
+    }, {
+        value: 200,
+        name: '重要人事任免'
+    }, {
+        value: 100,
+        name: '大额资金使用'
+    }];
+    targetElement12.setOption(option12);
+
+    var option13 = option;
+    option13.title.text='住投';
+    option13.series[0].data=[{
+        value: 880,
+        name: '重大项目安排'
+    }, {
+        value: 100,
+        name: '重大事项决策'
+    }, {
+        value: 200,
+        name: '重要人事任免'
+    }, {
+        value: 100,
+        name: '大额资金使用'
+    }];
+    targetElement13.setOption(option13);
+
+    var option14 = option;
+    option14.title.text='城发';
+    option1.series[0].data=[{
+        value: 180,
+        name: '重大项目安排'
+    }, {
+        value: 800,
+        name: '重大事项决策'
+    }, {
+        value: 200,
+        name: '重要人事任免'
+    }, {
+        value: 100,
+        name: '大额资金使用'
+    }];
+    targetElement14.setOption(option14);
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblEspCustCartModel">
+    <resultMap id="TblEspCustCartMap" type="TblEspCustCartModel">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="goodsPaywayId" column="goods_payway_id"/>
+        <result property="goodsType" column="goods_type"/>
+        <result property="goodsNum" column="goods_num"/>
+        <result property="addTime" column="add_time"/>
+        <result property="payFlag" column="pay_flag"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="virtualMemberId" column="virtual_member_id"/>
+        <result property="virtualMemberNm" column="virtual_member_nm"/>
+        <result property="virtualAviationType" column="virtual_aviation_type"/>
+        <result property="entryCard" column="entry_card"/>
+        <result property="bonusValue" column="bonus_value"/>
+        <result property="singlePoint" column="single_point"/>
+        <result property="cardType" column="card_type"/>
+        <result property="attachIdentityCard" column="attach_identity_card"/>
+        <result property="attachName" column="attach_name"/>
+        <result property="prepaidMob" column="prepaid_mob"/>
+        <result property="oriBonusValue" column="ori_bonus_value"/>
+        <result property="serialno" column="serialno"/>
+        <result property="fixBonusValue" column="fix_bonus_value"/>
+        <result property="custmerNm" column="custmer_nm"/>
+    </resultMap>
+    <sql id="columns">
+    id,cust_id,item_id,goods_payway_id,goods_type,goods_num,add_time,pay_flag,ordertype_id,virtual_member_id,virtual_member_nm,virtual_aviation_type,entry_card,bonus_value,single_point,card_type,attach_identity_card,attach_name,prepaid_mob,ori_bonus_value,serialno,fix_bonus_value,custmer_nm
+    </sql>
+
+    <insert id="insert" parameterType="TblEspCustCartModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_esp_cust_cart
+        (cust_id
+        ,item_id
+        ,goods_payway_id
+        ,goods_type
+        ,goods_num
+        ,add_time
+        ,pay_flag
+        ,ordertype_id
+        ,virtual_member_id
+        ,virtual_member_nm
+        ,virtual_aviation_type
+        ,entry_card
+        ,bonus_value
+        ,single_point
+        ,card_type
+        ,attach_identity_card
+        ,attach_name
+        ,prepaid_mob
+        ,ori_bonus_value
+        ,serialno
+        ,fix_bonus_value
+        ,custmer_nm)
+        values(#{custId}
+        ,#{itemId}
+        ,#{goodsPaywayId}
+        ,#{goodsType}
+        ,#{goodsNum}
+        ,now()
+        ,#{payFlag}
+        ,#{ordertypeId}
+        ,#{virtualMemberId}
+        ,#{virtualMemberNm}
+        ,#{virtualAviationType}
+        ,#{entryCard}
+        ,#{bonusValue}
+        ,#{singlePoint}
+        ,#{cardType}
+        ,#{attachIdentityCard}
+        ,#{attachName}
+        ,#{prepaidMob}
+        ,#{oriBonusValue}
+        ,#{serialno}
+        ,#{fixBonusValue}
+        ,#{custmerNm})
+    </insert>
+
+    <update id="update" parameterType="TblEspCustCartModel">
+        update tbl_esp_cust_cart
+        <set>
+            <if test="custId !=null">cust_id = #{custId}
+                ,</if>
+            <if test="itemId !=null">item_id = #{itemId}
+                ,</if>
+            <if test="goodsPaywayId !=null">goods_payway_id = #{goodsPaywayId}
+                ,</if>
+            <if test="goodsType !=null">goods_type = #{goodsType}
+                ,</if>
+            <if test="goodsNum !=null">goods_num = #{goodsNum}
+                ,</if>
+            <if test="addTime !=null">add_time = #{addTime}
+                ,</if>
+            <if test="payFlag !=null">pay_flag = #{payFlag}
+                ,</if>
+            <if test="ordertypeId !=null">ordertype_id = #{ordertypeId}
+                ,</if>
+            <if test="virtualMemberId !=null">virtual_member_id = #{virtualMemberId}
+                ,</if>
+            <if test="virtualMemberNm !=null">virtual_member_nm = #{virtualMemberNm}
+                ,</if>
+            <if test="virtualAviationType !=null">virtual_aviation_type = #{virtualAviationType}
+                ,</if>
+            <if test="entryCard !=null">entry_card = #{entryCard}
+                ,</if>
+            <if test="bonusValue !=null">bonus_value = #{bonusValue}
+                ,</if>
+            <if test="singlePoint !=null">single_point = #{singlePoint}
+                ,</if>
+            <if test="cardType !=null">card_type = #{cardType}
+                ,</if>
+            <if test="attachIdentityCard !=null">attach_identity_card = #{attachIdentityCard}
+                ,</if>
+            <if test="attachName !=null">attach_name = #{attachName}
+                ,</if>
+            <if test="prepaidMob !=null">prepaid_mob = #{prepaidMob}
+                ,</if>
+            <if test="oriBonusValue !=null">ori_bonus_value = #{oriBonusValue}
+                ,</if>
+            <if test="serialno !=null">serialno = #{serialno}
+                ,</if>
+            <if test="custmerNm !=null">custmer_nm = #{custmerNm}
+                ,</if>
+            <if test="fixBonusValue !=null">fix_bonus_value = #{fixBonusValue}
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="itemId !=null">and item_id = #{itemId}</if>
+            <if test="goodsPaywayId !=null">and goods_payway_id = #{goodsPaywayId}</if>
+            <if test="goodsType !=null">and goods_type = #{goodsType}</if>
+            <if test="goodsNum !=null">and goods_num = #{goodsNum}</if>
+            <if test="addTime !=null">and add_time > #{addTime}</if>
+            <if test="payFlag !=null">and pay_flag = #{payFlag}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="virtualMemberId !=null">and virtual_member_id = #{virtualMemberId}</if>
+            <if test="virtualMemberNm !=null">and virtual_member_nm = #{virtualMemberNm}</if>
+            <if test="virtualAviationType !=null">and virtual_aviation_type = #{virtualAviationType}</if>
+            <if test="entryCard !=null">and entry_card = #{entryCard}</if>
+            <if test="bonusValue !=null">and bonus_value = #{bonusValue}</if>
+            <if test="singlePoint !=null">and single_point = #{singlePoint}</if>
+            <if test="cardType !=null">and card_type = #{cardType}</if>
+            <if test="attachIdentityCard !=null">and attach_identity_card = #{attachIdentityCard}</if>
+            <if test="attachName !=null">and attach_name = #{attachName}</if>
+            <if test="prepaidMob !=null">and prepaid_mob = #{prepaidMob}</if>
+            <if test="oriBonusValue !=null">and ori_bonus_value = #{oriBonusValue}</if>
+            <if test="serialno !=null">and serialno = #{serialno}</if>
+            <if test="fixBonusValue !=null">and fix_bonus_value = #{fixBonusValue}</if>
+            <if test="custmerNm !=null">and custmer_nm = #{custmerNm}</if>
+        </where>
+    </sql>
+    <sql id="conditionsPager">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="itemId !=null">and item_id = #{itemId}</if>
+            <if test="goodsPaywayId !=null">and goods_payway_id = #{goodsPaywayId}</if>
+            <if test="goodsType !=null">and goods_type = #{goodsType}</if>
+            <if test="goodsNum !=null">and goods_num = #{goodsNum}</if>
+            <if test="addTime !=null">and add_time > #{addTime}</if>
+            <if test="payFlag !=null">and pay_flag = #{payFlag}</if>
+            <if test="ordertypeId !=null and ordertypeIdFq == null">and ordertype_id = #{ordertypeId}</if>
+            <if test="ordertypeId !=null and ordertypeIdFq != null">and(ordertype_id = #{ordertypeId} or ordertype_id = #{ordertypeIdFq})</if>
+            <if test="virtualMemberId !=null">and virtual_member_id = #{virtualMemberId}</if>
+            <if test="virtualMemberNm !=null">and virtual_member_nm = #{virtualMemberNm}</if>
+            <if test="virtualAviationType !=null">and virtual_aviation_type = #{virtualAviationType}</if>
+            <if test="entryCard !=null">and entry_card = #{entryCard}</if>
+            <if test="bonusValue !=null">and bonus_value = #{bonusValue}</if>
+            <if test="singlePoint !=null">and single_point = #{singlePoint}</if>
+            <if test="cardType !=null">and card_type = #{cardType}</if>
+            <if test="attachIdentityCard !=null">and attach_identity_card = #{attachIdentityCard}</if>
+            <if test="attachName !=null">and attach_name = #{attachName}</if>
+            <if test="prepaidMob !=null">and prepaid_mob = #{prepaidMob}</if>
+            <if test="oriBonusValue !=null">and ori_bonus_value = #{oriBonusValue}</if>
+            <if test="serialno !=null">and serialno = #{serialno}</if>
+            <if test="fixBonusValue !=null">and fix_bonus_value = #{fixBonusValue}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblEspCustCartMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_esp_cust_cart
+       where id=#{id}
+    </select>
+    <select id="findCartItemsByIds" parameterType="Map" resultMap="TblEspCustCartMap">
+    SELECT
+        <include refid="columns"/>
+    from tbl_esp_cust_cart
+    where id in
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+        #{item}
+    </foreach>
+    </select>
+
+    <!--<select id="findAll" resultMap="TblEspCustCartMap">-->
+        <!--select-->
+        <!--<include refid="columns"/>-->
+        <!--from tbl_esp_cust_cart-->
+        <!--<include refid="conditions"/>-->
+    <!--</select>-->
+
+    <select id="findByCustId" parameterType="Map" resultMap="TblEspCustCartMap">
+        select
+        <include refid="columns"/>
+        from tbl_esp_cust_cart
+        <include refid="conditions"/>
+    </select>
+
+    <select id="findByCustInfo" parameterType="Map" resultMap="TblEspCustCartMap">
+        select
+        <include refid="columns"/>
+        from tbl_esp_cust_cart
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblEspCustCartMap">
+        select
+        <include refid="columns"/>
+        from tbl_esp_cust_cart
+        <include refid="conditionsPager"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <delete id="delete" parameterType="TblEspCustCartModel">
+        delete from tbl_esp_cust_cart where id = id
+    </delete>
+
+    <delete id="deleteByIds" parameterType="TblEspCustCartModel">
+        delete from tbl_esp_cust_cart
+          where id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_esp_cust_cart
+        <include refid="conditionsPager"/>
+    </select>
+
+    <select id="userBuyCount" resultType="Integer" parameterType="String">
+        select count(1)
+        from tbl_esp_cust_cart
+        where cust_id = #{cust_id} and pay_flag = '0'
+    </select>
+
+    <select id="userItemBuyCount" resultType="Integer" parameterType="Map">
+        select sum(goods_num) "count"
+        from tbl_esp_cust_cart
+        where cust_id = #{custId} and item_id = #{itemCode} and pay_flag = '0'
+    </select>
+</mapper>
+
+

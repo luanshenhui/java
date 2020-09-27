@@ -1,0 +1,463 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>大数据首页</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="js/echarts.min.js"></script>
+</head>
+
+<body>
+<div class="wrap">
+	<div class="container">
+        <div class="header">
+            <h1 class="header-log"><a href="/a" target="_blank" style="cursor:pointer"><img src="./image/logo.png"></a></h1>
+            <div class="header-btn"><img src="./image/header-icon-start.png"><span>自动播放</span></div>
+            <div class="header-nav header-nav-spac">
+                <ul class="header-nav-btn">
+                    <li class="next disable"><a href="javascript:void(0)" >&gt;</a></li>
+                    <li class="prev"><a href="javascript:void(0)" >&lt;</a></li>
+                </ul>
+				<ul>
+					<li><a href="gzw-businessDataVolume.html" title="企业融合分析"><i></i>数据融合分析</a> </li>
+					<li><a href="gzw-threeImportant1.html" title="三重一大">三重一大</a> </li>
+					<li><a href="javascript:void(0)" title="财务分析" >财务分析</a> </li>
+					<li><a href="gzwChart4.html" title="产权分析"  >产权分析</a> </li>
+				</ul>
+            </div>
+            <div class="header-nav">
+                <ul>
+                    <li><a href="gzw-SupervisoryDutiy.html" title="监管职责"><i></i>监管职责</a> </li>
+                    <li><a href="gzw-workflowInstruction.html" title="流程说明">流程说明</a> </li>
+                    <li><a href="gzw-SupervisoryDutiy2.html" title="风险点" >风险点</a> </li>
+                </ul>
+            </div>
+        </div>
+		<div class="box">
+			<div class="left m-r-20">
+				<div class="small-box" id="businessGauge">
+
+				<!--	<img src="image/pic0.png" alt="" class="small-box-img1"/>-->
+
+				</div>
+				<div class="absoluteSpan businessSpan">效能</div>
+				<div class="absoluteSpan businessDataSpan">业务数据量</div>
+				<div class="small-box">
+					<div class="l-title">
+						<span>风险等级 / 告警等级</span>
+						<p class="right">
+							<span class="end"></span><span class="m-r-20">已处理</span>
+						</p>
+					</div>
+					<div class="l-content">
+						<div>红色<span class="red-font">风险</span>
+							<p>
+								<span class="line-font green" data-id="riskGR" style="width: 50%;">2</span><span class="line-font red " data-id="riskRR" style="width: 50%;"></span>
+							</p>
+							<span class="right m-r-20" data-id="riskRCount">4</span>
+						</div>
+						<div>橙色<span class="red-font">风险</span>
+							<p>
+								<span class="line-font green" data-id="riskGO" style="width: 75%;">3</span><span class="line-font orange " data-id="riskOO" style="width: 25%;"></span>
+							</p>
+
+							<span class="right m-r-20" data-id="riskOCount">4</span>
+						</div>
+						<div>黄色<span class="red-font">风险</span>
+							<p>
+								<span class="line-font green" data-id="riskGY" style="width: 100%;">7</span><span class="line-font yellow " data-id="riskYY" style="width: 0%;"></span>
+							</p>
+							<span class="right m-r-20" data-id="riskYCount">7</span>
+						</div>
+					</div>
+					<div class="line1"></div>
+					<div class="l-content">
+						<div>红色<span class="yellow-font">告警</span>
+							<p>
+								<span class="line-font green" data-id="alarmGR" style="width: 100%;">10</span><span class="line-font red " data-id="alarmRR" style="width: 0%;"></span>
+							</p>
+
+							<span class="right m-r-20" data-id="alarmRCount">10</span>
+						</div>
+
+						<div>橙色<span class="yellow-font">告警</span>
+							<p>
+								<span class="line-font green" data-id="alarmGO" style="width: 23.0769%;">3</span><span class="line-font orange " data-id="alarmOO" style="width: 76.9231%;"></span>
+							</p>
+
+							<span class="right m-r-20" data-id="alarmOCount">13</span>
+						</div>
+						<div>黄色<span class="yellow-font">告警</span>
+							<p>
+								<span class="line-font green" data-id="alarmGY" style="width: 80%;">16</span><span class="line-font yellow" data-id="alarmYY" style="width: 20%;"></span>
+							</p>
+							<span class="right m-r-20" data-id="alarmYCount">20</span>
+						</div>
+					</div>
+				</div>
+				<div class="small-box">
+					<p class="title">数据引擎监控情况</p>
+					<img src="image/pic1.png" alt="" class="small-box-img3"/>
+				</div>
+			</div>
+	        <div class="center-box left">
+	        	<div class="c-logo"><span>业务综合效能分析</span></div>
+				<div class="center-box-container" id="center-form"></div>
+	        </div>
+	        <div class="right m-l-20">
+	        	<div class="small-box small-box4" >
+					<p class="title">告警风险对比
+						<span class="risk"><i></i>风险</span>
+						<span class="alarm"><i></i>告警</span>
+
+
+					</p>
+					<div class="small-box-form" id="small-box-form4"></div>
+				</div>
+				<div class="big-box">
+					<p class="title">各专委会风险状况</p>
+					<div class="small-box-form6" id="small-box-form6" ></div>
+				</div>
+
+	        </div>	
+		</div>
+		<div class="clear"></div>
+		<div class="footer">截至2016年12月23日 12：00：00</div>
+	    	
+    </div>
+</div>
+<script>
+
+	//气泡图
+	var myChart = echarts.init(document.getElementById('small-box-form6'));
+	var data = [
+		[[35,50,5000000000,'投资运营','投资运营']],[[15,30,5000000000,'改革重组','改革重组']],[[14,54,5000000000,'经营性资产监管','经营性资产监管']]
+	];
+
+	var option6 = {
+		legend: {
+			right: 10,
+			data: ['投资运营', '改革重组','经营性资产监管'],
+			padding: [400,  // 上
+				0, // 右
+				5,  // 下
+				0, // 左
+			],left:'40',textStyle:{
+				fontSize:'20',
+				color:'#fff'
+			},itemGap:25
+		},
+		xAxis: {
+			show: false
+		},
+		yAxis: {
+			show: false
+		},
+		series: [{
+			name: '投资运营',
+			data: data[0],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]) / 5e2;
+			},
+			label: {
+				normal:{textStyle:{fontSize:'20'},show:true,
+					formatter: function () {
+						return 1;
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top',
+
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: 'rgb(25, 183, 207)'
+					}, {
+						offset: 1,
+						color: 'blue'
+					}])
+				}
+			}
+		}, {
+			name: '改革重组',
+			data: data[1],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]) / 5e2;
+			},
+			label: {
+				normal:{textStyle:{fontSize:'20'},show:true,
+					formatter: function () {
+						return 1;
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: '#a7f9a3'
+					}, {
+						offset: 1,
+						color: '#11c508'
+					}])
+				}
+			}
+		}, {
+			name: '经营性资产监管',
+			data: data[2],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]) / 5e2;
+			},
+			label: {
+				normal:{textStyle:{fontSize:'20'},show:true,
+					formatter: function () {
+						return 1;
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: '#f7c1cc'
+					}, {
+						offset: 1,
+						color: '#ff0000'
+					}])
+				}
+			}
+		}]
+	};
+	myChart.setOption(option6);
+	var targetElement = echarts.init(document.getElementById("center-form"));
+	var targetElement4 = echarts.init(document.getElementById("small-box-form4"));
+	//雷达图
+	var option = {
+		tooltip: {},
+		radar: {
+			indicator:
+					[
+						{ name: '管理类风险', max: 20},
+						{ name: '时效类风险', max: 20},
+						{ name: '监督类风险', max: 20},
+						{ name: '执行类风险', max: 20},
+						{ name: '效能类风险', max: 20},
+						{ name: '调查类风险', max: 20},
+						{ name: '决策类风险', max: 20}
+
+					],
+			splitNumber:4,
+			splitArea: {
+				areaStyle: {
+					color: '#0D0D0D',
+					shadowColor: '#161617',
+					shadowBlur: 10
+				}
+			},
+			splitLine:{
+				show:true,
+				lineStyle:{
+					width:3,
+					type:'dotted',
+					color: ['red', 'green','yellow','orange']
+				}
+			}
+		},
+		textStyle:{fontSize:'24',color:'#fff'},
+		series: [{
+			type: 'radar',
+
+			tooltip: {
+				trigger: 'item'
+			},
+			itemStyle: {
+				normal: {
+					areaStyle: {type: 'default'},
+				}
+			},
+			data : [
+				{
+					value : [1, 15, 8,14, 7,9,0],
+					name:'风险数：',
+					areaStyle:{
+						normal: {
+							opacity: 0.5,
+							color:'#9f6bfe'
+						}
+					},
+					lineStyle:{normal:{color:'#038cec'}},
+					itemStyle:{
+						normal:{
+							color:'#ff0000',
+							borderWidth:10,
+							borderType:'dashed',
+							shadowColor: 'yellow',
+							shadowBlur: 5,
+							opacity:1
+						}
+					}
+				}
+			]
+		}]
+	};
+	//柱形图
+	var option1 = {
+
+		tooltip : {
+			trigger: 'axis'
+		},
+		calculable : true,
+		xAxis : [
+			{
+				type : 'category',
+				data : ['1','2','3','4'],
+				name:'季度',
+				nameTextStyle:{
+					fontSize:12
+				}
+
+			}
+		],
+		yAxis : [
+			{
+				type : 'value',name:'数量',
+				nameTextStyle:{
+					fontSize:12
+				}
+			}
+		],textStyle:{fontSize:"20",color:"#fff"},
+		series : [
+			{
+				name:'告警',
+				type:'bar',
+				data:[15,13,11,14],
+				itemStyle:{
+					normal:{
+						color:'#007498'
+					}
+				}
+			},
+			{
+				name:'风险',
+				type:'bar',
+				data:[4,4,2,0],
+				itemStyle:{
+					normal:{
+						color:'#ff0000'
+					}
+				}
+			}
+
+		]
+	};
+	targetElement.setOption(option);
+	targetElement4.setOption(option1);
+
+
+	//首页仪表盘js
+	var businessGauge = echarts.init(document.getElementById('businessGauge'));
+
+	var option8 = {
+		backgroundColor: '#1b1b1b',
+		tooltip : {
+			formatter: "{a} <br/>{c} {b}"
+		},
+		series : [
+			{
+				name:'能效',
+				type:'gauge',
+				startAngle :180,
+				endAngle :0,
+				center: ['50%', '70%'],
+				min:0,
+				max:100,
+				splitNumber:10,
+				radius: 170,
+				axisLine: {            // 坐标轴线
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: [[0.09, '#1e90ff'],[0.82, '#1e90ff'],[1, '#1e90ff']],
+						width: 3,
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisTick: {            // 坐标轴小标记
+					length :15,        // 属性length控制线长
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: 'auto',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				splitLine: {           // 分隔线
+					length :25,         // 属性length控制线长
+					lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+						width:3,
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				pointer: {           // 指针
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5
+				},
+				title : {
+					offsetCenter:[0, '30%'],
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						fontSize: 32,
+						color: '#fff'
+					}
+				},
+				detail : {
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5,
+					offsetCenter: [0, '-35%'],       // x, y，单位px
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						color: '#ff8400',
+						fontSize: 50,
+					}
+				},
+				data:[{value:"87", name: '480'}]
+			}
+		]
+	};
+	// 使用刚指定的配置项和数据显示图表。
+	businessGauge.setOption(option8);
+
+
+</script>
+</body>
+</html>

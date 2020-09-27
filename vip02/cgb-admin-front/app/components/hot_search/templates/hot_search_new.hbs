@@ -1,0 +1,36 @@
+<div class="modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>
+            {{#if data.title}}
+                新增热搜词
+            {{else}}
+                编辑热搜词
+            {{/if}}
+        </h2>
+    </div>
+    <form class="form form-aligned term-form">
+        <div class="term-new modal-body">
+            <div class="control-group">
+                <label for="terms_name"><span class="required">*</span>热搜词名称:</label>
+                <input id="terms_name"  data-name="{{id}}" name = "name" class="form-control" type="text" required value="{{name}}" maxlength="50">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="order"><span class="required">*</span>排序:</label>
+                <input id="sort" data-name="{{sort}}" name = "sort" class="form-control" type="text" required value="{{sort}}" maxlength="9">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="status">状态:</label>
+                <input id="status" name="status" type="checkbox" value="0">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small js-terms-create" value="确定">
+            <button class="btn  btn-close btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

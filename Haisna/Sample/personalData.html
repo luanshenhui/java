@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<title>個人情報メンテナンス</title>
+<link rel="stylesheet" type="text/css" media="all" href="css/main.css" />
+</head>
+<body class="personal_data">
+
+<div class="header cf">
+	<div class="header_inner cf">
+		<div class="main_logo">
+			<a class="head_logo logo" href="frontdoor.html">hains・h</a>
+		</div><!--.main_logo-->
+		<div class="menu">
+			<ul class="cf">
+				<li><a href="#">予約</a></li>
+				<li><a href="#">当日</a></li>
+				<li><a href="#">結果</a></li>
+				<li><a href="#">判定</a></li>
+				<li><a href="#">結果参照</a></li>
+				<li><a href="#">印刷</a></li>
+				<li><a href="#">請求</a></li>
+				<li><a href="#">データ</a></li>
+				<li><a href="#">メンテナンス</a></li>
+				<li><a href="#">フォローアップ</a></li>
+			</ul>
+		</div><!--.menu end-->
+		<div class="header_op_box">
+			<div class="account cf">
+				<ul class="dropdown_nav">
+					<li><a href="javascript:void(0);" class="trigger"><span class="icon icon-account text_default_light"></span></a>
+						<ul id="sub_navi_account" class="submenu">
+							<li><a href="#">パスワードを変更する</a></li>
+							<li><a href="#">ログアウト</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!--.account end-->
+			<div class="oparation cf">
+				<ul class="dropdown_nav">
+					<li><a href="javascript:void(0);" class="trigger"><span class="icon icon-doclist text_default_light"></span></a>
+						<ul id="sub_navi_oparation" class="submenu">
+							<li><a href="#">パスワードを変更する</a></li>
+							<li><a href="#">ログアウト</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!--.oparation end-->
+			<div class="header_search_box cf">
+				<form method="post" action="sample">
+					<span class="header_search_box_input cf">
+						<input class="w_md" name="***" type="text" value="***">
+					</span>
+					<button class="btn_header_search bgcolor_default_light" type="submit"><span class="icon icon-loope"></span></button>
+				</form>
+			</div><!--.header_search_box end-->
+		</div><!--.header_op_box end-->
+	</div><!--header_inner end-->
+</div><!--header end-->
+<div class="wrapper cf mh-box">
+	<div class="contents">
+		<div class="title cf border_aux_2">
+			<span class="title_i icon-information bgcolor_aux_2"></span>
+			<h1>個人情報メンテナンス</h1>
+		</div>
+		<div class="main">
+			<div class="content_nav">
+				<a href="#" class="btn bgcolor_default">戻　る</a>
+				<a href="#" class="btn bgcolor_default">検査情報</a>
+				<a href="#" class="btn bgcolor_default">削　除</a>
+				<a href="#" class="btn bgcolor_default">新　規</a>
+				<a href="#" class="btn bgcolor_default">保　存</a>	
+				<a href="#" class="btn bgcolor_default">付け替え</a>	
+      </div><!--.content_nav end-->
+			<div class="detail_info_box">
+				<table>
+					<tr>
+						<th>個人 ID</th>
+						<td id="value_id">@00000000024</td>
+					</tr>
+					<tr>
+						<th>フリガナ</th>
+						<td class="person_name"><span class="label text_sm">姓</span><input type="text" class="first" name="***" value="" placeholder="テスト"><span class="label text_sm">名</span><input type="text" name="***" value="" placeholder="てすこ"></td>
+					</tr>
+					<tr>
+						<th>名前</th>
+						<td class="person_name"><span class="label text_sm">姓</span><input type="text" class="first" name="***" value="" placeholder="テスト"><span class="label text_sm">名</span><input type="text" name="***" value="" placeholder="てすこ"></td>
+					</tr>
+					<tr>
+						<th>ローマ字名</th>
+						<td><input class="w_full" type="text" name="***" value="" placeholder="TEST TESKO"></td>
+					</tr>
+					<tr>
+						<th colspan="2"><hr /></th>
+					</tr>
+					<tr>
+						<th>性別</th>
+						<td>
+							<select class="w_sm" name="***">
+								<option value="***">男性</option>
+								<option value="***">女性</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>生年月日</th>
+						<td>
+							<select class="w_auto" name="***">
+								<option value="1973" selected>昭和48年(1973)</option>
+								<option value="1974">昭和49年(1974)</option>
+							</select>
+							<span class="text_sm">年</span>
+							<select class="w_auto" name="***">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6" selected>6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+							</select>
+							<span class="text_sm">月</span>
+							<select class="w_auto" name="***">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5" selected>5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+							</select>
+							<span class="text_sm">日</span>
+						</td>
+					</tr>
+					<tr>
+						<th colspan="2"><hr /></th>
+					</tr>
+					<tr>
+						<th>使用状態</th>
+						<td>
+							<select class="w_sm" name="***">
+								<option value="***" selected>使用中</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th colspan="2"><hr /></th>
+					</tr>
+					<tr>
+						<th>同伴者名</th>
+						<td>
+							<span class="search_value"><a href="#"><span class="icon circle_i icon-question"></span></a><a href="#"><span class="icon circle_i icon-delete"></span></a></span>
+						</td>
+					</tr>
+				</table>
+				<h2>医療情報</h2>
+				<div class="content_nav mar_b_xxs">
+					<a href="#" class="btn btn_content_sm bgcolor_default">医療情報を複写</a>
+				</div>
+				<table class="medical_info_tbl">
+					<tr>
+						<th>漢字氏名</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>カナ氏名</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>生年月日</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>性別</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>更新日時</th>
+						<td></td>
+					</tr>
+				</table>
+				<h2>住所（自宅）</h2>
+				<table>
+					<tr>
+						<th>郵便番号</th>
+						<td>
+							<span class="search_value"><a href="#"><span class="icon circle_i icon-question"></span></a><input class="w_sm mar_l_xxs" type="text" name="***" value=""></span>
+						</td>
+					</tr>
+					<tr>
+						<th>郵便番号</th>
+						<td>
+							<select class="w_sm" name="***">
+								<option value="***" selected>北海道</option>
+								<option value="***">青森</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>市区町村</th>
+						<td>
+							<input class="w_full" type="text" name="***" value="***">
+						</td>
+					</tr>
+					<tr>
+						<th>住所１</th>
+						<td>
+							<input class="w_full" type="text" name="***" value="***">
+						</td>
+					</tr>
+					<tr>
+						<th>住所２</th>
+						<td>
+							<input class="w_full" type="text" name="***" value="***">
+						</td>
+					</tr>
+					<tr>
+						<th>電話番号</th>
+						<td>
+							<input class="w_md" type="text" name="***" value="***">
+						</td>
+					</tr>
+				</table>
+			</div><!--,detail_info_box end-->
+		</div><!--.main end-->
+	</div><!--.contents end-->
+</div><!--.wrapper end-->
+
+<script src="js/jquery-3.2.0.slim.min.js"></script>
+<script src="js/jquery.matchHeight-min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

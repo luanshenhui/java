@@ -1,0 +1,212 @@
+.admin-top{
+  .top-left {
+    float: left;
+    width: 565px;
+  }
+  .top-left-top {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    padding: 10px 20px;
+  }
+  .top-left-bottom {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+  }
+  .top-right {
+    float: right;
+    width: 333px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 0 0 20px 0;
+  }
+  .top-right-box {
+    padding: 0 20px 0 20px;
+  }
+  .top-right-box ul.list-rank li {
+    margin-top: 30px;
+  }
+  .top-right-box ul.list-rank span.rank {
+    float: left;
+    margin-right: 10px;
+    background-color: #FFB33B;
+    font-size: 12px;
+    width: 15px;
+    height: 13px;
+    color: #fff;
+    text-align: center;
+    line-height: 12px;
+    padding-top: 2px;
+  }
+  .top-right-box ul.list-rank span.title {
+    float: left;
+    line-height: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 210px;
+  }
+  .top-right-box ul.list-rank span.num {
+    float: right;
+    line-height: 14px;
+  }
+  ul.list-tab { background-color: #fff; }
+  ul.list-tab li { font-size: 14px; padding-top: 5px; display: inline-block; width: 166px; text-align: center; border-bottom: 1px solid #ccc; cursor: pointer; float: left; line-height: 18px; height: 24px; border-top: 4px solid #fff; margin-bottom: 10px;}
+  ul.list-tab li.on { border-top: 4px solid #EF1919;border-bottom: none;}
+  ul.list-tab li.border-right { border-right: 1px solid #ccc;}
+  .tab-box {
+    display: none;
+  }
+  .top-title {
+    font-size: 18px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  .top-title2 {
+    color: #f01919;
+    font-size: 18px;
+    border-bottom: 1px solid #f01919;
+    padding-bottom: 3px;
+    margin-bottom: 30px;
+  }
+  .top-title2 span {
+    border-bottom: 3px solid #f01919;
+    padding-right: 10px;
+  }
+  .top-num {
+    float: left;
+    width: 170px;
+    border-right: 1px solid #ccc;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .top-num p {
+    font-size: 48px;
+    line-height: 48px;
+    margin-bottom: 5px;
+    padding-top: 5px;
+  }
+  .border-right-none {
+    border: none;
+  }
+
+  .top-chart {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    margin-top: 20px;
+  }
+  .left-480 {
+    width: 440px;
+    float: left;
+    margin-left: 10px;
+  }
+  .right-480 {
+    width: 440px;
+    float: right;
+    margin-right: 10px;
+  }
+  .left-480 .top-title, .right-480, .top-title {
+    margin-bottom: 20px;
+  }
+  .admin-num {
+    float: left;
+    margin-right: 56px;
+    width: 90px;
+    text-align: center;
+    position: relative;
+    margin-bottom: 50px;
+    cursor: pointer;
+  }
+  .admin-num i{
+    margin:0 auto;
+  }
+  .admin-num .number {
+    font-size: 12px;
+    color: #fff;
+    padding: 0px 6px;
+    text-align: center;
+    background-color: #f01919;
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    -moz-border-radius: 50px; /* Firefox */
+    -webkit-border-radius: 50px; /* Safari 和 Chrome */
+    border-radius: 50px; /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器 */
+  }
+  .admin-num i {
+    display: block;
+  }
+  .rank-box {
+    margin-bottom: 40px;
+  }
+  .rank-box .r-one {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+    text-align: center;
+    background-color: #f01919;
+    float: left;
+    margin-top: 15px;
+    margin-right: 20px;
+  }
+  .rank-box .r-two {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+    text-align: center;
+    background-color: #F57575;
+    float: left;
+    margin-top: 15px;
+    margin-right: 20px;
+  }
+  .rank-box .r-three {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+    text-align: center;
+    background-color: #FABABA;
+    float: left;
+    margin-top: 15px;
+    margin-right: 20px;
+  }
+  .rank-box .r-pic {
+    border: 1px solid #ccc;
+    padding: 5px;
+    width: 45px;
+    height: 45px;
+    float: left;
+    text-align: center;
+    margin-right: 20px;
+  }
+  .rank-box .r-pic img {
+    width: 35px;
+    height: 45px;
+  }
+  .rank-box .r-title {
+    float: left;
+    width: 220px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-top: 3px;
+  }
+  .rank-box .r-title span {
+    display: block;
+    color: #aaa;
+  }
+  .rank-box .r-num {
+    float: right;
+    margin-right: 10px;
+    color: #f01919;
+    font-weight: bold;
+  }
+  .clear {
+    font-size: 0px;
+    clear: both;
+    line-height: 0px;
+    height: 1px;
+  }
+}

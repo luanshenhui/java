@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SynBonus">
+   <select id="findById" parameterType="String" resultType="cn.com.cgbchina.batch.model.SynBonusModel">
+      select
+      integraltype_id integraltypeId,
+      integraltype_nm integraltypeNm,
+      cur_status curStatus
+      from tbl_cfg_integraltype
+      where integraltype_id=#{integraltypeId}
+   </select>
+   <update id="update" parameterType="Map">
+      update tbl_cfg_integraltype set
+      integraltype_nm = #{integraltypeNm},
+      cur_status = #{curStatus},
+      modify_oper = #{modifyOper},
+      modify_time = #{modifyTime}
+      where integraltype_id = #{integraltypeId}
+   </update>
+   <insert id="create" parameterType="Map">
+      insert into tbl_cfg_integraltype
+        (integraltype_id
+        ,integraltype_nm
+        ,cur_status
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{integraltypeId}
+        ,#{integraltypeNm}
+        ,#{curStatus}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime})
+   </insert>
+</mapper>
+
+

@@ -1,0 +1,17 @@
+package com.yulin.web.dao;
+
+import java.util.List;
+
+import com.yulin.web.entity.User;
+
+public interface UserDao {
+	public List<User> findAll();
+	
+	public boolean insertUser(User u);
+	
+	public boolean updateUser(User u);
+	
+	public int findMinSalary(int salary);
+	
+	public int findMaxSalary(int salary);
+}

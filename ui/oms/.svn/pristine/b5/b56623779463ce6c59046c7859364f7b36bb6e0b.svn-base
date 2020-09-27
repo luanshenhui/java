@@ -1,0 +1,14 @@
+package cn.rkylin.oms.system.user.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import cn.rkylin.oms.system.user.vo.UserVO;
+
+public interface IUserDAO {
+
+	List<UserVO> getUserByCondition(UserVO userVo);
+
+	Map getExtInfo(String string, String userId) throws Exception;
+
+}

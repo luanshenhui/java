@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    <struts>
+    <!-- 通过constant标签，可以修改default.properties中常量的值 -->
+    <constant name="struts.multipart.maxSize" value="5000000"></constant>
+    
+    <package name="upload" namespace="/upload" extends="struts-default">
+    
+	    <!-- 打开上传文件页面的Action -->
+	    <action name="toUpload">
+	    	<result name="success">
+	    		/WEB-INF/jsp/upload.jsp
+	    	</result>
+	    </action>
+	    <!-- 文件上传的Action -->
+	    <action name="upload" class="com.yulin.action.UploadAction">
+	    	<!-- 引用上传文件的拦截器 -->
+	    	<interceptor-ref name="fileUpload">
+	    		<param name="maximumSize">2000000</param>
+	    	</interceptor-ref>
+	    	<interceptor-ref name="basicStack"></interceptor-ref>
+	    	
+	    	<result name="success">
+	    		/WEB-INF/jsp/ok.jsp
+	    	</result>
+	    	<result name="error">
+	    		/WEB-INF/jsp/error.jsp
+	    	</result>
+	    </action>
+	   </package>
+    </struts>

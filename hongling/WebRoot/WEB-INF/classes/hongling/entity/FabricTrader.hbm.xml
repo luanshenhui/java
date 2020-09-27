@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="hongling.entity.FabricTrader" table="FABRICTRADER">
+        <id name="id" type="integer">
+			<column name="ID" />
+			<generator class="increment"></generator>
+		</id>
+        <property name="traderName" type="string">
+            <column name="TRADERNAME"/>
+        </property>
+        <property name="traderLevel" type="integer">
+            <column name="TRADERLEVEL"/>
+        </property>
+        <property name="recommendation" type="string">
+            <column name="RECOMMENDATION"/>
+        </property>
+        <property name="address" type="string">
+            <column name="ADDRESS"/>
+        </property>
+        <property name="telephone" type="string">
+            <column name="TELEPHONE"/>
+        </property>
+         <property name="createBy" type="string">
+            <column name="CREATEBY"/>
+        </property>
+        <property name="createTime" type="date">
+            <column name="CREATETIME"/>
+        </property>
+        <property name="remark" type="string">
+            <column name="REMARK"/>
+        </property>
+	</class>
+</hibernate-mapping>

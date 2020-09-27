@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblOrderExtend1Model">
+    <resultMap id="TblOrderExtend1Map" type="TblOrderExtend1Model">
+        <result property="orderExtend1Id" column="order_extend1_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="errorcode" column="errorcode"/>
+        <result property="approveresult" column="approveresult"/>
+        <result property="followdir" column="followdir"/>
+        <result property="caseid" column="caseid"/>
+        <result property="specialcust" column="specialcust"/>
+        <result property="releasetype" column="releasetype"/>
+        <result property="rejectcode" column="rejectcode"/>
+        <result property="aprtcode" column="aprtcode"/>
+        <result property="ordernbr" column="ordernbr"/>
+        <result property="processstatus" column="processstatus"/>
+        <result property="processresult" column="processresult"/>
+        <result property="creator" column="creator"/>
+        <result property="regulator" column="regulator"/>
+        <result property="michelleid" column="michelleid"/>
+        <result property="incomingtel" column="incomingtel"/>
+        <result property="extend1" column="extend1"/>
+        <result property="extend2" column="extend2"/>
+        <result property="extend3" column="extend3"/>
+    </resultMap>
+    <sql id="columns">
+    order_extend1_id,order_id,errorcode,approveresult,followdir,caseid,specialcust,releasetype,rejectcode,aprtcode,ordernbr,processstatus,processresult,creator,regulator,michelleid,incomingtel,extend1,extend2,extend3
+    </sql>
+
+    <insert id="insert" parameterType="TblOrderExtend1Model" useGeneratedKeys="true"
+            keyProperty="orderExtend1Id" keyColumn="order_extend1_id">
+        insert into tbl_order_extend1
+        (order_id
+        ,errorcode
+        ,approveresult
+        ,followdir
+        ,caseid
+        ,specialcust
+        ,releasetype
+        ,rejectcode
+        ,aprtcode
+        ,ordernbr
+        ,processstatus
+        ,processresult
+        ,creator
+        ,regulator
+        ,michelleid
+        ,incomingtel
+        ,extend1
+        ,extend2
+        ,extend3)
+        values(#{orderId}
+        ,#{errorcode}
+        ,#{approveresult}
+        ,#{followdir}
+        ,#{caseid}
+        ,#{specialcust}
+        ,#{releasetype}
+        ,#{rejectcode}
+        ,#{aprtcode}
+        ,#{ordernbr}
+        ,#{processstatus}
+        ,#{processresult}
+        ,#{creator}
+        ,#{regulator}
+        ,#{michelleid}
+        ,#{incomingtel}
+        ,#{extend1}
+        ,#{extend2}
+        ,#{extend3})
+    </insert>
+
+    <update id="update" parameterType="TblOrderExtend1Model">
+        update tbl_order_extend1 set
+            <if test="orderId !=null">order_id = #{orderId}
+                ,</if>
+            <if test="errorcode !=null">errorcode = #{errorcode}
+                ,</if>
+            <if test="approveresult !=null">approveresult = #{approveresult}
+                ,</if>
+            <if test="followdir !=null">followdir = #{followdir}
+                ,</if>
+            <if test="caseid !=null">caseid = #{caseid}
+                ,</if>
+            <if test="specialcust !=null">specialcust = #{specialcust}
+                ,</if>
+            <if test="releasetype !=null">releasetype = #{releasetype}
+                ,</if>
+            <if test="rejectcode !=null">rejectcode = #{rejectcode}
+                ,</if>
+            <if test="aprtcode !=null">aprtcode = #{aprtcode}
+                ,</if>
+            <if test="ordernbr !=null">ordernbr = #{ordernbr}
+                ,</if>
+            <if test="processstatus !=null">processstatus = #{processstatus}
+                ,</if>
+            <if test="processresult !=null">processresult = #{processresult}
+                ,</if>
+            <if test="creator !=null">creator = #{creator}
+                ,</if>
+            <if test="regulator !=null">regulator = #{regulator}
+                ,</if>
+            <if test="michelleid !=null">michelleid = #{michelleid}
+                ,</if>
+            <if test="incomingtel !=null">incomingtel = #{incomingtel}
+                ,</if>
+            <if test="extend1 !=null">extend1 = #{extend1}
+                ,</if>
+            <if test="extend2 !=null">extend2 = #{extend2}
+                ,</if>
+            <if test="extend3 !=null">extend3 = #{extend3}
+                </if>
+        where order_extend1_id = #{orderExtend1Id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="orderExtend1Id !=null">and order_extend1_id = #{orderExtend1Id}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="errorcode !=null">and errorcode = #{errorcode}</if>
+            <if test="approveresult !=null">and approveresult = #{approveresult}</if>
+            <if test="followdir !=null">and followdir = #{followdir}</if>
+            <if test="caseid !=null">and caseid = #{caseid}</if>
+            <if test="specialcust !=null">and specialcust = #{specialcust}</if>
+            <if test="releasetype !=null">and releasetype = #{releasetype}</if>
+            <if test="rejectcode !=null">and rejectcode = #{rejectcode}</if>
+            <if test="aprtcode !=null">and aprtcode = #{aprtcode}</if>
+            <if test="ordernbr !=null">and ordernbr = #{ordernbr}</if>
+            <if test="processstatus !=null">and processstatus = #{processstatus}</if>
+            <if test="processresult !=null">and processresult = #{processresult}</if>
+            <if test="creator !=null">and creator = #{creator}</if>
+            <if test="regulator !=null">and regulator = #{regulator}</if>
+            <if test="michelleid !=null">and michelleid = #{michelleid}</if>
+            <if test="incomingtel !=null">and incomingtel = #{incomingtel}</if>
+            <if test="extend1 !=null">and extend1 = #{extend1}</if>
+            <if test="extend2 !=null">and extend2 = #{extend2}</if>
+            <if test="extend3 !=null">and extend3 = #{extend3}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblOrderExtend1Map">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_order_extend1
+       where id=#{orderExtend1Id}
+    </select>
+    <select id="findByOrderId" parameterType="Map" resultMap="TblOrderExtend1Map">
+        SELECT
+        <include refid="columns"/>
+        from tbl_order_extend1
+        where order_id = #{orderId}
+    </select>
+    <select id="findAll" resultMap="TblOrderExtend1Map">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_extend1
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblOrderExtend1Map">
+        select id,
+        <include refid="columns"/>
+        from tbl_order_extend1
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblOrderExtend1Model">
+        delete from tbl_order_extend1 where id = orderExtend1Id
+    </delete>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tbl_order_extend1
+        (order_id
+        ,errorcode
+        ,approveresult
+        ,followdir
+        ,caseid
+        ,specialcust
+        ,releasetype
+        ,rejectcode
+        ,aprtcode
+        ,ordernbr
+        ,processstatus
+        ,processresult
+        ,creator
+        ,regulator
+        ,michelleid
+        ,incomingtel
+        ,extend1
+        ,extend2
+        ,extend3)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.orderId}
+        ,#{item.errorcode}
+        ,#{item.approveresult}
+        ,#{item.followdir}
+        ,#{item.caseid}
+        ,#{item.specialcust}
+        ,#{item.releasetype}
+        ,#{item.rejectcode}
+        ,#{item.aprtcode}
+        ,#{item.ordernbr}
+        ,#{item.processstatus}
+        ,#{item.processresult}
+        ,#{item.creator}
+        ,#{item.regulator}
+        ,#{item.michelleid}
+        ,#{item.incomingtel}
+        ,#{item.extend1}
+        ,#{item.extend2}
+        ,#{item.extend3})
+        </foreach>
+    </insert>
+</mapper>
+
+

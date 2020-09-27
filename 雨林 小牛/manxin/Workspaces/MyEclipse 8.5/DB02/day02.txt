@@ -1,0 +1,167 @@
+查询一、
+	查询所有英雄的姓名、工资、工资*0.1234567后精确两位、工资*0.1234567后保留整数
+	
+查询二、
+	如果bonus 不是null,发年终奖金额为bonus,
+	如果bonus 是null,发年终奖金额为salary*0.5
+	如果bonus 和salary都是null,发100元安慰
+	select ename, salary, bonus, coalesce(bonus, salary*0.5,100) year from emp;
+	
+查询三、
+	如果职位是 战士：加薪50%
+	如果职位是 弓箭手：加薪30%
+	如果职位是 法师：加薪20%
+	其他职位：薪水不变
+	
+	select ename,salary,job,
+	case job wneh '战士' then salary*0.5
+	when '弓箭手' then salary*0.3
+	when '法师' then salary*0.2
+	else salary
+	end new_salary
+	from emp;
+	
+查询四、
+	用decode完成上述查询
+	
+查询五、
+	select ename,salary from emp order by salary;
+	
+查询六、
+	查询所有的战士、法师的工资、奖金，结果按工资的降序排序，工资一样按奖金的降序排序(排序的关键字用','分割)
+	select ename,salary,bonus from emp where job='战士' or jib='法师' order by salary desc, bonus desc
+	
+	错误查询：select ename,count(*) from emp;
+	
+查询七、
+	1.查询出10部门一共有多少人？
+		select count(*) from emp where deptno=10;
+	2.查询出员工的平均工资
+		select avg(salary) from emp;
+	3.查询出员工的人数、平均工资、总工资，最高工资和最低工资
+		select count(*),sum(salary),max(salary),min(salary),avg(salary) from emp;
+	4.查询出战士的平均工资和最高工资
+		select sum(salary),avg(salary) from emp where job='战士';
+	5.查询出刺客和法师的总人数和平均工资
+		select count(*),avg(salary) from emp where job='刺客' or job='法师';
+	
+查询八、
+	每个部门的最高和最低薪水分别是多少
+		select deptno man(salary),min(salary) from emp group by deptno;
+	1.查询出各个职位的平均工资和人数
+		select job,avg(salary),count(*) from emp group by job;
+	2.查询出每个部门的平均工资，按升序排序
+		select deptno,avg(salary) from emp group by deptno order by avg(salary);
+	3.查询出战士和法师的人数
+		select job,count(*) from emp where job='战士' or job='法师' group by job;
+	4.查询出工资高于6000的战士的人数
+		select job,count(*) from emp where salary>6000 and job='战士' group by job;
+	5.查询出部门的最高工资大于9000的部门的平均工资
+		select deptno,avg(salary) from emp group by deptno having max(salary)>9000;
+	6.查询出月平均收入(salary + bonus)大于7000的部门的人数、平均工资、最高工资
+		select deptno,avg(salary),max(salary+bonus),count(*) from emp group by deptno having avg(salary+nvl(bonus,0))>7000;
+	7.查询出工资大于平均工资的英雄信息
+		select * from emp where salary>(select avg(salary) from emp);
+	
+	
+	练习：
+	1:查询职员表中工资大于 5600 的员工姓名和工资
+		select ename,salary from emp where salary>5600;
+	2:查询职员表中员工号为 1008 的员工的姓名和部门号码
+		select ename,deptno from emp where empno='1008';
+	3:选择职员表中工资不在 6000 到 8000 的员工的姓名和工资
+		select ename,salary from emp where salary<6000 or salary>8000;
+		select ename,salary from emp where salary not between 6000 and 8000;
+	4:选择职员表中在 20 和 30 号部门工作的员工姓名和部门号
+		select ename,deptno from emp where deptno in(20,30);
+	5:选择职员表中没有管理者的员工姓名及职位,  按职位排序
+		select ename,job from emp where mgr is null order by job;
+	6:选择职员表中有奖金的员工姓名，工资和奖金，按工资倒序排列
+		select ename,salary,bonus from emp where bonus is not null order by salary desc;
+	7:选择职员表中员工职位的第二个字母是 a 的员工姓名
+		select ename from emp where job like'_a%';
+	8:列出部门表中的部门名字和所在城市；
+		select location,dname from dept;
+	9:显示出职员表中的不重复的职位；
+		select distinct job from emp;
+	10查询各员工的姓名 ename，并显示出各员工在公司工作的月份数
+		(即:不当前日期比较,该员工已经工作了几个月,  用整数表示)。
+		select ename,hirdate,round(months_between(sysdate,hirdate))在职 from emp;
+	11：按照”2009-4-11 20:35:10 ”类似的格式显示系统当前时间
+		select to_char(sysdate,'yyyy-mm-dd hh:mm:ss') from dual;
+	12：查询员工表 emp 中员工编码 empno，姓名 ename，以及月收入(薪水+奖金)，注意有的员工可能没有奖金或薪水。
+		select empno,ename,(nvl(salary,0)+nvl(bonus,0))月收入 from emp;
+	13：查询薪水大于 4000 元的员工的姓名和薪水，幵对查询结果按薪水的降序方式进行排列；
+		select ename,salary from emp where salary>4000 order by salary desc;
+	14：查询公司员工工资的最大值，最小值，平均值，总和
+		select max(salary)最大值,min(salary)最小值,avg(salary)平均值,sum(salary)总和 from emp;
+	15：列出每个员工的名字，工资、涨薪后工资（涨幅为 8%），元为单位进行四舍五入
+		select ename,salary,round(salary*0.8,2)涨资 from emp;
+	16：选择具有各个 job 的员工人数
+		select job,count(*)人数 from emp group by job;
+	17：查询员工最高工资和最低工资的差额；
+		select (max(salary)-min(salary))差额 from emp;
+	18: 查询职员表 emp 中员工号、姓名、工资，以及工资提高百分之 20%后的结果
+		select empno,ename,salary,round(salary*0.2,2)涨资 from emp;
+	19:列出除了 ACCOUNT（财务部） 部门还有哪些部门
+		select deptno from emp where deptno not in 10;
+	20：求出每个部门 分别发了多少奖金,如果该部门某员工没有奖金
+		按照该员工工资的10% 发放？
+		select deptno,sum(nvl(bonus,salary*0.1))奖金和 from emp group by deptno;  
+	21：求出每个部门中入职时间最长的员工？
+		select ename,deptno,hiredate from emp where (deptno,hiredate)
+			In (select deptno,min(hiredate) from emp where deptno is not null
+			group by deptno);
+	22：求出薪水最高的那个人在 那个部门？
+		select deptno,ename from emp where salary=(select max(salary) from emp);
+	23: 求出入职时间最长的员工 比 入职时间最短的员工 时间长多少（天）？
+		select max(hirdate)-min(hirdate) from emp;
+	24：求出最高工资的那个人 比公司平均工资高多少？
+		select round(max(salary)-avg(salary),2)差值 from emp;
+	25：求出每个部门里面没有奖金的人？
+		select deptno,ename from emp where bonus is null group by deptno,ename;
+	26：请把没有奖金的员工 工资再加 20%
+		select salary*0.2差值 from emp where bonus is null;
+	27：请把manager职位的员工薪水加10%  salesman职位的员工薪水加15%
+		Analyst职位的员工薪水加18%，其余员工加20%
+		select ename,salary,job,
+		case job when '战士' then salary*0.1
+		when '弓箭手' then salary*0.15
+		when '美人鱼' then salary*0.18
+		else salary*0.2
+		end new_salary
+		from emp;
+	28：求出每个部门中薪水最高的那个人
+		select deptno,ename,job,salary from emp where (deptno,salary) in (select deptno,max(salary) from emp where deptno is not null group by deptno);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

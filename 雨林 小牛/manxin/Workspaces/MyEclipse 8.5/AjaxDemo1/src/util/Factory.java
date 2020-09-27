@@ -1,0 +1,36 @@
+package util;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+import DAO.EmpDao;
+import DAO.EmpDaoImpl;
+
+public class Factory {
+	
+	private static Properties pro = new Properties();
+	static{
+		InputStream ips = Factory.class.getClassLoader().getResourceAsStream("entity/Factory.properties");
+		try {
+			pro.load(ips);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public static Object getInstance(String type){
+		Object obj = null;
+		String className = pro.getProperty(type);
+		try {
+			Class c = Class.forName(className);//加载
+			obj = c.newInstance();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return obj;
+	}
+}

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.apollo.mapper.projectRuleMapper">
+	<sql id="columns">
+		ID,
+		SIGN_COMPANY,
+		BRAND_BIZ_NAME,
+		CONTACT_TYPE,
+		CURRENCY_TYPE,
+		SERVICE_FEE,
+		COMMISSION_TD,
+		SPARE_CURRENCY,
+		CONTRACT_BEGIN_DT,
+		CONTRACT_END_DT,
+		CREATE_DT,
+		PROJECT_ID,
+		BRAND_BIZ_ADDR,
+		WMS_CHARGE,
+		WMS_FEE_CHARGE,
+		TMS_CHARGE,
+		TMS_FEE_CHARGE,
+		CUSTORM_CHARGE,
+		REFUND_CHARGE,
+		SOFTWARE_USE,
+		WE_SETTLE_PERSON,
+		WE_PERSON_PHONE,
+		PF_OPERATOR,
+		PF_OPERATOR_PHONE,
+		PF_SETTLE_PERSON,
+		PF_SETTLE_PERSON_PHONE,
+		PF_SETTLE_PERSON_EMAIL,
+		PF_COMPANY_ADDR,
+		SERVICE_FEE_PERIOD,
+		COMMISSION_FEE_PERIOD,
+		COMMISSION_TD_RULE,
+		SERVICE_FEE_REMARK,
+		COMMISSION_TD_REMARK,
+		REMARK,
+		RULE_STATUS,
+		PROJECT_NAME
+	</sql>
+	<sql id="tableName">fm_project_settle_rule</sql>
+
+	<select id="findProjectSettleRule" resultType="java.util.Map">
+		select
+		<include refid="columns" />
+		from
+		<include refid="tableName" />
+		t
+		where 1=1 and t.RULE_STATUS = 1
+		<if test="null != projectId and '' != projectId">
+			and t.PROJECT_ID = #{projectId}
+		</if>
+		<if test="null != uid and '' != uid">
+			and t.ID = #{uid}
+		</if>
+	</select>
+
+	<select id="findMaxProjectRuleId" resultType="java.util.Map">
+		select max(id)+1 as maxId from
+		<include refid="tableName" />
+		t
+	</select>
+
+	<insert id="insertProjSettleRule" parameterType="cn.rkylin.core.ApolloMap">
+		insert into
+		<include refid="tableName" />
+		(
+		ID,
+		SIGN_COMPANY,
+		BRAND_BIZ_NAME,
+		CONTACT_TYPE,
+		CURRENCY_TYPE,
+		SERVICE_FEE,
+		COMMISSION_TD,
+		SPARE_CURRENCY,
+		CONTRACT_BEGIN_DT,
+		CONTRACT_END_DT,
+		CREATE_DT,
+		PROJECT_ID,
+		BRAND_BIZ_ADDR,
+		WMS_CHARGE,
+		WMS_FEE_CHARGE,
+		TMS_CHARGE,
+		TMS_FEE_CHARGE,
+		CUSTORM_CHARGE,
+		REFUND_CHARGE,
+		SOFTWARE_USE,
+		WE_SETTLE_PERSON,
+		PF_SETTLE_PERSON_PHONE,
+		PF_SETTLE_PERSON_EMAIL,
+		PF_COMPANY_ADDR,
+		SERVICE_FEE_PERIOD,
+		COMMISSION_FEE_PERIOD,
+		COMMISSION_TD_RULE,
+		SERVICE_FEE_REMARK,
+		COMMISSION_TD_REMARK,
+		REMARK,
+		RULE_STATUS,
+		PF_OPERATOR,
+		PF_OPERATOR_PHONE,
+		PF_SETTLE_PERSON,
+		WE_PERSON_PHONE,
+		PROJECT_NAME
+		)
+		VALUES
+		(
+		#{rule_id},
+		#{rule_sign_company},
+		#{rule_brand_biz_name},
+		#{rule_contact_type},
+		#{rule_currency_type},
+		#{rule_service_fee},
+		#{rule_commission_td},
+		#{rule_spare_currency},
+		#{rule_contract_begin_dt},
+		#{rule_contract_end_dt},
+		now(),
+		#{rule_project_id},
+		#{rule_brand_biz_addr},
+		#{rule_wms_charge},
+		#{rule_wms_fee_charge},
+		#{rule_tms_charge},
+		#{rule_tms_fee_charge},
+		#{rule_custorm_charge},
+		#{rule_refund_charge},
+		#{rule_software_use},
+		#{rule_we_settle_person},
+		#{rule_pf_settle_person_phone},
+		#{rule_pf_settle_person_email},
+		#{rule_pf_company_addr},
+		#{rule_service_fee_period},
+		#{rule_commission_fee_period},
+		#{rule_commission_td_rule},
+		#{rule_service_fee_remark},
+		#{rule_commission_td_remark},
+		#{rule_remark},
+		#{rule_status},
+		#{rule_pf_operator},
+		#{rule_pf_operator_phone},
+		#{rule_pf_settle_person},
+		#{rule_we_person_phone},
+		#{rule_project_name}
+		)
+	</insert>
+
+
+	<update id="updateProjectRule" parameterType="cn.rkylin.core.ApolloMap">
+		update
+		<include refid="tableName" />
+		SET
+		SIGN_COMPANY = #{rule_sign_company},
+		BRAND_BIZ_NAME = #{rule_brand_biz_name},
+		CONTACT_TYPE = #{rule_contact_type},
+		CURRENCY_TYPE = #{rule_currency_type},
+		SERVICE_FEE = #{rule_service_fee},
+		COMMISSION_TD = #{rule_commission_td},
+		SPARE_CURRENCY = #{rule_spare_currency},
+		CONTRACT_BEGIN_DT = #{rule_contract_begin_dt},
+		CONTRACT_END_DT =
+		#{rule_contract_end_dt},
+		BRAND_BIZ_ADDR = #{rule_brand_biz_addr},
+		WMS_CHARGE = #{rule_wms_charge},
+		WMS_FEE_CHARGE =
+		#{rule_wms_fee_charge},
+		TMS_CHARGE = #{rule_tms_charge},
+		TMS_FEE_CHARGE = #{rule_tms_fee_charge},
+		CUSTORM_CHARGE =
+		#{rule_custorm_charge},
+		REFUND_CHARGE = #{rule_refund_charge},
+		SOFTWARE_USE = #{rule_software_use},
+		WE_SETTLE_PERSON =
+		#{rule_we_settle_person},
+		PF_SETTLE_PERSON_PHONE = #{rule_pf_settle_person_phone},
+		PF_SETTLE_PERSON_EMAIL =
+		#{rule_pf_settle_person_email},
+		PF_COMPANY_ADDR = #{rule_pf_company_addr},
+		SERVICE_FEE_PERIOD =
+		#{rule_service_fee_period},
+		COMMISSION_FEE_PERIOD = #{rule_commission_fee_period},
+		COMMISSION_TD_RULE =
+		#{rule_commission_td_rule},
+		SERVICE_FEE_REMARK = #{rule_service_fee_remark},
+		COMMISSION_TD_REMARK =
+		#{rule_commission_td_remark},
+		REMARK = #{rule_remark},
+		PF_OPERATOR = #{rule_pf_operator},
+		PF_OPERATOR_PHONE =
+		#{rule_pf_operator_phone},
+		PF_SETTLE_PERSON = #{rule_pf_settle_person},
+		WE_PERSON_PHONE = #{rule_we_person_phone},
+		UPDATE_DT = now()
+		WHERE ID = #{rule_id} and PROJECT_ID = #{rule_project_id}
+	</update>
+
+
+	<update id="updateProjectRuleStatus" parameterType="cn.rkylin.core.ApolloMap">
+		update
+		<include refid="tableName" />
+		set RULE_STATUS =3,UPDATE_DT=now()
+		where id= #{uid} and project_id = #{projectId} and RULE_STATUS!=3
+	</update>
+
+
+
+</mapper>

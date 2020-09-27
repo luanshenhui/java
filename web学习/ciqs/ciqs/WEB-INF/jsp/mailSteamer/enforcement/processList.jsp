@@ -1,0 +1,229 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>进出境邮轮检疫</title>
+<%@ include file="/common/resource_show.jsp"%>
+<style type="text/css">
+input.datepick{background:#FFF url(/ciqs/static/dec/images/dpn.date.pick.gif) no-repeat right}
+
+.title a:link,.title a:visited,.user-info a:link,.user-info a:visited{
+     color:white;
+     text-decoration:none;
+}
+.title a:active,.title a:hover,.user-info a:active,.user-info a:hover{
+     color:#014ccc;
+     text-decoration:underline;
+}
+.box-img-bg {
+	background-image: url(../static/show/disc/bg.png);
+	box-sizing: border-box;
+	width: 1198px;
+	height: 164px;
+	padding: 0 200px;
+	position: absolute;
+	display: none;
+	font-size: 20px;
+	line-height: 35px;
+	color: white;
+}
+
+.box-content-style {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+</style>
+<script type="text/javascript"> 
+		function pageUtil(page) {
+			$("#process_form").attr("action", "/ciqs/mailSteamer/showenforcementprocess");
+			$("#process_form").append("<input type='hidden' name='page' value='"+page+"'/>");
+			$("#process_form").submit();
+		}
+		
+</script>
+</head>
+
+<body  class="bg-gary">
+<div class="freeze_div_list">
+<div class="title-bg" >
+<div class=" title-position margin-auto white">
+<div class="title"><span class="font-24px" style="color:white;">行政确认 /</span><a href="showenforcementprocess">进出境邮轮检疫</a></div>
+<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+</div>
+</div>
+<div class="flow-bg" >
+<div class="flow-position margin-auto" >
+
+<ul class="white font-18px flow-height font-weight">
+	<li>申报</li>
+	<li>准备</li>
+	<li>登轮检疫</li>
+	<li>上报通报</li>
+	<li>行政处罚</li>
+	<li>归档</li>
+	<li></li>
+	<li></li>
+</ul>
+<ul>
+	<li><img src="${ctx}/static/show/images/mailSteamer/mailSteamerA1.png" width="107" height="103" content="接受邮轮负责人或其代理人的入境检疫申报并确定检疫方式。记录内容包括：《国际航行船舶入境检疫申报书》、确定的检疫方式及《船舶入境卫生检疫证》。"/></li>
+	<li><img src="${ctx}/static/show/images/mailSteamer/mailSteamerA2.png" width="107" height="103" content="根据检疫方式、邮轮风险等级、疫情情况、核生化危险因子情况等，确定登轮人数，但一般不少于2人。根据情况选择性准备证单表格及设备用品。记录内容包括：仪器设备领取记录和使用记录及船方准备的额外文件清单。" /></li>
+	<li><img src="${ctx}/static/show/images/mailSteamer/mailSteamerA3.png" width="107" height="103" content="做好登轮前检查准备，登轮后查阅检疫文件，进行流行病学调查、医学检查、卫生监督、样品采集与送检。主要记录内容包括：《船舶入境检疫查验记录表》、《船舶卫生监督记录表》、《口岸传染病可疑病例流行病学调查表》、《口岸传染病可疑病例医学排查记录表》、《采样知情同意书》等。"/></li>
+	<li><img src="${ctx}/static/show/images/mailSteamer/mailSteamerA4.png" width="107" height="103" content="将本次邮轮入境检疫查验后的相关信息以及风险评估结果上报总局，需下一港实施检疫措施的邮轮，应及时将有关信息包括相关样品检验结果，报送至下一港检验检疫部门。记录内容包括：相关电子文书记录及通知下一港信息的相关材料。"/></li>
+	<li><img src="${ctx}/static/show/images/mailSteamer/mailSteamerA5.png" width="107" height="103" content="对涉嫌违法的行为进行初步调查，并将案件单据、证据资料及相关文件移交大连局法综处。记录内容包括：《检验检疫涉嫌案件申报单》及相关电子图像、音像记录。" /></li>
+	<li><img src="${ctx}/static/show/images/mailSteamer/mailSteamerA6.png" width="107" height="103" content="全部检疫工作完毕后，将完整数据录入“口岸公共卫生风险监测预警决策系统”；汇总纸质记录单证，涉及实验室结果和检疫处理报告的，应等实验室结果报告和检疫处理结果报告到位后，将所有资料整理归档。"/></li>
+	<li></li>
+	<li></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="blank_div_list">
+</div>
+<div class="margin-auto width-1200 search-box">
+	<div id="alertBoxId" class="box-img-bg"><span class="box-content-style" id="alertContentId"></span></div>
+<form action="/ciqs/quarExitEntry/showenforcementprocess"  method="post" id="process_form">
+<table width="100%" border="0" class="table-search margin-auto">
+  <tr>
+    <td height="25" align="left" valign="middle">中文船名</td>
+    <td height="25" align="left" valign="middle">英文船名</td>
+    <td height="25" align="left" valign="middle">开始时间</td>
+    <td height="25" align="left" valign="middle">结束时间</td>
+    <td height="25" align="left" valign="middle">检疫方式</td>
+    <td height="25" align="left" valign="middle">操作</td>
+  </tr>
+  <tr>
+  	<td align="left"><input type="text" class="search-input input-175px" name="cnVslm" id="cnVslm"
+								size="14" value="${map.cnVslm}"/></td>
+  	<td align="left"><input type="text" class="search-input input-175px" name="fullVslm" id="fullVslm"
+								size="14" value="${map.fullVslm}"/></td>
+  	<td align="left"><input type="text" class="search-input input-175px datepick" name="startdate" id="startdate"
+								size="14" value="${map.startdate}"/></td>
+  	<td align="left"><input type="text" class="search-input input-175px datepick" name="enddate" id="enddate"
+								size="14" value="${map.enddate}"/></td>
+  	<td align="left">
+  	<select id="chkNotify" name="chkNotify"  class="search-input input-175px" class="required select">
+  		<option value="">全选</option>
+  		<c:if test="${not empty libraryList }">
+				<c:forEach items="${libraryList}" var="row">
+					<c:if test="${map.chkNotify== row.code}">
+						<option selected="selected" value="${row.code}">${row.name}</option>
+					</c:if>
+					<c:if test="${map.chkNotify != row.code}">
+						<option value="${row.code}">${row.name}</option>
+					</c:if>
+				</c:forEach>
+			</c:if>
+  	</select></td>
+  </tr>
+  <tr>
+    <td colspan="2" height="25" align="left" valign="middle">直属局</td>
+    <td colspan="2" height="25" align="left" valign="middle">分支机构</td>
+  </tr>
+  <tr>
+  	<td colspan="2" align="left"><select id="portOrgcode" name="portOrgcode"  class="search-input input-175px" class="required select">
+										<c:if test="${not empty orglist }">
+											<c:forEach items="${orglist}" var="row">
+												<c:if test="${map.portOrgcode == row.code}">
+													<option selected="selected" value="${row.code}">${row.name}</option>
+												</c:if>
+												<c:if test="${map.portOrgcode!= row.code}">
+													<option value="${row.code}">${row.name}</option>
+												</c:if>
+											</c:forEach>
+										</c:if>
+									</select>
+									<p></p></td>
+  	<td colspan="2" align="left"><select id="portDeptcode" name="portDeptcode"  class="search-input input-175px" class="required select">
+									<option value=""></option>
+									<c:if test="${not empty depyList }">
+										<c:forEach items="${depyList}" var="row">
+											<c:if test="${map.portDeptcode== row.code}">
+												<option selected="selected" value="${row.code}">${row.name}</option>
+											</c:if>
+											<c:if test="${map.portDeptcode != row.code}">
+												<option value="${row.code}">${row.name}</option>
+											</c:if>
+										</c:forEach>
+									</c:if>
+									</select>
+									<p></p></td>
+	<th align="right"></th>
+  	<td align="left"><input type="hidden" class="search-input input-175px" name="" id=""size="14" value=""/></td>
+  </tr>
+  <tr>
+	<td></td>
+	<td></td>
+	<td style="width:250px;padding-top:8px;">
+		<input type="submit" class="search-btn fo" value="搜索" style="cursor: pointer;" onclick="pageUtil('1')" />
+	</td>
+	<td>	
+		<input type="reset" class="search-btn fo" value="清空" style="cursor: pointer;" />
+	</td>
+	<td></td>
+  </tr>
+</table>
+</form>
+</div>
+
+<div class="margin-auto width-1200 tips" >共找到<span class="yellow font-18px" >${counts}</span>条记录
+分为&nbsp;<span class="number">${allPage }</span>&nbsp;页，
+				每页显示&nbsp;<span class="number">${itemInPage }</span>&nbsp;条记录</div>
+<div class="margin-auto width-1200  data-box">
+<div class="margin-cxjg">
+	<table class="margin-cxjg_table" border="0" cellspacing="0" cellpadding="0">
+	  	<tr class="thead">
+	      <td>中文船名</td>
+	      <td>英文船名</td>
+	      <td>呼号</td>
+	   	  <td>近四周寄港及日期</td>
+	      <td>船舶免予卫生控制措施证书/船舶卫生控制措施证书签发港及日期</td>
+	      <td>交通工具卫生证书签发港及日期</td>
+	      <td>检疫方式</td>
+	  	  <td>直属局</td>
+	      <td>分支机构</td>
+	      <td>操作</td>
+	    </tr>
+     <tbody>
+ 	 <c:if test="${not empty list }">
+	 	<c:forEach items="${list}" var="row">
+	     <tr>
+	      <td width="150" height="90" align="center" class="font-18px">${row.cn_vsl_m}</td>
+	      <td width="100" height="90" align="center">${row.full_vsl_m}</td>
+	      <td width="100" height="90" align="center">${row.vsl_callsign}</td>
+	      <td width="100" height="90" align="center">${row.last_four_port}</td>
+	      <td width="100" height="90" align="center" >${row.ship_sanit_cert}</td>
+	      <td width="100" height="90" align="center" >${row.traf_cert}</td>
+	      <td width="150" height="90" align="center">${row.chk_dec}</td>
+	      <td width="150" height="90" align="center">${row.org_code}</td>
+	      <td width="150" height="90" align="center">${row.dept_code}</td>
+	      <td height="90" align="center" valign="middle"><a href='showtoprocessInfo_jsp?processId=${row.id}'><span class="data-btn margin-auto">详细+</span></a></td>
+	    </tr>
+    	</c:forEach>
+	</c:if>
+	  </tbody> 
+	  <tfoot >
+       	<jsp:include page="/common/pageUtil.jsp" flush="true"/>
+      </tfoot>      
+  </table>
+</div>
+</div>
+<div class="margin-auto width-1200 tips" ></div>
+</body>
+<script type="text/javascript">
+    $("li").mouseenter(function () {
+        var img = this.getElementsByTagName("img")[0];
+        var str = img.getAttribute("content");
+        var alertBox = document.getElementById("alertBoxId");
+        var alertContent = document.getElementById("alertContentId");
+        alertContent.innerText = str;
+        alertBox.style.display = 'table';
+    });
+
+    $("li").mouseleave(function () {
+        var alertBox = document.getElementById("alertBoxId")
+        alertBox.style.display = 'none';
+    });
+</script>
+</html>

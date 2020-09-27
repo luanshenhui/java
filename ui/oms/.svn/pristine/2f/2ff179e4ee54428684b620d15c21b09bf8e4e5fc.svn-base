@@ -1,0 +1,32 @@
+package cn.rkylin.oms.system.role.dao;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.role.domain.WF_ORG_USER_ROLE;
+@Repository(value = "roleDAO")
+public class RoleDAOImpl implements IRoleDAO {
+	@Autowired
+	protected IDataBaseFactory dao;
+	@Autowired
+	private IDataBaseFactory dataBaseFactory;
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getRoleByCondition(WF_ORG_ROLE roleVO,int page, int rows) throws Exception {
+//		List<WF_ORG_ROLE> resultList = new ArrayList();
+//		resultList=dao.findAllList("WF_ORG_ROLE.select", roleVO);
+		return dataBaseFactory.findPage(page, rows, "getRoleByCondition", roleVO).getList();
+	}
+
+	@Override
+	public void insert(String stationParam, WF_ORG_USER_ROLE ur) throws Exception {
+		dao.insert("insertRoleUser", ur);
+		
+	}
+
+}

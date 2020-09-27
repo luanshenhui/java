@@ -1,0 +1,19 @@
+<div class="modal business-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned business-form">
+        <input type="hidden" name="parametersId" value="{{data.parametersId}}"/>
+
+        <div class="control-group business-prompt">
+            <label for="prompt"><span class="required">*</span>业务话术:</label>
+            <textarea name="prompt" class="js-approve-memeo" maxlength="100" onchange="this.value=this.value.substring(0, 100)" onkeydown="this.value=this.value.substring(0, 100)" onkeyup="this.value=this.value.substring(0, 100)"required>{{data.prompt}}</textarea>
+        </div>
+        <div class="modal-footer">
+                <input type="submit" class="btn btn-success btn-small" value="确定">
+            <button class="btn btn-close btn-small close">关闭</button>
+        </div>
+    </form>
+</div>

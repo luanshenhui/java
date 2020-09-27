@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SmspInfModel">
+    <resultMap id="SmspInfMap" type="SmspInfModel">
+        <result property="id" column="id"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="itemName" column="item_name"/>
+        <result property="perStage" column="per_stage"/>
+        <result property="stagesCode" column="stages_code"/>
+        <result property="goodsPrice" column="goods_price"/>
+        <result property="smspId" column="smsp_id"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="voucherPrice" column="voucher_price"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="couponNm" column="coupon_nm"/>
+        <result property="ifPoint" column="if_point"/>
+        <result property="status" column="status"/>
+        <result property="otherMess" column="other_mess"/>
+        <result property="subDatetime" column="sub_datetime"/>
+        <result property="checkDatetime" column="check_datetime"/>
+        <result property="sendDatetime" column="send_datetime"/>
+        <result property="loadStatus" column="load_status"/>
+        <result property="loadDatetime" column="load_datetime"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="dealFlag" column="deal_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,item_code,item_name,per_stage,stages_code,goods_price,smsp_id,begin_date,end_date,voucher_price,coupon_id,coupon_nm,if_point,status,other_mess,sub_datetime,check_datetime,send_datetime,load_status,load_datetime,del_flag,deal_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="SmspInfModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_smsp_inf
+        (item_code
+        ,item_name
+        ,per_stage
+        ,stages_code
+        ,goods_price
+        ,smsp_id
+        ,begin_date
+        ,end_date
+        ,voucher_price
+        ,coupon_id
+        ,coupon_nm
+        ,if_point
+        ,status
+        ,other_mess
+        ,sub_datetime
+        ,check_datetime
+        ,send_datetime
+        ,load_status
+        ,load_datetime
+        ,del_flag
+        ,deal_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{itemCode}
+        ,#{itemName}
+        ,#{perStage}
+        ,#{stagesCode}
+        ,#{goodsPrice}
+        ,#{smspId}
+        ,#{beginDate}
+        ,#{endDate}
+        ,#{voucherPrice}
+        ,#{couponId}
+        ,#{couponNm}
+        ,#{ifPoint}
+        ,#{status}
+        ,#{otherMess}
+        ,#{subDatetime}
+        ,#{checkDatetime}
+        ,#{sendDatetime}
+        ,#{loadStatus}
+        ,#{loadDatetime}
+        ,'0'
+        ,'0'
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="SmspInfModel">
+        update tbl_smsp_inf set
+        <if test="itemCode !=null">item_code = #{itemCode}
+            ,
+        </if>
+        <if test="itemName !=null">item_name = #{itemName}
+            ,
+        </if>
+        <if test="perStage !=null">per_stage = #{perStage}
+            ,
+        </if>
+        <if test="stagesCode !=null">stages_code = #{stagesCode}
+            ,
+        </if>
+        <if test="goodsPrice !=null">goods_price = #{goodsPrice}
+            ,
+        </if>
+        <if test="smspId !=null">smsp_id = #{smspId}
+            ,
+        </if>
+        <if test="beginDate !=null">begin_date = #{beginDate}
+            ,
+        </if>
+        <if test="endDate !=null">end_date = #{endDate}
+            ,
+        </if>
+        <if test="voucherPrice !=null">voucher_price = #{voucherPrice}
+            ,
+        </if>
+        <if test="couponId !=null">coupon_id = #{couponId}
+            ,
+        </if>
+        <if test="couponNm !=null">coupon_nm = #{couponNm}
+            ,
+        </if>
+        <if test="ifPoint !=null">if_point = #{ifPoint}
+            ,
+        </if>
+        <if test="status !=null">status = #{status}
+            ,
+        </if>
+        <if test="otherMess !=null">other_mess = #{otherMess}
+            ,
+        </if>
+        <if test="subDatetime !=null">sub_datetime = #{subDatetime}
+            ,
+        </if>
+        <if test="checkDatetime !=null">check_datetime = #{checkDatetime}
+            ,
+        </if>
+        <if test="sendDatetime !=null">send_datetime = #{sendDatetime}
+            ,
+        </if>
+        <if test="loadStatus !=null">load_status = #{loadStatus}
+            ,
+        </if>
+        <if test="loadDatetime !=null">load_datetime = #{loadDatetime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            del_flag = '0'
+            <if test="id !=null">and id = #{id}</if>
+            <if test="itemCode !=null">and item_code = #{itemCode}</if>
+            <if test="itemName !=null">and item_name = #{itemName}</if>
+            <if test="perStage !=null">and per_stage = #{perStage}</if>
+            <if test="stagesCode !=null">and stages_code = #{stagesCode}</if>
+            <if test="goodsPrice !=null">and goods_price = #{goodsPrice}</if>
+            <if test="smspId !=null">and smsp_id = #{smspId}</if>
+            <if test="beginDate !=null">and begin_date = #{beginDate}</if>
+            <if test="endDate !=null">and end_date = #{endDate}</if>
+            <if test="voucherPrice !=null">and voucher_price = #{voucherPrice}</if>
+            <if test="couponId !=null">and coupon_id = #{couponId}</if>
+            <if test="couponNm !=null">and coupon_nm = #{couponNm}</if>
+            <if test="ifPoint !=null">and if_point = #{ifPoint}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="otherMess !=null">and other_mess = #{otherMess}</if>
+            <if test="subDatetime !=null">and sub_datetime = #{subDatetime}</if>
+            <if test="checkDatetime !=null">and check_datetime = #{checkDatetime}</if>
+            <if test="sendDatetime !=null">and send_datetime = #{sendDatetime}</if>
+            <if test="loadStatus !=null">and load_status = #{loadStatus}</if>
+            <if test="loadDatetime !=null">and load_datetime = #{loadDatetime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="dealFlag !=null">and deal_flag = #{dealFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="SmspInfMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_smsp_inf
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="SmspInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_smsp_inf
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="SmspInfMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_smsp_inf
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <!--分页查询 niufw-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_smsp_inf
+        <include refid="conditions"/>
+    </select>
+
+    <delete id="delete" parameterType="SmspInfModel">
+        delete from tbl_smsp_inf where id = id
+    </delete>
+    <!--逻辑删除-->
+    <update id="updateForDelete" parameterType="java.lang.Long">
+        update tbl_smsp_inf set
+        del_flag = '0'
+        where  id = #{id}
+    </update>
+    <!--提交-->
+    <update id="updateForSubmit" parameterType="java.lang.Long">
+        update tbl_smsp_inf set
+        status = '0202',  <!--已提交-->
+        sub_datetime = now()
+        where id = #{id}
+    </update>
+    <!--批量提交-->
+    <update id="submitAll" parameterType="SmspInfModel">
+        update tbl_smsp_inf set
+        sub_datetime = now(),
+        <if test="status !=null">status = #{status}
+        </if>
+        where id = #{id}
+    </update>
+
+    <!--批量删除-->
+    <update id="deleteAll" parameterType="SmspInfModel">
+        update tbl_smsp_inf set
+        del_flag = '1'
+        where id = #{id}
+    </update>
+
+    <!--审核通过-->
+    <update id="smsTemplateCheck" parameterType="java.lang.Long">
+        update tbl_smsp_inf set
+        status = '0204',   <!--已完成-->
+        check_datetime = now()
+        where id = #{id}
+    </update>
+
+    <update id="smsTemplateRefuse" parameterType="java.lang.Long">
+        update tbl_smsp_inf set
+        status = '0205'   <!--已拒绝-->
+        where id = #{id}
+    </update>
+</mapper>
+
+

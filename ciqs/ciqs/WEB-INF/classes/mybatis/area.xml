@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SQL.AREA">
+
+	<select id="selectCheckResult" parameterType="com.dpn.ciqqlc.standard.model.CheckResultModel"  resultType="com.dpn.ciqqlc.standard.model.CheckResultModel">
+			SELECT
+		content as applyCompany
+		FROM
+		qlc_export_ipc
+		where 1=1
+	</select>
+	
+	<select id="getCountryList" parameterType="com.dpn.ciqqlc.standard.model.CountryDTO"  resultType="com.dpn.ciqqlc.standard.model.CountryDTO">
+		select NUM_CODE,CNNAME from country
+		where 1=1
+		<if test="num_code != null and num_code != ''" >
+			and num_code=#{num_code}
+		</if>
+	</select>
+
+
+	<!-- 各功能模块获取codelibrary代码公共方法 -->
+	<select id="getQlcCodeLibrary" resultType="com.dpn.ciqqlc.standard.model.CodeLibraryDTO">
+		select code,name from qlc_code_library where type=#{type} 
+			<if test = "port_org_code != null and port_org_code != ''">
+				and port_org_code=#{port_org_code}
+			</if>
+	</select>
+	<!-- **** insert ******************************************************* -->
+	<insert id="insertChkRckModel" parameterType="com.dpn.ciqqlc.standard.model.ChkRckModel">
+		insert into QLC_CHK_RCD
+		(id
+		<if test="procMainId != null and procMainId != ''" >
+			,proc_main_id
+		</if>
+		<if test="projCode != null and projCode != ''" >
+			,proj_code
+		</if>
+		<if test="resultState != null and resultState != ''" >
+			,result_state
+		</if>
+		<if test="resultRmk != null and resultRmk != ''" >
+			,result_rmk
+		</if>
+		<if test="oprUser != null and oprUser != ''" >
+			,opr_user
+		</if>
+		<if test="oprDate != null and oprDate != ''" >
+			,opr_date
+		</if>
+		)
+		values (#{id}
+		<if test="procMainId != null and procMainId != ''" >
+			,#{procMainId}
+		</if>
+		<if test="projCode != null and projCode != ''" >
+			,#{projCode}
+		</if>
+		<if test="resultState != null and resultState != ''" >
+			,#{resultState}
+		</if>
+		<if test="resultRmk != null and resultRmk != ''" >
+			,#{resultRmk}
+		</if>
+		<if test="oprUser != null and oprUser != ''" >
+			,#{oprUser}
+		</if>
+		<if test="oprDate != null and oprDate != ''" >
+			,#{oprDate}
+		</if>
+		)
+	</insert>
+	<!-- **** update ******************************************************* -->
+
+	<!-- **** delete ******************************************************* -->
+
+</mapper>

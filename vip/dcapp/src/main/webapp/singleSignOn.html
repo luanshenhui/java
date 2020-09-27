@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <script src="static/jquery/dist/jquery.min.js"></script>
+</head>
+
+<script>
+
+    $(function () {
+    	
+    	$('button[data-id="loginBtn"]').on('click', function(){
+    		
+    		var name = $('#username').val(),
+    			pwd = $('#password').val();
+    		
+    		// 向融合分析平台发起登陆
+    		$.post("http://localhost/a/login", {username: name, password: pwd}, function(){
+
+    			// 向OA发起登陆
+    			var div = $('<div>').load("http://localhost/OAapp/WebObjects/OAapp.woa/wa/loginOA #hrefId", 
+    					{language:'CN', userId: name, password: pwd},function(){
+					
+    				// 从cookie中获取链接
+    				var href = getCookie('href');
+    				
+					if(href){
+	    				if(href == 'oa'){
+	    					href = $('a',div).attr('href');
+	    				}
+	    				
+	    				window.location = href;
+					}else{
+						window.location = 'main.html';
+					}
+				})
+				
+    		});
+    		
+    	});
+    })
+    
+    /* 
+		功能：获取cookies函数  
+		参数：name，cookie名字 
+	*/  
+	function getCookie(name){  
+	    var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));  
+	    if(arr != null){  
+	     return unescape(arr[2]);   
+	    }else{  
+	     return null;  
+	    }  
+	} 
+</script>
+<body>
+	<div>
+		<input type="text" id="username" placeholder="请输入用户名" value="admin">
+		<input type="password" id="password" placeholder="请输入密码" value="123456">
+		<button type="button" data-id="loginBtn" value="登 录">登 录</button>
+	</div>
+</body>
+</html>

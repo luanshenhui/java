@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="arm64-v8a,armeabi-v7a,armeabi"
+    api-level="22"
+    density="xhdpi"
+    format="7"
+    timestamp="22045290730845" >
+
+    <task
+        name="javac"
+        duration="7065" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="30" />
+    <task
+        name="verifier"
+        duration="19" />
+
+    <artifact
+        location="C:\Users\home\Desktop\Hello_Watch\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
+        type="DEX" />
+
+    <build timestamp="21803095329167" >
+        <artifact
+            location="C:\Users\home\Desktop\Hello_Watch\app\build\outputs\apk\app-debug.apk"
+            type="MAIN" />
+    </build>
+    <build timestamp="21945685172699" >
+        <artifact
+            location="C:\Users\home\Desktop\Hello_Watch\app\build\intermediates\res\resources-debug.ap_"
+            type="RESOURCES" />
+    </build>
+    <build timestamp="22045290730845" >
+        <artifact
+            location="C:\Users\home\Desktop\Hello_Watch\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
+            type="DEX" />
+    </build>
+
+</instant-run>

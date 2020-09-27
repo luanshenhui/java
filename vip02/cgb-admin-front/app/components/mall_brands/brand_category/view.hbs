@@ -1,0 +1,77 @@
+{{#component "brandsCategory-info js-component"}}
+    <p class="components-title"><strong>- 品牌类别管理 -</strong></p>
+
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form form-inline form-aligned">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="brandName">类别ID:</label>
+                            <input class="form-control" type="text" name="categoryId"
+                                   value="{{categoryId}}" maxlength="4" />
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="brandName">类别名称:</label>
+                            <input class="form-control" type="text" name="categoryName"
+                                   value="{{categoryName}}" maxlength="12" />
+                        </span>
+                        <span class="span4 span-large">
+                            <input class="btn btn-success btn-small pull-right margin-right-10" type="submit" value="查询"/>
+                        </span>
+                    </p>
+                </fieldset>
+            </form>
+            <div class="add m-b-10">
+                {{#authorial "brandCategories_add"}}
+                    <a class="btn btn-info btn-small js-brandCategory-add">+ 新增</a>
+                {{/authorial}}
+            </div>
+            {{#equals _DATA_.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th width="10%">类别ID</th>
+                        <th width="20%">类别名称</th>
+                        <th width="10%">显示顺序</th>
+                        <th width="15%">频道代码</th>
+                        <th width="25%">备注</th>
+                        <th width="20%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each _DATA_.data}}
+                        <tr data-data="{{json this}}" >
+                            <td>{{categoryId}}</td>
+                            <td>{{categoryName}}</td>
+                            <td>{{categorySeq}}</td>
+                            <td>{{channelId}}</td>
+                            <td>{{categoryDesc}}</td>
+                            <td>
+                            {{#authorial "brandCategories_view"}}
+                                <button class="btn btn-info btn-sm js-brandCategory-view">查看</button>
+                            {{/authorial}}
+                            {{#authorial "brandCategories_edit"}}
+                                <button class="btn btn-info btn-sm js-brandCategory-edit">编辑</button>
+                            {{/authorial}}
+                            {{#authorial "brandCategories_del"}}
+                                <button class="btn btn-info btn-sm js-brandCategory-del"
+                                        onclick="return check(this);" id="{{id}}"
+                                        data-toggle="confirm"
+                                        data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                        data-event="confirm:delete-categories">
+                                    删除
+                                </button>
+                            {{/authorial}}
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            {{/equals}}
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+    </div>
+{{/component}}

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LocalProcodeModel">
+    <resultMap id="LocalProcodeMap" type="LocalProcodeModel">
+        <result property="id" column="id"/>
+        <result property="proCode" column="pro_code"/>
+        <result property="proNm" column="pro_nm"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,pro_code,pro_nm,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="LocalProcodeModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into local_procode
+        (pro_code
+        ,pro_nm
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{proCode}
+        ,#{proNm}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="LocalProcodeModel">
+        update local_procode set
+        <if test="proCode !=null">pro_code = #{proCode}
+            ,
+        </if>
+        <if test="proNm !=null">pro_nm = #{proNm}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = 0
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="proCode !=null">and pro_code = #{proCode}</if>
+            <if test="proNm !=null">and pro_nm = #{proNm}</if>
+            and del_flag = 0
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="LocalProcodeMap">
+        SELECT id,
+        <include refid="columns"/>
+        from local_procode
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="LocalProcodeMap">
+        select id,
+        <include refid="columns"/>
+        from local_procode
+        <include refid="conditions"/>
+    </select>
+    <select id="count" resultType="Long">
+        select count(1)
+        from local_procode
+        <include refid="conditions"/>
+    </select>
+    <select id="pager" parameterType="Map" resultMap="LocalProcodeMap">
+        select id,
+        <include refid="columns"/>
+        from local_procode
+        <include refid="conditions"/>
+        <![CDATA[ order by pro_code  limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="LocalProcodeModel">
+        update local_procode
+        set
+        del_flag = 1
+        where id = #{id}
+    </delete>
+
+
+    <select id="findByProCode" parameterType="Map" resultMap="LocalProcodeMap">
+        SELECT id,
+        <include refid="columns"/>
+        from local_procode
+        where pro_code=#{proCode}
+        and del_flag = 0
+    </select>
+
+    <!--校验name唯一性使用 by yuxinxin -->
+    <select id="findNameByName" parameterType="String" resultType="Long">
+        select count(1)
+        from local_procode
+        where pro_nm = #{proNm} and del_flag = 0
+    </select>
+    <!--校验pro_code唯一性使用 by yuxinxin -->
+    <select id="findProCodeByProCode" parameterType="String" resultType="Long">
+        select count(1)
+        from local_procode
+        where pro_code = #{proCode} and del_flag = 0
+    </select>
+
+</mapper>
+
+

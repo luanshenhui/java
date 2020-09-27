@@ -1,0 +1,791 @@
+{{#component "cooperation-edit js-component"}}
+    <script src="/static/scripts/encrypt/pwdObject_.js"></script>
+    <div class="modal-header">
+        <div class="main-box-title h1-title">编辑供应商信息</div>
+    </div>
+
+    <!--邮购分期新增时需要隐藏传递的-->
+    <div id="addMailStages" class="addMailStages">
+        <div id="mail-stages" class="mail-stages js-mail-stages-info">
+            <div class="control-group pull-left">
+                <label class="label-width" for="mailStagesModel.code"><span class="required">*</span>邮购分期类别码:</label>
+                <input id="code" class="code" name="mailStagesModel.code" value="{{mailStagesModel.code}}"
+                       type="text"
+                       class="form-control" maxlength="4"/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="mailStagesModel.name"><span class="required">*</span>邮购分期类别名称:</label>
+                <input id="name" class="name" name="mailStagesModel.name" value="{{mailStagesModel.name}}"
+                       type="text"
+                       class="form-control" maxlength="100"/>
+                <button type="button" class="btn btn-info btn-small js-mail-stages-delete">删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!--分期费率新增时需要隐藏传递的-->
+    <div id="addStageRate" class="addStageRate">
+        <div id="rate" class="rate js-rate-info">
+            <div class="main-box-title2"><span class="rate-span">1期费率</span>
+                <button type="button" class="btn btn-info btn-small js-rate-delete">删除</button>
+            </div>
+            <div class="control-group pull-left">
+                <label class="label-width" for="period">期数:</label>
+                <select id="period" name="stageRateModel.period" class="totalStage">
+                    <option value="1" {{#equals period "1" }} selected {{/equals}}>1</option>
+                    <option value="3" {{#equals period "3" }} selected {{/equals}}>3</option>
+                    <option value="6" {{#equals period "6" }} selected {{/equals}}>6
+                    </option>
+                    <option value="9" {{#equals period "9" }} selected {{/equals}}>9
+                    </option>
+                    <option value="12" {{#equals period "12" }} selected {{/equals}}>12
+                    </option>
+                    <option value="18" {{#equals period "18" }} selected {{/equals}}>18
+                    </option>
+                    <option value="24" {{#equals period "24" }} selected {{/equals}}>24
+                    </option>
+                </select>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="fixedfeehtFlag">手续费首位付标志:</label>
+                <select id="fixedfeehtFlag" name="TblVendorRatioModel.fixedfeehtFlag">
+                    <option value="1" {{#equals fixedfeehtFlag "1" }} selected {{/equals}}>
+                        E
+                    </option>
+                    <option value="2" {{#equals fixedfeehtFlag "2" }} selected {{/equals}}>
+                        S
+                    </option>
+                    <option value="3" {{#equals fixedfeehtFlag "3" }} selected {{/equals}}>
+                        W
+                    </option>
+                    <option value="4" {{#equals fixedfeehtFlag "4" }} selected {{/equals}}>
+                        F
+                    </option>
+                    <option value="5" {{#equals fixedfeehtFlag "5" }} selected {{/equals}}>
+                        L
+                    </option>
+                </select>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="fixedamtFee"><span class="required">*</span>固定金额手续费:</label>
+                <input id="fixedamtFee" class="fixedamtFee input-small" name="stageRateModel.fixedamtFee"
+                       value="{{fixedamtFee}}"
+                       type="text"
+                       class="form-control" maxlength="5"/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="feeratio1"><span class="required">*</span>手续费费率1(月费率):</label>
+                <input id="feeratio1" class="feeratio1 input-small" name="stageRateModel.feeratio1" value="{{feeratio1}}"
+                       type="text"
+                       class="form-control"  maxlength="6"/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="ratio1Precent"><span class="required">*</span>费率1本金百分比:</label>
+                <input id="ratio1Precent" class="ratio1Precent input-small" name="stageRateModel.ratio1Precent" value="{{ratio1Precent}}"
+                       type="text"
+                       class="form-control" maxlength="6"/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="feeratio2"><span class="required">*</span>手续费费率2(月费率):</label>
+                <input id="feeratio2" class="feeratio2 input-small" name="stageRateModel.feeratio2" value="{{feeratio2}}"
+                       type="text"
+                       class="form-control"  maxlength="6" readonly/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="ratio2Precent"><span class="required">*</span>费率2本金百分比:</label>
+                <input id="ratio2Precent" class="ratio2Precent input-small" name="stageRateModel.ratio2Precent" value="{{ratio2Precent}}"
+                       type="text"
+                       class="form-control"  maxlength="6" readonly/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="feeratio2Bill"><span class="required">*</span>手续费费率2 开机期数:</label>
+                <input id="feeratio2Bill" class="feeratio2Bill input-small" name="stageRateModel.feeratio2Bill" value="{{feeratio2Bill}}"
+                       type="text"
+                       class="form-control"  maxlength="9" readonly/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="feeratio3"><span class="required">*</span>手续费费率3(月费率):</label>
+                <input id="feeratio3" class="feeratio3 input-small" name="stageRateModel.feeratio3" value="{{feeratio3}}"
+                       type="text"
+                       class="form-control"  maxlength="6" readonly/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="ratio3Precent"><span class="required">*</span>费率3本金百分比:</label>
+                <input id="ratio3Precent" class="ratio3Precent input-small" name="stageRateModel.ratio3Precent" value="{{ratio3Precent}}"
+                       type="text"
+                       class="form-control"  maxlength="6" readonly/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="feeratio3Bill"><span class="required">*</span>手续费费率3 开机期数:</label>
+                <input id="feeratio3Bill" class="feeratio3Bill input-small" name="stageRateModel.feeratio3Bill" value="{{feeratio3Bill}}"
+                       type="text"
+                       class="form-control"  maxlength="9" readonly/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="reducerateFrom"><span class="required">*</span>直接免除手续费期数FROM:</label>
+                <input id="reducerateFrom" class="reducerateFrom input-small" name="stageRateModel.reducerateFrom"
+                       value="{{reducerateFrom}}"
+                       type="text" class="form-control"  maxlength="9"/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="reducerateTo"><span class="required">*</span>直接免除手续费期数TO:</label>
+                <input id="reducerateTo" class="reducerateTo input-small" name="stageRateModel.reducerateTo"
+                       value="{{reducerateTo}}"
+                       type="text"
+                       class="form-control"  maxlength="9"/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="reducerate"><span class="required">*</span>手续费免除期数:</label>
+                <input id="reducerate" class="reducerate input-small" name="stageRateModel.reducerate" value="{{reducerate}}"
+                       type="text"
+                       class="form-control"  maxlength="9"/>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="htflag"><span class="required">*</span>首尾付标志:</label>
+                <select id="htflag" name="TblVendorRatioModel.htflag" class="htflag">
+                    <option value="1" {{#equals htflag "1" }} selected {{/equals}}>N
+                    </option>
+                    <option value="2" {{#equals htflag "2" }} selected {{/equals}}>S
+                    </option>
+                    <option value="3" {{#equals htflag "3" }} selected {{/equals}}>W
+                    </option>
+                    <option value="4" {{#equals htflag "4" }} selected {{/equals}}>F
+                    </option>
+                    <option value="5" {{#equals htflag "5" }} selected {{/equals}}>L
+                    </option>
+                </select>
+            </div>
+
+            <div class="control-group pull-left">
+                <label class="label-width" for="htant"><span class="required">*</span>首尾付本金:</label>
+                <input id="htant" class="htant input-small" name="stageRateModel.htant"
+                       value="{{htant}}"
+                       type="text"
+                       class="form-control"  maxlength="9" readonly/>
+            </div>
+        </div>
+    </div>
+
+    <form id="cooperationEditForm" class="form form-aligned cooperation-edit-form">
+        <!--隐藏传递平台类型 YG：广发商城，JF：积分商城-->
+        <input type="hidden" id="businessTypeId" name="businessTypeId" value="YG">
+    {{#with _DATA_}}
+        <div class="subNav">- 基本信息 -
+            <i class="icon-admin-cat-box-list-bg detail-close"></i>
+            <i class="icon-side-arrow detail-open"></i>
+        </div>
+        <div class="navContent">
+        <p class="components-title title">基本信息</p>
+
+        <div class="control-group pull-left">
+            <label for="vendorId" class="label-width"><span class="required">*</span>供应商编码:</label>
+            <input id="vendorId" name="vendorId" value="{{vendorId}}" type="text" class="form-control" required
+                   maxlength="6" readonly="readonly"/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <div class="control-group pull-left">
+            <label for="merId" class="label-width"><span class="required">*</span>商户号:</label>
+            <input id="merId" name="merId" value="{{merId}}" type="text" class="form-control" maxlength="20" required/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <div class="control-group pull-left">
+            <label for="fullName" class="label-width"><span class="required">*</span>供应商名称:</label>
+            <input id="fullName" name="fullName" value="{{fullName}}" type="text" class="form-control" required
+                   maxlength="100"/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <div class="control-group pull-left">
+            <label for="simpleName" class="label-width"><span class="required">*</span>供应商简称:</label>
+            <input id="simpleName" name="simpleName" value="{{simpleName}}" type="text" class="form-control" required
+                   maxlength="20"/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="taxCode" class="label-width">纳税登记号:</label>
+            <input id="taxCode" name="taxCode" value="{{taxCode}}" type="text" class="form-control" maxlength="20"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="vendorType" class="label-width">类型:</label>
+            <input id="vendorType" name="vendorType" type="text" value="{{vendorType}}" class="form-control"
+                    maxlength="20"/>
+        </div>
+        <p class="components-title title">付款信息</p>
+
+        <div class="control-group pull-left">
+            <label for="payCondition" class="label-width">付款条件:</label>
+            <input id="payCondition" name="payCondition" type="text" value="{{payCondition}}" class="form-control"
+                   maxlength="20"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="payGroup" class="label-width">支付组:</label>
+            <input id="payGroup" name="payGroup" type="text" value="{{payGroup}}" class="form-control" maxlength="20"/>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="commision" class="label-width">佣金率:</label>
+            <input id="commision" name="commision" type="text" value="{{commision}}" class="form-control"
+                   maxlength="4"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="payWay" class="label-width">付款方法:</label>
+            <input id="payWay" name="payWay" type="text" value="{{payWay}}" class="form-control" maxlength="20"/>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="payCurrency" class="label-width">付款币种:</label>
+            <input id="payCurrency" name="payCurrency" type="text" value="{{payCurrency}}" class="form-control"
+                   maxlength="20"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="freightTip" class="label-width">运费条款:</label>
+            <input id="freightTip" name="freightTip" type="text" value="{{freightTip}}" class="form-control"
+                   maxlength="200"/>
+        </div>
+
+        <div class="control-group pull-left">
+            <!--收取方式  1：按月收取  2：按季收取  3：按年收取  4：一次性收取-->
+            <label for="feeType" class="label-width">接收方式:</label>
+            <select id="feeType" name="feeType">
+                <option value="1" {{#equals feeType "1" }} selected {{/equals}}>按月收取</option>
+                <option value="2" {{#equals feeType "2" }} selected {{/equals}}>按季收取</option>
+                <option value="3" {{#equals feeType "3" }} selected {{/equals}}>按年收取</option>
+                <option value="4" {{#equals feeType "4" }} selected {{/equals}}>一次性收取</option>
+            </select>
+        </div>
+        <div class="control-group pull-left">
+            <label for="provinceId" class="label-width"><span class="required">*</span>省份:</label>
+            <input type="hidden" id="provinces" name="provinces" value="{{provinceId}}">
+            <select name="provinceId" id="provinceId" class="js-cooperation-selectCity">
+            </select>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="cityId" class="label-width"><span class="required">*</span>城市:</label>
+            <input type="hidden" id="citys" name="citys" value="{{cityId}}">
+            <select name="cityId" id="cityId" class="js-cooperation-selectDistrict">
+            </select>
+        </div>
+        <div class="control-group pull-left">
+            <label for="areaId" class="label-width"><span class="required">*</span>区:</label>
+            <input type="hidden" id="areas" name="areas" value="{{areaId}}">
+            <select name="areaId" id="areaId">
+            </select>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="cooperAddress" class="label-width"><span class="required">*</span>供应商地点:</label>
+            <input id="cooperAddress" name="cooperAddress" type="text" value="{{cooperAddress}}" class="form-control"
+                   maxlength="200" required/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <div class="control-group pull-left">
+            <label for="enterpriseAddress" class="label-width"><span class="required">*</span>企业地址:</label>
+            <input id="enterpriseAddress" name="enterpriseAddress" type="text" value="{{enterpriseAddress}}"
+                   class="form-control"
+                   maxlength="200" required/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="postCode" class="label-width"><span class="required">*</span>邮政编码:</label>
+            <input id="postCode" name="postCode" value="{{postCode}}" type="text" class="form-control" required
+                   maxlength="6"/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <div class="control-group pull-left">
+            <label for="payAddress" class="label-width">用于支付地点:</label>
+            <input id="payAddress" name="payAddress" value="{{payAddress}}" type="text" class="form-control"
+                   maxlength="200"/>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="buyAddress" class="label-width"><span class="required">*</span>用于采购地点:</label>
+            <input id="buyAddress" name="buyAddress" value="{{buyAddress}}" type="text" class="form-control" required
+                   maxlength="200"/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <div class="control-group pull-left">
+            <label for="payConditionAddress" class="label-width">付款条件地点:</label>
+            <input id="payConditionAddress" name="payConditionAddress" value="{{payConditionAddress}}" type="text"
+                   class="form-control" maxlength="200"/>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="payGroupAddress" class="label-width">支付组地点:</label>
+            <input id="payGroupAddress" name="payGroupAddress" value="{{payGroupAddress}}" type="text"
+                   class="form-control" maxlength="200"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="address" class="label-width">收货地点:</label>
+            <input id="address" name="address" value="{{address}}" type="text" class="form-control" maxlength="80"/>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="debtAccount" class="label-width">负债账户:</label>
+            <input id="debtAccount" name="debtAccount" value="{{debtAccount}}" type="text" class="form-control"
+                   maxlength="20"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="prepayAccount" class="label-width">预付款账户:</label>
+            <input id="prepayAccount" name="prepayAccount" value="{{prepayAccount}}" type="text" class="form-control"
+                   maxlength="20"/>
+        </div>
+        <p class="components-title title">联系人信息</p>
+
+        <div class="control-group pull-left">
+            <label for="contact" class="label-width">联系人名称:</label>
+            <input id="contact" name="contact" value="{{contact}}" type="text" class="form-control" maxlength="30"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="phone" class="label-width">联系人电话:</label>
+            <input id="phone" name="phone" value="{{phone}}" type="text" class="form-control" maxlength="20"/>
+            <span class="note">区号-电话/手机</span>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="contactTax" class="label-width">联系人传真:</label>
+            <input id="contactTax" name="contactTax" value="{{contactTax}}" type="text" class="form-control"
+                   maxlength="20"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="email" class="label-width">电子信箱:</label>
+            <input id="email" name="email" value="{{email}}" type="text" class="form-control" maxlength="300"/>
+        </div>
+
+        <div class="control-group pull-left onlyOne">
+            <label for="invoice" class="label-width"><span class="required">*</span>发票匹配选项:</label>
+            <input id="invoice" name="invoice" value="{{invoice}}" type="text" class="form-control" required
+                   maxlength="20"/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <p class="components-title title">银行方信息</p>
+
+        <div class="control-group pull-left">
+            <label for="accBank" class="label-width">收款银行名称:</label>
+            <input id="accBank" name="accBank" value="{{accBank}}" type="text" class="form-control" maxlength="80"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="accNo" class="label-width">银行帐号:</label>
+            <input id="accNo" name="accNo" value="{{accNo}}" type="text" class="form-control" maxlength="40"/>
+        </div>
+        <p class="components-title title">其他信息</p>
+
+        <div class="control-group pull-left">
+            <!--当前状态  0101：未启用  0102：已启用-->
+            <!--此处逻辑：如果审核状态是0-待审核新增，不可用，其余情况状态可用-->
+            <label for="status" class="label-width">当前状态:</label>
+            {{#equals 0 vendorModel.checkStatus}}
+                <select id="status" name="status" disabled>
+                    <option value="0101">未启用</option>
+                    <option value="0102">已启用</option>
+                </select>
+                <input name="status" value="0101" type="hidden" class="form-control"/>
+            {{else}}
+                <select id="status" name="status">
+                    <option value="0101" {{#equals status "0101" }} selected {{/equals}}>未启用</option>
+                    <option value="0102" {{#equals status "0102" }} selected {{/equals}}>已启用</option>
+                </select>
+            {{/equals}}
+        </div>
+        <div class="control-group pull-left">
+            <label for="vendorRole" class="label-width"><span class="required">*</span>供应商角色:</label>
+            <select id="vendorRole" name="vendorRole">
+                <option value="0" {{#equals vendorRole "0" }} selected {{/equals}}>VMI合作商</option>
+                <option value="1" {{#equals vendorRole "1" }} selected {{/equals}}>VMI物流商</option>
+                <option value="2" {{#equals vendorRole "2" }} selected {{/equals}}>高级供应商</option>
+                <option value="3" {{#equals vendorRole "3" }} selected {{/equals}}>O2O供应商</option>
+            </select>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="unionPayNo" class="label-width"><span class="required">*</span>银联商户号:</label>
+            <input id="unionPayNo" name="unionPayNo" value="{{unionPayNo}}" type="text" class="form-control"
+                   maxlength="15" required/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="vendorNo" class="label-width"><span class="required">*</span>供应商代码:</label>
+            <input id="vendorNo" name="vendorNo" value="{{vendorNo}}" type="text" class="form-control"
+                   maxlength="5" required/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <div class="control-group pull-left">
+            <label for="virtualVendorId" class="label-width"><span class="required">*</span>虚拟特店号:</label>
+            <input id="virtualVendorId" name="virtualVendorId" value="{{virtualVendorId}}" type="text" class="form-control"
+                   maxlength="12" required/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="serviceTime" class="label-width">供应商服务时间:</label>
+            <input id="serviceTime" name="serviceTime" value="{{serviceTime}}" type="text" class="form-control"
+                   maxlength="50"/>
+        </div>
+        <p class="components-title title">用户信息</p>
+
+        <div class="control-group pull-left">
+            <label for="vendorModel.code" class="label-width"><span class="required">*</span>用户编号:</label>
+            <input id="vendorModel.code" name="vendorModel.code" value="{{vendorModel.code}}" type="text"
+                   class="form-control vMCode" required maxlength="30" readonly="readonly"/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <div class="control-group pull-left">
+            <label for="vendorModel.name" class="label-width"><span class="required">*</span>用户姓名:</label>
+            <input id="vendorModel.name" name="vendorModel.name" value="{{vendorModel.name}}" type="text"
+                   class="form-control vName" required maxlength="20"/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+<!--密码控件开始-->
+        <div class="control-group pull-left modify-password-div">
+            <label for="passwordNew" class="password-div password-right label-width">一次密码:</label>
+            <div id="passwordNew" class="password-div"><script type="text/javascript">
+                createPwdObjectNew("passwordNew-div","164","28","4","4","E","222");
+            </script></div>
+        </div>
+
+        <div class="control-group pull-left modify-password-div">
+            <label for="passwordConfirm" class="password-div password-right label-width">确认密码:</label>
+            <div id="passwordConfirm" class="password-div"><script type="text/javascript">
+                createPwdObjectNew("passwordConfirm-div","164","28","4","4","E","222");
+            </script></div>
+        </div>
+<!--密码控件结束-->
+
+        <div class="control-group pull-left">
+            <label for="vendorModel.mobile" class="label-width">手机号码:</label>
+            <input id="vendorModel.mobile" name="vendorModel.mobile" value="{{vendorModel.mobile}}" type="text"
+                   class="form-control vmobile" maxlength="20"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="vendorModel.phone" class="label-width">联系电话:</label>
+            <input id="vendorModel.phone" name="vendorModel.phone" value="{{vendorModel.phone}}" type="text"
+                   class="form-control vphone"
+                   maxlength="20"/>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="vendorModel.fax" class="label-width">传真电话:</label>
+            <input id="vendorModel.fax" name="vendorModel.fax" value="{{vendorModel.fax}}" type="text"
+                   class="form-control vfax" maxlength="20"/>
+        </div>
+        <div class="control-group pull-left">
+            <label for="vendorModel.address" class="label-width">通讯地址:</label>
+            <input id="vendorModel.address" name="vendorModel.address" value="{{vendorModel.address}}" type="text"
+                   type="text"
+                   class="form-control vAddress" maxlength="80"/>
+        </div>
+
+        <div class="control-group pull-left">
+            <label for="vendorModel.email" class="label-width"><span class="required">*</span>邮件地址:</label>
+            <input id="vendorModel.email" name="vendorModel.email" value="{{vendorModel.email}}" type="text"
+                   class="form-control vmail" required maxlength="100"/>
+            <span class="note"><i>&times;</i> 必填 不得为空</span>
+            <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+        </div>
+        <div class="control-group pull-left">
+            <!--当前状态0101未启用0102已启用-->
+            <!--此处逻辑：如果审核状态是0-待审核新增，不可用，其余情况状态可用-->
+            <label for="vendorModel.status" class="label-width">当前状态:</label>
+            {{#equals 0 vendorModel.checkStatus}}
+                <select name="vendorModel.status" disabled>
+                    <option value="0101">未启用</option>
+                    <option value="0102">已启用</option>
+                </select>
+                <input name="vendorModel.status" value="0101" type="hidden" class="form-control"/>
+            {{else}}
+                <select id="vendorModel.status" name="vendorModel.status">
+                    <option value="0101" {{#equals vendorModel.status "0101" }} selected {{/equals}}>未启用
+                    </option>
+                    <option value="0102" {{#equals vendorModel.status "0102" }} selected {{/equals}}>已启用
+                    </option>
+                </select>
+            {{/equals}}
+        </div>
+
+        <div class="control-group pull-left onlyOne">
+            <label for="descript" class="label-width">用户描述:</label>
+            <input name="vendorModel.descript" value="{{vendorModel.descript}}" type="text" class="form-control vDescript"
+                   maxlength="200"/>
+        </div>
+        </div>
+
+        <div class="subNav">- 分期费率 -
+            <i class="icon-admin-cat-box-list-bg detail-close"></i>
+            <i class="icon-side-arrow detail-open"></i>
+        </div>
+        <div class="navContent">
+            <p class="components-title title">分期费率</p>
+            <button type="button" class="btn btn-info btn-small js-rate-add">+ 新增</button>
+
+            <div id="rate-list">
+                {{#each tblVendorRatioModelList}}
+                    <div id="rate-list-first">
+                        <div class="rate js-rate-info">
+                            <input type="hidden" id="id" class="rate-id" name="id" value="{{id}}">
+
+                            <div class="main-box-title2"><span class="rate-span">{{period}}期费率</span>
+                                <button type="button" class="btn btn-info btn-small js-rate-delete">删除</button>
+                            </div>
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="period">期数:</label>
+                                <select id="period" name="TblVendorRatioModel.period" class="totalStage">
+                                    <option value="1" {{#equals period "1" }} selected {{/equals}}>1</option>
+                                    <option value="3" {{#equals period "3" }} selected {{/equals}}>3</option>
+                                    <option value="6" {{#equals period "6" }} selected {{/equals}}>6
+                                    </option>
+                                    <option value="9" {{#equals period "9" }} selected {{/equals}}>9
+                                    </option>
+                                    <option value="12" {{#equals period "12" }} selected {{/equals}}>12
+                                    </option>
+                                    <option value="18" {{#equals period "18" }} selected {{/equals}}>18
+                                    </option>
+                                    <option value="24" {{#equals period "24" }} selected {{/equals}}>24
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="fixedfeehtFlag">手续费首位付标志:</label>
+                                <select id="fixedfeehtFlag" name="TblVendorRatioModel.fixedfeehtFlag">
+                                    <option value="1" {{#equals fixedfeehtFlag "1" }} selected {{/equals}}>E
+                                    </option>
+                                    <option value="2" {{#equals fixedfeehtFlag "2" }} selected {{/equals}}>S
+                                    </option>
+                                    <option value="3" {{#equals fixedfeehtFlag "3" }} selected {{/equals}}>W
+                                    </option>
+                                    <option value="4" {{#equals fixedfeehtFlag "4" }} selected {{/equals}}>F
+                                    </option>
+                                    <option value="5" {{#equals fixedfeehtFlag "5" }} selected {{/equals}}>L
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="fixedamtFee"><span class="required">*</span>固定金额手续费:</label>
+                                <input id="fixedamtFee" class="fixedamtFee input-small" name="TblVendorRatioModel.fixedamtFee"
+                                       value="{{fixedamtFee}}"
+                                       type="text"
+                                       class="form-control"  maxlength="5"/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="feeratio1"><span class="required">*</span>手续费费率1(月费率):</label>
+                                <input id="feeratio1" class="feeratio1 input-small" name="TblVendorRatioModel.feeratio1" value="{{feeratio1}}"
+                                       type="text"
+                                       class="form-control"  maxlength="6"/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="ratio1Precent"><span class="required">*</span>费率1本金百分比:</label>
+                                <input id="ratio1Precent" class="ratio1Precent input-small" name="TblVendorRatioModel.ratio1Precent"
+                                       value="{{ratio1Precent}}"
+                                       type="text"
+                                       class="form-control" maxlength="6"/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="feeratio2"><span class="required">*</span>手续费费率2(月费率):</label>
+                                <input id="feeratio2" class="feeratio2 input-small" name="TblVendorRatioModel.feeratio2" value="{{feeratio2}}"
+                                       type="text"
+                                       class="form-control" maxlength="6" {{#equals period "1" }} readonly {{/equals}}/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="ratio2Precent"><span class="required">*</span>费率2本金百分比:</label>
+                                <input id="ratio2Precent" class="ratio2Precent input-small" name="TblVendorRatioModel.ratio2Precent"
+                                       value="{{ratio2Precent}}"
+                                       type="text"
+                                       class="form-control" maxlength="6" {{#equals period "1" }} readonly {{/equals}}/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="feeratio2Bill"><span class="required">*</span>手续费费率2 开机期数:</label>
+                                <input id="feeratio2Bill" class="feeratio2Bill input-small" name="TblVendorRatioModel.feeratio2Bill" value="{{feeratio2Bill}}"
+                                       type="text"
+                                       class="form-control" maxlength="9" {{#equals period "1" }} readonly {{/equals}}/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="feeratio3"><span class="required">*</span>手续费费率3(月费率):</label>
+                                <input id="feeratio3" class="feeratio3 input-small" name="TblVendorRatioModel.feeratio3" value="{{feeratio3}}"
+                                       type="text"
+                                       class="form-control" maxlength="6" {{#equals period "1" }} readonly {{/equals}}/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="ratio3Precent"><span class="required">*</span>费率3本金百分比:</label>
+                                <input id="ratio3Precent" class="ratio3Precent input-small" name="TblVendorRatioModel.ratio3Precent"
+                                       value="{{ratio3Precent}}"
+                                       type="text"
+                                       class="form-control" maxlength="6" {{#equals period "1" }} readonly {{/equals}}/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="feeratio3Bill"><span class="required">*</span>手续费费率3 开机期数:</label>
+                                <input id="feeratio3Bill" class="feeratio3Bill input-small" name="TblVendorRatioModel.feeratio3Bill" value="{{feeratio3Bill}}"
+                                       type="text"
+                                       class="form-control" maxlength="9" {{#equals period "1" }} readonly {{/equals}}/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="reducerateFrom"><span class="required">*</span>直接免除手续费期数FROM:</label>
+                                <input id="reducerateFrom" class="reducerateFrom input-small" name="TblVendorRatioModel.reducerateFrom"
+                                       value="{{reducerateFrom}}"
+                                       type="text" class="form-control" maxlength="9"/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="reducerateTo"><span class="required">*</span>直接免除手续费期数TO:</label>
+                                <input id="reducerateTo" class="reducerateTo input-small" name="TblVendorRatioModel.reducerateTo"
+                                       value="{{reducerateTo}}"
+                                       type="text"
+                                       class="form-control" maxlength="9"/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="reducerate"><span class="required">*</span>手续费免除期数:</label>
+                                <input id="reducerate" class="reducerate input-small" name="TblVendorRatioModel.reducerate"
+                                       value="{{reducerate}}"
+                                       type="text"
+                                       class="form-control" maxlength="9"/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="htflag"><span class="required">*</span>首尾付标志:</label>
+                                <select id="htflag" name="TblVendorRatioModel.htflag" class="htflag">
+                                    <option value="1" {{#equals htflag "1" }} selected {{/equals}}>N
+                                    </option>
+                                    <option value="2" {{#equals htflag "2" }} selected {{/equals}}>S
+                                    </option>
+                                    <option value="3" {{#equals htflag "3" }} selected {{/equals}}>W
+                                    </option>
+                                    <option value="4" {{#equals htflag "4" }} selected {{/equals}}>F
+                                    </option>
+                                    <option value="5" {{#equals htflag "5" }} selected {{/equals}}>L
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="htant"><span class="required">*</span>首尾付本金:</label>
+                                <input id="htant" class="htant " name="TblVendorRatioModel.htant"
+                                       value="{{htant}}"
+                                       type="text"
+                                       class="form-control" maxlength="9"
+                                    {{#equals htflag "1" }}
+                                       readonly
+                                        {{else}}
+                                        {{#equals htflag "2" }}
+                                            readonly
+                                            {{else}}
+                                            {{#equals htflag "3" }}
+                                                readonly
+                                            {{/equals}}
+                                        {{/equals}}
+                                    {{/equals}}/>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="subNav">- 邮购分期 -
+            <i class="icon-admin-cat-box-list-bg detail-close"></i>
+            <i class="icon-side-arrow detail-open"></i>
+        </div>
+        <div class="navContent">
+            <p class="components-title title">邮购分期</p>
+
+            <p class="add">
+                <button type="button" class="btn btn-info btn-small js-mail-stages-add">+ 新增</button>
+            </p>
+            <div id="mail-stages-list">
+                {{#each mailStagesModelList}}
+                    <div id="mail-stages-list-first">
+                        <div id="mail-stages" class="mail-stages js-mail-stages-info">
+                            <input type="hidden" id="mailStagesId" class="mail-id" name="id" value="{{id}}">
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="mailStagesModel.code"><span class="required">*</span>邮购分期类别码:</label>
+                                <input id="code" class="code" name="mailStagesModel.code" value="{{code}}"
+                                       type="text"
+                                       class="form-control" maxlength="4"/>
+                            </div>
+
+                            <div class="control-group pull-left">
+                                <label class="label-width" for="mailStagesModel.name"><span class="required">*</span>邮购分期类别名称:</label>
+                                <input id="name" class="name" name="mailStagesModel.name" value="{{name}}"
+                                       type="text"
+                                       class="form-control" maxlength="100"/>
+                                <button type="button" class="btn btn-info btn-small js-mail-stages-delete">删除</button>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+
+
+        <!--隐藏传递审核状态 0-待审核（新增）2-待审核（编辑）1-已审核 3-已拒绝（新增）4-已拒绝（编辑）-->
+        {{#equals "1" vendorModel.checkStatus }}
+            <input name="vendorModel.checkStatus" value="2" type="hidden" class="form-control"/>
+        {{else}}
+            {{#equals "0" vendorModel.checkStatus}}
+                <input name="vendorModel.checkStatus" value="0" type="hidden" class="form-control"/>
+            {{else}}
+                {{#equals "2" vendorModel.checkStatus }}
+                    <input name="vendorModel.checkStatus" value="2" type="hidden" class="form-control"/>
+                {{else}}
+                    {{#equals "3" vendorModel.checkStatus}}
+                        <input name="vendorModel.checkStatus" value="0" type="hidden" class="form-control"/>
+                    {{else}}
+                        {{#equals "4" vendorModel.checkStatus}}
+                            <input name="vendorModel.checkStatus" value="2" type="hidden" class="form-control"/>
+                        {{else}}
+                            <input name="vendorModel.checkStatus" value="0" type="hidden" class="form-control"/>
+                        {{/equals}}
+                    {{/equals}}
+                {{/equals}}
+            {{/equals}}
+        {{/equals}}
+    {{/with}}
+
+    <div class="control-group submit">
+        <input class="btn btn-success btn-medium js-update" type="submit" data-id="{{vendorId}}" id="submitForUpdate"
+               value="提交审核"/>
+        <a class="btn btn-info btn-medium" href="{{_HREF_.mainContext}}/mall/cooperation/cooperation_all"/>取消</a>
+    </div>
+    </form>
+{{/component}}

@@ -1,0 +1,64 @@
+package com.yulin.am;
+
+import java.util.*;
+public class Pet {
+
+	/**
+	 * @param args
+	 */
+	public String name;
+	public int age;
+	//成长经验、饥饿、清洁、心情、叛逆
+	public int level=0;//经验 100点长一岁 自动生长
+	public int an=50;//饥饿 0~100
+	public int heart=50;//心情 0~100 小于0 心情叛逆下降
+	public int clene=50;//清洁 0~100 小于0离家出走
+	public int panni=50;//叛逆0~100 小于0 咬死
+	
+	public static Pet(String name){
+		this.name=name;
+		age=0;
+		System.out.println("宠物已诞生~！");
+		this.chengZhang();
+	}
+	private void chengZhang(){//成长
+		new Timer().schedule(new TimerTask(){
+			@Override
+			public void run(){
+				level+=10;
+				if(level>=100){
+					age+=1;
+					level=0;
+				}
+				an-=10;
+				if(an<=0){
+					System.out.println("饿死了~！");
+					System.out.println("Game Over~!");
+					System.exit(0);
+				}
+			}
+		}, 3000,1000);//延迟3000毫秒之后，每隔1000毫秒运行一次run()
+	}
+	
+	public void showM(){//显示信息
+		System.out.println("名字："+name);
+		System.out.println("年龄："+age);
+		System.out.println("饥饿："+an);
+		System.out.println("心情："+heart);
+		System.out.println("清洁："+clene);
+		System.out.println("叛逆："+panni);
+	}
+	public void eatM(){//喂食
+		an+=30;//等同于饥饿+30
+		if(an>=100){
+			an=100;
+			System.out.println(name+":不能再喂食了~要撑死了！");
+		}
+		else{
+			System.out.println(name+"正在进食~！");
+		}
+	}
+	
+
+
+}

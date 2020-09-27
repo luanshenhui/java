@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（人保粤通卡积分兑换）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF33",
+            "reportCode":"JF33"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

@@ -1,0 +1,42 @@
+<div class="modal add-brand-category-model">
+    <div class="modal-header">
+        <a href="javascript:void(0)" class="close">×</a>
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned add-brand-category-form">
+        <div class="modal-body">
+            {{#if data.categoryId}}
+                <input name="id" type="text" value="{{data.id}}" readonly="readonly" style="display: none"/>
+                <div class="control-group">
+                    <label>类别ID：</label>
+                    <input name="categoryId" class="display-mouse" type="text" value="{{data.categoryId}}"  readonly="readonly"/>
+                </div>
+            {{/if}}
+            <div class="control-group">
+                <label><span class="required">*</span>类别名称：</label>
+                <input name="categoryName" type="text" value="{{data.categoryName}}" required maxlength=10 />
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label><span class="required">*</span>显示顺序：</label>
+                <input name="categorySeq" type="text" required maxlength=9 value="{{data.categorySeq}}" pattern="^[0-9]\d*$"/>
+                <span class="note-error"><i>&times;</i> 请输入正整数</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label>频道代码：</label>
+                <input name="channelId" type="text" value="{{data.channelId}}" maxlength=2 />
+            </div>
+            <div class="control-group">
+            <label for="approveMemo">备注：</label>
+                    <textarea  id="descript" name="categoryDesc" class="js-approve-memeo"
+                               maxlength="40">{{data.categoryDesc}}</textarea>
+            <p class="remaining-text">您还可以输入<i>40</i>字</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-medium save-brand-category" value="确定">
+            <button type="button" class="btn btn-close btn-medium close">取消</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,146 @@
+
+.box{
+    position: relative;
+    padding-bottom: 0;
+}
+.box-head{
+    width: 100%;
+    position: relative;
+    height: 70px;
+}
+.box-head a{
+    position: absolute;
+    display: block;
+    top: 0;
+    background: url(../images/header-menu-bg-middle.png) repeat-x;
+    text-align: center;
+    font-size: 20px;
+    line-height: 45px;
+    color: #fff;
+    text-decoration: none;
+}
+.arrow-back{
+    left: 0;
+    width: 100px;
+    height: 45px;
+
+}
+.arrow-back2{
+    width: 180px;
+    left:112px;
+}
+.box-head a em,.box-head a em:after{
+    position: absolute;
+    top: 0;
+    width: 15px;
+    height: 45px;
+    content: '';
+}
+.b-right:after{
+	right:-101px!important;
+}
+.box-head a em{
+    left: -2px;
+    background: url(../images/header-menu-bg-left.png) no-repeat;
+}
+.box-head a em:after{
+    right: -65px;
+    background: url(../images/header-menu-bg-right.png) no-repeat;
+}
+.box-head a:hover{
+	background: url(../images/header-menu-bg-middle-ov.png) repeat-x;
+}
+.box-head a:hover em{
+	background: url(../images/header-menu-bg-left-ov.png) no-repeat;
+}
+.box-head a:hover em:after{
+    background: url(../images/header-menu-bg-right-ov.png) no-repeat;
+}
+.arrow-back i{
+    display: inline-block;
+    width: 18px;
+    height: 21px;
+    margin-right: 7px;
+    vertical-align: middle;
+    background:url("../images/homepage-btn.png") no-repeat;
+}
+.box .box-title{
+    position: absolute;
+    display: block;
+    left: 50%;
+    top: -12px;
+    width: 290px;
+    height: 55px;
+    margin-left: -145px;
+    color: #fff;
+    font-size: 25px;
+    text-align: center;
+    line-height: 55px;
+    background: url("../images/box-title-bg.png");
+}
+.box-head .arrow-left {
+    right: 85px;
+
+}
+.box-head  .arrow-right{
+    right: 0;}
+.box-head .arrow-left,.box-head .arrow-right{
+    width: 75px;
+    height: 45px;
+}
+.arrow-left i,.arrow-right i{
+    display: block;
+    width: 75px;
+    height: 45px;
+    vertical-align: middle;
+}
+.arrow-left i{
+    background: url("../images/arrow-left.png") no-repeat center;
+}
+.arrow-right i{
+    background: url("../images/arrow-right.png") no-repeat center;
+}
+.box-container{
+    border: 2px solid #090204;
+    border-radius: 4px;
+    background: #292c2e;
+    height: 825px;
+    box-sizing: content-box;
+}
+
+.table{
+    width: 100%;
+}
+.table thead{
+    width: 100%;
+    height: 48px;
+    background: url("../images/table-bg.png") center repeat-x;
+}
+.table thead tr th{
+    height: 48px;
+    line-height: 48px;
+    color:#fff;
+    font-size: 14px;
+    text-align: center;
+}
+
+.table tbody tr td{
+    padding: 5px 20px;
+    border: 2px solid #000;
+    border-top: 2px solid #4A4A4A;
+    border-collapse: collapse;
+    font-size: 14px;
+    color:#fff;
+    text-align: center;
+}
+
+.table tbody tr:hover{
+    background: #383838;
+}
+
+.txt-left{
+    text-align: left!important;
+}
+.border-right{
+    border-right: 0!important;
+}

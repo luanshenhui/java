@@ -1,0 +1,133 @@
+html, body, div, h1, h2, h3, h4, h5, h6, header, menu, p, dl, dt, dd, ul, li, form, button, input, textarea, select, table, th, td, tr, img, span, strong, em, u, i, b {
+	margin: 0;
+	padding: 0;
+	border: none;
+	text-decoration: none;
+	outline: none;
+	list-style: none;
+	resize: none;
+	color: #000;
+	font-family: "微软雅黑", "Microsoft Yahei", "simsun";
+	font-size: 12px;
+}
+*, *:before, *:after {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+html {
+	height: 100%;
+}
+body {
+	min-width: 1300px;
+	height: 100%;
+	overflow: auto;
+}
+/* Links */
+a {
+	color: #1d93ed;
+	outline: 0;
+	text-decoration: none;
+}
+a:hover {
+	color: #0e6ab0;
+	text-decoration: underline;
+}
+img {
+	border: none;
+	vertical-align: middle;
+}
+.header {
+	width: 100%;
+	min-width: 1300px;
+	height: 121px;
+	background: url(../image/header-bg.png) repeat-x;
+}
+.header > .header-log {
+	display: block;
+	float: left;
+	margin-left: 30px;
+	line-height: 90px;
+	text-align: center;
+}
+.header > .header-nav {
+	position: relative;
+	display: block;
+	float: right;
+	padding: 0 10px;
+}
+.header > .header-nav > ul > li {
+	position: relative;
+	display: block;
+	float: left;
+	height: 45px;
+	padding: 0 15px;
+	margin: 24px 5px 0 5px;
+	background: url(../image/header-menu-bg-left.png) no-repeat left 0;
+	cursor: pointer;
+}
+.header > .header-nav > ul > li > a {
+	display: block;
+	min-width: 100px;
+	height: 45px;
+	background: url(../image/header-menu-bg-middle.png) repeat-x;
+	text-align: center;
+	font-size: 18px;
+	line-height: 45px;
+	color: #fff;
+	text-decoration: none;
+}
+.header > .header-nav > ul > li > a:after {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 15px;
+	height: 45px;
+	background: url(../image/header-menu-bg-right.png);
+	content: '';
+}
+.header > .header-btn {
+	display: block;
+	float: right;
+	width: 108px;
+	height: 95px;
+	padding-top: 15px;
+	border-left: solid 2px #222;
+	text-align: center;
+	cursor: pointer;
+}
+.header > .header-btn span {
+	display: block;
+	font-size: 15px;
+	color: #fff;
+}
+.header > .header-nav > .header-nav-btn > .next, .header > .header-nav > .header-nav-btn > .prev {
+	position: absolute;
+	top: -68px;
+	display: block;
+}
+.header > .header-nav > .header-nav-btn > .next a, .header > .header-nav > .header-nav-btn > .prev a {
+	min-width: 20px;
+	font-family: "宋体";
+	font-weight: bold;
+}
+.header > .header-nav > .header-nav-btn > .next.disable a, .header > .header-nav > .header-nav-btn > .prev.disable a {
+	color: #666;
+}
+.header > .header-nav > .header-nav-btn > .next {
+	right: 0;
+}
+.header > .header-nav > .header-nav-btn > .prev {
+	left: 0;
+}
+.header-nav-btn {
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	left: 0;
+	bottom: 0;
+}
+.header > .header-nav.header-nav-spac {
+	padding: 0 60px;
+	margin-right: 20px;
+}

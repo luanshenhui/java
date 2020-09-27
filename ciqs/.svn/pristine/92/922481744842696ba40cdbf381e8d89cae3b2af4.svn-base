@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SQL.Tgoods">
+ <insert id="insertSelective" parameterType="com.dpn.ciqqlc.standard.model.Tgoods">
+    insert into QLC_ORIG_TGOODS
+  <!--   <trim prefix="(" suffix=")" suffixOverrides=",">
+        GID,
+      <if test="ID != null and ID != ''">
+        ID,
+      </if>
+      <if test="AUDID != null and  AUDID != ''">
+        AUDID,
+      </if>
+      <if test="BOUTPUT != null and  BOUTPUT != ">
+        BOUTPUT,
+      </if>
+      <if test="CATEGORY != null and CATEGORY  != ''">
+        CATEGORY,
+      </if>
+      <if test="CHECKID != null and CHECKID != ''">
+        CHECKID,
+      </if>
+      <if test="CNAME != null and CNAME != ''">
+        CNAME,
+      </if>
+      <if test="CODE != null and CODE  != ''">
+        CODE,
+      </if>
+      <if test="CODESHORT != null and  CODESHORT != ''">
+        CODESHORT,
+      </if>
+      <if test="CONSIGNEEADD != null and  CONSIGNEEADD != ''">
+        CONSIGNEEADD,
+      </if>
+      <if test="CONSIGNEENAME != null and  CONSIGNEENAME != ''">
+        CONSIGNEENAME,
+      </if>
+      <if test="CONSIGNERADD != null and CONSIGNERADD  != ''">
+        CONSIGNERADD,
+      </if>
+      <if test="CONSIGNERNAME != null and CONSIGNERNAME  != ''">
+        CONSIGNERNAME,
+      </if>
+      <if test="CONVEYANCE != null and CONVEYANCE != ''">
+        CONVEYANCE,
+      </if>
+      <if test="CONVEYANCENO != null and CONVEYANCENO  != ''">
+        CONVEYANCENO,
+      </if>
+      <if test="DEREGDISENTER != null and  DEREGDISENTER != ''">
+        DEREGDISENTER,
+      </if>
+      <if test="DEREGMIXDISENTER != null and DEREGMIXDISENTER  != ''">
+        DEREGMIXDISENTER,
+      </if>
+      <if test="DEREGNOPERMITQC != null and DEREGNOPERMITQC  != ''">
+        DEREGNOPERMITQC,
+      </if>
+      <if test="DEREGNOQC != null and DEREGNOQC  != ''">
+        DEREGNOQC,
+      </if>
+      <if test="DEREGNOTIDES != null and  DEREGNOTIDES != ''">
+        DEREGNOTIDES,
+      </if>
+      <if test="DEREGNOTISN != null and  DEREGNOTISN != ''">
+        DEREGNOTISN,
+      </if>
+      <if test="DEREGOTHER != null and DEREGOTHER  != ''">
+        DEREGOTHER,
+      </if>
+      <if test="ENAME != null and ENAME  != ''">
+        ENAME,
+      </if>
+      <if test="ENTERDATE != null and ENTERDATE  != ''">
+        ENTERDATE,
+      </if>
+      <if test="ENTERPORT != null and  ENTERPORT != ''">
+        ENTERPORT,
+      </if>
+      <if test="ERDES != null and  ERDES != ''">
+        ERDES,
+      </if>
+      <if test="EXPORTNATION != null and FORMAUDIT  != ''">
+        EXPORTNATION,
+      </if>
+      <if test="FORMAUDIT != null and FORMAUDIT  != ''">
+        FORMAUDIT,
+      </if>
+      <if test="FORMDATE != null and  FORMDATE != ''">
+        FORMDATE,
+      </if>
+      <if test="FORMDEPTNO != null and FORMDEPTNO  != ''">
+        FORMDEPTNO,
+      </if>
+      <if test="FORMDEPTNOSHORT != null and  FORMDEPTNOSHORT != ''">
+        FORMDEPTNOSHORT,
+      </if>
+      <if test="FORMPERS != null and  FORMPERS != ''">
+        FORMPERS,
+      </if>
+      <if test="FORMSN != null and FORMSN  != ''">
+        FORMSN,
+      </if>
+      <if test="IC != null and IC  != ''">
+        IC,
+      </if>
+      <if test="IDECIQ != null and IDECIQ != ''">
+        IDECIQ,
+      </if>
+      <if test="INTERPORT != null and INTERPORT  != ''">
+        INTERPORT,
+      </if>
+      <if test="LNAME != null and LNAME  != ''">
+        LNAME,
+      </if>
+      <if test="MARKID != null and  MARKID != ''">
+        MARKID,
+      </if>
+      <if test="MARKQUAR != null and  MARKQUAR!= ''">
+        MARKQUAR,
+      </if>
+      <if test="MEASURE != null and  MEASURE != ''">
+        MEASURE,
+      </if>
+      <if test="ORIGNATION != null and ORIGNATION  != ''">
+        ORIGNATION,
+      </if>
+      <if test="PRIORITY != null and  PRIORITY != ''">
+        PRIORITY,
+      </if>
+      <if test="PUBSTATID != null and PUBSTATID  != ''">
+        PUBSTATID,
+      </if>
+      <if test="QCADD != null and  QCADD != ''">
+        QCADD,
+      </if>
+      <if test="QCDATE != null and QCDATE  != ''">
+        QCDATE,
+      </if>
+      <if test="QCSN != null and  QCSN != ''">
+        QCSN,
+      </if>
+      <if test="QUANTITY != null and QUANTITY  != ''">
+        QUANTITY,
+      </if>
+      <if test="RECEIVEDDATE != null and RECEIVEDDATE  != ''">
+        RECEIVEDDATE,
+      </if>
+      <if test="REGION != null and REGION  != ''">
+        REGION,
+      </if>
+      <if test="SN != null and SN  != ''">
+        SN,
+      </if>
+      <if test="STARTADD != null and  STARTADD != ''">
+        STARTADD,
+      </if>
+      <if test="STARTADDEN != null and STARTADDEN  != ''">
+        STARTADDEN,
+      </if>
+      <if test="TRANSMODE != null and  TRANSMODE != ''">
+        TRANSMODE,
+      </if>
+      <if test="TREATDATE != null and  TREATDATE != ''">
+        TREATDATE,
+      </if>
+      <if test="TREATMENT != null and  TREATMENT != ''">
+        TREATMENT,
+      </if>
+      <if test="UNIT != null and  UNIT != ''">
+        UNIT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        CreateGUID() ,
+      <if test="ID != null and ID != ''">
+        #{ID},
+      </if>
+      <if test="AUDID != null and AUDID != ''">
+        #{AUDID},
+      </if>
+      <if test="BOUTPUT != null and BOUTPUT != ''">
+        #{BOUTPUT},
+      </if>
+      <if test="CATEGORY != null and CATEGORY != ''">
+        #{CATEGORY},
+      </if>
+      <if test="CHECKID != null and CHECKID != ''">
+        #{CHECKID},
+      </if>
+      <if test="CNAME != null and CNAME != ''">
+        #{CNAME},
+      </if>
+      <if test="CODE != null and CODE != ''">
+        #{CODE},
+      </if>
+      <if test="CODESHORT != null and CODESHORT != ''">
+        #{CODESHORT},
+      </if>
+      <if test="CONSIGNEEADD != null and CONSIGNEEADD != ''">
+        #{CONSIGNEEADD},
+      </if>
+      <if test="CONSIGNEENAME != null and CONSIGNEENAME !=''">
+        #{CONSIGNEENAME},
+      </if>
+      <if test="CONSIGNERADD != null and CONSIGNERADD !=''">
+        #{CONSIGNERADD},
+      </if>
+      <if test="CONSIGNERNAME != null and CONSIGNERNAME !=''">
+        #{CONSIGNERNAME},
+      </if>
+      <if test="CONVEYANCE != null and CONVEYANCE !=''">
+        #{CONVEYANCE},
+      </if>
+      <if test="CONVEYANCENO != null and CONVEYANCENO !=''">
+        #{CONVEYANCENO},
+      </if>
+      <if test="DEREGDISENTER != null and DEREGDISENTER !=''">
+        #{DEREGDISENTER},
+      </if>
+      <if test="DEREGMIXDISENTER != null and DEREGMIXDISENTER !=''">
+        #{DEREGMIXDISENTER},
+      </if>
+      <if test="DEREGNOPERMITQC != null and DEREGNOPERMITQC !=''">
+        #{DEREGNOPERMITQC},
+      </if>
+      <if test="DEREGNOQC != null and DEREGNOQC !=''">
+        #{DEREGNOQC},
+      </if>
+      <if test="DEREGNOTIDES != null and DEREGNOTIDES !=''">
+        #{DEREGNOTIDES},
+      </if>
+      <if test="DEREGNOTISN != null and DEREGNOTISN !=''">
+        #{DEREGNOTISN},
+      </if>
+      <if test="DEREGOTHER != null and DEREGOTHER !=''">
+        #{DEREGOTHER},
+      </if>
+      <if test="ENAME != null and ENAME !=''">
+        #{ENAME},
+      </if>
+      <if test="ENTERDATE != null and ENTERDATE !=''">
+        to_date('${ENTERDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="ENTERPORT != null and ENTERPORT !=''">
+        #{ENTERPORT},
+      </if>
+      <if test="ERDES != null and ERDES !=''">
+        #{ERDES},
+      </if>
+      <if test="EXPORTNATION != null and EXPORTNATION !=''">
+        #{EXPORTNATION},
+      </if>
+      <if test="FORMAUDIT != null and FORMAUDIT !=''">
+        #{FORMAUDIT},
+      </if>
+      <if test="FORMDATE != null and FORMDATE !=''">
+        to_date('${FORMDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="FORMDEPTNO != null and FORMDEPTNO !=''">
+        #{FORMDEPTNO},
+      </if>
+      <if test="FORMDEPTNOSHORT != null and FORMDEPTNOSHORT !=''">
+        #{FORMDEPTNOSHORT},
+      </if>
+      <if test="FORMPERS != null and FORMPERS !=''">
+        #{FORMPERS},
+      </if>
+      <if test="FORMSN != null and FORMSN  !=''">
+        #{FORMSN},
+      </if>
+      <if test="IC != null and IC !=''">
+        #{IC},
+      </if>
+      <if test="IDECIQ != null and IDECIQ !=''">
+        #{IDECIQ},
+      </if>
+      <if test="INTERPORT != null and INTERPORT !=''">
+        #{INTERPORT},
+      </if>
+      <if test="LNAME != null and INTERPORT !=''">
+        #{LNAME},
+      </if>
+      <if test="MARKID != null and MARKID !=''">
+        #{MARKID},
+      </if>
+      <if test="MARKQUAR != null and MARKQUAR !=''">
+        #{MARKQUAR},
+      </if>
+      <if test="MEASURE != null and MEASURE !=''">
+        #{MEASURE},
+      </if>
+      <if test="ORIGNATION != null and ORIGNATION !=''">
+        #{ORIGNATION},
+      </if>
+      <if test="PRIORITY != null and PRIORITY !=''">
+        #{PRIORITY},
+      </if>
+      <if test="PUBSTATID != null and PUBSTATID !=''">
+        #{PUBSTATID},
+      </if>
+      <if test="QCADD != null and QCADD !=''">
+        #{QCADD},
+      </if>
+      <if test="QCDATE != null and QCDATE !=''">
+        to_date('${QCDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="QCSN != null and QCSN !=''">
+        #{QCSN},
+      </if>
+      <if test="QUANTITY != null and QUANTITY !=''">
+        #{QUANTITY},
+      </if>
+      <if test="RECEIVEDDATE != null and RECEIVEDDATE !=''">
+        to_date('${RECEIVEDDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="REGION != null and REGION !=''">
+        #{REGION},
+      </if>
+      <if test="SN != null and SN !=''">
+        #{SN},
+      </if>
+      <if test="STARTADD != null and STARTADD !=''">
+        #{STARTADD},
+      </if>
+      <if test="STARTADDEN != null and STARTADDEN !=''">
+        #{STARTADDEN},
+      </if>
+      <if test="TRANSMODE != null and TRANSMODE !=''">
+        #{TRANSMODE},
+      </if>
+      <if test="TREATDATE != null and TREATDATE !=''">
+        to_date('${TREATDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="TREATMENT != null and TREATMENT !=''">
+        #{TREATMENT},
+      </if>
+      <if test="UNIT != null and UNIT !=''">
+        #{UNIT},
+      </if>
+    </trim> -->
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        GID,
+      <if test="AUDID != null">
+        AUDID,
+      </if>
+      <if test="BOUTPUT != null">
+        BOUTPUT,
+      </if>
+      <if test="CATEGORY != null">
+        CATEGORY,
+      </if>
+      <if test="CHECKID != null">
+        CHECKID,
+      </if>
+      <if test="CNAME != null">
+        CNAME,
+      </if>
+      <if test="CODE != null">
+        CODE,
+      </if>
+      <if test="CODESHORT != null">
+        CODESHORT,
+      </if>
+      <if test="CONSIGNEEADD != null">
+        CONSIGNEEADD,
+      </if>
+      <if test="CONSIGNEENAME != null">
+        CONSIGNEENAME,
+      </if>
+      <if test="CONSIGNERADD != null">
+        CONSIGNERADD,
+      </if>
+      <if test="CONSIGNERNAME != null">
+        CONSIGNERNAME,
+      </if>
+      <if test="CONVEYANCE != null">
+        CONVEYANCE,
+      </if>
+      <if test="CONVEYANCENO != null">
+        CONVEYANCENO,
+      </if>
+      <if test="DEREGDISENTER != null">
+        DEREGDISENTER,
+      </if>
+      <if test="DEREGMIXDISENTER != null">
+        DEREGMIXDISENTER,
+      </if>
+      <if test="DEREGNOPERMITQC != null">
+        DEREGNOPERMITQC,
+      </if>
+      <if test="DEREGNOQC != null">
+        DEREGNOQC,
+      </if>
+      <if test="DEREGNOTIDES != null">
+        DEREGNOTIDES,
+      </if>
+      <if test="DEREGNOTISN != null">
+        DEREGNOTISN,
+      </if>
+      <if test="DEREGOTHER != null">
+        DEREGOTHER,
+      </if>
+      <if test="ENAME != null">
+        ENAME,
+      </if>
+      <if test="ENTERDATE != null">
+        ENTERDATE,
+      </if>
+      <if test="ENTERPORT != null">
+        ENTERPORT,
+      </if>
+      <if test="ERDES != null">
+        ERDES,
+      </if>
+      <if test="EXPORTNATION != null">
+        EXPORTNATION,
+      </if>
+      <if test="FORMAUDIT != null">
+        FORMAUDIT,
+      </if>
+      <if test="FORMDATE != null">
+        FORMDATE,
+      </if>
+      <if test="FORMDEPTNO != null">
+        FORMDEPTNO,
+      </if>
+      <if test="FORMDEPTNOSHORT != null">
+        FORMDEPTNOSHORT,
+      </if>
+      <if test="FORMPERS != null">
+        FORMPERS,
+      </if>
+      <if test="FORMSN != null">
+        FORMSN,
+      </if>
+      <if test="IC != null">
+        IC,
+      </if>
+      <if test="ID != null">
+        ID,
+      </if>
+      <if test="IDECIQ != null">
+        IDECIQ,
+      </if>
+      <if test="INTERPORT != null">
+        INTERPORT,
+      </if>
+      <if test="LNAME != null">
+        LNAME,
+      </if>
+      <if test="MARKID != null">
+        MARKID,
+      </if>
+      <if test="MARKQUAR != null">
+        MARKQUAR,
+      </if>
+      <if test="MEASURE != null">
+        MEASURE,
+      </if>
+      <if test="ORIGNATION != null">
+        ORIGNATION,
+      </if>
+      <if test="PRIORITY != null">
+        PRIORITY,
+      </if>
+      <if test="PUBSTATID != null">
+        PUBSTATID,
+      </if>
+      <if test="QCADD != null">
+        QCADD,
+      </if>
+      <if test="QCDATE != null">
+        QCDATE,
+      </if>
+      <if test="QCSN != null">
+        QCSN,
+      </if>
+      <if test="QUANTITY != null">
+        QUANTITY,
+      </if>
+      <if test="RECEIVEDDATE != null">
+        RECEIVEDDATE,
+      </if>
+      <if test="REGION != null">
+        REGION,
+      </if>
+      <if test="SN != null">
+        SN,
+      </if>
+      <if test="STARTADD != null">
+        STARTADD,
+      </if>
+      <if test="STARTADDEN != null">
+        STARTADDEN,
+      </if>
+      <if test="TRANSMODE != null">
+        TRANSMODE,
+      </if>
+      <if test="TREATDATE != null">
+        TREATDATE,
+      </if>
+      <if test="TREATMENT != null">
+        TREATMENT,
+      </if>
+      <if test="UNIT != null">
+        UNIT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+    CreateGUID() ,
+      <if test="AUDID != null">
+        #{AUDID,jdbcType=NVARCHAR},
+      </if>
+      <if test="BOUTPUT != null">
+        #{BOUTPUT,jdbcType=DECIMAL},
+      </if>
+      <if test="CATEGORY != null">
+        #{CATEGORY,jdbcType=NVARCHAR},
+      </if>
+      <if test="CHECKID != null">
+        #{CHECKID,jdbcType=NVARCHAR},
+      </if>
+      <if test="CNAME != null">
+        #{CNAME,jdbcType=NVARCHAR},
+      </if>
+      <if test="CODE != null">
+        #{CODE,jdbcType=VARCHAR},
+      </if>
+      <if test="CODESHORT != null">
+        #{CODESHORT,jdbcType=VARCHAR},
+      </if>
+      <if test="CONSIGNEEADD != null">
+        #{CONSIGNEEADD,jdbcType=VARCHAR},
+      </if>
+      <if test="CONSIGNEENAME != null">
+        #{CONSIGNEENAME,jdbcType=VARCHAR},
+      </if>
+      <if test="CONSIGNERADD != null">
+        #{CONSIGNERADD,jdbcType=VARCHAR},
+      </if>
+      <if test="CONSIGNERNAME != null">
+        #{CONSIGNERNAME,jdbcType=VARCHAR},
+      </if>
+      <if test="CONVEYANCE != null">
+        #{CONVEYANCE,jdbcType=VARCHAR},
+      </if>
+      <if test="CONVEYANCENO != null">
+        #{CONVEYANCENO,jdbcType=VARCHAR},
+      </if>
+      <if test="DEREGDISENTER != null">
+        #{DEREGDISENTER,jdbcType=DECIMAL},
+      </if>
+      <if test="DEREGMIXDISENTER != null">
+        #{DEREGMIXDISENTER,jdbcType=VARCHAR},
+      </if>
+      <if test="DEREGNOPERMITQC != null">
+        #{DEREGNOPERMITQC,jdbcType=DECIMAL},
+      </if>
+      <if test="DEREGNOQC != null">
+        #{DEREGNOQC,jdbcType=DECIMAL},
+      </if>
+      <if test="DEREGNOTIDES != null">
+        #{DEREGNOTIDES,jdbcType=VARCHAR},
+      </if>
+      <if test="DEREGNOTISN != null">
+        #{DEREGNOTISN,jdbcType=VARCHAR},
+      </if>
+      <if test="DEREGOTHER != null">
+        #{DEREGOTHER,jdbcType=VARCHAR},
+      </if>
+      <if test="ENAME != null">
+        #{ENAME,jdbcType=NVARCHAR},
+      </if>
+      <if test="ENTERDATE != null">
+        to_date(#{ENTERDATE},'YYYY-MM-DD HH24:mi:ss'),
+      </if>
+      <if test="ENTERPORT != null">
+        #{ENTERPORT,jdbcType=VARCHAR},
+      </if>
+      <if test="ERDES != null">
+        #{ERDES,jdbcType=VARCHAR},
+      </if>
+      <if test="EXPORTNATION != null">
+        #{EXPORTNATION,jdbcType=VARCHAR},
+      </if>
+      <if test="FORMAUDIT != null">
+        #{FORMAUDIT,jdbcType=VARCHAR},
+      </if>
+      <if test="FORMDATE != null">
+        to_date(#{FORMDATE},'YYYY-MM-DD HH24:mi:ss'),
+      </if>
+      <if test="FORMDEPTNO != null">
+        #{FORMDEPTNO,jdbcType=NVARCHAR},
+      </if>
+      <if test="FORMDEPTNOSHORT != null">
+        #{FORMDEPTNOSHORT,jdbcType=NVARCHAR},
+      </if>
+      <if test="FORMPERS != null">
+        #{FORMPERS,jdbcType=NVARCHAR},
+      </if>
+      <if test="FORMSN != null">
+        #{FORMSN,jdbcType=DECIMAL},
+      </if>
+      <if test="IC != null">
+        #{IC,jdbcType=NVARCHAR},
+      </if>
+      <if test="ID != null">
+        #{ID,jdbcType=DECIMAL},
+      </if>
+      <if test="IDECIQ != null">
+        #{IDECIQ,jdbcType=VARCHAR},
+      </if>
+      <if test="INTERPORT != null">
+        #{INTERPORT,jdbcType=NVARCHAR},
+      </if>
+      <if test="LNAME != null">
+        #{LNAME,jdbcType=NVARCHAR},
+      </if>
+      <if test="MARKID != null">
+        #{MARKID,jdbcType=VARCHAR},
+      </if>
+      <if test="MARKQUAR != null">
+        #{MARKQUAR,jdbcType=VARCHAR},
+      </if>
+      <if test="MEASURE != null">
+        #{MEASURE,jdbcType=NVARCHAR},
+      </if>
+      <if test="ORIGNATION != null">
+        #{ORIGNATION,jdbcType=NVARCHAR},
+      </if>
+      <if test="PRIORITY != null">
+        #{PRIORITY,jdbcType=VARCHAR},
+      </if>
+      <if test="PUBSTATID != null">
+        #{PUBSTATID,jdbcType=VARCHAR},
+      </if>
+      <if test="QCADD != null">
+        #{QCADD,jdbcType=NVARCHAR},
+      </if>
+      <if test="QCDATE != null">
+        to_date(#{QCDATE},'YYYY-MM-DD HH24:mi:ss'),
+      </if>
+      <if test="QCSN != null">
+        #{QCSN,jdbcType=OTHER},
+      </if>
+      <if test="QUANTITY != null">
+        #{QUANTITY,jdbcType=OTHER},
+      </if>
+      <if test="RECEIVEDDATE != null">
+        to_date(#{RECEIVEDDATE},'YYYY-MM-DD HH24:mi:ss'),
+      </if>
+      <if test="REGION != null">
+        #{REGION,jdbcType=NVARCHAR},
+      </if>
+      <if test="SN != null">
+        #{SN,jdbcType=NVARCHAR},
+      </if>
+      <if test="STARTADD != null">
+        #{STARTADD,jdbcType=NVARCHAR},
+      </if>
+      <if test="STARTADDEN != null">
+        #{STARTADDEN,jdbcType=NVARCHAR},
+      </if>
+      <if test="TRANSMODE != null">
+        #{TRANSMODE,jdbcType=NVARCHAR},
+      </if>
+      <if test="TREATDATE != null">
+        to_date(#{TREATDATE},'YYYY-MM-DD HH24:mi:ss'),
+      </if>
+      <if test="TREATMENT != null">
+        #{TREATMENT,jdbcType=NVARCHAR},
+      </if>
+      <if test="UNIT != null">
+        #{UNIT,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+ <update id="updateByPrimaryKeySelective" parameterType="com.dpn.ciqqlc.standard.model.Tgoods">
+    update QLC_ORIG_TGOODS
+    <set>
+      <if test="ID != null and ID != ''">
+        ID=#{ID},
+      </if>
+      <if test="AUDID != null and AUDID != ''">
+        AUDID=#{AUDID},
+      </if>
+      <if test="BOUTPUT != null and BOUTPUT !=''">
+       BOUTPUT =#{BOUTPUT},
+      </if>
+      <if test="CATEGORY != null and CATEGORY !=''">
+        CATEGORY=#{CATEGORY},
+      </if>
+      <if test="CHECKID != null and CHECKID!=''">
+        CHECKID=#{CHECKID},
+      </if>
+      <if test="CNAME != null and CNAME !=''">
+        CNAME=#{CNAME},
+      </if>
+      <if test="CODE != null and CODE !=''">
+        CODE=#{CODE},
+      </if>
+      <if test="CODESHORT != null and CODESHORT !=''">
+        CODESHORT=#{CODESHORT},
+      </if>
+      <if test="CONSIGNEEADD != null and CONSIGNEEADD  !=''">
+        CONSIGNEEADD=#{CONSIGNEEADD},
+      </if>
+      <if test="CONSIGNEENAME != null and CONSIGNEENAME !=''">
+        CONSIGNEENAME=#{CONSIGNEENAME},
+      </if>
+      <if test="CONSIGNERADD != null and CONSIGNERADD !=''">
+        CONSIGNERADD=#{CONSIGNERADD},
+      </if>
+      <if test="CONSIGNERNAME != null and CONSIGNERNAME !=''">
+        CONSIGNERNAME=#{CONSIGNERNAME},
+      </if>
+      <if test="CONVEYANCE != null and CONVEYANCE !=''">
+        CONVEYANCE=#{CONVEYANCE},
+      </if>
+      <if test="CONVEYANCENO != null and CONVEYANCENO !=''">
+        CONVEYANCENO=#{CONVEYANCENO},
+      </if>
+      <if test="DEREGDISENTER != null and DEREGDISENTER !=''">
+        DEREGDISENTER=#{DEREGDISENTER},
+      </if>
+      <if test="DEREGMIXDISENTER != null and DEREGMIXDISENTER !=''">
+        DEREGMIXDISENTER=#{DEREGMIXDISENTER},
+      </if>
+      <if test="DEREGNOPERMITQC != null and DEREGNOPERMITQC !=''">
+        DEREGNOPERMITQC=#{DEREGNOPERMITQC},
+      </if>
+      <if test="DEREGNOQC != null and DEREGNOQC !=''">
+        DEREGNOQC=#{DEREGNOQC},
+      </if>
+      <if test="DEREGNOTIDES != null and DEREGNOTIDES !=''">
+        DEREGNOTIDES=#{DEREGNOTIDES},
+      </if>
+      <if test="DEREGNOTISN != null and DEREGNOTISN !=''">
+        DEREGNOTISN=#{DEREGNOTISN},
+      </if>
+      <if test="DEREGOTHER != null and DEREGOTHER !=''">
+        DEREGOTHER=#{DEREGOTHER},
+      </if>
+      <if test="ENAME != null and ENAME !=''">
+        ENAME=#{ENAME},
+      </if>
+      <if test="ENTERDATE != null and ENTERDATE !=''">
+        ENTERDATE=to_date('${ENTERDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="ENTERPORT != null and ENTERPORT !=''">
+        ENTERPORT=#{ENTERPORT},
+      </if>
+      <if test="ERDES != null and ERDES !=''">
+        ERDES=#{ERDES},
+      </if>
+      <if test="EXPORTNATION != null and EXPORTNATION !=''">
+        EXPORTNATION=#{EXPORTNATION},
+      </if>
+      <if test="FORMAUDIT != null and FORMAUDIT !=''">
+        FORMAUDIT=#{FORMAUDIT},
+      </if>
+      <if test="FORMDATE != null and FORMDATE !=''">
+       FORMDATE =to_date('${FORMDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="FORMDEPTNO != null and FORMDEPTNO !=''">
+        FORMDEPTNO=#{FORMDEPTNO},
+      </if>
+      <if test="FORMDEPTNOSHORT != null and FORMDEPTNOSHORT !=''">
+       FORMDEPTNOSHORT =#{FORMDEPTNOSHORT},
+      </if>
+      <if test="FORMPERS != null and FORMPERS !=''">
+       FORMPERS =#{FORMPERS},
+      </if>
+      <if test="FORMSN != null and FORMSN  !=''">
+        FORMSN=#{FORMSN},
+      </if>
+      <if test="IC != null and IC !=''">
+        IC=#{IC},
+      </if>
+      <if test="IDECIQ != null and IDECIQ !=''">
+        IDECIQ=#{IDECIQ},
+      </if>
+      <if test="INTERPORT != null and INTERPORT !=''">
+        INTERPORT=#{INTERPORT},
+      </if>
+      <if test="LNAME != null and INTERPORT !=''">
+        LNAME=#{LNAME},
+      </if>
+      <if test="MARKID != null and MARKID !=''">
+        MARKID=#{MARKID},
+      </if>
+      <if test="MARKQUAR != null and MARKQUAR !=''">
+        MARKQUAR=#{MARKQUAR},
+      </if>
+      <if test="MEASURE != null and MEASURE !=''">
+        MEASURE=#{MEASURE},
+      </if>
+      <if test="ORIGNATION != null and ORIGNATION !=''">
+        ORIGNATION=#{ORIGNATION},
+      </if>
+      <if test="PRIORITY != null and PRIORITY !=''">
+       PRIORITY =#{PRIORITY},
+      </if>
+      <if test="PUBSTATID != null and PUBSTATID !=''">
+       PUBSTATID =#{PUBSTATID},
+      </if>
+      <if test="QCADD != null and QCADD !=''">
+        QCADD=#{QCADD},
+      </if>
+      <if test="QCDATE != null and QCDATE !=''">
+        QCDATE=to_date('${QCDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="QCSN != null and QCSN !=''">
+        QCSN=#{QCSN},
+      </if>
+      <if test="QUANTITY != null and QUANTITY !=''">
+       QUANTITY =#{QUANTITY},
+      </if>
+      <if test="RECEIVEDDATE != null and RECEIVEDDATE !=''">
+        RECEIVEDDATE=to_date('${RECEIVEDDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="REGION != null and REGION !=''">
+        REGION=#{REGION},
+      </if>
+      <if test="SN != null and SN !=''">
+       SN =#{SN},
+      </if>
+      <if test="STARTADD != null and STARTADD !=''">
+       STARTADD =#{STARTADD},
+      </if>
+      <if test="STARTADDEN != null and STARTADDEN !=''">
+       STARTADDEN =#{STARTADDEN},
+      </if>
+      <if test="TRANSMODE != null and TRANSMODE !=''">
+        TRANSMODE=#{TRANSMODE},
+      </if>
+      <if test="TREATDATE != null and TREATDATE !=''">
+        TREATDATE=to_date('${TREATDATE}','yyyy-MM-dd HH24:mi:ss'),
+      </if>
+      <if test="TREATMENT != null and TREATMENT !=''">
+        TREATMENT=#{TREATMENT},
+      </if>
+      <if test="UNIT != null and UNIT !=''">
+        UNIT=#{UNIT},
+      </if>
+    </set>
+    where ID = #{ID}
+  </update>
+  
+   <sql id="Base_Column_List">
+    GID, AUDID, BOUTPUT, CATEGORY, CHECKID, CNAME, CODE, CODESHORT, CONSIGNEEADD, CONSIGNEENAME, 
+    CONSIGNERADD, CONSIGNERNAME, CONVEYANCE, CONVEYANCENO, DEREGDISENTER, DEREGMIXDISENTER, 
+    DEREGNOPERMITQC, DEREGNOQC, DEREGNOTIDES, DEREGNOTISN, DEREGOTHER, ENAME, ENTERDATE, 
+    ENTERPORT, ERDES, EXPORTNATION, FORMAUDIT, FORMDATE, FORMDEPTNO, FORMDEPTNOSHORT, 
+    FORMPERS, FORMSN, IC, ID, IDECIQ, INTERPORT, LNAME, MARKID, MARKQUAR, MEASURE, ORIGNATION, 
+    PRIORITY, PUBSTATID, QCADD, QCDATE, QCSN, QUANTITY, RECEIVEDDATE, REGION, SN, STARTADD, 
+    STARTADDEN, TRANSMODE, TREATDATE, TREATMENT, UNIT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="com.dpn.ciqqlc.standard.model.Tgoods">
+    select 
+    <include refid="Base_Column_List" />
+    from QLC_ORIG_TGOODS
+    where ID = #{ID}
+  </select>
+  
+  <select id="fetchMaxGoodId" resultType="int">
+	select (case when max(t.id) is null then 0
+        when max(t.id) is not null then (max(t.id)+1)end) from QLC_ORIG_TGOODS t
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from QLC_ORIG_TGOODS
+    where ID = #{ID}
+  </delete>
+  
+</mapper>

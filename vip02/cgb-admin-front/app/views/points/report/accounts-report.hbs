@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}结算报表{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF03",
+            "reportCode":"JF03"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

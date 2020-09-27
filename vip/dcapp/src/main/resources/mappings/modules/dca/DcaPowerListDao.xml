@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.risklist.dao.DcaPowerListDao">
+    
+	<sql id="dcaPowerListColumns">
+		a.UUID AS "uuid",
+		a.BIZ_ROLE_NAME AS "bizRoleName",
+		a.POWER_ID AS "powerId",
+		a.ACCORD AS "accord",
+		a.DUTY AS "duty",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks"
+	</sql>
+	
+	<sql id="dcaPowerListJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaPowerList">
+		SELECT 
+			<include refid="dcaPowerListColumns"/>
+		FROM DCA_POWER_LIST a
+		<include refid="dcaPowerListJoins"/>
+		WHERE a.UUID = #{uuid}
+	</select>
+	
+	<select id="findList" resultType="DcaPowerList">
+		SELECT 
+		a.UUID AS "uuid",
+		a.BIZ_ROLE_NAME AS "bizRoleName",
+		a.POWER_ID AS "powerId",
+		a.ACCORD AS "accord",
+		a.DUTY AS "duty",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks",
+		s.NAME AS name
+		FROM DCA_POWER_LIST a
+		LEFT JOIN SYS_OFFICE s ON s.ID = a.REMARKS
+		<include refid="dcaPowerListJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="powerId != null and powerId != ''">
+				AND a.POWER_ID = #{powerId}
+			</if>
+			<if test="bizRoleName != null and bizRoleName != ''">
+				AND a.BIZ_ROLE_NAME = #{bizRoleName}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND INSTR(a.REMARKS, #{remarks}) > 0
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaPowerList">
+		SELECT 
+			<include refid="dcaPowerListColumns"/>
+		FROM DCA_POWER_LIST a
+		<include refid="dcaPowerListJoins"/>
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO DCA_POWER_LIST(
+			UUID,
+			BIZ_ROLE_NAME,
+			POWER_ID,
+			ACCORD,
+			DUTY,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS
+		) VALUES (
+			#{uuid},
+			#{bizRoleName},
+			#{powerId},
+			#{accord},
+			#{duty},
+			#{delFlag},
+			#{createPerson},
+			SYSDATE,
+			#{updatePerson},
+			SYSDATE,
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE DCA_POWER_LIST SET 	
+			BIZ_ROLE_NAME = #{bizRoleName},
+			POWER_ID = #{powerId},
+			ACCORD = #{accord},
+			DUTY = #{duty},
+			REMARKS = #{remarks},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = SYSDATE
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<update id="delete">
+		UPDATE DCA_POWER_LIST SET 
+			DEL_FLAG = #{delFlag}
+		WHERE UUID = #{uuid}
+	</update>
+	
+	<select id="getBizRoleByPowerId" resultType="DcaPowerList">
+		SELECT a.UUID AS "uuid", a.BIZ_ROLE_NAME AS "bizRoleName"
+		FROM DCA_POWER_LIST a
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="powerId != null and powerId != ''">
+				AND a.POWER_ID = #{powerId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 插入业务角色和组织岗位关联关系表 -->
+  	<insert id="insertSave">
+		INSERT INTO DCA_BIZ_ROLE_REF_ORG_POST(
+			UUID,
+			BIZ_ROLE_ID,
+			POWER_ID,
+			POST_ID,
+			DEL_FLAG,
+			CREATE_PERSON,
+			CREATE_DATE,
+			UPDATE_PERSON,
+			UPDATE_DATE,
+			REMARKS
+		) VALUES (
+			#{uuid},
+			#{bizRoleId},
+			#{powerId},
+			#{postId},
+			#{delFlag},
+			#{createPerson},
+			SYSDATE,
+			#{updatePerson},
+			SYSDATE,
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="updateSave">
+		UPDATE DCA_BIZ_ROLE_REF_ORG_POST SET 	
+			BIZ_ROLE_ID = #{bizRoleId},
+			POWER_ID = #{powerId},
+			POST_ID = #{postId},
+			REMARKS = #{remarks},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = SYSDATE
+		WHERE BIZ_ROLE_ID = #{bizRoleId}
+	</update>
+	
+	<update id="officeDelete">
+		UPDATE DCA_BIZ_ROLE_REF_ORG_POST SET 
+			DEL_FLAG = #{delFlag},
+			UPDATE_DATE = SYSDATE
+		WHERE BIZ_ROLE_ID = #{uuid}
+	</update>
+	
+	<!-- 获取权责清单数量（首页用） add by liuchang 20161228  -->
+	<select id="getPowerListCount" resultType="java.lang.Integer">
+		SELECT COUNT(UUID)
+		FROM DCA_POWER_LIST
+		WHERE
+			DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="updateDate != null and updateDate != ''">
+				AND 
+				TRUNC(UPDATE_DATE,'mi') <![CDATA[ <= ]]> #{updateDate}
+			</if>
+	</select>
+</mapper>

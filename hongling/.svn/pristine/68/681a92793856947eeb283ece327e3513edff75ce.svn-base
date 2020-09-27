@@ -1,0 +1,158 @@
+@charset "utf-8";
+/* CSS Document */
+.content {
+	position: relative;
+	width: 960px;
+	height: 600px;
+	margin: 0 auto;
+	background: url(../images/content_bg.png) center 350px no-repeat;
+	_background:none;
+}
+.content .top_title {
+	position: absolute;
+	top: 55px;
+	left: 20px;
+}
+.content ul {
+	width: 540px;
+	overflow: hidden;
+	margin: 0 auto;
+}
+.content li {
+	width: 90px;
+	float: left;
+	text-align: center;
+	margin-top: 320px;
+}
+.content span {
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	width: 94px;
+}
+.apply {
+	width: 200px;
+	margin: 0 auto;
+	text-align: center;
+	padding-top: 10px;
+}
+/*---------弹窗css---------*/
+.reveal-modal-bg {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	z-index: 100;
+	display: none;
+	top: 0;
+	left: 0;
+　
+}
+.reveal-modal {
+	visibility: hidden;
+	top: 100px;
+	left: 50%;
+	margin-left: -400px;
+	width: 800px;
+	height: 230px;
+	background: url(../images/msg_bg.png) repeat top center;
+	position: absolute;
+	z-index: 101;
+	padding: 30px 40px 34px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
+	-webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
+	-box-shadow: 0 0 10px rgba(0,0,0,.4);
+	border-top: 6px solid #333;
+	border-bottom: 6px solid #333;
+}
+.reveal-modal.small {
+	width: 200px;
+	margin-left: -140px;
+}
+.reveal-modal.medium {
+	width: 400px;
+	margin-left: -240px;
+}
+.reveal-modal.large {
+	width: 600px;
+	margin-left: -340px;
+}
+.reveal-modal.xlarge {
+	width: 800px;
+	margin-left: -440px;
+}
+.reveal-modal .close-reveal-modal {
+	font-size: 22px;
+	line-height: .5;
+	position: absolute;
+	top: 8px;
+	right: 11px;
+	color: #aaa;
+	text-shadow: 0 -1px 1px rbga(0, 0, 0, .6);
+	font-weight: bold;
+	cursor: pointer;
+}
+.reveal-modal h1 {
+	font-size:50px;
+	_line-height:50px;
+	width:700px;
+	margin:0 auto;
+	text-align:center;
+	margin-bottom:30px;
+}
+.reveal-modal li span {
+	font-size:16px;
+	font-weight:bold;
+	margin-right:10px;
+}
+.reveal-modal li {
+	float:left;
+	width:170px;
+    _width:178px;
+	overflow:hidden;
+}
+.reveal-modal .apply_b {
+	width:750px;
+	text-align:center;
+	margin:0 auto;
+	margin-top:20px;
+}
+.reveal-modal .bind_apple{
+	width:148px;
+	height:39px;
+	background:url(../images/aply_2.png) top center no-repeat;
+	border:none;
+	color:#FFF;
+	font-weight:bold;
+}
+.bind_apple{
+	margin-top:20px;
+	cursor: pointer;
+}
+.reveal-modal ul {
+	position:relative;
+	width:510px;
+	_width:535px;
+	margin:0 auto;
+	margin-top:40px;
+}
+.reveal-modal li input {
+	width:85px;
+}
+.reveal-modal .bind_apply {
+	margin:0 auto;
+}
+	
+/* 除IE6浏览器的通用方法 */
+
+
+
+/* IE6浏览器的特有方法 */
+
+* html .ie6fixedTL {
+	position: absolute;
+left:expression(eval(document.documentElement.scrollLeft));
+top:expression(eval(document.documentElement.scrollTop))
+}

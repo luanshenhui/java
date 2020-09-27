@@ -1,0 +1,155 @@
+{{#component "activitys-edit js-component"}}
+    <link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+
+    <p>
+        <strong class="main-box-title" data-type=true>- 活动编辑 -</strong>
+    </p>
+    <form class="form form-aligned newActivity-form newActivity-add-form form-inline">
+        <div>
+            &nbsp;
+            <div class="control-group form-information active-name-check">
+                <label for="roleName"><span class="required">*</span>活动名称:</label>
+                <input name="name" class="form-control active-name" type="text" placeholder="请输入活动主题"
+                       required value="{{_DATA_.adminPromotionResultDto.name}}">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group form-information">
+                <label for="roleName"><span class="required">*</span>活动简称:</label>
+                <input name="shortName" class="form-control shortName" type="text" placeholder="请输入活动简称" required
+                       value="{{_DATA_.adminPromotionResultDto.shortName}}">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group form-information">
+                <label for="requestMoneyState"><span class="required">*</span>活动类型:</label>
+                <select id="ForType" name="promType" class="width-164" required
+                        data-value="{{_DATA_.adminPromotionResultDto.promTypeName}}" disabled="disabled">
+                    <option selected="selected" value="">请选择</option>
+                    <option value="10">折扣</option>
+                    <option value="20">满减</option>
+                    <option value="30">秒杀</option>
+                    <option value="40">团购</option>
+                    <option value="50">荷兰拍</option>
+                </select>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+        </div>
+        <div class="calculate-Time">
+            <h3>- 活动基本条件 -</h3>
+        <span class="control-group form-information sale-channel"
+              data-value="{{_DATA_.adminPromotionResultDto.sourceNames}}">
+            <label for="role"><span class="required">*</span>销售渠道:</label>
+            <input type="checkbox" name="sourceId" class="source channel-check1">广发商城
+            <input type="checkbox" name="sourceId" class="source channel-check2">CC
+            <input type="checkbox" name="sourceId" class="source channel-check3">IVR
+            <input type="checkbox" name="sourceId" class="source channel-check4">手机商城
+            <input type="checkbox" name="sourceId" class="source channel-check5">短信
+            <input type="checkbox" name="sourceId" class="source channel-check6">微信广发银行
+            <input type="checkbox" name="sourceId" class="source channel-check7">微信广发信用卡
+            <input type="checkbox" name="sourceId" class="source  hidden-display">
+            <input type="checkbox" name="sourceId" class="source  hidden-display">
+            <input type="checkbox" name="sourceId" class="source channel-check10">App
+        </span>
+
+            <div class="control-group form-information active-singup-time m-t-20">
+                <label for="roleName"><span class="required">*</span>活动报名时间:</label>
+                <input id="js-date-startEntry"
+                       class="beginEntryDate cursor-pointer" name="beginEntryDate" required
+                       data-value="{{_DATA_.adminPromotionResultDto.loopBeginTime1}}"
+                       value="{{#formatDate _DATA_.adminPromotionResultDto.beginEntryDate}}{{/formatDate}}">
+                - <input id="js-date-endEntry"
+                         class="endEntryDate cursor-pointer" name="endEntryDate" required
+                         data-value="{{_DATA_.adminPromotionResultDto.loopEndTime1}}"
+                         value="{{#formatDate _DATA_.adminPromotionResultDto.endEntryDate}}{{/formatDate}}">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group form-information m-t-20">
+                <label for="roleName"><span class="required">*</span>活动时间:</label>
+                <input id="js-date-start" class="beginDate cursor-pointer" name="beginDate" required
+                       data-value="{{_DATA_.adminPromotionResultDto.loopBeginTime2}}"
+                       value="{{#formatDate _DATA_.adminPromotionResultDto.beginDate}}{{/formatDate}}"/>
+                - <input id="js-date-end" class="endDate cursor-pointer" name="endDate" required
+                         data-value="{{_DATA_.adminPromotionResultDto.loopEndTime2}}"
+                         value="{{#formatDate _DATA_.adminPromotionResultDto.endDate}}{{/formatDate}}"/>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div>
+            <span class="control-group form-information">
+                <label for="role"><span class="required">*</span>是否循环执行:</label>
+                <input type="checkbox" class="recycleActivity" name="loopType"
+                       data-value="{{_DATA_.adminPromotionResultDto.loopType}}"
+                       data-data="{{_DATA_.adminPromotionResultDto.loopData}}">循环执行
+            </span>
+            </div>
+            <div class="padding-left-160 recycleActive">
+                <div class="dayWeekMonth"></div>
+                <div class="everyWeekOrMonth"></div>
+                <div class="loopTime"></div>
+            </div>
+        </div>
+        <div>
+            <h3 class="active-rule-title"
+                {{#equals _DATA_.adminPromotionResultDto.promType '10'}}
+                data-value="{{_DATA_.adminPromotionResultDto.ruleDiscountRate}},{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}},{{_DATA_.adminPromotionResultDto.ruleLimitBuyType}}"
+                {{/equals}}
+                {{#equals _DATA_.adminPromotionResultDto.promType '20'}}
+                data-value="{{_DATA_.adminPromotionResultDto.ruleMinPays}}"
+                data-title="{{_DATA_.adminPromotionResultDto.ruleFees}}"
+                {{/equals}}
+                {{#equals _DATA_.adminPromotionResultDto.promType '30'}}
+                data-value="{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}},{{_DATA_.adminPromotionResultDto.ruleLimitBuyType}}"
+                {{/equals}}
+                {{#equals _DATA_.adminPromotionResultDto.promType '40'}}
+                data-value="{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}},{{_DATA_.adminPromotionResultDto.ruleLimitBuyType}}"
+                {{/equals}}
+                {{#equals _DATA_.adminPromotionResultDto.promType '50'}}
+                data-value="{{_DATA_.adminPromotionResultDto.ruleFrequency}},{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}},{{_DATA_.adminPromotionResultDto.ruleLimitTicket}},{{_DATA_.adminPromotionResultDto.ruleGroupCount}},{{_DATA_.adminPromotionResultDto.ruleLimitBuyType}}"
+                {{/equals}}>
+                - 活动优惠规则 -</h3>
+            <a class="btn btn-info btn-small fullDown-add-btn hideStyle">新增</a>
+
+            <div class="control-group1 active-sale-rule"></div>
+        </div>
+
+        <div class="active-range-title" data-data="{{json this}}">
+            <h3 class="activity-range" data-groupclassify="{{json _DATA_.groupClassifies}}">- 活动范围 -</h3>
+
+            <div class="activeRangeAddBtn hideStyle">
+                <a class="btn btn-info btn-small js—add—content">新增</a>
+            </div>
+            <div class="activeRangeAddBtn-discount hideStyle">
+                <a class="btn btn-info btn-small range-add-btn">新增</a>
+            </div>
+            <div class="activeRangeAddBtn-fullDown hideStyle">
+                <a class="btn btn-info btn-small range-add-btn">新增</a>
+            </div>
+
+            <div class="activeRange scroll-800">
+
+            </div>
+        </div>
+        <div>
+            <h3 class="active-Context" data-value="{{_DATA_.adminPromotionResultDto.description}}">- 促销内容 -</h3>
+
+            <div class="" id="text-content">
+                <script type="text/plain" id="myEditor" style="width:950px;height:240px;">
+
+                </script>
+                <!--<textarea name="memo" id='memo'></textarea>-->
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <div class="margin-center">
+            <input type="submit" class="btn btn-success btn-medium js-activity-create new-active-save" value="保存">
+            <input type="submit" class="btn btn-success btn-medium js-activity-create new-active-submit-auditing"
+                   value="提交审核">
+            <button class="btn btn-info btn-medium button-cancle">取消</button>
+        </div>
+    </div>
+    <script src="/static/scripts/laydate/laydate.js"></script>
+{{/component}}

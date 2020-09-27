@@ -1,0 +1,498 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>财务分析</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/model.css" />
+    <link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+    <link rel="stylesheet" href="css/three-important1.css"/>
+    <link rel="stylesheet" href="css/personal.css"/>
+    <script src="js/echarts.min.js"></script>
+    <script src="js/jquery-1.8.3.js"></script>
+    <script src="js/three-important.js"></script>
+    <script src="js/js.js"></script>
+</head>
+<body>
+<div class="box">
+    <div class="box-head">
+       <!-- <a href="firstpage.html" class="arrow-back"><i></i>首页</a>-->
+        <p class="box-title">财务分析</p>
+        <!--<a href="javascript:void(0)" class="arrow-left"><i></i></a>
+        <a href="javascript:void(0)" class="arrow-right"><i></i></a>-->
+    </div>
+    <div class="box-container">
+        <div class="box-left">
+            <ul>
+                <li class="on">
+                    <a href="gzw-financialAnalysis-statistics.html">财务基本状况分析</a>
+                </li>
+                <li >
+                    <a href="gzw-financialAnalysis-newsflash.html">财务监督铁笼应用</a>
+                </li>
+                <li>
+                    <a href="gzw-financialAnalysis-annual.html">财务数据年度分析</a>
+                </li>
+            </ul>
+        </div>
+        <div class="box-right">
+            <div class="box-right-title">
+                <p><i></i>财务基本状况分析</p>
+            </div>
+            <div class="box-right-form  three-important1">
+                <div class="risk-form-main financial-chart financial-statistic">
+                    <div id="chart1"  class="block-module-background block-module"></div>
+                    <div id="chart2"  class="block-module-background block-module"></div>
+                    <div id="chart3"  class="block-module-background block-module"></div>
+                    <div id="chart4"  class="block-module-background block-module"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script>
+    var myChart1 = echarts.init(document.getElementById('chart1'));
+    var option1 = {
+        title: {
+            text: '营业分析',
+            textStyle:{fontSize:'20',color:'#fff'}
+        },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            right:'4%',
+            itemGap:20,
+            data:['营业收入（万元）','营业成本（万元）'],
+            textStyle:{fontSize:'18',color:'#fff'}
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                data : ['铁投','农投','工投','贵阳银行','农商行','城投','旅文投','住投','工商','医管','轨道','阳光产权','城发'],
+                axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}}
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}}
+            }
+        ],
+        series : [
+            {
+                name:'营业收入（万元）',
+                type:'bar',
+                barWidth:'10',
+                data:[32, 24, 51, 32, 33, 75, 56, 18, 45, 12, 27, 39, 11],
+                itemStyle : { normal: {color:'#5B9BD5',label : {show: true, position: 'top',textStyle:{fontSize:20 }}}},
+            },
+
+            {
+                name:'营业成本（万元）',
+                type:'bar',
+                data:[85, 57, 88, 70, 63, 110, 82, 65, 59, 32, 66, 91, 40],
+                itemStyle : { normal: {color:'#ED7D31',label : {show: true, position: 'top',textStyle:{fontSize:20 }}}},
+
+            }
+        ]
+    };
+    myChart1.setOption(option1);
+
+    var myChart2 = echarts.init(document.getElementById('chart2'));
+    data = [
+        [[1,30,2000000000,'贵阳银行','贵阳银行']],
+        [[4,38,1000000000,'医管','医管']],
+        [[6,25,3500000000,'城投','城投']],
+        [[8,32,2500000000,'铁投','铁投']],
+        [[14,10,7000000000,'工投','工投']],
+        [[16,45,1500000000,'旅文投','旅文投']],
+        [[20,1,1200000000,'农投','农投']],
+        [[19,23,2000000000,'住投','住投']],
+        [[23,28,3000000000,'农商行','农商行']]
+    ];
+
+    option2 = {
+        title: {
+            text: '企业规模',
+            x:'center',
+            textStyle:{fontSize:'20',color:'#fff'}
+        },
+        xAxis: {
+            show: false
+        },
+        yAxis: {
+            show: false
+        },
+        series: [{
+            name: '贵阳银行',
+            data: data[0],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+            label: {
+                normal:{textStyle:{fontSize:'20'},show:true,
+                    formatter: function () {
+                        return 60;
+                    }},
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top',
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#FF9966'
+                }
+            }
+        }, {
+            name: '医管',
+            data: data[1],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+            label: {
+                normal:{textStyle:{fontSize:'20'},show:true,
+                    formatter: function () {
+                        return 50;
+                    }},
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#66CCCC'
+                }
+            }
+        }, {
+            name: '城投',
+            data: data[2],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+            label: {
+                normal:{textStyle:{fontSize:'20'},show:true,
+                    formatter: function () {
+                        return 70;
+                    }},
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#CC99CC'
+                }
+            }
+        },{
+            name: '铁投',
+            data: data[3],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+            label: {
+                normal:{textStyle:{fontSize:'20'},show:true,
+                    formatter: function () {
+                        return 65;
+                    }},
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top',
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#FFFF66'
+                }
+            }
+        }, {
+            name: '工投',
+            data: data[4],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+            label: {
+                normal:{textStyle:{fontSize:'20'},show:true,
+                    formatter: function () {
+                        return 100;
+                    }},
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#00FFCC'
+                }
+            }
+        }, {
+            name: '旅文投',
+            data: data[5],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+            label: {
+                normal:{textStyle:{fontSize:'20'},show:true,
+                    formatter: function () {
+                        return 55;
+                    }},
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#99FF33'
+                }
+            }
+        },{
+            name: '农投',
+            data: data[6],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+            label: {
+                normal:{textStyle:{fontSize:'20'},show:true,
+                    formatter: function () {
+                        return 53;
+                    }},
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top',
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#FF6699'
+                }
+            }
+        }, {
+            name: '住投',
+            data: data[7],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+            label: {
+                normal:{textStyle:{fontSize:'20'},show:true,
+                    formatter: function () {
+                        return 58;
+                    }},
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#FF9900'
+                }
+            }
+        }, {
+            name: '农商行',
+            data: data[8],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+            label: {
+                normal:{textStyle:{fontSize:'20'},show:true,
+                    formatter: function () {
+                        return 68;
+                    }},
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#99CC66'
+                }
+            }
+        }]
+    };
+
+    myChart2.setOption(option2);
+
+    var myChart3 = echarts.init(document.getElementById('chart3'));
+    var data = [
+        [[58,90,100000000,'铁投',1990],[30,56,100000000,'城投',1990],[34,78,100000000,'农投',1990],[45,96,100000000,'工投',1990],[56,33,100000000,'住投',1990],[77,27,100000000,'旅文投',1990],[34,56,100000000,'医管',1990],[56,88,100000000,'城发',1990]],
+    ];
+    option3 = {
+        title: {
+            text: '各企业负债比',
+            x:'center',
+            textStyle:{fontSize:'20',color:'#fff'}
+        },
+        legend: {
+            right: 10
+        },
+        grid:{
+            right:'18%'
+        },
+        xAxis: {
+            name:'资产负债比',
+            nameTextStyle:{
+                color:'#fff',
+                fontSize:'16'
+            },
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            },
+            axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}}
+        },
+        yAxis: {
+            name:'流动负债比',
+            nameTextStyle:{
+                color:'#fff',
+                fontSize:'16'
+            },
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            },
+            axisLabel:{textStyle:{fontSize:20,color:'#7a7a7a'}},
+            scale: true
+        },
+        series: [{
+            data: data[0],
+            type: 'scatter',
+            symbolSize: function (data) {
+                return Math.sqrt(data[2]) / 5e2;
+            },
+
+            label: {
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top',
+                    textStyle:{fontSize:20,color:'#ffffff'}
+                }
+            },
+            itemStyle: {
+                normal: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(120, 36, 50, 0.5)',
+                    shadowOffsetY: 5,
+                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                        offset: 0,
+                        color: 'rgb(251, 118, 123)'
+                    }, {
+                        offset: 1,
+                        color: 'rgb(204, 46, 72)'
+                    }])
+                }
+            }
+        }]
+    };
+    myChart3.setOption(option3);
+
+    var myChart4 = echarts.init(document.getElementById('chart4'));
+    option4 = {
+        title : {
+            text: '利润构成',
+            x:'center',
+            textStyle:{fontSize:'20',color:'#fff'}
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            bottom:'bottom',
+            left: 'left',
+            textStyle:{fontSize:18,color:'#fff'},
+            data: ['铁投','农投','公投','贵阳银行','农商行','城投','旅文投','住投','工商','医管','轨道','阳光产权','城发']
+        },
+        series : [
+            {
+                name: '利润构成',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '45%'],
+                data:[
+                    {value:'3000000', name:'铁投',itemStyle:{normal:{color:'#5B9BD5'}}},
+                    {value:'2000000', name:'农投',itemStyle:{normal:{color:'#ED7D31'}}},
+                    {value:'2000000', name:'工投',itemStyle:{normal:{color:'#A5A5A5'}}},
+                    {value:'6000000', name:'贵阳银行',itemStyle:{normal:{color:'#FFC000'}}},
+                    {value:'2000000', name:'农商行',itemStyle:{normal:{color:'#4472C4'}}},
+                    {value:'3000000', name:'城投',itemStyle:{normal:{color:'#70AD47'}}},
+                    {value:'2000000', name:'旅文投',itemStyle:{normal:{color:'#255E91'}}},
+                    {value:'8000000', name:'住投',itemStyle:{normal:{color:'#9E480E'}}},
+                    {value:'2000000', name:'工商',itemStyle:{normal:{color:'#636363'}}},
+                    {value:'1000000', name:'医管',itemStyle:{normal:{color:'#997300'}}},
+                    {value:'3000000', name:'轨道',itemStyle:{normal:{color:'#264478'}}},
+                    {value:'2000000', name:'阳光产权',itemStyle:{normal:{color:'#43682B'}}},
+                    {value:'4000000', name:'城发',itemStyle:{normal:{color:'#7CAFDD'}}}
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    textStyle:{fontSize:'20',color:'#fff'}
+                }
+            }
+        ]
+    };
+    myChart4.setOption(option4);
+</script>
+</body>
+</html>

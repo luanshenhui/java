@@ -1,0 +1,388 @@
+{{#component "html-upload js-component" }}
+    <link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <p class="components-title js-html-title" data-id="{{ordertypeId}}"><strong>- 静态页面管理 -</strong></p>
+    <div class="m-b-10">
+        <form id="form-search" class="form">
+            <fieldset>
+                <p class="filter-name">
+                    <span class="span4">
+                        <label for="actId">静态页面代码:</label>
+                        <input id="actId" type="text" name="actId" class="search-account search-input"
+                               value="{{actId}}" maxlength="20">
+                    </span>
+                    <span class="span4">
+                        <label for="actName">页面名称:</label>
+                        <input id="actName" type="text" name="actName" class="search-account search-input"
+                               value="{{actName}}" maxlength="30">
+                    </span>
+                    <span class="span4">
+                        <label for="oper">上传者:</label>
+                        <select id="oper" type="text" name="oper" class="search-account search-input">
+                            <option value="" {{#equals oper ""}}selected{{/equals}}>请选择</option>
+                            <option value="0" {{#equals oper "0"}}selected{{/equals}}>内管</option>
+                            <option value="1" {{#equals oper "1"}}selected{{/equals}}>供应商</option>
+                        </select>
+                    </span>
+                </p>
+                <p class="filter-name">
+
+                <span class="span4">
+                    <label for="pageType">页面类型:</label>
+                    <select id="pageType" type="text" name="pageType" class="search-account search-input">
+                        <option value="" {{#equals pageType ""}}selected{{/equals}}>请选择</option>
+                        <option value="05" {{#equals pageType "05"}}selected{{/equals}}>商城预留页</option>
+                        <option value="04" {{#equals pageType "04"}}selected{{/equals}}>APP预留页</option>
+                    </select>
+                </span>
+                </p>
+                <input class="btn btn-success btn-small margin-right-0 pull-right" type="submit" value="查询"/>
+            </fieldset>
+        </form>
+        <div class="btn-group add-html">
+            {{#equals ordertypeId "YG"}}
+                {{#authorial "htmlUpload_add"}}
+                    <button class="btn btn-info btn-small js-html-new">新建</button>
+                {{/authorial}}
+            {{/equals}}
+            {{#equals ordertypeId "JF"}}
+                {{#authorial "pointHtmlUpload_add"}}
+                    <button class="btn btn-info btn-small js-html-new">新建</button>
+                {{/authorial}}
+            {{/equals}}
+
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="10%">静态页面代码</th>
+            <th width="8%">页面类型</th>
+            <th width="8%">页面代码</th>
+            <th width="8%">页面名称</th>
+            <th width="8%">上传者</th>
+            <th width="10%">文件名称</th>
+            <th width="10%">发布状态</th>
+            <th width="26%">页面信息</th>
+            <th width="19%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" data-data="{{json this}}">
+                {{#equals pageType "05"}}
+                    <td class="html-act-id">{{actId}}</td>
+                    <td>商城预留页</td>
+                    <td>{{pageId}}</td>
+                    <td>{{actName}}</td>
+                    <td>{{simpleName}}</td>
+                    <td>{{actFilename}}</td>
+                    <td>{{#equals publishStatus "00"}}已发布{{/equals}}
+                        {{#equals publishStatus "01"}}等待发布{{/equals}}
+                        {{#equals publishStatus "02"}}等待审核{{/equals}}
+                        {{#equals publishStatus "03"}}发布失败{{/equals}}
+                        {{#equals publishStatus "21"}}发布中{{/equals}}
+                        {{#equals publishStatus "40"}}审核拒绝{{/equals}}
+                    </td>
+                    <td class="text-left"><p>开始时间：{{#formatDate startTime}}{{/formatDate}}</p>
+
+                        <p>结束时间：{{#formatDate endTime}}{{/formatDate}}</p>
+                        {{#equals  publishStatus "00"}}
+                            <p>浏览路径：{{_HREF_.htmlPublishUrl}}{{browsePath}}</p>
+                        {{else}}
+                            <p>浏览路径：-</p>
+                        {{/equals}}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-info js-html-look"
+                            {{#equals publishStatus "00"}}
+                                data-url="{{_HREF_.htmlPublishUrl}}{{browsePath}}"
+                            {{else}}
+                                data-url="{{_HREF_.htmlUrl}}{{browsePath}}"
+                            {{/equals}}>预览
+                        </button>
+
+                        <!--删除-->
+                        {{#equals ordertypeId "YG"}}
+                            {{#authorial "htmlDel_announcement"}}
+                                <button class="btn btn-sm btn-info js-html-del" id="{{actId}}" data-toggle="confirm"
+                                        data-title="删除" data-content="您确定要删除该静态页面吗?" data-event="confirm:del-html">
+                                    删除
+                                </button>
+                            {{/authorial}}
+                        {{else}}
+                            {{#authorial "pointHtmlDel_announcement"}}
+                                <button class="btn btn-sm btn-info js-html-del" id="{{actId}}" data-toggle="confirm"
+                                        data-title="删除" data-content="您确定要删除该静态页面吗?" data-event="confirm:del-html">
+                                    删除
+                                </button>
+                            {{/authorial}}
+                        {{/equals}}
+                        {{#equals publishStatus "00"}}
+                            {{#if vendorId}}
+                            {{else}}
+                                {{#equals ordertypeId "YG"}}
+                                    {{#authorial "htmlUpload_upload"}}
+                                        <button class="btn btn-sm btn-info js-html-update">上传</button>
+                                    {{/authorial}}
+                                {{/equals}}
+                                {{#equals ordertypeId "JF"}}
+                                    {{#authorial "pointHtmlUpload_upload"}}
+                                        <button class="btn btn-sm btn-info js-html-update">上传</button>
+                                    {{/authorial}}
+                                {{/equals}}
+                            {{/if}}
+                        {{/equals}}
+                        {{#equals publishStatus "02"}}
+                            {{#authorial "htmlUpload_audit"}}
+                                <button class="btn btn-sm btn-info js-html-pass" id="{{actId}}" data-toggle="confirm"
+                                        data-title="通过" data-content="您确定要通过该静态页面吗?" data-event="confirm:pass-html">
+                                    通过
+                                </button>
+                            {{/authorial}}
+                            {{#authorial "htmlUpload_audit"}}
+                                <button class="btn btn-sm btn-info js-html-refuse" id="{{actId}}" data-toggle="confirm"
+                                        data-title="拒绝" data-content="您确定要拒绝该静态页面吗?" data-event="confirm:refuse-html">
+                                    拒绝
+                                </button>
+                            {{/authorial}}
+                        {{/equals}}
+                        {{#equals publishStatus "03"}}
+                            {{#authorial "htmlUpload_announcement"}}
+                                <button class="btn btn-sm btn-info js-html-push" id="{{actId}}" data-toggle="confirm"
+                                        data-title="发布" data-content="您确定要发布该静态页面吗?" data-event="confirm:push-html">
+                                    发布
+                                </button>
+                            {{/authorial}}
+                        {{/equals}}
+                        {{#equals publishStatus "01"}}
+                            {{#authorial "htmlUpload_announcement"}}
+                                <button class="btn btn-sm btn-info js-html-push" id="{{actId}}" data-toggle="confirm"
+                                        data-title="发布" data-content="您确定要发布该静态页面吗?" data-event="confirm:push-html">
+                                    发布
+                                </button>
+                            {{/authorial}}
+                        {{/equals}}
+                    </td>
+                {{/equals}}
+                {{#equals pageType "04"}}
+                    <td class="html-act-id">{{actId}}</td>
+                    <td>APP预留页</td>
+                    <td>{{pageId}}</td>
+                    <td>{{actName}}</td>
+                    <td>{{simpleName}}</td>
+                    <td>{{actFilename}}</td>
+                    <td>{{#equals publishStatus "00"}}已发布{{/equals}}
+                        {{#equals publishStatus "01"}}等待发布{{/equals}}
+                        {{#equals publishStatus "02"}}等待审核{{/equals}}
+                        {{#equals publishStatus "03"}}发布失败{{/equals}}
+                        {{#equals publishStatus "21"}}发布中{{/equals}}
+                        {{#equals publishStatus "40"}}审核拒绝{{/equals}}
+                        {{#equals publishStatus "50"}}待上传{{/equals}}
+                    </td>
+                    <td class="text-left">
+                        <p>开始时间：{{#formatDate startTime}}{{/formatDate}}</p>
+
+                        <p>结束时间：{{#formatDate endTime}}{{/formatDate}}</p>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-info js-html-look"
+                            {{#equals publishStatus "00"}}
+                                data-url="{{_HREF_.htmlPublishUrl}}{{browsePath}}"
+                            {{else}}
+                                data-url="{{_HREF_.htmlUrl}}{{browsePath}}"
+                            {{/equals}}>预览
+                        </button>
+                        {{#equals ordertypeId "YG"}}
+                            {{#authorial "htmlDel_announcement"}}
+                                <button class="btn btn-sm btn-info js-html-del" id="{{actId}}" data-toggle="confirm"
+                                        data-title="删除" data-content="您确定要删除该静态页面吗?" data-event="confirm:del-html">
+                                    删除
+                                </button>
+                            {{/authorial}}
+                        {{/equals}}
+                        {{#equals ordertypeId "JF"}}
+                            {{#authorial "pointHtmlDel_announcement"}}
+                                <button class="btn btn-sm btn-info js-html-del" id="{{actId}}" data-toggle="confirm"
+                                        data-title="删除" data-content="您确定要删除该静态页面吗?" data-event="confirm:del-html">
+                                    删除
+                                </button>
+                            {{/authorial}}
+                        {{/equals}}
+                        <!--已发布-->
+                        {{#equals publishStatus "00"}}
+                            {{#if vendorId}}
+                            {{else}}
+                                {{#equals ordertypeId "YG"}}
+                                    {{#authorial "htmlUpload_upload"}}
+                                        <button class="btn btn-sm btn-info js-html-update">上传</button>
+                                    {{/authorial}}
+                                {{/equals}}
+                                {{#equals ordertypeId "JF"}}
+                                    {{#authorial "pointHtmlUpload_upload"}}
+                                        <button class="btn btn-sm btn-info js-html-update">上传</button>
+                                    {{/authorial}}
+                                {{/equals}}
+                            {{/if}}
+                            {{#equals ordertypeId "YG"}}
+                                {{#authorial "htmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#equals ordertypeId "JF"}}
+                                {{#authorial "pointHtmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{/equals}}
+                        {{/equals}}
+                        <!--等待发布-->
+                        {{#equals publishStatus "01"}}
+                            {{#equals ordertypeId "YG"}}
+                                {{#authorial "htmlUpload_announcement"}}
+                                    <button class="btn btn-sm btn-info js-html-push" id="{{actId}}"
+                                            data-toggle="confirm"
+                                            data-title="发布" data-content="您确定要发布该静态页面吗?" data-event="confirm:push-html">
+                                        发布
+                                    </button>
+                                {{/authorial}}
+                                {{#authorial "htmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{else}}
+                                {{#authorial "pointHtmlUpload_announcement"}}
+                                    <button class="btn btn-sm btn-info js-html-push" id="{{actId}}"
+                                            data-toggle="confirm"
+                                            data-title="发布" data-content="您确定要发布该静态页面吗?" data-event="confirm:push-html">
+                                        发布
+                                    </button>
+                                {{/authorial}}
+                                {{#authorial "pointHtmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{/equals}}
+                        {{/equals}}
+                        <!--等待审核-->
+                        {{#equals publishStatus "02"}}
+                            {{#equals ordertypeId "YG"}}
+                                {{#authorial "htmlUpload_audit"}}
+                                    <button class="btn btn-sm btn-info js-html-pass" id="{{actId}}"
+                                            data-toggle="confirm"
+                                            data-title="通过" data-content="您确定要通过该静态页面吗?" data-event="confirm:pass-html">
+                                        通过
+                                    </button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#equals ordertypeId "JF"}}
+                                {{#authorial "pointHtmlUpload_audit"}}
+                                    <button class="btn btn-sm btn-info js-html-pass" id="{{actId}}"
+                                            data-toggle="confirm"
+                                            data-title="通过" data-content="您确定要通过该静态页面吗?" data-event="confirm:pass-html">
+                                        通过
+                                    </button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#equals ordertypeId "YG"}}
+                                {{#authorial "htmlUpload_audit"}}
+                                    <button class="btn btn-sm btn-info js-html-refuse" id="{{actId}}"
+                                            data-toggle="confirm"
+                                            data-title="拒绝" data-content="您确定要拒绝该静态页面吗?"
+                                            data-event="confirm:refuse-html">
+                                        拒绝
+                                    </button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#equals ordertypeId "JF"}}
+                                {{#authorial "pointHtmlUpload_audit"}}
+                                    <button class="btn btn-sm btn-info js-html-refuse" id="{{actId}}"
+                                            data-toggle="confirm"
+                                            data-title="拒绝" data-content="您确定要拒绝该静态页面吗?"
+                                            data-event="confirm:refuse-html">
+                                        拒绝
+                                    </button>
+                                {{/authorial}}
+                            {{/equals}}
+                        {{/equals}}
+                        <!--发布失败-->
+                        {{#equals publishStatus "03"}}
+                            {{#equals ordertypeId "YG"}}
+                                {{#authorial "htmlUpload_announcement"}}
+                                    <button class="btn btn-sm btn-info js-html-push" id="{{actId}}"
+                                            data-toggle="confirm"
+                                            data-title="发布" data-content="您确定要发布该静态页面吗?" data-event="confirm:push-html">
+                                        发布
+                                    </button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#equals ordertypeId "JF"}}
+                                {{#authorial "pointHtmlUpload_announcement"}}
+                                    <button class="btn btn-sm btn-info js-html-push" id="{{actId}}"
+                                            data-toggle="confirm"
+                                            data-title="发布" data-content="您确定要发布该静态页面吗?" data-event="confirm:push-html">
+                                        发布
+                                    </button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#equals ordertypeId "YG"}}
+                                {{#authorial "htmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#equals ordertypeId "JF"}}
+                                {{#authorial "pointHtmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{/equals}}
+                        {{/equals}}
+                        <!--审核拒绝-->
+                        {{#equals publishStatus "40"}}
+                            {{#equals ordertypeId "YG"}}
+                                {{#authorial "htmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#equals ordertypeId "JF"}}
+                                {{#authorial "pointHtmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{/equals}}
+                        {{/equals}}
+                        <!--待上传-->
+                        {{#equals publishStatus "50"}}
+                            {{#if vendorId}}
+                            {{else}}
+                                {{#equals ordertypeId "YG"}}
+                                    {{#authorial "htmlUpload_upload"}}
+                                        <button class="btn btn-sm btn-info js-html-update">上传</button>
+                                    {{/authorial}}
+                                {{/equals}}
+                                {{#equals ordertypeId "JF"}}
+                                    {{#authorial "pointHtmlUpload_upload"}}
+                                        <button class="btn btn-sm btn-info js-html-update">上传</button>
+                                    {{/authorial}}
+                                {{/equals}}
+
+                            {{/if}}
+                            {{#equals ordertypeId "YG"}}
+                                {{#authorial "htmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{/equals}}
+                            {{#equals ordertypeId "JF"}}
+                                {{#authorial "pointHtmlUpload_assignStatPage"}}
+                                    <button class="btn btn-sm btn-info js-html-for">指派</button>
+                                {{/authorial}}
+                            {{/equals}}
+                        {{/equals}}
+                    </td>
+                {{/equals}}
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+    {{else}}
+        <div class="pagination" data-total="{{_DATA_.total}}"></div>
+    {{/equals}}
+    </div>
+    <script src="/static/scripts/laydate/laydate.js"></script>
+{{/component}}

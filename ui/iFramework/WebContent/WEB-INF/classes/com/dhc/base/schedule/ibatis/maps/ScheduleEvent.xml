@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Schedule">
+
+	<resultMap id="scheduleResult" class="com.dhc.base.schedule.ScheduleEvent">
+		<result property="eventId" column="eventId" columnIndex="1" />
+		<result property="startDate" column="startDate" columnIndex="2" />
+		<result property="endDate" column="endDate" columnIndex="3" />
+		<result property="text" column="text" columnIndex="4" />
+		<result property="details" column="details" columnIndex="5" />
+		<result property="username" column="username" columnIndex="6" />
+	</resultMap>
+	
+	<select id="schedule_findAllEvent" parameterClass="java.lang.String" resultMap="scheduleResult">
+		select 
+		eventId eventId,
+		startDate startDate,
+		endDate endDate,
+		text text,
+		details details,
+		username username
+		from jt_event
+		where username=#value#
+    </select>
+	<select id="schedule_findEventById" parameterClass="java.lang.String" resultClass="com.dhc.base.schedule.ScheduleEvent">
+		select 
+		eventId eventId,
+		startDate startDate,
+		endDate endDate,
+		text text,
+		details details
+		from jt_event
+		where eventId = #value#
+    </select>
+    <insert id="schedule_addEvent" parameterClass="com.dhc.base.schedule.ScheduleEvent">
+		insert into jt_event
+		(eventId, startDate, endDate, text, details, username)
+		values (
+		#eventId#,
+		#startDate#,
+		#endDate#,
+		#text#,
+		#details#,
+		#username#)
+    </insert>
+    <update id="schedule_updateEvent" parameterClass="com.dhc.base.schedule.ScheduleEvent">
+		update jt_event
+		set
+		startDate=#startDate#,
+		endDate=#endDate#,
+		text=#text#,
+		details=#details#
+		where eventId=#eventId#
+    </update>
+  	<delete id="schedule_delEvent" parameterClass="java.lang.String">
+		delete from jt_event
+		where eventId=#value#
+    </delete>
+  	
+</sqlMap>

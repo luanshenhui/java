@@ -1,0 +1,72 @@
+<script src="../blexpresscom/common.js"></script>
+<script src="../bldelivery/common.js"></script>
+<script src="../bldelivery/delivery.js"></script>
+<form id="delivery_form" class="form_template">
+	<h1></h1>
+	<table style="width:98%">
+		<tr>
+			<td class="label star lblDeliveryDate"></td>
+			<td><input type="text" id="deliveryDate" name="deliveryDate" class="textbox" style="width:180px;"/></td>
+<!-- 			<td class="label lblDeliveryAddress star"></td>
+			<td><input type="text" id="deliveryAddress" name="deliveryAddress" class="textbox" style="width:200px;"/></td> -->
+			<td class="label star lblDeliveryExpressCom"></td>
+			<td><select id="expressComId" class="expressComId2" style="width: 150px;"></select></td>
+			
+		</tr>
+		<tr>
+		<td class="label star lblDeliveryCountry"></td>
+			<td>
+				<input type="text" id="countryName" name="countryName" class="textbox" />
+				<input type="hidden" id="countryCode" name="countryCode" />
+			</td>
+			<td class="label star lblDeliveryState state"></td>
+			<td class="state">
+				<input type="text" id="division" name="division" class="textbox" />
+				<input type="hidden" id="divisionCode" name="divisionCode" />
+			</td>
+			
+		</tr>
+		<tr>
+		<td class="label star lblDeliveryCity"></td>
+			<td><input type="text" id="city" name="city" class="textbox" /></td>
+		    <td class="label star lblDeliveryAddress1"></td>
+			<td><input type="text" id="addressLine1" name="addressLine1" class="textbox" /></td>
+			
+		</tr>
+		<tr>
+		<td class="label lblDeliveryAddress2"></td>
+			<td><input type="text" id="addressLine2" name="addressLine2" class="textbox" /></td>
+		    <td class="label star lblDeliveryPostalCode"></td>
+			<td><input type="text" id="postalCode" name="postalCode" class="textbox" /></td>
+			
+		</tr>
+	</table>
+	<div id="DeliveryDetailsResult"></div>
+	<div class="operation">
+		<a id="btnSaveDelivery"/> <a id="btnCancelDelivery"/>
+	</div>
+</form>
+<textarea  id="DeliveryDetailsTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class='check' style="vertical-align:middle;"><input type="checkbox" onclick="$.csControl.checkAll('chkDeliveryOrden', this.checked);"/></td>
+			<td class="lblCode"></td>
+			<td class="lblClothingCategory"></td>
+			<td class="lblName"></td>
+			<td class="lblTel"></td>
+			<td class="lblFabric"></td>
+			<td class="lblState"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ordenID}">
+			<td class="center" style="vertical-align:middle;"><input type="checkbox" value="{$T.row.ordenID}" name="chkDeliveryOrden"/></td>
+			<td>{$T.row.ordenID}</td>
+			<td>{$T.row.clothingName}</td>
+			<td>{$T.row.customer.name}</td>
+			<td>{$T.row.customer.tel}</td>
+			<td>{$T.row.fabricCode}</td>
+			<td>{$T.row.statusName}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea >

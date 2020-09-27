@@ -1,0 +1,43 @@
+package cn.rkylin.oms.system.messageDefine.service;
+
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.messageDefine.dao.IMessageDefineDao;
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE;
+import cn.rkylin.oms.system.messageDefine.vo.MessageDefineVo;
+
+@Service("messageDefineService")
+public class MessageDefineServiceImpl extends ApolloService implements IMessageDefineService{
+	@Autowired
+	private IMessageDefineDao messageDefineDao;
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据条件获取物流公司
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 *
+	 */
+	public PageInfo<MessageDefineVo> findByWhere(int page, int rows, MessageDefineVo messVo) throws Exception {
+		PageInfo<MessageDefineVo> messVOList = findPage(page, rows, "getMessageList", messVo);
+		return messVOList;
+	}
+	@Override
+	public void saveMessage(OMS_MESSAGE message) throws Exception {
+		message.setMsgId(UUID.randomUUID().toString().replaceAll("-", ""));
+		messageDefineDao.saveMessage(message);
+		
+	}
+	@Override
+	public void delete(String msgId) throws Exception {
+		messageDefineDao.delete("deleteMsg", msgId);
+	}
+}

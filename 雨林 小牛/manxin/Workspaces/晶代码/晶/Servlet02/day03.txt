@@ -1,0 +1,41 @@
+1、servlet如何使用jdbc访问数据库?
+	step1, 将jdbc驱动(.jar)文件放到WEB-INF\lib下。
+	step2, 在servlet类里面，使用jdbc提供的api访问
+	数据库，但是，需要注意异常的处理。
+	
+	create table t_emp(
+		id int primary key auto_increment,
+		name varchar(50),
+		salary double,
+		age int
+	)type=innodb;
+	
+练习：
+		完成员工的添加和员工列表。
+	暂时不用考虑插入中文
+2、重定向
+	1)什么是重定向?
+		服务器向浏览器发送一个302状态码和一个
+		Location消息头(值是一个地址，称之为重定向
+		地址),浏览器收到之后，会立即向重定向地址
+		发请求。
+	2)如何重定向?
+		response.sendRedirect(String url);
+		url: 重定向地址
+	3)需要注意的两个问题
+		a,重定向之前，不能够调用out.close或者out.flush。
+		b,重定向之前，容器会先清空response对象上缓存
+		的数据。
+	4)特点
+		a,重定向地址是任意的。
+		b,重定向之后，浏览器地址栏的地址会变成
+		重定向地址。
+
+练习：
+		完成删除指定员工的操作，要求删除之后，重定向
+	到员工列表页面。
+	
+	
+练习： 完成员工修改操作，要求修改完成之后，重定向
+	到员工列表页面。
+		

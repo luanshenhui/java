@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}商品复审{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "mall_item/item_view" true}}
+            {
+            "type":"3"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

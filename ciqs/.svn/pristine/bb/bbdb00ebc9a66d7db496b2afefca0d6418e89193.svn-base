@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SQL.WARNING_LINK_RULE">
+
+<!-- 查询全部规则 -->
+	<select id="findList"  parameterType="com.dpn.ciqqlc.http.form.WarningLinkRuleForm"  resultType="com.dpn.ciqqlc.http.form.WarningLinkRuleForm">
+		select ID as id,t.BUSINESSS_TYPE as businessType ,t.BUSINESSS_NAME as businessName ,
+		t.GOOD_TYPE as goodType , t.LINK_TYPE as linkType , t.LINK_NAME as linkName , 
+		t.DIC_TYPE as dicType , t.DIC_NAME as dicName , t.WARNING as warning, t.EDN_FLAG as endFlag,
+		t.DIC_NUM as dicNum
+		from
+		  WARNING_LINK_RULE t
+	</select>
+
+
+</mapper>

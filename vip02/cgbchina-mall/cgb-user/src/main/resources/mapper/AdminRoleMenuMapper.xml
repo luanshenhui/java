@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminRoleMenuModel">
+    <resultMap id="AdminRoleMenuMap" type="AdminRoleMenuModel">
+        <result property="id" column="id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="menuMagid" column="menu_magid"/>
+        <result property="rightRead" column="right_read"/>
+        <result property="rightWrite" column="right_write"/>
+        <result property="rightMod" column="right_mod"/>
+        <result property="rightDel" column="right_del"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="refuseDesc" column="refuse_desc"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="descript" column="descript"/>
+    </resultMap>
+    <sql id="columns">
+        id,role_id,menu_magid,right_read,right_write,right_mod,right_del,check_status,refuse_desc,del_flag,descript
+    </sql>
+
+    <insert id="insert" parameterType="Map" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+
+        insert into local_role_menu (role_id,menu_magid) values
+        <foreach collection="resourceIds" item="resourceId" separator=",">
+            (#{roleId},#{resourceId})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="AdminRoleMenuModel">
+        update local_role_menu set
+        <if test="roleId !=null">role_id = #{roleId}
+            ,
+        </if>
+        <if test="menuMagid !=null">menu_magid = #{menuMagid}
+            ,
+        </if>
+        <if test="rightRead !=null">right_read = #{rightRead}
+            ,
+        </if>
+        <if test="rightWrite !=null">right_write = #{rightWrite}
+            ,
+        </if>
+        <if test="rightMod !=null">right_mod = #{rightMod}
+            ,
+        </if>
+        <if test="rightDel !=null">right_del = #{rightDel}
+            ,
+        </if>
+        <if test="checkStatus !=null">check_status = #{checkStatus}
+            ,
+        </if>
+        <if test="refuseDesc !=null">refuse_desc = #{refuseDesc}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="descript !=null">descript = #{descript}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="roleId !=null">and role_id = #{roleId}</if>
+            <if test="menuMagid !=null">and menu_magid = #{menuMagid}</if>
+            <if test="rightRead !=null">and right_read = #{rightRead}</if>
+            <if test="rightWrite !=null">and right_write = #{rightWrite}</if>
+            <if test="rightMod !=null">and right_mod = #{rightMod}</if>
+            <if test="rightDel !=null">and right_del = #{rightDel}</if>
+            <if test="checkStatus !=null">and check_status = #{checkStatus}</if>
+            <if test="refuseDesc !=null">and refuse_desc = #{refuseDesc}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="descript !=null">and descript = #{descript}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="AdminRoleMenuMap">
+        SELECT id,
+        <include refid="columns"/>
+        from local_role_menu
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="AdminRoleMenuMap">
+        select id,
+        <include refid="columns"/>
+        from local_role_menu
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="AdminRoleMenuMap">
+        select id,
+        <include refid="columns"/>
+        from local_role_menu
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <update id="delete" parameterType="Map">
+        UPDATE local_role_menu SET del_flag="1" where role_id = #{roleId} and menu_magid IN
+        <foreach collection="resourceIds" item="resourceId1" separator="," open="(" close=")">
+            #{resourceId1}
+        </foreach>
+    </update>
+    <select id="getMenuByRoleId" resultType="Long">
+        SELECT DISTINCT menu_magid FROM local_role_menu WHERE del_flag="0" AND role_id IN
+        <foreach collection="list" open="(" close=")" separator="," item="roleId">
+            #{roleId}
+        </foreach>
+    </select>
+    <update id="deleteByRoleId" parameterType="Long">
+        UPDATE local_role_menu SET del_flag=1 WHERE role_id =#{_parameter}
+    </update>
+</mapper>
+
+

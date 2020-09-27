@@ -1,0 +1,19 @@
+{{#each this}}
+    <tr class="points-gift-recomm-tr" data-id="{{this.model.id}}" data-sort="{{this.model.goodsSeq}}">
+        <td class="itemCode">{{this.model.goodsXid}}</td>
+        <td class="giftName">
+            <a href="javascript:void(0)" data-goodscode="{{this.goodsCode}}"
+               class="js-goods-url">{{this.model.goodsNm}}
+            </a>
+        </td>
+        <td class="jpPoints">{{this.model.jpPoint}}</td>
+        <td>
+            <i width="24" height="24" class="icon-admin-hover-up js-gift-hover-up"></i>
+            <i width="24" height="24" class="icon-admin-hover-down js-gift-hover-down"></i>
+            <!--<a href="#" class="table-link-orange delete-gift">删 除</a></td>-->
+            <button id="{{this.model.id}}" class="btn btn-info btn-small js-default-term-delete" data-toggle="confirm"
+                    data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                    data-event="confirm:delete-gift">删除
+            </button>
+    </tr>
+{{/each}}

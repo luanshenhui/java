@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <!-- 全局初始化参数 -->
+  <context-param>
+  	<param-name>company</param-name>
+  	<param-value>大连雨琳</param-value>
+  </context-param>
+  <!-- 过滤器的配置 -->
+  <!-- 监听器的配置 -->
+  <listener>
+  	<listener-class>Text.CountListener</listener-class>
+  </listener>
+  <listener>
+  	<listener-class>Text.TaskListener</listener-class>
+  </listener>
+  <!-- servlet的配置 -->
+  <servlet>
+  	<servlet-name>SomeServlet</servlet-name>
+  	<servlet-class>Text.SomeServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>OtherServlet</servlet-name>
+  	<servlet-class>Text.OtherServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SomeServlet</servlet-name>
+  	<url-pattern>/some</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>OtherServlet</servlet-name>
+  	<url-pattern>/other</url-pattern>
+  </servlet-mapping>
+   <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

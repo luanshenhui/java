@@ -1,0 +1,314 @@
+package com.sanzeng.hello_watch.utils;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.sanzeng.hello_watch.R;
+
+
+/**
+ * Provides utility methods and convenience methods for View controls.
+ */
+public class ViewUtils {
+
+    private static final String TAG = ViewUtils.class.getSimpleName();
+    private static String oldMsg;
+    protected static Toast toast = null;
+
+    private static long oneTime = 0;
+    private static long twoTime = 0;
+
+    /**
+     * Shows live character counter for the number of characters typed in the parameter {@link EditText}
+     *
+     * @param editTextView    Characters to count from
+     * @param textCounterView {@link TextView} to show live character count in
+     * @param maxCharCount    Max characters that can be typed in into the parameter edittext
+     * @param countdown       if true, only the remaining of the max character count will be displayed. If false,
+     *                        current character count as well as max character count will be displayed in the UI.
+     *                        **
+     */
+    public static void setLiveCharCounter(EditText editTextView, final TextView textCounterView, final int maxCharCount, final boolean countdown) {
+
+        if (editTextView == null) {
+            throw new NullPointerException("View to count text characters on cannot be null");
+        }
+
+        if (textCounterView == null) {
+            throw new NullPointerException("View to display count cannot be null");
+        }
+
+        // initialize the TextView initial state
+        if (countdown) {
+            textCounterView.setText(String.valueOf(maxCharCount));
+        } else {
+            textCounterView.setText(String.valueOf("0 / " + maxCharCount));
+        }
+
+        // initialize the edittext
+        setMaxLength(editTextView, maxCharCount);
+
+        editTextView.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (countdown) {
+                    // show only the remaining number of characters
+                    int charsLeft = maxCharCount - s.length();
+
+                    if (charsLeft >= 0) {
+                        textCounterView.setText(String.valueOf(charsLeft));
+                    }
+                } else {
+                    // show number of chars / maxChars in the UI
+                    textCounterView.setText(s.length() + " / " + maxCharCount);
+                }
+
+            }
+
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    /**
+     * Set max text length for textview
+     * **
+     */
+    public static void setMaxLength(TextView textView, int maxLength) {
+
+        if (textView == null) {
+            throw new NullPointerException("TextView cannot be null");
+        }
+
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLength);
+        textView.setFilters(fArray);
+    }
+
+    /**
+     * Tiles the background of the for a view with viewId as a parameter.
+     * **
+     */
+    public static void tileBackground(Context ctx, int viewId, int resIdOfTile) {
+
+        try {
+            // Tiling the background.
+            Bitmap bmp = BitmapFactory.decodeResource(ctx.getResources(), resIdOfTile);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(ctx.getResources(), bmp);
+            bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            View view = ((Activity) ctx).findViewById(viewId);
+
+            if (view == null) {
+                throw new NullPointerException("View to which the tile has to be applied should not be null");
+            } else {
+                setBackground(view, bitmapDrawable);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "#tileBackground Exception while tiling the background of the view");
+        }
+    }
+
+    /**
+     * Sets the passed-in drawable parameter as a background to the
+     * passed in target parameter in an SDK independent way. This
+     * is the recommended way of setting background rather
+     * than using native background setters provided by {@link View}
+     * class. This method should NOT be used for setting background of an {@link android.widget.ImageView}
+     *
+     * @param target   View to set background to.
+     * @param drawable background image
+     *                 **
+     */
+    @SuppressLint("NewApi")
+    public static void setBackground(View target, Drawable drawable) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            target.setBackgroundDrawable(drawable);
+        } else {
+            target.setBackground(drawable);
+        }
+    }
+
+    public static void tileBackground(Context ctx, int layoutId, View viewToTileBg, int resIdOfTile) {
+
+        try {
+            // Tiling the background.
+            Bitmap bmp = BitmapFactory.decodeResource(ctx.getResources(), resIdOfTile);
+            // deprecated constructor
+            // BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(ctx.getResources(), bmp);
+            bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            View view = viewToTileBg.findViewById(layoutId);
+
+            if (view != null) {
+                setBackground(view, bitmapDrawable);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "#tileBackground Exception while tiling the background of the view");
+        }
+    }
+
+    /**
+     * Show a toast with specified message without time and custom style;
+     *
+     * @param context current component context
+     * @param msg     message need to show
+     */
+    public static void showToast(Context context, String msg) {
+        if (context == null || TextUtils.isEmpty(msg))
+            return;
+
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Show a toast with specified message without time and custom style;
+     *
+     * @param context current component context
+     * @param msgRes  message need to show
+     */
+    public static void showToast(Context context, int msgRes) {
+        if (context == null)
+            return;
+
+        Toast.makeText(context, msgRes, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Show a toast with specified message and time;
+     *
+     * @param context  current component context
+     * @param msg      message need to show
+     * @param duration how long time toast show
+     */
+    public static void showToast(Context context, String msg, int duration) {
+        if (context == null || TextUtils.isEmpty(msg))
+            return;
+
+        if (toast == null)
+            toast = new Toast(context);
+
+        toast.setText(msg);
+        toast.setDuration(duration);
+        toast.show();
+    }
+
+    /**
+     * Show a toast with specified message and duration and custom style;
+     *
+     * @param context    current component context
+     * @param msg        message need to show
+     * @param duration   how long time toast show
+     * @param customView custom view to show
+     */
+    public static void showToast(Context context, String msg, int duration, View customView) {
+        if (context == null || TextUtils.isEmpty(msg)
+                || duration == 0 || customView == null)
+            return;
+
+        if (toast == null)
+            toast = new Toast(context);
+
+        toast.setText(msg);
+        toast.setDuration(duration);
+        toast.setView(customView);
+        toast.show();
+    }
+
+    /**
+     * 获取view的bitmap
+     */
+    public static Bitmap convertViewToBitmap(View view) {
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                , View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        return view.getDrawingCache();
+    }
+
+    /**
+     * 解决toast重复弹出 单例
+     *
+     * @param context 上下文
+     * @param s       需要提示的文字
+     * @author ge
+     */
+    public static void showToastSingle(Context context, String s) {
+        if (toast == null) {
+            toast = Toast.makeText(context, s, Toast.LENGTH_SHORT);
+            toast.show();
+            oneTime = System.currentTimeMillis();
+        } else {
+            twoTime = System.currentTimeMillis();
+            if (s.equals(oldMsg)) {
+                if (twoTime - oneTime > Toast.LENGTH_SHORT) {
+                    toast.show();
+                }
+            } else {
+                oldMsg = s;
+                toast.setText(s);
+                toast.show();
+            }
+        }
+        oneTime = twoTime;
+    }
+
+
+    /**
+     * 解决toast重复弹出的单例
+     *
+     * @param context 上下文
+     * @param resId   提示文字的资源路径
+     * @author ge
+     */
+    public static void showToastSingle(Context context, int resId) {
+        showToast(context, context.getString(resId));
+    }
+
+    /**
+     * 显示让view旋转的动画
+     *
+     * @param view 待旋转的view
+     */
+    public static void viewRotateAnim(View view) {
+        view.setVisibility(View.VISIBLE);
+        AnimationSet animSet = new AnimationSet(false);
+        RotateAnimation rotate = new RotateAnimation(360, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(1000);
+        LinearInterpolator ddd = new LinearInterpolator();
+        rotate.setInterpolator(ddd);
+        rotate.setRepeatCount(10000);
+        rotate.setFillAfter(true);
+        animSet.addAnimation(rotate);
+        view.startAnimation(animSet);
+    }
+
+}

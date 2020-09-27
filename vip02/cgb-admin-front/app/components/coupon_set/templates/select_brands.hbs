@@ -1,0 +1,39 @@
+<div class="modal coupon_vendor_modal">
+    <div class="modal-header"><a href="javascript:void(0)" class="close">×</a>
+
+        <h2>品牌选择</h2></div>
+    <div class="modal-body">
+        <table class="table-0 modal-body-table" width="0" border="0">
+            <tr>
+                <td>选择品牌：
+                    <input type="text" class="form-control order-form col-3 form-gray-txt js-search-value1"
+                           placeholder="请输入品牌名称">
+                    <a href="#" class="btn-upload m-l-10 js-search-btn" data-value="1">搜索</a>
+                    <div style="margin-top: 5px;"><div style="float: left;"> 已选择:</div><div class="optCodes" title="" data-optnames="" data-first="0" data-optcodes=""></div></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="setting-scrll">
+                        <table class="table-list">
+                            {{#each list}}
+                                <tbody>
+                                <tr>
+                                    <td width="5%"><input type="checkbox" class="optCodebox" id="{{this.id}}"
+                                                          value="{{this.brandName}}"
+                                                          name="brandNames"
+                                                          data-id="{{this.id}}">
+                                    </td>
+                                    <td width="95%" class="breakWords">{{this.brandName}}</td>
+                                </tr>
+                                </tbody>
+                            {{/each}}
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="modal-footer">
+            <a class="btn btn-success btn-small js-save-brandName" href="javascript:void(0)">确定</a></div>
+    </div>
+</div>

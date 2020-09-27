@@ -1,0 +1,23 @@
+<div class="modal vendor-download">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>导入分期费率</h2>
+    </div>
+    <form class="form form-aligned vendor-form-add" component-id="{{id}}">
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="file">导入文件：</label>
+
+                <input type="button" class="btn btn-success upload-btn btn-small upload-vendor-btn " value="选择文件并上传"/>
+                <input type="file" id="vendorfile"  class="img-upload upload-file js-file-upload" name="files" />
+
+            </div>
+
+            <p class="font-size-12 font-color-gray">说明：上传文件格式必须是excel，请按照下载导入模板格式上传，否则文件录入无效。</p>
+            <div class="js-import-result"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-small btn-info close">返 回</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,411 @@
+package cn.rkylin.oms.system.user.dao;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.config.BizTypeDefine;
+import cn.rkylin.oms.system.config.ElementDefine;
+import cn.rkylin.oms.system.config.OrgnizationConfig;
+import cn.rkylin.oms.system.position.dao.IPositionDAO;
+import cn.rkylin.oms.system.position.domain.WF_ORG_USER_STATION;
+import cn.rkylin.oms.system.role.dao.IRoleDAO;
+import cn.rkylin.oms.system.role.domain.WF_ORG_USER_ROLE;
+import cn.rkylin.oms.system.unit.domain.WF_ORG_USER_UNIT;
+import cn.rkylin.oms.system.user.domain.WF_ORG_USER;
+import cn.rkylin.oms.system.user.vo.UserVO;
+
+@Repository(value = "userDAO")
+public class UserDAOImpl implements IUserDAO{
+	@Autowired
+	private SqlSession sqlSession;
+	@Autowired
+	protected IDataBaseFactory dao;
+	@Autowired
+	protected IPositionDAO positionDAO;
+	@Autowired
+	protected IRoleDAO roleDAO;
+	
+	@Override
+	public List<UserVO> getUserByCondition(UserVO userVo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public Map getExtInfo(String bizType, String idColumnValue) throws Exception{
+		return new HashMap();
+		// 扩展表的表名
+//				String extTableName = "";
+//				// 扩展表的主键字段名
+//				String idColumnName = "";
+//				Connection conn = null;
+//				Statement stmt = null;
+//
+//				Map returnMap = new HashMap();
+//				Map temp = new HashMap();
+//				try {
+//					// 确定tableName和idColumnName
+//					BizTypeDefine bizTypeDefine = OrgnizationConfig.getBizTypeDefine(bizType);
+//					extTableName = bizTypeDefine.getTable();
+//					if (bizTypeDefine.getElementList() != null || bizTypeDefine.getElementList().size() > 0) {
+//						for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+//							ElementDefine ed = (ElementDefine) bizTypeDefine.getElementList().get(j);
+//							if (ed.getName().equalsIgnoreCase("id")) {
+//								idColumnName = ed.getColumn();
+//								break;
+//							}
+//						}
+//					} else {
+//						return new HashMap();
+//					}
+//
+//					String selectSQL = "SELECT * FROM " + extTableName + " WHERE " + idColumnName + " = '" + idColumnValue
+//							+ "'";
+//					conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+//					stmt = conn.createStatement();
+//					// System.out.println(selectSQL);
+//					ResultSet rs = stmt.executeQuery(selectSQL);
+//					if (rs.next()) {
+//						for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+//							temp.put(rs.getMetaData().getColumnName(i), rs.getString(i));
+//						}
+//						if (bizTypeDefine.getElementList() != null || bizTypeDefine.getElementList().size() > 0) {
+//							for (int j = 0; j < bizTypeDefine.getElementList().size(); j++) {
+//								ElementDefine ed = (ElementDefine) bizTypeDefine.getElementList().get(j);
+//								if (ed.getName().equalsIgnoreCase("id")) {
+//									idColumnName = ed.getColumn();
+//									continue;
+//								}
+//								returnMap.put(ed.getName(), temp.get(ed.getColumn()) == null ? "" : temp.get(ed.getColumn()));
+//							}
+//						}
+//					}
+//				} catch (SQLException e) {
+//					e.printStackTrace();
+//				} finally {
+//					try {
+//						if (stmt != null)
+//							stmt.close();
+//						if (conn != null)
+//							conn.close();
+//					} catch (Exception ex) {
+//					}
+//				}
+//				return returnMap;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void createUser(WF_ORG_USER userVO, String extTableName, String idColName)throws Exception {
+		Connection conn = null;
+		Statement statement = null;
+		try {
+//			this.getSqlMapClient().insert("WF_ORG_USER.insert", userVO);
+			dao.insert("insert", userVO);
+			// 插用户的组织单元
+			if (userVO.getUserUnitList() != null && userVO.getUserUnitList().size() > 0) {
+				for (int i = 0; i < userVO.getUserUnitList().size(); i++) {
+					String userUnit = (String) userVO.getUserUnitList().get(i);
+					WF_ORG_USER_UNIT uu = new WF_ORG_USER_UNIT();
+					uu.setUserId(userVO.getUserId());
+					uu.setUnitId(userUnit);
+//					this.getSqlMapClient().insert("WF_ORG_USER.insertUserUnit", uu);
+					dao.insert("insertUserUnit", uu);
+				}
+			}
+			// 插用户的岗位
+			if (userVO.getUserStationList() != null && userVO.getUserStationList().size() > 0) {
+				for (int i = 0; i < userVO.getUserStationList().size(); i++) {
+					String userStation = (String) userVO.getUserStationList().get(i);
+					// 处理岗位下的人数限制，如果超上限，则抛异常，事务回滚
+					if (getStationUserRemain(userStation) <= 0)
+						throw new Exception("岗位的用户数超过上限");
+
+					WF_ORG_USER_STATION uu = new WF_ORG_USER_STATION();
+					uu.setUserId(userVO.getUserId());
+					uu.setStationId(userStation);
+//					this.getSqlMapClient().insert("WF_ORG_STATION.insertUserStation", uu);
+					positionDAO.insert("insertUserStation", uu);
+				}
+			}
+			// 插用户的角色
+			if (userVO.getUserRoleList() != null && userVO.getUserRoleList().size() > 0) {
+				for (int i = 0; i < userVO.getUserRoleList().size(); i++) {
+					String userRole = (String) userVO.getUserRoleList().get(i);
+					// 处理岗位下的人数限制，如果超上限，则抛异常，事务回滚
+					if (getRoleUserRemain(userRole) <= 0)
+						throw new Exception("角色的用户数超过上限");
+
+					WF_ORG_USER_ROLE ur = new WF_ORG_USER_ROLE();
+					ur.setUserId(userVO.getUserId());
+					ur.setRoleId(userRole);
+//					this.getSqlMapClient().insert("WF_ORG_ROLE.insertRoleUser", ur);
+					roleDAO.insert("insertRoleUser", ur);
+				}
+			}
+			// 插入扩展表信息
+//			if (userVO.getExtInfoMap() != null) {
+//				Iterator columnIter = userVO.getExtInfoMap().keySet().iterator();
+//				int columnTotal = userVO.getExtInfoMap().size();
+//				String insertExtInfoString1 = "INSERT INTO " + extTableName + " (" + idColName + ',';
+//				String insertExtInfoString2 = " VALUES ('" + userVO.getUserId();
+//				if (!columnIter.hasNext()) {
+//					insertExtInfoString2 += "')";
+//				} else {
+//					insertExtInfoString2 += "','";
+//				}
+//				int j = 0;
+//				while (columnIter.hasNext()) {
+//					String columnName = columnIter.next().toString();
+//					j++;
+//					String columnValue = userVO.getExtInfoMap().get(columnName) == null ? ""
+//							: userVO.getExtInfoMap().get(columnName).toString();
+//					insertExtInfoString1 += columnName;
+//					insertExtInfoString2 += columnValue;
+//					if (columnTotal == j) {
+//						insertExtInfoString1 += ")";
+//						insertExtInfoString2 += "')";
+//					} else {
+//						insertExtInfoString1 += ",";
+//						insertExtInfoString2 += "','";
+//					}
+//				}
+//				System.out.println(insertExtInfoString1 + insertExtInfoString2);
+//				conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+//				statement = conn.createStatement();
+//				statement.execute(insertExtInfoString1 + insertExtInfoString2);
+//			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Exception("数据库操作异常");
+		} finally {
+			try {
+				if (statement != null)
+					statement.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception ex) {
+			}
+		}
+		
+	}
+
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取岗位中用户的剩余数量
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleID
+	 *            - 岗位id
+	 * @return 岗位中用户的剩余数量
+	 * @throws DataAccessException
+	 */
+	private int getStationUserRemain(String stationID) throws Exception {
+		int returnValue = -1;
+		try {
+//			Object obj = this.getSqlMapClient().queryForObject("WF_ORG_USER.stationUserRemain", stationID);
+			Object obj =dao.findList("stationUserRemain", stationID);
+			if (obj != null)
+				returnValue = (Integer) obj;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception("根据条件查询用户时发生错误");
+		}
+		return returnValue;
+	}
+	
+	/**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取角色中用户的剩余数量
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图
+	 * </p>
+	 * 
+	 * @param roleID
+	 *            - 角色id
+	 * @return 角色中用户的剩余数量
+	 * @throws DataAccessException
+	 */
+	private int getRoleUserRemain(String roleID) throws Exception {
+		int returnValue = -1;
+		try {
+//			Object obj = this.getSqlMapClient().queryForObject("WF_ORG_USER.roleUserRemain", roleID);
+			Object obj =dao.findList("roleUserRemain", roleID);
+			if (obj != null)
+				returnValue = (Integer) obj;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception("根据条件查询用户时发生错误");
+		}
+		return returnValue;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void updateUser(WF_ORG_USER userVO, String extTableName, String idColName) throws Exception  {
+
+		Connection conn = null;
+		Statement statement = null;
+
+		try {
+//			this.getSqlMapClient().update("WF_ORG_USER.update", userVO);
+			dao.update("update", userVO);
+			// 删除用户的组织单元
+//			this.getSqlMapClient().delete("WF_ORG_USER.deleteUserUnit", userVO.getUserId());
+			dao.delete("deleteUserUnit", userVO);
+			// 删除用户的岗位
+//			this.getSqlMapClient().delete("WF_ORG_USER.deleteUserStation", userVO.getUserId());
+			dao.delete("deleteUserStation", userVO);
+			// 删除用户的所有角色
+//			this.getSqlMapClient().delete("WF_ORG_USER.deleteUserRole", userVO.getUserId());
+			dao.delete("deleteUserRole", userVO);
+			// 插用户的组织单元
+			if (userVO.getUserUnitList() != null && userVO.getUserUnitList().size() > 0) {
+				for (int i = 0; i < userVO.getUserUnitList().size(); i++) {
+					String userUnit = (String) userVO.getUserUnitList().get(i);
+					WF_ORG_USER_UNIT uu = new WF_ORG_USER_UNIT();
+					uu.setUserId(userVO.getUserId());
+					uu.setUnitId(userUnit);
+//					this.getSqlMapClient().insert("WF_ORG_USER.insertUserUnit", uu);
+					dao.insert("insertUserUnit", uu);
+				}
+			}
+			// 插用户的岗位
+			if (userVO.getUserStationList() != null && userVO.getUserStationList().size() > 0) {
+				for (int i = 0; i < userVO.getUserStationList().size(); i++) {
+					String userStation = (String) userVO.getUserStationList().get(i);
+					// 处理岗位下的人数限制，如果超上限，则抛异常，事务回滚
+					WF_ORG_USER_STATION uu = new WF_ORG_USER_STATION();
+					uu.setUserId(userVO.getUserId());
+					uu.setStationId(userStation);
+//					this.getSqlMapClient().insert("WF_ORG_STATION.insertUserStation", uu);
+					positionDAO.insert("insertUserStation", uu);
+				}
+			}
+			// 插用户的角色
+			if (userVO.getUserRoleList() != null && userVO.getUserRoleList().size() > 0) {
+				for (int i = 0; i < userVO.getUserRoleList().size(); i++) {
+					String userRole = (String) userVO.getUserRoleList().get(i);
+					// 处理岗位下的人数限制，如果超上限，则抛异常，事务回滚
+
+					WF_ORG_USER_ROLE ur = new WF_ORG_USER_ROLE();
+					ur.setUserId(userVO.getUserId());
+					ur.setRoleId(userRole);
+//					this.getSqlMapClient().insert("WF_ORG_ROLE.insertRoleUser", ur);
+					roleDAO.insert("insertRoleUser", ur);
+				}
+			}
+			// 更新扩展信息
+			if (userVO.getExtInfoMap() != null) {
+				Iterator columnIter = userVO.getExtInfoMap().keySet().iterator();
+				if (columnIter.hasNext()) {
+					int columnTotal = userVO.getExtInfoMap().size();
+					String updateExtInfoString = "UPDATE " + extTableName + " SET ";
+					String whereClause = " WHERE " + idColName + " = '" + userVO.getUserId() + "'";
+					int j = 0;
+					while (columnIter.hasNext()) {
+						String columnName = columnIter.next().toString();
+						j++;
+						String columnValue = userVO.getExtInfoMap().get(columnName) == null ? ""
+								: userVO.getExtInfoMap().get(columnName).toString();
+						if (columnName.equalsIgnoreCase("id"))
+							continue;
+						updateExtInfoString += columnName + " = '" + columnValue + "'";
+						if (columnTotal > j) {
+							updateExtInfoString += ",";
+						}
+					}
+					System.out.println(updateExtInfoString + whereClause);
+					conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+					statement = conn.createStatement();
+					statement.execute(updateExtInfoString + whereClause);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Exception("数据库操作异常");
+		} finally {
+			try {
+				if (statement != null)
+					statement.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception ex) {
+			}
+		}
+	
+		
+	}
+
+	@Override
+	public void lockUser(String userID, String isLocked) throws Exception {
+		if (isLocked.equals("否"))
+			dao.update("lockUser", userID);
+		else
+			dao.update("unlockUser", userID);
+	}
+
+	@Override
+	public void deleteUser(String userID, String extTableName, String idColumnName) throws Exception {
+//		Connection conn = null;
+//		Statement stmt = null;
+		try {
+			WF_ORG_USER user=new WF_ORG_USER();
+			user.setUserId(userID);
+			// 删除用户的组织单元
+			dao.delete("deleteUserUnit", user);
+			// 删除用户的角色
+			dao.delete("deleteUserRole", user);
+			// 删除用户的岗位
+			dao.delete("deleteUserStation", user);
+			// 删除用户的权限微调
+			dao.delete("deleteUserPermission", userID);
+			// 删除用户
+			dao.delete("delete", userID);
+//			String deleteSQL = "delete FROM " + extTableName + " WHERE " + idColumnName + " = '" + userID + "'";
+//			conn = sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
+//			stmt = conn.createStatement();
+//			stmt.execute(deleteSQL);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Exception("用户已被使用，不能删除");
+		}
+//		finally {
+//			try {
+//				if (stmt != null)
+//					stmt.close();
+//				if (conn != null)
+//					conn.close();
+//			} catch (Exception ex) {
+//			}
+//		}
+		
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getUserByCondition(WF_ORG_USER userVO) throws Exception {
+		return dao.findAllList("select_user", userVO);
+	}
+
+}

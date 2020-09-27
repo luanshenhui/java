@@ -1,0 +1,23 @@
+<script src="../bldelivery/BlListTrack.js"></script>
+<div id="BlListTrackTitle" class="list_search">
+	<h3></h3>
+</div>
+<div id="BlListTrackResult"></div>
+<div id="BlListTrackStatistic" class="pagingleft"></div>
+<div id="BlListTrackPagination" class="paging"></div>
+<textarea  id="BlListTrackTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="blLblTrackNumber"></td>
+			<td class="blLblTrackTime"></td>
+			<td class="blLblTrackMemo"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr>
+			<td class="center">{$T.row.number}</td>
+			<td class="center">{$T.row.operateTime}</td>
+			<td class="center">{$T.row.operateInfo}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

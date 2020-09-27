@@ -1,0 +1,31 @@
+package cn.rkylin.oms.system.enterprise.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cn.rkylin.core.service.ApolloService;
+import cn.rkylin.oms.system.enterprise.dao.IEnterpriseDAO;
+import cn.rkylin.oms.system.enterprise.domain.Enterprise;
+import cn.rkylin.oms.system.enterprise.vo.EnterpriseVO;
+
+@Service("enterpriseService")
+public class EnterpriseServiceImpl extends ApolloService implements IEnterpriseService{
+	@Autowired
+	private IEnterpriseDAO enterpriseDAO;
+	@Override
+	public List getEnterpriseName(Enterprise param) {
+		try {
+			return enterpriseDAO.getEnterpriseName(param);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	@Override
+	public List getOneEnterpriseList(EnterpriseVO param) throws Exception {
+		return enterpriseDAO.getOneEnterpriseList(param);
+	}
+
+}

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.user.dao.UserDAOImpl">
+  <resultMap id="BaseResultMap" type="cn.rkylin.oms.system.user.vo.UserVO" >
+    <id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="chk" property="chk" jdbcType="VARCHAR" />
+    <result column="USER_ACCOUNT" property="userAccount" jdbcType="VARCHAR" />
+    <result column="USER_FULLNAME" property="userFullname" jdbcType="VARCHAR" />
+    <result column="USER_PASSWORD" property="userPassword" jdbcType="VARCHAR" />
+    <result column="USER_DESCRIPTION" property="userDescription" jdbcType="VARCHAR" />
+    <result column="USER_PASSWORD_CHANGED" property="userPasswordChanged" jdbcType="TIMESTAMP" />
+    <result column="USER_ACCOUNT_ENABLED" property="userAccountEnabled" jdbcType="CHAR" />
+    <result column="USER_ACCOUNT_LOCKED" property="userAccountLocked" jdbcType="CHAR" />
+    <result column="USER_ACCOUNT_CREATED" property="userAccountCreated" jdbcType="TIMESTAMP" />
+  </resultMap>
+	<sql id="Base_Column">
+	</sql>
+	
+	<select id="pageSelectUser" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.user.vo.UserVO" >
+    select '' as chk, USER_ID, USER_ACCOUNT, USER_FULLNAME, USER_PASSWORD, USER_DESCRIPTION,
+      USER_PASSWORD_CHANGED, USER_ACCOUNT_ENABLED, (case
+         when USER_ACCOUNT_LOCKED = '1' then
+          '是'
+         else
+          '否'
+       end) as USER_ACCOUNT_LOCKED, USER_ACCOUNT_CREATED
+    from WF_ORG_USER
+		where 1=1
+		<if test="userId != null">
+			and USER_ID =#{userId}
+		</if>
+		<if test="userAccount != null">
+			and USER_ACCOUNT = #{userAccount}
+		</if>
+		<if test="userFullname != null">
+			and USER_FULLNAME like #{userFullname}
+		</if>
+		<if test="userAccountLocked != null">
+			USER_ACCOUNT_LOCKED = #{userAccountLocked}
+		</if>
+		<if test="unitID != null">
+			and USER_ID exist
+	       (SELECT DISTINCT (B.USER_ID)
+	          FROM WF_ORG_UNIT A, WF_ORG_USER_UNIT B
+	         WHERE A.UNIT_ID = B.UNIT_ID
+	           AND A.UNIT_ID = #{unitID})
+		</if>
+		<if test="roleId != null">
+			USER_ID exist
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.ROLE_ID = #{roleId})
+		</if>
+		<if test="stationId != null">
+    		USER_ID exist
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_STATION A
+	         WHERE A.STATION_ID = #{stationId})
+		</if>
+		<if test="userPassword != null">
+			USER_PASSWORD = #{userPassword}
+		</if>
+   </select>
+   
+    <insert id="insert" parameterType="cn.rkylin.oms.system.user.domain.WF_ORG_USER" >
+    insert into WF_ORG_USER (USER_ID, USER_ACCOUNT, USER_FULLNAME, USER_PASSWORD, USER_DESCRIPTION,
+      USER_PASSWORD_CHANGED, USER_ACCOUNT_ENABLED, USER_ACCOUNT_LOCKED, USER_ACCOUNT_CREATED)
+    values (#{userId}, #{userAccount}, #{userFullname}, #{userPassword}, #{userDescription},
+      #{userPasswordChanged}, #{userAccountEnabled}, #{userAccountLocked}, #{userAccountCreated})
+  </insert>
+  
+   <insert id="insertUserUnit" parameterType="cn.rkylin.oms.system.unit.domain.WF_ORG_USER_UNIT" >
+    insert into wf_org_user_unit
+	  (unit_id, user_id)
+	values
+	  (#{unitId}, #{userId})
+  </insert>
+  
+   <select id="stationUserRemain" resultType="java.lang.Integer" parameterType="string" >
+	   <![CDATA[
+		SELECT (CASE
+		         WHEN (SELECT S1.USER_NUMBERS
+		                 FROM WF_ORG_STATION S1
+		                WHERE S1.STATION_ID = #{value}) < 0 THEN
+		          99999999
+		         ELSE
+		          (SELECT S1.USER_NUMBERS
+		             FROM WF_ORG_STATION S1
+		            WHERE S1.STATION_ID = #{value})
+		       END) -
+		       (SELECT COUNT(S.USER_ID)
+		          FROM WF_ORG_USER_STATION S
+		         WHERE S.STATION_ID = {value}) AS STATION_USERS_REMAIN
+		  FROM DUAL
+	   ]]>
+	</select>
+	
+	  <select id="roleUserRemain" resultType="java.lang.Integer" parameterType="string" >
+	   <![CDATA[
+		SELECT (CASE
+		         WHEN (SELECT S1.USER_NUMBERS
+		                 FROM WF_ORG_ROLE S1
+		                WHERE S1.ROLE_ID = #{value}) < 0 THEN
+		          99999999
+		         ELSE
+		          (SELECT S1.USER_NUMBERS
+		             FROM WF_ORG_ROLE S1
+		            WHERE S1.ROLE_ID = #{value})
+		       END) -
+		       (SELECT COUNT(S.USER_ID)
+		          FROM WF_ORG_USER_ROLE S
+		         WHERE S.ROLE_ID = #{value}) AS ROLE_USERS_REMAIN
+		  FROM DUAL
+	   ]]>
+	</select>
+	
+	 <update id="update" parameterType="cn.rkylin.oms.system.user.domain.WF_ORG_USER" >
+    update WF_ORG_USER
+    set USER_ACCOUNT = #{userAccount},
+      USER_FULLNAME = #{userFullname},
+      <if test="userPassword != null">
+      	USER_PASSWORD = #{userPassword},
+      	USER_PASSWORD_CHANGED = now(),
+      </if>
+      USER_DESCRIPTION = #{userDescription}
+    where USER_ID = #{userId}
+  </update>
+  
+  <delete id="deleteUserUnit" parameterType="cn.rkylin.oms.system.user.domain.WF_ORG_USER" >
+    delete from wf_org_user_unit
+	 where user_id = #{userId}
+  </delete>
+  
+   <delete id="deleteUserStation" parameterType="cn.rkylin.oms.system.user.domain.WF_ORG_USER" >
+    delete from WF_ORG_USER_STATION
+	 where user_id = #{userId}
+  </delete>
+  
+  <delete id="deleteUserRole" parameterType="cn.rkylin.oms.system.user.domain.WF_ORG_USER" >
+    delete from wf_org_user_role
+	 where user_id = #{userId}
+  </delete>
+  
+   <update id="lockUser" parameterType="java.lang.String" >
+    update WF_ORG_USER
+    set USER_ACCOUNT_LOCKED = '1'
+    where USER_ID= #{userID}
+  </update>
+  
+  <update id="unlockUser" parameterType="java.lang.String" >
+    update WF_ORG_USER
+    set USER_ACCOUNT_LOCKED = '0'
+    where USER_ID= #{userID}
+  </update>
+  
+  <delete id="deleteUserPermission" parameterType="java.lang.String" >
+    delete from wf_org_resource_authority
+	 where role_id=#{userID}
+  </delete>
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from WF_ORG_USER where user_id=#{value}
+  </delete>
+  
+    <select id="select_user" resultMap="BaseResultMap" parameterType="cn.rkylin.oms.system.user.domain.WF_ORG_USER" >
+    select USER_ID, USER_ACCOUNT, USER_FULLNAME, USER_PASSWORD, USER_DESCRIPTION,
+      USER_PASSWORD_CHANGED, USER_ACCOUNT_ENABLED, (case
+         when USER_ACCOUNT_LOCKED = '1' then
+          '是'
+         else
+          '否'
+       end) as USER_ACCOUNT_LOCKED, USER_ACCOUNT_CREATED
+    from WF_ORG_USER
+	where 1 = 1
+		 <if test="userId != null">
+			and USER_ID = #{userId}
+		</if>
+		 <if test="userAccount != null">
+			and USER_ACCOUNT = #{userAccount}
+		</if>
+		 <if test="userFullname != null">
+			and USER_FULLNAME like #{userFullname}
+		</if>
+		 <if test="userAccountLocked != null">
+			and USER_ACCOUNT_LOCKED = #{userAccountLocked}
+		</if>
+		 <if test="unitID != null">
+			and USER_ID IN
+	       (SELECT DISTINCT (B.USER_ID)
+	          FROM WF_ORG_UNIT A, WF_ORG_USER_UNIT B
+	         WHERE A.UNIT_ID = B.UNIT_ID
+	           AND A.UNIT_ID = #{unitID})
+		</if>
+		 <if test="roleId != null">
+			and USER_ID IN
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_ROLE A
+	         WHERE A.ROLE_ID = #{roleId})
+		</if>
+		<if test="stationId != null">
+    		and USER_ID IN
+	       (SELECT A.USER_ID
+	          FROM WF_ORG_USER_STATION A
+	         WHERE A.STATION_ID = #{stationId})
+		</if>
+		<if test="userPassword != null">
+			and USER_PASSWORD = #{userPassword}
+		</if>
+   </select>
+</mapper>

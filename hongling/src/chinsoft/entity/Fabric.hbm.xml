@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Fabric" table="Fabric">
+        <id name="ID" type="integer">
+            <column name="ID"/>
+            <generator class="sequence">
+            	<param name= "sequence">FABRIC_ID</param> 
+            </generator>
+        </id>
+        <property name="Code" type="string">
+            <column name="Code"/>
+        </property>
+        <property name="Weight" type="double">
+            <column name="Weight"/>
+        </property>
+        <property name="Price" type="double">
+            <column name="Price"/>
+        </property>
+        <property name="SeriesID" type="integer">
+            <column name="SeriesID"/>
+        </property>
+        <property name="ColorID" type="integer">
+            <column name="ColorID"/>
+        </property>
+        <property name="FlowerID" type="integer">
+            <column name="FlowerID"/>
+        </property>
+        <property name="CompositionID" type="integer">
+            <column name="CompositionID"/>
+        </property>
+        <property name="CategoryID" type="integer">
+            <column name="CategoryID"/>
+        </property>
+        <property name="IsStop" type="integer">
+            <column name="IsStop"/>
+        </property>
+        <property name="FabricSupplyID" type="string">
+            <column name="FabricSupplyID"/>
+        </property>
+        <property name="FabricSupplyCode" type="string">
+            <column name="FabricSupplyCode"/>
+        </property>
+        <property name="FabricSupplyCategoryID" type="integer">
+            <column name="FabricSupplyCategoryID"/>
+        </property>
+        <property name="ShaZhi" type="string">
+            <column name="ShaZhi"/>
+        </property>
+         <property name="DollarPrice" type="double">
+            <column name="DollarPrice"/>
+        </property>
+        <property name="SequenceNo" type="integer">
+            <column name="SequenceNo"/>
+        </property>
+        <property name="VseriesID" type="string">
+            <column name="VseriesID"/>
+        </property>
+        <property name="VcompositionID" type="integer">
+            <column name="VcompositionID"/>
+        </property>
+        <property name="VcolorID" type="integer">
+            <column name="VcolorID"/>
+        </property>
+        <property name="VflowerID" type="integer">
+            <column name="VflowerID"/>
+        </property>
+         <property name="owners" type="string">
+            <column name="owners"/>
+        </property>
+    </class>
+</hibernate-mapping>

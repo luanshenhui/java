@@ -1,0 +1,131 @@
+/**
+ * 首页框架
+ */
+var t;
+var index = 0;
+var powerIdList = ['businessDataVolume', 'threeImportant1'];
+
++(function ($) {
+
+    function HomePage(element, options) {
+
+        this.$element = $(element);
+
+        this.options = $.extend({}, {}, options);
+
+        _buildEvent.call(this);
+
+    }
+
+    function _buildEvent() {
+
+        var $this = this;
+        
+        this.$element
+
+        	// 点击按钮的hover
+	        .on('click', 'li[data-role=item]', function () {
+	        	
+	        	$("li[data-role=item]").removeClass('active');
+	            $(this).addClass('active');
+	            
+	    		var powerId = $(this).attr('data-powerId');
+	    		var pageIndex = $('input[data-id="pageIndex"]').val();
+	    		
+	    		// 监管职责
+	    		if(powerId == "duty"){
+	    			$('#iframe-main_'+pageIndex).attr('src',  ctx+'/gzw/duty');
+	    		// 流程说明
+	    		}else if(powerId == "workflowinstruction"){
+	    			$('#iframe-main_'+pageIndex).attr('src',  ctx+'/gzw/workflowinstruction');
+	    		// 风险点
+	    		}else if(powerId == "riskpoint"){
+	    			$('#iframe-main_'+pageIndex).attr('src',  ctx+'/gzw/riskpoint');
+	    		// 融合分析
+	    		}else if(powerId == "businessDataVolume"){
+	    			$('#iframe-main_'+pageIndex).attr('src',  ctx+'/gzw/businessDataVolume');
+
+	    		//三重一大
+	    		}else if(powerId == "threeImportant1"){
+	    			$('#iframe-main_'+pageIndex).attr('src',  ctx+'/gzw/threeImportant1');
+	    			
+	    		}
+				
+	        })
+	        
+	        .on('click', '.header-btn', function(){
+	        	
+	        	var frequency = $('#frequency').val()*1000;
+	    		var pageIndex = $('input[data-id="pageIndex"]').val();
+	            clearInterval(t);
+	            t = setInterval(function(){
+	            	$('#iframe-main_'+pageIndex).attr('src',  ctx+'/gzw/'+powerIdList[index]);
+	                
+	                $("li[data-role=item]").removeClass('active');
+	                $('li[data-powerId="'+ powerIdList[index] +'"]').addClass('active');
+	                
+	                index = (index == 2 )?0:index+1;
+	                if(index == 0){
+	                	$('#iframe-main_'+pageIndex).attr('src',  ctx+'/gzw/homepageInfo');
+	                }
+
+	            }, frequency);
+	            
+	            $('div[data-id="header-btn-stop"]').removeClass("display-none").addClass("display-block");
+	            $('div[data-id="header-btn-start"]').removeClass("display-block").addClass("display-none");
+	        })
+	        
+	        .on('click', 'div[data-id="header-btn-stop"]', function(){
+	            clearInterval(t);
+	            $('div[data-id="header-btn-start"]').removeClass('display-none').addClass("display-block");
+	            $('div[data-id="header-btn-stop"]').removeClass('display-block').addClass("display-none");
+
+	        })
+	        
+    }
+    
+    function Plugin(option) {
+
+        var args = Array.prototype.slice.call(arguments, 1)
+
+        return this.each(function () {
+            var $this = $(this);
+            var data = $this.data('dcapp.homePage');
+            var options = typeof option == 'object' && option;
+
+            if (!data) {
+                $this.data('dcapp.homePage', (data = new HomePage(this, options)));
+            }
+
+            if (typeof option == 'string') {
+
+                data[option].apply(data, args);
+            }
+        })
+    }
+
+    var old = $.fn.homePage;
+
+    $.fn.homePage = Plugin;
+    $.fn.homePage.Constructor = HomePage;
+    
+    $.fn.homePage.noConflict = function () {
+        $.fn.homePage = old;
+        return this;
+    }
+    	  
+})(jQuery);
+
+
+$(function () {
+	
+    $('#homePage-gzw').homePage();
+
+	var refreshTime = $('#refreshTime').val()*60000;
+	// 定时刷新首页
+	setInterval(function(){
+		window.location.reload(); 
+	}, refreshTime);
+    
+})
+

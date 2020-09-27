@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.workflow.dao.DcaWorkflowBasicIdxDao">
+
+	<sql id="dcaWorkflowBasicIdxColumns">
+		a.IDX_ID AS "idxId",
+		a.IDX_NAME AS "idxName",
+		a.IDX_SQL AS
+		"idxSql",
+		a.IDX_DATA_TYPE AS "idxDataType",
+		a.DEL_FLAG AS "delFlag",
+		a.CREATE_PERSON AS "createPerson",
+		a.CREATE_DATE AS "createDate",
+		a.UPDATE_PERSON AS "updatePerson",
+		a.UPDATE_DATE AS "updateDate",
+		a.REMARKS AS "remarks"
+	</sql>
+
+	<sql id="dcaWorkflowBasicIdxJoins">
+	</sql>
+
+	<select id="get" resultType="DcaWorkflowBasicIdx">
+		SELECT
+		<include refid="dcaWorkflowBasicIdxColumns" />
+		FROM DCA_WORKFLOW_BASIC_IDX a
+		<include refid="dcaWorkflowBasicIdxJoins" />
+		WHERE a.IDX_ID = #{id}
+
+	</select>
+
+	<select id="findList" resultType="DcaWorkflowBasicIdx">
+		SELECT
+		<include refid="dcaWorkflowBasicIdxColumns" />
+		FROM DCA_WORKFLOW_BASIC_IDX a
+		<include refid="dcaWorkflowBasicIdxJoins" />
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			<if test="idxName != null and idxName != ''">
+				AND a.IDX_NAME LIKE
+				<if test="dbName == 'oracle'">'%'||#{idxName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{idxName}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%',#{idxName},'%')</if>
+			</if>
+			<if test="idxDataType != null and idxDataType != ''">
+				AND a.IDX_DATA_TYPE = #{idxDataType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DcaWorkflowBasicIdx">
+		SELECT
+		<include refid="dcaWorkflowBasicIdxColumns" />
+		FROM DCA_WORKFLOW_BASIC_IDX a
+		<include refid="dcaWorkflowBasicIdxJoins" />
+		<where>
+			a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.UPDATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="checkName" parameterType="string" resultType="string">
+		SELECT
+		IDX_NAME
+		FROM
+		DCA_WORKFLOW_BASIC_IDX a
+		WHERE
+		a.IDX_NAME = #{idxName}
+		AND a.DEL_FLAG = '0'
+
+	</select>
+
+	<select id="checkTaskContent" parameterType="string" resultType="java.util.List">
+		SELECT
+		COMPUTE_RULE
+		FROM
+		DCA_WORKFLOW_TASK_CONTENT a
+		WHERE
+		a.COMPUTE_RULE = #{idxName}
+		AND a.DEL_FLAG = '0'
+
+	</select>
+
+	<insert id="insert">
+		INSERT INTO DCA_WORKFLOW_BASIC_IDX(
+		IDX_ID,
+		IDX_NAME,
+		IDX_SQL,
+		IDX_DATA_TYPE,
+		DEL_FLAG,
+		CREATE_PERSON,
+		CREATE_DATE,
+		UPDATE_PERSON,
+		UPDATE_DATE,
+		REMARKS
+		) VALUES (
+		#{idxId},
+		#{idxName},
+		#{idxSql},
+		#{idxDataType},
+		#{delFlag},
+		#{createPerson},
+		SYSDATE,
+		#{updatePerson},
+		SYSDATE,
+		#{remarks}
+		)
+	</insert>
+
+	<update id="update">
+
+		UPDATE DCA_WORKFLOW_BASIC_IDX SET
+		IDX_NAME =
+		#{idxName},
+		IDX_SQL = #{idxSql},
+		IDX_DATA_TYPE = #{idxDataType},
+		UPDATE_PERSON = #{updatePerson},
+		UPDATE_DATE = SYSDATE,
+		REMARKS =
+		#{remarks}
+		WHERE IDX_ID = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE DCA_WORKFLOW_BASIC_IDX SET
+		DEL_FLAG =
+		#{DEL_FLAG_DELETE}
+		WHERE IDX_ID = #{id}
+	</update>
+
+</mapper>

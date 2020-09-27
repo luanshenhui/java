@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（中国人寿保险车主卡驾驶员意外）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF27",
+            "reportCode":"JF27,JF58"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

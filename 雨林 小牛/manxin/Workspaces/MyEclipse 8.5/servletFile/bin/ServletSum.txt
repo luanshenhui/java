@@ -1,0 +1,211 @@
+servlet小结：
+  1 servlet基础
+    1）servlet是什么?
+    	sun公司制定的一种用来扩展web服务器功能的组件规范
+    2）servlet容器是什么？
+    	Tomcat
+    3）如何开发一个servlet？（结构 5步）
+    	1.写一个java类，继承HttpServlet或Servlet接口
+    	2.编译
+    	3.打包(.class,.xml等)
+    	4.部署
+    	5.通过ip，端口号进行访问
+    4）了解http协议（请求资源路径、状态、）
+    	http超文本传输协议，一次请求，一次响应的方式，能为更多用户提供服务器服务
+    5）servlet是如何运行的：
+		1.浏览器依据ip,port建立与servlet容器(servlet容器同时也是一个简单的web服务器)之间的连接
+		2.浏览器打包(按照http协议的要求，将一些数据，比如请求资源路径，请求参数以及一些消息头放到请求数据包里)
+		3.servlet容器拆包(将请求数据包里面的数据解析出来，放到一个request 对象里面，同时会创建response对象)
+		4.servlet容器依据请求资源路径找到对应的servlet的配置，然后将servlet实例化
+		5.servlet容器会调用servlet对象的service方法(将request对象和response对象作为参数)。通过request对象
+			就可以获得相关的数据，然后进行相应的处理，最后将处理的结果放到response对象中
+		6.servlet容器从response对象中取出数据，打包给浏览器
+		7.浏览器拆包，生成相应的页面
+    
+  2 servlet核心
+    1）servlet生命周期
+      a、四个阶段（实例化、初始化、就绪 、销毁）
+      b、init（）方法
+      c、<load-on-startup>
+      d、生命周期相关的几个接口类
+         Servlet接口
+         GenericServlet抽象类
+         HttpServelt抽象类
+         HttpServletRequest 接口（ServletRequest接口）
+         HttpServletResponse 接口（ServletResponse接口）
+         (自己总结其方法）
+         ServletConfig接口（getInitParameter,getServletConfig
+    2)servlet线程安全
+      a、产生原因
+      		Servlet容器默认Servlet只有一个实例，当多个请求访问Servlet实例，要求修改Servlet实例属性值
+      		容易产生线程安全
+      b、解决方式
+      		a.使用synchronized对方法或代码块进行加锁
+      		b.实现SingleThreadModel接口，对服务器压力过大
+    3）表单处理
+      a、如何获得表单中的参数
+        String request.getParameter(String name);
+        String[] request.getParameterValues(String name);
+      b、有中文参数值
+        step1 确保表单按照指定的编码格式打开。
+        step2 request.setCharacterEncoding(Sting 编码);
+    4)get请求与post请求
+      a、哪些是get请求，哪些是post请求
+      		get:向服务器请求获得一些资源
+      		post:提交数据
+      c、get请求特点，post请求特点
+      	 get:表单默认的提交方式是：get
+      	 	 直接在地址栏输入地址
+      	 post：会将请求参数放到实体内容里面
+      e、二者的区别
+      	 get:浏览器会将请求参数及参数值放到请求资源路径之后，所以请求参数不能过多 2K
+      	 	并且将请求参数显示在浏览器的地址栏里，不安全
+      	 post:将请求参数放到实体内容里，请求参数没有限制，不会将请求参数放到地址栏，相对安全
+    5）转发与重定向
+      a、什么是重定向
+      	服务器向浏览器发送一个302的状态码及一个消息头，Location(该消息头包含了一个地址，成为重定向地址)浏览器会立即
+      	向location指定的地址发送一个新的请求
+      b、怎样重定向（需要注意的问题）
+      	response.sendRedirect(url)
+      c、重定向的特点
+      		1.重定向的地址是任意的，
+      		2.重定向之后地址栏会改变成重定向的地址
+      d、什么是转发
+      		一个web组件将未完成的任务交给另一个web组件来完成
+      e、怎样转发
+         request.setAttibute(String name,Object obj);先绑定数据
+         Object request.getAttribute(String name);
+         RequestDispatcher rd = request.getRequestDistpatcher(url);获得转发器
+         rd.forward(request,response);转发
+         request.removeAttribute(String name);解除绑定
+      f、转发的特点
+      		1.转发的目的地只能是同一应用下的组件的地址
+      		2.转发的各个组件共享一个request对象
+      		3.转发之后，浏览器地址栏不会改变
+      g、二者的区别
+      		1.都可以实现一个web组件调用另一个web组件
+      		2.重定向的地址是任意的，转发的地址是同一个应用内部
+      		3.重定向之后，地址栏会改变，转发后，地址栏不会改变
+      		4.重定向是两次请求，转发是一次请求
+      		5.重定向是一件事已完成，去做另一件事，转发是一件事未完成
+      		6.重定向不能共享request和response对象，转发可以
+  3 状态管理
+    1）什么是状态管理
+    	将客户端与服务器之间的多次交互涉及的数据保存下来
+    	浏览器是Cookie
+    	服务器是session
+    2）cookie技术
+      a、什么是cookie？
+      	浏览器访问服务器时，服务器将少量数据以set-cookie的方式发送给浏览器，浏览器会将这些数据保存下来。
+      	当浏览器再次访问服务器时，会将这些数据以消息头的方式发送给浏览器
+      b、如何创建cookie？
+         Cookie c = new Cookie(String name,String value);
+         response.addCookie(c);
+      c、cookie的编码问题，路径问题，生存时间问题
+      String URLEncoder.encode(String str,String 编码);
+      String URLDecoder.decode(String str,String 编码); 
+      cookie.setMaxAge(int i)
+      	i=0时，直接删除cookie
+      	i<0时，将cookie保存到内存里
+      	i>0时，将cookie保存到硬盘里
+      	
+      	路径问题：什么是cookie路径：所有的cookie都有一个path属性。当浏览器向服务器发送请求时，会先比较path与要访问的
+      		服务器地址时候匹配，之后匹配的cookie才会被浏览器发送给服务器
+      d、cookie的限制
+      		1.不安全
+      		2.大小限制，4k左右
+      		3.个数限制，300个左右
+      		4.可以被禁止
+      		5.只能保存字符串，要考虑编码问题
+      e、什么是session？
+      		浏览器访问服务器时，服务器会创建一个session对象，有唯一的sessionId。服务器在默认情况下，会将sessionId以
+      		set-cookie消息头的方式发送给浏览器，浏览器会将sessionId保存下来，当浏览器再次访问服务器时，将这个sessionId
+      		以cookie消息头的方式发送给服务器，服务器会根据sessionId找到之前的session对象
+      f、如何创建session
+      		HttpSession session= request.getSession(boolean bo);
+      		当bo=true时，服务器会查看请求中是否有sessionId，如果没有则会创建一个session对象，如果有则根据sessionId查找
+      		session对象，如果有则返回，没有则创建session对象
+      		当bo=false时，服务器会查看请求中是否有sessionId，如果没有，返回null，如果有，根据sessionId查找session对象
+      		如果有，返回该对象，如果没有，返回null
+      g、
+      h、超时
+        setMaxInactiveInterval(int seconds);
+      i、删除
+        invalidate();
+      j、如何进制cookie，如何继续使用session（url重写）
+        response.encodeURL(String url);
+        response.encodeRediredtURL(String url);
+      k、session的特点
+      		1.可以保存多种数据类型
+      		2.保存数据的大小不受限制
+      		3.安全
+      		4.服务器压力会比较大
+      l、session相关的案例
+         session验证
+         验证码
+         购物车  
+  4 数据库访问
+    1）什么是dao
+    	封装了数据访问逻辑的模块
+    2）如何写一个dao
+    	1.实体类，一般与表对应，方便访问数据库中的记录
+    	2.接口，声明一些方法
+    	3.实现类，采用相应的数据访问技术，实现接口声明的方法
+    	4.工厂类
+    		工厂设计模式：将对象的制作过程对外屏蔽。优点：不用创建对象，当对象的实现类发生改变，也不会影响调用者
+    3）如何处理异常
+    	1.将异常抛出
+    	2.编写一个错误页面
+    	3.在web.xml中配置<error-page>
+  5 过滤器和监听器
+    1）过滤器是什么？
+    	servlet规范中定义的一种特殊的类，它可以对servlet容器的调用过程进行拦截
+    2）如何写一个过滤器（3步）
+    	1.写一个java类，实现Filter接口
+    	2.在doFilter方法中，实现处理逻辑
+    	3.配置过滤器
+    3）优先级
+    	如果有多个过滤器都满足过滤条件，则执行顺序由<filter-mapping>的顺序来决定
+    4）初始化参数及其优点
+    	1.在web.xml中使用<init-param>配置初始化参数
+    	2.使用FilterConfig对象的getInitParamter(String)方法来访问
+    	优点：
+    		1.可以将多个组件相同的处理逻辑集中写在过滤器里，方便代码维护
+    		2.可以实现代码的“可插拔性”
+    5）什么是监听器
+    	servlet规范中定义的一种特殊的类，可以用来监听servlet容器发生的一些事件并且对这些事件进行处理
+    	事件类型：
+    		1.生命周期相关事件(HttpSessionListener,ServletContextListener)
+    		2.绑定相关事件
+    6）如何写监听器
+    	1.写一个java类，实现监听器接口
+    	2.在监听器接口方法中，实现相应的处理逻辑(HttpSessionListener、ServletContextListener)
+    	3.配置web.xml
+    7）ServletContext接口
+      a、什么是servlet上下文，
+      	容器在启动的时候，会为每一个web应用创建唯一的一个符合ServletContext接口的对象。
+      	特点：
+      		1.唯一性，一个应用对应一个servlet上下文
+      		2.一直存在，只要容器不关闭不卸载
+      b、如何获得(getServletContext())
+      	1.HttpSession
+      	2.ServletConfig
+      	3.FilterConfig
+      	4.GenericServlet
+      c、作用
+     request.setAttibute(String name,Object obj);绑定数据
+         Object request.getAttribute(String name);
+         request.removeAttribute(String name);
+     String getInitParameter(String paraName);访问全局的初始化参数
+     String getRealPath(String  path);依据逻辑路径获得实际部署的物理路径
+     d、与request、session区别
+     	（生命周期不同）
+     	1.request对象的生存时间是一次请求和一次响应
+     	  session对象的生存时间是多次请求和多次响应
+     	  Servlet上下文的生存时间是一直存在
+     	2.request对象上面绑定的数据只能是同一个请求所涉及的组件可以访问
+     	  session对象上面绑定的数据是同一个会话中所涉及的组件可以访问
+     	  servlet上下文上面绑定的数据是同一个应用中的组件都可以访问
+  6 扩展（上传文件）
+  	1.将表单的enctype的属性设置为"multipart/form-data"(用来设置浏览器上传文件的格式)
+  	2.在服务器端读取上传文件的内容，并保存到相应的文件夹下

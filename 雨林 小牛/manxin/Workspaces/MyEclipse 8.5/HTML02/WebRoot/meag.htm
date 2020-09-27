@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<script type="text/jscript">
+function $(id){
+	return document.getElementById(id);	
+}
+function f1(){
+	var name = $("name").value;
+	var sex = $("sex").value;
+	var age = $("age").value;
+	var ta = document.createElement("table");
+	var tr = document.createElement("tr");
+	var td = document.createElement("td");
+	td.innerHTML += "姓名："+name+",性别:"+sex+",年龄："+age;
+	
+	tr.appendChild(td);
+	ta.appendChild(tr);
+	ta.border = 1;
+	ta.width = 270;
+	
+	document.getElementById("d1").appendChild(ta)
+}
+function f2(){ 
+	var btn = document.createElement("input");
+	btn.type = "button";
+	btn.value = "删除";
+	btn.setAttribute("onclick","f3()");
+	document.getElementById("d1").appendChild(btn)	
+}
+function f3(){
+		
+}
+
+</script>
+
+</head>
+
+<body>
+<title>无标题文档</title>
+<table width="500" border="1">
+  <tr>
+    <td><table border="0">
+  <tr>
+    <td>姓名</td>
+    <td><input id="name" type="text" /></td>
+  </tr>
+  <tr>
+    <td>性别</td>
+    <td><input id="sex" type="text" /></td>
+  </tr>
+  <tr>
+    <td>年龄</td>
+    <td><input id="age" type="text" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><input id="btn" type="button" value="添加"/ onclick="f1()"></td> 
+  </tr>
+</table>
+</td>
+    <td><div id="d1" style="width:270px"></div></td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceGroup>
+	<service name="XmlService" targetNamespace="http://service">
+		<description>XmlService</description>
+		<schema schemaNamespace="http://service" />
+		<parameter name="ServiceClass" locked="false">chinsoft.service.webservice.XmlService
+		</parameter>
+		<operation name="submitOrder">
+			<!--
+				<messageReceiver
+				class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver" />
+			-->
+			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+		</operation>
+		<operation name="updateOrderStatus">
+			<messageReceiver
+				class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver" />
+		</operation>
+		<operation name="updateOrderStatusJhrq">
+			<messageReceiver
+				class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver" />
+		</operation>
+		<operation name="getOccupyFabric">
+			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+		</operation>
+		<operation name="uploadImageWithByte">
+			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+		</operation>
+		<operation name="getServiceInit">
+			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+		</operation>
+	</service>
+	<service name="OrderService" targetNamespace="http://serivce">
+		<description>OrderService</description>
+		<schema schemaNamespace="http://service"/>
+		<parameter locked="false" name="ServiceClass">chinsoft.service.webservice.OrderService</parameter>
+		<operation name="getOrderPayment">
+			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+		</operation>
+	</service>
+	<service name="ImageService" targetNamespace="http://service">
+		<description>ImageService</description>
+		<schema schemaNamespace="http://service"/>
+		<parameter name="ServiceClass" locked="false">chinsoft.service.webservice.ImageService</parameter>
+		<operation name="uploadImageWithByte">
+			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+		</operation>
+	</service>
+	<service name="FabricService" targetNamespace="http://service">
+		<description>FabricService</description>
+		<schema schemaNamespace="http://service"/>
+		<parameter name="ServiceClass" locked="false">chinsoft.service.webservice.FabricService</parameter>
+		<operation name="getFabricStock">
+			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+		</operation>
+	</service>
+</serviceGroup>
+ 

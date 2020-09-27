@@ -1,0 +1,44 @@
+{{#component "inside_message js-component"}}
+    <p class="components-title"><strong>消息管理</strong></p>
+    <div>
+        <form method="get" class="item-form-search form-inline">
+            <fieldset>
+                <label for="insideType">消息类型:</label>
+                <select type="text" name="type" class="search-role search-input">
+                    <option value="" {{#unless type}}selected{{/unless}}>系统消息</option>
+                    <option value="0" {{#equals type "0"}}selected{{/equals}}>逆向交易消息</option>
+                </select>
+
+                     <label for=""> 发送时间 :</label>
+                    <input type="text" name="" class="" value="">—<input type="text" name="" class="" value="">
+
+
+                    <label>&nbsp;</label>
+                    <input class="btn btn-success btn-sm"type="submit" value="搜索"/>
+
+            </fieldset>
+        </form>
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="5%">消息类型</th>
+            <th width="10%">发送时间</th>
+            <th width="20%">内容</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tbody data-content="{{_DATA_}}">
+        {{#each _DATA_.data}}
+            <tr data-component="" data-id="{{id}}">
+                <td class="inside">{{inside}}</td>
+                <td class="creatTime">{{creatTime}}</td>
+                <td class="insideMessage">{{insideMessage}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+<div class="paginationsb" data-total="{{_DATA_.total}}">
+</div>
+{{/component}}

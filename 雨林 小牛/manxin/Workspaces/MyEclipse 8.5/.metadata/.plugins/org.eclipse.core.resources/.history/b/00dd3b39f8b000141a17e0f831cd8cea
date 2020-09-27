@@ -1,0 +1,40 @@
+package com.cost.action;
+
+import com.cost.Dao.CostDao;
+import com.cost.Factory.Factory;
+import com.cost.entity.Cost;
+
+public class CostDelAction {
+	private int id;
+//	private Cost cost;
+	
+//	public Cost getCost() {
+//		return cost;
+//	}
+//
+//	public void setCost(Cost cost) {
+//		this.cost = cost;
+//	}
+
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String execute() {
+		System.out.println("shanchu ");
+		System.out.println(id);
+		Cost cost = new Cost();
+		CostDao dao = (CostDao) Factory.getInstance("CostDao");
+		try {
+			cost.setId(id);
+			dao.deleteCost(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "success";
+	}
+}

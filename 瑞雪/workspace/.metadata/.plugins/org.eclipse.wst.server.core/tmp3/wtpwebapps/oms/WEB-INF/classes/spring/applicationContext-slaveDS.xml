@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+	<!-- 创建从库数据源 -->
+	<bean id="slaveDataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="${slave.jdbc.driver}" />
+		<property name="url" value="jdbc:jtds:sqlserver://121.41.164.190:30005/RUIXUE_CUST" />
+		<property name="username" value="rkylin" />
+		<property name="password" value="rkylin" />
+
+		<property name="filters" value="stat" />
+
+		<property name="maxActive" value="${slave.jdbc.maxActive}" />
+		<property name="initialSize" value="${slave.jdbc.initialSize}" />
+		<property name="maxWait" value="60000" />
+		<property name="minIdle" value="1" />
+
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<property name="validationQuery" value="select 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+	</bean>
+
+	<bean id="slaveSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="slaveDataSource" />
+		<property name="typeAliasesPackage" value="cn.rkylin.theme.entity" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath*:cn/rkylin/apollo/**/*Mapper.xml"></property>
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageHelper">
+					<property name="properties">
+						<value>
+							dialect=sqlserver
+							reasonable=true
+							pageSizeZero=true
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+	<!-- 3. mybatis自动扫描加载Sql映射文件 : MapperScannerConfigurer sqlSessionFactory / basePackage -->
+	<bean id="slaveMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.rkylin.apollo.dao" />
+		<property name="sqlSessionFactoryBeanName" value="slaveSessionFactory" />
+	</bean>
+
+	<bean id="slaveSqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="slaveSessionFactory" />
+	</bean>
+
+	<!-- 通过aop配置事务 -->
+	<bean id="slaveTxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="slaveDataSource" />
+	</bean>
+
+	<tx:advice id="slaveTxAdvice" transaction-manager="slaveTxManager">
+		<tx:attributes>
+			<!-- get*, load*, list*, find* 不启用回滚，只读事务保持多条sql数据一致 -->
+			<!-- <tx:method name="save*" propagation="REQUIRED" rollback-for="java.lang.Exception"/> <tx:method name="add*" propagation="REQUIRED" 
+				rollback-for="java.lang.Exception"/> <tx:method name="create*" propagation="REQUIRED" rollback-for="java.lang.Exception"/> 
+				<tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Exception"/> <tx:method name="modify*" propagation="REQUIRED" 
+				rollback-for="java.lang.Exception"/> <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception"/> -->
+			<!-- propagation：事务传播行为定义， -默认为“REQUIRED”，表示：支持当前事务，如果当前没有事务，就新建一个事务 -SUPPORTS：支持当前事务，如果当前没有事务，就以非事务方式执行 read-only：事务只读设置，默认为false，表示不是只读； -->
+			<tx:method name="*" read-only="true" rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut id="slaveManagerMethod" expression="execution(* cn.rkylin.apollo.service..*.*(..))" />
+		<aop:advisor pointcut-ref="slaveManagerMethod" advice-ref="slaveTxAdvice" />
+	</aop:config>
+
+</beans>

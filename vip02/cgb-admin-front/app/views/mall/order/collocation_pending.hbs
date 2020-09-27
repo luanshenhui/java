@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}搭销管理{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "mall_collocation/collocation_manage" true}}
+            {
+            "type":"2"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.workflow.dao.DcaWorkflowDao">
+    
+	<sql id="dcaWorkflowColumns">
+	    rownum AS "num",
+		a.wf_id AS "wfId",
+		a.wf_name AS "wfName",
+		a.power_id AS "powerId",
+		a.xml_name AS "xmlName",
+		a.xml_content AS "xmlContent",
+		a.start_time AS "startTime",
+		a.end_time AS "endTime",
+		a.is_show AS "isShow",
+		a.wf_level AS "wfLevel",
+		a.idx_data_type AS "idxDataType",
+		a.del_flag AS "delFlag",
+		a.create_person AS "createPerson",
+		a.create_date AS "createDate",
+		a.update_person AS "updatePerson",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.TRACE_DICT_ID AS "traceDictId"
+	</sql>
+	
+	<sql id="dcaWorkflowJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaWorkflow">
+		SELECT 
+			<include refid="dcaWorkflowColumns"/>
+		FROM dca_workflow a
+		<include refid="dcaWorkflowJoins"/>
+		WHERE a.wf_id = #{wfId}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="findList" resultType="DcaWorkflow">
+		SELECT 
+			<include refid="dcaWorkflowColumns"/>
+		FROM dca_workflow a
+		<include refid="dcaWorkflowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wfName != null and wfName != ''">
+				AND a.wf_name LIKE 
+				<if test="dbName == 'oracle'">'%'||#{wfName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{wfName}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%',#{wfName},'%')</if>
+			</if>
+			<if test="powerId != null and powerId != ''">
+				AND a.power_id = #{powerId}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+			<if test="wfLevel != null and wfLevel != ''">
+				AND a.wf_level = #{wfLevel}
+			</if>
+			<if test="idxDataType != null and idxDataType != ''">
+				AND a.idx_data_type LIKE
+				<if test="dbName == 'oracle'">'%'||#{idxDataType}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{idxDataType}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%',#{idxDataType},'%')</if>
+			</if>
+		</where>
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="DcaWorkflow">
+		SELECT 
+			<include refid="dcaWorkflowColumns"/>
+		FROM dca_workflow a
+		<include refid="dcaWorkflowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 通用check -->
+	<select id="check" resultType="int">
+		SELECT 
+			count(1)
+		FROM dca_workflow_log a
+		<where>
+			a.del_flag = '0'
+			AND a.EXEC_STATUS = '1'
+			AND a.END_TIME is null 
+			AND a.wf_id = #{wfId}
+				
+		</where>		
+		
+	</select>
+	
+    <!-- 获得工作流json串 -->
+	<select id="getStratCheckJson" resultType="String">
+		SELECT 
+		XML_CONTENT
+		FROM dca_workflow 
+		<where>
+			wf_id = #{wfId}
+		</where>		
+	</select>
+	
+	<!-- 启动工作流第一步校验 -->
+	<select id="checkStartOne" resultType="int">
+		SELECT 
+		count(1)
+		FROM DCA_WORKFLOW_TASK a INNER JOIN DCA_WORKFLOW_TASK_CONTENT b ON a.UUID=b.TASK_ID
+		<where>
+			a.wf_id = #{wfId}
+		AND  b.IS_EFFECTIVE= '1'
+		</where>		
+	</select>
+	
+	<!-- 启动工作流第二步校验 -->
+	<select id="checkStartTwo" resultType="int">
+		SELECT 
+			count(1)
+		FROM DCA_WORKFLOW_TASK a INNER JOIN DCA_WORKFLOW_TASK_CONTENT b ON a.UUID=b.TASK_ID
+		<where>
+		a.wf_id = #{wfId}
+		AND  a.IS_SHOW= '1'			
+		</where>			
+	</select>
+	
+	<!-- 增加工作流 -->
+	<insert id="insert">
+		INSERT INTO dca_workflow(
+			wf_id,
+			wf_name,
+			power_id,
+			xml_name,
+			xml_content,
+			start_time,
+			end_time,
+			is_show,
+			wf_level,
+			idx_data_type,
+			del_flag,
+			create_person,
+			create_date,
+			update_person,
+			update_date,
+			remarks,
+			TRACE_DICT_ID
+		) VALUES (
+			#{wfId},
+			#{wfName},
+			#{powerId},
+			#{xmlName},
+			#{xmlContent},
+			#{startTime},
+			#{endTime},
+			#{isShow},
+			#{wfLevel},
+			#{idxDataType},
+			#{delFlag},
+			#{createPerson},
+			#{createDate},
+			#{updatePerson},
+			#{updateDate},
+			#{remarks},
+			#{traceDictId}
+		)
+	</insert>
+	
+	<!-- 停止工作流 -->
+	<update id="stopWorkFlow">
+		UPDATE dca_workflow SET
+			is_show = '0',
+			UPDATE_DATE = SYSDATE
+		WHERE wf_id = #{wfId}
+	</update>
+	<!-- 启动工作流 -->
+	<update id="startWorkFlow">
+		UPDATE dca_workflow SET
+			is_show = '1',
+			UPDATE_DATE = SYSDATE
+		WHERE wf_id = #{wfId}
+	</update>
+	
+	<update id="delete">
+		UPDATE dca_workflow SET 
+			del_flag = #{DEL_FLAG_DELETE},
+			UPDATE_DATE = SYSDATE
+		WHERE wf_id = #{wfId}
+	</update>
+	
+	<!-- 编辑工作流 -->
+	<update id="update">
+		UPDATE dca_workflow SET 	
+			wf_name = #{wfName},
+			power_id = #{powerId},
+			start_time = #{startTime},
+			end_time = #{endTime},
+			is_show = #{isShow},
+			wf_level = #{wfLevel},
+			idx_data_type = #{idxDataType},
+			remarks = #{remarks},
+			TRACE_DICT_ID = #{traceDictId},
+			UPDATE_DATE = SYSDATE
+		WHERE wf_id = #{wfId}
+	</update>
+	
+	<!-- 逻辑删除 -->
+	<update id="updateWF">
+		UPDATE dca_workflow SET 	
+			del_flag = '1',
+			UPDATE_DATE = SYSDATE
+		WHERE wf_id = #{wfId}
+	</update>
+
+    <!-- 校验重名 -->
+    <select id="checkWfName" resultType="DcaWorkflow">
+    	SELECT 
+			<include refid="dcaWorkflowColumns"/>
+		FROM dca_workflow a
+		<include refid="dcaWorkflowJoins"/>
+		WHERE a.wf_name=#{wfName} AND a.DEL_FLAG='0'
+    </select>
+    
+    <!-- 查数据类型 -->
+    <select id="searchDict" resultType="Dict">
+		SELECT 
+		value,label
+		FROM SYS_DICT
+		<where>
+			TYPE = 'idx_data_type'
+		</where>		
+	</select>
+	
+	<update id="updateXml">
+		UPDATE DCA_WORKFLOW SET 	
+			<if test="xmlName != null and xmlName != ''">XML_NAME = #{xmlName},</if>
+			XML_CONTENT = #{xmlContent},
+			UPDATE_PERSON = #{updatePerson},
+			UPDATE_DATE = SYSDATE
+		WHERE WF_ID = #{wfId}
+	</update>
+    
+    	
+	<!-- 告警风险统计(权力):业务事项统计 add by geshuo 20161206  -->
+	<select id="findWorkStatData" resultType="com.hepowdhc.dcapp.modules.visualization.entity.DcaAlarmRiskStatEntity">
+		SELECT D.POWER_ID,S.LABEL,D.totalCount
+		FROM (SELECT POWER_ID,COUNT(1) totalCount
+			  FROM DCA_WORKFLOW
+			  GROUP BY POWER_ID) D
+		LEFT JOIN (SELECT VALUE,LABEL FROM SYS_DICT WHERE TYPE='power_id') S 
+		ON D.POWER_ID=S.VALUE
+	</select>
+	
+	<!-- 首页菜单按钮 add by pang hui dan 20161227  -->
+	<select id="findPowerId" resultType="com.hepowdhc.dcapp.modules.workflow.entity.Dict">
+		SELECT DISTINCT S.VALUE,S.LABEL
+		FROM DCA_WORKFLOW D
+		LEFT JOIN SYS_DICT S ON D.POWER_ID=S.VALUE AND TYPE='power_id'
+		WHERE D.DEL_FLAG = '0' AND D.is_show = '0'
+		<if test="updateDate != null and updateDate != ''">
+				AND 
+				TRUNC(D.UPDATE_DATE,'mi') <![CDATA[ <= ]]> #{updateDate}
+			</if>
+	</select>
+	
+	<!-- 获取关键流程数量（首页用） add by liuchang 20161228  -->
+	<select id="getKeyWorkFlowCount" resultType="java.lang.Integer">
+		SELECT COUNT(WF_ID)
+		FROM DCA_WORKFLOW
+		WHERE
+			DEL_FLAG = #{DEL_FLAG_NORMAL} AND IS_SHOW = '1'
+			<if test="updateDate != null and updateDate != ''">
+				AND 
+				TRUNC(UPDATE_DATE,'mi') <![CDATA[ <= ]]> #{updateDate}
+			</if>
+	</select>
+
+	<!-- 查询启用的工作流数量 -->
+	<select id="findEnabledWorkflowCount" resultType="Integer">
+		SELECT COUNT(1) FROM DCA_WORKFLOW D
+		WHERE D.DEL_FLAG = '0' AND D.IS_SHOW = '1'
+	</select>
+	
+	<!-- 根据权力ID获取流程图JSON字符串  add by panghuidan 2017-01-04-->
+	<select id="getWorkFlowXML" resultType="DcaWorkflow">
+		SELECT
+			w.XML_CONTENT as xmlContent,
+			w.POWER_ID as powerId
+		FROM
+			DCA_WORKFLOW w
+		LEFT JOIN (
+			SELECT
+				VALUE,
+				label
+			FROM
+				SYS_DICT
+			WHERE
+				TYPE = 'power_id'
+		) D
+		 ON w.power_id = D.VALUE
+		WHERE w.IS_SHOW='1' AND w.DEL_FLAG='0'
+		<if test="powerId != null and powerId != ''">
+			AND SUBSTR(w.POWER_ID, 0, 2) = #{powerId}
+		</if>
+		ORDER BY w.POWER_ID
+	</select>
+</mapper>

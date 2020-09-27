@@ -1,0 +1,41 @@
+<div class="modal view-brand-category-model">
+    <div class="modal-header">
+        <a href="javascript:void(0)" class="close">×</a>
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned view-brand-category-form">
+        <div class="modal-body">
+            <div class="control-group">
+                <label>类别ID：</label>
+                <span>{{data.categoryId}}</span>
+            </div>
+            <div class="control-group">
+                <label><span class="required">*</span>类别名称：</label>
+                <span>{{data.categoryName}}</span>
+            </div>
+            <div class="control-group">
+                <label><span class="required">*</span>显示顺序：</label>
+                <span>{{data.categorySeq}}</span>
+            </div>
+            <div class="control-group">
+                <label>频道代码：</label>
+                {{#if data.channelId}}
+                    <span>{{data.channelId}}</span>
+                {{else}}
+                    <span>无</span>
+                {{/if}}
+            </div>
+            <div class="control-group">
+            <label for="approveMemo">备注：</label>
+                {{#if data.categoryDesc}}
+                    <span class="break">{{data.categoryDesc}}</span>
+                {{else}}
+                    <span>无</span>
+                {{/if}}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-close btn-medium close">关闭</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,103 @@
+<div class="modal brand-authorize-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned brands-view-form">
+        <input type="hidden" name="id" value="{{data.id}}"/>
+        <input type="hidden" name="goodsBrandId" value="{{data.goodsBrandId}}"/>
+        <input type="hidden" name="brandName" value="{{data.brandName}}"/>
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="createTime">申请时间：</label>
+                <span>{{formatDate data.createTime "day"}}</span>
+            </div>
+            <div class="control-group">
+                <label for="brandName">品牌名称：</label>
+                <span>{{data.brandName}}</span>
+            </div>
+            <div class="control-group">
+                <label for="brandImage">品牌图标：</label>
+                {{#if data.brandImage}}
+                    <img src="{{data.brandImage}}" class="brand-img brandImagebig">
+                {{else}}
+                    <span>暂无图片</span>
+                {{/if}}
+            </div>
+            <div class="control-group">
+                <label for="time">授权时间：</label>
+                <span>{{formatDate data.startTime "day"}}～{{formatDate data.endTime "day"}}</span>
+            </div>
+            <div class="control-group">
+                <label for="">品牌授权书：</label>
+                {{#if data.imgList}}
+                    <div class="brand-auth-div" style="margin-left: 46px">
+                        <ul class="goods-img-ul">
+                            {{#each data.imgList}}
+                                <li class="js-img-li">
+                                    <a href="javascript:void(0)">
+                                        <img class="img-tab3 authorizeImagebig" src="{{this}}">
+                                    </a>
+                                </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                {{else}}
+                    <span>暂无图片</span>
+                {{/if}}
+            </div>
+            <div class="clear"></div>
+            <div class="control-group">
+                <label for="simpleName">供应商：</label>
+                <span>{{data.simpleName}}</span>
+            </div>
+            {{!-审核品牌授权信息-}}
+            {{#if type}}
+                <div class="control-group">
+                    <label for="approveMemo">审核意见：</label>
+                    <textarea  id="descript" name="approveMemo" class="js-approve-memeo"
+                              maxlength="100"></textarea>
+                    <p class="remaining-text">您还可以输入<i>100</i>字</p>
+                </div>
+            {{!-查看品牌授权信息-}}
+            {{else}}
+                <div class="control-group">
+                    <label for="approveState">审核状态：</label>
+                    {{#equals data.approveState '00'}}
+                        待审核
+                    {{/equals}}
+                    {{#equals data.approveState '01'}}
+                        审核通过
+                    {{/equals}}
+                    {{#equals data.approveState '02'}}
+                        审核拒绝
+                    {{/equals}}
+                    {{#equals data.approveState '03'}}
+                        将过期
+                    {{/equals}}
+                    {{#equals data.approveState '04'}}
+                        已过期
+                    {{/equals}}
+                </div>
+                <div class="control-group">
+                    <label for="approveMemo">审核意见：</label>
+                    {{#if data.approveMemo}}
+                        <span class="break">{{data.approveMemo}}</span>
+                    {{else}}
+                        <span>无</span>
+                    {{/if}}
+                </div>
+            {{/if}}
+        </div>
+        <div class="modal-footer">
+            {{#if type}}
+                <button class="btn btn-success btn-small js-audit-pass" data-type="pass">通过</button>
+                <button class="btn btn-success btn-small js-audit-reject" data-type="reject">拒绝</button>
+                <button class="btn btn-close btn-small close">返回</button>
+            {{else}}
+                <button class="btn btn-close btn-small close">返回</button>
+            {{/if}}
+        </div>
+    </form>
+</div>

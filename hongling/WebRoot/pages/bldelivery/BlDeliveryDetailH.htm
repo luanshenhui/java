@@ -1,0 +1,68 @@
+<script src="../bldelivery/common.js"></script>
+<script src="../bldelivery/BlDeliveryDetailH.js"></script>
+<style>
+<!--
+	#blLblStorage, #blAddDeliveryDetail {
+		display:inline-block;background:url("../../themes/default/images/button_bg.gif") repeat-x;min-width:60px; color:#000;height:22px;line-height:22px;margin-left: 8px;text-align:center;
+	}
+-->
+</style>
+<form id="form" class="form_template">
+	<input type="hidden" id="deliveryid" name="deliveryid" />
+<!-- <div id="BlDeliveryDetailHTitle" class="list_search"> -->
+	<h1></h1>
+	<table>
+		<tr>
+			<td class="label blLblUserName"></td>
+			<td id="username"></td>
+			<td class="label blLblDeliveryAddr"></td>
+			<td id="deliveryAddress" width="300;"></td>
+			<td class="label blLblDeliveryDate"></td>
+			<td id="deliveryDate"></td>
+			<td class="label blLblAmount"></td>
+			<td id="amount"></td>
+			<td><a id="blLblStorage"></a> </td>
+			<td><a id="blAddDeliveryDetail"></a> </td>
+		</tr>
+	</table>
+<!-- </div> -->
+
+<div id="BlDeliveryDetailHResult"></div>
+<div id="BlDeliveryDetailHStatistic" class="pagingleft"></div>
+<div id="BlDeliveryDetailHPagination" class="paging"></div>
+<textarea  id="BlDeliveryDetailHTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+		<!-- 	<td><input type="checkbox" onclick="$.csControl.checkAll('chkRowDetail', this.checked);"/></td> -->
+			<td class="blLblNumber"></td>
+			<td class="blLblOrdenID"></td>
+			<td class="blLblAmount"></td>
+			<td class="blLblCompositionName"></td>
+			<td class="blLblClosingType"></td>
+			<td class="blLblOrdenStatus"></td>
+			<td class="blLblOperate"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr id="row{$T.row.ordenID}">
+			<!-- <td class="center"><input type="checkbox" value="{$T.row.ordenID}" name="chkRowDetail"/></td> -->
+			<td class="center">{$T.row.number}</td>
+			<td class="center">{$T.row.ordenID}</td>
+			<td class="center">{$T.row.amount}</td>
+			<td class="center">{$T.row.compositionName}</td>
+			<td class="center">{$T.row.closingType}</td>
+			<td class="center">{$T.row.statusName}</td>
+			<td class="center"><a class="delete" onclick="$.csBlDeliveryDetailHList.deleteDeliveryDetail('{$T.row.ordenID}',$('#deliveryid').val(),'{$T.row.type}');"></a></td>
+		</tr>
+		{#/for}
+		<tr>
+			<td class="label blLblMemo center"></td>	
+			<td colspan="6">
+				<input type="textarea" id="deliveryMemo" name="deliveryMemo" style="width:770px;height:150px;">
+			</td>
+		</tr>
+	</table>
+</textarea>
+<div class="operation" align="center">
+	<a id="btnSaveDelivery"></a><a id="btnLadeDelivery"></a> <a id="btnCancelDeliveryDetail"></a>
+</div>
+</form>

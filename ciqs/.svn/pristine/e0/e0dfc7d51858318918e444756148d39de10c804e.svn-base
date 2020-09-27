@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SQL.WARNING">
+
+<!-- 分页查询列表 -->
+	<select id="findWarningList"  parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto"  resultType="com.dpn.ciqqlc.standard.model.WarningRuleDto">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+		*
+		 from WARNING_RULE t
+		 where 1=1
+		<if test="good_type != null and good_type != ''" >
+			and t.good_type = #{good_type}
+		</if>
+		<if test="good_category != null and good_category != ''">
+			and t.good_category = #{good_category}
+		</if>
+		<if test="ruld_id != null and ruld_id != ''">
+			and t.ruld_id  = #{ruld_id}
+		</if>
+		 ) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+
+
+	<!-- 查询列表记录数 -->
+	<select id="findWarinCount"  parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto"  resultType="java.lang.Integer">
+		select count(*) 
+		 	from WARNING_RULE t
+		   	where 1=1
+		<if test="good_type != null and good_type != ''" >
+			and t.good_type = #{good_type}
+		</if>
+		<if test="good_category != null and good_category != ''">
+			and t.good_category = #{good_category}
+		</if>
+		<if test="ruld_id != null and ruld_id != ''">
+			and t.ruld_id  = #{ruld_id}
+		</if>
+	</select>
+	
+	<insert id="insertWarning" parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto" >
+		insert into WARNING_RULE (
+			RULD_ID,
+			GOOD_TYPE,
+			GOOD_CATEGORY,
+			MIN_TIME,
+			AVERAGE_TIME,
+			MAX_TIME
+		) values (
+			CreateGUID(),
+			#{good_type,jdbcType=VARCHAR},
+			#{good_category,jdbcType=VARCHAR},
+			#{min_time,jdbcType=VARCHAR},
+			#{average_time,jdbcType=VARCHAR},
+			#{max_time,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="updateWarning" parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto">
+	  UPDATE WARNING_RULE
+       <set>
+       		<if test="good_type != null">good_type = #{good_type},</if>
+       		<if test="good_category != null">good_category = #{good_category},</if>
+       		<if test="min_time != null">min_time = #{min_time},</if>
+       		<if test="average_time != null">average_time = #{average_time},</if>
+       		<if test="max_time != null">max_time = #{max_time},</if>
+       		ruld_id = #{ruld_id}
+       </set>
+        WHERE ruld_id = #{ruld_id} 
+	</update>
+	
+	<delete id="deleteWarning" parameterType="com.dpn.ciqqlc.standard.model.WarningRuleDto">
+		delete from WARNING_RULE where ruld_id = #{ruld_id} 
+	</delete>
+
+</mapper>

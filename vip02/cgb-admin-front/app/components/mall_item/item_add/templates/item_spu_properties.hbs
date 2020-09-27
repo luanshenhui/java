@@ -1,0 +1,6 @@
+{{#each data}}
+<div class="attr-item" data-spu="{{json this}}">
+    <label class="attr-label" for="input-item" style="font-size:12px;" title="{{attributeKey}}">{{attributeKey}}</label>
+    <input id="input-item" type="text" class="attr-input" value="{{attributeValue}}" style="font-size:12px;" disabled/>
+</div>
+{{/each}}

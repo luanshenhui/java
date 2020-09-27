@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC   
+     "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"   
+     "http://struts.apache.org/dtds/struts-2.0.dtd">
+     
+     
+<struts>
+	<package name="com.market" extends="struts-default">
+		<global-results>
+			<result name="succeed">/common/succeed.jsp</result>
+			<result name="successAdd">/common/add_success.jsp</result>
+			<result name="successDel">/common/del_success.jsp</result>
+			<result name="successUpdate">/common/update_success.jsp</result>
+		</global-results>
+
+
+
+<action  name="loginuser" class="loginuserWebAction">
+	<result name="list">/loginuser/loginuser_list.jsp</result>
+	<result name="add">/loginuser/loginuser_add.jsp</result>
+	<result name="edit">/loginuser/loginuser_edit.jsp</result>
+	<result name="view">/loginuser/loginuser_view.jsp</result>
+	<result name="fail">/login.jsp</result>
+	<result name="success">/index.jsp</result>
+	
+</action>
+<action  name="employee" class="employeeWebAction">
+	<result name="list">/employee/employee_list.jsp</result>
+	<result name="add">/employee/employee_add.jsp</result>
+	<result name="edit">/employee/employee_edit.jsp</result>
+	<result name="view">/employee/employee_view.jsp</result>
+	<result name="fail">/fail.jsp</result>
+</action>
+<action  name="member" class="memberWebAction">
+	<result name="list">/member/member_list.jsp</result>
+	<result name="add">/member/member_add.jsp</result>
+	<result name="edit">/member/member_edit.jsp</result>
+	<result name="view">/member/member_view.jsp</result>
+	<result name="selectMember">/member/select_member_list.jsp</result>
+	<result name="fail">/fail.jsp</result>
+</action>
+<action  name="card" class="cardWebAction">
+	<result name="list">/card/card_list.jsp</result>
+	<result name="add">/card/card_add.jsp</result>
+	<result name="edit">/card/card_edit.jsp</result>
+	<result name="view">/card/card_view.jsp</result>
+	<result name="fail">/fail.jsp</result>
+</action>
+<action  name="brand" class="brandWebAction">
+	<result name="list">/brand/brand_list.jsp</result>
+	<result name="add">/brand/brand_add.jsp</result>
+	<result name="edit">/brand/brand_edit.jsp</result>
+	<result name="view">/brand/brand_view.jsp</result>
+	<result name="fail">/fail.jsp</result>
+</action>
+<action  name="goods" class="goodsWebAction">
+	<result name="list">/goods/goods_list.jsp</result>
+	<result name="add">/goods/goods_add.jsp</result>
+	<result name="edit">/goods/goods_edit.jsp</result>
+	<result name="view">/goods/goods_view.jsp</result>
+	<result name="select_good">/goods/select_good_list.jsp</result>
+	<result name="stock">/stock/stock_add.jsp</result>
+	
+	<result name="fail">/fail.jsp</result>
+</action>
+<action  name="stock" class="stockWebAction">
+	<result name="list">/stock/stock_list.jsp</result>
+	<result name="add">/stock/stock_add.jsp</result>
+	<result name="edit">/stock/stock_edit.jsp</result>
+	<result name="view">/stock/stock_view.jsp</result>
+	<result name="staticStock">/stock/staticStock.jsp</result>
+	
+	<result name="fail">/fail.jsp</result>
+</action>
+<action  name="salesDetail" class="salesDetailWebAction">
+	<result name="list">/salesDetail/salesdetail_list.jsp</result>
+	<result name="add">/salesDetail/salesdetail_add.jsp</result>
+	<result name="edit">/salesDetail/salesdetail_edit.jsp</result>
+	<result name="view">/salesDetail/salesdetail_view.jsp</result>
+	<result name="fail">/fail.jsp</result>
+</action>
+<action  name="sales" class="salesWebAction">
+	<result name="list">/sales/sales_list.jsp</result>
+	<result name="add">/sales/sales_add.jsp</result>
+	<result name="edit">/sales/sales_edit.jsp</result>
+	<result name="view">/sales/sales_view.jsp</result>
+	<result name="staticSales">/sales/staticSales.jsp</result>
+	<result name="staticSalesBrand">/sales/staticSalesBrand.jsp</result>
+	<result name="staticSalesDay">/sales/staticSalesDay.jsp</result>
+	<result name="staticSalesBrandPic">/sales/staticSalesBrandPic.jsp</result>
+	
+	<result name="fail">/fail.jsp</result>
+</action>
+<action  name="stockDetail" class="stockDetailWebAction">
+	<result name="list">/stockDetail/stockdetail_list.jsp</result>
+	<result name="add">/stockDetail/stockdetail_add.jsp</result>
+	<result name="edit">/stockDetail/stockdetail_edit.jsp</result>
+	<result name="view">/stockDetail/stockdetail_view.jsp</result>
+	<result name="fail">/fail.jsp</result>
+</action>
+	</package>
+</struts>

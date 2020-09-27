@@ -1,0 +1,99 @@
+<div class="modal account-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned account-form" data-account-id="{{data.id}}" data-liu="{{json this}}">
+        <div class="account-new modal-body">
+
+            <div class="control-group">
+                <label for="orgName">所属机构:</label>
+                <span>{{data.orgSimpleName}}</span>
+            </div>
+            <div class="control-group">
+                <label for="id">登录帐号:</label>
+                <span >{{data.id}}</span>
+            </div>
+            <div class="control-group">
+                <label for="name">用户名:</label>
+                <span>{{data.name}}</span>
+            </div>
+            <div class="control-group">
+                <label for="mobile">手机号:</label>
+                <span>{{data.mobile}}</span>
+            </div>
+            <div class="control-group">
+                <label for="phone">联系电话:</label>
+                <span>{{data.phone}}</span>
+            </div>
+            <div class="control-group">
+                <label for="fax">传真电话:</label>
+                <span>{{data.fax}}</span>
+            </div>
+            <div class="control-group">
+                <label for="email">邮箱:</label>
+                <span>{{data.email}}</span>
+            </div>
+            <div class="control-group">
+                <label for="status">当前状态:</label>
+                <span>{{#equals data.status "0" }}
+                    已启用
+                {{else}}
+                    {{#equals data.status "1"}}
+                        停用
+                    {{/equals}}
+                {{/equals}}</span>
+            </div>
+            <div class="control-group">
+                <label for="papersType">证件类型:</label>
+                <span>
+                    {{#equals data.papersType "0" }}
+                        身份证
+                    {{/equals}}
+                    {{#equals data.papersType "1"}}
+                        户口簿
+                    {{/equals}}
+                    {{#equals data.papersType "2"}}
+                        护照
+                    {{/equals}}
+                    {{#equals data.papersType "3"}}
+                        军官证
+                    {{/equals}}
+                    {{#equals data.papersType "4"}}
+                        士兵证
+                    {{/equals}}
+                    {{#equals data.papersType "5"}}
+                        港澳居民来往内地通行证
+                    {{/equals}}
+                    {{#equals data.papersType "6"}}
+                        台湾同胞来往内地通行证
+                    {{/equals}}
+                    {{#equals data.papersType "7"}}
+                        临时身份证
+                    {{/equals}}
+                    {{#equals data.papersType "8"}}
+                        外国人居留证
+                    {{/equals}}
+                    {{#equals data.papersType "9"}}
+                        警官证
+                    {{/equals}}
+                    {{#equals data.papersType "X"}}
+                        其它证件
+                    {{/equals}}
+                </span>
+            </div>
+            <div class="control-group">
+                <label for="papersNum">证件号码:</label>
+                <span>{{data.papersNum}}</span>
+            </div>
+            <div class="control-group">
+                <label for="descript">用户描述:</label>
+                <span class="account-textarea">{{data.descript}}</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-info btn-small close">返回</button>
+        </div>
+    </form>
+</div>

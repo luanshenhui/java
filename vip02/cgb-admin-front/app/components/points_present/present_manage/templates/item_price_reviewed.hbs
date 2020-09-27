@@ -1,0 +1,219 @@
+<div class="modal pendpriced-model">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>定价审核</h2>
+    </div>
+    <form class="form form-aligned price-reviewed-form">
+        <div class="modal-body">
+            <table class="modal-body-table goods-table" data-code="{{data.goodsCode}}">
+                <colgroup>
+                    <col width="15%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="35%">
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th class="text-rg"><strong>礼品编码 ：</strong></th>
+                    <td>{{data.goodsCode}}</td>
+                    <th class="text-rg"><strong>礼品名称：</strong></th>
+                    <td>{{data.goodsName}}</td>
+                </tr>
+                </tbody>
+            </table>
+            {{#equals data.goodsType "00"}}
+            {{#each data.data.result}}
+                <table class="modal-body-table margin-top-30 pending-table" data-itemid="{{itemId}}" data-calmoney="{{calMoney}}">
+                    <colgroup>
+                        <col width="15%">
+                        <col width="85%">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th class="text-rg"><strong>单品编码 ：</strong></th>
+                        <td>{{itemId}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="price-table border check-table">
+                    <thead>
+                    <tr>
+                        <th width="8%">
+                            <label for="checkbox"></label>
+                        </th>
+                        <th width="10%">
+                            <label for="checkbox2"></label>
+                            金普
+                        </th>
+                        <th width="16%">
+                            <label for="checkbox3"></label>
+                            钛金/臻享 白金
+                        </th>
+                        <th width="16%">
+                            <label for="checkbox4"></label>
+                            顶级/增值 白金
+                        </th>
+                        <th width="10%">
+                            <label for="checkbox5"></label>
+                            VIP
+                        </th>
+                        <th width="10%">
+                            <label for="checkbox6"></label>
+                            生日
+                        </th>
+                        <th width="30%">
+                            <label for="checkbox7"></label>
+                            积分+现金
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td><input id="checkinput2" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{gold}}" disabled></td>
+                        <td><input id="checkinput3" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{titanium}}" disabled></td>
+                        <td><input id="checkinput4" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{topLevel}}" disabled></td>
+                        <td><input id="checkinput5" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{vip}}" disabled></td>
+                        <td><input id="checkinput6" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{birthday}}" disabled></td>
+                        <td><input id="checkinput7" name="checkinput" type="text" class="form-control input-width-75"
+                                   value="{{points}}" disabled>
+                            + <input id="checkinput8" name="checkinput" type="text" class="form-control input-width-75"
+                                     value="{{price}}" disabled></td>
+                    </tr>
+                    </tbody>
+                </table>
+            {{/each}}
+            {{/equals}}
+            {{#equals data.goodsType "01"}}
+                {{#each data.data.result}}
+                    <table class="modal-body-table margin-top-30 pending-table" data-itemid="{{itemId}}">
+                        <colgroup>
+                            <col width="15%">
+                            <col width="85%">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th class="text-rg"><strong>单品编码 ：</strong></th>
+                            <td>{{itemId}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-rg">
+                                <strong>纯积分价格 ：</strong>
+                            </th>
+                            <td>
+                                <input id="gold" type="text" class="form-control form－widht－185"
+                                       value="{{gold}}" disabled>
+                            </td>
+                        </tr>
+                        <!--<tr>-->
+                            <!--<th class="text-rg">-->
+                                <!--<strong>积分+现金 ：</strong>-->
+                            <!--</th>-->
+                            <!--<td>-->
+                                <!--<input id="points" type="text" class="form-control form－widht－185"-->
+                                       <!--value="{{points}}" disabled>-->
+                                <!--＋-->
+                                <!--<input id="price" type="text" class="form-control form－widht－185"-->
+                                       <!--value="{{price}}" disabled>-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                        </tbody>
+                    </table>
+                {{/each}}
+            {{/equals}}
+            {{#equals data.goodsType "02"}}
+                {{#each data.data.result}}
+                    <table class="modal-body-table margin-top-30 pending-table" data-itemid="{{itemId}}">
+                        <colgroup>
+                            <col width="15%">
+                            <col width="85%">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th class="text-rg"><strong>单品编码 ：</strong></th>
+                            <td>{{itemId}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="price-table border check-table">
+                        <thead>
+                        <tr>
+                            <th width="8%">
+                                <label for="checkbox"></label>
+                            </th>
+                            <th width="10%">
+                                <label for="checkbox2"></label>
+                                金普
+                            </th>
+                            <th width="16%">
+                                <label for="checkbox3"></label>
+                                钛金/臻享 白金
+                            </th>
+                            <th width="16%">
+                                <label for="checkbox4"></label>
+                                顶级/增值 白金
+                            </th>
+                            <th width="10%">
+                                <label for="checkbox5"></label>
+                                VIP
+                            </th>
+                            <th width="10%">
+                                <label for="checkbox6"></label>
+                                生日
+                            </th>
+                            <th width="30%">
+                                <label for="checkbox7"></label>
+                                积分+现金
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input id="checkinput2" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{gold}}" disabled></td>
+                            <td><input id="checkinput3" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{titanium}}" disabled></td>
+                            <td><input id="checkinput4" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{topLevel}}" disabled></td>
+                            <td><input id="checkinput5" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{vip}}" disabled></td>
+                            <td><input id="checkinput6" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{birthday}}" disabled></td>
+                            <td><input id="checkinput7" name="checkinput" type="text" class="form-control input-width-75"
+                                       value="{{points}}" disabled>
+                                + <input id="checkinput8" name="checkinput" type="text" class="form-control input-width-75"
+                                         value="{{price}}" disabled></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                {{/each}}
+            {{/equals}}
+            <table class="modal-body-table margin-top-30">
+                <colgroup>
+                    <col width="15%">
+                    <col width="85%">
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th><strong> 审核意见 </strong><strong>：</strong></th>
+                    <td><textarea class="js-approve-memo form-control order-form col-3 remaining-target"
+                                  id="descript" name="descript" type="text" maxlength="200"></textarea>
+                        <p class="remaining-text">您还可以输入<i>200</i>字</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-success js-exam-pass" type="button" data-result="pass" value="通过">
+            <input class="btn btn-success js-exam-reject" type="button" data-result="reject" value="拒绝">
+            <button class="btn btn-close btn-medium close">取 消</button>
+        </div>
+    </form>
+</div>

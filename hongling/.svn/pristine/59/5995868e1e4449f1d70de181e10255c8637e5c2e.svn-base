@@ -1,0 +1,46 @@
+<script src="../blcash/common.js"></script>
+<script src="../blcash/BlAddDeal.js"></script>
+<form id="BlAddDealForm" class="form_template">
+<input type="hidden" name="bldealcashid" id="bldealcashid"/>
+<input type="hidden" name="bldealmemberid" id="bldealmemberid"/>
+<h1></h1>
+<table>
+	<tr>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td class="label blLblAccountName"></td>
+		<td>
+			<input type="text" id="blAccountName"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblDealItem star"></td>
+		<td>
+			<select id="blDealItems" style="width:153px;" onclick="$.csBlAddDeal.changeDealItem();"></select>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblDealNum star"></td>
+		<td>
+			<input type="text" id="blDealNum"/><span id="tip_dealnum"></span>
+		</td>
+	</tr>
+	<tr id="yuanDanId">
+		<td class="label blLblYundanId star"></td>
+		<td>
+			<input type="text" id="blYundanId"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="label blLblMemo"></td>
+		<td>
+			<input type="text" id="blMemo"/>
+		</td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="blBtnSaveDeal"></a> <a id="blBtnCancelDeal"></a>
+</div>
+</form>

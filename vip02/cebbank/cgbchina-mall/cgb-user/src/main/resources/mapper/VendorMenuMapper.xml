@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VendorMenu">
+    <resultMap id="VendorMenuMap" type="VendorMenuModel">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="link" column="link"/>
+        <result property="isEnabled" column="is_enabled"/>
+        <result property="sort" column="sort"/>
+        <result property="pid" column="pid"/>
+        <result property="grade" column="grade"/>
+        <result property="shopType" column="shop_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="dataPaths" column="data_paths"/>
+    </resultMap>
+    <sql id="columns">
+        id,`name`,link,is_enabled,sort,pid,grade,shop_type,create_time,modify_time,vendor_id,del_flag,data_paths
+    </sql>
+
+    <insert id="insert" parameterType="VendorMenuModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_vendor_menu
+        (name
+        ,link
+        ,is_enabled
+        ,sort
+        ,pid
+        ,grade
+        ,shop_type
+        ,create_time
+        ,modify_time
+        ,vendor_id
+        ,del_flag)
+        values(#{name}
+        ,#{link}
+        ,#{isEnabled}
+        ,#{sort}
+        ,#{pid}
+        ,#{grade}
+        ,#{shopType}
+        ,#{createTime}
+        ,#{modifyTime}
+        ,#{vendorId}
+        ,#{delFlag})
+    </insert>
+
+    <update id="update" parameterType="VendorMenuModel">
+        update tbl_vendor_menu set
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="link !=null">link = #{link}
+            ,
+        </if>
+        <if test="isEnabled !=null">is_enabled = #{isEnabled}
+            ,
+        </if>
+        <if test="sort !=null">sort = #{sort}
+            ,
+        </if>
+        <if test="pid !=null">pid = #{pid}
+            ,
+        </if>
+        <if test="grade !=null">grade = #{grade}
+            ,
+        </if>
+        <if test="shopType !=null">shop_type = #{shopType}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+            ,
+        </if>
+        <if test="vendorId !=null">vendor_id = #{vendorId}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="link !=null">and link = #{link}</if>
+            <if test="isEnabled !=null">and is_enabled = #{isEnabled}</if>
+            <if test="sort !=null">and sort = #{sort}</if>
+            <if test="pid !=null">and pid = #{pid}</if>
+            <if test="grade !=null">and grade = #{grade}</if>
+            <if test="shopType !=null">and shop_type = #{shopType}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="VendorMenuMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_vendor_menu
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="VendorMenuMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_menu
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="VendorMenuMap">
+        select
+        <include refid="columns"/>
+        from tbl_vendor_menu
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="VendorMenuModel">
+        delete from tbl_vendor_menu where id = id
+    </delete>
+    <select id="findChildById" parameterType="Long" resultMap="VendorMenuMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_vendor_menu
+        WHERE pid=#{_parameter} AND del_flag=0 AND is_enabled=0 ORDER BY sort DESC
+    </select>
+    <select id="getAllResources" resultMap="VendorMenuMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_vendor_menu WHERE del_flag=0
+    </select>
+</mapper>
+
+

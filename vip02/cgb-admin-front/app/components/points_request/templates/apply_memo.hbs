@@ -1,0 +1,21 @@
+<div class="modal apply-memo">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>请款审核</h2>
+    </div>
+    <form class="form form-aligned memo-form" data-data="{{json this}}">
+        <div class="modal-body">
+            <div class="control-group">
+                <div class="float-left">审核意见:</div>
+                <textarea required name="sinApplyMemo" id="sinApplyMemo"></textarea>
+                <span class="note"><i>&times;</i> 拒绝时必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 拒绝时必填 不得为空</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="button" class="btn btn-success btn-sm js-memo-accept" value="通过">
+            <input type="submit" class="btn btn-success btn-sm js-memo-refuse" value="拒绝">
+            <button class="btn  btn-close btn-info btn-sm close">取消</button>
+        </div>
+    </form>
+</div>

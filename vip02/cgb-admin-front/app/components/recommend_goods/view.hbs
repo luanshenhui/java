@@ -1,0 +1,66 @@
+{{#component "recommend-goods js-component" }}
+    <p class="account-title components-title js-main-title" data-main="{{_HREF_.main}}"><strong>- 网银商品推荐 -</strong></p>
+    <div class="clear"></div>
+    <div class="main-box margin-top-10" style="padding-right: 0px;">
+        <div class="admin-cat-box">
+            <div class="admin-cat-box-title">一级类目</div>
+            <ul class="admin-cat-box-list back-category-list" id="level1" data-level=1>
+                {{#each _DATA_.data}}
+                    <li class="active" data-id="{{id}}" data-isparent={{isParent}}>
+                        <a href="#" class="find-next-category">{{name}}</a>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="admin-cat-box">
+            <div class="admin-cat-box-title">二级类目</div>
+            <ul class="admin-cat-box-list back-category-list" id="level2" data-level=2>
+            </ul>
+        </div>
+        <div class="admin-cat-box">
+            <div class="admin-cat-box-title">三级类目</div>
+            <ul class="admin-cat-box-list back-category-list" id="level3" data-level=3>
+            </ul>
+        </div>
+        <div class="admin-cat-box border-right-none" style="width: 30%; ">
+            <div class="admin-big-title text-align-center">
+                <div class="admin-sub-big-title" style="width: auto;">商品推荐列表</div>
+            </div>
+            <div class="admin-big-box clearfix ">
+                <div class="admin-big-box-sub-50">单品编码</div>
+                <div class="admin-big-box-sub-50">商品名称</div>
+                <div class="clear"></div>
+                <div class="recommend-list-goods" data-level=4></div>
+            </div>
+            <div class="admin-add-property" style="display: none;">
+                <div class="admin-big-box clearfix">
+                    <div class="one-box">
+                        <div class="admin-big-box-sub-100">单品编码：
+                            <input type="text" class="form-control goodsMid-input" placeholder="请输入5位单品编码" value="{{goodsMid}}" maxlength="5"></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="admin-big-box clearfix">
+                    <div class="one-box">
+                        <div class="admin-big-box-sub-100">商品名称：
+                            <input type="text" class="form-control goodsName-input" disabled="disabled"
+                                   value="{{name}}">
+                            <input type="hidden" class="form-control js-goodsCode" value="">
+                            <input type="hidden" class="form-control js-itemCode" value="">
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                {{#authorial "recommendGoods_add"}}
+                    <div class="del-btn-link btn-insert-re">保 存</div>
+                {{/authorial}}
+            </div>
+        </div>
+        {{#authorial "recommendGoods_add"}}
+            <div class="col-right-common add-property"><span style="font-size: 20px;">+</span><br>
+                新增
+            </div>
+        {{/authorial}}
+        <div class="clear"></div>
+    </div>
+{{/component}}

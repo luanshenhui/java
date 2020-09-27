@@ -1,0 +1,33 @@
+<div class="modal top-goods-edit-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        编辑置顶商品
+    </div>
+    <form class="form form-aligned topgoods-form-edit" data-component-id="{{id}}">
+        <div class="modal-body modal-topgoods">
+            <div class="control-group">
+                <label for="itemCode">商品编码:</label>
+                <span id="goodsCode" data-item-code="{{data.itemModel.code}}">{{data.code}}</span>
+            </div>
+            <div class="control-group">
+                <label for="itemName">单品名称:</label>
+                <span id="itemName">{{data.name}}</span>
+            </div>
+            <div class="control-group">
+                <label for=""><span class="required">*</span>显示顺序:</label>
+                <input id="stickOrder" class="form-control js_topgoods_stickOrder" name="stickOrder" type="text"
+                       maxlength="4" pattern="^\d+$"
+                       placeholder="请输入显示顺序" required
+                       data-stickorder="{{data.itemModel.stickOrder}}"
+                       value="{{data.itemModel.stickOrder}}">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error"><i>&times;</i> 必填 请输入数字</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="保存">
+            <button class="btn btn-info btn-small close">关闭</button>
+        </div>
+    </form>
+</div>

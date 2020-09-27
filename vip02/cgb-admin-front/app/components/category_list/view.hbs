@@ -1,0 +1,74 @@
+{{#component  "category-container js-component"}}
+    <div class="category category-{{_DATA_.categoryLevel}}" id="{{_DATA_.categoryLevel}}"
+         data-type="{{#equals type 1}}frontCategory{{else}}backCategory{{/equals}}" data-channel="{{channel}}">
+        <div class="category-header">
+            <p class="item-name-p">
+                <strong class="item-name">
+                    {{#equals _DATA_.categoryLevel 1}}一级类目{{/equals}}
+                    {{#equals _DATA_.categoryLevel 2}}二级类目{{/equals}}
+                    {{#equals _DATA_.categoryLevel 3}}三级类目{{/equals}}
+                </strong>
+            </p>
+        </div>
+        <div class="category-body">
+            <div class="search-item">
+                <div class="search-item-group">
+                    <i class="fa fa-search"></i>
+                    <input type="text" class="search-item-input js-search-item" placeholder="搜索关键字">
+                </div>
+            </div>
+            <ul class="divide-ul">
+                {{#each _DATA_.data}}
+                    <li class="divide-li" data-category="{{json this}}" id="{{id}}">
+                        <div class="normal-status">
+                            <div class="operate-span">
+                                <i  title="编辑" class="operate-status js-edit-category fa fa-pencil-square-o"></i>
+                                {{#equals hasChild false}}
+                                    <i  id="{{json this}}" data-categoryid="{{this.id}}" title="删除" class="operate-status js-delete-category fa fa-trash-o" data-toggle="confirm"
+                                       data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                       data-event="confirm:delete-category"></i>
+                                {{/equals}}
+                            </div>
+                            {{#equals hasChild true}}
+                                <i class="fa fa-angle-right next "></i>
+                                <i class="fa fa-angle-right white next  hide"></i>
+                            {{/equals}}
+                            {{#equals type 1}}
+                                <a class="image-upload" href="javascript:void(0);" title="上传图标">
+                                {{#if icon}}
+                                    <img src="{{icon}}_15x15.jpg" height="15px" width="15px" title="图标">
+                                {{else}}
+                                    <i class="fa fa-picture-o"></i>
+                                {{/if}}
+                            </a>
+                            {{/equals}}
+                            <a href="javascript:void(0);" class="item-pop" title="{{name}}"><span>{{name}}</span></a>
+                        </div>
+                        <form class="form category-edit-form update-category-group" style="display: none;"
+                              onkeydown="if(event.keyCode==30){return false;}">
+                            <div class="input-group input-group-append">
+                                <input type="text" class="update-category-input" name="name" maxlength="30">
+                                <span class="input-group-btn">
+                                  <button class="btn btn-success btn-small js-update-category" type="button">修改</button>
+                                </span>
+                            </div>
+                        </form>
+                    </li>
+                {{/each}}
+            </ul>
+            <div class="bottom-li"></div>
+            <div class="bottom-add-category">
+                <form class="category-form form" onkeydown="if(event.keyCode==30){return false;}">
+                    <div class="input-group input-group-append add-category-group">
+                        <input id="category-id" type="hidden" name="parentId" value="{{extras.parentId}}"/>
+                        <input type="text" class="js-new-category group-input" name="name"  maxlength="30">
+                        <input type="hidden" name="channel" value="{{channel}}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success btn-small js-add-category" type="button">添加</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{{/component}}

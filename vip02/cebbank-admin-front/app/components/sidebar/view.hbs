@@ -1,0 +1,57 @@
+{{#component "js-component sidebar"}}
+    <ul class="sidebar-ul">
+        <div class="side">
+            <ul class="f-link">
+                <a href="javascript:void(0)"
+                   style="">首页</a>
+                <li class="f-menu"><a href="javascript:void(0)"><i
+                        class="fa fa-fw fa-minus-square"></i>网上商城</a>
+                    <ul class="t-link">
+                        <li><a class="p-l-30"
+                               href="javascript:void(0)"><i
+                                class="fa fa-fw fa-plus-square"></i>商品管理</a>
+                            <ul class="s-link">
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/items/categories/back_categories"
+                                       data-paths='{{menu.dataPaths}}'>类目属性管理</a></li>
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/items/categories/front_categories"
+                                       data-paths='{{menu.dataPaths}}'>前台类目管理</a></li>
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/items/categories/front_categories"
+                                       data-paths='{{menu.dataPaths}}'>品牌管理</a></li>
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/items/categories/front_categories"
+                                       data-paths='{{menu.dataPaths}}'>商品管理</a></li>
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/test"
+                                       data-paths='{{menu.dataPaths}}'>测试页面</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="t-link">
+                        <li><a class="p-l-30"
+                               href="javascript:void(0)"><i
+                                class="fa fa-fw fa-plus-square"></i>网站前台</a>
+                            <ul class="s-link">
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/admins/components"
+                                       data-paths='{{menu.dataPaths}}'>组件管理</a></li>
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/admins/sites"
+                                       data-paths='{{menu.dataPaths}}'>站点管理</a></li>
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/admins/sites"
+                                       data-paths='{{menu.dataPaths}}'>搜索引擎优化</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="t-link">
+                        <li><a class="p-l-30"
+                               href="javascript:void(0)"><i
+                                class="fa fa-fw fa-plus-square"></i>系统设置</a>
+                            <ul class="s-link">
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/admins/sites"
+                                       data-paths='{{menu.dataPaths}}'>账号管理</a></li>
+                                <li><a class="p-l-50" href="{{_HREF_.mainContext}}/admins/sites"
+                                       data-paths='{{menu.dataPaths}}'>角色管理</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </ul>
+{{/component}}

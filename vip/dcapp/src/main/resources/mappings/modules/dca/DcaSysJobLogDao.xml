@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.basicdata.dao.DcaSysJobLogDao">
+    
+	<sql id="dcaSysJobLogColumns">
+		a.ID_JOB AS "idJob",
+		a.CHANNEL_ID AS "channelId",
+		a.JOBNAME AS "jobname",
+		a.STATUS AS "status",
+		a.LINES_READ AS "linesRead",
+		a.LINES_WRITTEN AS "linesWritten",
+		a.LINES_UPDATED AS "linesUpdated",
+		a.LINES_INPUT AS "linesInput",
+		a.LINES_OUTPUT AS "linesOutput",
+		a.LINES_REJECTED AS "linesRejected",
+		a.ERRORS AS "errors",
+		a.STARTDATE AS "startdate",
+		a.ENDDATE AS "enddate",
+		a.LOGDATE AS "logdate",
+		a.DEPDATE AS "depdate",
+		a.REPLAYDATE AS "replaydate",
+		a.LOG_FIELD AS "logField"
+	</sql>
+	
+	<sql id="dcaSysJobLogJoins">
+	</sql>
+	
+	
+	<!-- job item表的列名 -->
+	<sql id="showdetialColumns">
+	 	r.ID_BATCH as"idBatch",
+		r.LOG_DATE AS "date",
+		r.STEPNAME AS "stepname",
+		r.ERRORS AS "itemerror"
+	
+	</sql>
+	
+	<!-- 查询job item表的日志数据 -->
+	<select id="showdetial" resultType="DcaSysJobLog">
+	 SELECT 
+	 <include refid="showdetialColumns" />
+	 FROM DCA_ETL_JOB_ITEM_LOG r WHERE r.ID_BATCH = #{idJob}
+	
+	</select>
+   
+	<select id="get" resultType="DcaSysJobLog">
+		SELECT 
+			<include refid="dcaSysJobLogColumns"/>
+		FROM DCA_ETL_JOB_LOG a
+		<include refid="dcaSysJobLogJoins"/>
+		WHERE a.ID_JOB = #{id}
+	</select>
+	
+	<!-- 查询job表的数据 -->
+	<select id="findList" resultType="DcaSysJobLog">
+		SELECT 
+			<include refid="dcaSysJobLogColumns"/>
+		FROM DCA_ETL_JOB_LOG a
+		<include refid="dcaSysJobLogJoins"/>
+		<where>
+		<if test="startdate != null and startdate != ''">
+				TRUNC(a.ENDDATE,'dd') <![CDATA[ >= ]]> #{startdate}
+			</if>
+			<if test="enddate != null and enddate != ''">
+				AND 
+				TRUNC(a.ENDDATE,'dd') <![CDATA[ <= ]]> #{enddate}
+			</if>
+		</where>
+			ORDER BY a.ENDDATE DESC
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaSysJobLog">
+		SELECT 
+			<include refid="dcaSysJobLogColumns"/>
+		FROM DCA_ETL_JOB_LOG a
+		<include refid="dcaSysJobLogJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO DCA_ETL_JOB_LOG(
+			ID_JOB,
+			CHANNEL_ID,
+			JOBNAME,
+			STATUS,
+			LINES_READ,
+			LINES_WRITTEN,
+			LINES_UPDATED,
+			LINES_INPUT,
+			LINES_OUTPUT,
+			LINES_REJECTED,
+			ERRORS,
+			STARTDATE,
+			ENDDATE,
+			LOGDATE,
+			DEPDATE,
+			REPLAYDATE,
+			LOG_FIELD
+		) VALUES (
+			#{idJob},
+			#{channelId},
+			#{jobname},
+			#{status},
+			#{linesRead},
+			#{linesWritten},
+			#{linesUpdated},
+			#{linesInput},
+			#{linesOutput},
+			#{linesRejected},
+			#{errors},
+			#{startdate},
+			#{enddate},
+			#{logdate},
+			#{depdate},
+			#{replaydate},
+			#{logField}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE DCA_ETL_JOB_LOG SET 	
+			ID_JOB = #{idJob},
+			CHANNEL_ID = #{channelId},
+			JOBNAME = #{jobname},
+			STATUS = #{status},
+			LINES_READ = #{linesRead},
+			LINES_WRITTEN = #{linesWritten},
+			LINES_UPDATED = #{linesUpdated},
+			LINES_INPUT = #{linesInput},
+			LINES_OUTPUT = #{linesOutput},
+			LINES_REJECTED = #{linesRejected},
+			ERRORS = #{errors},
+			STARTDATE = #{startdate},
+			ENDDATE = #{enddate},
+			LOGDATE = #{logdate},
+			DEPDATE = #{depdate},
+			REPLAYDATE = #{replaydate},
+			LOG_FIELD = #{logField}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM DCA_ETL_JOB_LOG
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

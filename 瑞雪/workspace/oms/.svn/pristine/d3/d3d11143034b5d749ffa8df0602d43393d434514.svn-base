@@ -1,0 +1,26 @@
+package cn.rkylin.oms.system.role.service;
+
+import java.util.List;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.role.vo.RoleVo;
+
+public interface IRoleService {
+	PageInfo<RoleVo> findByWhere(int page, int length, RoleVo param) throws Exception;
+
+	public void insert(RoleVo roleVo) throws Exception;
+	
+	public void delete(String roleId) throws Exception;
+	
+	public WF_ORG_ROLE selectRoleDetail(String roleId) throws Exception;
+	
+	public void update(RoleVo roleVo)throws Exception;
+
+	List getAllRoles(WF_ORG_ROLE roleVO) throws Exception;
+	
+	public List getRoleByIDs(WF_ORG_ROLE roleVO) throws Exception;
+	
+	public void enableFlg(String roleid, String roleEnable) throws Exception;
+}

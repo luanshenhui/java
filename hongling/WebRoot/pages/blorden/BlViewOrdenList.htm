@@ -1,0 +1,62 @@
+<script src="../blorden/common.js"></script>
+<script src="../blorden/BlViewOrdenList.js"></script>
+<script src="../orden/listjsp.js"></script>
+<div id="BlViewOrdenListSearch" class="list_search">
+	<h1></h1>
+	<span id="blLblStatistic"></span>
+	<label class="lblClothingCategory"></label>
+	<select id="searchClothingID"></select>
+	<label class="lblStatus"></label>
+	<select id="searchStatus"></select>
+	<label class="lblName"></label>
+	<select id="searchClientID" style="width:176px;"></select>
+	<label class="blLblKeyword"></label>
+	<input type="text" id="searchKeywords" style="width:95px;"/>
+	<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label class="lblPubDate"></label>
+	<input type="text" id="pubDate" class="date"/>
+	<input type="text" id="pubToDate" class="date"/>
+	<label class="lblDeliveryDate"></label>
+	<input type="text" id="deliveryDate" class="date"/>
+	<input type="text" id="deliveryToDate" class="date"/>
+	<label class="lblDealDate"></label>
+	<input type="text" id="dealDate" class="date"/>
+	<input type="text" id="dealToDate" class="date"/>
+	<a id="blBtnSearchOrdens"></a>
+</div>
+<div id="BlViewOrdenListResult"></div>
+<div id="BlViewOrdenListStatistic"></div>
+<div id="BlViewOrdenListPagination" class="paging"></div>
+<textarea  id="BlViewOrdenListTemplate" class="list_template">
+	<table class="list_result">
+		<tr class="header">
+			<td class="lblNumber"></td>
+			<td class="lblCode"></td>
+			<td class="lblUserNo"></td>
+			<td class="lblClothingCategory"></td>
+			<td class="lblName"></td>
+			<td class="lblFabric"></td>
+			<td class="lblStatus"></td>
+			<td class="lblPubDate"></td>
+			<td class="lblDeliveryDate"></td>
+			<td class="lblDealDate"></td>
+			<td class="lblChukudanId"></td>
+		</tr>
+		{#foreach $T.data as row}
+		<tr>
+		    <td class="center">{$T.row.number}</td>
+		    <td class="link" onclick="$.csOrdenList.openView('{$T.row.ordenID}')">{$T.row.ordenID}</td>
+		    <td class="center">{$T.row.userordeNo}</td>
+		    <td class="center">{$T.row.clothingName}</td>
+		    <td class="center">{$T.row.customerName}</td>
+		    <td class="center">{$T.row.fabricCode}</td>
+		    <td class="center">{$T.row.statusName}</td>
+		    <td class="center">{$T.row.pubDate}</td>
+		    <td class="center">{$T.row.deliveryDate}</td>
+		    <td class="center">{$T.row.dealDate}</td>
+		    <td class="center">{$T.row.chukudanId}</td>
+		</tr>
+		{#/for}
+	</table>
+</textarea>

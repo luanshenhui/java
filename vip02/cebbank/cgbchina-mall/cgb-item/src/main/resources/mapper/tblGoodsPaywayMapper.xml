@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TblGoodsPaywayModel">
+    <resultMap id="TblGoodsPaywayMap" type="TblGoodsPaywayModel">
+        <result property="goodsPaywayId" column="goods_payway_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="paywayCode" column="payway_code"/>
+        <result property="payType" column="pay_type"/>
+        <result property="incCode" column="inc_code"/>
+        <result property="stagesCode" column="stages_code"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="authFlat1" column="auth_flat1"/>
+        <result property="authFlat2" column="auth_flat2"/>
+        <result property="perStage" column="per_stage"/>
+        <result property="stagesFlagCash" column="stages_flag_cash"/>
+        <result property="stagesFlagPoint" column="stages_flag_point"/>
+        <result property="stagesFlagInc" column="stages_flag_inc"/>
+        <result property="goodsPoint" column="goods_point"/>
+        <result property="isAction" column="is_action"/>
+        <result property="isBirth" column="is_birth"/>
+        <result property="memberLevel" column="member_level"/>
+        <result property="goodsPrice" column="goods_price"/>
+        <result property="calMoney" column="cal_money"/>
+        <result property="goodsPaywayDesc" column="goods_payway_desc"/>
+        <result property="ischeck" column="ischeck"/>
+        <result property="curStatus" column="cur_status"/>
+        <result property="categoryNo" column="category_no"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="reserved1" column="reserved1"/>
+    </resultMap>
+    <sql id="columns">
+    goods_payway_id,goods_id,payway_code,pay_type,inc_code,stages_code,rule_id,auth_flat1,auth_flat2,per_stage,stages_flag_cash,stages_flag_point,stages_flag_inc,goods_point,is_action,is_birth,member_level,goods_price,cal_money,goods_payway_desc,ischeck,cur_status,category_no,create_oper,create_time,modify_oper,modify_time,reserved1
+    </sql>
+
+    <insert id="insert" parameterType="TblGoodsPaywayModel" useGeneratedKeys="true"
+            keyProperty="goodsPaywayId" keyColumn="goods_payway_id">
+        insert into tbl_goods_payway
+        (goods_id
+        ,payway_code
+        ,pay_type
+        ,inc_code
+        ,stages_code
+        ,rule_id
+        ,auth_flat1
+        ,auth_flat2
+        ,per_stage
+        ,stages_flag_cash
+        ,stages_flag_point
+        ,stages_flag_inc
+        ,goods_point
+        ,is_action
+        ,is_birth
+        ,member_level
+        ,goods_price
+        ,cal_money
+        ,goods_payway_desc
+        ,ischeck
+        ,cur_status
+        ,category_no
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,reserved1)
+        values(#{goodsId}
+        ,#{paywayCode}
+        ,#{payType}
+        ,#{incCode}
+        ,#{stagesCode}
+        ,#{ruleId}
+        ,#{authFlat1}
+        ,#{authFlat2}
+        ,#{perStage}
+        ,#{stagesFlagCash}
+        ,#{stagesFlagPoint}
+        ,#{stagesFlagInc}
+        ,#{goodsPoint}
+        ,#{isAction}
+        ,#{isBirth}
+        ,#{memberLevel}
+        ,#{goodsPrice}
+        ,#{calMoney}
+        ,#{goodsPaywayDesc}
+        ,#{ischeck}
+        ,#{curStatus}
+        ,#{categoryNo}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{reserved1})
+    </insert>
+
+    <update id="update" parameterType="TblGoodsPaywayModel">
+        update tbl_goods_payway set
+            <if test="goodsId !=null">goods_id = #{goodsId}
+                ,</if>
+            <if test="paywayCode !=null">payway_code = #{paywayCode}
+                ,</if>
+            <if test="payType !=null">pay_type = #{payType}
+                ,</if>
+            <if test="incCode !=null">inc_code = #{incCode}
+                ,</if>
+            <if test="stagesCode !=null">stages_code = #{stagesCode}
+                ,</if>
+            <if test="ruleId !=null">rule_id = #{ruleId}
+                ,</if>
+            <if test="authFlat1 !=null">auth_flat1 = #{authFlat1}
+                ,</if>
+            <if test="authFlat2 !=null">auth_flat2 = #{authFlat2}
+                ,</if>
+            <if test="perStage !=null">per_stage = #{perStage}
+                ,</if>
+            <if test="stagesFlagCash !=null">stages_flag_cash = #{stagesFlagCash}
+                ,</if>
+            <if test="stagesFlagPoint !=null">stages_flag_point = #{stagesFlagPoint}
+                ,</if>
+            <if test="stagesFlagInc !=null">stages_flag_inc = #{stagesFlagInc}
+                ,</if>
+            <if test="goodsPoint !=null">goods_point = #{goodsPoint}
+                ,</if>
+            <if test="isAction !=null">is_action = #{isAction}
+                ,</if>
+            <if test="isBirth !=null">is_birth = #{isBirth}
+                ,</if>
+            <if test="memberLevel !=null">member_level = #{memberLevel}
+                ,</if>
+            <if test="goodsPrice !=null">goods_price = #{goodsPrice}
+                ,</if>
+            <if test="calMoney !=null">cal_money = #{calMoney}
+                ,</if>
+            <if test="goodsPaywayDesc !=null">goods_payway_desc = #{goodsPaywayDesc}
+                ,</if>
+            <if test="ischeck !=null">ischeck = #{ischeck}
+                ,</if>
+            <if test="curStatus !=null">cur_status = #{curStatus}
+                ,</if>
+            <if test="categoryNo !=null">category_no = #{categoryNo}
+                ,</if>
+            <if test="createOper !=null">create_oper = #{createOper}
+                ,</if>
+            <if test="createTime !=null">create_time = #{createTime}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            <if test="modifyTime !=null">modify_time = #{modifyTime}
+                ,</if>
+            <if test="reserved1 !=null">reserved1 = #{reserved1}
+                </if>
+        where goods_payway_id = #{goodsPaywayId}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="goodsPaywayId !=null">and goods_payway_id = #{goodsPaywayId}</if>
+            <if test="goodsId !=null">and goods_id = #{goodsId}</if>
+            <if test="paywayCode !=null">and payway_code = #{paywayCode}</if>
+            <if test="payType !=null">and pay_type = #{payType}</if>
+            <if test="incCode !=null">and inc_code = #{incCode}</if>
+            <if test="stagesCode !=null">and stages_code = #{stagesCode}</if>
+            <if test="ruleId !=null">and rule_id = #{ruleId}</if>
+            <if test="authFlat1 !=null">and auth_flat1 = #{authFlat1}</if>
+            <if test="authFlat2 !=null">and auth_flat2 = #{authFlat2}</if>
+            <if test="perStage !=null">and per_stage = #{perStage}</if>
+            <if test="stagesFlagCash !=null">and stages_flag_cash = #{stagesFlagCash}</if>
+            <if test="stagesFlagPoint !=null">and stages_flag_point = #{stagesFlagPoint}</if>
+            <if test="stagesFlagInc !=null">and stages_flag_inc = #{stagesFlagInc}</if>
+            <if test="goodsPoint !=null">and goods_point = #{goodsPoint}</if>
+            <if test="isAction !=null">and is_action = #{isAction}</if>
+            <if test="isBirth !=null">and is_birth = #{isBirth}</if>
+            <if test="memberLevel !=null">and member_level = #{memberLevel}</if>
+            <if test="goodsPrice !=null">and goods_price = #{goodsPrice}</if>
+            <if test="calMoney !=null">and cal_money = #{calMoney}</if>
+            <if test="goodsPaywayDesc !=null">and goods_payway_desc = #{goodsPaywayDesc}</if>
+            <if test="ischeck !=null">and ischeck = #{ischeck}</if>
+            <if test="curStatus !=null">and cur_status = #{curStatus}</if>
+            <if test="categoryNo !=null">and category_no = #{categoryNo}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="reserved1 !=null">and reserved1 = #{reserved1}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="TblGoodsPaywayMap">
+       SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+       where goods_payway_id=#{goodsPaywayId}
+    </select>
+    <select id="findAll" resultMap="TblGoodsPaywayMap">
+        select
+        <include refid="columns"/>
+        from tbl_goods_payway
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_goods_payway
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="TblGoodsPaywayModel">
+        delete from tbl_goods_payway where id = goodsPaywayId
+    </delete>
+
+
+    <insert id="insertBatch" parameterType="java.util.List">
+             insert into tbl_goods_payway
+        (goods_payway_id
+        ,goods_id
+        ,payway_code
+        ,pay_type
+        ,inc_code
+        ,stages_code
+        ,rule_id
+        ,auth_flat1
+        ,auth_flat2
+        ,per_stage
+        ,stages_flag_cash
+        ,stages_flag_point
+        ,stages_flag_inc
+        ,goods_point
+        ,is_action
+        ,is_birth
+        ,member_level
+        ,goods_price
+        ,cal_money
+        ,goods_payway_desc
+        ,ischeck
+        ,cur_status
+        ,category_no
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,reserved1)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.goodsPaywayId}
+        ,#{item.goodsId}
+        ,#{item.paywayCode}
+        ,#{item.payType}
+        ,#{item.incCode}
+        ,#{item.stagesCode}
+        ,#{item.ruleId}
+        ,#{item.authFlat1}
+        ,#{item.authFlat2}
+        ,#{item.perStage}
+        ,#{item.stagesFlagCash}
+        ,#{item.stagesFlagPoint}
+        ,#{item.stagesFlagInc}
+        ,#{item.goodsPoint}
+        ,#{item.isAction}
+        ,#{item.isBirth}
+        ,#{item.memberLevel}
+        ,#{item.goodsPrice}
+        ,#{item.calMoney}
+        ,#{item.goodsPaywayDesc}
+        ,#{item.ischeck}
+        ,#{item.curStatus}
+        ,#{item.categoryNo}
+        ,#{item.createOper}
+        ,now()
+        ,#{item.modifyOper}
+        ,now()
+        ,#{item.reserved1})
+        </foreach>
+    </insert>
+    <select id="findByItemCodeAndStagesCode" parameterType="Map" resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id = #{itemCode} and stages_code = #{stagesCode}
+    </select>
+    <select id="findByItemCode"  resultMap="TblGoodsPaywayMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_goods_payway
+        where goods_id=#{itemCode} ORDER BY stages_code ASC
+    </select>
+</mapper>
+
+

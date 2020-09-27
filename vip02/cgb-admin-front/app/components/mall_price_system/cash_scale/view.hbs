@@ -1,0 +1,39 @@
+{{#component "cash-scale js-component"}}
+    <p class="components-title"><strong class="font-size">现金比例</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals type "1"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/points-ratio">金普卡积分系数</a>
+            </li>
+            <li {{#equals type "2"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/discount-scale">折扣比例</a>
+            </li>
+            <li {{#equals type "3"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/cash-scale">现金比例</a>
+            </li>
+            <li {{#equals type "4"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/purchase-ratio">采购价上浮系数</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents m-t-20">
+        <form class="form form-aligned cash-scale-form">
+            {{#each _DATA_.data}}
+                <!--隐藏传递该条数据的id，编辑时会用到-->
+                <input id="id" name="id" type="hidden" value="{{id}}">
+
+                <div data-role="content" class="tab-content">
+                    <input id="argumentOther" name="argumentOther" type="text" value="{{argumentOther}}" maxlength="4">
+                    积分+现金的场合，现金所占比例
+                </div>
+            {{/each}}
+            <div class="control-group submit m-t-20">
+                {{#authorial "priceSystem_save"}}
+                    <input type="submit" class="btn btn-success btn-small js-cash-submit" value="保存">
+                {{/authorial}}
+                <a class="btn btn-success btn-small" href="{{_HREF_.mainContext}}/mall/price-system/cash-scale"/>取消</a>
+            </div>
+        </form>
+    </div>
+
+{{/component}}

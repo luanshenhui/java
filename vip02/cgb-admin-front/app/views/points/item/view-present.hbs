@@ -1,0 +1,11 @@
+{{#partial "realTitle"}}查看礼品详情{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "points_present/present_view" true}}
+            {
+            "type":"1"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

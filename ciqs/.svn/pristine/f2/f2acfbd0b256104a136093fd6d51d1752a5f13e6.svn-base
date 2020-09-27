@@ -1,0 +1,1382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for licenseDec.
+
+@author wangzhy
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.XK">
+
+    <!-- **** insert ******************************************************* -->
+
+    <!-- **** select ******************************************************* -->
+    <!-- 分页查询列表 -->
+	<select id="findLicenseDecs"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				id,
+				license_dno,
+				comp_name,
+				comp_addr,
+				management_addr,
+				management_area,
+				legal_name,
+				contacts_name,
+				contacts_phone,
+				mailbox,
+				fax,
+				employee_num,
+				certificate_numver,
+				management_type,
+				apply_scope,
+				apply_type,
+				hygiene_license_number,
+				declare_user,
+				declare_date,
+				approval_result,
+				approval_date,
+				status,
+				jd_result,
+				trunc((sysdate-declare_date)) jb_date,
+				(select id from QLC_CHECK_DOCS_RCD r where r.proc_main_id = t.license_dno and r.doc_type='D_PT_H_L_0' and rownum = 1) iszg,
+				(select file_name from QLC_VIDEO_FILE_EVENT where create_date in (select max(create_date) from QLC_VIDEO_FILE_EVENT v where t.license_dno = v.PROC_MAIN_ID and v.FILE_TYPE = '4') and rownum = 1) file_name
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+			 where 1=1
+			<if test="approval_result != null and approval_result != ''">
+				and t.approval_result=#{approval_result}
+			</if>
+			<if test="(approval_result == null or approval_result == '') and (comp_name == null or comp_name == '')">
+				and t.approval_result is null
+			</if>
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+			
+		order by t.declare_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询随机人员 -->
+	<select id="findAddpesons"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				t.id,
+				t.license_dno,
+				t.comp_name,
+				t.comp_addr,
+				t.management_addr,
+				t.management_area,
+				t.legal_name,
+				t.contacts_name,
+				t.contacts_phone,
+				t.mailbox,
+				t.fax,
+				t.employee_num,
+				t.certificate_numver,
+				t.management_type,
+				t.apply_scope,
+				t.apply_type,
+				t.hygiene_license_number,
+				t.declare_user,
+				t.declare_date,
+				t.approval_result,
+				t.approval_date,
+				cl.name admissible_org_code,
+				admissible_org_code org_code,
+				t.approval_users_name,
+				t.approval_users_id,
+				t.exam_status,
+				t.Exam_result,
+				t.status
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+	         left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+			 where t.status in ('2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21') 
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="port_org_code != null and port_org_code != ''">
+				and cl.code = #{port_org_code}
+			</if>
+			<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+		order by t.approval_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询随机人员记录数 -->
+	<select id="findAddpesonsCount"  resultType="java.lang.Integer">
+		select count(t.id)
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+           left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+		   where t.status in ('2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21')  
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="port_org_code != null and port_org_code != ''">
+			and cl.code = #{port_org_code}
+		</if>
+		<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+	</select>
+	
+	<!-- 查询随机人员 -->
+	<select id="findAddpesonsSp"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				t.id,
+				t.license_dno,
+				t.comp_name,
+				t.comp_addr,
+				t.management_addr,
+				t.management_area,
+				t.legal_name,
+				t.contacts_name,
+				t.contacts_phone,
+				t.mailbox,
+				t.fax,
+				t.employee_num,
+				t.certificate_numver,
+				t.management_type,
+				t.apply_scope,
+				t.apply_type,
+				t.hygiene_license_number,
+				t.declare_user,
+				t.declare_date,
+				t.approval_result,
+				t.approval_date,
+				cl.name admissible_org_code,
+				admissible_org_code org_code,
+				t.approval_users_name,
+				t.approval_users_id,
+				t.exam_status,
+				t.status
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+	         left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+			 where t.status in ('3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21')  and approval_users_name is not null
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="port_org_code != null and port_org_code != ''">
+				and cl.code = #{port_org_code}
+			</if>
+			<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+		order by t.approval_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询随机人员记录数 -->
+	<select id="findAddpesonsCountSp"  resultType="java.lang.Integer">
+		select count(t.id)
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+           left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+		  where t.status in ('3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21')  and approval_users_name is not null
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="port_org_code != null and port_org_code != ''">
+			and cl.code = #{port_org_code}
+		</if>
+		<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+	</select>
+	
+	<!-- 查询随机人员 -->
+	<select id="findAddpesons2"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				t.id,
+				t.license_dno,
+				t.comp_name,
+				t.comp_addr,
+				t.management_addr,
+				t.management_area,
+				t.legal_name,
+				t.contacts_name,
+				t.contacts_phone,
+				t.mailbox,
+				t.fax,
+				t.employee_num,
+				t.certificate_numver,
+				t.management_type,
+				t.apply_scope,
+				t.apply_type,
+				t.hygiene_license_number,
+				t.declare_user,
+				t.declare_date,
+				t.approval_result,
+				t.approval_date,
+				cl.name admissible_org_code,
+				t.approval_users_name,
+				t.exam_status,
+				t.status
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+	         left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+			 where t.status='3' and approval_users_name is not null
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="port_org_code != null and port_org_code != ''">
+				and cl.code = #{port_org_code}
+			</if>
+		order by t.approval_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询随机人员记录数 -->
+	<select id="findAddpesonsCount2"  resultType="java.lang.Integer">
+		select count(t.id)
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+           left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+		   where t.status='3' and approval_users_name is not null
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="port_org_code != null and port_org_code != ''">
+			and cl.code = #{port_org_code}
+		</if>
+	</select>
+	
+	<!-- 查询记录数 -->
+	<select id="findLicenseDecsCount"  resultType="java.lang.Integer">
+		select count(t.id) 
+		from QLC_HYGIENE_LICENSE_DECLARE t where 1=1
+		<if test="approval_result != null and approval_result != ''">
+				and t.approval_result=#{approval_result}
+		</if>
+		<if test="approval_result == null or approval_result == ''">
+			and t.approval_result is null
+		</if>
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+	</select>
+	
+	<!-- 查询随机人员列表 by erikWang -->
+	<select id="findByPseon" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(
+		    select 
+			id,
+			psn_name,
+			psn_prof,
+			psn_goodat,
+			rdm_date
+		    from qlc_exp_food_prod_psn_rdm where apply_no = #{apply_no}
+			<if test='psn_name != null and psn_name != ""'>
+		 		and psn_name like '%' || #{psn_name} || '%'	
+			</if>
+		) a 
+     	where  <![CDATA[ rownum <=#{lastRcd}) where rid>=#{firstRcd} ]]>
+	</select>
+	
+	<!-- 查询随机人员记录数 -->
+	<select id="findByPseonCount"  resultType="java.lang.Integer">
+		select count(id)
+	    from qlc_exp_food_prod_psn_rdm where apply_no = #{apply_no}
+		<if test='psn_name != null and psn_name != ""'>
+	 		and psn_name like '%' || #{psn_name} || '%'	
+		</if>
+	</select>
+	
+	<!-- 根据单据号查询随机人员 -->
+	<select id="findAllPseon" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		SELECT 
+			p.id,
+			p.psn_name,
+			p.psn_prof,
+			p.psn_goodat,
+			p.rdm_date
+		 from QLC_EXP_FOOD_PROD_PSN_RDM p 
+		 LEFT JOIN QLC_EXP_FOOD_PROD f ON p.APPLY_NO = f.APPLY_NO
+		 WHERE  p.apply_no = #{apply_no}
+		 <if test='psn_name != null and psn_name != ""'>
+	 	   AND p.PSN_NAME like '%' || #{psn_name} || '%'	
+		 </if>
+	</select>
+	
+	<!-- 现场评审列表查询 -->
+	<select id="findReviews"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				t.id,
+				t.license_dno,
+				t.comp_name,
+				t.comp_addr,
+				t.management_addr,
+				t.management_area,
+				t.legal_name,
+				t.contacts_name,
+				t.contacts_phone,
+				t.mailbox,
+				t.fax,
+				t.employee_num,
+				t.certificate_numver,
+				t.management_type,
+				t.apply_scope,
+				t.apply_type,
+				t.hygiene_license_number,
+				t.declare_user,
+				t.declare_date,
+				t.approval_result,
+				t.approval_date,
+				t.status,
+				doc.option_80 review_result,
+				t.approval_users_name,
+			    doc.dec_date review_date,
+				trunc((sysdate-t.approval_date)) jb_date,
+				(select id from QLC_CHECK_DOCS_RCD r where r.proc_main_id = t.license_dno and r.doc_type='D_PT_H_L_0' and rownum = 1) iszg,
+				(select file_name from QLC_VIDEO_FILE_EVENT where create_date in (select max(create_date) from QLC_VIDEO_FILE_EVENT v where t.license_dno = v.PROC_MAIN_ID and v.FILE_TYPE = '6') and rownum = 1) file_name,
+				(select file_name from QLC_VIDEO_FILE_EVENT where create_date in (select max(create_date) from QLC_VIDEO_FILE_EVENT v where t.license_dno = v.PROC_MAIN_ID and v.FILE_TYPE = '5') and rownum = 1) filePath
+	         from QLC_HYGIENE_LICENSE_DECLARE t,QLC_CHECK_DOCS_RCD doc
+			 where doc.proc_main_id = t.license_dno and doc.doc_type like 'D_PT_H_L%'
+			 and t.approval_users_name is not null  
+			 and doc.option_80 in ('0','1')
+			<if test="review_result != null and review_result != ''">
+				and doc.option_80=#{review_result}
+				and t.status in ('5','6')
+			</if>
+			<if test="review_result == null or review_result == ''">
+				and t.status in ('4')
+			</if>
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+		order by  doc.dec_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询现场评审记录数 -->
+	<select id="findReviewsCount"  resultType="java.lang.Integer">
+		select count(t.id) 
+		from QLC_HYGIENE_LICENSE_DECLARE t,QLC_CHECK_DOCS_RCD doc
+			 where doc.proc_main_id = t.license_dno and doc.doc_type like 'D_PT_H_L%'
+			 and t.approval_users_name is not null  
+			 and doc.option_80 in ('0','1')
+			<if test="review_result != null and review_result != ''">
+				and doc.option_80=#{review_result}
+				and t.status in ('5','6')
+			</if>
+			<if test="review_result == null or review_result == ''">
+				and t.status in ('4','5','6')
+			</if>
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+	</select>
+	
+	<!-- 决定领导审批列表查询 -->
+	<select id="findReviewsSp"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				t.id,
+				t.license_dno,
+				t.comp_name,
+				t.comp_addr,
+				t.management_addr,
+				t.management_area,
+				t.legal_name,
+				t.contacts_name,
+				t.contacts_phone,
+				t.mailbox,
+				t.fax,
+				t.employee_num,
+				t.certificate_numver,
+				t.management_type,
+				t.apply_scope,
+				t.apply_type,
+				t.hygiene_license_number,
+				t.declare_user,
+				t.declare_date,
+				t.approval_result,
+				t.approval_date,
+				t.status,
+				t.jd_result,
+				t.jd_sp,
+				t.approval_users_name,
+				trunc((sysdate-t.approval_date)) jb_date,
+				(select id from QLC_CHECK_DOCS_RCD r where r.proc_main_id = t.license_dno and r.doc_type='D_PT_H_L_0' and rownum = 1) iszg,
+				(select file_name from QLC_VIDEO_FILE_EVENT where create_date in (select max(create_date) from QLC_VIDEO_FILE_EVENT v where t.license_dno = v.PROC_MAIN_ID and v.FILE_TYPE = '5') and rownum = 1) filePath,
+				(select file_name from QLC_VIDEO_FILE_EVENT where create_date in (select max(create_date) from QLC_VIDEO_FILE_EVENT v where t.license_dno = v.PROC_MAIN_ID and v.FILE_TYPE = '6') and rownum = 1) file_name
+	         from QLC_HYGIENE_LICENSE_DECLARE t,QLC_CHECK_DOCS_RCD doc
+			 where doc.proc_main_id = t.license_dno and doc.doc_type like 'D_PT_H_L%'
+			 and t.approval_users_name is not null  
+			<if test="jd_sp == null or jd_sp == ''">
+			 	and jd_sp is null and t.status = '5'
+			</if>
+			<if test="jd_sp != null and jd_sp != ''">
+				and t.jd_sp = #{jd_sp}
+				and jd_sp is not null and t.status = '6'
+			</if>
+			<if test="review_result != null and review_result != ''">
+				and doc.option_80=#{review_result}
+			</if>
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+		order by  doc.dec_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 决定审批录数 -->
+	<select id="findReviewsSpCount"  resultType="java.lang.Integer">
+		select count(t.id) 
+		from QLC_HYGIENE_LICENSE_DECLARE t  ,QLC_CHECK_DOCS_RCD doc
+		where doc.proc_main_id = t.license_dno and doc.doc_type like 'D_PT_H_L%'
+		and t.approval_users_name is not null  
+		 <if test="jd_sp == null or jd_sp == ''">
+			 	and jd_sp is null and t.status = '5'
+			 </if>
+			<if test="jd_sp != null and jd_sp != ''">
+				and t.jd_sp = #{jd_sp}
+				and jd_sp is not null and t.status = '6'
+			</if>
+		<if test="review_result != null and review_result != ''">
+			and doc.option_80=#{review_result}
+		</if>
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+	</select>
+	
+	<!-- 口岸处理状态列表查询 -->
+	<select id="findDoReviews"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				t.id,
+				t.license_dno,
+				t.comp_name,
+				t.comp_addr,
+				t.management_addr,
+				t.management_area,
+				t.legal_name,
+				t.contacts_name,
+				t.contacts_phone,
+				t.mailbox,
+				t.fax,
+				t.employee_num,
+				t.certificate_numver,
+				t.management_type,
+				t.apply_scope,
+				t.apply_type,
+				t.hygiene_license_number,
+				t.declare_user,
+				t.declare_date,
+				t.approval_result,
+				t.approval_date,				
+				(select status from QLC_HYGIENE_LICENSE_EVENT where OPR_DATE = (select max(OPR_DATE) from QLC_HYGIENE_LICENSE_EVENT where licence_id = t.license_dno) and rownum = 1) status
+	        from QLC_HYGIENE_LICENSE_DECLARE t
+			where 1=1 and t.license_dno in (select LICENCE_ID from QLC_HYGIENE_LICENSE_EVENT where status in ('7','11','12'))
+			and t.license_dno not in (select LICENCE_ID from QLC_HYGIENE_LICENSE_EVENT where status in ('8','15','16'))
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+		order by t.declare_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 口岸处理状态录数 -->
+	<select id="findDoReviewsCount"  resultType="java.lang.Integer">
+		select count(t.id) 
+		from QLC_HYGIENE_LICENSE_DECLARE t
+		where 1=1 and t.license_dno in (select LICENCE_ID from QLC_HYGIENE_LICENSE_EVENT where status in ('7','11','12'))	
+		and t.license_dno not in (select LICENCE_ID from QLC_HYGIENE_LICENSE_EVENT where status in ('8','15','16'))	
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+	</select>
+	
+	<select id="getFilePath"  resultType="string" >
+		select file_name from QLC_VIDEO_FILE_EVENT 
+		where proc_main_id = #{license_dno}
+		and file_type = #{file_type}
+	</select>
+	
+	<select id="findLicenseDecsList"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+				select
+				id,
+				license_dno,
+				comp_name,
+				comp_addr,
+				management_addr,
+				management_area,
+				legal_name,
+				contacts_name,
+				contacts_phone,
+				mailbox,
+				fax,
+				employee_num,
+				certificate_numver,
+				management_type,
+				apply_scope,
+				apply_type,
+				hygiene_license_number,
+				declare_user,
+				declare_date,
+				approval_result,
+				approval_date,
+				status,
+				trunc((sysdate-declare_date)) jb_date
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+			 where 1=1
+			<if test="id != null and id != ''">
+				and t.id=#{id}
+			</if>
+			<if test="approval_result != null and approval_result != ''">
+				and t.approval_result=#{approval_result}
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+		order by t.declare_date desc
+	</select>
+	
+	<!-- 移动端接口 -->
+	<select id="licenseDecsInfo" resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+        	select 
+				id,
+				license_dno,
+				comp_name,
+				comp_addr,
+				management_addr,
+				management_area,
+				legal_name,
+				contacts_name,
+				contacts_phone,
+				mailbox,
+				fax,
+				employee_num,
+				certificate_numver,
+				management_type,
+				apply_scope,
+				apply_type,
+				hygiene_license_number,
+				declare_user,
+				declare_date,
+				approval_result,
+				approval_date,
+				status,
+				admissible_org_code,
+				approval_users_name,
+	            review_result
+            from QLC_HYGIENE_LICENSE_DECLARE t
+            where t.license_dno not in(select proc_main_id from qlc_chk_rcd where proj_code='PT_H_L')
+            and t.status = '4' and approval_users_name is not null
+		    <if test="review_result != null and review_result != ''">
+				and t.review_result=#{review_result}
+			</if>
+			<if test="review_result_flag != null and review_result_flag != ''">
+				and t.review_result is null
+			</if>
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd') +1]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="port_org_code != null and port_org_code != ''">
+				and t.admissible_org_code = #{port_org_code}
+			</if>
+		order by t.declare_date desc
+   </select>
+   
+   <select id="getLicenseDec" resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+        	select 
+				id,
+				license_dno,
+				comp_name,
+				comp_addr,
+				management_addr,
+				management_area,
+				legal_name,
+				contacts_name,
+				contacts_phone,
+				mailbox,
+				fax,
+				employee_num,
+				certificate_numver,
+				management_type,
+				apply_scope,
+				apply_type,
+				hygiene_license_number,
+				declare_user,
+				declare_date,
+				approval_result,
+				approval_date,
+				approval_users_name,
+				status,
+				(select max(option_80) from QLC_CHECK_DOCS_RCD r where r.proc_main_id = t.license_dno and option_80 in ('0','1') and r.doc_type like 'D_PT_H_L_%') review_result,
+				(select max(dec_date) from QLC_CHECK_DOCS_RCD rcd where doc_type ='D_PT_H_L_12' and rcd.proc_main_id=#{license_dno}) isdzbl
+            from QLC_HYGIENE_LICENSE_DECLARE t
+            where license_dno=#{license_dno} 
+    </select>
+    
+    <select id="selectfilePath" resultType="java.lang.String">
+	    select file_name from QLC_VIDEO_FILE_EVENT t 
+	    where file_type = #{type} and proc_main_id = #{license_dno}
+	    and rownum = 1 and file_name is not null
+	    order by t.create_date desc
+    </select>
+    
+    <!-- **** insert ******************************************************* -->
+	 <insert id="insertPeson" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" statementType="CALLABLE" >
+			insert into QLC_EXP_FOOD_PROD_PSN_RDM
+				(
+					id,
+					<if test="apply_no != null and apply_no != ''" >
+					APPLY_NO,
+					</if>
+					<if test="psn_id != null and psn_id != ''" >
+					PSN_ID,
+					</if>
+					<if test="psn_name != null and psn_name != ''" >
+					PSN_NAME,
+					</if>
+					<if test="psn_prof != null and psn_prof != ''">
+					PSN_PROF,
+					</if>
+					<if test="psn_goodat != null and psn_goodat != ''">
+					PSN_GOODAT,
+					</if>
+					<if test="psn_level != null and psn_level != ''">
+					PSN_LEVEL,
+					</if>
+					<if test="in_post != null and in_post != ''">
+					IN_POST,
+					</if>
+					<if test="bel_scope != null and bel_scope !=''" >
+					BEL_SCOPE,
+					</if>
+					<if test="rdm_date != null " >
+					RDM_DATE,
+					</if>
+					<if test="rdm_user != null and rdm_user != ''" >
+					RDM_USER,
+					</if>
+					<if test="rdm_type != null and rdm_type != ''" >
+					RDM_TYPE,
+					</if>
+					<if test="type != null and type != ''" >
+					TYPE
+					</if>
+				)
+			values 
+				(
+					CreateGUID(),
+					<if test="apply_no != null and apply_no != ''" >
+					#{apply_no},
+					</if>
+					<if test="psn_id != null and psn_id != ''" >
+					#{psn_id},
+					</if>
+					<if test="psn_name != null and psn_name != ''" >
+					#{psn_name},
+					</if>
+					<if test="psn_prof != null and psn_prof != ''" >
+					#{psn_prof},
+					</if>
+					<if test="psn_goodat != null and psn_goodat != ''" >
+					#{psn_goodat},
+					</if>
+					<if test="psn_level != null and psn_level != ''" >
+					#{psn_level},
+					</if>
+					<if test="in_post != null and in_post != ''" >
+					#{in_post},
+					</if>
+					<if test="bel_scope != null and bel_scope != ''" >
+					#{bel_scope},
+					</if>
+					<if test="rdm_date != null " >
+					#{rdm_date},
+					</if>
+					<if test="rdm_user != null and rdm_user != ''" >
+					#{rdm_user},
+					</if>
+					<if test="rdm_type != null and rdm_type != ''" >
+					#{rdm_type},
+					</if>
+					<if test="type != null and type != ''" >
+					#{type}
+					</if>
+				)
+	</insert> 
+	
+	<!-- 查询随机人员数据源表 -->
+	<select id="findByBasePseon" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		SELECT
+		p.psn_id,
+		p.psn_name,
+		p.psn_prof,
+		p.psn_goodat,
+		p.psn_level,
+		p.in_post,
+		GET_qlc_org_name(p.bel_scope) bel_scope
+		from QLC_EXP_FOOD_PROD_PSN p
+		WHERE 1=1
+		and BEL_SCOPE != #{org_code}
+		<if test='psn_name != null and psn_name != ""'>
+		 	AND
+			p.psn_name like '%' || #{psn_name} || '%'			
+		</if>
+		<if test='psn_prof != null and psn_prof != ""'>
+		 	AND
+			p.psn_prof like '%' || #{psn_prof} || '%'			
+		</if>
+		<if test='psn_goodat != null and psn_goodat != ""'>
+		 	AND
+			p.psn_goodat like '%' || #{psn_goodat} || '%'			
+		</if>
+		<if test='psn_level != null and psn_level != ""'>
+		 	AND
+			p.psn_level =#{psn_level}			
+		</if>
+		<if test='psn_prof != null and psn_prof != ""'>
+		 	AND
+			p.psn_prof =#{psn_prof}			
+		</if>
+		<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			p.bel_scope =#{bel_scope}			
+		</if>
+		<if test='id != null and id != ""'>
+		 	AND
+			p.psn_id =#{id}			
+		</if>
+	
+	
+	</select>
+	
+		<select id="findByBasePseon2" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		SELECT
+		p.psn_id,
+		p.psn_name,
+		p.psn_prof,
+		p.psn_goodat,
+		p.psn_level,
+		p.in_post,
+		GET_qlc_org_name(p.bel_scope) bel_scope
+		from QLC_EXP_FOOD_PROD_PSN p
+		WHERE 1=1
+		and BEL_SCOPE != #{org_code}
+		<if test='psn_name != null and psn_name != ""'>
+		 	or
+			p.psn_name like '%' || #{psn_name} || '%'			
+		</if>
+		<if test='psn_prof != null and psn_prof != ""'>
+		 	AND
+			p.psn_prof like '%' || #{psn_prof} || '%'			
+		</if>
+		<if test='psn_goodat != null and psn_goodat != ""'>
+		 	AND
+			p.psn_goodat like '%' || #{psn_goodat} || '%'			
+		</if>
+		<if test='psn_level != null and psn_level != ""'>
+		 	AND
+			p.psn_level =#{psn_level}			
+		</if>
+		<if test='psn_prof != null and psn_prof != ""'>
+		 	AND
+			p.psn_prof =#{psn_prof}			
+		</if>
+		<if test='bel_scope != null and bel_scope != ""'>
+		 	AND
+			p.bel_scope =#{bel_scope}			
+		</if>
+		<if test='id != null and id != ""'>
+		 	AND
+			p.psn_id =#{id}			
+		</if>
+	
+	
+	</select>
+	
+	<!-- 审查分页查询列表 -->
+	<select id="findScs1"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				t.id,
+				t.license_dno,
+				t.comp_name,
+				t.comp_addr,
+				t.management_addr,
+				t.management_area,
+				t.legal_name,
+				t.contacts_name,
+				t.contacts_phone,
+				t.mailbox,
+				t.fax,
+				t.employee_num,
+				t.certificate_numver,
+				t.management_type,
+				t.apply_scope,
+				t.apply_type,
+				t.hygiene_license_number,
+				t.declare_user,
+				t.declare_date,
+				t.approval_result,
+				t.approval_date,
+				u.name approval_user,
+				t.status,
+				t.exam_result,
+				t.first_exam_result,
+				(select file_name from QLC_VIDEO_FILE_EVENT where create_date in (select max(create_date) from QLC_VIDEO_FILE_EVENT v where t.license_dno = v.PROC_MAIN_ID and v.FILE_TYPE = '4') and rownum = 1) file_name
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+	         inner join USERS_CIQ u on u.id = t.approval_user
+			 where 1=1
+			and t.approval_result= '3' and t.first_exam_result is null
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.approval_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.approval_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+		order by t.approval_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 审查记录数 -->
+	<select id="findScs1Count"  resultType="java.lang.Integer">
+		select count(t.id) 
+	    from QLC_HYGIENE_LICENSE_DECLARE t
+	    inner join USERS_CIQ u on u.id = t.approval_user
+		where 1=1
+		and t.approval_result= '3' and t.exam_result is null
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.approval_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.approval_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="admissible_org_code != null and admissible_org_code != ''">
+			and t.admissible_org_code = #{admissible_org_code} 
+		</if>
+	</select>
+	
+	<!-- 审查分页查询列表 -->
+	<select id="findScs"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				t.id,
+				t.license_dno,
+				t.comp_name,
+				t.comp_addr,
+				t.management_addr,
+				t.management_area,
+				t.legal_name,
+				t.contacts_name,
+				t.contacts_phone,
+				t.mailbox,
+				t.fax,
+				t.employee_num,
+				t.certificate_numver,
+				t.management_type,
+				t.apply_scope,
+				t.apply_type,
+				t.hygiene_license_number,
+				t.declare_user,
+				t.declare_date,
+				t.approval_result,
+				t.approval_date,
+				u.name approval_user,
+				t.status,
+				t.exam_result,
+				t.first_exam_result,
+				(select file_name from QLC_VIDEO_FILE_EVENT where create_date in (select max(create_date) from QLC_VIDEO_FILE_EVENT v where t.license_dno = v.PROC_MAIN_ID and v.FILE_TYPE = '4') and rownum = 1) file_name
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+	         inner join USERS_CIQ u on u.id = t.approval_user
+			 where 1=1
+			and t.approval_result= '3' and t.exam_result is null
+			and t.status ='20'
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.approval_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.approval_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+		order by t.approval_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 审查记录数 -->
+	<select id="findScsCount"  resultType="java.lang.Integer">
+		select count(t.id) 
+	    from QLC_HYGIENE_LICENSE_DECLARE t
+	    inner join USERS_CIQ u on u.id = t.approval_user
+		where 1=1
+		and t.approval_result= '3' and t.exam_result is null
+		and t.status ='20'
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.approval_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.approval_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="admissible_org_code != null and admissible_org_code != ''">
+			and t.admissible_org_code = #{admissible_org_code} 
+		</if>
+	</select>
+	
+	<!-- 审查派员查询 -->
+	<select id="findyScs"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+				t.id,
+				t.license_dno,
+				t.comp_name,
+				t.comp_addr,
+				t.management_addr,
+				t.management_area,
+				t.legal_name,
+				t.contacts_name,
+				t.contacts_phone,
+				t.mailbox,
+				t.fax,
+				t.employee_num,
+				t.certificate_numver,
+				t.management_type,
+				t.apply_scope,
+				t.apply_type,
+				t.hygiene_license_number,
+				t.declare_user,
+				t.declare_date,
+				t.approval_result,
+				t.approval_date,
+				cl.name admissible_org_code,
+				t.approval_users_name,
+				t.exam_status,
+				t.status
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+	         left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+			 where t.approval_users_name is not null and t.exam_status = '1'
+			<if test="startDeclare_date != null and startDeclare_date != ''">
+				<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+			</if>
+			<if test="endDeclare_date != null and endDeclare_date != ''">
+				<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+			</if>
+			<if test="comp_name != null and comp_name != ''">
+				and t.comp_name like '%' || #{comp_name} || '%'
+			</if>
+			<if test="port_org_code != null and port_org_code != ''">
+				and t.admissible_org_code = #{port_org_code} 
+			</if>
+		order by t.random_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 审查派员人员记录数 -->
+	<select id="findyScsCount"  resultType="java.lang.Integer">
+		select count(t.id)
+	         from QLC_HYGIENE_LICENSE_DECLARE t
+           left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+		   where t.approval_users_name is not null and t.exam_status = '1'
+		<if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="port_org_code != null and port_org_code != ''">
+			and cl.code = #{port_org_code}
+		</if>
+	</select>
+	
+	
+	
+	<select id="bfList"  resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+		select * from (
+			select a.*,rownum rid from 
+			(select 
+        t.id,
+        t.license_dno,
+        t.comp_name,
+        t.comp_addr,
+        t.management_addr,
+        t.management_area,
+        t.legal_name,
+        t.contacts_name,
+        t.contacts_phone,
+        t.mailbox,
+        t.fax,
+        t.employee_num,
+        t.certificate_numver,
+        t.management_type,
+        t.apply_scope,
+        t.apply_type,
+        t.hygiene_license_number,
+        t.declare_user,
+        t.declare_date,
+        t.approval_result,
+        t.approval_date,
+        cl.name admissible_org_code,
+        t.zz_result,
+        t.zx_result,
+        t.cx_result,
+        substr(t.approval_users_name,2,length(t.approval_users_name)) approval_users_name,
+        (select file_name from QLC_VIDEO_FILE_EVENT where create_date in (select max(create_date) from QLC_VIDEO_FILE_EVENT v where t.license_dno = v.PROC_MAIN_ID and v.FILE_TYPE = #{type}) and rownum = 1) file_name,
+        t.exam_status,
+         t.status
+         from QLC_HYGIENE_LICENSE_DECLARE t
+         left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+       
+         where 1=1 
+         <if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		 </if>
+		 <if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		 </if>
+		 <if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		 </if>
+		 <if test="port_org_code != null and port_org_code != ''">
+			and cl.code = #{port_org_code}
+		 </if> 
+		 <if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+		 and t.status in ${status}
+		 
+         order by t.status <if test="desc != null and desc != ''">${desc}</if>
+         ) a
+         
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	
+	<select id="bfCounts"  resultType="java.lang.Integer">
+		select count(t.id) from 
+         QLC_HYGIENE_LICENSE_DECLARE t
+         left join QLC_CODE_LIBRARY cl on cl.code = t.admissible_org_code and type = 'QLC_DEPTMENTS'
+         where 1=1 
+         <if test="startDeclare_date != null and startDeclare_date != ''">
+			<![CDATA[ and t.declare_date >= to_date(#{startDeclare_date}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="endDeclare_date != null and endDeclare_date != ''">
+			<![CDATA[ and t.declare_date < to_date(#{endDeclare_date}, 'yyyy-mm-dd')+1 ]]>
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="port_org_code != null and port_org_code != ''">
+			and cl.code = #{port_org_code}
+		</if>
+		<if test="admissible_org_code != null and admissible_org_code != ''">
+				and t.admissible_org_code = #{admissible_org_code} 
+			</if>
+         and t.status in ${status}
+	</select>
+	
+	
+	<select id="getOrgList"  resultType="com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select org_code,name from ORGANIZES_CIQ
+	</select>
+	
+	<select id="getbelScope"  resultType="java.lang.String">
+		select BEL_SCOPE from QLC_EXP_FOOD_PROD_PSN where PSN_NAME = #{psn_name}
+	</select>
+	
+	<select id="getPseonInfo" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+	   select t.psn_id,
+       t.psn_name,
+       t.psn_prof,
+       t.psn_goodat,
+       t.psn_level,
+       t.in_post,
+       t.bel_scope
+ 	   from QLC_EXP_FOOD_PROD_PSN t where  t.psn_name = #{psn_name}
+	</select>
+	
+	<select id="getSealList" resultType="com.dpn.ciqqlc.standard.model.SealFileDTO">
+	   select 
+		t.id,
+		t.licence_id,
+		t.doc_type,
+		t.create_date,
+		t.create_user,
+		t.doc_file_path 
+		from CIQ_SEAL_FILE t where  t.licence_id = #{licence_id} and t.doc_type = #{doc_type}
+	</select>
+	
+	<insert id="insertEvent">
+		insert into qlc_hygiene_license_event
+		(
+			licence_id
+			,status
+			,opr_psn
+			,opr_date
+			<if test="files != null and files != ''">
+				,#{files}
+			</if>
+		)
+		values
+		(
+			#{licence_id}
+			,#{status}
+			,#{opr_psn}
+			,sysdate
+			<if test="files != null and files != ''">
+				,#{files}
+			</if>
+		)
+	</insert>
+	
+	<insert id="insertSeal">
+		insert into CIQ_SEAL_FILE
+		(
+			id,
+			licence_id,
+			doc_type,
+			create_date,
+			create_user,
+			doc_file_path 
+		)
+		values
+		(
+			CreateGUID(),
+			#{licence_id},
+			#{doc_type},
+			sysdate,
+			#{create_user},
+			#{doc_file_path} 
+		)
+	</insert>
+	
+    <!-- **** update ******************************************************* -->
+    <update id="updateSeal">
+    	update CIQ_SEAL_FILE set create_date = sysdate,
+    	create_user = #{create_user},doc_file_path = #{doc_file_path}
+    	where licence_id = #{licence_id}
+    </update>
+    
+    <update id="doApproval">
+    	update QLC_HYGIENE_LICENSE_DECLARE set approval_result = #{approval_result},
+    	approval_date = sysdate,approval_user = #{approval_user}
+    	where id = #{id}
+    </update>
+    
+    <update id="doExamination">
+    	update QLC_HYGIENE_LICENSE_DECLARE set exam_result = #{exam_result},
+    	exam_date = sysdate,exam_user = #{exam_user}
+    	where id = #{id}
+    </update>
+    
+    <update id="doExamination1">
+    	update QLC_HYGIENE_LICENSE_DECLARE set first_exam_result = #{first_exam_result}
+    	where id = #{id}
+    </update>
+    
+    <update id="setTy">
+    	update QLC_HYGIENE_LICENSE_DECLARE set exam_status = '1'
+    	where license_dno = #{license_dno}
+    </update>
+    
+    <update id="updateApprovalUsersName">
+    	update QLC_HYGIENE_LICENSE_DECLARE set approval_users_name = #{approval_users_name}
+    	where license_dno = #{license_dno}
+    </update>
+    
+    <update id="updateDocApprovalUsersName">
+    	update QLC_CHECK_DOCS_RCD set option_21 = #{option_21},option_22 = #{option_22}
+    	where PROC_MAIN_ID = #{license_dno} and doc_type ='D_SQ_SHRY'
+    </update>
+    
+    <update id="updateDStatus">
+    	update QLC_HYGIENE_LICENSE_DECLARE set status = #{status}
+    	where license_dno = #{license_dno}
+    </update>
+    
+    <update id="doReview">
+    	update QLC_HYGIENE_LICENSE_DECLARE set jd_result = #{jd_result},
+    	jd_date = sysdate,jd_user = #{jd_user}
+    	where id = #{id}
+    </update>
+    
+    <update id="doReviewSp">
+    	update QLC_HYGIENE_LICENSE_DECLARE set jd_sp = #{jd_sp}
+    	where id = #{id}
+    </update>
+    
+    <update id="updateApprovalUsers">
+    	update QLC_HYGIENE_LICENSE_DECLARE set approval_users_name = approval_users_name || #{approval_users_name}
+    	,random_date=sysdate
+    	where license_dno = #{license_dno}
+    </update>
+    
+    <update id="doSubmit">
+    	update QLC_HYGIENE_LICENSE_DECLARE set 
+    	license_dno = #{license_dno}
+    	<if test="zz_result != null and zz_result != ''">
+    		,zz_result = #{zz_result}
+    	</if>
+    	<if test="zx_result != null and zx_result != ''">
+    		,zx_result = #{zx_result}
+    	</if>
+    	<if test="cx_result != null and cx_result != ''">
+    		,cx_result = #{cx_result}
+    	</if>
+    	<if test="approval_result != null and approval_result != ''">
+    		,approval_result = #{approval_result}
+    	</if>
+    	<if test="jd_result != null and jd_result != ''">
+    		,jd_result = #{jd_result}
+    	</if>
+    	where license_dno = #{license_dno}
+    </update>
+  
+  
+    <!-- **** delete ******************************************************* -->
+	
+	
+</mapper>

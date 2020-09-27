@@ -1,0 +1,222 @@
+[
+{
+  "name_ja":"連番",
+  "name_en":"DENBUN-SEQ",
+  "start_pos":"1",
+  "length":"5",
+  "type":"2",
+  "use_flg":"1",
+  "space_flg":"0",
+  "kihon":"1",
+  "value":[]
+},
+{
+  "name_ja":"ｼｽﾃﾑｺｰﾄﾞ",
+  "name_en":"SYS-C",
+  "start_pos":"6",
+  "length":"1",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"0",
+  "kihon":"1",
+  "value":["H"]
+},
+{
+  "name_ja":"電文種別",
+  "name_en":"DENBUN-SYUBETU",
+  "start_pos":"7",
+  "length":"2",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":["KJ","KI","KK","K3"]
+},
+{
+  "name_ja":"継続ﾌﾗｸﾞ",
+  "name_en":"CONT-F",
+  "start_pos":"9",
+  "length":"1",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":["C","E"]
+},
+{
+  "name_ja":"宛先ｺｰﾄﾞ",
+  "name_en":"TO-C",
+  "start_pos":"10",
+  "length":"1",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":["H","E","L","C","T"]
+},
+{
+  "name_ja":"発信元ｺｰﾄﾞ",
+  "name_en":"FROM-C",
+  "start_pos":"11",
+  "length":"1",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":["H","F","T"]
+},
+{
+  "name_ja":"処理日",
+  "name_en":"SYORI-H",
+  "start_pos":"12",
+  "length":"8",
+  "type":"2",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":[]
+},
+{
+  "name_ja":"処理時間",
+  "name_en":"SYORI-TIME",
+  "start_pos":"20",
+  "length":"6",
+  "type":"2",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":[]
+},
+{
+  "name_ja":"端末名",
+  "name_en":"WS-MEI",
+  "start_pos":"26",
+  "length":"8",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":[]
+},
+{
+  "name_ja":"利用者番号",
+  "name_en":"RIYOSYA-ID",
+  "start_pos":"34",
+  "length":"8",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":[]
+},
+{
+  "name_ja":"処理区分",
+  "name_en":"SYORI-KBN",
+  "start_pos":"42",
+  "length":"2",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"0",
+  "kihon":"1",
+  "value":["01","02","03"]
+},
+{
+  "name_ja":"応答種別",
+  "name_en":"SYUBETU",
+  "start_pos":"44",
+  "length":"2",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":["OK","N1","N2","N3","SP"]
+},
+{
+  "name_ja":"電文長",
+  "name_en":"DENBUN-LNG",
+  "start_pos":"46",
+  "length":"5",
+  "type":"2",
+  "use_flg":"1",
+  "space_flg":"0",
+  "kihon":"1",
+  "value":[]
+},
+{
+  "name_ja":"改行コード",
+  "name_en":"RECV-EOT",
+  "start_pos":"51",
+  "length":"1",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":["SP"]
+},
+{
+  "name_ja":"空白",
+  "name_en":"FILLER",
+  "start_pos":"52",
+  "length":"13",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"1",
+  "value":["SP"]
+},
+{
+  "name_ja":"患者番号",
+  "name_en":"ID",
+  "start_pos":"65",
+  "length":"10",
+  "type":"2",
+  "use_flg":"1",
+  "space_flg":"0",
+  "kihon":"2",
+  "value":[]
+},
+{
+  "name_ja":"カナ全角氏名",
+  "name_en":"NM",
+  "start_pos":"75",
+  "length":"80",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"0",
+  "kihon":"2",
+  "value":[]
+},
+{
+  "name_ja":"日本語氏名",
+  "name_en":"JEF-NM",
+  "start_pos":"155",
+  "length":"40",
+  "type":"1",
+  "use_flg":"1",
+  "space_flg":"1",
+  "kihon":"2",
+  "value":[]
+},
+{
+  "name_ja":"性別",
+  "name_en":"SEX",
+  "start_pos":"195",
+  "length":"1",
+  "type":"2",
+  "use_flg":"1",
+  "space_flg":"0",
+  "kihon":"2",
+  "value":["1","2"]
+},
+{
+  "name_ja":"生年月日",
+  "name_en":"BIRTH",
+  "start_pos":"196",
+  "length":"8",
+  "type":"2",
+  "use_flg":"1",
+  "space_flg":"0",
+  "kihon":"2",
+  "value":[]
+}
+]

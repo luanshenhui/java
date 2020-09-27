@@ -1,0 +1,53 @@
+package com.yulin.web.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.yulin.web.common.MyBatisUtil;
+import com.yulin.web.entity.SearchKey;
+import com.yulin.web.entity.User;
+
+public class UserDaoImpl implements UserDao{
+
+	private String namespace = "EmpMapping";
+	public List<User> findAll() {
+		SqlSession session = MyBatisUtil.getSession();
+		List<User> list = session.selectList(namespace + ".findAll");
+		return list;
+	}
+	public boolean insertUser(User u) {
+		// 添加
+		SqlSession session = MyBatisUtil.getSession();
+		int flag = 0;
+		flag = session.insert(namespace + ".insertUser", u);
+		session.commit();
+		return flag == 1;
+	}
+	
+	public boolean updateUser(User u) {
+		// 修改
+		SqlSession session = MyBatisUtil.getSession();
+		int flag = 0;
+		flag = session.update(namespace + ".updateUser", u);
+		session.commit();
+		return flag == 1;
+	}
+
+	public List<User> findSalary(SearchKey key) {
+		SqlSession session = MyBatisUtil.getSession();
+		List<User> list = session.selectList(namespace + ".findSalary", key);
+		return list;
+	}
+	
+	public static void main(String[] args) {
+		UserDaoImpl ud = new UserDaoImpl();
+		SearchKey key = new SearchKey();
+		key.setKeyWord(null);
+		key.setMin(1000);
+		key.setMax(1001);
+		System.out.println(ud.findSalary(key));
+	}
+
+}

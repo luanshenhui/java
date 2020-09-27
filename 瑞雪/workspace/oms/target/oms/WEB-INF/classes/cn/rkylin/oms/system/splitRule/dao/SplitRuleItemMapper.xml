@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.splitRule.dao.SplitRuleItemDAOImpl">
+  <resultMap id="BaseResultMap" type="cn.rkylin.oms.system.splitRule.vo.SplitRuleItemVO">
+    <id column="split_rule_item_id" jdbcType="VARCHAR" property="splitRuleItemId" />
+    <result column="split_rule_id" jdbcType="VARCHAR" property="splitRuleId" />
+    <result column="ec_item_id" jdbcType="VARCHAR" property="ecItemId" />
+    <result column="ec_item_code" jdbcType="VARCHAR" property="ecItemCode" />
+      <!--
+    <result column="outer_id" jdbcType="VARCHAR" property="outerId" />
+    -->
+    <result column="split_shop_id" jdbcType="VARCHAR" property="splitShopId" />
+    <result column="split_shop_name" jdbcType="VARCHAR" property="splitShopName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="CHAR" property="deleted" />
+    
+    <result column="ec_item_code" jdbcType="VARCHAR" property="ecItemCode"/>
+    <result column="ec_item_name" jdbcType="VARCHAR" property="ecItemName"/>
+    <result column="ec_item_id" jdbcType="VARCHAR" property="ecItemId"/>
+    <result column="outer_code" jdbcType="VARCHAR" property="outerCode"/>
+    <result column="itemSelect" jdbcType="VARCHAR" property="itemSelect"/>
+    <result column="shop_name" jdbcType="VARCHAR" property="shopname"/>
+  </resultMap>
+  
+  <sql id="Base_Column_ListSplitRuleItem">
+    item.ec_item_id as ec_item_id , item.ec_item_code as ec_item_code , item.ec_item_name as ec_item_name, item.outer_code as outer_code,
+	'' as itemSelect , splitruleitem.split_shop_name as split_shop_name , splitrule.shop_name as shop_name
+  </sql>
+  <select id="pageSelectSplitRuleItem" parameterType="cn.rkylin.oms.system.splitRule.vo.SplitRuleItemVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_ListSplitRuleItem" />
+		from oms_ec_item item left join oms_split_rule splitrule on item.shop_id = splitrule.shop_id 
+		      left join oms_split_rule_item splitruleitem on splitrule.split_rule_id = splitruleitem.split_rule_id 
+		      and splitruleitem.ec_item_id = item.ec_item_id 
+		      inner join oms_shop shop on shop.shop_id = splitrule.shop_id 
+		     inner join oms_project project on project.prj_id = shop.prj_id
+		where splitrule.deleted = 'n'
+		<if test="searchItemCondition != null">
+			and (item.ec_item_code like CONCAT('%',#{searchItemCondition},'%') or item.ec_item_name like CONCAT('%',#{searchItemCondition},'%'))
+		</if>
+		<if test="shopId != null">
+			and item.shop_id = #{shopId}
+		</if>
+		<if test="splitRuleId != null">
+			and splitrule.split_rule_id = #{splitRuleId}
+		</if>
+		<if test="otherSql != null">
+			${otherSql} 
+		</if>
+		<if test="searchCondition != null">
+			and (shop.shop_name like CONCAT('%',#{searchCondition},'%') or project.prj_name like CONCAT('%',#{searchCondition},'%'))
+		</if>
+		<if test="ecItemId != null">
+			and splitruleitem.ec_item_id = #{ecItemId}
+		</if>
+		
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+	</select>
+  <sql id="Base_Column_List">
+    split_rule_item_id, split_rule_id, ec_item_id, ec_item_code, split_shop_id, 
+    split_shop_name, create_time, update_time, deleted
+  </sql>
+  <select id="pageSelectSplitRuleItemList" parameterType="cn.rkylin.oms.system.splitRule.vo.SplitRuleItemVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from oms_split_rule_item
+		where 1=1
+		
+		<if test="splitShopId != null">
+			and split_shop_id = #{splitShopId}
+		</if>
+		<if test="ecItemId != null">
+			and ec_item_id = #{ecItemId}
+		</if>
+		<if test="splitRuleId != null">
+			and split_rule_id = #{splitRuleId}
+		</if>
+	</select>
+  <select id="selectByPrimaryKeySplitRuleItem" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oms_split_rule_item
+    where split_rule_item_id = #{splitRuleItemId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKeySplitRuleItem" parameterType="java.lang.String">
+    delete from oms_split_rule_item
+    where split_rule_item_id = #{splitRuleItemId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSplitRuleItem" parameterType="cn.rkylin.oms.system.splitRule.domain.SplitRuleItem">
+    insert into oms_split_rule_item (split_rule_item_id, split_rule_id, ec_item_id, 
+      ec_item_code, split_shop_id, 
+      split_shop_name, create_time, update_time, 
+      deleted)
+    values (#{splitRuleItemId,jdbcType=VARCHAR}, #{splitRuleId,jdbcType=VARCHAR}, #{ecItemId,jdbcType=VARCHAR}, 
+      #{ecItemCode,jdbcType=VARCHAR}, #{splitShopId,jdbcType=VARCHAR}, 
+      #{splitShopName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{deleted,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelectiveSplitRuleItem" parameterType="cn.rkylin.oms.system.splitRule.domain.SplitRuleItem">
+    insert into oms_split_rule_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="splitRuleItemId != null">
+        split_rule_item_id,
+      </if>
+      <if test="splitRuleId != null">
+        split_rule_id,
+      </if>
+      <if test="ecItemId != null">
+        ec_item_id,
+      </if>
+      <if test="ecItemCode != null">
+        ec_item_code,
+      </if>
+      <if test="splitShopId != null">
+        split_shop_id,
+      </if>
+      <if test="splitShopName != null">
+        split_shop_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="splitRuleItemId != null">
+        #{splitRuleItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="splitRuleId != null">
+        #{splitRuleId,jdbcType=VARCHAR},
+      </if>
+      <if test="ecItemId != null">
+        #{ecItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="ecItemCode != null">
+        #{ecItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="splitShopId != null">
+        #{splitShopId,jdbcType=VARCHAR},
+      </if>
+      <if test="splitShopName != null">
+        #{splitShopName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelectiveSplitRuleItem" parameterType="cn.rkylin.oms.system.splitRule.domain.SplitRuleItem">
+    update oms_split_rule_item
+    <set>
+      <if test="splitRuleId != null">
+        split_rule_id = #{splitRuleId,jdbcType=VARCHAR},
+      </if>
+      <if test="ecItemId != null">
+        ec_item_id = #{ecItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="ecItemCode != null">
+        ec_item_code = #{ecItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="splitShopId != null">
+        split_shop_id = #{splitShopId,jdbcType=VARCHAR},
+      </if>
+      <if test="splitShopName != null">
+        split_shop_name = #{splitShopName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=CHAR},
+      </if>
+    </set>
+    where split_rule_item_id = #{splitRuleItemId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeySplitRuleItem" parameterType="cn.rkylin.oms.system.splitRule.domain.SplitRuleItem">
+    update oms_split_rule_item
+    set split_rule_id = #{splitRuleId,jdbcType=VARCHAR},
+      ec_item_id = #{ecItemId,jdbcType=VARCHAR},
+      ec_item_code = #{ecItemCode,jdbcType=VARCHAR},
+      split_shop_id = #{splitShopId,jdbcType=VARCHAR},
+      split_shop_name = #{splitShopName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=CHAR}
+    where split_rule_item_id = #{splitRuleItemId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.ectrade.dao.EcOrderDAOImpl">
+  <resultMap id="BaseResultMap" type="cn.rkylin.oms.ectrade.vo.EcOrderVO">
+    <id column="ec_order_id" jdbcType="VARCHAR" property="ecOrderId" />
+    <result column="ec_trade_id" jdbcType="VARCHAR" property="ecTradeId" />
+    <result column="ec_oid" jdbcType="VARCHAR" property="ecOid" />
+    <result column="ec_item_code" jdbcType="VARCHAR" property="ecItemCode" />
+    <result column="ec_item_name" jdbcType="VARCHAR" property="ecItemName" />
+    <result column="ec_sku_code" jdbcType="VARCHAR" property="ecSkuCode" />
+    <result column="ec_sku_name" jdbcType="VARCHAR" property="ecSkuName" />
+    <result column="qty" jdbcType="INTEGER" property="qty" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="disc" jdbcType="DECIMAL" property="disc" />
+    <result column="stan_unit_price" jdbcType="DECIMAL" property="stanUnitPrice" />
+    <result column="fact_unit_price" jdbcType="DECIMAL" property="factUnitPrice" />
+    <result column="discount_fee" jdbcType="DECIMAL" property="discountFee" />
+    <result column="adjust_fee" jdbcType="DECIMAL" property="adjustFee" />
+    <result column="lgst_fee" jdbcType="DECIMAL" property="lgstFee" />
+    <result column="serv_fee" jdbcType="DECIMAL" property="servFee" />
+    <result column="weight" jdbcType="DECIMAL" property="weight" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="CHAR" property="deleted" />
+    
+    <result column="split_shop_id" jdbcType="VARCHAR" property="splitShopId" />
+    <result column="split_shop_name" jdbcType="VARCHAR" property="splitShopName" />
+    <result column="lgst_name" jdbcType="VARCHAR" property="lgstName" />
+    <result column="lgst_no" jdbcType="VARCHAR" property="lgstNo" />
+    <result column="ec_order_status" jdbcType="VARCHAR" property="ecOrderStatus" />
+    <result column="delete_reason" jdbcType="VARCHAR" property="deleteReason" />
+    <result column="parent_order_id" jdbcType="VARCHAR" property="parentOrderId" />
+    <result column="erp_status" jdbcType="VARCHAR" property="erpStatus" />
+    
+    <result column="exceptionType" jdbcType="VARCHAR" property="exceptionType" />
+    <result column="platformStatus" jdbcType="VARCHAR" property="platformStatus" />
+    <result column="systemStatus" jdbcType="VARCHAR" property="systemStatus" />
+    <result column="ship_time" jdbcType="VARCHAR" property="shipTime" />
+    <result column="operation" jdbcType="VARCHAR" property="operation" />
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+    ecorder.ec_order_id, 
+    ecorder.ec_trade_id, 
+    ecorder.ec_oid, 
+    ecorder.ec_item_code, 
+    ecorder.ec_item_name, 
+    ecorder.ec_sku_code, 
+    ecorder.ec_sku_name, 
+    ecorder.qty, 
+    ecorder.score, 
+    ecorder.disc, 
+    ecorder.stan_unit_price, 
+    ecorder.fact_unit_price, 
+    ecorder.discount_fee, 
+    ecorder.adjust_fee, 
+    ecorder.lgst_fee, 
+    ecorder.serv_fee, 
+    ecorder.weight, 
+    ecorder.remark, 
+    ecorder.create_time, 
+    ecorder.update_time, 
+    ecorder.deleted,
+    ecorder.delete_reason,
+    '' as platformStatus,
+    ship_time as shipTime,
+    ecorder.split_shop_name as splitShopName,
+    ecorder.ec_order_status as ecOrderStatus,
+    ecorder.delete_reason as deleteReason,
+    ecorder.erp_status as erpStatus,
+    ecorder.lgst_name as lgstName,
+    ecorder.lgst_no as lgstNo,
+    '' as operation
+  </sql>
+  <select id="pageSelectEcOrder" parameterType="cn.rkylin.oms.ectrade.vo.EcOrderVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from oms_ec_order ecorder 
+		where ecorder.deleted = 'n'
+		<if test="ecTradeId != null">
+			AND  EXISTS
+			(SELECT 
+			    ec_trade_id 
+			  FROM
+			    oms_ec_trade 
+			  WHERE parent_trade_id = #{ecTradeId} 
+			    AND <![CDATA[parent_trade_id <> ec_trade_id]]> 
+			    AND ec_trade_id = ecorder.ec_trade_id)
+		</if>
+		
+	</select>
+	
+  <select id="selectByOrderKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oms_ec_order
+    where ec_order_id = #{ecOrderId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByOrderKey" parameterType="java.lang.String">
+    delete from oms_ec_order
+    where ec_order_id = #{ecOrderId,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="updateByOrderKeySelective" parameterType="cn.rkylin.oms.ectrade.vo.EcOrderVO">
+    update oms_ec_order
+    <set>
+      <if test="ecTradeId != null">
+        ec_trade_id = #{ecTradeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ecOid != null">
+        ec_oid = #{ecOid,jdbcType=VARCHAR},
+      </if>
+      <if test="ecItemCode != null">
+        ec_item_code = #{ecItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ecItemName != null">
+        ec_item_name = #{ecItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="ecSkuCode != null">
+        ec_sku_code = #{ecSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ecSkuName != null">
+        ec_sku_name = #{ecSkuName,jdbcType=VARCHAR},
+      </if>
+      <if test="qty != null">
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="disc != null">
+        disc = #{disc,jdbcType=DECIMAL},
+      </if>
+      <if test="stanUnitPrice != null">
+        stan_unit_price = #{stanUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="factUnitPrice != null">
+        fact_unit_price = #{factUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discountFee != null">
+        discount_fee = #{discountFee,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustFee != null">
+        adjust_fee = #{adjustFee,jdbcType=DECIMAL},
+      </if>
+      <if test="lgstFee != null">
+        lgst_fee = #{lgstFee,jdbcType=DECIMAL},
+      </if>
+      <if test="servFee != null">
+        serv_fee = #{servFee,jdbcType=DECIMAL},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=CHAR},
+      </if>
+      <if test="splitShopId != null">
+        split_shop_id = #{splitShopId,jdbcType=VARCHAR},
+      </if>
+      <if test="splitShopName != null">
+        split_shop_name = #{splitShopName,jdbcType=VARCHAR},
+      </if>
+      <if test="lgstName != null">
+        lgst_name = #{lgstName,jdbcType=VARCHAR},
+      </if>
+      <if test="lgstNo != null">
+        lgst_no = #{lgstNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ecOrderStatus != null">
+        ec_order_status = #{ecOrderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteReason != null">
+        delete_reason = #{deleteReason,jdbcType=VARCHAR},
+      </if>
+      <if test="parentOrderId != null">
+        parent_order_id = #{parentOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="erpStatus != null">
+        erp_status = #{erpStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="shipTime != null">
+        ship_time = #{shipTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ec_order_id = #{ecOrderId,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

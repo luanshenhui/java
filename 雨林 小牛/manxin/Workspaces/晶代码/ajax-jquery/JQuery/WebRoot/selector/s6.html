@@ -1,0 +1,32 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	function f1(){
+		$('div[id]').css('font-size','60px');
+	}
+	
+	function f2(){
+		$('div[id=d2]').css('font-size','60px');
+	}
+	
+	function f3(){
+		$('div[id!=d2]').css('font-size','60px');
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<div id="d1">hello jQuery</div>
+	<div>hello java</div>
+	<div id="d2">hello c</div>
+		<a href="javascript:;" 
+	onclick="f3();">ClickMe</a>
+	
+	
+	
+	
+</body>
+</html>

@@ -1,0 +1,23 @@
+<SCRIPT LANGUAGE="VBScript" RUNAT="Server">
+<!--METADATA TYPE="TypeLib" FILE="D:\webHains\dlls\Common.dll"-->
+Option Explicit
+
+Sub Application_OnStart()
+
+	Application("LOGINPAGE") = "/webHains/login.asp"
+	Application("STARTPAGE") = "/webHains/frontdoor.asp"
+
+End Sub
+
+Sub Application_OnEnd()
+
+End Sub
+
+Sub Session_OnStart()
+
+End Sub
+
+Sub Session_OnEnd()
+
+End Sub
+</SCRIPT>

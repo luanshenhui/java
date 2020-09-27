@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<!-- 指定默认编码集,作用于HttpServletRequest的setCharacterEncoding方法 和freemarker 、velocity的输出 -->
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<!-- 指定国际化资源文件 -->
+	<constant name="struts.custom.i18n.resources" value="resource"></constant>
+	<!-- 该属性指定需要Struts 2处理的请求后缀，该属性的默认值是action，即所有匹配*.action的请求都由Struts2处理。 
+		如果用户需要指定多个请求后缀，则多个后缀之间以英文逗号（,）隔开。 -->
+	<constant name="struts.action.extension" value="do,action" />
+	<!-- 设置浏览器是否缓存静态内容,默认值为true(生产环境下使用),开发阶段最好关闭 -->
+	<constant name="struts.serve.static.browserCache" value="false" />
+	<!-- 当struts的配置文件修改后,系统是否自动重新加载该文件,默认值为false(生产环境下使用),开发阶段最好打开 -->
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<!-- 开发模式下使用,这样可以打印出更详细的错误信息 -->
+	<constant name="struts.devMode" value="false" />
+	<!-- 默认的视图主题 -->
+	<constant name="struts.ui.theme" value="simple" />
+	<!-- 该属性设置Struts 2是否支持动态方法调用，该属性的默认值是true。如果需要关闭动态方法调用，则可设置该属性为false。 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<!--上传文件的大小限制 -->
+	<constant name="struts.multipart.maxSize" value="10701096" />
+	
+	<package name="orden" extends="struts-default" namespace="/orden">
+		<action name="*_ordenAction" class="chinsoft.service.orden.OrdenAction" method="{1}">
+			<result name="addPage">/pages/orden/addNewOrden.jsp</result>
+		</action>
+	
+		<action name="*_transitAction" class="chinsoft.service.orden.TransitAction" method="{1}">
+			<result name="ordenListPage" type="redirect">dordenPage.do</result>
+		</action>
+		
+		<action name="addOrdenAction" class="chinsoft.service.orden.AddOrdenAction">
+			<result name="addOrden">/pages/orden/addOrden.jsp</result>
+		</action>
+		<action name="editOrdenAction" class="chinsoft.service.orden.EditOrdenAction">
+			<result name="editOrden">/pages/orden/editOrden.jsp</result>
+		</action>
+
+		<action name="dordenPage" class="hongling.service.orden.GetOrdenListAction">
+			<result>/pages/orden/dorden_Page.jsp</result>
+		</action>
+
+	</package>
+	<package name="/ordenajax" extends="json-default" namespace="/ordenajax">
+		<action name="changeClothingAction" class="chinsoft.service.orden.ChangeClothingAction">
+			<result type="json"/>
+		</action>
+		<action name="changeSizeCategoryAction" class="chinsoft.service.orden.ChangeSizeCategoryAction">
+			<result type="json"/>
+		</action>
+		<action name = "*_changeSizeInfoAction" class="chinsoft.service.orden.ChangeSizeInfoAction" method="{1}">
+			<result type="json"></result>
+		</action>
+	</package>
+</struts>    

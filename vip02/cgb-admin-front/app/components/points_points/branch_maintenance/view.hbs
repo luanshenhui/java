@@ -1,0 +1,58 @@
+{{#component "branch-maintenance js-component"}}
+    <p class="components-title"><strong>- 分行维护 -</strong></p>
+    <div class="add-new  m-b-10">
+
+        {{#authorial "branchMaintenance_add"}}
+            <button class="btn btn-info btn-small js-branch-new">+ 新增</button>
+        {{/authorial}}
+        {{#authorial "branchMaintenance_delete"}}
+            <button class="btn btn-info btn-small js-all-delete" id="deleteBtn">删除
+            </button>
+            <button style="display:none" data-toggle="confirm" id="deleteConfirmBtn"
+                    data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                    data-event="confirm:delete-all">删除
+            </button>
+        {{/authorial}}
+    </div>
+
+    {{#equals _DATA_.total "0"}}
+        <span class="search-none">暂无分行数据</span>
+    {{else}}
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="5%">选择</th>
+            <th width="10%">分行号</th>
+            <th width="20%">分行名称</th>
+            <th width="20%">发卡城市</th>
+            <th width="25%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#each _DATA_.data}}
+                <tr data-data="{{json this}}" class="item-tr" data-id="{{id}}">
+                    <td><input type="checkbox" class="js_checkbox_item"/></td>
+                    <td class="branch-code">{{code}}</td>
+                    <td class="branch-name">{{name}}</td>
+                    <td class="branch-city">{{bankCityNm}}</td>
+                    <td>
+                        {{#authorial "branchMaintenance_edit"}}
+                            <button class="btn btn-info btn-sm js-branch-edit">编辑</button>
+                        {{/authorial}}
+                        {{#authorial "branchMaintenance_delete"}}
+                            <button id="{{id}}" class="btn btn-info btn-sm js-branch-delete" data-toggle="confirm"
+                                    data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                    data-event="confirm:delete-branch">删除
+                            </button>
+                        {{/authorial}}
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <div class="m-l-20 m-b-10 m-t-10">
+        <input type="checkbox" class="js-all-check"/><span>全选</span>
+    </div>
+    {{/equals}}
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+{{/component}}

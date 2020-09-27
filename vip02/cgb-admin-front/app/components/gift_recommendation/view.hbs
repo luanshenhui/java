@@ -1,0 +1,71 @@
+{{#component "gift-recommendation js-component"}}
+    <p class="components-title js-main-title" data-main="{{_HREF_.main}}"><strong>- 网银积分礼品推荐 -</strong></p>
+
+
+    <div class="main-box margin-top-10" style="padding-right: 0px;">
+        <div class="admin-cat-box admin-cat-box-30">
+            <div class="admin-cat-box-title">积分区间</div>
+            <ul class="admin-cat-box-list-points">
+                {{#each _DATA_}}
+                    <li  data-id="{{regionId}}">
+                        <a href="#" class="js-gift-recommend current-points-region href-black"><span>{{minPoint}}</span><em>-</em><span>{{maxPoint}}</span></a>
+                    {{#authorial "giftRecommendation_deletePointRegion"}}
+                        <a href="#" class="btn btn-info btn-sm delete-region">删除</a>
+                    {{/authorial}}
+                    </li>
+                {{/each}}
+            </ul>
+        {{#authorial "giftRecommendation_addRegion"}}
+            <form class="admin-cat-box-search form form-aligned ">
+
+                    <input type="text" class="form-control-admin-search min-point" maxlength="9">
+                    <div class="float-left"> <em>-</em></div>
+                    <input type="text" class="form-control-admin-search max-point" maxlength="9">
+
+                <input type="submit" class="admin-cat-add col-left-common icon-add-btn points-region-add" value=""><!--新增积分区间-->
+            </form>
+        {{/authorial}}
+            <div class="clear"></div>
+        </div>
+        <div class="admin-cat-box-points-table admin-cat-box-points-table-62" style="position: relative;">
+            <div class="admin-cat-points-title">积分礼品推荐</div>
+            <table class="table">
+                <thead>
+                 <tr>
+                     <th width="20%">礼品编码</th>
+                     <th width="40%">礼品名称</th>
+                     <th width="20%">金普价</th>
+                     <th width="20%">操作</th>
+                 </tr>
+                </thead>
+                <tbody class="points-gift-add">
+
+                </tbody>
+            </table>
+            <div class="admin-add-property points-box">
+                <div class="admin-big-box m-b-20 clearfix">
+                    <div class="one-box">
+                        <div class="admin-big-box-sub">礼品编码：<input type="text" class="form-control gift-input" placeholder="请输入5位礼品编码"
+                                                                   value="{{goodsCode}}" maxlength="5"></div>
+                    </div>
+                </div>
+                <div class="admin-big-box m-b-20 clearfix">
+                    <div class="one-box">
+                        <div class="admin-big-box-sub">礼品名称： <input value="{{name}}" type="text"
+                                                                    class="form-control giftName-input"
+                                                                    disabled=""></div>
+                    </div>
+                </div>
+                <div class="del-btn-link points-box-inline btn-insert-re">保 存</div>
+                <div class="del-btn-link points-box-inline btn-cancel-re">取 消</div>
+            </div>
+        </div>
+    {{#authorial "giftRecommendation_add"}}
+        <div class="col-right-common add-property">
+            <span style="font-size : 20px;">+</span>
+            <br/>新增
+        </div>
+    {{/authorial}}
+        <div class="clear"></div>
+    </div>
+{{/component}}

@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>s7.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script type="text/javascript" src="../js/jquery-1.4.3.js"></script>
+	<script type="text/javascript">
+		function f1(){
+			$('ul li:eq(1)').css('font-size','60px');
+		}
+		function f2(){
+			$('ul li:nth-child(2)').css('font-size','60px');
+		}
+	</script>
+  </head>
+  
+  <body style="font-size: 30px;">
+    <ul>
+    	<li>item1</li>
+    	<li>item2</li>
+    	<li>item3</li>
+    </ul>
+    <ul>
+    	<li>item111</li>
+    	<li>item222</li>
+    	<li>item333</li>
+    </ul>
+    <a href="javascript:;" onclick="f1();">ClickMe</a>
+  </body>
+</html>

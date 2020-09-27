@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="js/echarts.min.js"></script>
+</head>
+<body>
+<div class="box">
+			<div class="left m-r-20">
+				<div class="small-box" id="businessGauge">
+				</div>
+				<div class="absoluteSpan businessSpan">综合效能</div>
+				<div class="absoluteSpan businessDataSpan">业务数据量</div>
+				<div class="small-box">
+					<div class="l-title">
+						<span>风险等级 / 告警等级</span>
+						<p class="right">
+							<span class="end"></span><span class="m-r-20">已处理</span>
+						</p>
+					</div>
+					<div class="l-content">
+						<div>红色<span class="red-font">风险</span>
+							<p>
+								<span class="line-font green" data-id="riskGR" style="width: 50%;">2</span><span class="line-font red " data-id="riskRR" style="width: 50%;"></span>
+							</p>
+							<span class="right m-r-20" data-id="riskRCount">4</span>
+						</div>
+						<div>橙色<span class="red-font">风险</span>
+							<p>
+								<span class="line-font green" data-id="riskGO" style="width: 75%;">3</span><span class="line-font orange " data-id="riskOO" style="width: 25%;"></span>
+							</p>
+
+							<span class="right m-r-20" data-id="riskOCount">4</span>
+						</div>
+						<div>黄色<span class="red-font">风险</span>
+							<p>
+								<span class="line-font green" data-id="riskGY" style="width: 100%;">7</span><span class="line-font yellow " data-id="riskYY" style="width: 0%;"></span>
+							</p>
+							<span class="right m-r-20" data-id="riskYCount">7</span>
+						</div>
+					</div>
+					<div class="line1"></div>
+					<div class="l-content">
+						<div>红色<span class="yellow-font">告警</span>
+							<p>
+								<span class="line-font green" data-id="alarmGR" style="width: 100%;">10</span><span class="line-font red " data-id="alarmRR" style="width: 0%;"></span>
+							</p>
+
+							<span class="right m-r-20" data-id="alarmRCount">10</span>
+						</div>
+
+						<div>橙色<span class="yellow-font">告警</span>
+							<p>
+								<span class="line-font green" data-id="alarmGO" style="width: 23.0769%;">3</span><span class="line-font orange " data-id="alarmOO" style="width: 76.9231%;"></span>
+							</p>
+
+							<span class="right m-r-20" data-id="alarmOCount">13</span>
+						</div>
+						<div>黄色<span class="yellow-font">告警</span>
+							<p>
+								<span class="line-font green" data-id="alarmGY" style="width: 80%;">16</span><span class="line-font yellow" data-id="alarmYY" style="width: 20%;"></span>
+							</p>
+							<span class="right m-r-20" data-id="alarmYCount">20</span>
+						</div>
+					</div>
+				</div>
+				<div class="small-box">
+					<p class="title">数据引擎监控情况</p>
+					<img src="image/pic1.png" alt="" class="small-box-img3"/>
+				</div>
+			</div>
+	        <div class="center-box left" style="margin-left: 7px;">
+	        	<div class="c-logo"><span>科技计划管理效能分析</span></div>
+				<div class="center-box-container" id="center-form"></div>
+	        </div>
+	        <div class="right ">
+	        	<div class="small-box small-box4" >
+					<p class="title">专利执法风险汇总</p>
+					<div class="small-box-form" id="small-box-form4"></div>
+				</div>
+				<div class="small-box" style="position: relative">
+					<p class="title">各部门风险状况</p>
+					<div id="riskDeptInfo" class="riskDeptInfo" data-id="riskDeptInfo" style="width: 381px;height: 239px;"></div>
+					<div id="riskSpan" class="absoluteSpan riskDeptSpan">风险</div>
+				</div>
+				<div class="small-box">
+					<div class="xs-title">
+						<span>覆盖业务</span>
+						<span class="right font-42">10%</span>
+					</div>
+					<ul class="content-list">
+						<li>
+							<p class="icon">
+								<span class="sub-icon icon01"></span>
+							</p>
+							<p class="describe ">
+								<span>职责清单</span>
+								<span class="num">1</span>
+							</p>
+						</li>
+						<li>
+							<p class="icon">
+								<span class="sub-icon icon02"></span>
+							</p>
+							<p class="describe">
+								<span>涉及部门</span>
+								<span class="num">8</span>
+							</p>
+						</li>
+					</ul>
+					<div class="line"></div>
+					<ul class="content-list">
+						<li>
+							<p class="icon">
+								<span class="sub-icon icon03"></span>
+							</p>
+							<p class="describe ">
+								<span>关键流程</span>
+								<span class="num">2</span>
+							</p>
+						</li>
+						<li>
+							<p class="icon">
+								<span class="sub-icon icon04"></span>
+							</p>
+							<p class="describe">
+								<span>风险点</span>
+								<span class="num">2</span>
+							</p>
+						</li>
+					</ul>
+				</div>
+
+	        </div>
+		</div>
+<script>
+
+	//气泡图
+	var myChart = echarts.init(document.getElementById('small-box-form4'));
+
+	var data = [
+		[[35,50,1,'群众举报、投诉']],[[25,55,2,'日常执法、专项检查']],[[50,38,4,'上级机关指定、交办']],
+		[[10,25,5,'其他机关移送']],[[35,30,3,'其他']]
+	];
+	var option6 = {
+		legend: {
+			right: 10,
+			itemGap:10,
+			data: ['群众举报、投诉', '日常执法、专项检查','上级机关指定、交办','其他机关移送','其他'],
+			padding: [170,  // 上
+				0, // 右
+				5,  // 下
+				0 // 左
+			],
+			left:'40',
+			textStyle:{
+				fontSize:'14',
+				color:'#fff'
+			}
+		},
+		grid:{
+			top:40,
+			right:90
+		},
+		xAxis: {
+			show: false
+		},
+		yAxis: {
+			show: false
+		},
+		series: [{
+			name: '群众举报、投诉',
+			data: data[0],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]*40000000) / 3e2;
+			},
+			label: {
+				normal:{
+					textStyle:{
+						fontSize:'20'
+					},
+					show:true,
+					formatter: function (param) {
+						return param.data[2];
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: 'rgb(25, 183, 207)'
+					}, {
+						offset: 1,
+						color: 'blue'
+					}])
+				}
+			}
+		}, {
+			name: '日常执法、专项检查',
+			data: data[1],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]*40000000) / 3e2;;
+			},
+			label: {
+				normal:{
+					textStyle:{
+						fontSize:'20'
+					},
+					show:true,
+					formatter: function (param) {
+						return param.data[2];
+					}
+				},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: '#77dfee'
+					}, {
+						offset: 1,
+						color: '#04798a'
+					}])
+				}
+			}
+		}, {
+			name: '上级机关指定、交办',
+			data: data[2],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]*40000000) / 3e2;;
+			},
+			label: {
+				normal:{
+					textStyle:{
+						fontSize:'20'
+					},
+					show:true,
+					formatter: function (param) {
+						return param.data[2];
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: '#f6c1f7'
+					}, {
+						offset: 1,
+						color: '#9006b3'
+					}])
+				}
+			}
+		}, {
+			name: '其他机关移送',
+			data: data[3],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]*40000000) / 3e2;;
+			},
+			label: {
+				normal:{
+					textStyle:{
+						fontSize:'20'
+					},
+					show:true,
+					formatter: function (param) {
+						return param.data[2];
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(120, 36, 50, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: '#5ef69b'
+					}, {
+						offset: 1,
+						color: '#037a33'
+					}])
+				}
+			}
+		}, {
+			name: '其他',
+			data: data[4],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2]*40000000) / 3e2;;
+			},
+			label: {
+				normal:{
+					textStyle:{
+						fontSize:'20'
+					},
+					show:true,
+					formatter: function (param) {
+						return param.data[2];
+					}},
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return param.data[3];
+					},
+					position: 'top'
+				}
+			},
+			itemStyle: {
+				normal: {
+					shadowBlur: 10,
+					shadowColor: 'rgba(25, 100, 150, 0.5)',
+					shadowOffsetY: 5,
+					color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+						offset: 0,
+						color: 'yellow'
+					}, {
+						offset: 1,
+						color: '#ff0000'
+					}])
+				}
+			}
+		}]
+	};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option6);
+	var targetElement = echarts.init(document.getElementById("center-form"));
+	/*var targetElement4 = echarts.init(document.getElementById("small-box-form4"));*/
+	//雷达图
+	var option = {
+		tooltip: {},
+		radar: {
+			indicator:
+					[
+						{ name: '项目申报', max: 20},
+						{ name: '格式审查', max: 20},
+						{ name: '第三方机构审查', max: 20},
+						{ name: '专家评审', max: 20},
+						{ name: '评审公示', max: 20},
+						{ name: '预算评审', max: 20},
+						{ name: '合同书', max: 20},
+						{ name: '资金拨付', max: 20},
+						{ name: '中期检查 ', max: 20},
+						{ name: '项目验收', max: 20}
+
+					],
+			splitNumber:4,
+			splitArea: {
+				areaStyle: {
+					color: '#0D0D0D',
+					shadowColor: '#161617',
+					shadowBlur: 10
+				}
+			},
+			splitLine:{
+				show:true,
+				lineStyle:{
+					width:3,
+					type:'dotted',
+					color: ['red', 'green','yellow','orange']
+				}
+			}
+		},
+		textStyle:{fontSize:'24',color:'#fff'},
+		series: [{
+			type: 'radar',
+
+			tooltip: {
+				trigger: 'item'
+			},
+			itemStyle: {
+				normal: {
+					areaStyle: {type: 'default'},
+				}
+			},
+			data : [
+				{
+					value : [9, 15, 8,14, 7,9,0,5,10,8],
+					name:'风险数：',
+					areaStyle:{
+						normal: {
+							opacity: 0.5,
+							color:'#9f6bfe'
+						}
+					},
+					lineStyle:{normal:{color:'#038cec'}},
+					itemStyle:{
+						normal:{
+							color:'#ff0000',
+							borderWidth:10,
+							borderType:'dashed',
+							shadowColor: 'yellow',
+							shadowBlur: 5,
+							opacity:1
+						}
+					}
+				}
+			]
+		}]
+	};
+	//柱形图
+	var option1 = {
+
+		tooltip : {
+			trigger: 'axis'
+		},
+		calculable : true,
+		xAxis : [
+			{
+				type : 'category',
+				data : ['1','2','3','4'],
+				name:'季度',
+				nameTextStyle:{
+					fontSize:12
+				}
+			}
+		],
+		yAxis : [
+			{
+				type : 'value',name:'数量',
+				nameTextStyle:{
+					fontSize:12
+				}
+			}
+		],textStyle:{fontSize:"20",color:"#fff"},
+		series : [
+			{
+				name:'告警',
+				type:'bar',
+				data:[15,13,11,14],
+				itemStyle:{
+					normal:{
+						color:'#007498'
+					}
+				}
+			},
+			{
+				name:'风险',
+				type:'bar',
+				data:[4,4,2,0],
+				itemStyle:{
+					normal:{
+						color:'#ff0000'
+					}
+				}
+			}
+		]
+	};
+	targetElement.setOption(option);
+	/*targetElement4.setOption(option1);*/
+
+
+	//首页仪表盘js
+	var businessGauge = echarts.init(document.getElementById('businessGauge'));
+	var option8 = {
+		backgroundColor: '#1b1b1b',
+		tooltip : {
+			formatter: "{a} <br/>{c} {b}"
+		},
+		series : [
+			{
+				name:'能效',
+				type:'gauge',
+				startAngle :180,
+				endAngle :0,
+				center: ['50%', '70%'],
+				min:0,
+				max:100,
+				splitNumber:10,
+				radius: 170,
+				axisLine: {            // 坐标轴线
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: [[0.09, '#1e90ff'],[0.82, '#1e90ff'],[1, '#1e90ff']],
+						width: 3,
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisTick: {            // 坐标轴小标记
+					length :15,        // 属性length控制线长
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: 'auto',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				splitLine: {           // 分隔线
+					length :25,         // 属性length控制线长
+					lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+						width:3,
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				pointer: {           // 指针
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5
+				},
+				title : {
+					offsetCenter:[0, '30%'],
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						fontSize: 32,
+						color: '#fff'
+					}
+				},
+				detail : {
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5,
+					offsetCenter: [0, '-35%'],       // x, y，单位px
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						color: '#ff8400',
+						fontSize: 50
+					}
+				},
+				data:[{value:"87", name: '480'}]
+			}
+		]
+	};
+	// 使用刚指定的配置项和数据显示图表。
+	businessGauge.setOption(option8);
+
+	// 绘各部门风险情况饼图
+
+		// 基于准备好的dom，初始化echarts实例
+		var riskPie = echarts.init(document.getElementById('riskDeptInfo'));
+
+		// 指定图表的配置项和数据
+	var option9 = {
+		color: ['#10ebff','#108aff','#104eff','#6a10ff','#28df9c','#94df28','#dfc328','#e68216','#ec491d'],
+		tooltip: {
+			trigger: 'item',
+			formatter: "{a} <br/>{b}: {c} ({d}%)"
+		},
+		legend: {
+			orient: 'vertical',
+			right: '0%',
+			top: 'top',
+			align:'left',
+			itemWidth:20,
+			itemHeight:7,
+			itemGap:10,
+			padding:[10,20,0,50],
+			textStyle:{
+				color:'#FFFFFF',
+				fontWeight:'normal',
+			},
+			data:['办公室','计划处', '政策法规处', '发展计划处', '科研条件与 财务处', '防震减灾处', '社会发展科技处', '高新处', '成果处']
+		},
+		series: [
+			{
+				name: '风险数量',
+				type: 'pie',
+				radius: ['30%', '70%'],
+				center:['30%','40%'],
+				itemStyle: {
+					emphasis: {
+						shadowBlur: 10,
+						shadowOffsetX: 0,
+						shadowColor: 'rgba(0, 0, 0, 0.5)'
+					}
+				},
+				label:{
+					normal: {
+						show: false     //不需要设置标签
+					}
+				},
+				labelLine: {
+					normal: {
+						show: false     //不需要设置引导线
+					}
+				},
+				data:[
+					{value:10, name:'办公室'},
+					{value:2, name:'计划处'},
+					{value:3, name:'政策法规处'},
+					{value:6, name:'发展计划处'},
+					{value:7, name:'科研条件与 财务处'},
+					{value:17, name:'防震减灾处'},
+					{value:9, name:'社会发展科技处'},
+					{value:6, name:'高新处'},
+					{value:6, name:'成果处'}
+				]
+			}
+		]
+	};
+		// 使用刚指定的配置项和数据显示图表。
+		riskPie.setOption(option9);
+
+</script>
+</body>
+</html>

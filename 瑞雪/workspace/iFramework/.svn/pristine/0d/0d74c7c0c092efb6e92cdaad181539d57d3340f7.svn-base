@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" errorTracingEnabled="true" useStatementNamespaces="true" />
+	<!-- audit -->
+    <sqlMap resource="com/dhc/base/audit/dao/ibatis/maps/AUDIT.xml"/>
+    
+    <!-- security -->
+    <sqlMap resource="com/dhc/base/security/ibatis/maps/SecurityResource.xml"/>
+	<sqlMap resource="com/dhc/base/security/ibatis/maps/SecurityUser.xml"/>
+    
+    <!-- persist -->
+    <sqlMap resource="com/dhc/base/persistence/ibatis/maps/Sequence.xml"/>	
+</sqlMapConfig>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>风险详情页</title>
+    <link rel="stylesheet" type="text/css" href="/static/nytz/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/static/nytz/css/kpi-nytz.css" />
+    <link rel="stylesheet" type="text/css" href="/static/nytz/css/riskDetail.css" />
+    <link rel="stylesheet" href="/static/nytz/js/jquery-ztree/3.5.12/css/zTreeStyle/zTreeStyle.min.css"/>
+    <script src="/static/nytz/js/jquery-1.8.3.js"></script>
+  	<script src="/static/nytz/js/jquery-ztree/3.5.12/js/jquery.ztree.core-3.5.min.js" type="text/javascript"></script>
+    <script src="/static/nytz/js/jquery.riskDetail.nytz.js"></script>
+</head>
+<body>
+<div class="wrap" data-id="riskDetailPage">
+    <div class="container">
+        <div class="box">
+            <div class="box-head">
+                <a href="/a/nytz/homepageInfo" class="arrow-back"><em class="b-right"></em><i></i>首页</a>
+                <p class="box-title">风险详情页</p>
+                <a href="javascript:void(0)" class="arrow-left"><em></em><i></i></a>
+                <a href="javascript:void(0)" class="arrow-right"><em></em><i></i></a>
+            </div>
+            <div class="box-container">
+                <h1 class="risk-title">风险详情</h1>
+                <div class="search p-t-8 h-65">
+                    <ul class="searchBox">
+                        <li><span>部门</span>
+                            
+                            <input type="text" class="inputBox" disabled data-id="inputBox"/><span class="search-popup top-16" data-id="treeBtn"><i></i></span>
+                            <ul id="treeDemo" class="ztree"><!-- <li class="tree-close" data-id=""></li> --></ul>
+                        </li>
+                        <li><span>操作人</span>
+                            <select data-id="person"></select>
+                        </li>
+                        <li><span>界定状态</span>
+                            <select data-id="defineStatus"></select>
+                        </li>
+                        <li>
+                            <a href="javaScript:void(0)" class="btn btn-search" data-id="search">查询</a>
+                        </li>
+                    </ul>
+                </div>
+               
+	                <table class="table" cellpadding="0" cellspacing="0">
+	                    <thead>
+	                        <tr>
+	                            <th width="15%">业务事项</th>
+	                            <th width="10%">操作人</th>
+	                            <th width="15%">所属部门</th>
+	                            <th width="10%">办理事项</th>
+	                            <th width="12%">风险内容</th>
+	                            <th width="6%">风险等级</th>
+	                            <th width="5%">界定人</th>
+	                            <th width="10%">界定状态</th>
+	                            <th width="20%">考核结果</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody data-id="viewDetail"></tbody>
+	                    </table>
+                  <div class="page">
+		                <ul>
+		                    <li class="pagePrev"><a href="javascript:void (0)" class="disable">上一页</a></li>
+		                    <li class="pageNext"><a href="javascript:void (0)">下一页</a></li>
+		                    <li class="no-background">共<span class="pageNum" data-id="pageNum"></span>页</li>
+		                </ul>
+            	</div>
+                <div class="clear"></div>
+            </div>
+            
+            <div class="risk-popup">
+                <div class="risk-container">
+                    <p class="pop-title">风险查看<i class="close" data-id="close"></i></p>
+                    <div id="pop-content" class="pop-content" data-id="pop-content">
+                     <!--    <p><span>风险级别：</span><span class="risk-color">橙色</span></p>
+                        <p>风险维度：<span>时间约束</span></p>
+                        <p>风险内容：<span>未在20天内审核完成</span></p>
+                        <div class="highBox">
+                            <p>界定结果：<span>风险</span></p>
+                            <p>界定人：<span>王明</span></p>
+                            <p>界定时间：<span>2017-01-12 17:20:18</span></p>
+                            <p>界定材料：<span>电视会议证明 <a href="javaScript:void (0)" class="download">下载</a></span></p>
+                            <p>说明：
+                                <span class="info">电视会议证明为证，详细请看上传的证明材料</span>
+                                <span class="info2"><a href="javaScript:void (0)" class="download-view">请点击下载进行查看</a></span></p>
+                        </div>
+                        <span class="s-title">界定履历：</span>
+                            <ul class="defineList">
+                                <li>黎明 撤销界定 2017-01-12 13:46</li>
+                                <li>黎明 撤销界定 2017-01-12 13:46</li>
+                                <li>黎明 撤销界定 2017-01-12 13:46</li>
+                                <li>黎明 撤销界定 2017-01-12 13:46</li>
+                            </ul>
+ -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+        <div class="footer">截至到2016年12月23日 12：00：00</div>
+    </div>
+
+</div>
+</body>
+</html>

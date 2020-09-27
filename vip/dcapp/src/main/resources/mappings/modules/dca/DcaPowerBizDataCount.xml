@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.workflow.dao.DcaPowerBizDataCountDao">
+    
+    <!-- 根据节点名称统计实例业务数据数量  add by geshuo 20160105 -->
+	<select id="getDataCountByTaskName" resultType="DcaSimpleCountEntity">
+		SELECT 
+			TASK_NAME AS name,
+			COUNT(1) AS count
+		FROM DCA_POWER_BIZ_DATA_COUNT
+		WHERE DEL_FLAG = 0
+		<if test="list != null">
+			AND TASK_NAME IN 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+	            	#{item}
+	        	</foreach>
+		</if>
+		GROUP BY TASK_NAME
+	</select>
+	
+	<!-- 获取业务数据总数  add by liuc 20170106 -->
+	<select id="getBizDataCount" resultType="java.lang.String">
+		SELECT SUM(data_count)
+		FROM dca_power_biz_data_count
+	</select>
+	
+	<!-- 获取业务数据最近10次列表  add by liuc 20170106 -->
+	<select id="getBizDataLastList" resultType="java.lang.Integer">
+		SELECT SUM(DATA_COUNT)
+		FROM DCA_POWER_BIZ_DATA_COUNT
+		WHERE ROWNUM <![CDATA[ < ]]> 10
+		GROUP BY CREATE_DATE
+		ORDER BY CREATE_DATE DESC
+	</select>
+
+</mapper>

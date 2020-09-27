@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderBatch">
+	<resultMap id="OrderBatchMap" type="cn.com.cgbchina.batch.model.OrderBatchModel">
+		<result property="ordermainId" column="ordermain_id" />
+		<result property="orderId" column="order_id" />
+		<result property="bankNbr" column="bank_nbr" />
+		<result property="acceptedTime" column="accepted_time" />
+		<result property="sourceNm" column="source_nm" />
+		<result property="vendorId" column="vendor_id" />
+		<result property="vendorSnm" column="vendor_snm" />
+		<result property="goodsId" column="goods_id" />
+		<result property="goodsNm" column="goods_nm" />
+		<result property="paywayNm" column="payway_nm" />
+		<result property="goodssendFlag" column="goodssend_flag" />
+		<result property="sinStatusNm" column="sin_status_nm" />
+		<result property="stagesNum" column="stages_num" />
+		<result property="totalMoney" column="total_money" />
+		<result property="calMoney" column="cal_money" />
+		<result property="goodsNum" column="goods_num" />
+		<result property="singlePrice" column="single_price" />
+		<result property="specShopNo" column="spec_shopno" />
+		<result property="curStatusId" column="cur_status_id" />
+		<result property="curStatusNm" column="cur_status_nm" />
+		<result property="cardType" column="cardtype" />
+		<result property="voucherNo" column="voucher_no" />
+		<result property="voucherNm" column="voucher_nm" />
+		<result property="voucherPrice" column="voucher_price" />
+		<result property="bonusTotalValue" column="bonus_totalvalue" />
+		<result property="bonusPrice" column="bonus_price" />
+		<result property="bonusTrnDate" column="bonus_trn_date" />
+		<result property="ext2" column="ext2" />
+		<result property="orderDesc" column="order_desc" />
+		<result property="contIdcard" column="cont_idcard"/>
+		<result property="otSourceNm" column="ot_source_nm" />
+		<result property="commDate" column="comm_date" />
+		<result property="commTime" column="comm_time" />
+		<result property="transcorpNm" column="transcorpNm" />
+		<result property="mailingNum" column="mailing_num" />
+		<result property="ordertypeNm" column="ordertype_nm" />
+		<result property="cardNo" column="cardno" />
+		<result property="csgAddress" column="csg_address" />
+		<result property="csgPostcode" column="csg_postcode" />
+		<result property="csgPhone1" column="csg_phone1" />
+		<result property="csgPhone2" column="csg_phone2" />
+		<result property="invoice" column="invoice" />
+		<result property="contNm" column="cont_nm" />
+		<result property="csgIdcard" column="csg_idcard" />
+		<result property="pdtNbr" column="pdt_nbr" />
+		<result property="csgProvince" column="csg_province" />
+		<result property="csgCity" column="csg_city" />
+		<result property="csgBorough" column="csg_borough" />
+		<result property="acceptedNo" column="accepted_no" />
+		<result property="goodsName" column="goods_name" />
+		<result property="vendorName" column="vendor_name" />
+		<result property="isBirthday" column="is_birth" />
+		<result property="goodsCode" column="goods_code" />
+		<result property="regionType" column="region_type"/>
+		<result property="backCategory1Id" column="back_category1_id" />
+		<result property="backCategory2Id" column="back_category2_id" />
+		<result property="backCategory3Id" column="back_category3_id" />
+		<result property="mailOrderCode" column="mail_order_code" />
+		<result property="installmentPrice" column="installment_price" />
+		<result property="goodsXid" column="goods_xid"/>
+		<result property="jpNum" column="jpnum"/>
+		<result property="ztNum" column="ztnum"/>
+		<result property="zdNum" column="zdnum"/>
+		<result property="vipNum" column="vipnum"/>
+		<result property="birthdayNum" column="birthdaynum"/>
+		<result property="bcnum" column="bcnum"/>
+		<result property="saleSumNum" column="saleSumNum"/>
+		<result property="memberNum" column="memberNum"/>
+		<result property="requestGoodsNum" column="request_goods_num"/>
+		<result property="requestTotalMoney" column="request_total_money"/>
+		<result property="backGoodsNum" column="back_goods_num"/>
+		<result property="backTotalMoney" column="back_total_money"/>
+		<result property="ordernbr" column="ordernbr"/>
+		<result property="transcorpNm" column="transcorp_nm"/>
+		<result property="productId" column="product_id"/>
+		<result property="goodsBrandName" column="goods_brand_name"/>
+		<result property="custType" column="cust_type"/>
+		<result property="purchasePrice" column="purchase_price"/>
+		<result property="actType" column="act_type"/>
+		<result property="actName" column="act_name"/>
+	</resultMap>
+	
+	<!--商户销售统计报表 -->
+	<select id="findVendorSaleStatistics" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+		o.vendor_id,
+		o.vendor_snm,
+		sum(o.total_money) AS total_money,
+		sum(o.goods_num) AS goods_num
+		FROM
+			tbl_order o, tbl_order_dodetail d
+		WHERE
+			o.order_id=d.order_id
+			AND d.status_id='0308'
+			AND <![CDATA[d.do_time >= #{startDate}]]>
+			AND	<![CDATA[d.do_time < #{endDate}]]>
+			<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+			AND o.cur_status_id NOT IN ('0301','0316','0307','0305','0304')
+			AND o.ordertype_id IN ('YG','FQ')
+		GROUP BY
+			o.vendor_id
+		ORDER BY
+			o.create_time
+	</select>
+	<select id="countGoodsSaleDetail" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultType="Long">
+		SELECT
+			count(1)
+		FROM
+			tbl_order o,tbl_order_dodetail d 
+		WHERE
+			o.order_id=d.order_id
+			AND d.status_id='0308'
+			AND <![CDATA[d.do_time >= #{startDate}]]>
+			AND	<![CDATA[d.do_time < #{endDate}]]>
+			AND o.cur_status_id NOT IN ('0301','0316','0307','0305','0304','0382')
+			AND o.ordertype_id in ('YG','FQ')
+	</select>
+	<!-- 商品销售明细报表 -->
+	<select id="findGoodsSaleDetail" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+			om.serial_no AS accepted_no,
+			o.order_id AS "order_id",
+			oe.ordernbr AS bank_nbr,
+			DATE_FORMAT(o.create_time,'%Y%m%d') AS "accepted_time",
+			DATE_FORMAT(o.create_time,'%H%i%s') AS "comm_time",
+			o.cardno AS "cardno",
+			o.source_nm AS "source_nm",
+			goods.goods_brand_name,
+			o.vendor_snm AS "vendor_snm",
+			item.mid AS goods_id,
+			o.ordertype_id AS payway_nm,
+			o.stages_num AS "stages_num",
+			o.total_money+(case when o.uitdrtamt is null then 0 else o.uitdrtamt end)+(case when o.voucher_price is null then 0 else o.voucher_price end) as "single_price",
+			o.total_money AS "total_money",
+			o.goods_num AS "goods_num",
+			o.cur_status_nm as "cur_status_nm",
+			om.csg_province as "csg_province",
+			om.csg_city as "csg_city",
+			om.csg_borough as "csg_borough",
+			om.csg_address AS "csg_address",
+			om.csg_postcode AS "csg_postcode",
+			om.csg_phone1 AS "csg_phone1",
+			om.csg_phone2 AS "csg_phone2",
+			om.invoice AS "invoice",
+			o.spec_shopno AS "spec_shopno",
+			o.voucher_no AS "voucher_no",
+			o.voucher_nm AS "voucher_nm",
+			o.voucher_price AS "voucher_price",
+			o.bonus_totalvalue AS "bonus_totalvalue",
+			o.uitdrtamt AS "bonus_price",
+			goods.product_id,
+			goods.name as "goods_name",
+			(CASE WHEN o.cardtype ='C' THEN '信用卡' ELSE '借记卡' end) as cardtype,
+			(case when o.act_type=10 then '折扣'
+			when o.act_type=20 then '满减'
+			when o.act_type=30 then '秒杀'
+			when o.act_type=40 then ' 团购 '
+			when o.act_type=50 then '荷兰拍' end) "act_type",
+			prom.name as "act_name",
+			ot.transcorp_nm AS "transcorp_nm",
+			ot.mailing_num AS "mailing_num"
+		FROM
+			(SELECT o1.* 
+			FROM
+			tbl_order o1,tbl_order_dodetail d 
+			WHERE
+				o1.order_id=d.order_id
+				AND d.status_id='0308'
+				AND <![CDATA[d.do_time >= #{startDate}]]>
+				AND	<![CDATA[d.do_time < #{endDate}]]>
+				AND o1.cur_status_id NOT IN ('0301','0316','0307','0305','0304','0382')
+				AND o1.ordertype_id in ('YG','FQ')) o
+		INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		INNER JOIN tbl_item item on item.code=o.goods_id
+		inner join tbl_goods goods on item.goods_code=goods.code
+		LEFT JOIN TBL_ORDER_EXTEND1 oe on o.order_id=oe.order_id
+		LEFT JOIN tbl_order_trans ot ON o.order_id = ot.order_id
+		LEFT JOIN tbl_promotion prom on o.act_id=prom.id
+		ORDER BY o.create_time
+		<![CDATA[ limit #{offset}, #{limit} ]]>
+	</select>
+	<select id="countStageReqCash" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultType="Long" >
+		SELECT
+			count(1)
+		FROM
+			tbl_order o
+		INNER JOIN tbl_order_dodetail od ON od.order_id = o.order_id
+		WHERE   
+			od.STATUS_ID = '0311'
+			AND <![CDATA[od.do_time >= #{startDate}]]>
+			AND	<![CDATA[od.do_time < #{endDate}]]>
+			<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+			AND	o.ordertype_id = 'FQ'
+			AND o.sin_status_id = '0311'
+	</select>
+	<!-- 分期请款报表 -->
+	<select id="findStageReqCash" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+			oe.ordernbr AS "bank_nbr",
+			o.ordermain_id AS "ordermain_id",
+			o.order_id AS "order_id",
+			o.vendor_snm AS "vendor_snm",
+			om.cont_nm AS "cont_nm",
+			item.mid AS "goods_id",
+			o.goods_num AS "goods_num",
+			gp.goods_price AS "total_money",
+			ot.transcorp_nm AS "transcorp_nm",
+			ot.mailing_num AS "mailing_num",
+			o.ordertype_id AS "payway_nm",
+			o.CUR_STATUS_NM AS "goodssend_flag",
+			o.sin_status_nm AS "sin_status_nm",
+			o.source_nm AS "source_nm",
+			o.spec_shopno AS "spec_shopno"
+		FROM
+			tbl_order o
+		INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		INNER JOIN tbl_order_dodetail od ON od.order_id = o.order_id
+		INNER JOIN tbl_item item on item.code=o.goods_id
+		INNER JOIN tbl_goods_payway gp On gp.goods_payway_id=o.goods_payway_id	
+		LEFT JOIN tbl_order_trans ot ON o.order_id = ot.order_id
+		LEFT JOIN TBL_ORDER_EXTEND1 oe on o.order_id=oe.order_id 
+		WHERE   od.STATUS_ID = '0311'
+			AND <![CDATA[od.do_time >= #{startDate}]]>
+			AND	<![CDATA[od.do_time < #{endDate}]]>
+			<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+			AND	o.ordertype_id = 'FQ'
+			AND o.sin_status_id = '0311'
+		ORDER BY o.create_time
+		<![CDATA[ limit #{offset}, #{limit} ]]>
+	</select>
+	<select id="countStageReturnGoods" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultType="Long" >
+		SELECT
+			count(1)
+		FROM
+			tbl_order o
+			INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+		WHERE od.status_id = '0327'
+		AND <![CDATA[od.do_time >= #{startDate} AND od.do_time <#{endDate}]]>
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		AND o.cur_status_id = '0327'
+		AND o.ordertype_id = 'FQ'
+	</select>
+	<!-- 分期退货报表 -->
+	<select id="findStageReturnGoods" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+			oe.ordernbr as bank_nbr,
+			o.order_id,
+			item.mid as goods_id,
+			o.total_money,
+			o.goods_nm,
+			o.cardno,
+			om.cont_nm,
+			od.do_desc,
+			o.vendor_snm,
+			om.cont_idcard,
+			o.goods_num,
+			o.source_nm,
+			o.spec_shopno
+		FROM
+			tbl_order o
+			INNER JOIN tbl_order_main om on o.ordermain_id = om.ordermain_id
+			INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+			INNER JOIN tbl_item item on item.code=o.goods_id
+			LEFT JOIN TBL_ORDER_EXTEND1 oe on o.order_id = oe.order_id 
+		WHERE od.status_id = '0327'
+		AND <![CDATA[od.do_time >= #{startDate} AND od.do_time <#{endDate}]]>
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		AND o.cur_status_id = '0327'
+		AND o.ordertype_id = 'FQ'
+		ORDER BY
+			o.create_time 
+		<![CDATA[ limit #{offset}, #{limit} ]]>
+	</select>
+	<select id="countCommonGiftSale" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultType="Long" >
+		SELECT
+			count(1)
+		FROM
+			tbl_order o
+		INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+		WHERE od.status_id = '0308'
+		AND <![CDATA[od.do_time >= #{startDate} AND od.do_time < #{endDate}]]>
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		AND o.ordertype_id = 'JF'
+		AND o.cur_status_id NOT IN ('0301','0316','0307','0305','0304')
+		AND (o.act_type NOT IN ('30', '40') or o.act_type is null)
+		ORDER BY o.create_time ASC
+	</select>
+	<!-- 普通礼品销售报表 -->
+	<select id="findCommonGiftSale" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+			o.order_id,
+			item.xid as goods_id,
+			o.source_nm,
+			g.name as goods_nm,
+			g.product_id,
+			(gp.cal_money * o.goods_num) total_money,
+			(CASE 
+			WHEN gp.is_birth ='1' THEN gp.cal_money * o.goods_num * 0.88
+			ELSE gp.cal_money * o.goods_num END) AS cal_money,
+			o.goods_num,
+			om.cont_nm,
+			om.csg_province,
+			om.csg_city,
+			o.cur_status_nm,
+			(case when gp.is_birth='1' then '是' else '否' end) AS is_birth,
+			(case o.cust_type when o.cust_type='A' then '金普'
+			when o.cust_type='B' then '钛金/臻享白金'
+			when o.cust_type='C' then '顶级/增值白金'
+			when o.cust_type='D' then 'VIP'
+			else '' end) cust_type
+		FROM
+			tbl_order o
+		INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+		INNER JOIN tbl_item item ON o.goods_id = item.code
+		INNER JOIN tbl_goods g on g.code = item.goods_code
+		INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		INNER JOIN tbl_goods_payway gp ON o.goods_payway_id = gp.goods_payway_id
+		WHERE od.status_id = '0308'
+		AND <![CDATA[od.do_time >= #{startDate} AND od.do_time <#{endDate}]]>
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		AND o.ordertype_id = 'JF'
+		AND o.cur_status_id NOT IN ('0301','0316','0307','0305','0304')
+		AND (o.act_type NOT IN ('30', '40') or o.act_type is null)
+		ORDER BY o.create_time ASC
+		<![CDATA[ limit #{offset}, #{limit} ]]>
+	</select>
+	<select id="countGoodBack" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultType="Long" >
+		SELECT
+			count(1)
+		FROM
+			tbl_order o
+			INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+			INNER JOIN tbl_item item ON o.goods_id = item.code
+			INNER JOIN tbl_goods_payway gp ON gp.goods_payway_id = o.goods_payway_id
+			INNER JOIN tbl_goods g ON item.goods_code = g.code
+			INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		WHERE	
+			od.status_id in ('0312','0327')
+			AND o.ordertype_id = 'JF'
+			<![CDATA[AND od.do_time >= #{startDate} AND od.do_time <#{endDate}]]>
+			<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+	</select>
+	<!-- 退货报表 -->
+	<select id="findGoodBack" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+			o.order_id AS "order_id",
+			item.xid AS goods_id,
+			g.name AS goods_nm,
+			g.product_id,
+			o.goods_num AS "goods_num",
+			(case when o.MEMBER_LEVEL='0004' then gp.CAL_MONEY*0.88 else gp.CAL_MONEY end) AS single_price,
+			((case when o.MEMBER_LEVEL='0004' then gp.CAL_MONEY*0.88 else gp.CAL_MONEY end)*o.goods_num) AS cal_money,
+			(case when gp.is_birth='1' then '是' else '否' end) AS is_birth,
+			o.cur_status_nm AS "cur_status_nm",
+			o.source_nm AS "source_nm",
+			gp.goods_price as purchase_price,
+			gp.CAL_MONEY*o.goods_num as total_money,
+			om.cont_nm,
+			om.csg_province,
+			om.csg_city
+		FROM
+			tbl_order o
+			INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+			INNER JOIN tbl_item item ON o.goods_id = item.code
+			INNER JOIN tbl_goods_payway gp ON gp.goods_payway_id = o.goods_payway_id
+			INNER JOIN tbl_goods g ON item.goods_code = g.code
+			INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		WHERE	
+			od.status_id in ('0312','0327')
+			AND o.ordertype_id = 'JF'
+			<![CDATA[AND od.do_time >= #{startDate} AND od.do_time <#{endDate}]]>
+			<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		<![CDATA[ limit #{offset}, #{limit} ]]>
+	</select>
+	<!-- 结算日报表 -->
+	<select id="findClearingDetail" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT 
+			vendor_id,
+			vendor_snm,
+			sum(case when sin_status_id ='0311' then Cal_money*goods_num else 0 end) AS request_total_money,
+			sum(case when sin_status_id ='0311' then goods_num else 0 end) AS request_goods_num,
+			sum(case when cur_status_id ='0327' then Cal_money*goods_num  else 0 end) AS back_total_money,
+			sum(case when cur_status_id ='0327' then goods_num  else 0 end) AS back_goods_num,
+			sum(case when sin_status_id ='0311' then Cal_money*goods_num else 0 end)-sum(case when cur_status_id ='0327' then Cal_money*goods_num  else 0 end) as cal_money
+		from 
+			(select o.order_id,'' as sin_status_id, od.status_id as cur_status_id ,o.vendor_id,o.vendor_snm,gp.cal_money,o.goods_num
+			FROM tbl_order o
+			INNER JOIN tbl_order_dodetail od ON o.order_id=od.order_id
+			INNER JOIN tbl_goods_payway gp ON gp.goods_payway_id = o.goods_payway_id		
+			WHERE od.status_id = '0327'
+			AND <![CDATA[od.do_time >= #{startDate} AND od.do_time <#{endDate}]]>
+			AND o.ordertype_id = 'JF'
+			union all
+			select o.order_id,od.status_id as sin_status_id, '' as cur_status_id ,o.vendor_id,o.vendor_snm,gp.cal_money,o.goods_num
+			FROM tbl_order o
+			INNER JOIN tbl_order_dodetail od ON o.order_id=od.order_id	
+			INNER JOIN tbl_goods_payway gp ON gp.goods_payway_id = o.goods_payway_id	
+			WHERE od.status_id = '0311'
+			AND <![CDATA[od.do_time >= #{startDate} AND od.do_time <#{endDate}]]>
+			AND o.ordertype_id = 'JF') a
+		group by vendor_id
+		order by vendor_snm
+	</select>
+	<!-- 兑换统计月报表 -->
+	<select id="findExchangeStatistics" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT item.xid as goods_id,o1.source_nm,o1.goods_nm,
+			o1.jpnum,
+			o1.ztnum,
+			o1.zdnum,
+			o1.vipnum,
+			o1.birthdaynum,
+			o1.bcnum,
+			(o1.jpnum+o1.ztnum+o1.zdnum+o1.vipnum+o1.birthdaynum+o1.bcnum) AS saleSumNum,
+			area.area_name as region_type,
+			goods.product_id
+		FROM	
+			(SELECT 
+				o.goods_id, o.source_nm, o.goods_nm, 
+				SUM(CASE WHEN o.member_level ='0000' THEN o.goods_num ELSE 0 END) AS jpnum, 
+				SUM(CASE WHEN o.member_level ='0001' THEN o.goods_num ELSE 0 END) AS ztnum, 
+				SUM(CASE WHEN o.member_level ='0002' THEN o.goods_num ELSE 0 END) AS zdnum, 
+				SUM(CASE WHEN o.member_level ='0003' THEN o.goods_num ELSE 0 END) AS vipnum, 
+				SUM(CASE WHEN o.member_level ='0004' THEN o.goods_num ELSE 0 END) AS birthdaynum, 
+				SUM(CASE WHEN o.member_level ='0005' THEN o.goods_num ELSE 0 END) AS bcnum
+			FROM
+				tbl_order o
+			WHERE o.ordertype_id ='JF'
+			<![CDATA[ AND o.create_time >= #{startDate} AND o.create_time <#{endDate} ]]>
+			AND o.cur_status_id NOT IN('0301','0316','0307','0305','0304')
+			GROUP BY o.goods_id,o.SOURCE_NM
+			ORDER BY o.SOURCE_NM,o.goods_id) o1
+		INNER JOIN tbl_item item ON item.code = o1.goods_id
+		INNER JOIN tbl_goods goods ON goods.code = item.goods_code
+		LEFT JOIN tbl_esp_area_inf area on goods.region_type = area.area_id
+	</select>
+	<select id="countCreditCardReqMoney" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultType="long" >
+		SELECT
+			count(1)
+		FROM
+			tbl_order o
+			INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+			LEFT JOIN tbl_order_extend1 oe ON o.order_id = oe.order_id
+		WHERE
+			o.sin_status_id = '0311'
+		AND o.ordertype_id = 'FQ'
+		AND od.status_id = '0311'
+		<![CDATA[AND od.do_time >= #{startDate}  AND od.do_time <#{endDate} ]]>
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		ORDER BY o.create_time ASC
+	</select>
+	<!-- 信用卡请款对账明细报表 (供应商)-->
+	<select id="findCreditCardReqMoney" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+			o.order_id,
+			oe.ordernbr as bank_nbr,
+			item.mid as goods_id,
+			o.goods_nm,
+			o.goods_num,
+			gp.goods_price as single_price,
+			o.stages_num,
+			o.total_money,
+			o.bonus_totalvalue,
+			o.uitdrtamt as bonus_price,
+			o.voucher_nm,
+			o.voucher_price,
+			o.spec_shopno,
+			DATE_FORMAT(od.do_time,'%Y%m%d') AS accepted_time,
+			o.sin_status_nm
+		FROM
+			tbl_order o
+			INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+			INNER JOIN tbl_item item ON o.goods_id = item.code
+			left join tbl_goods_payway gp on gp.goods_payway_id=o.goods_payway_id
+			LEFT JOIN tbl_order_extend1 oe ON o.order_id = oe.order_id
+		WHERE
+			o.sin_status_id = '0311'
+		AND o.ordertype_id = 'FQ'
+		AND od.status_id = '0311'
+		<![CDATA[AND od.do_time >= #{startDate}  AND od.do_time <#{endDate} ]]>
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		ORDER BY o.create_time ASC
+		<![CDATA[ limit #{offset}, #{limit} ]]>
+	</select>
+	<select id="countVendorGoodsBack" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultType="Long" >
+		SELECT
+			count(1)
+		FROM
+			tbl_order o
+		INNER JOIN tbl_goods g ON o.goods_code = g.code
+		INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+		INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		WHERE o.cur_status_id = '0327'
+		AND o.ordertype_id IN ('YG','FQ')
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		AND od.status_id = '0327'
+		<![CDATA[AND od.do_time >= #{startDate}  AND od.do_time <#{endDate} ]]>
+		ORDER BY o.create_time ASC
+	</select>
+	<!-- 商户退货明细报表 (供应商)-->
+	<select id="findVendorGoodsBack" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+			(case when (o.act_type=10 or o.act_type=20 or o.act_type=30 or o.act_type=40 or o.act_type=50) then '活动商品'
+			else '普通商品' end) as act_type,
+			o.order_id,
+			item.mid as goods_id,
+			o.goods_nm,
+			gp.cal_money,
+			gp.goods_price as single_price,
+			item.market_price as purchasePrice,
+			DATE_FORMAT(od.do_time,'%Y%m%d') AS accepted_time,
+			RIGHT(o.cardno,4) AS cardno,
+			o.vendor_snm,
+			(CASE WHEN o.ordertype_id ='FQ' THEN '分期' ELSE '一期' end) as ordertype_nm,
+			o.source_nm
+		FROM
+			tbl_order o
+		INNER JOIN tbl_item item ON o.goods_id = item.code
+		INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+		INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		left join tbl_goods_payway gp on gp.goods_payway_id=o.goods_payway_id
+		WHERE o.cur_status_id = '0327'
+		AND o.ordertype_id IN ('YG','FQ')
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		AND od.status_id = '0327'
+		<![CDATA[AND od.do_time >= #{startDate}  AND od.do_time <#{endDate} ]]>
+		ORDER BY o.create_time ASC
+		<![CDATA[ limit #{offset}, #{limit} ]]>
+	</select>
+	<select id="countVendorSellDetail" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultType="Long" >
+		SELECT
+			count(1)
+		FROM
+			tbl_order o
+		INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+		WHERE o.cur_status_id NOT IN ('0301','0316','0307','0305','0304','0382')
+		AND o.ordertype_id IN('YG','FQ')
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		AND od.status_id = '0308'
+		<![CDATA[AND od.do_time >= #{startDate}  AND od.do_time <#{endDate} ]]>
+		ORDER BY o.create_time ASC
+	</select>
+	<!-- 商户销售明细报表 (供应商)-->
+	<select id="findVendorSellDetail" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+			o.order_id,
+			item.mid as goods_id,
+			g.name as goods_nm,
+			g.product_id,
+			o.goods_num,
+			gp.goods_price as single_price,
+			o.vendor_snm,
+			(CASE WHEN o.cardtype ='C' THEN '信用卡' ELSE '借记卡' end) as cardtype,
+			RIGHT(o.cardno,4) AS cardno,
+			(CASE WHEN o.ordertype_id ='FQ' THEN '分期' ELSE '一期' end) as ordertype_nm,
+			o.cur_status_nm,
+			o.source_nm,
+			o.spec_shopno,
+			o.voucher_no,
+			o.voucher_nm,
+			o.voucher_price,
+			o.bonus_totalvalue,
+			o.uitdrtamt as bonus_price,
+			om.csg_province,
+			om.csg_city,
+			om.csg_borough,
+			om.csg_address
+		FROM
+			tbl_order o
+		INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+		INNER JOIN tbl_goods g ON o.goods_code = g.code
+		INNER JOIN tbl_item item ON o.goods_id = item.code
+		INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		left join tbl_goods_payway gp on gp.goods_payway_id=o.goods_payway_id
+		WHERE o.cur_status_id NOT IN ('0301','0316','0307','0305','0304','0382')
+		AND o.ordertype_id IN('YG','FQ')
+		<if test="vendorId!=null"> AND o.vendor_id = #{vendorId} </if>
+		AND od.status_id = '0308'
+		<![CDATA[AND od.do_time >= #{startDate}  AND od.do_time <#{endDate} ]]>
+		ORDER BY o.create_time ASC 
+		<![CDATA[ limit #{offset}, #{limit} ]]>
+	</select>
+	<!-- 会员总数周报表 -->
+	<select id="findMemberNumDto" parameterType="cn.com.cgbchina.batch.model.QueryParams" resultMap="OrderBatchMap">
+		SELECT
+			'广发商城' AS ordertype_nm,
+			COUNT(DISTINCT om.cont_idcard) AS memberNum
+		FROM
+			tbl_order o
+		INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+		INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		WHERE
+			o.cur_status_id NOT IN ('0301','0316','0307','0305','0304')
+		AND o.ordertype_id IN ('YG', 'FQ')
+		AND od.status_id = '0308'
+		<![CDATA[AND od.do_time >= #{startDate}  AND od.do_time <#{endDate} ]]>
+		UNION ALL
+		SELECT
+			'积分商城' AS ordertype_nm,
+			COUNT(DISTINCT om.cont_idcard) AS memberNum
+		FROM
+			tbl_order o
+		INNER JOIN tbl_order_dodetail od ON o.order_id = od.order_id
+		INNER JOIN tbl_order_main om ON o.ordermain_id = om.ordermain_id
+		WHERE
+			o.cur_status_id NOT IN ('0301','0316','0307','0305','0304')
+		AND o.ordertype_id IN ('JF')
+		AND od.status_id = '0308'
+		<![CDATA[AND od.do_time >= #{startDate}  AND od.do_time <#{endDate} ]]>
+	</select>
+	<!-- 商户兑换统计月报表 -->
+	<select id="findVendorExchangeStat" resultMap="OrderBatchMap">
+		SELECT 
+			o.vendor_id,
+			o.vendor_snm,
+			sum(o.goods_num) as goods_num,
+			sum(gp.cal_money*o.goods_num) as total_money
+		FROM tbl_order o
+		INNER JOIN tbl_order_dodetail d ON d.order_id=o.order_id
+		INNER JOIN tbl_goods_payway gp ON gp.goods_payway_id = o.goods_payway_id
+		WHERE d.status_id='0308'
+			AND <![CDATA[d.do_time >= #{startDate} AND d.do_time < #{endDate}]]>
+		    AND o.ordertype_id='JF'
+		    AND o.cur_status_id not in('0301','0316','0307','0305','0304')
+	    GROUP BY o.vendor_id
+	    ORDER BY o.vendor_snm
+	</select>
+	<sql id="vendorSaleDetailConditions">
+		<where>
+			d.status_id='0308'
+			AND <![CDATA[d.do_time >= #{startDate} AND d.do_time < #{endDate}]]>
+		    AND o1.ordertype_id IN('YG','FQ')
+		    AND o1.cur_status_id NOT IN('0301','0316','0307','0305','0304')
+	    </where>
+	</sql>
+	<select id="countVendorSaleDetail" resultType="Long">
+		SELECT count(1)
+		FROM tbl_order o1
+		INNER JOIN tbl_order_dodetail d ON d.order_id=o1.order_id	
+		<include refid="vendorSaleDetailConditions"/>
+	</select>
+	<!-- 商户销售明细报表 -->
+	<select id="findVendorSaleDetail" resultMap="OrderBatchMap">
+		SELECT 
+			o.order_id,
+			o.cur_status_nm,
+			o.source_nm,
+			o.vendor_snm,
+			o.cardtype,
+			o.goods_num,
+			o.single_price,
+			o.cardno,
+			(CASE WHEN o.ordertype_id ='FQ' THEN '分期' ELSE '一期' end) as ordertype_nm,
+			o.SPEC_SHOPNO,
+			o.voucher_no,
+			o.voucher_nm,
+			o.voucher_price,
+			o.bonus_totalvalue,
+			o.uitdrtamt as bonus_price,
+			item.mid as goods_id,
+			goods.name as goods_name,
+			goods.product_id,
+			goods.goods_brand_name
+		FROM 
+			(SELECT o1.order_id,
+				o1.cur_status_nm,
+				o1.source_nm,
+				o1.vendor_snm,
+				o1.cardtype,
+				o1.goods_id,
+				o1.goods_num,
+				gp.goods_price as single_price,
+				o1.cardno,
+				o1.ordertype_id,
+				o1.SPEC_SHOPNO,
+				o1.voucher_no,
+				o1.voucher_nm,
+				o1.voucher_price,
+				o1.bonus_totalvalue,
+				o1.uitdrtamt,
+				o1.create_time
+			FROM tbl_order o1
+			INNER JOIN tbl_order_dodetail d ON d.order_id=o1.order_id
+			Left Join tbl_goods_payway gp On gp.goods_payway_id=o1.goods_payway_id	
+			<include refid="vendorSaleDetailConditions"/>
+			<![CDATA[ ORDER BY o1.create_time limit #{offset}, #{limit} ]]>) o
+		inner join tbl_item item on item.code=o.goods_id
+		inner join tbl_goods goods on item.goods_code=goods.code
+	</select>
+	
+	<select id="findGoodsNameByItemCode" parameterType="String" resultType="String">
+		SELECT 
+		 	g.name
+		FROM 
+		 	tbl_goods g 
+		 LEFT JOIN tbl_item i ON g.code = i.goods_code 
+		WHERE i.code = #{itemCode}
+	</select>
+</mapper>
+
+

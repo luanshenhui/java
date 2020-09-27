@@ -1,0 +1,5 @@
+package com.yulin.dangdang.dao;
+
+public interface OrderDao {
+	public boolean insertOrder(Order order);
+}

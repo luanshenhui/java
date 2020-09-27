@@ -1,0 +1,24 @@
+<div class="modal">
+    <div class="modal-header"><h2>{{#if id}}编辑其他级别参数{{else}}新增其他级别参数{{/if}}</h2></div>
+    <form class="price-system-form">
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="systemCode" >体系代码：</label>
+                <input id="systemCode" name="systemCode" class="form-control" type="text" value="{{systemCode}}"/>
+            </div>
+            <div class="control-group">
+                <label for="systemName" >体系名称：</label>
+                <input id="systemName" name="systemName" class="form-control" type="text" value="{{systemName}}"/>
+            </div>
+            <div class="control-group">
+                <label for="levelParam" >参数：</label>
+                <input id="levelParam" name="levelParam" class="form-control" type="text" value="{{levelParam}}"/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-sm" value="确定">
+            <button class="btn btn-info btn-sm close">取消</button>
+        </div>
+    </form>
+
+</div>

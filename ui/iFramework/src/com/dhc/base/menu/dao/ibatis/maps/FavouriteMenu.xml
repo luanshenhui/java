@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="FAVOURITE_MENU" >
+	<resultMap id="FavouriteMenuResultMap" class="com.dhc.base.menu.vo.MenuTreeVO" >
+		<result column="MENU_CODE" property="menuCode"/>
+		<result column="USER_ID" property="userID"/>
+		<result column="MENU_NAME" property="menuName"/>
+		<result column="MENU_LOCATION" property="menuLocation"/>
+		<result column="FAVORITE_ORDER" property="favouriteOrder"/>
+	</resultMap>
+	<resultMap id="MenuResultMap" class="com.dhc.base.menu.vo.MenuTreeVO" >
+		<result column="MENU_CODE" property="menuCode"/>
+		<result column="MENU_NAME" property="menuName"/>
+		<result column="MENU_LOCATION" property="menuLocation"/>
+	</resultMap>
+	<select id="queryFavouriteMenu" resultMap="FavouriteMenuResultMap" parameterClass="java.lang.String" >
+   		SELECT F.MENU_CODE, F.USER_ID, M.MENU_NAME, M.MENU_LOCATION, F.FAVORITE_ORDER
+     	FROM WF_ORG_FW_FAVORITE_T F LEFT JOIN WF_ORG_MENU M 
+     		ON F.MENU_CODE=M.MENU_CODE
+     	WHERE F.USER_ID=#value#
+     	ORDER BY F.FAVORITE_ORDER
+	</select>
+	<select id="getFavMenuInof" resultMap="FavouriteMenuResultMap" parameterClass="com.dhc.base.menu.vo.MenuTreeVO">
+		SELECT MENU.MENU_CODE,
+       		FAV.USER_ID,
+       		MENU.MENU_NAME,
+       		MENU.MENU_LOCATION,
+       		FAV.FAVORITE_ORDER
+  		FROM WF_ORG_FW_FAVORITE_T FAV
+  			LEFT JOIN WF_ORG_MENU MENU
+    	ON FAV.MENU_CODE = MENU.MENU_CODE
+     	WHERE MENU.MENU_CODE=#menuCode# AND FAV.USER_ID=#userID#
+	</select>
+	<select id="getMenuByMenuId" resultMap="MenuResultMap" parameterClass="java.lang.String">
+		SELECT MENU_CODE, MENU_NAME, MENU_LOCATION
+		FROM WF_ORG_MENU
+     	WHERE MENU_CODE=#value# AND MENU_TYPE='MENU'
+	</select>
+	<select id="getFavMenuCountByUserId" resultClass="int" parameterClass="java.lang.String">
+		SELECT COUNT(*)
+		FROM WF_ORG_FW_FAVORITE_T
+     	WHERE USER_ID=#value#
+	</select>
+	<insert id="insertFavMenu" parameterClass="com.dhc.base.menu.vo.MenuTreeVO">
+		INSERT INTO WF_ORG_FW_FAVORITE_T
+		(MENU_CODE, USER_ID, FAVORITE_NAME,PAGE_LINK,FAVORITE_ORDER)
+		VALUES (#menuCode#, #userID#, #menuName#,#menuLocation#,#favouriteOrder#)
+	</insert>
+	<delete id="deleteMenuTreeByUserID" parameterClass="java.lang.String">
+		DELETE FROM WF_ORG_FW_FAVORITE_T
+		WHERE USER_ID = #value#
+	</delete>
+</sqlMap>

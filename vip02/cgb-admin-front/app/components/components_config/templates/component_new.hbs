@@ -1,0 +1,52 @@
+<div class="modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>组件配置</h2>
+    </div>
+    <form class="form form-aligned component-form" component-id="{{id}}">
+        <div class="component-new modal-body">
+            <div class="control-group">
+                <label for="category"><span class="required">*</span>组件类型:</label>
+                <select class="select form-control" name="componentCategory">
+                    <option value="COMMON" {{#equals componentCategory "COMMON"}}selected{{/equals}}>COMMON</option>
+                    <option value="ADMIN" {{#equals componentCategory "ADMIN"}}selected{{/equals}}>ADMIN</option>
+                    <option value="OFFICIAL" {{#equals componentCategory "OFFICIAL"}}selected{{/equals}}>OFFICIAL</option>
+                    <option value="VENDOR" {{#equals componentCategory "VENDOR"}}selected{{/equals}}>VENDOR</option>
+                    <option value="ITEM" {{#equals componentCategory "ITEM"}}selected{{/equals}}>ITEM</option>
+                    <option value="INTEGRADE" {{#equals componentCategory "INTEGRADE"}}selected{{/equals}}>INTEGRADE</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="name"><span class="required">*</span>组件名:</label>
+                <input id="name" class="form-control" name="name" type="text" placeholder="请输入组件名" required
+                       value="{{name}}">
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="icon">组件logo:</label>
+                <input id="icon" class="form-control" name="icon" type="text" placeholder="请输入组件logo" value="{{icon}}">
+            </div>
+            <div class="control-group">
+                <label for="description">组件描述:</label>
+                <input id="description" class="form-control" name="description" type="text" placeholder="请输入组件描述"
+                       value="{{description}}">
+            </div>
+            <div class="control-group">
+                <label for="path"><span class="required">*</span>路径:</label>
+                <input id="path" name="path" class="form-control" type="text" placeholder="请输入组件路径" value="{{path}}"
+                       required>
+                <span class="note"><i>&times;</i> 必填 不得为空</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="api">组件接口:</label>
+                <textarea id="api" name="api" class="form-control" placeholder="请输入组件调用接口（api）">{{api}}</textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small" value="确定">
+            <button class="btn btn-close btn-small close">关闭</button>
+        </div>
+    </form>
+</div>

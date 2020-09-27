@@ -1,0 +1,712 @@
+
+web 基础的课程
+	html:1
+	css:1
+	javascript:3
+	JQuery/Ajax:
+	
+静态页面:不与服务器发生动态交互
+	html:页面的架构/内容
+	CSS:美化页面--控制页面的外观
+	JS:页面的动态显示效果
+
+服务器端技术:页面数据和服务器的交互
+	JSP
+	PHP
+	ASP.NET	
+--------------------
+HTML 课程：
+1 什么是 HTML
+	hypertext markup language-超(超级链接)文本标记语言是一种编写网页的标记语言(纯文本),后缀为htm或者html的文件,由浏览器软件解释运行(标记错误,意想不到的后果)
+
+2 基础语法
+	大多数的标记成对出现: <a></a>
+	个别标记只有开始标记: <br> 或者 <br />
+	带有属性的标记: <a href="a.html" title='sss'></a>空格隔开,属性名称和值之间用等号连接,属性的值用一对单引号或者一对双引号
+			
+3 编写一个 html 网页
+	创建一个后缀为 html 或者 htm 的文件,用文本编辑器打开,编写用浏览器打开
+		
+4 浏览器软件
+	IE/Firfox/Chrome/Safiri
+	同样的文件,用不同的浏览器查看,可能会有不同的效果
+		
+5 html 页面的标准结构:练习(标准格式的html文档,版本信息不需要)
+	DTD定义的版本信息
+	根元素为 html
+	<head>:对于整个文档的描述信息 **
+	<title>:为网页添加标题
+	<meta>:元数据--单标记
+		<meta http-equiv="refresh" content="3">定义消息头,常用于留言论坛的页面
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">定义编码格式
+	<link>:引入外部的其他文件,比如 CSS 文件
+	<style>:内部样式表
+	<script>:引入脚本文件,比如 js文件/vbs文件
+	<body>:页面的主体展示内容
+		文本标记
+		图像和超级链接
+		表格
+		表单
+		列表
+		框架元素
+		
+6 版本信息
+	4.01:过渡型
+	XHTML 1.0:严格型
+	框架类型
+	
+7 文本标记:文本默认显示的
+	<p>:段落标记,常用于文章的编辑
+	<br>:单标记,代表换行
+		用<p>或者两个 <br>,实现单独的行,默认情况下,<p>有较大的段落间距
+	<hn>:<h1>--<h6>,代表1号--6号标题,将一些文本以标题的方式突出显示
+	<span>和<div>:分区显示元素,常用于分别设置样式外观
+	<span>:不影响原有的布局,适用于同一行的分组
+	<div>:独占一行,适用于不同行不同元素的分组
+			
+8 图像和超级链接
+图像	<img>:单标记
+	src:设置显示的图片的路径(相对或者绝对)
+	width/height:尺寸
+	title:提示性的文本信息
+		<img src="http://bbs.tarena.com/images/logo.gif"
+		<img src="d:/a.jpg">
+		<img src="a.jpg">
+超级链接:<a> 标记---<a>被点击的文本或者其他元素<a>
+	href:url地址(相对或者绝对)---页面间跳转
+		<a href="http://bbs.tarena.com.cn"></a>:友好链接
+		<a href="home.jsp">主页</a>:当前站点跳转
+	target:页面在何处打开(原有的窗口,新窗口)
+	_blank:查看详细
+	_self:前后逻辑顺序
+	name:定义锚点---当前页面上的不同部分之间的跳转
+		一个 <a> 定义锚点:使用name 属性
+		一个 <a> 定义链接: href="#锚点名称"
+	整幅图像只有一个链接:<a href=""><img></a>
+	为一副图像添加多个链接:热点映射
+	<map name="aaa">
+		<area shape="" coords="" href="">定义一个区域,单标记
+		<area shape="circle"  coords="x,y,r">
+		<area shape="rect" coords="x1,y1,x2,y2">
+		<area shape="poly" coords="x1,y1,x2,y2,x3,y3,.....">
+	</map>
+	<img src="" width="" title="" usemap="#aaa">
+						
+9 表格
+	显示规则化数据
+	页面的布局
+	主要元素:<table> <tr> <td>,内容只能显示在td里
+	table 元素可以附带一些属性:
+		border
+		width/height:默认大小是自适应的设置大小后,按照行列中内容的比例自动分配
+		cellspacing
+		cellpadding:单元格内容与单元格的边距
+	tr和td元素也可以设置一些属性:格子之间(边框)的间距
+		width/height:
+		align:水平方向的对齐 left/center/right
+		valign:垂直方向的对齐 top/middle/bottom
+	表格的完整结构
+		<caption>:为表格定义标题
+		行分组:适应于为多行统一的样式定义的时候
+			<thead>:表头,一个
+			<tbody>:表主体,可以有多个
+			<tfoot>:表的页脚部分,一个
+	不规则表格:
+		td 元素属性
+			rowspan:跨多行
+			colspan:跨多列
+	表格的嵌套
+		td 元素中包含整个table 的定义
+
+10 表单:页面的数据录入/选择和提交
+	<form>:包含表单元素,以表单为单位提交
+		action="register.jsp"
+		method="post"
+	<input>标记:单标记
+		type 属性:决定输入元素的类型
+		type="text":文本输入框
+		type="password":密码输入框,用掩码的方式显示文本
+		type="checkbox":核选框,多选框,checked属性:设置默认选中
+		type="radio":单选,一组实现互斥的选择通过name属性来实现分组
+	按钮相关
+		type="submit":提交类型的按钮
+		type="reset":重置类型的按钮,恢复到加载时
+	两种
+		type="hidden":隐藏域控件--界面上不显示,专用于记载那些不希望用户看见的关键数据
+		type="file":文件上传
+		value属性:如果是文本框或者密码框,value的值将显示在
+			  如果是核选框/单选框,记载发送给服务器端的关键数据
+			  如果是按钮类型,设置按钮上的文本
+
+	非<input>标记:
+		<select>和<option>:下拉框或者列表框(依靠size属性)
+			select 的常用属性:multiple实现多选,只能用于列表框
+		<textarea>:多行的文本区域
+		<label>:用来包含文本的,包含的文本和表单元素关联起来
+			for 属性: <label for="元素的id的值">文本</label>
+
+11 列表:将一系列的选项按照分行对齐显示
+	<ol>:有序列表
+	<ul>:无序列表
+	<li>:list item
+	嵌套实现导航菜单的效果
+
+12 框架元素(了解)
+	作用:在一个浏览器窗口或者页签中显示多个html页面
+	使用方式:
+		新建一个html文件,代码中使用框架元素划分页面并引入其他html文件
+		不需要body元素,包含如下:
+	<frameset rows="200,*">---使用rows或者cols属性划分
+		<frame src="a.html">---单标记,引入html页面
+		<frame src="b.html">
+	</frameset>
+
+	<iframe>标记:在一个非框架页面(普通html页面)上嵌入一个其他页面
+
+练习:嵌套的列表/iframe 的使用
+	tts文档
+	额外加一个:
+---------------------------
+css笔记：
+1 CSS:cascading stylesheet,级联(层叠)样式表
+	数据和表现分离,统一的样式控制
+	W3C 定义了CSS:统一使用CSS 的语法来定义所有元素的外观
+	没有使用CSS之前:将每个样式使用属性的方式来定义,不能统一控制,不能实现数据和表现的分离
+
+2 CSS 的基础语法
+	用于定义样式
+		样式属性的名称:值;样式属性的名称:值;...
+		color:red;font-size:20pt;
+	用来定义样式选择器
+		选择器 {样式定义}
+
+3 CSS 的使用方式:
+	内联:将样式定义在 元素的 style 属性中,没有分离;没有重用,不好维护
+	内部样式表:将样式定义在页面的 head 元素里的 style 元素里,使用选择器;分离;仅限于当前页面的重用
+	外部样式表:样式定义在单独的文件(后缀为 css)里,页面引入样式表文件
+	
+课堂练习:
+	定义一个html文件,分别使用三种 CSS 方式定义某些元素的外观
+
+4 CSS 优先级别
+	大多数样式可以继承,如果重复,以就近优先
+		<p>aa<span>span text</span>bbb</p>
+	默认样式
+	内部或者外部样式表:就近,取决于先后顺序
+	内联样式
+
+5 选择器的声明:将样式定义灵活的运用于页面元素
+	元素(名称)选择器:以元素的名称作为选择器的名称
+		必须合法的html 标记的名称
+		同一类标记实现样式定义;不能实现跨类别的,不能实现同一种元素中的细分
+	类选择器:
+		.className {样式}
+		<元素 class="className" >
+	分类选择器:同一种元素中细分
+		元素的名称.className {样式}
+		<元素 class="">
+	元素 ID 选择器:将样式局限于页面上某一个元素使用
+		#元素id值 {样式}
+		<元素 id="">
+
+	群组选择器:对于多个选择器实现统一的定义
+		p,h1.first,#td1 {样式}
+	
+	派生选择器:和元素的包含层次相关,以元素的顺序定义
+		p span {样式}
+
+		td.header a {color:red;}
+		td.left a {}
+		td.right a {}
+<table>
+	<tr>
+		<td colspan="2" class="header">
+			<a>login</a>
+			<a>register</a>
+			<a>login</a>
+			<a>register</a>
+			<a>login</a>
+			<a>register</a>
+		</td>
+	</tr>
+</table>
+
+	伪类:元素有多种状态,每种状态定义样式
+		a:link:没有被访问过
+		a:hover:鼠标悬停,可用于其他元素
+		a:active:点下
+		a:visited:访问过的
+
+		input:hover	
+
+6 样式属性
+	尺寸的单位: px(像素) pt(磅) cm mm in %
+	颜色的单位:单词 #FFFFFF
+
+7 尺寸(面积)的属性
+	width
+	height
+
+8 边框的属性
+	综合定义 border:width style color;
+	单样式定义 
+		border-width:1px;
+		border-style:solid;
+		border-color:red;
+	单边框定义:
+		border-left/right/top/bottom:1px solid red;
+
+9 显示属性
+	display:修改html元素原有的显示效果
+		none:不显示,不占用页面原有的空间
+			常和js一起实现页面的动态效果
+		inline:行内
+		block:块
+	html 元素分为两类:
+		块级元素(独占一行):div/p/hn/table/ul/ol
+		行内元素(共处一行):span/a/img/input,设置高和宽无用
+
+10 定位属性
+	position:html文档中的元素默认按照流的方式布局
+		可以设置为static以外的其他值,脱离了原有的流布局模式
+		static:默认的流模式
+		relative:相对定位,偏移量相对于原位置而言
+		absolute:绝对定位,偏移量相对于父元素的边框而言
+   偏移属性:位置
+	top/bottom/left/right:
+   堆叠顺序:层数
+	z-index
+
+11 文本属性:设置文本内容的样式
+	color
+	font-size
+	font-weight:粗体显示
+	font-family:字体的名称
+	text-decoration:none/underline
+	text-align:left/center/right
+
+12 背景属性:设置元素的背景
+	background-color:
+	background-image:url(a.jpg);
+	background-repeat:repeat/repeat-x/repeat-y/no-repeat;
+		常用于实现特殊的背景效果,比如渐变色
+	background-position:value1 value2;
+		常用于实现在背景图像上的偏移
+	background-attachment:附着方式
+		scroll/fixed
+		类似于水印的效果
+
+13 边距属性
+	box 模型
+	margin:外边距
+		margin-left/top/right/bottom
+	padding:内边距
+		padding-left/top/right/bottom
+
+	padding:10px;
+	简写的办法(精确的设置每个方向的边距):
+		padding:10px 30px 50px 5px;
+			top  right bottom left
+
+14 浮动属性:需要将多个块级元素位于同一行显示
+	float:left/right
+		元素脱离原有的流布局,浮动的停靠
+		可能会对后续元素的布局带来影响
+	clear:left/right/both
+		清除附近浮动元素带来的影响
+
+15 列表的样式
+	list-style-type:none;
+-------------------------
+js笔记：
+客户端与服务器端
+
+1 javascript 脚本语言:嵌入到网页上,实现一些动态的效果
+	动态的显示
+	数据录入的验证
+	DOM效果(动态的安排页面元素的显示)
+	BOM效果:browser
+
+2 javascript 的基础应用--UI相关
+  JQuery 
+  Ajax
+
+3 NetScape---javascript语言
+  Microsoft---JScript
+
+4 语言特点
+	一种基于对象和事件驱动的脚本语言
+	由浏览器软件解释运行
+
+5 基础语法
+	弱类型的语言
+	统一使用var 声明变量,变量的类型以赋值为准
+		var s = "hello";
+		var n = 12;
+		n = true;
+	变量的命名(标识符)
+		字母/数字/下划线/$组成
+		不能以数字开头
+		大小写敏感
+	语句:以分号结束
+	注释: //	/**/
+
+6 书写脚本的方式
+	<head>里<script>
+	js文件:脚本代码书写在一个后缀为js的文件里
+		引入js文件
+
+7 流程控制语句
+	条件语句:if/else   switch/case
+	循环语句:for/while
+
+8 数据类型的转换
+	弱类型的语言:
+		==  比较的值
+		=== 比较值和类型---严格相等
+		奇怪的比较,比如 0 和 ""
+			    比如 0 和 true
+	
+	基础数据类型:string/number/bool
+	其他:null/undefined(声明了但是没有赋值)
+
+	直接(隐式)转换:不同数据类型进行运算
+		string 和 number:string
+		number 和 bool:number
+		string 和 bool:string
+
+	显式转换:
+		转换为数值类型:parseInt/parseFloat
+		有可能转换失败:
+			isNaN:is not a number
+
+			var i = parseInt("12");
+			var i = parseint("12");//error
+		转换为字符串类型:toString
+
+	获取变量的数据类型
+		typeof(s)---string/number/bool/object
+
+9 内置对象(string)
+	创建一个字符串对象:一对单引号或者双引号括起文本
+		var s = "mary";
+		var s = 'mary';
+		var s = new String("mary");
+
+	属性
+		s.length
+
+	方法
+	获取单个字符
+		charAt(index)--字符
+	查询字符出现的位置
+		indexOf("a")---位置 -1
+		lastIndexOf
+	截取子字符串
+		substring(start,end)
+			end是真实的结束位置加1
+	大小写转换
+		toLowerCase
+		toUpperCase
+			GCD Gcd GCd gcd
+	常和正则表达式一起使用
+		replace(findstr,replacestr)
+			
+		search("abc")---index
+		search(/\d+/)
+
+		match---匹配的结果--数组
+
+	正则表达式:匹配/替换/搜索等 
+		匹配 \d \w [a-e] \d{3,5}
+		     +(1-n)
+		     ?(0/1)
+		     *(0-n)
+	拆分方法
+		split(",")---数组
+
+10 常用内置对象(Array)
+	创建数组,初始化
+		var a = new Array();
+		a[0] = "mary";
+		a[1] = true;
+		a[2] = 100;
+		//或
+		var a = ["mary",true,100];
+
+	属性:length
+
+	方法
+		得到数组的内容
+			join("|")
+			toString();返回以逗号分开的内容串联值
+		数组的相加,得到一个大数组
+			a1.concat(a2)
+		返回数组的一部分
+			a1.slice(start,end)--end还是+1
+		翻转
+			reverse()
+		排序
+			sort():按照字符串的比较
+			sort(方法的名称):传入一个方法对象
+
+11 常用内置对象Math
+	使用 Math.
+	属性:常用于得到数学常数
+		Math.PI
+
+	方法
+		计算用:min/max/round/ceil/floor
+			random:0=< <1的小数
+		复杂计算:
+			三角函数sin
+   Date
+	var t1 = new Date();
+	var t2 = new Date("2011-01-01");
+
+12 function 对象
+	声明和调用
+		function MethodName(p1,p2,p3)
+		{
+			//方法语句
+			return 返回值;
+		}
+
+		var r = MethodName(12,34);
+
+	方法的重载:没有
+		如果定义了相同名称的方法,以最后一次定义的为准
+
+	必须要实现类似于重载的效果:
+		arguments:得到当前方法的参数的数组
+		方法定义时,没有定义参数,依然可以传入
+		传入的参数都存放到arguments
+			function M()
+			{
+				//方法体
+			}
+
+	局部变量和全局变量
+	脚本中直接调用执行方法:在页面显示之前就执行
+
+练习:模拟机选一注双色球号码
+	按钮,点击:
+	1/随机出6个1到33(包括1和33)之间的整数
+	2/6个数不能重复,且按照升序排列,显示
+	3/随机出1个1到16(包括1和16)之间的整数
+	4/显示在界面上
+	
+13  DOM:document object model
+	将整个 html 文档对象化:树形结构
+	第一步:找到目标节点
+		通过id查找单个节点:document.getElementById
+		查找多个节点:document.getElementsByTagName
+			查找某类,返回节点对象的数组
+
+	第二步:操作目标节点(查询,修改)
+查询:将 html 标记对象化--元素标记的属性作为对象的属性用
+		比如style为集合属性
+			obj.style.样式属性
+			style.color
+			style.backgroundColor
+			style.fontSize
+		样式比较复杂:
+			声明样式类
+			obj.className = "有效的样式类的名称";
+			
+     .innerHTML	--元素标记的文本内容
+
+常见的效果:页签/二级菜单/输入验证
+	输入验证:检查用户的录入,提示,不允许提交
+	正则表达式的用法:
+		和字符串对象的方法一起使用:实现对于字符串的操作处理
+			string.replace/search/match
+		使用正则表达式对象的方法实现验证
+			var reg = /[a-z]{3}/;
+			reg.test(string)--bool
+	取消事件:取消提交
+		onxxxx = "return false;"
+
+先在页面上布置好标记,修改样式/文本
+
+创建新元素
+	createElement("a/img/input")
+	appendChild--追加
+	parent.insertBefore(newEle,refEle)
+		--定位在谁的某个子元素前面
+
+	obj.childNodes[index]
+其他操作
+	obj.removeChild(childNode)
+	obj.replaceChild(newEle,oldChildNode)
+
+下拉框的联动效果
+
+dom回顾:动态的安排页面元素(是否显示/显示的外观)
+	纯粹的js代码:
+		find元素/修改
+		create元素/设置属性/加入
+	第三方封装:JQuery
+		对于表格的操作做了封装
+var row = tableObj.insertRow(index);<tr></tr>
+var cell = row.insertCell(index);  <td class=""></td>
+cell.innerHTML = "";
+cell.rowspan = "3";
+cell.className = "";
+
+
+如果需要创建一个option:<option value="1">text</option>
+	js代码:
+var obj = document.createElement("option");
+obj.innerHTML = "text";
+obj.value = "1";
+selectObj.appendChild(obj);
+
+	封装:html页面引入prototype.js文件
+var obj = new Option("text","1");
+selectObj.options[index] = obj;
+
+14 对象模型(树形)---BOM(brower object model)
+			window
+  document    location   history  navigator   screen  event
+ 文档的内容    地址栏      历史   浏览器软件   屏幕    事件
+
+15 window对象:代表浏览器窗口
+	常用属性
+		window.status
+	常用方法
+		window.open(url,name,config):动态
+			静态<a target="_blank" href="">click</a>
+		window.close
+		window.focus
+		弹出对话框窗口
+			window.alert();--警告框
+			window.confirm();--确认框
+			window.prompt();--输入框
+		定时器
+			window.setInterval(function,time以毫秒为单位)
+			启动周期性时钟,返回时钟对象
+			window.clearInterval(timer);
+
+			window.setTimeout(function,time)
+			启动一次性时钟,返回时钟对象
+			常用于类似于倒计时的效果
+			window.clearTimeout(timer)
+
+			<a href="javascript:method();"></a>
+
+16 location 对象
+	是window 对象的子对象,代表地址栏,
+	使用它修改载入的页面
+		window.location.
+		或者
+		location.
+	属性
+		location.href = "url";
+	方法
+		location.replace("url");
+	与window.open的区别:打开新窗口
+
+17 history 对象
+	也是window对象的子对象,代表的历史访问记录
+	history.length
+	history.back()
+	history.forward()
+
+18 screen 对象
+	window 对象的子对象,机器的屏幕信息
+	只有属性,没有方法
+	width/height:高和宽
+	availWidth/availHeight:可用的高和宽
+
+19 navigator 对象:代表的浏览器及操作系统的软件信息
+	只有属性,访问信息
+	for(var p in navigator)
+	{
+		navigator[p]
+	}
+
+20 事件
+	事件的类型
+		鼠标事件
+			onmouseover:移入
+			onmouseout:移出
+			onclick:单击
+			ondblclick:双击
+		键盘事件
+			onkeydown
+			onkeyup
+		状态改变事件
+			onblur:失去焦点,录入完毕
+			onfocus:得到焦点
+			onchange:下拉框的选择改变
+			onload:body元素
+			onsubmit:form元素
+
+	可以取消事件
+		onxxx = "return false;"
+	
+	冒泡机制
+		各层元素都定义了相同的事件,
+		引发该事件时,会从触发层开始,层层向上传递
+		大多数情况下,可以取消冒泡机制
+			event.cancelBubble=true;
+		元素有大量的子元素具有相同的事件
+		为了避免重复定义,为其父元素定义事件
+	
+	event 对象:只要页面发生事件,包含与事件相关的所有信息
+		event.clientX
+		event.clientY
+		event.srcElement:引发事件的元素(仅限于firefox以外)
+		event.target:引发事件的元素(firefox)
+	考虑浏览器兼容问题
+		IE/Chrome:event获取事件对象
+		firefox:在页面上使用event关键字将事件对象传入
+	
+	事件的动态注册:onxxx = function对象
+		先声明一个function,赋值
+		使用匿名方法
+		btn.onclick = 
+			function(){alert("function");}	
+			;
+		如何选择:
+			1.取决于逻辑代码的复杂程度
+			2.如果要传参数,使用匿名函数,
+
+21 自定义对象对于数据的封装
+	使用 Object 对象:适用于当前方法里
+		var p = new Object();
+		p.name = "mary";
+		p.age = 23;
+		p.sex = "F";
+
+	使用new实现自定义对象:实现重用
+		function Person(n,a)
+		{
+			this.name = n;
+			this.age = a;
+		}
+		var p = new Person("mary",23);
+
+	JSon:服务器端要求客户端传递数据
+var p = {"name":"mary" , "age":13, "sing":AAA};
+alert(p.name);
+
+onclick
+onblur:失去焦点,录入完毕
+onmouseover:移入
+onmouseout:移出
+onchange:下拉框的选择改变
+
+练习(选做):
+	走马灯的效果(每隔3s切换图片,
+	当鼠标移入图片上,停止切换;
+	鼠标移走,继续):
+	<img src="a1.jpg">
+练习:模拟机选一注双色球号码
+	按钮,点击:
+	1/随机出6个1到33(包括1和33)之间的整数
+	2/6个数不能重复,且按照升序排列,显示
+	3/随机出1个1到16(包括1和16)之间的整数
+	4/显示在界面上
+

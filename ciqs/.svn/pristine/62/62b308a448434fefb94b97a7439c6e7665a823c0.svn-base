@@ -1,0 +1,307 @@
+package com.dpn.ciqqlc.common.util;
+
+
+
+public class Constants {
+	
+	public static final String USER_KEY = "user";                                                     //session中user的key
+	 
+	public static final String GUEST_NAME = "游客";                                                    //session中【游客】用户的用户名
+	
+	public static final String PRE_LOGIN_URL = "preLoginUrl";                                         //被拦截至登录的请求URL
+	 
+	public static final Integer PAGE_NUM = 10;  
+	
+	public static final String[] SEAL_PDF_TYPE = {"01","02"};
+	
+	public static final String DEFAULT_ORG_CODE = "210000";                                          //默认直属局代码 - 辽宁出入境检验检疫局
+	
+	public static final String DEFAULT_ORG_NAME = "辽宁出入境检验检疫局";									  //默认直属局名称 - 辽宁出入境检验检疫局
+	
+	public static final String PORT_ORG_CODE = "CIQGVCFD";                                            //监管口岸局代码
+	
+    public static final String QLCORGANIZES ="QLC_ORGANIZES";                                         //直属局
+	
+	public static final String QLCDEPTMENTS ="QLC_DEPTMENTS";                                         //分支机构
+	
+	public static final String SUCCESS_INFO = "succInfo";                                             //向页面传递操作信息的键值
+	
+	public static final String ERROR_INFO = "errorInfo";                                              //向页面传递操作信息的键值
+
+
+	public static final String RANDOM_KEY="nums";                                                     //验证码随机数KEY
+	
+	public static final String USER_URL = "userURL";                                                  //用户拥有的URL权限
+	
+	
+	
+	public static final String QLC_VSL_DEC="JC_T_T";                                                  //进出境货轮检疫系统代码
+	
+	public static final String QLC_VSL_DEC_CHECK_TYPE_DEC="QLC_VSL_DEC_CHECK_TYPE_DEC";               //进出境货轮检疫检疫方式(申报)
+	
+	public static final String QLC_VSL_DEC_CHECK_TYPE_APRV="QLC_VSL_DEC_CHECK_TYPE_APRV";             //进出境货轮检疫检疫方式(审批)
+	
+	public static final String CHECK_BEFORE_LOAD1="V_JC_T_T_1";                                       //进出境货轮检疫-登轮前检查
+	
+	public static final String CHECKFILE_AFTER_LOAD="V_JC_T_T_2";                                     //进出境货轮检疫-登轮后文件审核
+	
+	public static final String CHECK_QUARANTINE="V_JC_T_T_3";                                         //进出境货轮检疫-检疫查验
+	
+	public static final String EPIDEMIC_PRELIMNARY="V_JC_T_T_4";                                      //进出境货轮检疫-疫情疫病初步排查
+	
+	public static final String EPIDEMIC_MEDICINE="V_JC_T_T_5";                                        //进出境货轮检疫-疫情疫病医学排查
+	
+	public static final String HYGIENISM_SUPERINTEND="V_JC_T_T_6";                                    //进出境货轮检疫-卫生监督
+	
+	public static final String QUARANTINE_NOTICE="V_JC_T_T_7";                                        //进出境货轮检疫-检疫处理通知书
+	
+	public static final String HYGIENISM_SUPERINTEND_RESULT="V_JC_T_T_8";                             //进出境货轮检疫-卫生处理监督及评价
+	
+	public static final String HYGIENISM_HANDLE="V_JC_T_T_9";                                         //进出境货轮检疫-卫生处理
+	
+	public static final String CREDENTIALS_SIGN="V_JC_T_T_10";                                        //进出境货轮检疫-证书签发
+	
+	public static final String ACC_STATE_0 = "0";                                                     //受理状态-待受理
+
+	public static final String ACC_STATE_1 = "1";                                                     //受理状态-通过
+
+	public static final String ACC_STATE_2 = "2";                                                     //受理状态-不通过
+	
+	public static final String ADT_TYPE_0 = "0";                                                      //审批状态-待审核
+	
+	/** 一般处罚环节-立案申报 */
+	public static final String AUDIT_STEP_1 = "1";                                                    //一般处罚环节-立案申报
+
+	/** 一般处罚环节-立案预审核 */
+	public static final String AUDIT_STEP_2 = "2";                                                    //一般处罚环节-立案预审核
+
+	/** 一般处罚环节-稽查受理1 */
+	public static final String AUDIT_STEP_3 = "3";                                                    //一般处罚环节-稽查受理1
+	/** 一般处罚环节-稽查受理2 */
+	public static final String AUDIT_STEP_16 = "16";                                                    //一般处罚环节-稽查受理2
+	
+	/** 一般处罚环节-稽查审批 */
+	public static final String AUDIT_STEP_4 = "4";                                                    //一般处罚环节-稽查审批
+	
+	/** 一般处罚环节-法制受理1 */
+	public static final String AUDIT_STEP_5 = "5";                                                    //一般处罚环节-法制受理1
+	/** 一般处罚环节-法制受理2 */
+	public static final String AUDIT_STEP_17 = "17";                                                    //一般处罚环节-法制受理2
+
+	/** 一般处罚环节-法制审批 */
+	public static final String AUDIT_STEP_6 = "6";                                                    //一般处罚环节-法制审批
+
+	/** 般处罚环节-立案审批 */
+	public static final String AUDIT_STEP_7 = "7";                                                    //一般处罚环节-立案审批
+
+	/** 一般处罚环节-延期审批 */
+	public static final String AUDIT_STEP_8 = "8";                                                    //一般处罚环节-延期审批
+
+	/** 一般处罚环节-调查报告填写  */
+	public static final String AUDIT_STEP_9 = "9";                                                    //一般处罚环节-调查报告填写初审
+	
+	/** 一般处罚环节-调查报告填写  复审*/
+	public static final String AUDIT_STEP_18 = "18";                                                    //一般处罚环节-调查报告填写复审
+	
+	/** 一般处罚环节-调查报告填写  终审*/
+	public static final String AUDIT_STEP_19 = "19";                                                    //一般处罚环节-调查报告填写终审
+
+	/** 一般处罚环节-调查报告预审批 审理建议一*/
+	public static final String AUDIT_STEP_10 = "10";                                                  //一般处罚环节-调查报告预审批 审理建议一
+	
+	/** 一般处罚环节-调查报告预审批 审理建议二*/
+	public static final String AUDIT_STEP_20 = "20";                                                  //一般处罚环节-审理建议二
+
+	/** 一般处罚环节-调查报告提交 */
+	public static final String AUDIT_STEP_11 = "11";                                                  //一般处罚环节-调查报告提交
+
+	/** 一般处罚环节-调查报告（法制）审批 */
+	public static final String AUDIT_STEP_12 = "12";                                                  //一般处罚环节-调查报告（法制）审批
+
+	/** 一般处罚环节-调查报告局审批 */
+	public static final String AUDIT_STEP_13 = "13";                                                  //一般处罚环节-调查报告局审批
+	
+	/** 一般处罚环节-全过程查询 */
+	public static final String AUDIT_STEP_14 = "14";                                                  //一般处罚环节-全过程查询
+	
+	/**全流程详情*/
+	public static final String AUDIT_STEP_15 = "15"; 												  //全流程详情
+	
+	public static final String GNRL_PNSMT_SHH_STATUS_0 = "0";                                         //一般处罚环节-审核状态-未审核
+
+	public static final String GNRL_PNSMT_SHH_STATUS_1 = "1";                                         //一般处罚环节-审核状态-通过
+
+	public static final String GNRL_PNSMT_SHH_STATUS_2 = "2";                                         //一般处罚环节-审核状态-未通过
+
+	public static final String GNRL_PNSMT_SHH_STATUS_3 = "3";                                         //一般处罚环节-审核状态-退回
+
+	public static final String GNRL_PNSMT_SHH_STATUS_4 = "4";                                         //一般处罚环节-审核状态-全部
+	
+	/** 审理决定 */
+	public static final String GNRL_PNSMT_SHH_STATUS_10 = "10";
+	
+	/** 延期处理 */
+	public static final String GNRL_PNSMT_SHH_STATUS_39 = "39";
+	
+	/** 送达执行 */
+	public static final String GNRL_PNSMT_SHH_STATUS_13 = "13";
+	
+	/** 结案归档 */
+	public static final String GNRL_PNSMT_SHH_STATUS_14 = "14";
+	
+	/** 移送*/
+	public static final String GNRL_PNSMT_SHH_STATUS_15 = "15";
+	   
+	
+	/** 结案归档审核状态 21-38*/
+	/**未经检验擅自销售或使用进口商品                                       */
+	public static final String GNRL_PNSMT_SHH_STATUS_21 = "21"; 
+	/**进出口假冒伪劣商品                                       */
+	public static final String GNRL_PNSMT_SHH_STATUS_22 = "22"; 
+	/**伪造、变造、买卖或者盗窃商检单证、标志、封识             */
+	public static final String GNRL_PNSMT_SHH_STATUS_23 = "23"; 
+	/**使用伪造、变造的检验证单、标志、封识                     */
+	public static final String GNRL_PNSMT_SHH_STATUS_24 = "24"; 
+	/**销售、使用经法定检验不合格的进口商品                     */
+	public static final String GNRL_PNSMT_SHH_STATUS_25 = "25"; 
+	/**不如实提供真实情况取得有关证单                           */
+	public static final String GNRL_PNSMT_SHH_STATUS_26 = "26"; 
+	/**对法定检验的进出口商品不予报检，逃避检验                 */
+	public static final String GNRL_PNSMT_SHH_STATUS_27 = "27"; 
+	/**报检受托人未合理审查导致骗取单证                         */
+	public static final String GNRL_PNSMT_SHH_STATUS_28 = "28"; 
+	/**代理报检企业扰乱报检秩序                                 */
+	public static final String GNRL_PNSMT_SHH_STATUS_29 = "29"; 
+	/**未经许可擅自将动植物产品卸离运输工具或运递               */
+	public static final String GNRL_PNSMT_SHH_STATUS_30 = "30"; 
+	/**报检的动植物产品与实际不符                               */
+	public static final String GNRL_PNSMT_SHH_STATUS_31 = "31"; 
+	/**使用、买卖、伪造、变造动植物检疫单证、标志、封识         */
+	public static final String GNRL_PNSMT_SHH_STATUS_32 = "32"; 
+	/**擅自拆除、遗弃木质包装，伪造、变更、盗用IPPC专用标识     */
+	public static final String GNRL_PNSMT_SHH_STATUS_33 = "33"; 
+	/**拒绝接受检疫或者抵制卫生监督，拒不接受卫生处理           */
+	public static final String GNRL_PNSMT_SHH_STATUS_34 = "34"; 
+	/**逃避检疫，向国境卫生检疫机关隐瞒真实情况、隐瞒疫情或伪造情节         */
+	public static final String GNRL_PNSMT_SHH_STATUS_35 = "35"; 
+	/**伪造或者涂改检疫单、证，不如实申报疫情           */        
+	public static final String GNRL_PNSMT_SHH_STATUS_36 = "36"; 
+	/**买卖卫生检疫单证或者买卖伪造、变造的卫生检疫单证 */        
+	public static final String GNRL_PNSMT_SHH_STATUS_37 = "37"; 
+	/**其他    */
+	public static final String GNRL_PNSMT_SHH_STATUS_38 = "38";   
+	
+	
+	
+/*	public static final String GNRL_PNSMT_SHP_STATUS_0 = "0";                                         //一般处罚环节-审批状态-未审批
+
+	public static final String GNRL_PNSMT_SHP_STATUS_1 = "1";                                         //一般处罚环节-审批状态-同意
+
+	public static final String GNRL_PNSMT_SHP_STATUS_2 = "2";                                         //一般处罚环节-审批状态-不同意
+
+	public static final String GNRL_PNSMT_SHP_STATUS_3 = "3";                                         //一般处罚环节-审批状态-退回
+
+	public static final String GNRL_PNSMT_SHP_STATUS_4 = "4";                                         //一般处罚环节-审批状态-全部
+*/	
+	public static final String INSP_OVER_SOURCE_PC = "1";                                             //检疫完毕的操作来自PC
+
+	public static final String INSP_OVER_SOURCE_PAD = "0";                                            //检疫完毕的操作来自PAD
+	
+	
+	/**一般处罚文档类型*/
+	
+	/** 案件移送函 */
+	public static final String DOC_YBCF_D_GP_A_Y_1 = "D_GP_A_Y_1";
+	
+	/** 立案审批表 */
+	public static final String DOC_YBCF_D_GP_L_S_1 = "D_GP_L_S_1";
+	
+	/** 调查报告中的延期审批表 */
+	public static final String DOC_YBCF_D_GP_DCBG_Y_S_1 = "D_GP_DCBG_Y_S_1";
+	
+	/** 延期审批表 */
+	public static final String DOC_YBCF_D_GP_Y_S_1 = "D_GP_Y_S_1";
+	
+	/** 涉嫌案件申报单 */
+	public static final String DOC_YBCF_GP_AJ_SBD = "GP_AJ_SBD";
+	
+	/** 行政处罚案件反馈表 */
+	public static final String DOC_YBCF_D_GP_XZCF_AJFKB = "D_GP_XZCF_AJFKB";
+	
+	/** 调查报告 */
+	public static final String DOC_YBCF_D_GP_DCBG = "D_GP_DCBG";
+	
+	/** 行政处罚告知书 */
+	public static final String DOC_YBCF_D_GP_XZCF_GZS = "D_GP_XZCF_GZS"; 
+	
+	/** 行政处罚案件办理审批表 */
+	public static final String DOC_YBCF_D_GP_XZCFAJ_SPB = "D_GP_XZCFAJ_SPB";
+	
+	/** 调查报告中的行政处罚案件办理审批表 */
+	public static final String DOC_YBCF_D_GP_DCBG_XZCFAJ_SPB = "D_GP_DCBG_XZCFAJ_SPB";
+	
+	/** 行政处罚决定书 */
+	public static final String DOC_YBCF_D_GP_XZCF_JDS = "D_GP_XZCF_JDS";
+	
+	/** 行政处罚结案报告 */
+	public static final String DOC_YBCF_D_GP_XZCF_JABG = "D_GP_XZCF_JABG";	
+	
+	
+	
+	public static final String CARDTYPE = "QLC_PROSAS_C_CARD_TYPE";                                   //证件类别
+  	
+	public static final String DISCOVERWAYTYPE = "QLC_PROSAS_C_DISCOVER_WAY";                         //发现方式
+	
+	public static final String OUTSIDEWAYTYPE ="QLC_PROSAS_C_ENTER_EXP_MOD";                          //交通工具
+	//上传主要盘符带\\
+	public static final String UP_LOAD_P ="/message/ciqqlc/";   //上传文件基本目录
+	//上传主要盘符
+	public static final String UP_LOAD_PATH ="/message/ciqqlc";  //用于获取文件名时替换路径
+
+	public static final String UP_LOAD_TMP ="/message/ciqqlc/tmp/";	  //临时目录
+	
+	public static final String UP_XK_PATH ="/message/xzxk"; //口岸卫生许可附件上传目录
+	
+	public static final String LIMS_FILE_PATH = "/message/lims/";//实验室 检测报告文档
+	
+	public static final String UPLOAD_PARAM_NAME = "file";											  //前台上传文件参数名称
+
+	public static final String CHECK_NOTE_PRT = "/message/ciqqlc/pdfModel/clbq.pdf";// 行政许可申请材料补正告知书 模板
+
+	public static final String D_BY_GZ = "/message/ciqqlc/pdfModel/byxzxkslgzs.pdf";//不予行政许可受理告知书 模板
+
+	public static final String D_SQ_BZ = "/message/ciqqlc/pdfModel/clbq.pdf";//行政许可申请材料补正告知书 模板
+
+	public static final String D_SQ_SL = "/message/ciqqlc/pdfModel/zysljds.pdf";//准予受理决定书 模板
+ 
+	public static final String D_BU_SL = "/message/ciqqlc/pdfModel/byxzxkjds.pdf";//不予行政许可决定书 模板
+
+	public static final String D_SL_GZ = "/message/ciqqlc/pdfModel/zyxzxkgzs.pdf";//准予行政许可告知书 模板
+	
+	public static final String D_SDHZ = "/message/ciqqlc/pdfModel/sdhz3.pdf";//送达回证 模板
+
+	public static final String JYCF ="/message/ciqqlc/pdfModel/jycf.pdf"; //简易处罚，行政处罚决定书
+	
+	public static final String GAI_ZHANG = "/message/ciqqlc/ca/srcFile/";
+	
+	public static final String PROJECT_PATH = "http://localhost:8080/ciqs/";   // 项目名 
+	
+	public static final String PDF_ROOT = "/message/ciqqlc/pdfModel";// 模板 根目录
+	
+	/****************************************FTP下载配置文件*********************************************************/
+
+	public static final String FTP_HOST = "10.21.255.148";//目标服务器
+	
+	public static final int FTP_HOST_PORT = 21;//目标服务器端口
+	
+	public static final String FTP_HOST_USERNAME ="lnciq_cnca";//目标服务器 登录用户名
+	
+	public static final String FTP_HOST_PASSWORD ="ciq@148";//目标服务器 密码
+	
+	public static final String FTP_HOST_FILE ="/home/lnciq_cnca/attachment/";//目标服务器文件存储目录
+	
+	/****************************************FTP下载配置文件*********************************************************/
+	
+	public static final String DOM_PARENT_BEGIN = "<NewDataSet>";
+	public static final String DOM_PARENT_END = "</NewDataSet>";
+}

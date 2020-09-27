@@ -1,0 +1,18 @@
+<table class="recom-table">
+    <colgroup>
+        <col width="10%">
+        <col width="20%">
+        <col width="70%">
+    </colgroup>
+    <tbody>
+    {{#each data}}
+    <tr data-data="{{json this}}">
+        <td class="td-center">
+            <input type="radio" name="recomGoods" value="{{itemModel.code}}"data-desc="{{itemDescription}}">
+        </td>
+        <td>{{itemModel.code}}</td>
+        <td class="td-width-300">{{itemDescription}}</td>
+    </tr>
+    {{/each}}
+</tbody>
+</table>

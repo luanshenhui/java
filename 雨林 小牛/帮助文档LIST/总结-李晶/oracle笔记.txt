@@ -1,0 +1,778 @@
+
+
+Oracle SQL
+SQL(structured query language 结构化查询语言)
+
+DB(database)
+  create database 库名；（创建数据库的语句）
+
+DDL(data definition language数据定义语言)针对表的操作
+create table(建表)  alter table(修改表) drop table(删除表)
+------------------------------------------------------
+structure(结构) column(列) datatype(数据类型) width(宽度/长度) constraint 约束
+
+
+DML(data manipulation language 数据操作语言)行是记录  列是列
+对表里面的数据（多指的记录）进行操作
+data(数据) row(行)
+insert (插入记录)
+delete (删除记录)
+update  (修改记录)
+
+TCL(transaction(事务) control language 事务控制语言)
+commit(提交)（进行了dml操作之后是需要commit的）mysql不需要
+因为自动提交了
+rollback(回滚)
+
+DQL(data query language 数据查询语言)（经典）
+select
+
+DCL(data control language 数据控制语言)（dba对表的权限的操作）
+grant(授权)
+revoke(回收权限)
+
+DBMS(database management system 数据库管理系统) 
+install 需安装
+
+oracle公司提供software oracle 10g(DBMS)
+ORACLE oracle 10g my sql
+IBM DB2
+MS  SQL SERVER
+SYBASE ASE
+
+DBMS(DBA)--->create database(建数据库) (create user 建用户)(open)(DBA 数据库管理员)--->connect to DB(连接数据库SD)--->SQL(SD)
+
+ORACLE_SID 需要连接的instance(实例)的名字.跟数据库建连接,是通过跟实例(instance)建连接来实现的.因为一个实例唯一对应一个数据库.
+oracle server = database + instance(实例)
+
+shell是命令解释器
+不同shell修改环境变量的命令不一样,
+在shell中执行的命令是可以读到环境变量的值的,
+如sqlplus就要读ORACLE_SID的值,以决定跟哪个数据库建连接.
+
+大家要分清shell提示符($/%),和sqlplus提示符(SQL>)shell里是执行os命令的,SQL>是执行sql命令的.
+
+bash
+export ORACLE_SID=hiloo
+echo $ORACLE_SID
+
+csh
+setenv ORACLE_SID hiloo
+echo $ORACLE_SID
+
+windows
+cmd
+set ORACLE_SID=hiloo
+set ORACLE_SID
+
+create table dept_hiloo
+(c1 number)
+
+create table dest_tabname
+as
+select * from src_tabname;
+
+select
+投影操作
+选择操作
+连接操作
+
+desc dept_zdj;查看表是否存在
+truncate table emp_zdj;删除表内全部内容
+select * from emp_zdj;查看表内容
+delete emp_zdj where empno=1010;删除单行
+
+复制其他表格：
+creat table 目标表名 as select * from 已有表名
+
+connect openlab/open123 换个身份重新连接
+
+选择操作，筛选
+select ename,salary             
+    from emp_zdj
+    where salary > 5000; 
+where执行在select之前，执行顺序为：from》where》select
+
+以下三种都是或的写法
+ select ename,salary             
+    from emp_zdj
+    where salary > 5000; 
+
+like模糊查询
+% 0或任意字符
+_ 任意一个字符
+
+select ename from emp_zdj where ename like 'yan\_%' escape '\';
+用escape定义谁来做转意字符
+----------------------------------------------
+day02
+
+upper(p1)大写  lower(p2)小写
+
+round(p1,p2)四舍五入
+   round(1.234,2) -->1.23
+   round(1.234,0)=round(1.234)-->1
+   round(1.234,-1)-->0
+   round(5.234,-1)-->10
+
+trunc 是truncate的缩写，意为 截取
+trunc(p1,p2)
+trunc(1.235,2)-->1.23
+trunc(1.235)-->1
+trunc(5.235,-1)-->0
+
+dual 是一个系统表，只有一列一条记录，适合调用常量
+
+日期函数：
+sysdate 返回当前系统日期和时间（无参数）
+sysdate+1 一天以后，sysdate-1一天之前
+时间可以做加减计算，结果为天数
+
+add_months(sysdate,1) 一个月之前
+add_months(sysdate,-1)一个月之后
+
+
+DD-MON-RR 日期的缺省显示格式
+alter session 会话 代表一个数据库连接
+nls_date_format本地化
+nls本地语言 nationa locale system
+format 格式化
+alter session set nls_date_format 
+    = 'yyyy mm dd hh24:mi:ss';    
+修改默认的日期表达格式，改后时间显示为：2010 03 12 00：00：00格式
+
+to_date('2008 08 08 08:08:08','yyyy mm dd hh24:mi:ss') 显示数据类型
+
+to_char(c1,'yyyy mm dd hh24:mi:ss')以“,”后的格式显示c1的时间
+to_char(c1,'mm')=03； 显示c1中月份为03的显示出来
+to_char(c1,'mm')=3；  同上，包含隐式转换，C-》N 字符转数值
+to_char(c1,'fmmm')=‘3’； fm可以去掉前导0，或者去掉两端的空格
+
+to_date需要一个日期类型的值时用
+to_char需要处理一个日期值时用
+
+to_number('一个字符类型的数字')将字符转成数值
+
+last_day(日期) 得到某个月的最后一天
+months_between(日期，日期) 两个日期之间有几个月
+
+coalesce 空值转换，有三个参数
+coalesce(p1,p2,p3)  第一个参数为空时，转换为第二个参数，当第二个参数也为空时，转换为第三个参数
+
+case when then 
+     when then
+else 
+end
+当不同记录的处理方式不一样时，用case when实现
+select ename,deptno,
+ case when deptno = 10 then salary*1.1
+ when deptno = 20 then salary*1.2
+ else
+    salary
+ end  new_sal
+    from emp_zdj;
+
+decode 解码
+decode(判断条件，匹配1，值1，匹配2，值2...默认值)
+当判断条件等于匹配1时，取值1，等于匹配2时，取值2，都不等于时，取默认值
+
+order by 排序,是最后的子句，其后可跟列名、表达式、函数、列别名、select后的位置值
+asc 升序 desc 降序
+ 
+函数
+单行函数 每条记录函数返回一个值
+字符函数 数值函数 日期函数 转换函数 一般函数
+多行函数 （组函数） 每组记录返回一个值，组函数处理所有的非空值
+avg() 平均值
+sum() 求和
+count()  求个数，永远不会返回空值，可以返回0值，count(*) 表示所有的记录数，空值也计数
+max() 最大值
+min() 最小值
+
+distincet可以放在组函数里，先去重
+
+where  过滤作用，过滤的只能是记录，其后可以跟单行函数，但不能干组函数，可以跟所有的列,表中有的数据
+having 过滤作用,可以过滤组，可以跟组函数，不能跟单行函数，可以跟组标识，表中没有的数据，需要计算获得
+
+select deptno,avg(salary)
+    from emp_zdj
+    where salary > 3000
+    group by deptno
+    having avg(salary) > 5000
+    order by 2 desc;
+以上语句执行顺序：from->where->group->having->select->order
+
+
+select deptno,avg(salary)
+    from emp_zdj
+    where deptno < 30
+    group by deptno
+    order by 2 asc
+
+edit 编辑
+：wq 返回
+--------------------------------------------------
+day03
+子查询   表连接
+
+子查询
+关联 ：两张表的列写成一个条件表达式
+
+非关联子查询
+先执行子查询（只执行一遍），当返回结果是多条的时候，系统会做去重的动作，再执行主查询
+
+多列子查询：
+谁的工资等于本部门的平均工资：
+select ename,deptno,salary from emp_zdj where (deptno,salary) in (select deptno,avg(salary) from emp_zdj group by deptno);
+
+部门号相同，工资相同
+
+关联子查询：
+从主查询出发，
+平均工资大于本部门平均工资的人：
+select ename,deptno,salary from emp_zdj o where salary > (select avg(salary) from emp_zdj i where o.deptno = i.deptno);
+
+exists 存在    not exists 
+select ename from emp_zdj o where exists (select 1 from emp_zdj i where o.empno = i.mgr);
+ 
+查询哪些部门有员工：
+select dname from dept_zdj where deptno in (select deptno from emp_zdj);
+
+select dname from dept_zdj o where exists (select 1 from emp_zdj i where o.deptno = i.deptno);
+
+集合操作：
+集合操作中的select语句必须是同构的，即结构一样，列的个数及数据类型一致
+union（去重）/union all（会有重复） 合并
+
+union有和case when then when then ...通用的用法
+
+intersect 交集（去重）
+
+minus 差（去重）
+
+所有的非主属性必须完全依赖主属性
+
+多表查询  sql99标准
+交叉连接 cross join 组合 结果叫迪卡尔集
+
+inner join = join 内连接
+
+1 确定用哪些表
+
+select e.ename,d.location from emp_zdj e join dept_zdj d on e.deptno = d.deptno and d.location = 'beijing'
+执行顺序：先过滤再连接
+ from->and->on->select
+
+不同部门的平均工资，显示部门名称：
+select d.dname,round(avg(salary)) from dept_zdj d join emp_zdj e on e.deptno = d.deptno group by d.dname;
+同下：
+select min(d.dname),round(avg(salary)) from dept_zdj d join emp_zdj e on e.deptno = d.deptno group by d.deptno;
+
+用union做领导和员工的关系：
+select a.ename,b.ename from emp_zdj a join emp_zdj b on a.mgr = b.empno union all select ename,'Boss' from emp_zdj where mgr is null;
+或者：
+select a.ename,decode(a.ename,b.ename,'Boss',b.ename) manager from emp_zdj a join emp_zdj b on nvl(a.mgr,a.empno) = b.empno;
+    
+自连接
+self join
+同一张表的记录之间有关系，通过给表起别名的方式把它变成两张表，再把这两张表的列写成一个表达式
+
+用连接的方法
+谁是领导
+select distinct m.ename from emp_zdj e join emp_zdj m on e.mgr = m.empno;
+exists:
+select ename from emp_zdj o where exists (select 1 from emp_zdj e o.empno = e.mgr);
+张无忌的领导是谁
+select e.ename,m.ename from emp_zdj e join emp_zdj m on e.mgr = m.empno and e.ename = 'zhangwuji';
+张无忌领导谁
+select e.ename from emp_zdj e join emp_zdj m on e.mgr = m.empno and m.ename = 'zhangwuji';
+
+外连接：
+   驱动表中的数据有不能匹配的值时，不被过滤，会匹配一个空值显示在结果集里。
+
+1\ 左边的表做驱动表
+   from t1 left outer join t2 on t1.c1 = t2.c2
+
+2\ 右边的表做驱动表
+   from t1 right join t2 on t1.c1 = t2.c2
+
+2\ 两边的表都要做一次驱动表
+   from t2 full join t2 on t1.c1 = t2.c2
+
+员工和领导的关系：
+用外连接做
+select e.ename,m.ename from emp_zdj e left join emp_zdj m on e.mgr = m.empno;
+
+哪些人是员工
+select m.ename from emp_zdj e right join emp_zdj m on e.mgr = m.empno where e.empno is null;
+  此处只能用where，不能用and，而且是先连接后过滤的，即先执行join后执行where，对匹配表的过滤若发生在外连接之后，必须用where子句当解决否定问题时，可以用外连接加上where
+
+哪个部门没有员工：
+select dname from emp_zdj e right join dept_zdj d on e.deptno = d.deptno where e.deptno is null;
+------------------------------------------------------
+day04
+对两个结果集操作
+前提条件：两个结果集必须机构相同
+
+子查询
+非关联子查询 in
+哪些人是领导：empno in (select mgr)
+关联子查询 exists
+在关联子查询中设置主表，和在表连接中决定驱动表是一样的
+哪些人是领导：select ename from emp_zdj o where exists (select 1 from emp_zdj i where o.empno = i.mgr);
+
+表连接
+
+内连接和外联接结果集产生的方法不一样（对匹配不上的记录的处理方式不一样）
+inner join
+等值连接   员工名字和部门名字的关系（不包括40）
+自连接     员工和领导的关系（不包括张三丰）
+outer join
+等值连接   员工名字和部门名字的关系（包括40）
+自连接     员工和领导的关系（包括张三丰）
+等值连接（两张不同的表有描述共同属性的列）
+自连接（同一张表的记录之间有关系）
+
+外连接的两种用法：
+1 不匹配的记录也要出现在结果集里时
+2 结果集里只要不匹配的记录，用outer join+where 匹配表，主键列
+
+哪些部门没有 zhangwuji
+select e.ename,e.ename,d.dname,d.deptno from emp_zdj e right join dept_zdj d on e.deptno = d.deptno and e.ename = 'zhangwuji' where e.empno is null;
+执行顺序：from-->and-->outer join-->where-->select
+
+如果需要在outer join之前对匹配表的数据进行过滤的话，需要用and实现；如果需要在outer join之后对结果集过滤，该过滤是通过对匹配表的主键列实现的话，用where实现,过滤驱动表用where
+
+查找不匹配的
+not in / not exists / outer join + where is null
+
+查找匹配的
+in / exists / distinct inner join
+
+select e.ename,m.ename from emp_zdj e join emp_zdj m on e.mgr = m.empno;
+
+工资表
+create table salgrade_zdj
+    (grade number(2),
+    lowsal number(8,2),
+    hisal number(8,2));
+insert into salgrade_zdj values(1,10001,99999);
+commit;
+
+哪些员工的工资属于1级或5级
+select e.ename,e.salary,s.grade from emp_zdj e join salgrade_zdj s on e.salary between s.lowsal and s.hisal and s.grade in (1,5);
+
+每个工资级别有多少人
+select s.grade,count(*) from emp_zdj e join salgrade_zdj s on e.salary between s.lowsal and s.hisal group by s.grade order by 1;
+执行顺序:from->join->on->group by->order by
+
+每个工资级别有多少人,显示无匹配的项
+select s.grade,count(e.empno) from emp_zdj e right join salgrade_zdj s on e.salary between s.lowsal and s.hisal group by s.grade;
+
+用from(select) a 嵌套方式
+哪些人的工资比本部门的平均工资高
+select e.ename,e.salary,e.deptno,a.asal from emp_zdj e join (select deptno,avg(salary) asal from emp_zdj group by deptno) a on e.deptno = a.deptno and  e.salary > a.asal;
+
+rownum:给每条结果记录编号
+select rownum,ename from emp_zdj where rownum < 3;
+工资最高的前三个人：
+select rownum,ename,salary from (select ename,salaryfrom emp_zdj order by salary desc) where rownum < 4;
+
+select rownum,ename,salary from (select rownum rn,ename,salary from emp_zdj where rownum <=6) where rn >= 4 ;
+
+课后作业：按工资排名（从高到低）找出第四名到第六名
+select rn,ename,salary from(select rownum rn,ename,salary from (select ename,salary from emp_zdj order by salary desc) where rownum <= 6) where rn >= 4;
+
+字符类型
+varchar2必须指定宽度，char可以不指定，缺省为1
+varchar2按实际长度存，char
+
+解决varchar2对空格敏感问题
+select ename,hiredate from emp_zdj where to_char(hiredate,'fmMONTH') = 'MARCH';
+
+create table test_zdj(
+    c1 number, 
+    c2 number(6),
+    c3 number(4,2),
+    c4 number(2,4),
+    c5 number(4,-2));
+insert into test_zdj values(220,182,22.22,0.0066,6626);
+insert into test_zdj values(1,2,45.21,1.245,4752.11);
+
+number(4,2),  //前一个参数为有效位数，包括整数和小数部分，后一个参数为小数位数
+
+DDL：
+create table xxx
+truncate(截取）保留表结构，删除表中所有数据，不需提交，没有回滚
+truncate table xxx;等价于create table xxx
+drop（删除） 删除表整体
+drop table xxx;
+HWM=high water mark 高水位线
+表示数据曾经插过数据的最高位置
+
+alter:
+修改列名xxx为nnn
+alter table 表名 rename column xxx to nnn;
+
+DML：
+insert:插入数据
+方法一：insert into emp_zdj values()
+insert into emp_zdj(empno,ename,)values()
+
+方法二：insert into emp_zdj
+select * from 
+
+复制表的结构，不复制内容：
+create bable emp_zdj1 as select * from emp_zdj where 1 <>1;
+
+复制表的一部分数据：
+create table emp_zdj2 as select empno,ename,salary*12 n_sal from emp_zdj where deptno = 10;
+
+create table emp_zdj3(did,emp_count) as select deptno,count(*) from emp_zdj group by deptno;
+
+rownum:
+向新表中插入指定记录数的数据：
+insert into emp_zdj4 (select * from emp_zdj where rownum <= 8);
+
+update:
+update emp_zdj set 列名 = 新的列值 where
+
+例：update emp_zdj set bonus = null where bonus = 500;
+
+delete(删除行）
+delete emp_zdj where empno = 1001;
+没有where条件时会删除所有记录
+alter table 表名 drop 列名   ：删除列
+
+distinct:
+
+rename（重命名）
+reneme emp_zdj1 to emp_zdj5;
+
+在%后面 建sql文本  vi test.sql
+
+select rownum,ename,salary from (select ename,salary from emp_zdj order by salary asc) where rownum < 3;
+--------------------------------------------
+day05
+transacton 事务/交易
+数据库中数据状态的变化是通过事务完成的。事务就是一笔交易，由多条DML语句和commit/rollback组成。
+事务的生命周期：
+   事务的结束
+   commit/rollback，DDL语句是自动提交（commit）的。rollbace撤销
+创建连接（session），在session上跑事务（transaction）。
+
+数据库缺省的事务隔离级别
+read committed（读已经提交的数据）
+本事务正在修改的数据
+
+资源只有一个，transaction操作同一个资源，并发操作，加锁保证数据完整性。
+
+不提交事务的后果：
+1、不提交其他session看不见
+2、不commit、rollback，锁资源不释放，会阻塞其他session
+3、不commit、rollback，rollback segment资源不释放
+
+DML加锁的方式
+表级和行级表示加锁的粒度
+锁的个数，共享有多个，排他唯一
+表级共享锁
+行级排他锁
+
+约束
+
+pk主键约束：
+
+fk外键约束：用来实现一对多关系的，fk定义在多那边，即子表，一是父表，定义的是pk/uk
+uk：用来保证唯一性的
+ck：check用来实现业务逻辑的，后面跟条件表达式
+列级约束：
+列 数据类型 constraint 约束名 reference 父表（pk 列）
+
+表级约束：
+建表后加约束 
+alter table xx 
+add(列名 类型) ： 增加一列
+rename column 旧列名 to 新列名   ：重命名
+drop column 列名 ：删除一列
+modify(列名 类型（）） ：改变列名长度
+
+create table child
+(c1 number(2) constraint child_c1_pk primary key,
+ c2 number(3),
+ constraint child_c2_fk foreign key(c2)
+            references parent(c1));
+
+drop table parent cascade(级联） constraints purge;断绝父子关系，把parent表的所有子表中的fk约束删掉，再删除parent表。
+
+外键约束，先建父表，再建子表，先给父表插入数据，再给子表插入数据，删除时，先删子表，再删父表，或者断绝父子关系，再删父表
+
+create table parent(
+c1 number(3));
+追加约束
+alter table parent
+add constraint parent_c1_pk primary key(c1)
+
+create table child
+(c1 number(2) constraint child_c1_pk primary key,
+ c2 number(3) constraint child_c2_fk 
+              references parent(c1));
+integrity（完整性） constraint --》违反外键约束时报错
+
+create table parent(
+c1 number(2) constraint parent_c1_pk primary key);
+
+create table child
+(c1 number(3) constraint child_c1_pk primary key,
+ c2 number(2) constraint child_c2_fk 
+              references parent(c1))
+              on delete cascade);级联删除，删父表时，先将子表删掉
+
+create table child2
+(c1 number(3) constraint child2_c1_pk primary key,
+ c2 number(2) constraint child2_c2_fk 
+              references parent(c1))
+              on delete set null);先将子表c1行的值设置为null，再删父表
+
+pk = uk(unique) + nn(not null)
+unique允许多个null值
+不同表里的约束名不能一样
+
+非空约束，只有列级约束，没有表级约束
+
+create table test(
+c1 number(2) constraint test_c1_pk primary key,
+c2 number(3) constraint test_c2_uk unique not null,
+c3 number(4) constraint test_c3_uk unique not null)
+
+ck
+create table test(
+c1 number constraint test_c1_ck check (c1>100));
+
+student
+id pk name not null 
+
+course
+id pk name not null
+
+stu_cour
+sid fk-->student(id)
+cid fk-->course(id)
+pk (sid,cid)
+scoure ck[0,100]
+
+zhangsan 选了哪些课程
+张三没选哪些课程
+哪些学生选了全部课程
+
+在脚本中增加一个view定义为各个部门的评价工资，通过emp表和view实现哪些员工的工资比本部门的平均工资高？
+
+查询约束条件
+select constraint_name,constraint_type from user_constraints where table_name = '大写的表名';
+
+create table xx(c1 number primary key);
+-----------------------------------------------------
+day06
+
+创建视图
+create or replace view :如果没有view就创建view，如果view存在，就覆盖
+给view增加一个检查约束：
+create or replace view test as select * from table1 where c1 = 1 with check option;
+只读视图:
+create or replace view test as select * from table1 where c1 = 1 with read only;
+
+select text from user_views where c1=1
+
+view 是一条select语句，类似于操作系统里的快捷方式
+user_tables
+user_constraints
+user_views
+user_objects  数据库对象的信息。
+数据库对象：table view index sequence function 等等
+
+view的作用
+1、保证数据安全,隔离数据
+2、汇总数据create view as select c1 from table1 union all select c2 from table2;
+3、简化操作
+
+index 索引
+
+rowid 标识一条记录的物理位置
+1、这条记录属于哪个数据对象的
+2、这条记录在哪个数据文件里
+3、这条记录在数据文件里的哪个data block 里
+4、这条记录在data blockl的第几条记录上
+
+索引记录rowid
+创建索引的命令create index emp_zdj_ename_idx
+            on emp_zdj(ename);
+索引里不计空值
+
+平衡树所有的叶子节点在同一层。包含根节点、分支节点、叶子节点。根节点、分支节点用于导航的，找到下一个数据块。叶子节点里面是index entry（索引项） 由key值，rowid组成。key值是创建索引的列在每条记录的取值（不包含null值，where c1 is null一定用FTS），所用的叶子节点串成类两个双向链表（索引是排序的），用于范围扫描。
+
+用索引的目的：
+select快，降低类扫描data block 的数量。DML变慢，占用空间
+
+物理读（data file）  逻辑读（SGA）
+alter index idx_name rebuild（重建）； 快
+drop index -->create index           慢
+
+哪些列适合建索引？
+1、主键、uk上一定有索引（系统会自动建索引）
+2、经常出现再where子句的列
+3、经常用于表连接的列
+4、FK
+5、order by（列必须保证非空） group by distinct
+6、is not null 列里有大量空值
+7、列的取值范围越大越好
+
+索引的类型
+唯一性索引：实现唯一性约束
+非唯一性索引：提高select的效率
+多列索引：
+create index test_c2_c3_idx on test(c2,c3);
+查询语句中常出现where c2 = xx and c3 = xxx 时，常用多列索引。
+单列索引：
+函数索引：
+create index test_c4_idx on test(round(c4));
+
+以下写法会导致索引用不了：
+where upper(ename)
+where salary*12>xxx
+where c1 = 2 c1 varchar2
+where c1 后接否定形式 not in 
+
+sequence:序列号
+例： create sequence s2
+    start with 001 increment by 1    ;
+ 001为初始值 1为递增值
+    insert into course_zdj values(s2.nextval,'tongjixue');
+ 每执行一次递增1
+
+产生pk值，如何产生唯一值 start with 2007130301 increment by 1;
+
+pl/sql  
+declare
+  申明部分
+begin 
+  后跟sql语句，为程序主体
+exception 
+  异常处理部分
+end 
+
+匿名 例：
+declare
+   v_ename emp_zdj.ename%type;定义变量，其类型与emp_zdj的ename一致
+   v_salary emp_zdj.salary%type;
+
+  把两个变量送给定义的变量,当且仅当返回值为1条时，用select into，把结果打印
+begin
+   select ename,salary into v_ename,v_salary
+   from emp_zdj
+   where empno = 1001;
+   dbms_output.put_line(v_ename||' '||v_salary);
+end;
+
+cursor c1 is
+select ename from emp_zdj   返回值为多条
+
+cursor（游标）是一条sql语句。
+
+set serveroutput on; 让结果显示在终端上
+
+在pl/sql中执行ddl语句，用以下形式：
+drop的方法
+begin
+execute immediate 'ddl语句‘
+
+创建函数:
+create or replace function avgsal
+(p_deptno number)
+return number
+as
+   v_avgsal emp_zdj.salary%type;
+begin
+   select avg(salary) into v_avgsal
+   from emp_zdj
+   where deptno = p_deptno;
+   return v_avgsal;
+end;
+/
+函数调用方法：
+1、select avgsal('developer') from dual;
+select avgsc(2007130306) from stu_cour_zdj;
+2、exec dbms_output.put_line(avgsal('developer'))
+
+3、declare
+    v_avgsc stu_cour_zdj%type
+      := avgsc(2007130306);
+begin
+  dbms_output.put_line(v_avgsc);
+end;
+
+show error;用来显示错误的命令
+
+查看数据库存储的函数具体什么样：
+select text from user_source
+where name = 'AVGSAL'
+set head off
+
+练习：创建函数--输入学生名字，打印平均成绩
+create or replace function avgsc
+(p_sid number)
+return number
+as
+   v_avgsc stu_cour_zdj.score%type;
+begin
+   select avg(score) into v_avgsc
+   from stu_cour_zdj
+   where sid = p_sid ;
+
+   return v_avgsc;
+end;
+调用该函数：	
+declare
+      v_avgsc stu_cour_zdj.score%type
+               := avgsc(2007130305);
+   begin
+      dbms_output.put_line(v_avgsc);
+   end;
+-------------------------------------------
+追加主键约束：
+alter table tablename add constraint 约束名 primary key(列名);
+
+alter table tablename 
+add (列名 类型（））：增加
+modify (列名 类型（））：修改
+rename column 旧名 to 新名
+drop column 列名
+
+查询数据库中已建立的带zdj字样的表：
+select table_name from user_tables where table_name like'%ZDJ%';
+
+修改表名：
+alter table 旧名 rename to 新名
+或者  rename 旧名 to 新名
+
+修改列名
+alter table 表名 rename column 旧列名 to 新列名
+
+truncate与delete区别
+t：快，不用提交，DDL语句
+d：需要提交，DML语句
+
+select chinese,math,english
+from zdj_core
+where chinese between 60 and 80
+     and math >= 80
+     and english <60;
+
+create table emp(
+empno int(3),
+name varchar(10),
+age int(2),
+magno int(3));
+
+select a.empno,a.name from emp a
+where a.age > (select m.age from emp m
+              where a.magno = m.empno)
+order by a.age;

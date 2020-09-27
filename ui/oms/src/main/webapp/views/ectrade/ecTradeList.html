@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<title>订单管理 | Rkylin OMS</title>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT" />
+
+<!-- 加载 bootstrap 样式-->
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" />
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css" />
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css" />
+
+<!-- 加载本页需要的三方插件样式 -->
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/DataTables/media/css/jquery.dataTables.css">
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/DataTables/media/css/dataTables.bootstrap.css">
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/jquery-tablesorter/themes/blue/style-custom.css">
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/jquery-bootstrap-wizard/custom.css">
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/jquery-steps/css/jquery.steps.css">
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/animate.css/animate.css" />
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/vendors/iCheck/skins/all.css" />
+
+<!-- 加载主题风格样式 -->
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/css/themes/style1/orange-blue.css"
+	class="default-style" />
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/css/themes/style1/orange-blue.css"
+	id="theme-change" class="style-change color-change" />
+<link type="text/css" rel="stylesheet"
+	href="/Apollo/madmin/css/style-responsive.css" />
+</head>
+<body class="">
+	<!--BEGIN CONTENT-->
+	<div class="page-content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-8 col-xs-8 col-sm-8 col-md-8"></div>
+				<div class="col-lg-4 col-xs-4 col-sm-4 col-md-4"
+					style="margin-bottom: 10px;">
+					<div class="input-group">
+						<input id="quickSearch" type="text" placeholder="平台交易号、顾客ID、平台规格编码、买家电话"
+							class="form-control" /> <span class="input-group-btn">
+							<button id="btnQuickSearch" type="button" class="btn btn-primary">
+								<i class="fa fa-search"></i>
+							</button>
+							<button id="btnAdvSearch" type="button" class="btn btn-default btn-adv-search">
+		                    	<i class="fa fa-angle-double-down" style="font-size: 20px; color:white;"></i>
+		                    </button>
+						</span>
+					</div>
+				</div>
+			</div>
+			<!-- 高级查询 -->
+        <row>
+            <div  class="panel panel-default" id="advSearchPanel" style="position:fixed;Z-index:9999;width:95%;"><!-- 窗体悬浮，百分比根据情况设置 -->
+                <div class="panel-body">
+                    <form id="frmAdvSearch" role="form" action="" class="form-horizontal advance-query"><!-- advance-query 必须要写的 -->
+                        <div class="row">
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="prjId" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">项目 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <select id="prjId" name="prjId" class="form-control forsubmiteq"
+                                                fieldname="ecTrade.prj_id" fieldtype="string" fieldoperator="and">
+                                            <option value="">请选择</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="shopId" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">店铺 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <select id="shopId" name="shopId" class="form-control forsubmiteq"
+                                                fieldname="ecTrade.shop_id" fieldtype="string" fieldoperator="and">
+                                            <option value="">请选择</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="shopType" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">来源 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <select id="shopType" name="shopType" class="form-control forsubmiteq"
+                                                fieldname="ecTrade.shop_type" fieldtype="string" fieldoperator="and">
+                                            <option value="">请选择</option>
+                                            <option value="淘宝">淘宝</option>
+                                            <option value="京东">京东</option>
+                                            <option value="买卖云">买卖云</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        	<div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="ecTradeCode" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">平台交易号 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <input id="ecTradeCode" name="ecTradeCode" type="text" placeholder=""
+                                               minlength="1"
+                                               maxlength="100" class="form-control forsubmiteq"
+                                               fieldname="ecTrade.ec_trade_code"
+                                               fieldtype="string" fieldoperator="and"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label for="ecCustCode" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">顾客ID </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <input id="ecCustCode" name="ecCustCode" type="text" placeholder=""
+                                               minlength="1"
+                                               maxlength="100" class="form-control forsubmiteq"
+                                               fieldname="ecTrade.ec_cust_code"
+                                               fieldtype="string" fieldoperator="and"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-md-3">
+                                <div class="form-group">
+                                    <label for="ecTradeId" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">平台订单号 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <input id="ecTradeId" name="ecTradeId" type="text" placeholder=""
+                                               minlength="1"
+                                               maxlength="100" class="form-control forsubmiteq"
+                                               fieldname="ecTrade.ec_trade_id"
+                                               fieldtype="string" fieldoperator="and"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-md-3">
+                                <div class="form-group">
+                                    <label for="childEcTradeId" class="col-sm-4 col-lg-4 col-xs-4 col-md-4 control-label">子订单号 </label>
+                                    <div class="col-sm-8 col-lg-8 col-xs-8 col-md-8">
+                                        <input id="childEcTradeId" name="childEcTradeId" type="text" placeholder=""
+                                               minlength="1"
+                                               maxlength="100" class="form-control forsubmiteq"
+                                               fieldname="childEcTrade.ec_trade_id"
+                                               fieldtype="string" fieldoperator="and"/>
+                                    </div>
+                                </div>
+                            </div>
+                             -->
+                            <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                               
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12 col-xs-12 col-md-12 text-right">
+                                <button type="reset" id="advSearchReset" name="advSearchReset" class="btn btn-default">
+                                   	 重置
+                                </button>
+                                <button type="button" id="advSearchSubmit" name="advSearchSubmit"
+                                        class="btn btn-primary">查询
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </row>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="portlet box portlet-blue tabbable">
+						<!--如果需要状态栏 必须加tabbable  -->
+						<div class="portlet-header">
+							<div class="caption">平台订单列表</div>
+						</div>
+						
+						<div class="portlet-body">
+							<div class="tabbable portlet-tabs">
+								<ul class="nav nav-tabs">
+									<li>
+										<button onclick="exportEcTrade()"  style="margin-top: 12px;" type="button" class="btn btn-warning btn-xs"><i class="fa"></i>&nbsp;导出</button>
+									</li>
+									<li>
+										<button onclick="refresh();"  style="margin-top: 12px;" type="button" class="btn btn-warning btn-xs"><i class="fa"></i>&nbsp;刷新</button>
+									</li>
+									<li><a id="portlettabcanceledid" href="#portlettabcanceled" data-toggle="tab">已废弃(0)</a>
+									</li>
+									<li><a id="portlettaboverid" href="#portlettabover" data-toggle="tab">已完成(0)</a>
+									</li>
+									<li><a id="portlettabsendid" href="#portlettabsend" data-toggle="tab">全部发货(0)</a>
+									</li>
+									<li><a id="portlettabwaiteSendid" href="#portlettabwaiteSend" data-toggle="tab">待发货(0)</a>
+									</li>
+									<li class="active"><a id="portlettabnoDealid" href="#portlettabnoDeal" data-toggle="tab">待处理(0)</a>
+									</li>
+									<li><a id="portlettabnoPayid"  href="#portlettabnoPay" data-toggle="tab">未付款(0)</a>
+									</li>
+								</ul>
+								
+								<div class="tab-content">
+									<!-- 未付款div -->
+									<div id="portlettabnoPay" class="tab-pane fade ">
+										<div class="table-responsive">
+											<table id="tecTradenoPay"
+												class="table table-hover table-striped table-bordered table-advanced tb-sticky-header tablefirst"
+												width="100%">
+												<thead>
+													<tr>
+														<th width="1%"></th>
+														<th width="4%">项目</th>
+														<th width="4%">店铺</th>
+														<th width="4%">平台交易号</th>
+														<th width="5%">状态</th>
+														<th width="5%">客户ID</th>
+														<th width="8%">拍单时间</th>
+													</tr>
+												</thead>
+												<tbody>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!-- 待处理div -->
+									<div id="portlettabnoDeal" class="tab-pane fade in active">
+										<div class="table-responsive">
+											<table id="tecTradenoDeal"
+												class="table table-hover table-striped table-bordered table-advanced tb-sticky-header tablefirst"
+												width="100%">
+												<thead>
+													<tr>
+														<th width="1%"></th>
+														<th width="4%">异常标识</th>
+														<th width="5%">项目</th>
+														<th width="5%">店铺</th>
+														<th width="5%">平台交易号</th>
+														<th width="5%">状态</th>
+														<th width="5%">客户ID</th>
+														<th width="6%">拍单时间</th>
+														<th width="6%">付款时间</th>
+													</tr>
+												</thead>
+												<tbody>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!-- 待发货div -->
+									<div id="portlettabwaiteSend" class="tab-pane fade">
+										<div class="table-responsive">
+											<table id="tecTradewaiteSend"
+												class="table table-hover table-striped table-bordered table-advanced tb-sticky-header tablefirst"
+												width="100%">
+												<thead>
+													<tr>
+														<th width="1%"></th>
+														<th width="4%">异常标识</th>
+														<th width="4%">分单标识</th>
+														<th width="5%">项目</th>
+														<th width="5%">店铺</th>
+														<th width="5%">平台交易号</th>
+														<th width="5%">状态</th>
+														<th width="5%">客户ID</th>
+														<th width="6%">拍单时间</th>
+														<th width="6%">付款时间</th>
+													</tr>
+												</thead>
+												<tbody>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!-- 全部发货div -->
+									<div id="portlettabsend" class="tab-pane fade">
+										<div class="table-responsive">
+											<table id="tecTradesend"
+												class="table table-hover table-striped table-bordered table-advanced tb-sticky-header tablefirst"
+												width="100%">
+												<thead>
+													<tr>
+														<th width="1%"></th>
+														<th width="4%">异常标识</th>
+														<th width="4%">部分发货</th>
+														<th width="5%">项目</th>
+														<th width="5%">店铺</th>
+														<th width="5%">平台交易号</th>
+														<th width="5%">状态</th>
+														<th width="5%">客户ID</th>
+														<th width="6%">拍单时间</th>
+														<th width="6%">付款时间</th>
+														<th width="6%">发货时间</th>
+													</tr>
+												</thead>
+												<tbody>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!-- 已完成div -->
+									<div id="portlettabover" class="tab-pane fade">
+										<div class="table-responsive">
+											<table id="tecTradeover"
+												class="table table-hover table-striped table-bordered table-advanced tb-sticky-header tablefirst"
+												width="100%">
+												<thead>
+													<tr>
+														<th width="1%"></th>
+														<th width="4%">异常标识</th>
+														<th width="4%">分单标识</th>
+														<th width="5%">项目</th>
+														<th width="5%">店铺</th>
+														<th width="5%">状态</th>
+														<th width="5%">客户ID</th>
+														<th width="6%">拍单时间</th>
+														<th width="6%">付款时间</th>
+														<th width="6%">发货时间</th>
+														<th width="6%">完成时间</th>
+													</tr>
+												</thead>
+												<tbody>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!-- 已废弃div -->
+									<div id="portlettabcanceled" class="tab-pane fade">
+										<div class="table-responsive">
+											<table id="tecTradecanceled"
+												class="table table-hover table-striped table-bordered table-advanced tb-sticky-header tablefirst"
+												width="100%">
+												<thead>
+													<tr>
+														<th width="1%"></th>
+														<th width="5%">项目</th>
+														<th width="5%">店铺</th>
+														<th width="5%">平台交易号</th>
+														<th width="5%">状态</th>
+														<th width="5%">客户ID</th>
+														<th width="6%">拍单时间</th>
+														<th width="6%">付款时间</th>
+													</tr>
+												</thead>
+												<tbody>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--END CONTENT-->
+<!-- 导出文件 -->
+<div id="exportList" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" class="modal fade"
+     aria-labelledby="modal-header-primary-label">
+</div>
+
+	<!-- 加载 jquery js-->
+	<script src="/Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+	<script src="/Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+	<script src="/Apollo/madmin/js/jquery-ui.js"></script>
+
+	<!-- 加载 bootstrap 和三方插件 js -->
+	<script src="/Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="/Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+	<script src="/Apollo/madmin/js/html5shiv.js"></script>
+	<script src="/Apollo/madmin/js/respond.min.js"></script>
+	<script src="/Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script>
+	<script src="/Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+	<script src="/Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+	<script
+		src="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+	<script src="/Apollo/madmin/vendors/jquery-pace/pace.min.js"></script>
+	<script src="/Apollo/madmin/vendors/holder/holder.js"></script>
+	<script src="/Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script>
+	<script src="/Apollo/madmin/vendors/moment/moment.js"></script>
+	<script
+		src="/Apollo/madmin/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+	<script
+		src="/Apollo/madmin/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+	<script
+		src="/Apollo/madmin/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+	<script
+		src="/Apollo/madmin/vendors/jquery-tablesorter/jquery.tablesorter.js"></script>
+	<script src="/Apollo/madmin/js/table-advanced.js"></script>
+	<script
+		src="/Apollo/madmin/vendors/jquery-validate/jquery.validate.min.js"></script>
+	<script src="/Apollo/madmin/vendors/jquery-validate/message_zh.js"></script>
+	<script
+		src="/Apollo/madmin/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+	<script
+		src="/Apollo/madmin/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+
+
+	<script src="ecTrade.js"></script>
+	<script src="/views/static/js/export.js"></script>
+	<script src="/views/static/js/form.js"></script>
+</body>
+</html>

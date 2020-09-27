@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BizElementExt>
+	<BizType type="unit" table="WF_ORG_UNIT_EXT">
+		<Element name="id" column="UNIT_ID" columnType="String" />
+		<Element name="email" column="UNIT_EMAIL" columnType="String"
+			type="TextField" regex="^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$" label="邮件" allowBlank="true" maxLength="32" errorInfoText="输入不正确"
+			width="175" />
+		<Element name="date" column="UNIT_DATE" columnType="Date"
+			type="DateField" regex="" readOnly="true" format="-" label="日期"
+			allowBlank="true" width="175" />
+		<Element name="num" column="UNIT_NUM" columnType="Integer"
+			type="NumberField" regex="^-?[1-9]\d*$"  label="整数"
+			allowBlank="true" maxLength="5" errorInfoText="不允许超过五位数" width="175" />
+		<Element name="float" column="UNIT_FLOAT" columnType="Float"
+			type="NumberField" decimalPrecision="2" label="浮点数"
+			allowBlank="true" maxLength="5" errorInfoText="包括小数点不能超过五位数" width="175" />
+		<Element name="combobox" column="UNIT_COMBOBOX" columnType="String" readOnly="true"
+			type="ComboBox" label="下拉列表" store="com.dhc.organization.extend.impl.SexCodeListImpl"
+			allowBlank="true" width="175" errorInfoText="不能为空"/>
+	</BizType>
+
+	<BizType type="user" table="WF_ORG_USER_EXT">
+		<Element name="id" column="USER_ID" columnType="String" />
+		<Element name="email" column="USER_EMAIL" columnType="String"
+			type="TextField" regex="^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$" label="邮件" allowBlank="true" maxLength="32" errorInfoText="输入不正确"
+			width="175" />
+		<Element name="date" column="USER_DATE" columnType="Date"
+			type="DateField" regex="" readOnly="true" format="-" label="日期"
+			allowBlank="true" width="175" errorInfoText="日期不能为空"/>
+		<Element name="num" column="USER_NUM" columnType="Integer"
+			type="NumberField" regex="^-?[1-9]\d*$" label="整数"
+			allowBlank="true" maxLength="5" errorInfoText="不允许超过五位数" width="175" />
+		<Element name="float" column="USER_FLOAT" columnType="Float"
+			type="NumberField" decimalPrecision="2" label="浮点数"
+			allowBlank="true" maxLength="5" errorInfoText="包括小数点不能超过五位数" width="175" />
+		<Element name="combobox" column="USER_COMBOBOX" columnType="String" readOnly="true"
+			type="ComboBox" label="下拉列表" store="com.dhc.organization.extend.impl.SexCodeListImpl"
+			allowBlank="true" width="175" errorInfoText="不能为空" />
+	</BizType>
+	<BizType type="station" table="WF_ORG_STATION_EXT">
+		<Element name="id" column="STATION_ID" columnType="String" />
+		<Element name="email" column="STATION_ATTR_1"
+			columnType="String" type="TextField" regex="email" label="邮件" maxLength="32" errorInfoText="邮件过长"
+			allowBlank="true" width="175" />
+		<Element name="date" column="STATION_DATE" columnType="Date"
+			type="DateField" regex="" readOnly="true" format="Y-m-d" label="日期"
+			allowBlank="true" width="175" />
+		<Element name="num" column="STATION_NUM" columnType="Integer"
+			type="NumberField" regex="alphanum" label="整数"
+			allowBlank="true" maxLength="5" errorInfoText="不允许超过五位数" width="175" />
+		<Element name="float" column="STATION_FLOAT" columnType="Float"
+			type="NumberField" decimalPrecision="2" label="浮点数"
+			allowBlank="true" maxLength="5" errorInfoText="包括小数点不能超过五位数" width="175" />
+		<Element name="combobox" column="STATION_COMBOBOX" columnType="String" readOnly="true"
+			type="ComboBox" label="下拉列表" store="com.dhc.organization.extend.impl.SexCodeListImpl"
+			allowBlank="true" width="175" errorInfoText="不能为空" />
+	</BizType>
+</BizElementExt>

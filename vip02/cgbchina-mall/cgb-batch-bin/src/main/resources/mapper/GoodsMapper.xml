@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ToolsGoods">
+    <resultMap id="GoodsMap" type="cn.com.cgbchina.batch.tools.GoodsModelTool">
+        <result property="code" column="code"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="name" column="name"/>
+        <result property="productId" column="product_id"/>
+        <result property="createType" column="create_type"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="manufacturer" column="manufacturer"/>
+        <result property="goodsBrandId" column="goods_brand_id"/>
+        <result property="goodsBrandName" column="goods_brand_name"/>
+        <result property="channelMall" column="channel_mall"/>
+        <result property="channelCc" column="channel_cc"/>
+        <result property="channelMallWx" column="channel_mall_wx"/>
+        <result property="channelCreditWx" column="channel_credit_wx"/>
+        <result property="channelPhone" column="channel_phone"/>
+        <result property="channelApp" column="channel_app"/>
+        <result property="channelSms" column="channel_sms"/>
+        <result property="channelPoints" column="channel_points"/>
+        <result property="channelIvr" column="channel_ivr"/>
+        <result property="goodsType" column="goods_type"/>
+        <result property="isInner" column="is_inner"/>
+        <result property="mailOrderCode" column="mail_order_code"/>
+        <result property="promotionTitle" column="promotion_title"/>
+        <result property="adWord" column="ad_word"/>
+        <result property="keyword" column="keyword"/>
+        <result property="giftDesc" column="gift_desc"/>
+        <result property="introduction" column="introduction"/>
+        <result property="serviceType" column="service_type"/>
+        <result property="recommendGoods1Code" column="recommend_goods1_code"/>
+        <result property="recommendGoods2Code" column="recommend_goods2_code"/>
+        <result property="recommendGoods3Code" column="recommend_goods3_code"/>
+        <result property="regionType" column="region_type"/>
+        <result property="approveStatus" column="approve_status"/>
+        <result property="limitCount" column="limit_count"/>
+        <result property="pointsType" column="points_type"/>
+        <result property="cards" column="cards"/>
+        <result property="cardLevelId" column="card_level_id"/>
+        <result property="onShelfMallDate" column="on_shelf_mall_date"/>
+        <result property="offShelfMallDate" column="off_shelf_mall_date"/>
+        <result property="onShelfCcDate" column="on_shelf_cc_date"/>
+        <result property="offShelfCcDate" column="off_shelf_cc_date"/>
+        <result property="onShelfMallWxDate" column="on_shelf_mall_wx_date"/>
+        <result property="offShelfMallWxDate" column="off_shelf_mall_wx_date"/>
+        <result property="onShelfCreditWxDate" column="on_shelf_credit_wx_date"/>
+        <result property="offShelfCreditWxDate" column="off_shelf_credit_wx_date"/>
+        <result property="onShelfPhoneDate" column="on_shelf_phone_date"/>
+        <result property="offShelfPhoneDate" column="off_shelf_phone_date"/>
+        <result property="onShelfAppDate" column="on_shelf_app_date"/>
+        <result property="offShelfAppDate" column="off_shelf_app_date"/>
+        <result property="onShelfSmsDate" column="on_shelf_sms_date"/>
+        <result property="offShelfSmsDate" column="off_shelf_sms_date"/>
+        <result property="freightSize" column="freight_size"/>
+        <result property="freightWeight" column="freight_weight"/>
+        <result property="approveDifferent" column="approve_different"/>
+        <result property="currType" column="curr_type"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="onShelfTime" column="on_shelf_time"/>
+        <result property="autoOffShelfTime" column="auto_off_shelf_time"/>
+        <result property="offShelfPointsDate" column="off_shelf_points_date"/>
+        <result property="onShelfPointsDate" column="on_shelf_points_date"/>
+        <result property="onShelfIvrDate" column="on_shelf_ivr_date"/>
+        <result property="offShelfIvrDate" column="off_shelf_ivr_date"/>
+    </resultMap>
+    <sql id="columns">
+        code,ordertype_id,name,product_id,create_type,vendor_id,manufacturer,goods_brand_id,goods_brand_name,channel_mall,channel_cc,channel_mall_wx,channel_credit_wx,channel_phone,channel_app,channel_sms,channel_points,channel_ivr,goods_type,is_inner,mail_order_code,promotion_title,ad_word,keyword,gift_desc,introduction,service_type,recommend_goods1_code,recommend_goods2_code,recommend_goods3_code,region_type,approve_status,limit_count,points_type,cards,card_level_id,on_shelf_mall_date,off_shelf_mall_date,on_shelf_cc_date,off_shelf_cc_date,on_shelf_mall_wx_date,off_shelf_mall_wx_date,on_shelf_credit_wx_date,off_shelf_credit_wx_date,on_shelf_phone_date,off_shelf_phone_date,on_shelf_app_date,off_shelf_app_date,on_shelf_sms_date,off_shelf_sms_date,freight_size,freight_weight,approve_different,curr_type,del_flag,create_oper,create_time,modify_oper,modify_time,on_shelf_time,auto_off_shelf_time,on_shelf_points_date,off_shelf_points_date,on_shelf_ivr_date,off_shelf_ivr_date,channel_points
+    </sql>
+
+    
+    <!-- 获取所有ID和商品名称 -->
+    <select id="findAllGoodsName" resultMap="GoodsMap">
+        SELECT
+   		code,name
+   		FROM tbl_goods
+    </select>
+     <!-- 根据乱码的商品map更新商品名称  -->
+    
+    <update id="updateGoodsNameByMap" parameterType="cn.com.cgbchina.batch.tools.GoodsModelTool">
+       	update tbl_goods set name=#{name}
+       	where code=#{code}
+    </update>
+</mapper>

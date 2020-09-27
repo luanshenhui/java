@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProductModel">
+    <resultMap id="productMap" type="ProductModel">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="manufacturer" column="manufacturer"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="goodsBrandId" column="goods_brand_id"/>
+        <result property="backCategory1Id" column="back_category1_id"/>
+        <result property="backCategory2Id" column="back_category2_id"/>
+        <result property="backCategory3Id" column="back_category3_id"/>
+        <result property="status" column="status"/>
+        <result property="createType" column="create_type"/>
+        <result property="attribute" column="attribute"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <sql id="columns">
+        id,name,manufacturer,ordertype_id,goods_brand_id,back_category1_id,back_category2_id,back_category3_id,status,create_type,attribute,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="ProductModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_product
+        (name
+        ,manufacturer
+        ,ordertype_id
+        ,goods_brand_id
+        ,back_category1_id
+        ,back_category2_id
+        ,back_category3_id
+        ,status
+        ,create_type
+        ,attribute
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{name}
+        ,#{manufacturer}
+        ,#{ordertypeId}
+        ,#{goodsBrandId}
+        ,#{backCategory1Id}
+        ,#{backCategory2Id}
+        ,#{backCategory3Id}
+        ,#{status}
+        ,#{createType}
+        ,#{attribute}
+        ,#{delFlag}
+        ,#{createOper}
+        ,#{createTime}
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <!--更新产品-->
+    <update id="update" parameterType="ProductModel">
+        update tbl_product set
+        <if test="name !=null">name = #{name}</if>
+        <if test="manufacturer !=null">,manufacturer = #{manufacturer}</if>
+        <if test="ordertypeId !=null">,ordertype_id = #{ordertypeId}</if>
+        <if test="goodsBrandId !=null">,goods_brand_id = #{goodsBrandId}</if>
+        <if test="goodsBrandId !=null">,goods_brand_id = #{goodsBrandId}</if>
+        <if test="backCategory1Id !=null">,back_category1_id = #{backCategory1Id}</if>
+        <if test="backCategory2Id !=null">,back_category2_id = #{backCategory2Id}</if>
+        <if test="backCategory3Id !=null">,back_category3_id = #{backCategory3Id}</if>
+        <if test="status !=null">,status = #{status}</if>
+        <if test="createType !=null">,create_type = #{createType}</if>
+        <if test="attribute !=null">,attribute = #{attribute}</if>
+        <if test="delFlag !=null">,del_flag = #{delFlag}</if>
+        ,create_oper = #{createOper},
+        create_time = now(),
+        modify_oper = #{modifyOper},
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="manufacturer !=null">and manufacturer = #{manufacturer}</if>
+            <if test="ordertypeId !=null">and ordertypeId = #{ordertypeId}</if>
+            <if test="goodsBrandId !=null">and goods_brand_id = #{goodsBrandId}</if>
+            <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+            <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+            <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="createType !=null">and create_type = #{createType}</if>
+            <if test="attribute !=null">and attribute = #{attribute}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <!--Add by TanLiang-->
+    <sql id="conditionsQuery">
+        <where>
+            del_flag = 0
+            <if test="id !=null">and id = #{id}</if>
+            <if test="name !=null">and name LIKE concat(concat('%',#{name}),'%')</if>
+            <if test="manufacturer !=null">and manufacturer = #{manufacturer}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="goodsBrandId !=null">and goods_brand_id = #{goodsBrandId}</if>
+            <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+            <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+            <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="createType !=null">and create_type = #{createType}</if>
+            <if test="attribute !=null">and attribute = #{attribute}</if>
+            <!--<if test="delFlag !=null">and del_flag = 0</if>-->
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="startTime !=null">and <![CDATA[ date_format(create_time,'%Y-%m-%d') >= #{startTime} ]]></if>
+            <if test="endTime !=null">and <![CDATA[ date_format(create_time,'%Y-%m-%d') <= #{endTime} ]]></if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+        </where>
+    </sql>
+
+    <sql id="conditionsQueryByPager">
+        <where>
+            del_flag = 0
+            <if test="id !=null">and id = #{id}</if>
+            <if test="name !=null">and name LIKE concat(concat('%',#{name}),'%')</if>
+            <if test="manufacturer !=null">and manufacturer = #{manufacturer}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="goodsBrandId !=null">
+                and goods_brand_id in
+                <foreach collection="goodsBrandId" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="backCategory1Id !=null">and back_category1_id = #{backCategory1Id}</if>
+            <if test="backCategory2Id !=null">and back_category2_id = #{backCategory2Id}</if>
+            <if test="backCategory3Id !=null">and back_category3_id = #{backCategory3Id}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="createType !=null">and create_type = #{createType}</if>
+            <if test="attribute !=null">and attribute = #{attribute}</if>
+            <!--<if test="delFlag !=null">and del_flag = 0</if>-->
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="startTime !=null">and <![CDATA[ date_format(create_time,'%Y-%m-%d') >= #{startTime} ]]></if>
+            <if test="endTime !=null">and <![CDATA[ date_format(create_time,'%Y-%m-%d') <= #{endTime} ]]></if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+        </where>
+    </sql>
+
+    <select id="findById" parameterType="Map" resultMap="productMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_product
+        where del_flag = 0 and id=#{id}
+    </select>
+    <select id="findAll" resultMap="productMap">
+        select
+        <include refid="columns"/>
+        from tbl_product
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="productMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_product
+        <include refid="conditions"/>
+        <![CDATA[ order by id asc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="ProductModel">
+        delete from tbl_product where id = id
+    </delete>
+
+    <!--新增产品-->
+    <insert id="insertProduct" parameterType="ProductModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_product
+        (name
+        ,manufacturer
+        ,ordertype_id
+        ,goods_brand_id
+        ,back_category1_id
+        ,back_category2_id
+        ,back_category3_id
+        ,status
+        ,create_type
+        ,attribute
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{name}
+        ,#{manufacturer}
+        ,#{ordertypeId}
+        ,#{goodsBrandId}
+        ,#{backCategory1Id}
+        ,#{backCategory2Id}
+        ,#{backCategory3Id}
+        ,#{status}
+        ,#{createType}
+        ,#{attribute}
+        ,#{delFlag}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now())
+    </insert>
+
+    <!--删除产品功能 逻辑删除-->
+    <delete id="deleteProduct" parameterType="Long">
+        <!--delete from product where id = #{id}-->
+        update tbl_product
+        set
+        del_flag = 1
+        where id = #{id}
+    </delete>
+
+    <!--查询条数-->
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_product
+        <include refid="conditionsQueryByPager"/>
+    </select>
+
+    <!--页面数据展示 add by tanliang -->
+    <select id="pagerQuery" parameterType="Map" resultMap="productMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_product
+        <include refid="conditionsQueryByPager"/>
+        <![CDATA[ order by create_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <!--产品名称重复校验-->
+    <select id="findNameByName" parameterType="ProductModel" resultType="Long">
+        select count(1)
+        from tbl_product
+        where name = #{name}
+        and
+        back_category3_id = #{backCategory3Id}
+        and del_flag = 0
+    </select>
+
+    <!--产品查询(没有分页) add by caofangyi-->
+    <select id="findProductListWithoutPager" parameterType="Map" resultMap="productMap">
+        SELECT id,
+        <include refid="columns"/>
+        FROM tbl_product
+        <include refid="conditionsQuery"/>
+        ORDER BY id ASC
+    </select>
+
+    <!--根据产品ＩＤ列表取得产品列表-->
+    <select id="findByIds" parameterType="java.util.List" resultMap="productMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_product
+        WHERE id IN
+        <foreach collection="list" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND del_flag=0
+        ORDER BY id
+    </select>
+
+    <!--根据产品名称精确查询产品信息-->
+    <select id="findProductByName" parameterType="String" resultMap="productMap">
+        SELECT <include refid="columns"/>
+        FROM tbl_product
+        WHERE del_flag = 0 and name=#{name} and ordertype_id = 'YG'
+    </select>
+
+    <!--查询使用该品牌的数量-->
+    <select id="findBrandCountByBrandId" parameterType="String"  resultType="Long">
+        select count(1)
+        from tbl_product
+        where del_flag = 0 and goods_brand_id = #{brandsId}
+    </select>
+</mapper>
+
+

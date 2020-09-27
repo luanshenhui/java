@@ -1,0 +1,104 @@
+@charset "utf-8";
+/* CSS Document */
+/*----------------------------------
+			 表格样式
+----------------------------------*/
+.tablebox{
+	display: inline;
+    float: left;
+    margin: 20px 0 10px 10px;
+    width: 100%;
+}
+.tablebox table{
+	border-top:2px solid #C6D2E5;
+	border-left:2px solid #C6D2E5;
+	border-right:1px solid #C6D2E5;
+	border-bottom:1px solid #C6D2E5;
+}
+.tablebox table tr{
+	line-height:30px;
+}
+.tablebox table td{
+	color:#546286;
+	padding:0 5px;
+	border-right:1px solid #C6D2E5;
+	border-bottom:1px solid #C6D2E5;
+}
+.tablebox table .name{
+	font-weight:600;
+	text-align:right;
+	width:100px;
+	background:#E9F0FB;
+}
+/*----------------------------------
+		     表格列表样式
+----------------------------------*/
+.table-box{
+	width:100%;
+	margin:20px 0 10px 10px;
+	float: left;
+	display: inline;
+}
+.table-box table{
+	border-left:1px solid #C6D2E5;
+}
+.table-box tr{
+	width:100%;
+}
+#table-name{
+	width:100%;
+	height:24px;
+	line-height:24px;
+	background:url(../images/bg/table-name-bg.png) repeat-x;
+	color: #546286;
+	text-shadow: 1px 1px 0 #fff;
+	font-weight:600;
+}
+.table-name td{	
+	border-top:1px solid #CAD5DD;
+	border-bottom:1px solid #CAD5DD;
+	border-right:1px solid #CAD5DD;
+}
+.table-box td{
+	padding: 0 10px;
+	white-space:nowrap;
+}
+/*隔行变色*/
+.table-box tbody{
+	
+}
+.table-box tbody tr{
+	line-height:26px;
+	color: #616a81;
+}
+.table-box tbody tr td{
+	border-bottom:1px solid #DDE8EF;
+	border-right:1px solid #D9E2E8;	
+}
+.table-box .odd{
+	background:#E9F0FB;
+}
+.table-box .even{
+	background:#ffffff;
+}
+.table-box tbody tr:hover{
+	background:#C1D8F5;
+}
+.table-box .selected{
+	background:#B2BFD1;
+	color: #ffffff;
+	text-shadow: 1px 1px 0 #184566;
+}
+/*表格底部*/
+.table-bottom{
+	height:25px; 
+	line-height:25px;
+	clear: both;
+	text-align:center;
+	border-bottom:1px solid #C6D2E5 !important;
+	border-right:1px solid #C6D2E5;
+	background:url(../images/bg/table-bottom-bg.png) repeat-x;
+}
+.table-bottom:hover{
+
+}

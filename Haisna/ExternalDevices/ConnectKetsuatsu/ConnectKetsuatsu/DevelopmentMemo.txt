@@ -1,0 +1,104 @@
+﻿// ***************************************************
+// 石原開発用メモ
+// ***************************************************
+
+残作業
+・ヴァリデーション
+・書き込むところのロジック
+	・テーブル設計しろ
+	・Oracle Exportしろ
+
+・呼ばれるREST API側の実装
+	・むしろほっしーの方が早いかも。実装。
+
+・最終的に画面をもうちょっときれいに（これは最後でいいや）]
+
+・現地テストもやりにいくよ（これは先）
+
+
+
+
+
+★高木さんに相談
+・formコンストラクタのInitializeComponent()に追記してもよいものかどうか
+・起動時引数の妥当性をどこで検証するのがよいか？
+
+他システム連携とWWWの関係性におけるジレンマ
+
+　高木が探しだしたodp.net(マネージコード）のおかげで他システム連携あたりにもOracle Clientが不要になった。
+　ってことはそこからわざわざREST APIで連携するのは
+
+　IISのオーバーヘッドが増え、今より遅い。
+　経由先が増える＝障害発生時のチェックポイント増
+　コーディング規約も増える
+　と悪いとこばっかで、メリットがまったくないってことになる。
+　計測器連携は仕方ないけれど、ソケット連携系はやる意味ないんじゃね？って気持ちになってます。
+
+・windows form上のコントロールはCamel式らしいです。
+・コメントの！って何？
+
+
+現行の構造体
+
+Type ketsuatsu_Receive
+   stx               As Byte    '                   1
+   id(1 To 2)        As Byte    'ID                 2
+   id_no(1 To 8)     As Byte    'IDNO               3
+   b                 As Byte    '
+   yy(1 To 2)        As Byte    '年
+   delimiter1        As Byte    '/
+   mm(1 To 2)        As Byte    '月
+   delimiter2        As Byte    '/
+   dd(1 To 2)        As Byte    '日
+   delimiter3        As Byte    ',
+   hh(1 To 2)        As Byte    '時
+   delimiter4        As Byte    ':
+   mi(1 To 2)        As Byte    '分
+   sp1               As Byte    ',
+   sys(1 To 3)       As Byte    'SYS
+   sp2               As Byte    ',
+   dla(1 To 3)       As Byte    'DIA??????????????
+   sp3               As Byte    ',
+   pr(1 To 3)        As Byte    'PR???????????????
+   sp4               As Byte    ',
+   etx               As Byte    'etx
+End Type
+
+
+
+
+
+
+
+・まずHTMLで<body onload="javascript:RoadData(2);">する
+・以下、コール
+            ketsuatsuActiveX.ReceiveFromJavaPreValue(
+                            "",
+                            "",
+                            "",
+                            "",
+--ここまで血圧高（結果１，２，３，手入力）
+                            "",
+                            "",
+                            "",
+                            "",
+--ここまで血圧低（結果１，２，３，手入力）
+                            "",
+                            "",
+                            "",
+                            "",
+--ここまで脈拍（結果１，２，３，手入力）
+                            obj.sdata12.value,		//前回値高
+                            obj.sdata13.value,		//前回値低
+                            obj.sdata14.value,		//前回脈拍
+                            obj.p_cslData2.value,	//前回受診日
+                            obj.rdata15.value		//プレチェック 
+            );
+
+
+
+setting	2400,e,7,1
+inbuf	1024
+outbuf	512
+
+

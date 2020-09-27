@@ -1,0 +1,97 @@
+Object类
+java中所有的类都直接或者间接的继承自Object。所以java有一句话是一切接对象
+
+当我们定义的类没有显示的继承任何类的时候
+jvm在编译时会自动默认将该类继承自Object
+这个是一个强制性的。所以，通常我们不需要显示的继承Object
+
+Object方法:
+public String toString():
+在Object中该方法返回的字符串为该对象的“句柄”。格式为"类名@hashcode"。
+
+java定义Object的toString方法，希望我们在需要的时候可以重写。
+该方法的真是意图是返回能够描述该对象的一个字符串。
+
+equals方法
+public boolean equals(Object o)
+equals如果没有重写的情况下那么和==是没有区别的  但是如果重写了equals方法
+那么比较的就是内容
+比较两个对象内容是否相等。
+Object对该方法的实现就是使用"=="实现的。所以毫无意义。
+若要判断两个对象内容是否相同，应重写该方法。定义对象内容的比较规则。
+
+对于引用类型来讲:
+"=="：    判断是否为同一个对象
+"equals"：判断两个对象是否"长得像"
+
+clone方法:
+public Object clone()
+该方法返回当前对象的一个副本。渐层复制实现。
+
+hashcode方法
+public int hashcode()
+返回一个int值。该方法在具有哈希算法的地方非常有用。后面会讲。
+
+字符串
+String类
+java.lang.String类的实例用于封装一个字符序列。
+一个字符串中的每个字符都对应的是一个unicode编码，换句话说，一个字符对应两个字节保存在内存中。
+字符串内部维护着一个char数组。用于保存这个字符串。
+char占2字节，每个字符用unicode编码保存
+
+字符串对象为不变对象，一经创建不可改变。
+一旦对字符串进行修改操作，会创建新的对象
+
+java对字符串操作的优化
+java中允许我们将一个字符串字面量赋值给字符串引用类型变量。
+例如:
+     引用类型变量     字面量
+     String str   =   "Hello";
+     String str2  =   "Hello";
+在语法上看来更像是对基本类型变量赋值。
+    
+处于性能的考虑，java对字面量产生的字符串进行了缓存。将他们缓存在字符串的常量池中。对于重复出现的字面量赋值，jvm会先查找常量池中是否有过这个字符串，若有则直接引用，减少字符串对象的创建。节省内存资源。
+字符串常用方法：
+
+String toLowerCase():将英文转换为小写
+String toUpperCase():将英文转换为大写
+
+String trim():去掉字符串两边的空白
+
+boolean startsWith(String prefix)
+查看当前字符串是否以给定字符串开头。
+
+boolean endsWith(String prefix)
+查看当前字符串是否以给定字符串结尾。
+
+int length()
+返回当前字符串的字符总数
+
+int indexOf(String str)
+返回给定字符串在当前字符串中第一次出现的位置。这个位置是给定字符串首字符在当前字符串中的位置。
+若给定字符串在当前字符串中不包含返回-1
+
+int indexOf(String str,int fromIndex)
+从fromIndex指定的位置开始查找给定字符串
+是否在当前字符串中存在。
+
+int lastIndexOf(String str)
+返回给定字符串在当前字符串中最后一次出现的位置。
+
+char charAt(int index)
+返回当前字符串中指定位置的字符
+
+
+东北人看的懂
+
+wo 读三声   kao读四声  表示愤怒
+wo 读四声   kao读四声  表示惊叹
+wo 读一声   kao读一声  表示轻蔑
+wo 读三声   kao读二声  表示疑问
+wo 读四声   kao读轻声  表示吓一跳
+wo 读轻声   kao读四声  表示赞赏
+
+
+
+
+

@@ -1,0 +1,40 @@
+package cn.rkylin.oms.system.messageDefine.vo;
+
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE;
+
+public class MessageDefineVo extends OMS_MESSAGE {
+	/**
+	* 序列
+	*/
+	private static final long serialVersionUID = 7261100665980740680L;
+	
+	/**
+	* orderBy子句
+	*/
+	private String orderBy;
+
+	/**
+	* 搜索条件
+	*/
+	private String searchCondition;
+	/**
+	 * 操作
+	 */
+	private String operation;
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
+	}
+
+}

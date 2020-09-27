@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Item">
+    <resultMap id="ItemMap" type="ItemModel">
+        <result property="code" column="code"/>
+        <result property="goodsCode" column="goods_code"/>
+        <result property="marketPrice" column="market_price"/>
+        <result property="price" column="price"/>
+        <result property="stock" column="stock"/>
+        <result property="o2oCode" column="o2o_code"/>
+        <result property="o2oVoucherCode" column="o2o_voucher_code"/>
+        <result property="installmentNumber" column="installment_number"/>
+        <result property="cash" column="cash"/>
+        <result property="stockWarning" column="stock_warning"/>
+        <result property="nostockNotifyTime" column="nostock_notify_time"/>
+        <result property="image1" column="image1"/>
+        <result property="image2" column="image2"/>
+        <result property="image3" column="image3"/>
+        <result property="image4" column="image4"/>
+        <result property="image5" column="image5"/>
+        <result property="freightSize" column="freight_size"/>
+        <result property="freightWeight" column="freight_weight"/>
+        <result property="stagesCode" column="stages_code"/>
+        <result property="fixPoint" column="fix_point"/>
+        <result property="machCode" column="mach_code"/>
+        <result property="goodsTotal" column="goods_total"/>
+        <result property="stickFlag" column="stick_flag"/>
+        <result property="stickOrder" column="stick_order"/>
+        <result property="wxOrder" column="wx_order"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="attribute" column="attribute"/>
+        <result property="mid" column="mid"/>
+        <result property="oid" column="oid"/>
+        <result property="xid" column="xid"/>
+        <result property="bid" column="bid"/>
+        <result property="wxProp1" column="wx_prop1"/>
+        <result property="wxProp2" column="wx_prop2"/>
+        <result property="wxProp3" column="wx_prop3"/>
+        <result property="preinstallStock" column="preinstall_stock"/>
+        <result property="productPointRate" column="product_point_rate"/>
+        <result property="bestRate" column="best_rate"/>
+        <result property="maxPoint" column="max_point"/>
+        <result property="cardLevelId" column="card_level_id"/>
+    </resultMap>
+    <sql id="columns">
+           code,goods_code,market_price,price,stock,o2o_code,o2o_voucher_code,installment_number,cash,stock_warning,nostock_notify_time,image1,image2,image3,image4,image5,freight_size,freight_weight,stages_code,fix_point,mach_code,goods_total,stick_flag,stick_order,wx_order,del_flag,create_oper,create_time,modify_oper,modify_time,attribute,mid,oid,xid,bid,wx_prop1,wx_prop2,wx_prop3,preinstall_stock,product_point_rate,best_rate,max_point,card_level_id
+    </sql>
+
+    <insert id="insert" parameterType="ItemModel" useGeneratedKeys="true"
+            keyProperty="code" keyColumn="code">
+     insert into tbl_item
+        (code
+        ,goods_code
+        ,market_price
+        ,price
+        ,stock
+        ,o2o_code
+        ,o2o_voucher_code
+        ,installment_number
+        ,cash
+        ,stock_warning
+        ,nostock_notify_time
+        ,image1
+        ,image2
+        ,image3
+        ,image4
+        ,image5
+        ,freight_size
+        ,freight_weight
+        ,stages_code
+        ,fix_point
+        ,mach_code
+        ,goods_total
+        ,stick_flag
+        ,stick_order
+        ,wx_order
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,attribute
+        ,mid
+        ,oid
+        ,xid
+        ,bid
+        ,wx_prop1
+        ,wx_prop2
+        ,wx_prop3
+        ,preinstall_stock
+        ,product_point_rate
+        ,best_rate
+        ,max_point)
+        values(#{code}
+        ,#{goodsCode}
+        ,#{marketPrice}
+        ,#{price}
+        ,#{stock}
+        ,#{o2oCode}
+        ,#{o2oVoucherCode}
+        ,#{installmentNumber}
+        ,#{cash}
+        ,#{stockWarning}
+        ,#{nostockNotifyTime}
+        ,#{image1}
+        ,#{image2}
+        ,#{image3}
+        ,#{image4}
+        ,#{image5}
+        ,#{freightSize}
+        ,#{freightWeight}
+        ,#{stagesCode}
+        ,#{fixPoint}
+        ,#{machCode}
+        ,#{goodsTotal}
+        ,#{stickFlag}
+        ,#{stickOrder}
+        ,#{wxOrder}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        ,#{attribute}
+        ,#{mid}
+        ,#{oid}
+        ,#{xid}
+        ,#{bid}
+        ,#{wxProp1}
+        ,#{wxProp2}
+        ,#{wxProp3}
+        ,#{preinstallStock}
+        ,#{productPointRate}
+        ,#{bestRate}
+        ,#{maxPoint})
+    </insert>
+
+    <update id="update" parameterType="ItemModel">
+        update tbl_item set
+        modify_time = now()
+        <if test="goodsCode !=null">,goods_code = #{goodsCode}</if>
+        <if test="marketPrice !=null">,market_price = #{marketPrice}</if>
+        <if test="price !=null">,price = #{price}</if>
+        <if test="stock !=null">,stock = #{stock}</if>
+        <if test="o2oCode !=null">,o2o_code = #{o2oCode}</if>
+        <if test="o2oVoucherCode !=null">,o2o_voucher_code = #{o2oVoucherCode}</if>
+        <if test="installmentNumber !=null">,installment_number = #{installmentNumber}</if>
+        <if test="cash !=null">,cash = #{cash}</if>
+        <if test="stockWarning !=null">,stock_warning = #{stockWarning}</if>
+        <if test="nostockNotifyTime !=null">,nostock_notify_time = #{nostockNotifyTime}</if>
+        <if test="image1 !=null">,image1 = #{image1}</if>
+        <if test="image2 !=null">,image2 = #{image2}</if>
+        <if test="image3 !=null">,image3 = #{image3}</if>
+        <if test="image4 !=null">,image4 = #{image4}</if>
+        <if test="image5 !=null">,image5 = #{image5}</if>
+        <if test="freightSize !=null">,freight_size = #{freightSize}</if>
+        <if test="freightWeight !=null">,freight_weight = #{freightWeight}</if>
+        <if test="stagesCode !=null">,stages_code = #{stagesCode}</if>
+        <if test="fixPoint !=null">,fix_point = #{fixPoint}</if>
+        <if test="machCode !=null">,mach_code = #{machCode}</if>
+        <if test="goodsTotal !=null">,goods_total = #{goodsTotal}</if>
+        <if test="stickFlag !=null">,stick_flag = #{stickFlag}</if>
+        <if test="stickOrder !=null">,stick_order = #{stickOrder}</if>
+        <if test="wxOrder !=null">,wx_order = #{wxOrder}</if>
+        <if test="delFlag !=null">,del_flag = #{delFlag}</if>
+        <if test="createOper !=null">,create_oper = #{createOper}</if>
+        <if test="createTime !=null">,create_time = #{createTime}</if>
+        <if test="modifyOper !=null">,modify_oper = #{modifyOper}</if>
+        <if test="attribute !=null">,attribute = #{attribute}</if>
+        <if test="mid !=null">,mid = #{mid}</if>
+        <if test="oid !=null">,oid = #{oid}</if>
+        <if test="xid !=null">,xid = #{xid}</if>
+        <if test="bid !=null">,bid = #{bid}</if>
+        <if test="wxProp1 !=null">,wx_prop1 = #{wxProp1}</if>
+        <if test="wxProp2 !=null">,wx_prop2 = #{wxProp2}</if>
+        <if test="wxProp3 !=null">,wx_prop3 = #{wxProp3}</if>
+        <if test="preinstallStock !=null">,preinstall_stock = #{preinstallStock}</if>
+        <if test="productPointRate !=null">,product_point_rate = #{productPointRate}</if>
+        <if test="bestRate !=null">,best_rate = #{bestRate}</if>
+        <if test="maxPoint !=null">,max_point = #{maxPoint}</if>
+        where code = #{code}
+    </update>
+
+    <update id="updateItem" parameterType="ItemModel">
+        update tbl_item set
+        modify_time = now(),
+        market_price = #{marketPrice},
+        cash = #{cash},
+        fix_point = #{fixPoint}
+        <if test="goodsCode !=null">,goods_code = #{goodsCode}</if>
+        <if test="price !=null">,price = #{price}</if>
+        <if test="stock !=null">,stock = #{stock}</if>
+        <if test="o2oCode !=null">,o2o_code = #{o2oCode}</if>
+        <if test="o2oVoucherCode !=null">,o2o_voucher_code = #{o2oVoucherCode}</if>
+        <if test="installmentNumber !=null">,installment_number = #{installmentNumber}</if>
+        <if test="stockWarning !=null">,stock_warning = #{stockWarning}</if>
+        <if test="nostockNotifyTime !=null">,nostock_notify_time = #{nostockNotifyTime}</if>
+        <if test="image1 !=null">,image1 = #{image1}</if>
+        <if test="image2 !=null">,image2 = #{image2}</if>
+        <if test="image3 !=null">,image3 = #{image3}</if>
+        <if test="image4 !=null">,image4 = #{image4}</if>
+        <if test="image5 !=null">,image5 = #{image5}</if>
+        <if test="freightSize !=null">,freight_size = #{freightSize}</if>
+        <if test="freightWeight !=null">,freight_weight = #{freightWeight}</if>
+        <if test="stagesCode !=null">,stages_code = #{stagesCode}</if>
+        <if test="machCode !=null">,mach_code = #{machCode}</if>
+        <if test="goodsTotal !=null">,goods_total = #{goodsTotal}</if>
+        <if test="stickFlag !=null">,stick_flag = #{stickFlag}</if>
+        <if test="stickOrder !=null">,stick_order = #{stickOrder}</if>
+        <if test="wxOrder !=null">,wx_order = #{wxOrder}</if>
+        <if test="delFlag !=null">,del_flag = #{delFlag}</if>
+        <if test="createOper !=null">,create_oper = #{createOper}</if>
+        <if test="createTime !=null">,create_time = #{createTime}</if>
+        <if test="modifyOper !=null">,modify_oper = #{modifyOper}</if>
+        <if test="attribute !=null">,attribute = #{attribute}</if>
+        <if test="mid !=null">,mid = #{mid}</if>
+        <if test="oid !=null">,oid = #{oid}</if>
+        <if test="xid !=null">,xid = #{xid}</if>
+        <if test="bid !=null">,bid = #{bid}</if>
+        <if test="wxProp1 !=null">,wx_prop1 = #{wxProp1}</if>
+        <if test="wxProp2 !=null">,wx_prop2 = #{wxProp2}</if>
+        <if test="wxProp3 !=null">,wx_prop3 = #{wxProp3}</if>
+        <if test="preinstallStock !=null">,preinstall_stock = #{preinstallStock}</if>
+        <if test="productPointRate !=null">,product_point_rate = #{productPointRate}</if>
+        <if test="bestRate !=null">,best_rate = #{bestRate}</if>
+        <if test="maxPoint !=null">,max_point = #{maxPoint}</if>
+        where code = #{code}
+    </update>
+
+
+
+
+
+    <sql id="conditions">
+        <where>
+            del_flag = 0
+            <where>
+                <if test="code !=null">and code = #{code}</if>
+                <if test="goodsCode !=null">and goods_code = #{goodsCode}</if>
+                <if test="marketPrice !=null">and market_price = #{marketPrice}</if>
+                <if test="price !=null">and price = #{price}</if>
+                <if test="stock !=null">and stock = #{stock}</if>
+                <if test="o2oCode !=null">and o2o_code = #{o2oCode}</if>
+                <if test="o2oVoucherCode !=null">and o2o_voucher_code = #{o2oVoucherCode}</if>
+                <if test="installmentNumber !=null">and installment_number = #{installmentNumber}</if>
+                <if test="cash !=null">and cash = #{cash}</if>
+                <if test="stockWarning !=null">and stock_warning = #{stockWarning}</if>
+                <if test="nostockNotifyTime !=null">and nostock_notify_time = #{nostockNotifyTime}</if>
+                <if test="image1 !=null">and image1 = #{image1}</if>
+                <if test="image2 !=null">and image2 = #{image2}</if>
+                <if test="image3 !=null">and image3 = #{image3}</if>
+                <if test="image4 !=null">and image4 = #{image4}</if>
+                <if test="image5 !=null">and image5 = #{image5}</if>
+                <if test="freightSize !=null">and freight_size = #{freightSize}</if>
+                <if test="freightWeight !=null">and freight_weight = #{freightWeight}</if>
+                <if test="stagesCode !=null">and stages_code = #{stagesCode}</if>
+                <if test="fixPoint !=null">and fix_point = #{fixPoint}</if>
+                <if test="machCode !=null">and mach_code = #{machCode}</if>
+                <if test="goodsTotal !=null">and goods_total = #{goodsTotal}</if>
+                <if test="stickFlag !=null">and stick_flag = #{stickFlag}</if>
+                <if test="stickOrder !=null">and stick_order = #{stickOrder}</if>
+                <if test="wxOrder !=null">and wx_order = #{wxOrder}</if>
+                <if test="createOper !=null">and create_oper = #{createOper}</if>
+                <if test="createTime !=null">and create_time = #{createTime}</if>
+                <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+                <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+                <if test="attribute !=null">and attribute = #{attribute}</if>
+                <if test="mid !=null">and mid = #{mid}</if>
+                <if test="oid !=null">and oid = #{oid}</if>
+                <if test="xid !=null">and xid = #{xid}</if>
+                <if test="bid !=null">and bid = #{bid}</if>
+                <if test="wxProp1 !=null">and wx_prop1 = #{wxProp1}</if>
+                <if test="wxProp2 !=null">and wx_prop2 = #{wxProp2}</if>
+                <if test="wxProp3 !=null">and wx_prop3 = #{wxProp3}</if>
+                <if test="preinstallStock !=null">and preinstall_stock = #{preinstallStock}</if>
+                <if test="productPointRate !=null">and product_point_rate = #{productPointRate}</if>
+                <if test="bestRate !=null">and best_rate = #{bestRate}</if>
+                <if test="maxPoint !=null">and max_point = #{maxPoint}</if>
+                <if test="cardLevelId !=null">and card_level_id = #{cardLevelId}</if>
+            </where>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_item
+        where code=#{code}
+    </select>
+
+    <select id="findAll" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        <include refid="conditions"/>
+    </select>
+
+    <!-- 根据商品codeList及单品code模糊查询-->
+    <select id="findAllExtra" parameterType="Map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        WHERE
+        goods_code IN
+        <foreach collection="goodsCodeList" item="goodsCodeList" index="index" open="(" separator="," close=")">
+            #{goodsCodeList}
+        </foreach>
+        AND del_flag=0
+        AND stock >=0
+        <if test="code !=null">and code LIKE concat(concat('%',#{code}),'%')</if>
+        <if test="itemCodes !=null">and
+            code NOT IN
+            <foreach collection="itemCodes" item="itemCode" index="index" open="(" separator="," close=")">
+                #{itemCode}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        <include refid="conditions"/>
+        <![CDATA[ order by code desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <!-- 根据商品codeList及单品code模糊查询-->
+    <select id="pagerExtra" parameterType="Map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        WHERE
+        goods_code IN
+        <foreach collection="goodsCodeList" item="goodsCodeList" index="index" open="(" separator="," close=")">
+            #{goodsCodeList}
+        </foreach>
+        AND del_flag=0
+        AND stock >0
+        <if test="code !=null">and code LIKE concat(concat('%',#{code}),'%')</if>
+        <![CDATA[ order by code desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <delete id="delete" parameterType="ItemModel">
+        delete from tbl_item where id = code
+    </delete>
+
+
+    <!--根据商品编码查询相应的单品的所有信息-->
+    <select id="findItemDetailByGoodCode" resultMap="ItemMap">
+        select <include refid="columns"/>
+        from tbl_item
+        where goods_code=#{goodsCode} and del_flag=0
+    </select>
+
+    <!--根据商品或单品编码取得单品列表 add by caofangyi-->
+    <select id="findItemListByGoodsOrItemCode" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE
+        del_flag=0
+        AND (
+            code=#{code}
+            OR goods_code=#{code}
+        )
+        ORDER BY goods_code,code
+    </select>
+
+    <!--根据商品CODE列表取得单品列表-->
+    <select id="findItemListByGoodsCodeList" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE goods_code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+        ORDER BY goods_code,code
+    </select>
+
+    <!--根据单品编码列表取得单品列表-->
+    <select id="findByCodes" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+        ORDER BY code
+    </select>
+    <!--根据单品编码列表取得单品列表不排序-->
+    <select id="findNoCode" parameterType="java.util.List" resultMap="ItemMap">
+        SELECT
+        <include refid="columns"/>
+        FROM tbl_item
+        WHERE code IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del_flag=0
+    </select>
+    <!--根据code查询相应的单品的所有信息 add by liuhan-->
+    <select id="findItemDetailByCode" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where code=#{itemCode} and del_flag=0
+    </select>
+    <!--批量插入单品信息 add by caofangyi-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tbl_item
+        (code
+        ,goods_code
+        ,market_price
+        ,price
+        ,stock
+        ,o2o_code
+        ,o2o_voucher_code
+        ,installment_number
+        ,cash
+        ,stock_warning
+        ,nostock_notify_time
+        ,image1
+        ,image2
+        ,image3
+        ,image4
+        ,image5
+        ,freight_size
+        ,freight_weight
+        ,stages_code
+        ,fix_point
+        ,mach_code
+        ,goods_total
+        ,stick_flag
+        ,stick_order
+        ,wx_order
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,attribute
+        ,mid
+        ,oid
+        ,xid
+        ,bid
+        ,wx_prop1
+        ,wx_prop2
+        ,wx_prop3
+        ,preinstall_stock
+        ,product_point_rate
+        ,best_rate
+        ,max_point)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.code}
+            ,#{item.goodsCode}
+            ,#{item.marketPrice}
+            ,#{item.price}
+            ,#{item.stock}
+            ,#{item.o2oCode}
+            ,#{item.o2oVoucherCode}
+            ,#{item.installmentNumber}
+            ,#{item.cash}
+            ,#{item.stockWarning}
+            ,#{item.nostockNotifyTime}
+            ,#{item.image1}
+            ,#{item.image2}
+            ,#{item.image3}
+            ,#{item.image4}
+            ,#{item.image5}
+            ,#{item.freightSize}
+            ,#{item.freightWeight}
+            ,#{item.stagesCode}
+            ,#{item.fixPoint}
+            ,#{item.machCode}
+            ,#{item.goodsTotal}
+            ,#{item.stickFlag}
+            ,#{item.stickOrder}
+            ,#{item.wxOrder}
+            ,0
+            ,#{item.createOper}
+            ,now()
+            ,#{item.modifyOper}
+            ,now()
+            ,#{item.attribute}
+            ,#{item.mid}
+            ,#{item.oid}
+            ,#{item.xid}
+            ,#{item.bid}
+            ,#{item.wxProp1}
+            ,#{item.wxProp2}
+            ,#{item.wxProp3}
+            ,#{item.preinstallStock}
+            ,#{item.productPointRate}
+            ,#{item.bestRate}
+            ,#{item.maxPoint})
+        </foreach>
+    </insert>
+    <!--查询置顶商品 add by liuhan-->
+    <select id="findAllstickFlag" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where stick_flag = 1
+        and del_flag = 0
+        ORDER BY modify_time desc
+    </select>
+    <!--查询置顶商品 add by liuhan-->
+    <select id="findAllstickFlagPager" parameterType="Map" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where stick_flag = 1
+        and del_flag = 0
+        <if test="code!=null">and code = #{code}</if>
+        <![CDATA[ order by modify_time desc limit #{offset}, #{limit} ]]>
+    </select>
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_item
+        where stick_flag = 1
+        and del_flag = 0
+        <if test="code!=null">and code = #{code}</if>
+    </select>
+
+    <!--根据单品code 删除单品（逻辑删除） add by tanliang-->
+    <delete id="deleteItemByCode" parameterType="String">
+        update
+        tbl_item
+        set
+        del_flag = 1
+        where
+        code = #{code}
+    </delete>
+
+    <!--更改单品（微信）顺序 add by tanliang-->
+    <update id="editItemOrder" parameterType="ItemModel">
+        update tbl_item
+        set
+        wx_order=#{wxOrder}
+        where
+        code = #{code}
+    </update>
+
+    <!--微信商品顺序重复校验-->
+    <select id="wxOrderCheck" parameterType="Long" resultType="Long">
+        select count(1)
+        from tbl_item
+        where
+        wx_order=#{wxOrder}
+    </select>
+
+    <select id="getItemListTest" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        ORDER BY modify_time desc
+        LIMIT 10
+    </select>
+
+    <update id="updateStock" parameterType="String">
+        update tbl_item set
+        stock = stock + 1
+        where code = #{code}
+    </update>
+
+    <!--根据itemCode查询单品相关信息 niufw-->
+    <select id="findByItemcode" parameterType="java.lang.String" resultMap="ItemMap">
+        select
+        <include refid="columns"/>
+        from tbl_item
+        where code=#{itemCode}
+    </select>
+    <update id="updateGoodsJF" parameterType="ItemModel">
+        update tbl_item set stock=stock+#{stock} where code=#{code} and (stock+#{stock})<![CDATA[ < ]]>9999
+    </update>
+    <update id="updateGoodsYG" parameterType="ItemModel">
+        update tbl_item set stock=stock+#{stock} where code=#{code}
+    </update>
+</mapper>
+
+

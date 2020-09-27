@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=EDGE;" />
+    <title>H4C2页面样式示例（IFRAME）</title>
+    <link type="text/css" rel="stylesheet" href="../../../styles/dpn.h4c2.css" />
+    <style type="text/css">
+        
+    </style>
+    <script type="text/javascript" src="../../../styles/dpn.h4c2.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+</head>
+<body>
+    <!-- **** head ********************************************************* -->
+
+    <!-- **** menu ********************************************************* -->
+
+    <!-- **** content ****************************************************** -->
+    <div class="dpn-content">
+        <div class="crumb">当前位置&nbsp;:&nbsp;基本组件&nbsp;&gt;&nbsp;查询条件</div>
+        <div class="title">查询条件样式示例</div>
+        <div class="search">
+            <div class="main">
+                <form id="search_form_1" method="post" action="">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <!-- 960px -->
+                                <th width="100"><span class="need">*</span>&nbsp;必填项&nbsp;:&nbsp;</th>
+                                <td width="150"><input class="text" name="key1" type="text" size="20" /></td>
+                                <th width="100">选填项&nbsp;:&nbsp;</th>
+                                <td width="150"><input class="text" name="key2" type="text" size="20" /></td>
+                                <th width="100">文字项&nbsp;:&nbsp;</th>
+                                <td width="150" class="text">显示文字</td>
+                                <th width="60"></th>
+                                <td width="150"><input class="button" type="submit" value="查&nbsp;询" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="search">
+            <div class="hideshow">
+                <a id="search_table_hide_show" name="hide" href="javascript:void(0);">显示更多(+)</a>
+            </div>
+            <div class="main">
+                <form id="search_form" method="post" action="">
+    		        <table id="search_table">
+    		            <tbody>
+    			            <tr>
+                                <!-- 960px -->
+    			                <th width="140"><span class="need">*</span>&nbsp;必填项&nbsp;:&nbsp;</th>
+    			                <td width="100"><input class="text" name="validateDemo" type="text" size="14" /><p></p></td>
+    			                <th width="140">本地自动提示&nbsp;:&nbsp;</th>
+    	                        <td width="100"><input id="local_auto_demo" class="text" name="key1" type="text" size="14" /></td>
+    			                <th width="140">ajax自动提示&nbsp;:&nbsp;</th>
+    	                        <td width="100"><input id="ajax_auto_demo" class="text" name="key1" type="text" size="14" /></td>
+    			                <th width="140">日期&nbsp;:&nbsp;</th>
+    			                <td width="100"><input class="datepick" name="key3" type="text" size="14" /></td>
+    			            </tr>
+    	                    <tr class="hide">
+    	                        <th>ajax校验&nbsp;:&nbsp;</th>
+                                <td><input class="text" id="validate_ajax_demo" name="validateAjaxDemo" type="text" size="14" /><p></p></td>
+                                <th>下拉列表&nbsp;:&nbsp;</th>
+    	                        <td>
+    	                            <select class="select" name="key2" style="width: 112px">
+    	                                <option>value1</option>
+    	                                <option>value2</option>
+    	                            </select>
+    	                        </td>
+    	                        <th>字符自动大写&nbsp;:&nbsp;</th>
+    	                        <td><input class="text" name="key1" type="text" size="14" style="text-transform: uppercase;" /></td>
+    	                        <th>字符自动小写&nbsp;:&nbsp;</th>
+    	                        <td><input class="text" name="key1" type="text" size="14" style="text-transform: lowercase;" /></td>
+    	                    </tr>
+    	                    <tr class="hide">
+    	                        <th>下拉列表&nbsp;:&nbsp;</th>
+    	                        <td>
+    	                            <select class="select" name="key2" style="width: 112px">
+    	                                <option>value1</option>
+    	                                <option>value2</option>
+    	                            </select>
+    	                        </td>
+    	                        <th>错误信息&nbsp;:&nbsp;</th>
+    	                        <td><input class="text" name="key1" type="text" size="14" /></td>
+    	                        <th><span class="need">*</span>&nbsp;其他必填项&nbsp;:&nbsp;</th>
+    	                        <td><input class="text" name="key1" type="text" size="14" /></td>
+    	                        <th>其他日期&nbsp;:&nbsp;</th>
+    	                        <td><input class="datepick" name="key3" type="text" size="14" /></td>
+    	                    </tr>
+                        </tbody>
+                        <tfoot>
+    	                    <tr>
+    	                        <td colspan="100">
+    	                            <input class="button" type="submit" value="查&nbsp;询" />
+    	                            <input class="button" type="button" value="清&nbsp;空" />
+    	                        </td>
+    			            </tr>
+    		            </tfoot>
+    		        </table>
+		        </form>
+		    </div>
+        </div>
+    </div>
+    <!-- **** foot ********************************************************* -->
+
+    <!-- **** javascript *************************************************** -->
+    <script type="text/javascript">
+        var autos = [
+             "Google","NetEase", "Sohu", "Sina", "Sogou", "Baidu", "Tencent",
+             "新浪", "腾讯", "雅虎", "微软", "谷歌", "迅雷"
+        ];
+        
+        jQuery(function () {
+        	jQuery("div.dpn-content input.datepick").attr("readonly", "readonly");
+            jQuery("div.dpn-content input.datepick").datePicker({
+                clickInput : true,
+                createButton : false,
+                startDate : "2000-01-01"
+            });
+            
+            jQuery("#search_table tbody tr.hide").hide();
+            jQuery("#search_table_hide_show").bind("click", function () {
+                var status = jQuery("#search_table_hide_show").attr("name");
+                if ("hide" == status) {
+                    jQuery("#search_table tbody tr.hide").show();
+                    jQuery("#search_table_hide_show").text("隐藏更多(-)");
+                    jQuery("#search_table_hide_show").attr("name", "show");
+                } else {
+                    jQuery("#search_table tbody tr.hide").hide();
+                    jQuery("#search_table_hide_show").text("显示更多(+)");
+                    jQuery("#search_table_hide_show").attr("name", "hide");
+                }
+                return false;
+            });
+            
+            jQuery("#local_auto_demo").autocomplete(autos);
+            
+            /*
+                ajax请求的返回结果需要满足一下要求：
+                1. 返回的结果须为"text/html"的mime类型；
+                2. 返回的结果每行(使用"\n"或者println)数据代表一个显示列表项；
+                3. 所有的返回结果均显示，前台不对返回结果进行值匹配校验；
+                4. 可以后台取得key为"q"的参数值获取当前用户在文本框中的输入信息；
+                5. ajax请求不能跨域，因此只能访问本域内的请求地址，即在同一系统内，不能跨系统。
+            */
+            jQuery("#ajax_auto_demo").autocomplete("./autocomplete.html");
+            
+            var searchDemoFormValidator = jQuery("#search_form").validate({
+                // debug : false,          // 调试模式取消submit的默认提交功能
+                // validClass : "check",   // 验证成功后的样式，默认字符串valid
+                // focusInvalid : true,    // 表单提交时,焦点会指向第一个没有通过验证的域
+                // focusCleanup : true;    // 焦点指向错误域时，隐藏错误信息，不可与focusInvalid一起使用
+                // errorElement : "label", // 默认添加错误的节点名称：label
+                // errorClass : "error",   // 默认为错误的样式类为：error
+                rules : {
+                    validateDemo : {
+                        required : true,
+                        lettersonly : true
+                    },
+                    validateAjaxDemo : {
+                        required : true,
+                        remote : {
+                            url : "./validate.json",  // 后台处理程序，只能返回“true”或者“false”
+                            type : "get",             // get, post
+                            dataType : "json",        // 接受数据格式
+                            data : {
+                                validateAjaxDemoValue : function () {
+                                    return jQuery("#validate_ajax_demo").val();
+                                },
+                                validateAjaxDemoValue1 : function () {
+                                    return jQuery("#validate_ajax_demo").val();
+                                }
+                            }
+                        }
+                    }
+                },
+                messages : {
+                    validateDemo : {
+                        required : "值必须填写",
+                        lettersonly : "请填写字母"
+                    },
+                    validateAjaxDemo : {
+                        required : "值也必须填写",
+                        remote : "ajax未通过"
+                    }
+                },
+                errorPlacement : function (error, element) {
+                    error.appendTo(element.next());
+                },
+                submitHandler : function (form) {
+                    alert("search submit!");
+                    form.submit();
+                }
+            });
+            
+            jQuery("#resetbtn").bind("click", function () {
+                if (searchDemoFormValidator) {
+                    searchDemoFormValidator.resetForm();
+                }
+                jQuery("#search_form")[0].reset();
+            });
+        });
+    </script>
+</body>
+</html>

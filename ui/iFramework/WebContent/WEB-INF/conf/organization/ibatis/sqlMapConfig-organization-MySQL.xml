@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" errorTracingEnabled="true" useStatementNamespaces="true" />
+	<sqlMap resource="com/dhc/organization/unit/dao/ibatis/sqlmap/WF_ORG_UNIT_MYSQL5.xml"/>
+    <sqlMap resource="com/dhc/organization/unit/dao/ibatis/sqlmap/WF_ORG_DICTIONARY.xml"/>
+    <sqlMap resource="com/dhc/organization/position/dao/ibatis/sqlmap/WF_ORG_STATION.xml"/>
+
+    <sqlMap resource="com/dhc/organization/user/dao/ibatis/sqlmap/WF_ORG_USER_MYSQL5.xml"/>
+    
+    <sqlMap resource="com/dhc/organization/role/dao/ibatis/sqlmap/WF_ORG_ROLE_MYSQL5.xml"/>
+</sqlMapConfig>

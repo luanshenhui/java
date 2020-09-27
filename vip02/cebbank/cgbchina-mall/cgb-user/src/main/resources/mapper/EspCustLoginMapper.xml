@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EspCustLogin">
+    <resultMap id="EspCustLoginMap" type="EspCustLoginModel">
+        <result property="id" column="id"/>
+        <result property="loginRandom" column="login_random"/>
+        <result property="custId" column="cust_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="loginFlag" column="login_flag"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginMac" column="login_mac"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="loginId" column="login_id"/>
+        <result property="reserved1" column="reserved1"/>
+        <result property="serverIp" column="server_ip"/>
+    </resultMap>
+    <sql id="columns">
+        id,login_random,cust_id,create_time,login_flag,login_ip,login_mac,modify_time,login_id,reserved1,server_ip
+    </sql>
+
+    <insert id="insert" parameterType="EspCustLoginModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_esp_cust_login
+        (login_random
+        ,cust_id
+        ,create_time
+        ,login_flag
+        ,login_ip
+        ,login_mac
+        ,modify_time
+        ,login_id
+        ,reserved1
+        ,server_ip)
+        values(#{loginRandom}
+        ,#{custId}
+        ,#{createTime}
+        ,#{loginFlag}
+        ,#{loginIp}
+        ,#{loginMac}
+        ,#{modifyTime}
+        ,#{loginId}
+        ,#{reserved1}
+        ,#{serverIp})
+    </insert>
+
+    <update id="update" parameterType="EspCustLoginModel">
+        update tbl_esp_cust_login set
+        login_random
+        = #{loginRandom},cust_id
+        = #{custId},create_time
+        = #{createTime},login_flag
+        = #{loginFlag},login_ip
+        = #{loginIp},login_mac
+        = #{loginMac},modify_time
+        = #{modifyTime},login_id
+        = #{loginId},reserved1
+        = #{reserved1},server_ip
+        = #{serverIp}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="loginRandom !=null">and login_random = #{loginRandom}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="loginFlag !=null">and login_flag = #{loginFlag}</if>
+            <if test="loginIp !=null">and login_ip = #{loginIp}</if>
+            <if test="loginMac !=null">and login_mac = #{loginMac}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="loginId !=null">and login_id = #{loginId}</if>
+            <if test="reserved1 !=null">and reserved1 = #{reserved1}</if>
+            <if test="serverIp !=null">and server_ip = #{serverIp}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="EspCustLoginMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_esp_cust_login
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="EspCustLoginMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_cust_login
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="EspCustLoginMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_esp_cust_login
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="EspCustLoginModel">
+        delete from tbl_esp_cust_login where id = id
+    </delete>
+</mapper>
+
+

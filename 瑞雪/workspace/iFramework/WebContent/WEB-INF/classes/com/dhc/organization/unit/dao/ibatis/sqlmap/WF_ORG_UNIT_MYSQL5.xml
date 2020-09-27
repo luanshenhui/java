@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="WF_ORG_UNIT">
+  <resultMap class="com.dhc.organization.unit.domain.WF_ORG_UNIT" id="WF_ORG_UNITResultMap">
+    <result column="UNIT_ID" jdbcType="VARCHAR" property="unitId" />
+    <result column="PARENT_UNIT_ID" jdbcType="VARCHAR" property="parentUnitId" />
+    <result column="STATION_ID" jdbcType="VARCHAR" property="stationId" />
+    <result column="STATION_NAME" jdbcType="VARCHAR" property="stationName" />
+    <result column="UNIT_NAME" jdbcType="VARCHAR" property="unitName" />
+    <result column="UNIT_DESCRIPTION" jdbcType="VARCHAR" property="unitDescription" />
+    <result column="UNIT_TYPE" jdbcType="VARCHAR" property="unitType" />
+    <result column="MANAGEABLE" jdbcType="VARCHAR" property="manageable" />
+  </resultMap>
+
+  <resultMap class="com.dhc.organization.unit.domain.WF_ORG_UNIT" id="WF_ORG_UNITResultMap2">
+    <result column="UNIT_ID" jdbcType="VARCHAR" property="unitId" />
+    <result column="UNIT_NAME" jdbcType="VARCHAR" property="unitName" />
+    <result column="MANAGEABLE" jdbcType="VARCHAR" property="manageable" />
+  </resultMap>
+  
+  <insert id="insertUserUnit" parameterClass="com.dhc.organization.unit.domain.WF_ORG_USER_UNIT">
+    INSERT INTO WF_ORG_USER_UNIT (UNIT_ID, USER_ID)
+    VALUES (#unitId#, #userId#)
+  </insert>
+  <delete id="deleteUserUnit" parameterClass="java.lang.String">
+    DELETE FROM WF_ORG_USER_UNIT WHERE UNIT_ID = #unitId#
+  </delete>
+  
+  <select id="select" parameterClass="com.dhc.organization.unit.domain.WF_ORG_UNIT" resultMap="WF_ORG_UNITResultMap">
+	SELECT UNIT_ID,
+	       PARENT_UNIT_ID,
+	       STATION_ID,
+	       (SELECT STATION_NAME
+	          FROM WF_ORG_STATION STATION
+	         WHERE STATION.STATION_ID = UNIT.STATION_ID) AS STATION_NAME,
+	       UNIT_NAME,
+	       UNIT_DESCRIPTION,
+	       UNIT_TYPE,
+	       '1' AS MANAGEABLE
+	  FROM WF_ORG_UNIT UNIT
+	<dynamic prepend="WHERE">
+		<isNotNull prepend="AND" property="unitId">
+			UNIT_ID = #unitId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="parentUnitId">
+			PARENT_UNIT_ID = #parentUnitId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="unitName">
+			UNIT_NAME = #unitName#
+		</isNotNull>
+		<isNotNull prepend="AND" property="unitType">
+			UNIT_TYPE = #unitType#
+		</isNotNull>
+		<isNotNull prepend="AND" property="manageable">
+			MANAGEABLE = #manageable#
+		</isNotNull>
+		<isNotNull prepend="AND" property="roleId">
+			UNIT.UNIT_ID IN
+	       (SELECT A.UNIT_ID
+	          FROM WF_ORG_ROLE_UNIT A
+	         WHERE A.ROLE_ID = #roleId#)
+		</isNotNull>
+		<isNotNull prepend="AND" property="userId">
+			UNIT.UNIT_ID IN
+	       (SELECT A.UNIT_ID
+	          FROM WF_ORG_USER_UNIT A
+	         WHERE A.USER_ID = #userId#)
+		</isNotNull>
+		<isNotNull prepend="OR" property="delegateUnitIdList">
+			UNIT.UNIT_ID IN
+       			<iterate property="delegateUnitIdList" conjunction="," close=")" open="(" > 
+				  #delegateUnitIdList[]:VARCHAR# 
+				</iterate>
+		</isNotNull>
+	</dynamic>
+  </select>
+  <!-- 
+  <select id="selectRootUnit" resultMap="WF_ORG_UNITResultMap">
+    select UNIT_ID, PARENT_UNIT_ID, STATION_ID, UNIT_NAME, UNIT_DESCRIPTION, UNIT_TYPE, '1' as MANAGEABLE
+    from WF_ORG_UNIT where PARENT_UNIT_ID is null
+  </select>
+   -->
+  <select id="selectRootUnit" parameterClass="string" resultClass="java.util.HashMap">
+    SELECT CONCAT(UNIT_ID , '@UNIT') AS UNIT_ID,
+       UNIT_NAME,
+       (CASE
+         WHEN PARENT_UNIT_ID IS NULL THEN
+          NULL
+         ELSE
+          CONCAT(PARENT_UNIT_ID , '@UNIT')
+       END) AS PARENT_UNIT_ID,
+       (CASE
+        WHEN 'adminUser' = #userID# THEN
+          1
+         WHEN UNIT_ID IN 
+              (SELECT DISTINCT (UNIT_ID) 
+                 FROM WF_ORG_ROLE_UNIT RU
+                WHERE RU.ROLE_ID IN
+                      (SELECT T.ROLE_ID
+                         FROM WF_ORG_USER_ROLE T, WF_ORG_ROLE R
+                        WHERE R.ROLE_ID = T.ROLE_ID
+                          AND R.IS_ADMINROLE = '是'
+                          AND T.USER_ID = #value#)) THEN
+          1
+         ELSE
+          0
+       END) AS MANAGEABLE
+  FROM WF_ORG_UNIT
+ where UNIT_ID = 'RootUnit'
+    OR PARENT_UNIT_ID = 'RootUnit'
+  </select>
+  
+  <select id="selectSubUnit" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+    SELECT CONCAT(UNIT_ID , '@UNIT') AS UNIT_ID,
+       UNIT_NAME,
+       CONCAT(PARENT_UNIT_ID , '@UNIT') AS PARENT_UNIT_ID,
+       (CASE
+         WHEN 'adminUser' = #userID# THEN
+          1
+         WHEN UNIT_ID IN 
+              (SELECT DISTINCT (UNIT_ID)
+                 FROM WF_ORG_ROLE_UNIT RU
+                WHERE RU.ROLE_ID IN
+                      (SELECT T.ROLE_ID
+                         FROM WF_ORG_USER_ROLE T, WF_ORG_ROLE R
+                        WHERE R.ROLE_ID = T.ROLE_ID
+                          AND R.IS_ADMINROLE = '是'
+                          AND T.USER_ID = #userID#)) THEN
+          1
+         ELSE
+          0
+       END) as MANAGEABLE
+  FROM WF_ORG_UNIT
+ WHERE PARENT_UNIT_ID = #parentUnitID#
+  </select>
+  
+  <delete id="delete" parameterClass="com.dhc.organization.unit.domain.WF_ORG_UNIT">
+    DELETE FROM WF_ORG_UNIT WHERE UNIT_ID = #unitId#
+  </delete>
+  
+  <delete id="deleteUnitUsers" parameterClass="com.dhc.organization.unit.domain.WF_ORG_UNIT">
+    DELETE FROM WF_ORG_USER_UNIT WHERE UNIT_ID = #unitId#
+  </delete>
+  
+  <delete id="deleteUnitRoles" parameterClass="com.dhc.organization.unit.domain.WF_ORG_UNIT">
+    DELETE FROM WF_ORG_ROLE_UNIT WHERE UNIT_ID = #unitId#
+  </delete>
+  
+  <insert id="insert" parameterClass="com.dhc.organization.unit.domain.WF_ORG_UNIT">
+    INSERT INTO WF_ORG_UNIT (UNIT_ID, PARENT_UNIT_ID, STATION_ID, UNIT_NAME, UNIT_DESCRIPTION,
+      UNIT_TYPE)
+    values (#unitId#, #parentUnitId#, #stationId:VARCHAR:NULL#, #unitName#, #unitDescription:VARCHAR:NULL#, #unitType#)
+  </insert>
+  <update id="update" parameterClass="com.dhc.organization.unit.domain.WF_ORG_UNIT">
+    UPDATE WF_ORG_UNIT
+    SET UNIT_ID = #unitId#,
+      PARENT_UNIT_ID = #parentUnitId:VARCHAR:NULL#,
+      STATION_ID = #stationId:VARCHAR:NULL#,
+      UNIT_NAME = #unitName#,
+      UNIT_DESCRIPTION = #unitDescription:VARCHAR:NULL#,
+      UNIT_TYPE = #unitType#
+  </update>
+   <update id="updateUnit" parameterClass="com.dhc.organization.unit.domain.WF_ORG_UNIT">
+    UPDATE WF_ORG_UNIT
+    SET STATION_ID = #stationId:VARCHAR:NULL#,
+      UNIT_NAME = #unitName#,
+      UNIT_DESCRIPTION = #unitDescription:VARCHAR:NULL#,
+      UNIT_TYPE = #unitType#
+      WHERE UNIT_ID = #unitId#
+  </update>
+</sqlMap>

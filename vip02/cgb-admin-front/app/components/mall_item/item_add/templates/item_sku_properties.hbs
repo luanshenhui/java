@@ -1,0 +1,33 @@
+{{#equals type 1}}
+  {{#each data}}
+  <div class="attr">
+    <label class="attr-label" data-name="{{attributeKey.name}}" title="{{attributeKey.name}}"><b class="required">*</b>{{attributeKey.name}}</label>
+    <div class="attr-box  sku-color">
+      <ul class="sku-list unstyled sku-property">
+          {{#each attributeValues}}
+            <li class="sku-item" data-sku="{{json this}}">
+              <label class="labelname"><input class="sku-value" data-id="{{id}}" data-value="{{value}}" type="checkbox" value="1">{{value}}</label>
+            </li>
+          {{/each}}
+      </ul>
+    </div>
+  </div>
+  {{/each}}
+{{else}}
+  {{#each data}}
+    <div class="attr">
+      <label class="attr-label" data-name="{{@key}}" title="{{@key}}"><b class="required">*</b>{{@key}}</label>
+      <div class="attr-box  sku-color">
+        <ul class="sku-list unstyled sku-property">
+          {{#each this}}
+            {{#each this}}
+              <li class="sku-item" data-sku="{{this}}">
+                <label class="labelname"><input class="sku-value" data-id="{{this}}" data-value="{{@key}}" type="checkbox" value="1" checked>{{@key}}</label>
+              </li>
+            {{/each}}
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  {{/each}}
+{{/equals}}

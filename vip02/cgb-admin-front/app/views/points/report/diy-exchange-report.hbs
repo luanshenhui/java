@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（DIY卡免还款签账额）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF34",
+            "reportCode":"JF34"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

@@ -1,0 +1,36 @@
+package cn.rkylin.oms.system.messageDefine.vo;
+
+import org.apache.commons.lang.StringUtils;
+
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE_SHOP;
+
+public class MessageShopVo extends OMS_MESSAGE_SHOP{
+	
+	/**
+	 * 序列号
+	 */
+	private static final long serialVersionUID = 5803839939171440398L;
+	private static final String OPERATION_BTN_EDIT = "<button onclick=\"operationEdit(this)\" shopid=\"%s\" type=\"button\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-edit\"></i>&nbsp;修改</button>";
+	private String operation;
+	private String orderBy;
+	public String getOperation() {
+		return operation;
+	}
+	public void setOperation(String operation) {
+		StringBuffer opButton = new StringBuffer();
+		if (StringUtils.isNotEmpty(getMsgId())) {
+				opButton.append(String.format(OPERATION_BTN_EDIT, getMsId()));
+				opButton.append("&nbsp;");
+		}
+		this.operation = opButton.toString();;
+	}
+	public String getOrderBy() {
+		return orderBy;
+	}
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+	
+	
+	
+}

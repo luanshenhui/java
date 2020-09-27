@@ -1,0 +1,83 @@
+html {
+	height: 99%;
+	min-height: 99%;
+	width: 99.5%;
+}
+
+body {
+	margin: 0px;
+	width: 100%;
+	min-height: 100%;
+	height: 100%;
+	/*font: normal 12px Georgia, "Times New Roman", Times, serif;*/
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px
+}
+
+.datagrid-search {
+	width: 100%;
+	height: 26px;
+	background-color: #efefef;
+	border-bottom: 1px solid #ccc;
+	display: none;
+	/*	position:relative;*/
+	padding-top: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.datagrid-search .defalut {
+	color: #737373;
+}
+
+.apollo-form {
+	border: solid 1px #dbdada;
+	background-color: #ffffff;
+	border-bottom: 0px;
+	width: 97%;
+	border-collapse: collapse;
+	margin: 2px;
+	border-left: 0px
+}
+
+.apollo-form tr {
+	width: 100%
+}
+
+.apollo-form th {
+	width: auto;
+	height: 30px;
+	font-size: 12px;
+	font-weight: 100;
+	text-align: right;
+	border-bottom: solid 1px #eae8e8;
+	background-color: #f3f3f3;
+	padding-right: 10px;
+	border-right: solid 1px #eae8e8;
+	border-left: solid 1px #eae8e8
+}
+
+.apollo-form td {
+	width: auto;
+	border-bottom: solid 1px #eaeaea;
+	padding-left: 15px;
+}
+
+.apollo-form thead td {
+	background-color: #e3e3e3;
+	height: 25px;
+	color: #045aad;
+	font-weight: bold
+}
+
+.apollo-form td textarea {
+	width: 155px
+}
+
+.apollo-form td select {
+	width: 155px
+}
+
+.apollo-form td radio {
+	vertical-align: middle
+}

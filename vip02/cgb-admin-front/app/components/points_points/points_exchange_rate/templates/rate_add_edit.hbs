@@ -1,0 +1,36 @@
+<div class="modal">
+    <div class="modal-header"><h2>特殊积分兑换倍率设置</h2></div>
+    <form class="rate-form">
+        <div class="modal-body rate-add-edit">
+            <div class="control-group">
+                <label for="rate">倍率:</label>
+                <input id="rate" name="rate"  class="form-control" type="text" value="{{rate}}"/>
+            </div>
+            <div class="control-group">
+                <label for="supplierName">合作商:</label>
+                <input id="supplierName" name="supplierName"  class="form-control" type="text" value="{{supplierName}}"/>
+                <button class="btn btn-sm">选择</button>
+            </div>
+            <div class="control-group">
+                <label for="brandName">品牌:</label>
+                <input id="brandName" name="brandName"  class="form-control" type="text" value="{{brandName}}"/>
+                <button class="btn btn-sm">选择</button>
+            </div>
+            <div class="control-group">
+                <label for="category">后台类目:</label>
+                <input id="category" name="category"  class="form-control" type="text" value="{{category}}"/>
+                <button class="btn btn-sm">选择</button>
+            </div>
+            <div class="control-group">
+                <label for="goodsName">商品:</label>
+                <input id="goodsName" name="goodsName"  class="form-control" type="text" value="{{goodsName}}"/>
+                <button class="btn btn-sm">选择</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-sm js-rate-confirm" value="确定">
+            <button class="btn btn-info btn-sm close">取消</button>
+        </div>
+    </form>
+
+</div>

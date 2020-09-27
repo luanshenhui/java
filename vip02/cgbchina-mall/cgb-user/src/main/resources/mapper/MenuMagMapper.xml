@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuMagModel">
+    <resultMap id="MenuMagMap" type="MenuMagModel">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="link" column="link"/>
+        <result property="alias" column="alias"/>
+        <result property="isEnabled" column="is_enabled"/>
+        <result property="sort" column="sort"/>
+        <result property="pid" column="pid"/>
+        <result property="memuType" column="memu_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="icon" column="icon"/>
+        <result property="dataPaths" column="data_paths"/>
+    </resultMap>
+    <sql id="columns">
+        id,name,link,alias,is_enabled,sort,pid,memu_type,create_time,modify_time,del_flag,icon,data_paths
+    </sql>
+
+    <insert id="insert" parameterType="MenuMagModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into local_menu
+        (name
+        ,link
+        ,alias
+        ,is_enabled
+        ,sort
+        ,pid
+        ,memu_type
+        ,create_time
+        ,modify_time
+        ,del_flag
+        ,icon)
+        values(#{name}
+        ,#{link}
+        ,#{isEnabled}
+        ,#{sort}
+        ,#{pid}
+        ,#{memuType}
+        ,#{createTime}
+        ,#{modifyTime}
+        ,#{delFlag}
+        ,#{icon})
+    </insert>
+
+    <update id="update" parameterType="MenuMagModel">
+        update local_menu set
+        <if test="name !=null">name = #{name}
+            ,
+        </if>
+        <if test="link !=null">link = #{link}
+            ,
+        </if>
+        <if test="alias !=null">alias = #{alias}
+            ,
+        </if>
+        <if test="isEnabled !=null">is_enabled = #{isEnabled}
+            ,
+        </if>
+        <if test="sort !=null">sort = #{sort}
+            ,
+        </if>
+        <if test="pid !=null">pid = #{pid}
+            ,
+        </if>
+        <if test="memuType !=null">memu_type = #{memuType}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="icon !=null">icon = #{icon}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="name !=null">and name = #{name}</if>
+            <if test="link !=null">and link = #{link}</if>
+            <if test="alias !=null">and alias = #{alias}</if>
+            <if test="isEnabled !=null">and is_enabled = #{isEnabled}</if>
+            <if test="sort !=null">and sort = #{sort}</if>
+            <if test="pid !=null">and pid = #{pid}</if>
+            <if test="memuType !=null">and memu_type = #{memuType}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="icon !=null">and icon = #{icon}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="MenuMagMap">
+        SELECT
+        <include refid="columns"/>
+        from local_menu
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="MenuMagMap">
+        select
+        <include refid="columns"/>
+        from local_menu
+        WHERE is_enabled=0 AND del_flag=0
+    </select>
+
+    <select id="findByIds" resultMap="MenuMagMap">
+        select
+        <include refid="columns"/>
+        from local_menu where id in
+        <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND del_flag=0 AND is_enabled=0
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="MenuMagMap">
+        select id,
+        <include refid="columns"/>
+        from local_menu
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="MenuMagModel">
+        delete from local_menu where id = id
+    </delete>
+    <select id="findChildById" parameterType="Long" resultMap="MenuMagMap">
+        SELECT
+        <include refid="columns"/>
+        FROM local_menu
+        WHERE pid=#{_parameter} AND del_flag=0 ORDER BY sort DESC
+    </select>
+    <select id="allEnabledMenu" resultType="Long">
+        SELECT id FROM local_menu WHERE del_flag=0 AND is_enabled=0
+    </select>
+</mapper>
+
+

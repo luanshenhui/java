@@ -1,0 +1,40 @@
+{{#component "purchase-ratio js-component"}}
+    <p class="components-title"><strong class="font-size">采购价上浮系数</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals type "1"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/points-ratio">金普卡积分系数</a>
+            </li>
+            <li {{#equals type "2"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/discount-scale">折扣比例</a>
+            </li>
+            <li {{#equals type "3"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/cash-scale">现金比例</a>
+            </li>
+            <li {{#equals type "4"}}class="active"{{/equals}}><a data-role="nav"
+                                                                 href="{{_HREF_.mainContext}}/mall/price-system/purchase-ratio">采购价上浮系数</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <form class="form form-aligned purchase-ratio-form">
+            {{#with _DATA_}}
+                <!--隐藏传递该条数据的id，编辑时会用到-->
+                <input id="id" name="id" type="hidden" value="{{id}}">
+
+                <div data-role="content" class="tab-content m-t-20">
+                    <label for="cfgValue1">采购价上浮系数</label>
+                    <input id="cfgValue1" name="cfgValue1" type="text" value="{{cfgValue1}}" maxlength="4">
+                </div>
+            {{/with}}
+            <div class="control-group submit m-t-20">
+                {{#authorial "priceSystem_save"}}
+                    <input type="submit" class="btn btn-success  btn-small js-purchase-submit" value="保存">
+                {{/authorial}}
+                <a class="btn btn-success btn-small"
+                   href="{{_HREF_.mainContext}}/mall/price-system/purchase-ratio"/>取消</a>
+            </div>
+        </form>
+    </div>
+
+{{/component}}

@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for licenseDec.
+
+@author wangzhy
+@since 1.0.0 
+@version 1.0.0 
+-->
+<!-- ***************************************************************************
+备忘记录
+-> 
+********************************************************************************
+变更履历
+-> 
+**************************************************************************** -->
+<mapper namespace="SQL.DC">
+
+	<insert id = "addLicenseDec">
+		insert into QLC_HYGIENE_LICENSE_DECLARE (
+			id,
+			license_dno,
+			comp_name,
+			comp_addr,
+			management_addr,
+			management_area,
+			legal_name,
+			contacts_name,
+			contacts_phone,
+			mailbox,
+			fax,
+			employee_num,
+			certificate_numver,
+			management_type,
+			apply_scope,
+			apply_type,
+			hygiene_license_number,
+			declare_user,
+			declare_date,
+			status,
+			admissible_org_code,
+			comp_code
+		) values (
+			CreateGUID(),
+			#{license_dno},
+			#{comp_name},
+			#{comp_addr},
+			#{management_addr},
+			#{management_area},
+			#{legal_name},
+			#{contacts_name},
+			#{contacts_phone},
+			#{mailbox},
+			#{fax},
+			#{employee_num},
+			#{certificate_numver},
+			#{management_type},
+			#{apply_scope},
+			#{apply_type},
+			#{hygiene_license_number},
+			#{declare_user},
+			sysdate,
+			0,
+			#{port_org_code},
+			#{comp_code}
+		)
+	</insert>
+
+	<select id="getLicenseDecsList" resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO" >
+		select * from (select  t1.*,rownum rid from
+		(
+        	select 
+				id,
+				license_dno,
+				comp_name,
+				comp_addr,
+				management_addr,
+				management_area,
+				legal_name,
+				contacts_name,
+				contacts_phone,
+				mailbox,
+				fax,
+				employee_num,
+				certificate_numver,
+				management_type,
+				apply_scope,
+				apply_type,
+				hygiene_license_number,
+				declare_user,
+				declare_date,
+				approval_result,
+				approval_date,
+				exam_result,
+				jd_sp,
+				jd_result,
+				t.status,
+				(select file_name from QLC_VIDEO_FILE_EVENT where create_date in (select max(create_date) from QLC_VIDEO_FILE_EVENT v where t.license_dno = v.PROC_MAIN_ID and v.FILE_TYPE = '5') and rownum = 1) filePath,
+				(select id from QLC_CHECK_DOCS_RCD r where r.proc_main_id = t.license_dno and r.doc_type='D_PT_H_L_0' and rownum = 1) iszg
+            from QLC_HYGIENE_LICENSE_DECLARE t
+            where 1=1
+            <if test="approval_result != null and approval_result != ''">
+            	and approval_result=#{approval_result}
+            </if>
+            <if test="hygiene_license_number != null and hygiene_license_number != ''">
+            	and hygiene_license_number=#{hygiene_license_number}
+            </if>
+            <if test="initflag != null and initflag != ''">
+            	and 1=2
+            </if>
+            order by t.declare_date desc) t1
+	   		where rownum &lt;#{lastRecord}) where rid>=#{firstRecord}
+   </select>
+   
+   <select id="getLicenseDecsCount" resultType="java.lang.Integer">
+	    select count(id) from QLC_HYGIENE_LICENSE_DECLARE t
+        where 1=1
+	    <if test="approval_result != null and approval_result != ''">
+            and approval_result=#{approval_result}
+        </if>
+        <if test="hygiene_license_number != null and hygiene_license_number != ''">
+            and hygiene_license_number=#{hygiene_license_number}
+        </if>
+        <if test="initflag != null and initflag != ''">
+            and 1=2
+        </if>
+   </select>
+   
+   <select id="getLicenseDec" parameterType="java.util.Map" resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+        	select 
+				id,
+				license_dno,
+				comp_name,
+				comp_addr,
+				management_addr,
+				management_area,
+				legal_name,
+				contacts_name,
+				contacts_phone,
+				mailbox,
+				fax,
+				employee_num,
+				certificate_numver,
+				management_type,
+				apply_scope,
+				apply_type,
+				hygiene_license_number,
+				declare_user,
+				declare_date,
+				approval_result,
+				approval_date,
+				admissible_org_code,
+				GET_qlc_org_name(admissible_org_code) admissible_org_name,
+				status,
+				jd_sp,
+				(select id from QLC_CHECK_DOCS_RCD r where r.proc_main_id = t.license_dno and r.doc_type='D_PT_H_L_0' and rownum = 1) iszg
+            from QLC_HYGIENE_LICENSE_DECLARE t
+            where license_dno=#{license_dno}
+   </select>
+   
+   
+   <delete id="licenseDecsDelete" parameterType="java.lang.String">
+	<![CDATA[ 
+		delete from QLC_HYGIENE_LICENSE_DECLARE 
+		where license_dno=#{license_dno} 
+	]]>
+   </delete>
+   
+   <insert id="saveUploadPath" parameterType="com.dpn.ciqqlc.standard.model.VideoFileEventModel" >
+			insert into qlc_video_file_event
+				(
+					id,
+					proc_main_id,
+					file_type,
+					file_name,
+					create_user,
+					create_date
+				)
+			values 
+				(
+					CreateGUID(),
+					#{proc_main_id},
+					#{file_type},
+					#{file_name},
+					#{create_user},
+					sysdate
+				)
+	</insert>
+	
+	<update id="licenseDecUpdate">
+			update QLC_HYGIENE_LICENSE_DECLARE 
+			set license_dno = #{license_dno} 
+			<if test="comp_name != null and comp_name != ''">
+			,comp_name=#{comp_name}
+			</if>
+			<if test="comp_addr != null and comp_addr != ''">
+			,comp_addr=#{comp_addr}
+			</if>
+			<if test="management_addr != null and management_addr != ''">
+			,management_addr=#{management_addr}
+			</if>
+			<if test="management_area != null and management_area != ''">
+			,management_area=#{management_area}
+			</if>
+			<if test="legal_name != null and legal_name != ''">
+			,legal_name=#{legal_name}
+			</if>
+			<if test="contacts_name != null and contacts_name != ''">
+			,contacts_name=#{contacts_name}
+			</if>
+			<if test="contacts_phone != null and contacts_phone != ''">
+			,contacts_phone=#{contacts_phone}
+			</if>
+			<if test="mailbox != null and mailbox != ''">
+			,mailbox=#{mailbox}
+			</if>
+			<if test="fax != null and fax != ''">
+			,fax=#{fax}
+			</if>
+			<if test="employee_num != null and employee_num != ''">
+			,employee_num=#{employee_num}
+			</if>
+			<if test="certificate_numver != null and certificate_numver != ''">
+			,certificate_numver=#{certificate_numver}
+			</if>
+			<if test="management_type != null and management_type != ''">
+			,management_type=#{management_type}
+			</if>
+			<if test="apply_scope != null and apply_scope != ''">
+			,apply_scope=#{apply_scope}
+			</if>
+			<if test="apply_type != null and apply_type != ''">
+			,apply_type=#{apply_type}
+			</if>
+			<if test="hygiene_license_number != null and hygiene_license_number != ''">
+			,hygiene_license_number=#{hygiene_license_number}
+			</if>
+			<if test="port_org_code != null and port_org_code != ''">
+			,admissible_org_code=#{port_org_code}
+			</if>
+			<if test="approval_result != null and approval_result != '' and approval_result == 'bccl'">
+			,approval_result = ''
+			</if>
+			
+			where license_dno = #{license_dno} 
+    </update>
+    
+    <select id="licenseDecsInfo" parameterType="java.util.Map" resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+        	select 
+				id,
+				license_dno,
+				comp_name,
+				comp_addr,
+				management_addr,
+				management_area,
+				legal_name,
+				contacts_name,
+				contacts_phone,
+				mailbox,
+				fax,
+				employee_num,
+				certificate_numver,
+				management_type,
+				apply_scope,
+				apply_type,
+				hygiene_license_number,
+				declare_user,
+				declare_date,
+				approval_result,
+				approval_date,
+				status,
+				admissible_org_code,
+				approval_users_name,
+	            review_result
+            from QLC_HYGIENE_LICENSE_DECLARE t
+            where t.license_dno not in(select proc_main_id from qlc_chk_rcd where proj_code='PT_H_L')
+            <if test="comp_name != null and comp_name != ''">
+            	and comp_name like '%' || #{comp_name} || '%'
+            </if>
+   	    	<if test="startDeclare_date != null and startDeclare_date != ''">
+   			   <![CDATA[and declare_date >=to_date(#{startDeclare_date} 'yyyy-mm-dd')]]>
+   	    	</if>
+   	    	<if test="endDeclare_date != null and endDeclare_date != ''">
+   			   <![CDATA[and declare_date <to_date(#{endDeclare_date} 'yyyy-mm-dd')+1]]>
+   	    	</if>
+   	    	<if test="admissible_org_code != null and admissible_org_code != ''">
+   			   and admissible_org_code=#{admissible_org_code}
+   	    	</if>
+   	    	<if test="review_result != null and review_result != ''">
+   			   and review_result=#{review_result}
+   	    	</if>
+   	    	<if test="review_result != null and review_result != ''">
+   	    	   and review_result is null
+   	    	</if>
+		    order by declare_date desc
+   </select>
+   
+   <select id="selectfilePath" parameterType="java.util.Map" resultType="java.lang.String">
+	    select file_name from QLC_VIDEO_FILE_EVENT t 
+	    where file_type = #{file_type} and proc_main_id = #{proc_main_id}
+	    and rownum = 1 and file_name is not null
+	    order by t.create_date desc
+   </select>
+   
+   <select id="gethxzzInfo" parameterType="java.util.Map" resultType="com.dpn.ciqqlc.standard.model.LicenseDecDTO">
+	   select 
+	t.opr_psn,
+	t.opr_date,
+	d.status,
+	d.zz_result,
+	d.zx_result,
+	d.cx_result
+	from QLC_HYGIENE_LICENSE_DECLARE d,QLC_HYGIENE_LICENSE_EVENT t
+	where t.licence_id = d.license_dno
+	and d.status = #{status} and t.licence_id =#{license_dno}
+	and rownum = 1
+	order by opr_psn desc 
+   </select>
+	
+    <select id="getOprDate" parameterType="java.util.Map" resultType="java.util.Date">
+	   select 
+	t.opr_date
+	from QLC_HYGIENE_LICENSE_DECLARE d,QLC_HYGIENE_LICENSE_EVENT t
+	where t.licence_id = d.license_dno
+	and t.status = #{status} and t.licence_id =#{license_dno}
+	and rownum = 1
+	order by opr_psn desc 
+   </select>    
+
+   <select id="isUploadPath" parameterType="java.util.Map" resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+        select id from QLC_VIDEO_FILE_EVENT t 
+        where proc_main_id =#{proc_main_id} and file_type=#{file_type}
+   </select>
+   
+   	<select id="getorganize_ciq" resultType="com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select name,
+               org_code
+        from organizes_ciq
+	</select>
+	
+   <select id="getOptionList" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO">
+		SELECT
+		DEC_USER,
+		DEC_DATE,
+		DOC_ID,
+		PROC_MAIN_ID,
+		DOC_TYPE ,
+		OPTION_1,
+		OPTION_2,
+		OPTION_3,
+		OPTION_4,
+		OPTION_5,
+		OPTION_6,
+		OPTION_7,
+		OPTION_8,
+		OPTION_9,
+		OPTION_10,
+		OPTION_11,
+		OPTION_12,
+		OPTION_13,
+		OPTION_14,
+		OPTION_15,
+		OPTION_16,
+		OPTION_17,
+		OPTION_18,
+		OPTION_19,
+		OPTION_20,
+		OPTION_21,
+		OPTION_22,
+		OPTION_23,
+		OPTION_24,
+		OPTION_25,
+		OPTION_26,
+		OPTION_27,
+		OPTION_28,
+		OPTION_29,
+		OPTION_30,
+		OPTION_31,
+		OPTION_32,
+		OPTION_33,
+		OPTION_34,
+		OPTION_35,
+		OPTION_36,
+		OPTION_37,
+		OPTION_38,
+		OPTION_39,
+		OPTION_40,
+		OPTION_41,
+		OPTION_42,
+		OPTION_43,
+		OPTION_44,
+		OPTION_45,
+		OPTION_46,
+		OPTION_47,
+		OPTION_48,
+		OPTION_49,
+		OPTION_50,
+		OPTION_51,
+		OPTION_52,
+		OPTION_53,
+		OPTION_54,
+		OPTION_55,
+		OPTION_56,
+		OPTION_57,
+		OPTION_58,
+		OPTION_59,
+		OPTION_60,
+		OPTION_61,
+		OPTION_62,
+		OPTION_63,
+		OPTION_64,
+		OPTION_65,
+		OPTION_80
+		FROM
+		QLC_CHECK_DOCS_RCD
+		WHERE 1=1
+		<if test="doc_type != null and doc_type != ''">
+			and DOC_TYPE = #{doc_type}
+		</if>
+		<if test="proc_main_id != null and proc_main_id != ''">
+			and PROC_MAIN_ID = #{proc_main_id}
+		</if>
+		order by DEC_DATE desc
+	</select>
+	
+   <update id="updateUploadPath" parameterType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+		<![CDATA[ 
+			update QLC_VIDEO_FILE_EVENT 
+			set 
+			file_name=#{file_name}
+			where proc_main_id = #{proc_main_id} and file_type =#{file_type}
+		]]>
+    </update>
+   
+   <update id="applyUpdate">
+		<![CDATA[ 
+			update QLC_HYGIENE_LICENSE_DECLARE 
+			set 
+			approval_result='',
+			status = 0,
+			declare_user = #{declare_user},
+			declare_date = sysdate
+			where license_dno = #{license_dno} 
+		]]>
+    </update>
+
+</mapper>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.kpi.dao.DcaKpiDao">
+    
+	<sql id="dcaKpiColumns">
+		a.kpi_id AS "kpiId",
+		a.idx_id AS "idxId",
+		a.idx_name AS "idxName",
+		a.kpi_result AS "kpiResult",
+		a.del_flag AS "delFlag",
+		a.create_person AS "createPerson",
+		a.create_date AS "createDate",
+		a.update_person AS "updatePerson",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="dcaKpiJoins">
+	</sql>
+    
+	<select id="get" resultType="DcaKpi">
+		SELECT 
+			<include refid="dcaKpiColumns"/>
+		FROM dca_kpi a
+		<include refid="dcaKpiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DcaKpi">
+		SELECT 
+			<include refid="dcaKpiColumns"/>
+		FROM dca_kpi a
+		<include refid="dcaKpiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DcaKpi">
+		SELECT 
+			<include refid="dcaKpiColumns"/>
+		FROM dca_kpi a
+		<include refid="dcaKpiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dca_kpi(
+			kpi_id,
+			idx_id,
+			idx_name,
+			kpi_result,
+			del_flag,
+			create_person,
+			create_date,
+			update_person,
+			update_date,
+			remarks
+		) VALUES (
+			#{kpiId},
+			#{idxId},
+			#{idxName},
+			#{kpiResult},
+			#{delFlag},
+			#{createPerson},
+			#{createDate},
+			#{updatePerson},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dca_kpi SET 	
+			kpi_id = #{kpiId},
+			idx_id = #{idxId},
+			idx_name = #{idxName},
+			kpi_result = #{kpiResult},
+			create_person = #{createPerson},
+			update_person = #{updatePerson},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 考核指标表编辑时联动修改考核表中的 -->
+	<update id="updateNameAndType" >
+		UPDATE dca_kpi SET 				
+			idx_name = #{idxName},
+			idx_type = #{idxType},
+			update_person = #{updatePerson},
+			update_date = SYSDATE			
+		WHERE idx_id = #{idxId} AND del_flag = #{DEL_FLAG_NORMAL}
+	</update>
+	
+	
+	<!-- 根据idxId删除 -->
+	<update id="deleteByIdxId">
+		UPDATE dca_kpi SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE IDX_ID = #{idxId}	
+	</update>
+	
+	<update id="delete">
+		UPDATE dca_kpi SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 获取绩效考核结果数据 add by geshuo 20170109 -->
+	<select id="getKPICheckResult" resultType="DcaKpi">
+		SELECT
+			k2.KPI_ID kpiId,
+			k2.IDX_TYPE idxType,
+			c2.LABEL idxTypeName,
+			k2.IDX_ID idxId,
+			k2.IDX_NAME idxName,
+			k2.KPI_RESULT kpiResult,
+			k1.RESULT checkResultCode,
+			c.LABEL checkResultText
+		FROM
+			(SELECT k.KPI_ID,
+				max(i.IDX_RESULT) as result
+			 FROM DCA_KPI k
+			 LEFT JOIN DCA_KPI_IDX i
+			 	ON (k.IDX_ID=i.IDX_ID AND k.KPI_RESULT >= i.CRITICALITY_VALUE AND i.DEL_FLAG = #{DEL_FLAG_NORMAL})
+			 WHERE k.DEL_FLAG = #{DEL_FLAG_NORMAL}
+			 GROUP BY k.KPI_ID) k1
+		LEFT JOIN DCA_KPI k2 on k1.KPI_ID = k2.KPI_ID AND k2.DEL_FLAG = #{DEL_FLAG_NORMAL}
+		LEFT JOIN SYS_DICT_CUSTOM c on (result = c.VALUE and c.TYPE='idx_result')
+		LEFT JOIN SYS_DICT_CUSTOM c2 on (k2.IDX_TYPE = c2.VALUE and c2.TYPE='kpi_idx_type')
+		ORDER BY k1.KPI_ID
+	</select>
+	
+	<update id="savaResult">
+		MERGE INTO DCA_KPI d
+		USING (SELECT #{idxId} as IDX_ID, #{idxName} as IDX_NAME from dual) s
+		ON (d.IDX_ID = s.IDX_ID AND d.IDX_NAME = s.IDX_NAME AND d.DEL_FLAG = '0')
+		WHEN MATCHED THEN 
+		UPDATE SET d.KPI_RESULT = #{kpiResult} WHERE d.IDX_ID = #{idxId} AND d.IDX_NAME = #{idxName}
+		WHEN NOT MATCHED THEN 
+		INSERT (KPI_ID,
+				IDX_ID,
+				IDX_NAME,
+				KPI_RESULT,
+				DEL_FLAG,
+				CREATE_PERSON,
+				CREATE_DATE,
+				UPDATE_PERSON,
+				UPDATE_DATE,
+				REMARKS,
+				IDX_TYPE
+			) VALUES (
+				#{kpiId},
+				#{idxId},
+				#{idxName},
+				#{kpiResult},
+				#{delFlag},
+				#{createPerson},
+				SYSDATE,
+				#{updatePerson},
+				SYSDATE,
+				#{remarks},
+				#{idxType}
+			)
+	</update>
+	
+</mapper>

@@ -1,0 +1,25 @@
+﻿<script language= "javascript" src="../message/post.js"></script>
+<form id="form" class="form_template">
+<input type="hidden" name="ID" id="ID"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label lblReceiver"></td>
+		<td>
+			<input type="text" readonly="readonly" id="receiverTexts" class="pick textbox"/>
+			<input type="hidden" id="receiverID"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="label lblTitle"></td>
+		<td><input type="text" id="title" name="title" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblContent"></td>
+		<td colspan="3"><textarea id="content" name="content" class="editor"></textarea></td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="btnSubmit"/> <a id="btnCancel"/>
+</div>
+</form>

@@ -1,0 +1,153 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>原产地证书申请书信息</title>
+<%@ include file="/common/resource_show.jsp"%>
+<style type="text/css">
+<!--
+.tableLine {
+	border: 1px solid #000;
+}
+.fangxingLine {
+	font-size:10;
+	margin-left:5px;
+	margin-right:5px;
+	border: 2px solid #000;
+	font-weight:900;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+.tableLine2 {
+	border: 1px solid #000;
+	padding-left: 10px; 
+}
+.tableLine_noright {
+	padding-left: 10px;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #000;
+	border-bottom-color: #000;
+	border-left-color: #000;
+}
+.tableLine_noleft {
+	padding-left: 10px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #000;
+	border-right-color: #000;
+	border-bottom-color: #000;
+}
+/* @media print { */
+/* .noprint{display:none} */
+/* } */
+-->
+.title a:link, a:visited {
+	    color:white;
+	    text-decoration: none;
+	    }
+</style>
+</head>
+<body  class="bg-gary">
+<div class="title-bg" >
+<div class=" title-position margin-auto white">
+<div class="title"><a href="nav.html" class="white"><span  class="font-24px">原产地证书申请书信息</span></a></div>
+<%@ include file="/WEB-INF/jsp/userinfo.jsp"%>
+</div>
+</div>
+<div class="blank_div_dtl">
+</div>
+<div class="margin-auto width-1200  data-box">
+<div><h1 style="margin-left:366px;font-size: 208%">中华人民共和国检验检疫</h1>
+<h1 style="margin-left:366px;font-size: 208%">原产地证书申请书信息</h1>
+申请单位（盖章）：${obj.dec_org_name}<br/>
+证书号码：${obj.cert_no}<br/>
+郑重声明：<br/>
+本人是被正式授权代表申请单位申请办理原产地证明书和签署本申情书的。
+本人所提供原产地证明书及所附单据内容正确无误，如发现弄虚做假，冒充证书所列货物，擅改证书，自愿按照有关规定接受处罚并负法律责任。现将有关情况申报如下：
+	  <table width="700"  border="0" align="center" style="font-size: 14px;line-height: 30px;" cellpadding="0" cellspacing="0"   class="tableLine">
+      <tr>
+              <td width="96" height="44" align="center" class="tableLine" colspan="2">证书种类</td>
+              <td width="96" colspan="2" align="center" class="tableLine" >${obj.cert_type}</td>
+              <td width="96" height="44" align="center" class="tableLine" colspan="2">发票号码</td>
+              <td width="96" colspan="2" align="center" class="tableLine" >${obj.receipt_no}</td>
+      </tr>
+       <tr>
+              <td width="96" height="44" align="center" class="tableLine" colspan="2">最终目的国家/地区</td>
+              <td width="96" colspan="1" align="center" class="tableLine" >${obj.dest_country}</td>
+              <td width="96"  align="center" class="tableLine" colspan="2">中转国/地区</td>
+              <td width="96" height="44" align="center" class="tableLine" >${obj.transfer_country}</td>
+              <td width="96" colspan="1" align="center" class="tableLine" >出运日期</td>
+              <td width="96" colspan="1" align="center" class="tableLine" ><fmt:formatDate value="${obj.shipping_date}" type="both" pattern="yyyy-MM-dd"/></td>
+      </tr>
+       <tr>
+              <td width="96" height="44" align="center" class="tableLine" colspan="2">贸易方式</td>
+              <td width="96" colspan="2" align="center" class="tableLine" >${obj.trade_mode}</td>
+              <td width="96" height="44" align="center" class="tableLine" colspan="2">商品FOB总值（美元）</td>
+              <td width="96" colspan="2" align="center" class="tableLine" >${obj.apply_fob_val}</td>
+      </tr>
+       <tr>
+              <td width="96" height="44" align="center" class="tableLine" >序号</td>
+              <td width="96"  align="center" class="tableLine" >HS编码</td>
+              <td width="96" height="44" align="center" class="tableLine" >货物名称</td>
+              <td width="96"  align="center" class="tableLine" >进口成分</td>
+               <td width="96" height="44" align="center" class="tableLine" >生产企业/联系人/电话</td>
+              <td width="96"  align="center" class="tableLine" >数/重量</td>
+              <td width="96" height="44" align="center" class="tableLine" >单位</td>
+              <td width="96"  align="center" class="tableLine" >FOB值（美元）</td>
+      </tr>
+      
+       		<tr>
+			  <td height="44" align="center" class="tableLine">${obj.cag_seq}</td>
+              <td height="44" align="center" class="tableLine">${obj.hs_code}</td>
+              <td  height="44" align="center" class="tableLine">${obj.cag_name}</td>
+              <td  height="44" align="center" class="tableLine">${obj.cag_imp_comp}</td>
+              <td  height="44" align="center" class="tableLine">${obj.prod_comp}</td>
+            	 <td  height="44" align="center" class="tableLine"> ${obj.num_weight}</td>
+              <td  height="44" align="center" class="tableLine">${obj.m_weight}</td>
+              <td  height="44" align="center" class="tableLine">${obj.fob_val}</td>
+            </tr>
+<!--       <c:if test="${not empty list}"> -->
+<!--       	<c:forEach items="${list}" var="row" > -->
+<!--           </c:forEach> -->
+<!--       </c:if> -->
+      
+       <tr>
+              <td width="96" height="44" align="center" class="tableLine" colspan="2">随附单证</td>
+              <td width="96"  align="center" class="tableLine" colspan="6"></td>
+      </tr>
+        <tr>
+              <td width="167" height="44" align="center" class="tableLine" colspan="4">
+              	<div style="margin-top: 25px;">备注。</div>
+              </td>
+              <td width="167" height="44" align="center" class="tableLine" colspan="4">
+				<div style="margin-top: 35px;">申报员（签名）：  
+				<c:if test="${not empty doc.option6}">
+	       			<img style="height: 30px;width: 60px;" src="/ciqs/showVideo?imgPath=${doc.option6}" alt="xx" /> 
+       			</c:if></br>
+				  电话：   ${doc.option7}
+				  </div></br>
+					  日期：  ${doc.option9}
+				<div style="margin-top: 35px;">
+				<c:if test="${not empty doc.option10}">
+	       			<img style="height: 30px;width: 60px;" src="/ciqs/showVideo?imgPath=${doc.option10}" alt="xx" /> 
+       			</c:if>
+				</div>
+			</td>
+      </tr>
+      </table>
+    </div> 
+     <input type="button" style="margin: 40px 40px 0px 260px; width: 80px;height: 30px;" value="打印" onclick="window.print()"/>
+     <input type="button" style="margin: 40px 40px 0px 80px; width: 80px;height: 30px;" value="返回" onclick=" window.history.back(-1)"/>
+</div>
+</body>
+</html>

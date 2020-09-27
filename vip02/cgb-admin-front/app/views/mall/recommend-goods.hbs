@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}网银商品推荐{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "recommend_goods" true}}
+            {
+            "type":-1,
+            "channel":"YG"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

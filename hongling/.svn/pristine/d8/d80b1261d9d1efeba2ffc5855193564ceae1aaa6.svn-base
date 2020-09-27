@@ -1,0 +1,39 @@
+<link href='../../scripts/jquery/swfupload/css/default.css' rel='stylesheet' type='text/css' />
+<link href='../../scripts/jquery/xheditor/style.css' type='text/css' rel='stylesheet' />
+<script type='text/javascript' src='../../scripts/jquery/swfupload/handlers.js'></script>
+<script type='text/javascript' src='../../scripts/jquery/swfupload/fileprogress.js'></script>
+<script type='text/javascript' src='../../scripts/jquery/swfupload/swfupload.js'></script>
+<script type='text/javascript' src='../../scripts/jquery/swfupload/swfupload.queue.js'></script>
+
+<script src="../information/post.js"></script>
+<form id="form" class="form_template">
+<input type="hidden" name="ID" id="ID"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label lblTitle nowrap"></td>
+		<td><input type="text" id="title" class="textbox"/></td>
+		<td class="label lblCategory"></td>
+		<td><select id="categoryID"></select></td>
+	</tr>
+	<tr>
+		<td class="label lblContent"></td>
+		<td colspan="3"><textarea id="content" class="editor"></textarea></td>
+	</tr>
+	<tr>
+		<td class="label lblGroup nowrap"></td>
+		<td colspan="3" id="divGroup"></td>
+	</tr>
+	<tr>
+		<td class="label lblAttachment"></td>
+		<td colspan="3">
+			<span id="spanButtonPlaceholder1"></span>
+			<div class="fieldset flash" id="fsUploadProgress1"></div>
+			<input type="hidden" id="attachmentIDs" name="attachmentIDs"/>
+		</td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="btnSaveInformation"/> <a id="btnCancelInformation"/>
+</div>
+</form>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SecurityRole">
+
+	<resultMap id="securityRoleResult" class="com.dhc.base.security.SecurityRole">
+		<result property="userName" column="username" columnIndex="1" />
+		<result property="roleId" column="roleid" columnIndex="2" />
+		<result property="roleName" column="rolename" columnIndex="3" />
+		<result property="roleDescription" column="roledescription" columnIndex="4" />
+		<result property="roleType" column="roletype" columnIndex="5" />
+	</resultMap>
+	<resultMap id="securityRoles" class="com.dhc.base.security.SecurityRole">		
+		<result property="roleId" column="roleid" columnIndex="1" />
+		<result property="roleName" column="rolename" columnIndex="2" />
+		<result property="roleDescription" column="roledescription" columnIndex="3" />
+		<result property="roleType" column="roletype" columnIndex="4" />
+	</resultMap>
+	<select id="sercurity_getRolesByUsername" resultMap="securityRoleResult">
+		select 
+		    e.f_work_no username,
+		    r.f_role_id roleid,
+			r.f_role_name rolename,
+			r.f_desc roledescription,
+			r.f_role_type roletype
+		from om_role_t r,om_employee_role_relation_t rr,om_employee_t e
+		where r.f_role_id = rr.f_role_id
+			and rr.f_employee_id = e.f_employee_id
+			and e.f_work_no= #username#
+  </select>
+  <select id="sercurity_getRoles" resultMap="securityRoles">
+		select distinct
+		  '' roleid,
+			r.f_role_type rolename,
+			'' roledescription,
+			r.f_role_type roletype
+		from om_role_t r
+  </select>
+
+</sqlMap>

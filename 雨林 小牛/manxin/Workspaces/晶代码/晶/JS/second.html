@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--注释-->
+<html>
+	<head>		
+		<script type="text/javascript" src="second.js"></script>
+		<style type="text/css">
+			h1.s1 {
+				border-top:1px solid red;
+				border-left:2px solid green;
+			}
+		</style>
+	</head>
+	<body>
+		<div>sss</div>
+		<form>
+			<input type="button" value="测试DOM 的操作" 
+			onclick="testDOM();" />
+			<p id="p1">修改段落的字体颜色、背景颜色、文本</p>
+			<img id="m1" src="" />
+			<h1 id="h1">复杂的样式</h1>
+
+
+			<input type="button" value="实验方法的重载" 
+			onclick="M(12,40);" />
+			<br />
+			<input type="button" value="方法的其他定义方式" 
+			onclick="testMethod();" />
+			<br />
+<input type="button" value="1" onclick="cal(this.value);" />
+<input type="button" value="2" onclick="cal(this.value);" />
+<input type="button" value="3" onclick="cal(this.value);" />
+<input type="button" value="4" onclick="cal(this.value);" />
+<input type="button" value="+" onclick="cal(this.value);" />
+<input type="button" value="-" onclick="cal(this.value);" />
+<input type="button" value="=" onclick="cal(this.value);" />
+<br />
+<input type="text" id="txtNumber" />
+			<br />
+<input type="submit" value="删除" onclick="return delFunc();" />
+<input type="button" value="打开新窗口" 
+onclick="window.open('http://www.yulin.com.cn','aaa',
+'width=300,height=200');" />
+			<br />
+		
+<input type="text" id="txtTime" />
+<input type="button" value="显示时间" onclick="showTime();" />
+<input type="button" value="启动时钟" onclick="startClock();" />
+<input type="button" value="停止时钟" onclick="stopClock();" />
+			<br />
+<input type="button" value="5s后弹出" onclick="timoutFunc();" />
+如果想取消，请点击<a href="javascript:cancelFunc();">这里</a>
+			<br />
+
+姓名：
+<input type="text" id="txtName" onblur="validName();"/>
+<span id="nameInfo">3-5个大小写字母</span>
+<br/>
+年龄：
+<input type="text" id="txtAge" onblur="validAge();" />
+
+<span id="ageInfo">2位数字</span>
+<br/>
+<input type="submit" value="保存" onclick="return validData();" />
+
+			<select id="s1">
+					<option>aa</option>
+
+					<option>bb</option>
+
+					<option>cc</option>
+
+			</select>
+			<br />
+			<h1>购物车</h1>
+<table id="t1" border="1">
+	<tr>
+<td>名称</td><td>价格</td><td>数量</td><td>小计</td>
+	</tr>
+	<tr>
+		<td>aa</td><td>10.21</td>
+		<td>
+			<input type="button" value="-" onclick="decrease(this);" />
+			<input type="text" value="1" />
+			<input type="button" value="+" onclick="add(this);"/>
+		</td>
+		<td>10.21</td>
+	</tr>
+				<tr>
+					<td>bb</td>
+					<td>3.4</td>
+					<td>
+						<input type="button" value="-" 
+						onclick="decrease(this);" />
+						<input type="text" value="1" />
+						<input type="button" value="+" 
+						onclick="add(this);"/>
+					</td>
+					<td>3.4</td>
+				</tr>
+			</table>
+			总计：<span id="totalPrice">13.61</span>
+		</form>
+	</body>
+</html>

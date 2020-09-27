@@ -1,0 +1,155 @@
+<html>
+<head>
+  <title>管理授权 | Rkylin OMS</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT" />
+        
+        <!-- 加载 bootstrap 样式-->
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/font-awesome/css/font-awesome.min.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap/css/bootstrap.min.css" />
+        
+        <!-- 加载本页需要的三方插件样式 -->
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/jquery.dataTables.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/DataTables/media/css/dataTables.bootstrap.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-tablesorter/themes/blue/style-custom.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-bootstrap-wizard/custom.css">
+	    <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/jquery-steps/css/jquery.steps.css">
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/animate.css/animate.css" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/iCheck/skins/all.css" />
+    	<link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+    	<link type="text/css" rel="stylesheet" href="/Apollo/madmin/vendors/user.css/dhtmlxtree.css">
+        <!-- 加载主题风格样式 -->
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" class="default-style" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/themes/style1/orange-blue.css" id="theme-change" class="style-change color-change" />
+        <link type="text/css" rel="stylesheet" href="/Apollo/madmin/css/style-responsive.css" />
+</head>
+<body>
+		<div class="page-content">
+			<div class="container-fluid">
+				<div class="row">
+                    <div class="col-lg-12">
+				        <div class="portlet box portlet-blue" style="margin-bottom: 15px;">
+				            <div class="portlet-header">
+				                <div class="caption">授权列表</div>
+				            </div>
+				            <div class="portlet-body">
+				           <!--  /////////////////////////////////////////// -->
+									<table>
+										<tr>
+											<td>
+												<div id="splitter" style="border:1px solid #ccc;background:#ffffff;width:250px;height:400px;overflow:hidden;">
+													<table style="width:100%;" cellspacing=0 cellpadding=0 border="0">
+														<tr>
+															<td height="25px"  style="background-color:#0a819c;">
+															<font style="padding:5px 0 0px 0;margin:0; font-size:13px;">
+																角色/岗位:</font>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<div class="col-lg-12" style="height:96%;width:96%;border:0px;font-size:13px;overflow:hidden;">
+																	<ul id="myTab" class="nav nav-tabs" style="height:96%;width:96%;border:0px;font-size:13px;overflow:hidden;">
+								                                        <li class="active"><a href="#home" data-toggle="tab">角色</a>
+								                                        </li>
+								                                        <li id="mypost"><a href="#profile" data-toggle="tab">岗位</a>
+								                                        </li>
+								                                    </ul>
+																	<div id="myTabContent" class="tab-content">
+								                                        <div id="home" class="tab-pane fade in active">
+									                                        <select name="listbox" id="listbox" size="15" onclick="roleSelect('listbox')" style="display:none;border:0px;padding:0px 0 0px 0;margin:0;width:100%;height:100%;">
+															            	</select>
+								                                        </div>
+								                                        <div id="profile" class="tab-pane fade">
+								                                        	<div id="orgTree" style="height:96%;width:96%;overflow:hidden;"></div>
+								                                        </div>
+								                                    </div>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</div>
+											</td>
+											<td>
+												<div style="border:1px solid #ccc; border-left:2;height:400px; width:500px">
+												<form class="jqueryui">
+													<table style="font-size: 12px; width:100%" cellspacing=0 cellpadding=0 border="0">
+														<tr height="25px">
+<!-- 															<td  style="background-color:#0a819c;width: 50%"> -->
+															<td  style="background-image:url('../../../images/loginbackground.jpg') no-repeat center right;">
+																<font style="padding:5px 0 0px 0;margin:0; font-size:13px;">
+																可使用功能菜单:</font>
+															</td>
+															<td align="right">
+															    <button class="btn btn-info btn-xs" type="button" id="btnClean"  onClick="cleanSubnode()">清空子节点</button>
+																<button class="btn btn-info btn-xs" type="button" id="btnExpand"  onClick="expandAll()">全展开</button>
+																<button class="btn btn-info btn-xs" type="button" id="btnClose"  onClick="closeAll()">全折叠</button>
+																<button class="btn btn-info btn-xs" type="button" id="btnSave"  onclick="savePrivileges()">保存</button>
+															</td>
+														</tr>
+														<tr height="100%" valign="top" >
+															<td height="100%" colspan="2" width="100%">
+																<div id="menuTree" style="height:380px;overflow:hidden;"></div>
+															</td>
+														</tr>
+													</table>
+												</form>
+												</div>
+											</td>
+										</tr>
+									</table>
+<!-- 								/////////////////////////////////////	 -->
+				            </div>
+				        </div>
+                    </div>
+                </div>
+	        </div>
+		</div>
+
+	<!--END CONTENT -->
+	    <!-- 加载 jquery js-->
+	    <script src="/Apollo/madmin/js/jquery-1.10.2.min.js"></script>
+	    <script src="/Apollo/madmin/js/jquery-migrate-1.2.1.min.js"></script>
+	    <script src="/Apollo/madmin/js/jquery-ui.js"></script>
+	    
+	    <!-- 加载 bootstrap 和三方插件 js -->
+	    <script src="/Apollo/madmin/vendors/bootstrap/js/bootstrap.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+	    <script src="/Apollo/madmin/js/html5shiv.js"></script>
+	    <script src="/Apollo/madmin/js/respond.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-cookie/jquery.cookie.js"></script>
+	    <script src="/Apollo/madmin/vendors/iCheck/icheck.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/iCheck/custom.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-notific8/jquery.notific8.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-pace/pace.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/holder/holder.js"></script>
+	    <script src="/Apollo/madmin/vendors/responsive-tabs/responsive-tabs.js"></script>
+	    <script src="/Apollo/madmin/vendors/moment/moment.js"></script>
+		<script src="/Apollo/madmin/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+	    <script src="/Apollo/madmin/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+	    <script src="/Apollo/madmin/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+    	<script src="/Apollo/madmin/vendors/jquery-tablesorter/jquery.tablesorter.js"></script>
+    	<script src="/Apollo/madmin/js/table-advanced.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-validate/jquery.validate.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-validate/message_zh.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+	    <script src="/Apollo/madmin/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    	<script src="/Apollo/madmin/js/Arraylist.js"></script>
+    	<script src="/Apollo/madmin/js/dhtmlxcommon.js"></script>
+    	<script src="/Apollo/madmin/js/dhtmlxmenu.js"></script>
+    	<script src="/Apollo/madmin/js/dhtmlxtree.js"></script>
+    	<script src="/Apollo/madmin/js/dhtmlXTreeExtend.js"></script>
+    	<script src="/Apollo/madmin/js/DivDialogUtil.js"></script>
+    	<script src="/Apollo/madmin/jsplit/jsplit.js"></script>
+
+	    <!-- 加载本页面对应的js -->
+	    <script src="PrivilegeMain.js"></script> 
+	    <script src="/views/static/js/export.js"></script>
+	    <script src="/views/static/js/form.js"></script>
+</body>
+</html>

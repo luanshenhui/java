@@ -1,0 +1,1684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for QLC_EXP_FOOD_PROD.
+@author xwj
+-->
+<mapper namespace="SQL.EXPFOODPOF">
+	<sql id="sql_check_menu_type">
+        <if test="check_menu_type != null and check_menu_type != ''">
+    			and tc.check_menu_type=#{check_menu_type}
+    	</if>
+    </sql>
+    
+    <sql id="sql_qlc_exp_food_prod">
+        	efp.id
+			,efp.apply_no
+			,efp.comp_name
+			,efp.apply_date
+			,efp.apply_type
+			,efp.proc_type
+			,efp.deal_user
+			,efp.deal_type
+			,efp.receipt
+    </sql>
+
+		<!-- 查询申请信息 -->
+	<select id="selectPOF" parameterType="com.dpn.ciqqlc.http.form.ExpFoodPOFForm" resultType="com.dpn.ciqqlc.standard.model.ExpFoodPOFDTO">
+		select 
+			efp.*,a.approve_result,a.approve_notice
+		from QLC_EXP_FOOD_PROD efp 
+		left join QLC_EXP_FOOD_PROD_APRV a on a.apply_no = efp.apply_no  
+		where 1=1
+		<if test="code != null and code != ''">
+		and efp.port_org = #{code}
+		</if>
+		<if test="applyNo != null and applyNo != ''">
+		and efp.apply_no = #{applyNo}
+		</if>
+		<if test="compName != null and compName != ''">
+		and efp.comp_name = #{compName}
+		</if>
+		<if test="applyDate1 != null and applyDate1 != ''">
+		<![CDATA[ and efp.apply_date >= #{applyDate1} ]]>
+		</if>
+		<if test="applyDate2 != null and applyDate2 != ''">
+		<![CDATA[ and efp.apply_date <= #{applyDate2} ]]>
+		</if>
+	</select>
+	
+				<select id="selectEfpeApply" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyModel">
+				select * from (
+				select a.*,rownum rid from (
+				select
+				t.APPLYID,
+				t.APPLYTYPENAME,
+				t.APPLYCODE,
+				t.ORGNAME,
+				t.DELIVERYDATE,
+				t.APPLYNOTENAME,
+				j.USERNAME, 
+				j.DUALCONTENT, 
+				j.DUALTYPE, 
+				j.CREATEDATE as STARTDATE,
+				t.ACTIVITYID,
+				e.ORGCODE
+				from EFPE_ACTIVITY t
+				left join EFPE_APPLY e on t.applyid=e.applyid
+				left join EFPE_WF_COMMENT_JOB j on t.ACTIVITYID=j.ACTIVITYID
+				where 1=1
+				<if test="applycode != null and applycode != ''">
+				and t.applycode like '%'||#{applycode}||'%'
+				</if>
+				<if test="orgname != null and orgname != ''">
+				and t.orgname like '%'||#{orgname}||'%'
+				</if>
+				<if test="applyDate1 != null and applyDate1 != ''">
+				<![CDATA[ and t.startdate >= #{applyDate1} ]]>
+				</if>
+				<if test="applyDate2 != null and applyDate2 != ''">
+				<![CDATA[ and t.startdate <= #{applyDate2} ]]>
+				</if> order by t.startdate desc
+				) a 
+     	where <![CDATA[ rownum < #{lastRcd}) where rid>#{firstRcd}]]>
+	</select>
+	
+		<select id="selectRdmName" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		SELECT *
+  		from QLC_EXP_FOOD_PROD_PSN_RDM
+  		WHERE 1=1
+  		<if test="apply_no != null and apply_no != ''">
+ 			AND apply_no = #{apply_no}
+ 		</if>
+ 		<if test="type != null and type != ''">
+ 			AND type = #{type}
+ 		</if>
+ 		 order by psn_type
+		</select>
+		
+		<select id="selectRdmName2" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+		select t.*, 
+			t.psn_goodat as psnExpertise,
+	 		GET_qlc_code(p.level_dept_1,'QLC_PSN_LEVEL_DEPT_1') levelDept_1,
+	        GET_qlc_code(p.level_dept_2,'QLC_PSN_LEVEL_DEPT_2') levelDept_2,
+	        GET_qlc_code(p.level_dept_3,'QLC_PSN_LEVEL_DEPT_3') levelDept_3
+        from QLC_EXP_FOOD_PROD_PSN_RDM t
+		left join QLC_EFPE_PSN p on t.psn_id=p.psn_id
+  		WHERE 1=1
+  		<if test="apply_no != null and apply_no != ''">
+ 			AND t.apply_no = #{apply_no}
+ 		</if>
+ 		 and p.type='1' and t.type='2'
+ 		 order by t.psn_type
+		</select>
+		
+		<select id="selectEfpeApplyByAny" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel" resultType="com.dpn.ciqqlc.standard.model.ExpFoodPOFDTO">
+			select 
+			t.APPLYID as id,
+			t.APPLYTYPENAME as apply_type,
+			t.APPLYCODE as apply_no,
+			t.ORGNAME as comp_name,
+			t.DELIVERYDATE,
+			t.APPLYNOTENAME,
+			t.USERNAME as deal_user,
+			t.STARTDATE as apply_date,
+			'' as approve_result, 
+			'' as approve_notice,
+			rdm.status,
+			rdm.des,
+			rdm.id as rdm_id,
+			e.ORGCODE
+			from EFPE_ACTIVITY t 
+			left join EFPE_APPLY e on t.applyid=e.applyid
+			inner join QLC_EXP_FOOD_PROD_PSN_RDM rdm on t.APPLYCODE=rdm.apply_no
+			where t.APPLYCODE not in (select proc_main_id from qlc_chk_rcd where proj_code='AD_M_P' and opr_user=#{psn_id})
+				<if test="psn_id != null and psn_id != ''">
+				and rdm.psn_id = #{psn_id} 
+				</if>
+				<if test="applycode != null and applycode != ''">
+				and t.applycode like '%'||#{applycode}||'%'
+				</if>
+				<if test="orgname != null and orgname != ''">
+				and t.orgname like '%'||#{orgname}||'%'
+				</if>
+				<if test="applyDate1 != null and applyDate1 != ''">
+				<![CDATA[ and t.startdate >= #{applyDate1} ]]>
+				</if>
+<!-- 				<if test="status != null and status != ''"> -->
+<!-- 					and rdm.status = #{status} -->
+<!-- 				</if> -->
+<!-- 				<if test="status == null or status == ''"> -->
+<!-- 					and (rdm.status is null or rdm.status='') -->
+<!-- 				</if> -->
+				<if test="applyDate2 != null and applyDate2 != ''">
+				<![CDATA[ and t.startdate <= #{applyDate2} ]]>
+				</if> 
+				and (rdm.status is null or rdm.status='' or rdm.status=' ' or rdm.status='1') 
+				order by t.startdate desc
+	</select>
+	
+	
+	<!-- ************************************************************************************************************************** -->
+	<select id="selectOneEfpeApply" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyModel">
+			select 
+			t.APPLYID,
+			t.APPLYTYPENAME,
+			t.APPLYCODE,
+			t.ORGNAME,
+			t.DELIVERYDATE,
+			t.APPLYNOTENAME,
+			t.USERNAME,
+			c.createdate as STARTDATE,
+			e.ORGCODE,
+			e.ORGNAME,
+			e.factoryname,
+			e.ACCPETORGNAME,
+			e.HEADNAME,
+			e.EMAIL,
+			e.ZIPCODE,
+			e.MOVETEL,
+			e.CONTACTNAME,
+			e.BLNO,
+			e.BLDATE,
+			e.FULLNAME,
+			e.FACTORYAREA,
+			e.CFDATE,
+			e.LCCFDATE,
+			e.WSAREA,
+			e.COLDCAP,
+			e.WAREHOSEAREA,
+			e.AWSAREA,
+			e.WAREHOSECAP,
+			e.FROZENAREA,
+			e.FROZENCAP,
+			e.FROZENABI,
+			e.LCCFCONTENT,
+			e.MAHEAD,
+			e.PROHEAD,
+			e.QUAHEAD,
+			e.MANO,
+			e.PRONO,
+			e.QUANO,
+			e.HACCPDATE,
+			e.HACCPTEMNAMES,
+			e.INTERNALAUDITOR,
+			e.FOODSAFETYSIT,
+			e.APTITUDESIT
+			from EFPE_ACTIVITY t 
+			left join EFPE_APPLY e on t.applyid=e.applyid
+			inner join  EFPE_WF_COMMENT c on  t.activityId=c.activityId 
+			where t.applyid = #{applyid}
+			order by c.createDate 
+	</select>
+	
+	<select id="selectOneEfpeInfo" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdReportDto" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdReportDto">
+			select 
+			*
+			from 
+			qlc_exp_food_prod_report t
+			where t.apply_no = #{apply_no}
+	</select>
+	
+	<select id="selectCertificationList" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyCertificationDTO">
+			select 
+				*
+			from EFPE_APPLY_CERTIFICATION
+			where applyid = #{applyid}
+	</select>
+	
+	<select id="selectCheckEquList" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyCheckEquDTO">
+			select 
+				*
+			from EFPE_APPLY_CHECK_EQU
+			where applyid = #{applyid}
+	</select>
+	
+	<select id="selectEquipmentList" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyEquipmentDTO">
+			select 
+				*
+			from EFPE_APPLY_EQUIPMENT
+			where applyid = #{applyid}
+	</select>
+	
+	<select id="selectFileList" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyFileDTO">
+			select 
+				startdate,
+				startdate as startdateStr,
+				path,
+				filetype,
+				attname,
+				filename,
+				accessoryid,
+				applyid
+			from EFPE_APPLY_FILE
+			where applyid = #{applyid}
+	</select>
+	
+	<select id="selectProductList" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel" resultType="com.dpn.ciqqlc.standard.model.EfpeApplyProductDTO">
+			select 
+				*
+			from EFPE_APPLY_PRODUCT
+			where applyid = #{applyid}
+	</select>
+	
+	<!-- ************************************************************************************************************************** -->
+	<select id="0selectEfpeApplyCount0" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel"  resultType="java.lang.Integer">
+			select  count(t.applyid) from EFPE_APPLY e 
+			left join EFPE_ACTIVITY t on t.applyid=e.applyid
+			where 1=1
+<!-- 				<if test="orgcode != null and orgcode != ''"> -->
+<!-- 				and e.orgcode = #{orgcode} -->
+<!-- 				</if> -->
+				<if test="applycode != null and applycode != ''">
+				and t.applycode like '%'||#{applycode}||'%'
+				</if>
+				<if test="orgname != null and orgname != ''">
+				and t.orgname like '%'||#{orgname}||'%'
+				</if>
+				<if test="applyDate1 != null and applyDate1 != ''">
+				<![CDATA[ and t.startdate >= #{applyDate1} ]]>
+				</if>
+				<if test="applyDate2 != null and applyDate2 != ''">
+				<![CDATA[ and t.startdate <= #{applyDate2} ]]>
+				</if>
+	</select>
+	
+	<select id="selectEfpeApplyCount" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel"  resultType="java.lang.Integer">
+		select count(*)
+				from EFPE_ACTIVITY t
+				left join EFPE_APPLY e on t.applyid=e.applyid
+				left join EFPE_WF_COMMENT_JOB j on t.ACTIVITYID=j.ACTIVITYID
+				where 1=1
+				<if test="applycode != null and applycode != ''">
+				and t.applycode like '%'||#{applycode}||'%'
+				</if>
+				<if test="orgname != null and orgname != ''">
+				and t.orgname like '%'||#{orgname}||'%'
+				</if>
+				<if test="applyDate1 != null and applyDate1 != ''">
+				<![CDATA[ and t.startdate >= #{applyDate1} ]]>
+				</if>
+				<if test="applyDate2 != null and applyDate2 != ''">
+				<![CDATA[ and t.startdate <= #{applyDate2} ]]>
+				</if> order by t.startdate desc
+	</select>
+	
+	<select id="orgCodeByOrganizes" resultType="com.dpn.ciqqlc.standard.model.OrganizesDTO">
+		select  ORG_CODE from ORGANIZES_CIQ where  ORG_CODE = #{org_code}
+	</select>
+	
+	<select id="userIdByUser" resultType="com.dpn.ciqqlc.standard.model.UserInfoDTO">
+		select id from users_ciq where id = #{psn_id}
+	</select>
+	
+	<!-- 查询所属机构-->
+		<select id="allOrgList"  resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+			select code,name 
+			from QLC_CODE_LIBRARY 
+			where type = 'QLC_ORGANIZES'
+		</select>
+	<!-- 查询详情 -->
+		<select id="selectDetailsPOF" parameterType="com.dpn.ciqqlc.http.form.ExpFoodPOFForm" resultType="com.dpn.ciqqlc.standard.model.ExpFoodPOFDTO">
+			select comp_name
+			,reg_comp_plc
+			,comp_plc
+			,enter_accp
+			,legal_psn
+			,e_mail
+			,post_no
+			,con_name
+			,con_tel
+			,buness_licen
+			,buness_date
+			,comp_code
+			,tel_fax
+			,plant_area
+			,crt_plant
+			,lst_mod_plant_date
+			,lst_mod_plant_con
+			,mach_plant_area
+			,cur_plant_area
+			,cld_plant_area
+			,cld_sto_area
+			,weah_area
+			,weah_area_cap
+			,cld_sto_vol
+			,cld_sto_cap
+			,cld_mach_bily
+			,mana_psn_name
+			,prod_psn
+			,qua_mana_psn
+			,psn_num
+			,prod_psn_num
+			,qua_psn_num
+			,haccp_date
+			,haccp_psn
+			,comp_audit_psn
+			,auth_type
+			,auth_org
+			,cert_no
+			,valid_term
+			,vedio_sys_situ
+			,eqpm_name
+			,spec_models
+			,puech_date
+			,func_situ
+			,func_opr_psn
+			,labory_situ
+			,faci_name
+			,insp_item
+			,meter_situ
+			,meter_opr_psn
+			,rmk
+			from QLC_EXP_FOOD_PROD 
+			where id = #{id}
+	</select>
+	
+	<select id="selectPsnRdm" parameterType="com.dpn.ciqqlc.standard.model.EfpeApplyModel" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO">
+	select t.*,to_char(t.rdm_date,'YYYY-MM-DD HH24:MI:SS') str_rdm_date,GET_qlc_users_name(t.rdm_user) str_rdm_user
+	from QLC_EXP_FOOD_PROD_PSN_RDM t where apply_no=#{applycode}
+	</select>
+	
+	<!-- 上传评审任务通知书 -->
+	<update id="updateApproveNotice" parameterType="com.dpn.ciqqlc.http.form.ExpFoodPOFForm">
+		update QLC_EXP_FOOD_PROD_APRV 
+		set approve_notice = #{approveNotice} 
+		where apply_no = #{applyNo}
+	</update>
+	<!-- 查询商品 -->
+		<select id="selectProd" parameterType="com.dpn.ciqqlc.http.form.ExpFoodPOFForm" resultType="com.dpn.ciqqlc.standard.model.ExpFoodPOFDTO">
+			select prod_type
+			,prod_name
+			,reg_tradmk
+			,dsgn_prod_bily
+			,exp_to_country
+			from QLC_EXP_FOOD_PROD 
+			where id = #{id}
+		</select>
+		<!-- 查询附件列表 -->
+		<select id="selecTattachList" parameterType="com.dpn.ciqqlc.http.form.ExpFoodPOFForm" resultType="com.dpn.ciqqlc.standard.model.ExpFoodPOFDTO">
+			select attach_list
+			from QLC_EXP_FOOD_PROD 
+			where id = #{id}
+		</select>
+		<select id="selectTextList" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckCodeDto" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckCodeDto">
+			select * from  QLC_EXP_FOOD_PROD_CHECK_CODE t
+			where 1=1 
+			<if test="check_menu_type != null and check_menu_type != ''">
+				and t.check_menu_type = #{check_menu_type}
+			</if>
+			order by num
+		</select>
+		
+		<select id="selectTextNewList" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdNewCodeDto" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdNewCodeDto">
+			select * from  QLC_EXP_FOOD_PROD_NEW_CODE t
+			where 1=1 
+			<if test="check_menu_type != null and check_menu_type != ''">
+				and t.check_menu_type = #{check_menu_type}
+			</if>
+			order by num
+		</select>
+		
+		<select id="getToTextList" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckCodeDto" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckCodeDto">
+			select t.check_title,t.check_menu_type from  QLC_EXP_FOOD_PROD_CHECK_CODE t
+				where t.num in(
+				select max(t.num) from  QLC_EXP_FOOD_PROD_CHECK_CODE t  
+				group by t.check_title
+				)
+				group by t.check_title,t.check_menu_type,t.num order by t.num
+		</select>
+		
+		<select id="getToTextNewList" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckCodeDto" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckCodeDto">
+			select t.check_title,t.check_menu_type from  QLC_EXP_FOOD_PROD_new_CODE t
+	        where t.num in(
+	        select max(t.num) from  QLC_EXP_FOOD_PROD_new_CODE t  
+	        where 1=1
+	        group by t.check_title
+	        )
+	        group by t.check_title,t.check_menu_type,t.num order by t.num
+		</select>
+		
+		<select id="getToTextView" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo">
+			select * from  QLC_EXP_FOOD_PROD_CHECK_CODE tc left join QLC_EXP_FOOD_PROD_CHECK t 
+			on tc.check_code_id=t.check_code_id 
+    		-- left join qlc_video_file_event tv on t.apply_no= tv.proc_main_id and t.check_proc_type=tv.proc_type
+    		where 1=1 
+    		<if test="check_result == null">
+    			and (t.apply_no=#{apply_no}   <include refid="sql_check_menu_type"/>)
+    		</if>
+    		<if test="check_result != null and check_result != ''">
+    			and t.check_result = #{check_result}
+    			and t.check_type=#{check_type}
+    			and t.apply_no=#{apply_no} 
+    		</if>
+    		<if test="td != null and td != ''">
+				and t.check_proc_type like '%'||#{td}||'%'
+				</if>
+    		 order by tc.num
+		</select>
+		
+		<select id="getToTextViewNew" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo">
+			select * from  QLC_EXP_FOOD_PROD_NEW_CODE tc left join QLC_EXP_FOOD_PROD_CHECK t 
+			on tc.check_code_id=t.check_code_id 
+    		where 1=1 
+    		<if test="check_result == null">
+    			and (t.apply_no=#{apply_no}   <include refid="sql_check_menu_type"/>)
+    		</if>
+    		<if test="check_result != null and check_result != ''">
+    			and t.check_result = #{check_result}
+    			and t.check_type=#{check_type}
+    			and t.apply_no=#{apply_no} 
+    		</if>
+    		<if test="td != null and td != ''">
+				and t.check_proc_type like '%'||#{td}||'%'
+			</if>
+    		 order by tc.num
+		</select>
+		
+		<select id="findexpFoodCount" parameterType="com.dpn.ciqqlc.http.form.ExpFoodPOFForm"  resultType="java.lang.Integer">
+			select 
+			count(*)
+			from QLC_EXP_FOOD_PROD efp 
+			left join QLC_EXP_FOOD_PROD_APRV a on a.apply_no = efp.apply_no  
+			where 1=1
+			<if test="code != null and code != ''">
+			and efp.port_org = #{code}
+			</if>
+			<if test="applyNo != null and applyNo != ''">
+			and efp.apply_no = #{applyNo}
+			</if>
+			<if test="compName != null and compName != ''">
+			and efp.comp_name = #{compName}
+			</if>
+			<if test="applyDate1 != null and applyDate1 != ''">
+			<![CDATA[ and efp.apply_date >= #{applyDate1} ]]>
+			</if>
+			<if test="applyDate2 != null and applyDate2 != ''">
+			<![CDATA[ and efp.apply_date <= #{applyDate2} ]]>
+			</if>
+		</select>
+		<select id="findFile" parameterType="com.dpn.ciqqlc.standard.model.FileInfoDto" resultType="com.dpn.ciqqlc.standard.model.FileInfoDto">
+		select 
+		   t.*,
+		      ( select name from USERS_CIQ u where u.id=t.create_user) as user_name
+		 from QLC_File_INFO t
+		 where t.main_id=#{main_id}
+		order by t.create_date desc
+	</select>
+		
+		
+		<select id="findFileInfo" parameterType="com.dpn.ciqqlc.standard.model.FileInfoDto" resultType="com.dpn.ciqqlc.standard.model.FileInfoDto">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+		   t.*,
+		      ( select name from USERS_CIQ u where u.id=t.create_user) as user_name
+		 from QLC_File_INFO t
+		 where 1=1
+		<if test="file_name != null and file_name != ''">
+			and t.file_name like '%' || #{file_name} || '%'
+		</if>
+		<if test="create_date_begin != null and create_date_begin != ''">
+			<![CDATA[ and t.create_date >= to_date(#{create_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="create_date_end != null and create_date_end != ''">
+			<![CDATA[ and t.create_date <= to_date(#{create_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		order by t.create_date desc) a 
+     	where <![CDATA[ rownum < #{lastRcd}) where rid>=#{firstRcd}]]>
+	</select>
+	
+	<select id="findFileCount" parameterType="com.dpn.ciqqlc.standard.model.FileInfoDto" resultType="java.lang.Integer">
+		select 
+		   count(*)
+		 from QLC_File_INFO t
+		 where 1=1
+		<if test="file_name != null and file_name != ''">
+			and t.file_name like '%' || #{file_name} || '%'
+		</if>
+		<if test="create_date_begin != null and create_date_begin != ''">
+			<![CDATA[ and t.create_date >= to_date(#{create_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="create_date_end != null and create_date_end != ''">
+			<![CDATA[ and t.create_date <= to_date(#{create_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+	</select>
+	
+	<select id="selectExpFoodProdPoint"  parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPointDto" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdPointDto">
+		select * from  EFPE_WF_COMMENT  where ACTIVITYID=#{activityid}
+	</select>
+<!-- 		and createdate in (select max(createdate) from EFPE_WF_COMMENT where ACTIVITYID =#{activityid} group by applynote) -->
+		
+		<insert id="saveText" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckDto">
+			insert into QLC_EXP_FOOD_PROD_CHECK
+		(id
+		<if test="apply_no != null and apply_no != ''" >
+			,apply_no
+		</if>
+		<if test="check_code_id != null and check_code_id != ''" >
+			,check_code_id
+		</if>
+		<if test="check_proc_type != null and check_proc_type != ''" >
+			,check_proc_type
+		</if>
+		<if test="check_result != null and check_result != ''" >
+			,check_result
+		</if>
+		<if test="check_disc != null and check_disc != ''" >
+			,check_disc
+		</if>
+		<if test="check_type != null and check_type != ''" >
+			,check_type
+		</if>
+		<if test="chech_psn != null and chech_psn != ''" >
+			,chech_psn
+		</if>
+		<if test="check_date != null and check_date != ''" >
+			,check_date
+		</if>
+		)
+		values (CreateGUID()
+		<if test="apply_no != null and apply_no != ''" >
+			,#{apply_no}
+		</if>
+		<if test="check_code_id != null and check_code_id != ''" >
+			,#{check_code_id}
+		</if>
+		<if test="check_proc_type != null and check_proc_type != ''" >
+			,#{check_proc_type}
+		</if>
+		<if test="check_result != null and check_result != ''" >
+			,#{check_result}
+		</if>
+		<if test="check_disc != null and check_disc != ''" >
+			,#{check_disc}
+		</if>
+		<if test="check_type != null and check_type != ''" >
+			,#{check_type}
+		</if>
+		<if test="chech_psn != null and chech_psn != ''" >
+			,#{chech_psn}
+		</if>
+		<if test="check_date != null and check_date != ''" >
+			,#{check_date}
+		</if>
+		)
+		</insert>
+		
+		
+		
+		<insert id="saveUpload" parameterType="com.dpn.ciqqlc.standard.model.FileInfoDto">
+			insert into QLC_FILE_INFO
+		(id
+		<if test="main_id != null and main_id != ''" >
+			,main_id
+		</if>
+		<if test="file_location != null and file_location != ''" >
+			,file_location
+		</if>
+		<if test="file_name != null and file_name != ''" >
+			,file_name
+		</if>
+		<if test="create_user != null and file_name != ''" >
+			,create_user
+		</if>
+			,create_date
+		<if test="remark != null and remark != ''" >
+			,remark
+		</if>	
+		)
+		values (CreateGUID()
+		<if test="main_id != null and main_id != ''" >
+			,#{main_id}
+		</if>
+		<if test="file_location != null and file_location != ''" >
+			,#{file_location}
+		</if>
+		<if test="file_name != null and file_name != ''" >
+			,#{file_name}
+		</if>
+		<if test="create_user != null and file_name != ''" >
+			,#{create_user}
+		</if>
+			,sysdate
+		<if test="remark != null and remark != ''" >
+			,#{remark}
+		</if>	
+		)
+		</insert>
+		
+		<delete id="deleteExpFoodProdCheckDto" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckDto">
+			delete QLC_EXP_FOOD_PROD_CHECK t where t.apply_no = #{apply_no} and check_code_id=#{check_code_id} and CHECK_PROC_TYPE=#{check_proc_type}
+		</delete>
+	<!-- liuchao 2017-11-13 -->
+		<!-- 分类 -->
+		<select id="psnTypeCode" resultType="com.dpn.ciqqlc.standard.model.CodeLibraryDTO" >
+			SELECT code,name
+			from QLC_CODE_LIBRARY
+			WHERE type = 'QLC_PSN_PSN_TYPE' and code!='qtzc'
+		</select>
+		<!-- 级别 -->
+		<select id="psnLevelCode" resultType="com.dpn.ciqqlc.standard.model.CodeLibraryDTO" >
+			SELECT code,name
+			from QLC_CODE_LIBRARY
+			WHERE type ='QLC_PSN_PSN_LEVEL'
+		</select>
+		<!-- 1级部门 -->
+		<select id="psnLevelDept_1Code" resultType="com.dpn.ciqqlc.standard.model.CodeLibraryDTO" >
+			SELECT code,name,port_org_code
+			from QLC_CODE_LIBRARY
+			WHERE type = 'QLC_PSN_LEVEL_DEPT_1'
+		</select>
+		<!-- 2级部门 -->
+		<select id="psnLevelDept_2Code" resultType="com.dpn.ciqqlc.standard.model.CodeLibraryDTO" >
+			select t2.code,t2.name,t2.port_org_code,t1.name as flag_op from
+		      (SELECT code,name,port_org_code
+		      from QLC_CODE_LIBRARY
+		      WHERE type = 'QLC_PSN_LEVEL_DEPT_2') t2 
+		      left join
+		      (SELECT code,name,port_org_code
+		      from QLC_CODE_LIBRARY
+		      WHERE type = 'QLC_PSN_LEVEL_DEPT_1') t1 on t2.port_org_code=t1.code
+		      order by t2.port_org_code
+		</select>
+		<!-- 3级部门 -->
+		<select id="psnLevelDept_3Code" resultType="com.dpn.ciqqlc.standard.model.CodeLibraryDTO" >
+			select t3.code,t3.name,t3.port_org_code,t1.name||'-'||t2.name as flag_op from
+			(SELECT code,name,port_org_code
+			from QLC_CODE_LIBRARY
+			WHERE type = 'QLC_PSN_LEVEL_DEPT_3') t3
+			left join
+			(SELECT code,name,port_org_code
+			from QLC_CODE_LIBRARY
+			WHERE type = 'QLC_PSN_LEVEL_DEPT_2') t2 on t3.port_org_code=t2.code
+			left join
+			(SELECT code,name,port_org_code
+			from QLC_CODE_LIBRARY
+			WHERE type = 'QLC_PSN_LEVEL_DEPT_1') t1 on t2.port_org_code=t1.code
+      		order by t3.port_org_code
+		</select>	
+		<!-- 专长 -->
+		<select id="expertise_code" resultType="com.dpn.ciqqlc.standard.model.EfpePsnExptDto" >
+			SELECT 
+				expertise_code,
+				expertise_main ||'-'||expertise_detail as expertise_detail
+			from QLC_EFPE_PSN_EXPT
+		</select>
+		<select id="expertise_code1" resultType="com.dpn.ciqqlc.standard.model.EfpePsnExptDto" >
+			SELECT 
+				expertise_code,
+				expertise_main,
+				expertise_detail
+			from QLC_EFPE_PSN_EXPT 
+			where classic_type = '核心团队'
+		</select>
+		<select id="expertise_code2" resultType="com.dpn.ciqqlc.standard.model.EfpePsnExptDto" >
+			SELECT 
+				expertise_code,
+				expertise_main,
+				expertise_detail
+			from QLC_EFPE_PSN_EXPT
+			where classic_type = '专业团队' 
+		</select>
+		<select id="expertise_code3" resultType="com.dpn.ciqqlc.standard.model.EfpePsnExptDto" >
+			SELECT 
+				expertise_code,
+				expertise_main,
+				expertise_detail
+			from QLC_EFPE_PSN_EXPT 
+			where classic_type = '准专业团队'
+		</select>
+		<select id="expertise_code4" resultType="com.dpn.ciqqlc.standard.model.EfpePsnExptDto" >
+			SELECT 
+				expertise_code,
+				expertise_main,
+				expertise_detail
+			from QLC_EFPE_PSN_EXPT 
+			where classic_type = '执法监管团队'
+		</select>
+		<select id="expertise_code5" resultType="com.dpn.ciqqlc.standard.model.EfpePsnExptDto" >
+			SELECT 
+				expertise_code,
+				expertise_main,
+				expertise_detail
+			from QLC_EFPE_PSN_EXPT 
+			where classic_type = '其他专长'
+		</select>
+		
+		<!-- 查询随机人员数据源表 -->
+	<select id="selectBasePsn" parameterType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto" resultType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto">
+		SELECT
+		    p.psn_id as psnId,
+		    p.psn_name as psnName,
+		    p.psn_type as psnType ,
+		    p.psn_goodat||p.psn_Other_goodat as psnExpertise,
+		    p.in_post,
+		    GET_qlc_code(p.psn_level,'QLC_PSN_PSN_LEVEL') psnLevel,
+		    GET_qlc_code(p.level_dept_1,'QLC_PSN_LEVEL_DEPT_1') levelDept_1,
+		    GET_qlc_code(p.level_dept_2,'QLC_PSN_LEVEL_DEPT_2') levelDept_2,
+		    GET_qlc_code(p.level_dept_3,'QLC_PSN_LEVEL_DEPT_3') levelDept_3
+		    from QLC_EFPE_PSN p
+		WHERE 
+		psn_status='1'
+		<if test='psnExpertise != null and psnExpertise != ""'>
+			AND ${psnExpertise}
+		</if>
+		<if test='psnLevel != null and psnLevel != ""'>
+		 	AND p.psn_level = #{psnLevel}
+		</if>
+		<if test='levelDept_1 != null and levelDept_1 != ""'>
+		 	AND p.level_dept_1 in (${levelDept_1})			
+		</if>
+		<if test='levelDept_2 != null and levelDept_2 != ""'>
+		 	AND p.level_dept_2 in (${levelDept_2})			
+		</if>
+		<if test='levelDept_3 != null and levelDept_3 != ""'>
+		 	AND p.level_dept_3 in (${levelDept_3})			
+		</if>
+		<if test='in_post != null and in_post != ""'>
+		 	AND p.in_post =#{in_post}			
+		</if>
+		<if test='type != null and type != ""'>
+		 	AND p.type =#{type}			
+		</if>
+		<if test='psnId != null and psnId != ""'>
+		 	AND p.psn_id !=#{psnId}			
+		</if>
+	
+	</select>
+	
+	
+	<select id="psyList" resultType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto" >
+		select * from (select  t1.*,rownum rid from
+		(
+        	select 
+        	    t.psn_id psnId,
+				t.psn_name psnName,
+				t.psn_code psnCode,
+				GET_QLC_PSN_LEVEL_DEPT_1_name(t.level_dept_1) levelDept_1,
+				t.in_post in_post
+		    from QLC_EFPE_PSN t
+            where type='1'
+            <if test='psn_name != null and psn_name != ""'>
+		 		and t.psn_name like '%'|| #{psn_name} || '%'		
+			</if>
+			<if test='psn_code != null and psn_code != ""'>
+		 		and t.psn_code like '%'|| #{psn_code} || '%'		
+			</if>
+			<if test='level_dept_1 != null and level_dept_1 != ""'>
+		 		and t.level_dept_1 in ${level_dept_1}		
+			</if>
+			<if test='in_post != null and in_post != ""'>
+		 		and t.in_post =#{in_post}	
+			</if>
+            order by t.psn_code) t1
+	   		where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+   </select>
+   
+   <select id="psyList2" resultType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto" >
+		select * from (select  t1.*,rownum rid from
+		(
+        	select 
+        	    t.psn_id psnId,
+				t.psn_name psnName,
+				t.psn_code psnCode,
+				GET_QLC_PSN_LEVEL_DEPT_1_name(t.level_dept_1) levelDept_1,
+				t.in_post in_post
+		    from QLC_EFPE_PSN t
+            where type='2'
+            <if test='psn_name != null and psn_name != ""'>
+		 		and t.psn_name like '%'|| #{psn_name} || '%'		
+			</if>
+			<if test='psn_code != null and psn_code != ""'>
+		 		and t.psn_code like '%'|| #{psn_code} || '%'		
+			</if>
+			<if test='level_dept_1 != null and level_dept_1 != ""'>
+		 		and t.level_dept_1 in ${level_dept_1}		
+			</if>
+			<if test='in_post != null and in_post != ""'>
+		 		and t.in_post =#{in_post}	
+			</if>
+            order by t.psn_code) t1
+	   		where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+   </select>
+   
+   <select id="psyCounts" resultType="java.lang.Integer">
+	    select count(psn_id) from QLC_EFPE_PSN t
+        where type='1'   
+        <if test='psn_name != null and psn_name != ""'>
+		 	and t.psn_name =#{psn_name}			
+		</if>
+		<if test='psn_code != null and psn_code != ""'>
+	 		and t.psn_code =#{psn_code}			
+		</if>
+		<if test='level_dept_1 != null and level_dept_1 != ""'>
+		 	and t.level_dept_1 in ${level_dept_1}		
+		</if>
+		<if test='in_post != null and in_post != ""'>
+	 		and t.in_post =#{in_post}	
+		</if>
+   </select>
+   
+   <select id="psyCounts2" resultType="java.lang.Integer">
+	    select count(psn_id) from QLC_EFPE_PSN t
+        where type='2'   
+        <if test='psn_name != null and psn_name != ""'>
+		 	and t.psn_name =#{psn_name}			
+		</if>
+		<if test='psn_code != null and psn_code != ""'>
+	 		and t.psn_code =#{psn_code}			
+		</if>
+		<if test='level_dept_1 != null and level_dept_1 != ""'>
+		 	and t.level_dept_1 in ${level_dept_1}		
+		</if>
+		<if test='in_post != null and in_post != ""'>
+	 		and t.in_post =#{in_post}	
+		</if>
+   </select>
+   
+   <select id="psnLevelDeptList" resultType="com.dpn.ciqqlc.standard.model.CodeLibraryDTO">
+	    select code,name from QLC_CODE_LIBRARY t
+        where type=#{type} and port_org_code=#{code}
+   </select>
+	
+   <select id="getQlcefpepsnDto" resultType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto">
+		SELECT
+		    t.PSN_ID psnId,
+		    t.PSN_NAME psnName,
+			t.PSN_CODE psnCode,
+			t.PSN_LEVEL psnLevel,
+			GET_qlc_code(t.PSN_LEVEL,'QLC_PSN_PSN_LEVEL') psnLevelName,
+			t.LEVEL_DEPT_1 levelDept_1,
+		    t.LEVEL_DEPT_2 levelDept_2,
+		    t.LEVEL_DEPT_3 levelDept_3,
+		    t.psn_status,
+		    GET_QLC_PSN_LEVEL_DEPT_1_name(t.LEVEL_DEPT_1) levelDept_1_name,
+		    GET_QLC_PSN_LEVEL_DEPT_2_name(t.LEVEL_DEPT_2) levelDept_2_name,
+		    GET_QLC_PSN_LEVEL_DEPT_3_name(t.LEVEL_DEPT_3) levelDept_3_name,
+			t.LAW_ENFO_CERT lawEnfoCert,
+			t.PSN_TYPE psnType,
+			t.PSN_GOODAT psnGoodat,
+			t.PSN_OTHER_GOODAT psnOther_goodat,
+			t.SIX six,
+			t.PSN_EXPERTISE psnExpertise,
+			t.PSN_BIRTH psnBirth,
+			t.PSN_GRADUATE psnGraduate,
+			t.PSN_MAJOR psnMajor,
+			t.PSN_EDUCATION psnEducation,
+			t.BS_TEL bsTel,
+			t.MOBILE_PHONE mobilePhone,
+			t.CUR_POST curPost,
+			t.CUR_WORK curWork,
+			t.ENG_LEVEL engLevel,
+			t.PSN_RESUME psnResume,
+			t.PSN_TRAIN psnTrain,
+			t.WORK_EXPERTISE workExpertise,
+			t.RMK rmk,
+			t.IN_POST in_post,
+			t.TYPE type
+		from QLC_EFPE_PSN t
+		WHERE psn_id = #{psn_id} and type = #{type}	
+   </select> 
+   
+   <select id="psnCodeBygetQlcefpepsn" resultType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto">
+		SELECT
+		    t.PSN_ID psnId,
+		    t.PSN_NAME psnName,
+			t.PSN_CODE psnCode,
+			t.PSN_LEVEL psnLevel,
+			GET_qlc_code(t.PSN_LEVEL,'QLC_PSN_PSN_LEVEL') psnLevelName,
+			t.LEVEL_DEPT_1 levelDept_1,
+		    t.LEVEL_DEPT_2 levelDept_2,
+		    t.LEVEL_DEPT_3 levelDept_3,
+		    t.psn_status,
+		    GET_QLC_PSN_LEVEL_DEPT_1_name(t.LEVEL_DEPT_1) levelDept_1_name,
+		    GET_QLC_PSN_LEVEL_DEPT_2_name(t.LEVEL_DEPT_2) levelDept_2_name,
+		    GET_QLC_PSN_LEVEL_DEPT_3_name(t.LEVEL_DEPT_3) levelDept_3_name,
+			t.LAW_ENFO_CERT lawEnfoCert,
+			t.PSN_TYPE psnType,
+			t.PSN_GOODAT psnGoodat,
+			t.PSN_OTHER_GOODAT psnOther_goodat,
+			t.SIX six,
+			t.PSN_EXPERTISE psnExpertise,
+			t.PSN_BIRTH psnBirth,
+			t.PSN_GRADUATE psnGraduate,
+			t.PSN_MAJOR psnMajor,
+			t.PSN_EDUCATION psnEducation,
+			t.BS_TEL bsTel,
+			t.MOBILE_PHONE mobilePhone,
+			t.CUR_POST curPost,
+			t.CUR_WORK curWork,
+			t.ENG_LEVEL engLevel,
+			t.PSN_RESUME psnResume,
+			t.PSN_TRAIN psnTrain,
+			t.WORK_EXPERTISE workExpertise,
+			t.RMK rmk,
+			t.IN_POST in_post,
+			t.TYPE type
+		from QLC_EFPE_PSN t
+		WHERE psn_code = #{psn_code} and type = #{type}	
+   </select> 
+
+   <insert id="insertQlcefpepsn" parameterType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto">
+   insert into QLC_EFPE_PSN(
+   		PSN_ID
+   		<if test="psnName != null and psnName != ''">
+    		,PSN_NAME
+    	</if>
+    	<if test="psnCode != null and psnCode != ''">
+    		,PSN_CODE
+    	</if>
+    	<if test="psnLevel != null and psnLevel != ''">
+    		,PSN_LEVEL
+    	</if>
+		<if test="levelDept_1 != null and levelDept_1 != ''">
+    		,LEVEL_DEPT_1
+    	</if>
+		<if test="levelDept_2 != null and levelDept_2 != ''">
+    		,LEVEL_DEPT_2
+    	</if>
+    	<if test="levelDept_3 != null and levelDept_3 != ''">
+    		,LEVEL_DEPT_3
+    	</if>
+    	<if test="psn_status != null and psn_status != ''">
+    		,PSN_STATUS
+    	</if>	
+		<if test="lawEnfoCert != null and lawEnfoCert != ''">
+    		,LAW_ENFO_CERT
+    	</if>
+		<if test="psnType != null and psnType != ''">
+    		,PSN_TYPE
+    	</if>   
+		<if test="psnGoodat != null and psnGoodat != ''">
+    		,PSN_GOODAT
+    	</if>	
+		<if test="psnOther_goodat != null and psnOther_goodat != ''">
+    		,PSN_OTHER_GOODAT
+    	</if>	
+		<if test="six != null and six != ''">
+    		,SIX
+    	</if>	
+		<if test="psnExpertise != null and psnExpertise != ''">
+    		,PSN_EXPERTISE
+    	</if>	
+		<if test="psnBirth != null and psnBirth != ''">
+    		,PSN_BIRTH
+    	</if>
+		<if test="psnGraduate != null and psnGraduate != ''">
+    		,PSN_GRADUATE
+    	</if>	
+		<if test="psnMajor != null and psnMajor != ''">
+    		,PSN_MAJOR 
+    	</if>	
+		<if test="psnEducation != null and psnEducation != ''">
+    		,PSN_EDUCATION 
+    	</if>	
+		<if test="bsTel != null and bsTel != ''">
+    		,BS_TEL
+    	</if>	
+		<if test="mobilePhone != null and mobilePhone != ''">
+    		,MOBILE_PHONE 
+    	</if>
+    	<if test="curPost != null and curPost != ''">
+    		,CUR_POST
+    	</if>		
+		<if test="curWork != null and curWork != ''">
+    		,CUR_WORK
+    	</if>	
+		<if test="engLevel != null and engLevel != ''">
+    		,ENG_LEVEL 
+    	</if>	
+		<if test="psnResume != null and psnResume != ''">
+    		,PSN_RESUME
+    	</if>	
+		<if test="psnTrain != null and psnTrain != ''">
+    		,PSN_TRAIN
+    	</if>	
+		<if test="workExpertise != null and workExpertise != ''">
+    		,WORK_EXPERTISE
+    	</if>
+		<if test="rmk != null and rmk != ''">
+    		,RMK
+    	</if>	
+    	,IN_POST
+    	,TYPE
+   )values
+   (
+   		#{psnId}
+   		<if test="psnName != null and psnName != ''">
+    		,#{psnName}
+    	</if>
+    	<if test="psnCode != null and psnCode != ''">
+    		,#{psnCode}
+    	</if>
+    	<if test="psnLevel != null and psnLevel != ''">
+    		,#{psnLevel}
+    	</if>
+		<if test="levelDept_1 != null and levelDept_1 != ''">
+    		,#{levelDept_1}
+    	</if>
+		<if test="levelDept_2 != null and levelDept_2 != ''">
+    		,#{levelDept_2}
+    	</if>
+    	<if test="levelDept_3 != null and levelDept_3 != ''">
+    		,#{levelDept_3}
+    	</if>
+    	<if test="psn_status != null and psn_status != ''">
+    		,#{psn_status}
+    	</if>	
+		<if test="lawEnfoCert != null and lawEnfoCert != ''">
+    		,#{lawEnfoCert}
+    	</if>
+		<if test="psnType != null and psnType != ''">
+    		,#{psnType}
+    	</if>   
+		<if test="psnGoodat != null and psnGoodat != ''">
+    		,#{psnGoodat}
+    	</if>	
+		<if test="psnOther_goodat != null and psnOther_goodat != ''">
+    		,#{psnOther_goodat}
+    	</if>	
+		<if test="six != null and six != ''">
+    		,#{six}
+    	</if>	
+		<if test="psnExpertise != null and psnExpertise != ''">
+    		,#{psnExpertise}
+    	</if>	
+		<if test="psnBirth != null and psnBirth != ''">
+    		,#{psnBirth}
+    	</if>
+		<if test="psnGraduate != null and psnGraduate != ''">
+    		,#{psnGraduate}
+    	</if>	
+		<if test="psnMajor != null and psnMajor != ''">
+    		,#{psnMajor}
+    	</if>	
+		<if test="psnEducation != null and psnEducation != ''">
+    		,#{psnEducation}
+    	</if>	
+		<if test="bsTel != null and bsTel != ''">
+    		,#{bsTel}
+    	</if>	
+		<if test="mobilePhone != null and mobilePhone != ''">
+    		,#{mobilePhone}
+    	</if>
+    	<if test="curPost != null and curPost != ''">
+    		,#{curPost}
+    	</if>		
+		<if test="curWork != null and curWork != ''">
+    		,#{curWork}
+    	</if>	
+		<if test="engLevel != null and engLevel != ''">
+    		,#{engLevel}
+    	</if>	
+		<if test="psnResume != null and psnResume != ''">
+    		,#{psnResume}
+    	</if>	
+		<if test="psnTrain != null and psnTrain != ''">
+    		,#{psnTrain}
+    	</if>	
+		<if test="workExpertise != null and workExpertise != ''">
+    		,#{workExpertise}
+    	</if>
+		<if test="rmk != null and rmk != ''">
+    		,#{rmk}
+    	</if>
+    	,'1'
+    	,#{type}
+   )
+   
+   </insert>
+   
+   <update id="updateQlcefpepsn" parameterType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto">
+    	update QLC_EFPE_PSN set 
+    	PSN_CODE = #{psnCode}
+    	<if test="psnId != null and psnId != ''">
+    		,PSN_ID = #{psnId}
+    	</if>
+    	<if test="psnName != null and psnName != ''">
+    		,PSN_NAME = #{psnName}
+    	</if>
+    	<if test="psnLevel != null and psnLevel != ''">
+    		,PSN_LEVEL = #{psnLevel}
+    	</if>
+    	<if test="psnLevel == null or psnLevel == ''">
+    		,PSN_LEVEL = ''
+    	</if>
+		<if test="levelDept_1 != null and levelDept_1 != ''">
+    		,LEVEL_DEPT_1 = #{levelDept_1}
+    	</if>
+    	<if test="levelDept_1 == null or levelDept_1 == ''">
+    		,LEVEL_DEPT_1 = ''
+    	</if>
+		<if test="levelDept_2 != null and levelDept_2 != ''">
+    		,LEVEL_DEPT_2 = #{levelDept_2}
+    	</if>
+    	<if test="levelDept_2 == null or levelDept_2 == ''">
+    		,LEVEL_DEPT_2 = ''
+    	</if>
+    	<if test="levelDept_3 != null and levelDept_3 != ''">
+    		,LEVEL_DEPT_3 = #{levelDept_3}
+    	</if>
+    	<if test="levelDept_3 == null or levelDept_3 == ''">
+    		,LEVEL_DEPT_3 = ''
+    	</if>
+    	<if test="psn_status != null and psn_status != ''">
+    		,PSN_STATUS = #{psn_status}
+    	</if>	
+    	<if test="psn_status == null or psn_status == ''">
+    		,PSN_STATUS = ''
+    	</if>
+		<if test="lawEnfoCert != null and lawEnfoCert != ''">
+    		,LAW_ENFO_CERT = #{lawEnfoCert}
+    	</if>
+    	<if test="lawEnfoCert == null or lawEnfoCert == ''">
+    		,LAW_ENFO_CERT = ''
+    	</if>
+		<if test="psnType != null and psnType != ''">
+    		,PSN_TYPE = #{psnType}
+    	</if> 
+    	<if test="psnType == null or psnType == ''">
+    		,PSN_TYPE = ''
+    	</if>    
+		<if test="psnGoodat != null and psnGoodat != ''">
+    		,PSN_GOODAT = #{psnGoodat}
+    	</if>	
+    	<if test="psnGoodat == null or psnGoodat == ''">
+    		,PSN_GOODAT = ''
+    	</if>
+		<if test="psnOther_goodat != null and psnOther_goodat != ''">
+    		,PSN_OTHER_GOODAT = #{psnOther_goodat}
+    	</if>
+    	<if test="psnOther_goodat == null or psnOther_goodat == ''">
+    		,PSN_OTHER_GOODAT = ''
+    	</if>	
+		<if test="six != null and six != ''">
+    		,SIX = #{six}
+    	</if>	
+    	<if test="six == null or six == ''">
+    		,SIX = ''
+    	</if>	
+		<if test="psnExpertise != null and psnExpertise != ''">
+    		,PSN_EXPERTISE = #{psnExpertise}
+    	</if>
+    	<if test="psnExpertise == null or psnExpertise == ''">
+    		,PSN_EXPERTISE = ''
+    	</if>	
+		<if test="psnBirth != null and psnBirth != ''">
+    		,PSN_BIRTH = #{psnBirth}
+    	</if>
+    	<if test="psnBirth == null or psnBirth == ''">
+    		,PSN_BIRTH = ''
+    	</if>
+		<if test="psnGraduate != null and psnGraduate != ''">
+    		,PSN_GRADUATE = #{psnGraduate}
+    	</if>	
+    	<if test="psnGraduate == null or psnGraduate == ''">
+    		,PSN_GRADUATE = ''
+    	</if>
+		<if test="psnMajor != null and psnMajor != ''">
+    		,PSN_MAJOR = #{psnMajor}
+    	</if>
+    	<if test="psnMajor == null or psnMajor == ''">
+    		,PSN_MAJOR = ''
+    	</if>	
+		<if test="psnEducation != null and psnEducation != ''">
+    		,PSN_EDUCATION = #{psnEducation}
+    	</if>	
+    	<if test="psnEducation == null or psnEducation == ''">
+    		,PSN_EDUCATION = ''
+    	</if>
+		<if test="bsTel != null and bsTel != ''">
+    		,BS_TEL = #{bsTel}
+    	</if>	
+    	<if test="bsTel == null or bsTel == ''">
+    		,BS_TEL = ''
+    	</if>
+		<if test="mobilePhone != null and mobilePhone != ''">
+    		,MOBILE_PHONE = #{mobilePhone}
+    	</if>
+    	<if test="mobilePhone == null or mobilePhone == ''">
+    		,MOBILE_PHONE = ''
+    	</if>
+    	<if test="curPost != null and curPost != ''">
+    		,CUR_POST = #{curPost}
+    	</if>	
+    	<if test="curPost == null or curPost == ''">
+    		,CUR_POST = ''
+    	</if>	
+		<if test="curWork != null and curWork != ''">
+    		,CUR_WORK = #{curWork}
+    	</if>
+    	<if test="curWork == null or curWork == ''">
+    		,CUR_WORK = ''
+    	</if>	
+		<if test="engLevel != null and engLevel != ''">
+    		,ENG_LEVEL = #{engLevel}
+    	</if>
+    	<if test="engLevel == null or engLevel == ''">
+    		,ENG_LEVEL = ''
+    	</if>	
+		<if test="psnResume != null and psnResume != ''">
+    		,PSN_RESUME = #{psnResume}
+    	</if>
+    	<if test="psnResume == null or psnResume == ''">
+    		,PSN_RESUME = ''
+    	</if>	
+		<if test="psnTrain != null and psnTrain != ''">
+    		,PSN_TRAIN = #{psnTrain}
+    	</if>
+    	<if test="psnTrain == null or psnTrain == ''">
+    		,PSN_TRAIN = ''
+    	</if>
+		<if test="workExpertise != null and workExpertise != ''">
+    		,WORK_EXPERTISE = #{workExpertise}
+    	</if>
+    	<if test="workExpertise == null or workExpertise == ''">
+    		,WORK_EXPERTISE = ''
+    	</if>
+		<if test="rmk != null and rmk != ''">
+    		,RMK = #{rmk}
+    	</if>
+    	<if test="rmk == null or rmk == ''">
+    		,RMK = ''
+    	</if>	
+		<if test="in_post != null and in_post != ''">
+    		,IN_POST = #{in_post}
+    	</if>	
+    	where PSN_CODE = #{psnCode} and type=#{type}
+    </update>
+   
+   <insert id="insertUsersCiq">
+   insert into users_ciq
+   (
+   ID,
+   PASSWORD,
+   NAME,
+   ORG_CODE,
+   DIRECTY_UNDER_ORG
+   )
+   values
+   (
+    #{id}
+    ,'111111'
+    ,#{psn_name}	
+    ,#{org_code}
+   	,#{directy_under_org}	
+   )
+   </insert>
+   
+   <update id="updateUsersCiq">
+    	update USERS_CIQ set
+    	ID = #{id}
+    	<if test="psn_name != null and psn_name != ''">
+    		,NAME = #{psn_name}
+    	</if>
+    	<if test="dept_code != null and dept_code != ''">
+    		,DEPT_CODE = #{dept_code}
+    	</if>
+		<if test="org_code != null and org_code != ''">
+    		,ORG_CODE = #{org_code}
+    	</if>	
+    	where ID = #{id}
+    </update>
+   
+   <select id="findBasePsn" parameterType="String" resultType="com.dpn.ciqqlc.standard.model.QlcEfpePsnDto">
+		SELECT
+		    p.psn_id as psnId,
+		    p.psn_name as psnName,
+		    p.psn_type as psnType ,
+		    p.psn_goodat as psnExpertise,
+		    p.psn_level as psnLevel,
+		    p.level_dept_1 levelDept_1,
+		    p.level_dept_2 levelDept_2,
+		    p.level_dept_3 levelDept_3,
+		    p.type,
+		    p.in_post
+		from QLC_EFPE_PSN p
+		WHERE psn_id = #{id}
+	
+	</select>
+	
+<!-- 		select * from QLC_EXP_FOOD_PROD_PSN_RDM rdm  -->
+<!-- 		left join QLC_COMPANY_PSN p on rdm.apply_no=p.id -->
+<!-- 		where rdm.type='3' and rdm.psn_id={psn_id} -->
+	<select id="selectCompanyPsn" parameterType="com.dpn.ciqqlc.standard.model.CompanyPsnModel" resultType="com.dpn.ciqqlc.standard.model.CompanyPsnModel">
+		select 
+   t.orgname,
+   t.accpetorgname,
+   t.quano,
+   rdm.psn_id,
+   rdm.apply_no，
+   t.fullName,
+   p.ipc_no,
+   t3.applyid,
+   p.ipc_product
+     from 
+       (select orgname, max(startdate) maxdate from efpe_apply group by orgname) t0
+       left join EFPE_APPLY t on t0.orgname = t.orgname and t0.maxdate = t.startdate
+       left join 
+        (select orgname, max(actualdate) as maxdate from EFPE_REGULATORY group by orgname) t1
+        on t.orgname = t1.orgname
+       left join EFPE_REGULATORY t2  on t1.orgname = t2.orgname and t1.maxdate = t2.actualdate
+       left join EFPE_ACTIVITY t3 on t.applyid = t3.applyid
+       left join qlc_exp_food_prod e on t.orgname = e.comp_name
+        left join QLC_EXP_FOOD_PROD_PSN_RDM rdm on rdm.apply_no= t3.applycode
+       left join QLC_COMPANY_PSN p on rdm.apply_no=p.id
+		   where rdm.type='3' and rdm.psn_id=#{psn_id}
+		order by t.startdate desc
+	</select>
+	
+		<select id="selectCompanyPsnNew" parameterType="com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel" resultType="com.dpn.ciqqlc.standard.model.EfpeRegulatoryModel">
+		select 
+	      f.SUBID as apply_no,
+	      t.ENTERPRISESNAME as orgName,
+	      t.depname as orgname,
+	      t.productname as ipc_product, 
+	      rdm.psn_id,
+	      f.SUBID as applyid,
+	      f.plantype,
+	      f.userid 
+	     from EFPE_ENTERPRISES t inner join EFPE_REGULATORY f on t.userid=f.userid
+	     left join QLC_EXP_FOOD_PROD_PSN_RDM rdm on f.subid=rdm.apply_no
+		 where 1=1
+ 		<if test="depname != null and depname != ''">
+			and t.depname = #{depname}
+		</if>
+ 		<if test="planType != null and planType != ''">
+			and f.planType = #{planType}
+		</if>
+ 		 and rdm.psn_id=#{psn_id} 
+		 and rdm.type='3' 
+		 and f.SUBID not in (select proc_main_id from qlc_chk_rcd where proj_code='AD_M_C' and opr_user=#{psn_id})
+	</select>
+	
+	<select id="findCompanyPsnDto" parameterType="com.dpn.ciqqlc.standard.model.CompanyPsnDto" resultType="com.dpn.ciqqlc.standard.model.CompanyPsnDto">
+	select a.userId,
+       a.ENTERPRISESNAME as company_name,
+       a.productName as ipc_product,
+       c.PROVEACCID as ipc_no
+	  from EFPE_ENTERPRISES a, EFPE_REGULATORY b, EFPE_CER c
+	  inner join (select userid,max(SENDDATE) SENDDATE from EFPE_CER  group by userid ) d on d.userid = c.userid and d.SENDDATE = c.senddate
+	 where a.userId = b.userId
+	   and a.depName = '辽阳局本部'
+	   and a.userId = c.userId
+	   and c.STATUS != '04'
+	 group by a.userid, a.ENTERPRISESNAME, a.productName, c.PROVEACCID
+	</select>
+	
+	<select id="getChecklist" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo" resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo">
+	select * from  QLC_EXP_FOOD_PROD_CHECK where apply_no=#{apply_no} and check_proc_type like 'V_SP_F_D%' order by check_date desc
+	</select>
+	
+	<select id="getQtOption"  resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel">
+	select * from  QLC_CHECK_DOCS_RCD where proc_main_id=#{ProcMainId} and doc_type=#{DocType}  order by dec_date desc
+	</select>
+	
+	<select id="getQtOption2"  resultType="com.dpn.ciqqlc.standard.model.CheckDocModel">
+	select 
+		DEC_USER as DecUser,
+		DEC_DATE as DecDate,
+		DOC_ID as DocId,
+		PROC_MAIN_ID as ProcMainId,
+		DOC_TYPE as DocType,
+		OPTION_1 as Option1,
+		OPTION_2 as Option2,
+		OPTION_3 as Option3,
+		OPTION_4 as Option4,
+		OPTION_5 as Option5,
+		OPTION_6 as Option6,
+		OPTION_7 as Option7,
+		OPTION_8 as Option8,
+		OPTION_9 as Option9,
+		OPTION_10 as Option10,
+		OPTION_11 as Option11,
+		OPTION_12 as Option12,
+		OPTION_13 as Option13,
+		OPTION_14 as Option14,
+		OPTION_15 as Option15,
+		OPTION_16 as Option16,
+		OPTION_17 as Option17,
+		OPTION_18 as Option18,
+		OPTION_19 as Option19,
+		OPTION_20 as Option20,
+		OPTION_21 as Option21,
+		OPTION_22 as Option22,
+		OPTION_23 as Option23,
+		OPTION_24 as Option24,
+		OPTION_25 as Option25,
+		OPTION_26 as Option26,
+		OPTION_27 as Option27,
+		OPTION_28 as Option28,
+		OPTION_29 as Option29,
+		OPTION_30 as Option30,
+		OPTION_31 as Option31,
+		OPTION_32 as Option32,
+		OPTION_33 as Option33,
+		OPTION_34 as Option34,
+		OPTION_35 as Option35,
+		OPTION_36 as Option36,
+		OPTION_37 as Option37,
+		OPTION_38 as Option38,
+		OPTION_39 as Option39,
+		OPTION_40 as Option40,
+		OPTION_41 as Option41,
+		OPTION_42 as Option42,
+		OPTION_43 as Option43,
+		OPTION_44 as Option44,
+		OPTION_45 as Option45,
+		OPTION_46 as Option46,
+		OPTION_47 as Option47,
+		OPTION_48 as Option48,
+		OPTION_49 as Option49,
+		OPTION_50 as Option50,
+		OPTION_51 as Option51,
+		OPTION_52 as Option52,
+		OPTION_53 as Option53,
+		OPTION_54 as Option54,
+		OPTION_55 as Option55,
+		OPTION_56 as Option56,
+		OPTION_57 as Option57,
+		OPTION_58 as Option58,
+		OPTION_59 as Option59,
+		OPTION_60 as Option60,
+		OPTION_61 as Option61,
+		OPTION_62 as Option62,
+		OPTION_63 as Option63,
+		OPTION_64 as Option64,
+		OPTION_65 as Option65,
+		OPTION_66 as Option66,
+		OPTION_67 as Option67,
+		OPTION_68 as Option68,
+		OPTION_69 as Option69,
+		OPTION_70 as Option70,
+		group_id as groupId
+	from  QLC_CHECK_DOCS_RCD where proc_main_id=#{ProcMainId} and doc_type=#{DocType}  order by dec_date desc
+	</select>
+	
+	<select id="getAllResult"  resultType="com.dpn.ciqqlc.standard.model.ExpFoodProdCheckVo">
+	select * from  QLC_EXP_FOOD_PROD_CHECK where apply_no=#{ProcMainId} and check_proc_type 
+	like  '%'||#{DocType}||'%' order by check_date desc
+	</select>
+	
+	<select id="getFtpDownFile"  resultType="com.dpn.ciqqlc.standard.model.EfpeApplyCommentFileDto">
+	select * from  EFPE_APPLY_COMMENT_FILE where 1=1
+	<if test="commentid != null and commentid != ''">
+		and	COMMENTID=#{commentid} 
+	</if>
+	</select>
+	
+
+	<select id="getMbModel"  resultType="com.dpn.ciqqlc.standard.model.EfpeApplyNoticeDto">
+	select * from  EFPE_APPLY_NOTICE where  WFNOTEID=#{wfnoteid} 
+	</select>
+	
+	<select id="findEfpeApplyNoticeDto"  resultType="com.dpn.ciqqlc.standard.model.EfpeApplyNoticeDto">
+	select * from  EFPE_APPLY_NOTICE where  NOTICEID=#{noticeid} 
+	</select>
+	
+	<select id="findCertificationList"  resultType="com.dpn.ciqqlc.standard.model.CertificationFileModel">
+		select
+    		*
+        from EFPE_APPLY_CERTIFICATION t
+        inner join EFPE_APPLY_FILE e on t.applyid=e.applyid
+        where t.applyid=#{applyid} 
+	</select>
+	
+	<select id="getSurapply"  resultType="com.dpn.ciqqlc.standard.model.EfpeApplySurapplyDto">
+	select * from  efpe_apply_surapply where surapplyid=#{surapplyid}  
+	</select>
+	
+	<select id="findEfpeApplyReviewNoticeDto"  resultType="com.dpn.ciqqlc.standard.model.EfpeApplyReviewNoticeDto">
+		select * from EFPE_APPLY_REVIEW_NOTICE  where applyid=#{applyId} 
+	</select>
+	
+	<select id="getEfpeCerPouductList" resultType="com.dpn.ciqqlc.standard.model.EfpeCerPouductModel">
+		 select substr(m.PRODUCTKIND,0,2) as productkind,m.productname headname,
+         e.productname as productname,
+         e.kindname    as kindname
+		  from EFPE_REG_PRODUCT_MID m,EFPE_REG_PRODUCT e 
+		where m.cerid=e.cerid and e.productkind = substr(m.productkind,0,2) and
+		m.cerid=#{cerid} order by m.productkind asc
+	</select>
+	
+	<select id="getEfpeCerPouduct" resultType="com.dpn.ciqqlc.standard.model.EfpeCerPouductModel">
+	select 
+			t.CERID as cerid,
+			t.PROVEACCID  as proveaccid,
+			t.EFFECTDATE  as effectdate,
+			t.CERASOFDATE as cerasofdate,
+			t.ARODATE     as arodate,
+			t.AROPERSON   as aroperson
+		from EFPE_CER t
+ 		where t.applyid=#{applyid}
+	</select>
+
+	<insert id="insertPeson" parameterType="com.dpn.ciqqlc.standard.model.ExpFoodProdPsnRdmDTO" statementType="CALLABLE" >
+			insert into QLC_EXP_FOOD_PROD_PSN_RDM
+				(
+					id
+					<if test="apply_no != null and apply_no != ''" >
+					,APPLY_NO
+					</if>
+					<if test="psn_id != null and psn_id != ''" >
+					,PSN_ID
+					</if>
+					<if test="psn_name != null and psn_name != ''" >
+					,PSN_NAME
+					</if>
+					<if test="psn_prof != null and psn_prof != ''">
+					,PSN_PROF
+					</if>
+					<if test="psn_goodat != null and psn_goodat != ''">
+					,PSN_GOODAT
+					</if>
+					<if test="psn_level != null and psn_level != ''">
+					,PSN_LEVEL
+					</if>
+					<if test="in_post != null and in_post != ''">
+					,IN_POST
+					</if>
+					<if test="bel_scope != null and bel_scope !=''" >
+					,BEL_SCOPE
+					</if>
+					<if test="rdm_date != null " >
+					,RDM_DATE
+					</if>
+					<if test="rdm_user != null and rdm_user != ''" >
+					,RDM_USER
+					</if>
+					<if test="rdm_type != null and rdm_type != ''" >
+					,RDM_TYPE
+					</if>
+					<if test="psn_type != null and psn_type != ''" >
+					,PSN_TYPE
+					</if>
+					<if test="type != null and type != ''" >
+					,TYPE
+					</if>
+					<if test="work_date != null " >
+					,WORK_DATE
+					</if>
+				)
+			values 
+				(
+					CreateGUID()
+					<if test="apply_no != null and apply_no != ''" >
+					,#{apply_no}
+					</if>
+					<if test="psn_id != null and psn_id != ''" >
+					,#{psn_id}
+					</if>
+					<if test="psn_name != null and psn_name != ''" >
+					,#{psn_name}
+					</if>
+					<if test="psn_prof != null and psn_prof != ''" >
+					,#{psn_prof}
+					</if>
+					<if test="psn_goodat != null and psn_goodat != ''" >
+					,#{psn_goodat}
+					</if>
+					<if test="psn_level != null and psn_level != ''" >
+					,#{psn_level}
+					</if>
+					<if test="in_post != null and in_post != ''" >
+					,#{in_post}
+					</if>
+					<if test="bel_scope != null and bel_scope != ''" >
+					,#{bel_scope}
+					</if>
+					<if test="rdm_date != null " >
+					,#{rdm_date}
+					</if>
+					<if test="rdm_user != null and rdm_user != ''" >
+					,#{rdm_user}
+					</if>
+					<if test="rdm_type != null and rdm_type != ''" >
+					,#{rdm_type}
+					</if>
+					<if test="psn_type != null and psn_type != ''" >
+					,#{psn_type}
+					</if>
+					<if test="type != null and type != ''" >
+					,#{type}
+					</if>
+					<if test="work_date != null " >
+					,#{work_date}
+					</if>
+				)
+	</insert> 
+	
+	<update id="updateChklist">
+		  UPDATE QLC_EXP_FOOD_PROD_CHECK 
+		  <set>
+		 	<if test="check_result != null and check_result != ''">check_result = #{check_result},</if>
+		 	<if test="check_disc != null and check_disc != ''">check_disc = #{check_disc},</if>
+		 	<if test="verdict != null and verdict != ''">verdict = #{verdict},</if>
+		 	apply_no = #{apply_no}
+		  </set>
+		  WHERE apply_no = #{apply_no} and check_code_id=#{check_code_id}
+	</update>
+	
+	<update id="updateSelectPerson">
+		 update QLC_EXP_FOOD_PROD_PSN_RDM set (psn_id,
+			psn_name,
+			psn_goodat,
+			psn_level,
+			in_post,
+			rdm_type,
+			status
+			)=(select t.psn_id,t.psn_name,t.psn_expertise,t.psn_level,in_post,'1',''
+		from QLC_EFPE_PSN t where t.psn_id=#{psn_id})
+		where id=#{id}
+	</update>
+	
+	<update id="updateRadmPerson">
+	 update QLC_EXP_FOOD_PROD_PSN_RDM 
+	  <set>
+		 <if test="des != null and des != ''">des=#{des},</if>
+			status=#{status}
+	  </set>		 	
+	 where id=#{id}
+	</update>
+		
+</mapper>

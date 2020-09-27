@@ -1,0 +1,150 @@
+1、jdbc是什么?
+	java database connectivity: java数据库
+	连接。
+	sun公司制订的一种访问数据库的标准，
+使用jdbc访问数据库的好处是，开发人员
+只需要掌握一种api,就可以用相同的方式
+来访问不同的数据库。
+	不同的数据库厂商(比如oracle,ibm)
+会实现jdbc规范，比如,sun公司在jdbc
+规范当中，制订了访问数据库所需要的
+几个接口(Connection,Statement,ResultSet)
+,这些数据库厂商将这些接口进行实现，
+并且将这些实现打包生成相应的jar文件，
+这些jar文件被称为jdbc驱动程序。
+	我们作为开发人员，要访问数据库，
+即必须使用相应的jdbc驱动程序。
+2,如何使用jdbc?
+	1)三个重要的接口
+		a,Connection
+		b,Statement
+		c, ResultSet
+	2)编程步骤
+		step1,加载驱动类
+			Class.forName(String className);
+			加载驱动时，驱动类会完成驱动的注册。
+		step2,获得连接
+			Connection conn = 
+			DriverManager.getConnection(String url,
+			,String username,String pwd);
+			 url: 提供连接数据库的ip,port,sid
+			 username: 用户名
+			 pwd:密码
+		step3,创建Statement
+			Statement stat = conn.createStatement();
+			返回一个符合Statement接口要求的对象，
+			该对象用来执行sql语句。
+		step4,执行sql语句
+			//查询
+			ResultSet rst = stat.executeQuery(sql);
+			jdbc驱动程序负责将查询的结果封装到
+			rst对象，通过调用rst对象的方法来获得
+			查询的结果。
+			rst的使用:
+				主要是掌握两个方法:
+				next()方法:
+					可以这么去理解，jdbc驱动程序将数据库
+			返回的结果封装成一张逻辑表，刚开始的时候，
+			rst对象有一个指针，指向这个逻辑表的第一行的
+			前面。当调用了next()方法，则这个指针会向下
+			移动一行，并且，该方法还会返回一个boolean值
+			(true表示这一行有数据,false表示这一行不存在，
+			不能够取数据)。
+				getXXX()方法:
+					jdbc驱动程序要负责将数据库中的数据类型
+				转换成相应的java类型(比如，数据库中某个字段
+				是varchar2类型，则getString方法会负责将
+				varchar2类型保存的数据转换为java的String类型)。
+					所以，要依据数据库中的字段类型来调用相应
+				的get方法。
+					getXXX方法可以带两种类型的参数，
+					一个是列名，比如: getString("name");
+					还可以是列的序号(从1开始)，比如:getString(2);
+			//插入、删除、修改
+			int stat.executeUpdate(sql);
+			int返回值是sql语句执行完成之后，受到影响的
+			记录的条数。
+	step5,关闭资源
+			rst.close();
+			stat.close();
+			conn.close();
+		
+补充知识:
+		1)、什么是类的加载？
+		jvm委托classloader(类加载器)去查找类的
+	字节码文件(.class文件),然后，将字节码文件的内容
+	读入到方法区，并且转换成一个class对象。
+		2)、Class.forName(String className);
+		依据className(是一个完整的类名，比如
+		com.tarena.tts.Student)进行类的加载。
+		3)、类加载时，会执行静态成员的初始化操作。
+		
+3、使用mysql数据库
+	1)登录mysql
+	mysql -uroot;
+	2)查询当前有哪些数据库
+	 show databases;
+	3)创建一个新的数据库
+	创建一个名叫jsd1307db的数据库，该数据库的
+	默认字符集是utf8。
+	create database  test default character 
+	set utf8;
+	4)使用某个数据库
+	  use test;
+	 5)查询当前数据库有哪些表
+	 show tables;
+	 6)建表
+	 create table t_student(
+	 	id int primary key auto_increment,
+	 	name varchar(50),
+	 	age int
+	 )type=innodb;
+	 insert into t_student(name,age) values('tom',22);
+	 insert into t_student(name,age) values('jetty',23);
+	 select * from t_student;
+	 注意:
+	 	type=innodb:让这个表支持事务。
+	 	auto_increment:自增长列，即插入记录时，
+	 数据库自动为这一列提供一个唯一的自增长的值。
+	
+4、PreparedStatement接口(预编译的Statement)
+	1)PreparedStatement接口是Statement的子接口。
+	2)预编译的Statement是如何执行的?
+	String sql = "select * from t_user where 
+	username=? and pwd=?";
+	//preparedstatement方法执行完毕之后，sql语句
+	//会发送给数据库，数据库会对sql进行预编译。预
+	//编译之后的sql语句结构是不能更改的。
+	PreparedStatement prep = conn.preparestatement(sql);
+	// sql语句中的?号，需要在执行之前赋值。
+	//?号对应的参数称之为IN参数，可以使用
+	//对应的setxxx方法来赋值(xxx指的是参数的类型)。
+	prep.setString(1,'zs');
+	prep.setString(2,'test');
+	//jdbc驱动程序会将参数值发送给数据库，执行
+	//相应的sql语句。
+	ResultSet rst = prep.executeQuery();
+	3)预编译的Statement的优点
+		a,可以防止sql注入。
+		sql注入指的是用户可以通过刻意构造的参数来改变
+		sql语句的结构，从而达到破坏的系统的目的，比如
+		实现非法的登录。
+		如果使用PreparedStatement,因为sql语句会在执行
+		之前先发送给数据库，数据库会先预编译，也就是说，
+		sql语句的结构就确定下来了，之后不能再变。所以，
+		sql注入就很难改变sql语句的结构。
+		b,执行效率高
+			如果有多条相同结构的sql语句要执行，预编译的
+			Statement执行速度要比Statement要高。
+			比如，向数据库插入100条记录，如果使用
+			Statement,则需要发送100次sql给数据库，数据库
+			需要预编译sql 100次；如果使用预编译的Statement,
+			只需要预编译1次。
+		C:预编译
+				
+		
+	 
+	
+		
+		
+	

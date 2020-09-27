@@ -1,0 +1,160 @@
+<div class="modal mall-account-modal">
+    <script src="/static/scripts/encrypt/pwdObject_.js"></script>
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned account-form" data-account-id="{{data.id}}" data-liu="{{json this}}">
+        <div class="account-new modal-body">
+            <p class="font-color-red notice"><strong>注意：新建的登录帐号或用户名可能与已被删除的登录帐号或用户名重复</strong></p>
+            <div class="control-group">
+                <label for="orgName"><span class="required">*</span>所属机构:</label>
+                {{#equals add true}}
+                    <select class="select" id="orgCode" name="orgCode" required>
+                        <option class="selectOP" value="">请选择</option>
+                    </select>
+                    <span class="note">请选择所属机构</span>
+                    <span class="note-error-empty"><i>&times;</i>请选择所属机构</span>
+                {{else}}
+                    <input id="orgName" type="text" value="{{data.orgSimpleName}}" readonly disabled="disabled">
+                {{/equals}}
+
+            </div>
+            <div class="control-group">
+                <label for="id"><span class="required">*</span>登录帐号:</label>
+                {{#equals add true}}
+                    <input id="id" data-id="{{data.id}}" class="form-control" name="id" type="text" required
+                           value="{{data.id}}" maxlength="8" pattern="[\d_a-zA-Z]{5,8}$">
+                    <span class="note-error">5-8字符，字母、数字组合</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                {{else}}
+                    <input id="id" type="text" value="{{data.id}}" readonly disabled="disabled">
+                {{/equals}}
+            </div>
+            <div class="control-group">
+                <label for="name"><span class="required">*</span>用户名:</label>
+                <input id="name" class="form-control" name="name" type="text" required
+                       value="{{data.name}}" pattern="^([A-Za-z0-9]|[\u4E00-\u9FA5])+$" maxlength="15">
+                <span class="note-error"><i>&times;</i> 用户名名称包含大写字母、小写字母、数字</span>
+                <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+            </div>
+            {{#if add}}
+                <!--<div class="control-group">-->
+                    <!--<label for="pwsecond"><span class="required">*</span>一次密码:</label>-->
+                    <!--<input id="pwsecond" class="form-control" name="pwsecond" maxlength="4" type="password" required-->
+                           <!--value=""-->
+                           <!--pattern="^(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![0-9\W]+$)(?![a-z\W]+$)(?![a-zA-Z]+$)(?![A-Z\W]+$)[a-zA-Z0-9\W_]+$">-->
+                    <!--<span class="note-error"><i>&times;</i> 必须包含三种类型的字符</span>-->
+                    <!--<span class="note-error-empty"><i>&times;</i> 密码不得为空</span>-->
+                <!--</div>-->
+                <!--<div class="control-group">-->
+                    <!--<label for="pwfirst"><span class="required">*</span>确认密码:</label>-->
+                    <!--<input id="pwfirst" class="form-control" name="pwfirst" maxlength="4" type="password" required-->
+                           <!--value=""-->
+                           <!--pattern="^(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![0-9\W]+$)(?![a-z\W]+$)(?![a-zA-Z]+$)(?![A-Z\W]+$)[a-zA-Z0-9\W_]+$">-->
+                    <!--<span class="note">再次输入密码</span>-->
+                <!--</div>-->
+                <!--密码控件开始-->
+                <div class="control-group modify-password-div">
+                    <label for="pwsecond" class="password-div password-right"><span class="required">*</span>一次密码:</label>
+                    <div id="pwsecond" class="password-div"><script type="text/javascript">
+                        createPwdObjectNew("pwsecond-div","164","28","4","4","E","222",null,null,null,"pwsecond");
+                    </script></div>
+                    <span class="note-error-empty"><i>&times;</i> 密码不得为空</span>
+                </div>
+                <div class="control-group modify-password-div">
+                    <label for="pwfirst" class="password-div password-right"><span class="required">*</span>确认密码:</label>
+                    <div id="pwfirst" class="password-div"><script type="text/javascript">
+                        createPwdObjectNew("pwfirst-div","164","28","4","4","E","222",null,null,null,"pwfirst");
+                    </script></div>
+                    <span class="note-error-empty"><i>&times;</i> 密码不得为空</span>
+                </div>
+                <!--密码控件结束-->
+            {{/if}}
+            <div class="control-group">
+                <label for="mobile"><span class="required">*</span>手机号:</label>
+                <input id="mobile" class="form-control" name="mobile" pattern="1[3|4|5|7|8]\d{9}"
+                       maxlength="20" type="text" required
+                       value="{{data.mobile}}">
+                <span class="note-error"><i>&times;</i> 请输入正确的手机号</span>
+                <span class="note-error-empty"><i>&times;</i> 手机号不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="phone">座机号:</label>
+                <input id="phone" class="form-control" name="phone" maxlength="20" type="text"
+                       value="{{data.phone}}">
+            </div>
+            <div class="control-group">
+                <label for="fax">传真电话:</label>
+                <input id="fax" class="form-control" name="fax" maxlength="20" type="text"
+                       value="{{data.fax}}">
+            </div>
+            <div class="control-group">
+                <label for="email">邮箱:</label>
+                <input id="email" class="form-control" name="email" type="email"
+                       value="{{data.email}}" maxlength="50">
+            </div>
+            <!--逻辑-->
+            <!--新增页面不可编辑；编辑页面只有审核通过可以修改当前状态，其余状态不可编辑-->
+            <div class="control-group">
+                <label for="status">当前状态:</label>
+                {{#equals "添加账户" title}}
+                    <select id="status" name="status" disabled>
+                        <option value="1">已停用</option>
+                        <option value="0">已启用</option>
+                    </select>
+                    <input name="status" value="1" type="hidden" class="form-control"/>
+                {{else}}
+                    {{#equals "1" data.checkStatus}}
+                        <select id="status" name="status">
+                            <option value="0" {{#equals "0" data.status}} selected {{/equals}}>已启用</option>
+                            <option value="1" {{#equals "1" data.status}} selected {{/equals}}>已停用</option>
+                        </select>
+                    {{else}}
+                        <select id="status" name="status" disabled>
+                            <option value="1">已停用</option>
+                            <option value="0">已启用</option>
+                        </select>
+                        <input name="status" value="1" type="hidden" class="form-control"/>
+                    {{/equals}}
+                {{/equals}}
+            </div>
+            <div class="control-group">
+                <label for="papersType">证件类型:</label>
+                <select class="select" id="papersType" name="papersType" data-papersType="{{data.papersType}}">
+                    <option value="">请选择</option>
+                    <option value="0" {{#equals data.papersType "0" }} selected {{/equals}}>身份证</option>
+                    <option value="1" {{#equals data.papersType "1" }} selected {{/equals}}>户口簿</option>
+                    <option value="2" {{#equals data.papersType "2" }} selected {{/equals}}>护照</option>
+                    <option value="3" {{#equals data.papersType "3" }} selected {{/equals}}>军官证</option>
+                    <option value="4" {{#equals data.papersType "4" }} selected {{/equals}}>士兵证</option>
+                    <option value="5" {{#equals data.papersType "5" }} selected {{/equals}}>港澳居民来往内地通行证</option>
+                    <option value="6" {{#equals data.papersType "6" }} selected {{/equals}}>台湾同胞来往内地通行证</option>
+                    <option value="7" {{#equals data.papersType "7" }} selected {{/equals}}>临时身份证</option>
+                    <option value="8" {{#equals data.papersType "8" }} selected {{/equals}}>外国人居留证</option>
+                    <option value="9" {{#equals data.papersType "9" }} selected {{/equals}}>警官证</option>
+                    <option value="X" {{#equals data.papersType "X" }} selected {{/equals}}>其它证件</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="papersNum">证件号码:</label>
+                <input id="papersNum" class="form-control" name="papersNum" type="text"
+                       value="{{data.papersNum}}" maxlength="50">
+            </div>
+            <div class="control-group">
+                <label for="descript">用户描述:</label>
+                <textarea id="descript" class="form-control order-form" name="descript"
+                          maxlength="100">{{data.descript}}</textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            {{#equals add true}}
+                    <input type="submit" class="btn btn-small btn-success js-account-edit" value="确定">
+            {{else}}
+                    <input type="submit" class="btn btn-small btn-success js-account-edit" value="确定">
+            {{/equals}}
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

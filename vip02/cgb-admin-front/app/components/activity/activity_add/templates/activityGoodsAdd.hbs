@@ -1,0 +1,85 @@
+<div class="modal activityGoodsAddModal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>活动选品</h2>
+    </div>
+    <form class="form item-form-search form-inline">
+        &nbsp;
+        <fieldset>
+            <p class="filter-name">
+                <span class="span4 span-large">
+                    <label for="name">商品名称:</label>
+                    <input name="name" type="text" value="{{id}}" class="form-control add-goods-name"/>
+                </span>
+                    <span class="span5 span-large">
+                    <label for="brandName">品牌:</label>
+                    <input class="form-control add-goods-brand" type="text" value="{{id}}" name="brandName">
+                 </span>
+                &nbsp;
+                 <span class="span5 span-large">
+                    <label>供应商:</label>
+                    <input class="form-control add-goods-vendor" type="text" value="{{id}}" name="brandName">
+                 </span>
+            </p>
+
+            <p class="filter-name">
+                <span class="span4 span-large">
+                    <label>后台类目</label>
+                    <select class="form-control select js-select1" data-level="1" name="back_category1_id">
+                        <option class="select" value="">请选择</option>
+                    </select>
+                </span>
+                <em> > </em>
+                <span class="span2 span-large">
+                    <select class="form-control select js-select2" data-level="2" name="back_category2_id">
+                        <option class="select" value="">请选择</option>
+                    </select>
+                </span>
+                <em> > </em>
+                <span class="span2 span-large">
+                    <select class="form-control select js-select3" data-level="3" name="back_category3_id">
+                        <option class="select" value="">请选择</option>
+                    </select>
+                </span>
+                <span class="span1 span-large">
+                    <label>&nbsp;</label>
+                    <input class="btn btn-success btn-small add-goods-search" type="button" value="查询"/>
+                </span>
+            </p>
+            <span style="font-size: 10px; margin-left: 65px; color: red;">注：活动选品默认显示50条单品，其他选品请通过搜索查询。根据类目查询请精确到三级类目</span>
+        </fieldset>
+    </form>
+
+    <div class="scroll-style data_div">
+        <table class="table table-top active-tr-center">
+            <thead>
+            <tr>
+                <th class="width-tr-150">单品编码</th>
+                <th class="width-tr-150">供应商名称</th>
+                <th class="width-tr-200">后台类目</th>
+                <th class="width-tr-150">商品名称</th>
+                <th class="width-tr-100">品牌</th>
+                <th class="width-tr-150" style="display: none">商品编码2</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each this}}
+            <tr data-component="" class="item-tr" data-id="{{id}}">
+                <td width="20%" class="itemCode">
+                    <input class="js-check-this" name="checkGoodsItem" type="checkbox" data-code="{{id}}" data-status="{{json this}}"/>{{itemCode}}
+                </td>
+                <td width="20%" class="venderName">{{vendorName}}</td>
+                <td width="25%" class="backCategoryName" data-category="{{backCategory1Id}},{{backCategory2Id}},{{backCategory3Id}}">{{backCategory1Name}}>{{backCategory2Name}}>{{backCategory3Name}}</td>
+                <td width="20%" class="goodsName"><div class="width-170">{{goodsName}}</div></td>
+                <td width="15%" class="goodsBrandName">{{goodsBrandName}}</td>
+                <td width="20%" class="goodsCode" style="display: none">{{goodsCode}}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-success btn-small addGoodsConfirm" value="确定">
+        <button class="btn btn-info btn-small range-model-cancel">取消</button>
+    </div>
+</div>

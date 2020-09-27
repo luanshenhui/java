@@ -1,0 +1,151 @@
+package cn.rkylin.oms.system.appClient.controller;
+
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.core.controller.ApolloController;
+import cn.rkylin.oms.system.appClient.dao.AppDAOImpl;
+import cn.rkylin.oms.system.appClient.domain.App;
+import cn.rkylin.oms.system.appClient.service.IAppService;
+import cn.rkylin.oms.system.appClient.vo.AppVo;
+
+@Controller
+@RequestMapping("/app")
+public class AppController extends ApolloController {
+	private static final Log logger = LogFactory.getLog(AppController.class);
+
+	@Autowired
+	private IAppService appService;
+
+	/**
+	 * app表格数据
+	 * 
+	 * @param quickSearch
+	 * @param start
+	 * @param length
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/appClientList", method = RequestMethod.GET)
+	public Map<String, Object> getSplitRuleItemList(String quickSearch,
+			@RequestParam(required = false, defaultValue = "0") int start,
+			@RequestParam(required = false, defaultValue = "10") int length) throws Exception {
+		// 用于返回值的json对象
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		try {
+			// 前台搜索条件，此处只有一个名称，暂时无分词
+			quickSearch = URLDecoder.decode(quickSearch, "UTF-8");
+
+			// 处理分页
+			if (length == -1) {
+				length = Integer.MAX_VALUE;
+			}
+			int page = start / length + 1;
+
+			// 处理快速查询条件
+			AppVo param = new AppVo();
+			if (StringUtils.isNotEmpty(quickSearch)) {
+				param.setSearchCondition(URLDecoder.decode(quickSearch, "UTF-8"));
+			}
+			// 处理转义的字段
+			Map<String, String> replaceFieldsMap = new HashMap<String, String>();
+			// replaceFieldsMap.put("status", "enable");
+			// 排序语句生成
+			String orderStatement = getOrderString(AppDAOImpl.class.getName(), "selectAppListPage", replaceFieldsMap);
+			if (StringUtils.isNotEmpty(orderStatement)) {
+				param.setOrderBy(orderStatement);
+			}
+			// 获取分页数据
+			PageInfo<AppVo> appVoList = appService.findByWhere(page, length, param);
+			// 设置返回结果内容
+			returnMap.put(JSON_RESULT, SUCCESS);
+			returnMap.put(RECORDS_FILTERED, appVoList.getTotal());
+			returnMap.put(RECORDS_TOTAL, appVoList.getTotal());
+			returnMap.put(RETURN_DATA, appVoList.getList());
+		} catch (Exception ex) {
+			logger.error(ex);
+			returnMap.put(JSON_RESULT, FAILED);
+			returnMap.put(JSON_MSG, ex.getMessage());
+		}
+		// 生成返回结果json串，null内容也需要返回
+		return returnMap;
+	}
+
+
+	/**
+	 * 修改和新增App方法
+	 * @param app 实体
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/saveApp", method = RequestMethod.POST)
+	public String saveApp(App app) {
+		try {
+			appService.saveApp(app);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			return FAILED;
+		}
+		return SUCCESS;
+	}
+
+	/**
+	 * 删除App方法
+	 * @param  id 实体app主键
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/deleteApp", method = RequestMethod.GET)
+	public String deleteApp(String id) {
+		try {
+			App app = new App();
+			app.setAppId(id);
+			appService.deleteApp(app);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			return FAILED;
+		}
+		return SUCCESS;
+	}
+
+	/**
+	 * 获取app详情
+	 * @param id 实体主键
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getAppDetail", method = RequestMethod.GET)
+	public Map<String, Object> getAppDetail(String id) {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		try {
+			App app = new App();
+			app.setAppId(id);
+			AppVo appVo = appService.getAppDetail(app);
+			returnMap.put(JSON_RESULT, SUCCESS);
+			returnMap.put(RETURN_DATA, appVo);
+			return returnMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			returnMap.put(JSON_RESULT, FAILED);
+			returnMap.put(JSON_MSG, e.getMessage());
+		}
+		return returnMap;
+	}
+}

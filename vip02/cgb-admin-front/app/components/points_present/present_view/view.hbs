@@ -1,0 +1,395 @@
+{{#component "present-view js-component"}}
+    <link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"
+          xmlns="http://www.w3.org/1999/html">
+    <p class="components-title item-title js-title" data-id="{{_DATA_.goodsModel.code}}" data-type="{{type}}">
+        {{#equals type 1}}
+            <strong class="js-strong">礼品详情</strong>
+        {{else}}
+            {{#equals _DATA_.goodsModel.approveStatus "01"}}<strong class="js-strong">礼品初审</strong>{{/equals}}
+            {{#equals _DATA_.goodsModel.approveStatus "02"}}<strong class="js-strong">礼品复审</strong>{{/equals}}
+            {{#equals _DATA_.goodsModel.approveStatus "03"}}<strong class="js-strong">礼品变更审核</strong>{{/equals}}
+            {{#equals _DATA_.goodsModel.approveStatus "04"}}<strong class="js-strong">礼品价格变更审核</strong>{{/equals}}
+            {{#equals _DATA_.goodsModel.approveStatus "05"}}<strong class="js-strong">礼品下架申请审核</strong>{{/equals}}
+        {{/equals}}
+    </p>
+    <div class="main-box">
+        <input type="hidden" class="js-approve-status" value="{{_DATA_.goodsModel.approveStatus}}"/>
+        <input type="hidden" id="modifyTime" value="{{_DATA_.goodsModel.modifyTime}}" />
+        <input type="hidden" id="spuId" name="spuId" value="{{_DATA_.goodsModel.productId}}">
+        <p class="components-title"><strong>- 供应商 -</strong></p>
+
+        <p class="filter-name p-width">
+            <span><label for="supplierName" class="item-lable1">供应商：</label></span>
+            <span class="item-span1 text-div">{{_DATA_.vendorInfoModel.simpleName}}</span>
+        </p>
+        <div class="clear"></div>
+
+        <p class="components-title"><strong>- 商品基本信息 -</strong></p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">后台类目：</label>
+                <span class="item-span1 text-div">{{_DATA_.backCategory1Name}}>{{_DATA_.backCategory2Name}}>{{_DATA_.backCategory3Name}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">品牌名：</label>
+                <span class="item-span1 text-div"> {{_DATA_.goodsModel.goodsBrandName}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">礼品名称：</label>
+                <span class="item-span1 text-div"> {{_DATA_.goodsModel.name}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">生产企业：</label>
+                <span class="item-span1 text-div">{{#if _DATA_.goodsModel.manufacturer}}{{_DATA_.goodsModel.manufacturer}}{{else}}无{{/if}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span><label for="cards" class="item-lable1">礼品类型：</label></span>
+            <span class="item-span1 text-div">
+                {{#equals _DATA_.goodsModel.goodsType '00'}}实物礼品{{/equals}}
+                {{#equals _DATA_.goodsModel.goodsType '01'}}虚拟礼品{{/equals}}
+                {{#equals _DATA_.goodsModel.goodsType '02'}}O2O礼品{{/equals}}
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span><label for="isInner" class="item-lable1">是否内宣礼品：</label>
+                <span class="item-span1 text-div">
+                    {{#equals _DATA_.goodsModel.isInner '0'}}是{{/equals}}
+                    {{#equals _DATA_.goodsModel.isInner '1'}}否{{/equals}}
+                </span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">分区：</label>
+                <span class="item-span1 text-div">{{_DATA_.espAreaInfModel.areaName}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label for="item-lable1" class="item-lable1">积分类型：</label>
+                <span class="item-span1 text-div">{{_DATA_.integralTypeModel.integraltypeNm}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label for="item-lable1" class="item-lable1">卡等级：</label>
+                <span class="item-span1 text-div">
+                {{#equals _DATA_.goodsModel.cardLevelId '00'}}无限制{{/equals}}
+                {{#equals _DATA_.goodsModel.cardLevelId '01'}}普卡{{/equals}}
+                {{#equals _DATA_.goodsModel.cardLevelId '03'}}金卡{{/equals}}
+                {{#equals _DATA_.goodsModel.cardLevelId '04'}}臻享白金卡{{/equals}}
+                {{#equals _DATA_.goodsModel.cardLevelId '05'}}增值白金卡{{/equals}}
+                {{#equals _DATA_.goodsModel.cardLevelId '06'}}顶级卡{{/equals}}
+                </span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label class="item-lable1">自动下架时间：</label>
+                <span class="item-span1 text-div">{{formatDate _DATA_.goodsModel.autoOffShelfTime "day"}}</span>
+            </span>
+        </p>
+
+        <p class="filter-name p-width">
+            <span>
+                <label for="isInner" class="item-lable1">当月限购数：</label>
+                <span class="item-span1 text-div">{{_DATA_.goodsModel.limitCount}}</span>
+            </span>
+        </p>
+        {{#equals _DATA_.goodsModel.goodsType '01'}}
+        <p class="filter-name p-width">
+            <span>
+                <label for="isInner" class="item-lable1">是否隐藏：</label>
+                <span class="item-span1 text-div">
+                    {{#each _DATA_.itemList}}
+                        {{#if @first}}
+                            {{#equals isShow 0}}否{{/equals}}
+                            {{#equals isShow 1}}是{{/equals}}
+                        {{/if}}
+                    {{/each}}
+                </span>
+            </span>
+        </p>
+        {{/equals}}
+
+        {{!--供应商端取消第三级卡产品编码的输入 FROM 修改 陈乐 2016.11.2 --}}
+        {{#equals type 1}}
+            <p class="filter-name p-width">
+            <span>
+                <label for="item-lable1" class="item-lable1">第三级卡产品编码：</label>
+                <span class="item-span1 text-div">{{_DATA_.goodsModel.cards}}</span>
+            </span>
+            </p>
+        {{else}}
+            <p class="filter-name" style="width: 530px;">
+            <span>
+                <label for="item-lable1" class="item-lable1">第三级卡产品编码：</label>
+                 <textarea class="approve-textarea js-edit-cards" maxlength="5000">{{_DATA_.goodsModel.cards}}</textarea>
+            </span>
+            </p>
+        {{/equals}}
+        {{!--供应商端取消第三级卡产品编码的输入 TO  修改 陈乐 2016.11.2 --}}
+
+        <div class="clear"></div>
+        <div class="control-group" style="height:auto;">
+            <label class="control-label" data-price>属性：</label>
+            <div class="controls controls-attr">
+                <div class="main-attr">
+                    <div class="spu base-attr clearfix"></div>
+                    <table class="table js-item-table table-list m-t-20">
+                        <thead>
+                            <tr>
+                                <th class="text-center">单品编码</th>
+                                <th class="text-center">5位编码</th>
+                                {{#each _DATA_.itemList}}
+                                    {{#if @first}}
+                                        {{#if attributeKey1}}
+                                            <th class="text-center">{{attributeKey1}}</th>
+                                        {{/if}}
+                                        {{#if attributeKey2}}
+                                            <th class="text-center">{{attributeKey2}}</th>
+                                        {{/if}}
+                                    {{/if}}
+                                {{/each}}
+                                {{#equals _DATA_.goodsModel.goodsType '01'}}
+                                    <th class="text-center js-virtualPrice-th">金额</th>
+                                    <th class="text-center js-virtualMileage-th">里程</th>
+                                    <th class="text-center js-property-th">限购</th>
+                                    <th class="text-center js-present-th">礼品代号</th>
+                                    <th class="text-center js-bid-th">上限积分值</th>
+                                {{/equals}}
+                                {{#equals _DATA_.goodsModel.goodsType '02'}}
+                                    <th class="text-center js-o2o-th">O2O礼品编码</th>
+                                    <th class="text-center js-voucher-th">O2O兑换券编码</th>
+                                {{/equals}}
+                                <th class="text-center js-price-th">采购价（元）</th>
+                                <th class="text-center js-stock-th">库存</th>
+                                <th class="text-center js-stock-th">库存预警值</th>
+                                <th class="text-center">礼品图片</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {{#each _DATA_.itemList}}
+                            <tr data-data="{{json this}}">
+                                <td>{{code}}</td>
+                                <td>{{xid}}</td>
+                                {{#if attributeName1}}<td>{{attributeName1}}</td>{{/if}}
+                                {{#if attributeName2}}<td>{{attributeName2}}</td>{{/if}}
+
+                                {{#equals _DATA_.goodsModel.goodsType '01'}}
+                                    <td>{{virtualPrice}}</td>
+                                    <td>{{virtualMileage}}</td>
+                                    <td class="js-prefucture-td">
+                                        {{#equals virtualLimit 0}}
+                                            {{#equals virtualLimitDays 0}}
+                                                无限制
+                                            {{/equals}}
+                                        {{/equals}}
+                                        {{#equals virtualLimit 1}}
+                                            {{#equals virtualLimitDays 365}}
+                                                一年限购一次
+                                            {{/equals}}
+                                        {{/equals}}
+                                        {{#equals virtualLimit 1}}
+                                            {{#equals virtualLimitDays 180}}
+                                                半年限购一次
+                                            {{/equals}}
+                                        {{/equals}}
+                                        {{#equals virtualLimit 2}}
+                                            {{#equals virtualLimitDays 365}}
+                                                一年限购两次
+                                            {{/equals}}
+                                        {{/equals}}
+                                    </td>
+                                    <td>{{bid}}</td><!--缺少礼品代号 add by zhoupeng-->
+                                    <td>{{virtualIntegralLimit}}</td>
+
+                                 {{/equals}}
+                                {{#equals _DATA_.goodsModel.goodsType '02'}}
+                                    <td>{{o2oCode}}</td>
+                                    <td>{{o2oVoucherCode}}</td>
+                                {{/equals}}
+                                <td>{{price}}</td>
+                                <td>{{stock}}</td>
+                                <td>{{stockWarning}}</td>
+                                <td>
+                                    <ul class="image-ul">
+                                        {{#if image1}}
+                                            <li class="item-image-li">
+                                                <a href="javascript:void(0);" title="放大"><img src="{{image1}}"width="30px" height="30px"></a>
+                                            </li>
+                                        {{/if}}
+                                        {{#if image2}}
+                                            <li class="item-image-li">
+                                                <a href="javascript:void(0);" title="放大"><img src="{{image2}}"width="30px" height="30px"></a>
+                                            </li>
+                                        {{/if}}
+                                        {{#if image3}}
+                                            <li class="item-image-li">
+                                                <a href="javascript:void(0);" title="放大"><img src="{{image3}}"width="30px" height="30px"></a>
+                                            </li>
+                                        {{/if}}
+                                        {{#if image4}}
+                                            <li class="item-image-li">
+                                                <a href="javascript:void(0);" title="放大"><img src="{{image4}}"width="30px" height="30px"></a>
+                                            </li>
+                                        {{/if}}
+                                        {{#if image5}}
+                                            <li class="item-image-li">
+                                                <a href="javascript:void(0);" title="放大"><img src="{{image5}}"width="30px" height="30px"></a>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <p class="filter-name">
+        <span>
+            <label for="adWord" class="item-lable1 item-lable2">礼品卖点：</label>
+             <span class="item-span1 text-div">{{ _DATA_.goodsModel.adWord}}</span>
+        </span>
+
+        </p>
+
+        <p class="filter-name">
+        <span>
+            <label for="giftDesc" class="item-lable1 item-lable2">赠品信息：</label>
+             <span class="item-span1 text-div">{{ _DATA_.goodsModel.giftDesc}}</span>
+        </span>
+        </p>
+        <p class="filter-name">
+            <span>
+                <label for="introduction" class="item-lable1 item-lable2">礼品描述：</label>
+                <div class="js-introduction"
+                     data-introduction="{{ _DATA_.goodsModel.introduction}}">
+                    <span class="text-div">
+                        <script type="text/plain" id="myEditor" style="width:935px;height:240px;">
+                        </script>
+                    </span>
+                </div>
+            </span>
+        </p>
+
+        <p class="filter-name">
+        <span>
+            <label for="servicePromise" class="item-lable1 item-lable2">服务承诺：</label>
+            <span class="item-span1 text-div">
+                {{_DATA_.servicePromiseStr}}
+            </span>
+        </span>
+        </p>
+
+        <p class="filter-name">
+        <span>
+            <label for="recommendGoods" class="item-lable1 item-lable2">关联推荐礼品：</label>
+            <span class="item-span1 text-div">
+                {{#if _DATA_.recommendGoodsList}}
+                    <ul class="recommend-ul">
+                        {{#each _DATA_.recommendGoodsList}}
+                            <li class="recommend-li">
+                                <a href="/mall/goods/{{goodsCode}}?itemCode={{itemCode}}" target="_blank"><img class="img-width" data-original="{{img}}"></a>
+                                <div class="main-item-list-title">
+                                    <a class="font-color-b" target="_blank" href="/mall/goods/{{goodsCode}}?itemCode={{itemCode}}" title="{{goodsName}}">{{goodsName}}</a>
+                                </div>
+                                <div class="price">
+                                    <span class="font-color-red">￥{{price}}</span>
+                                </div>
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{else}}
+                    无
+                {{/if}}
+            </span>
+        </span>
+        </p>
+        <div class="clear"></div>
+
+        <!-- 查看礼品详情时 是审核意见-->
+        {{#equals type 1}}
+            <p class="filter-name">
+            <span>
+                <label class="item-lable1 item-lable2">审核意见：</label>
+                <span class="item-span1 text-div js-approve-memo">
+                    {{#if  _DATA_.auditLoggingModelList }}
+                        {{#each _DATA_.auditLoggingModelList}}
+                            <span>{{businessType}}</span>:<span>{{#if auditorMemo}}{{auditorMemo}}{{else}}
+                            无{{/if}}</span>
+                            <br/>
+                        {{/each}}
+                    {{else}}
+                        无
+                    {{/if}}
+                </span>
+            </span>
+            </p>
+        {{else}}
+            <p class="filter-name">
+        <span>
+            <label class="item-lable1 item-lable2">审核意见：</label>
+             <span class="item-span1 text-div">
+                 <textarea class="js-approve-memo" maxlength="200"></textarea>
+                 <span class="remaining-text margin-left-10">您还可以输入<i>200</i>字</span>
+             </span>
+        </span>
+            </p>
+        {{/equals}}
+        <p class="filter-name">
+        <span>
+            <label class="item-lable1 item-lable2">操作履历：</label>
+            <span class="item-span1 text-div">
+                {{#if  _DATA_.auditLoggingModelList }}
+                    {{#each _DATA_.auditLoggingModelList}}
+                        <span>{{formatDate createTime}}</span>&nbsp;<span>{{createOper}}</span>&nbsp;
+                            <span>{{businessType}}</span><span>{{approveType}}</span><br/>
+                    {{/each}}
+                {{else}}
+                    无
+                {{/if}}
+            </span>
+        </span>
+        </p>
+        <!--页面底部按钮-->
+        {{#equals type 1}}
+            {{#if orderFlag}}
+                <div class="admin-btn">
+                    <a class="btn btn-success orderReturn">返回</a>
+                </div>
+            {{else}}
+                <div class="admin-btn">
+                    <a href="{{_HREF_.mainContext}}/points/item/all-present" class="btn btn-success">返回</a>
+                </div>
+            {{/if}}
+        {{else}}
+            <div class="admin-btn">
+                <button class="btn btn-success js-exam-pass" data-result="pass">通过</button>
+                <button class="btn btn-success js-exam-reject" data-result="reject">拒绝</button>
+                <a href="{{_HREF_.mainContext}}/points/item/all-present" class="btn btn-success">返回</a>
+            </div>
+        {{/equals}}
+    </div>
+{{/component}}

@@ -1,0 +1,55 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	function f1(){
+		$('#form1 input:disabled').css('border',
+		'1px dotted red');
+	}
+	
+	function f2(){
+		$('#form1 input:enabled').css('border',
+		'1px dotted red');
+	}
+	
+	function f3(){
+		alert($('#form2 input:checked').val());
+	}
+	
+	function f4(){
+		alert($('#form3 option:selected').val());
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<form id="form1">
+		username:<input name="username"/><br/>
+		name:<input name="name" 
+		disabled="disabled"/><br/>
+	</form>
+	
+	<form id="form2">
+		兴趣:钓鱼<input type="checkbox" name="interest" 
+		value="fishing"/>
+		足球<input type="checkbox" name="interest" 
+		value="football" checked="checked"/>
+		台球<input type="checkbox" name="interest" 
+		value="snooker"/>
+	</form>
+	
+	<form id="form3">
+		<select style="width:150px;">
+			<option value="bj">北京</option>
+			<option value="sh" selected="selected">上海</option>
+			<option value="wh">武汉</option>
+		</select>
+	</form>
+	<a href="javascript:;" 
+	onclick="f4();">ClickMe</a>
+	
+	
+</body>
+</html>

@@ -1,0 +1,101 @@
+.risk-form-main .personal-title ul{
+    margin: 20px 0 0 30px;
+}
+.risk-form-main .personal-title ul li{
+    position: relative;
+    list-style: none;
+    display: inline-block;
+    font-size: 20px;
+    height: 35px;
+    margin-right: 50px;
+    line-height: 35px;
+    cursor: pointer;
+}
+.risk-form-main .personal-title ul li.on:before{
+    position: absolute;
+    top: 9px;
+    left: -15px;
+    width: 8px;
+    height: 15px;
+    background: url(../image/triangle.png);
+    content: '';
+}
+.risk-form-main .personal-title ul li.on{
+    color: #389ad1;
+}
+.personal-private .tree-div1{
+    margin-bottom:0 ;
+}
+.personal-private .tree-red {
+    margin-top: -62px !important;
+}
+
+.three-important1 .personal-private li.tree-step4:before {
+left:-134px;
+    width: 125px;
+}
+.three-important1 .personal-private li.tree-step4:after {
+    left: -135px;
+}
+.display-none{
+    display: none;
+}
+.display-block{
+    display: block;
+}
+.personal-appoint .tree-div1{
+    margin: -390px -700px 50px 0;
+}
+.personal-appoint  .tree-step3:after {
+    top: 50px;
+    right: 123px;
+    content:'';
+}
+.personal-appoint .tree-red{
+    top: -184px;
+}
+.personal-appoint .tree-red:before{
+    position: absolute;
+    left: -69px;
+    top: 27px;
+    width: 51px!important;
+    height: 3px!important;
+    background: #595959;
+    content: '';
+}
+.personal-appoint .tree-red:after{
+    position: absolute;
+    left: -18px;
+    top: 22px;
+    background: url(../image/arrow-green.png);
+    content: '';
+}
+.personal-appoint .tree-div1 .tree-define:before{
+    position: absolute;
+    left: 129px;
+    top: 50px;
+    width: 3px!important;
+    height: 76px!important;
+    background: #595959;
+    content: '';
+}
+.personal-appoint .tree-div1 .tree-define:after{
+    position: absolute;
+    left: 126px;
+    top: 50px;
+    background: url(../image/arrow-green.png);
+    content: '';
+}
+.personal-appoint .tree-div1  li.tree-red{
+    top: -68px;
+    left: 282px;
+}
+.personal-appoint .tree-div1  li.tree-blue{
+    top: -136px;
+}
+.personal-appoint .tree-div1 li.tree-step3{
+    top: -74px;
+}
+.personal-appoint .tree-div1 li.tree-step4{
+    top: -63px;
+}

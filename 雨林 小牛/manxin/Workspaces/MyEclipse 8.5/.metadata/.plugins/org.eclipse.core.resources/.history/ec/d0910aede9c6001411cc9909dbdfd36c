@@ -1,0 +1,50 @@
+package com.yulin.dangdang.service;
+
+import java.util.Date;
+import java.util.List;
+
+import com.yulin.dangdang.bean.Item;
+import com.yulin.dangdang.bean.Order;
+import com.yulin.dangdang.bean.User;
+import com.yulin.dangdang.dao.daoimpl.OrderDaoImpl;
+
+public class OrderService {
+	public Order createOrder(User user, List<Item> list){
+		Order order = new Order();
+		order.setUser_id(user.getId());//保存用户id
+		order.setTotal_price(sum(list));//获得总价
+		order.setOrder_time(new Date().getTime());//获得当前时间(毫秒)
+		return order;
+	}
+
+	private double sum(List<Item> list) {
+		// 计算总价
+		double allPrice = 0;
+		for(int i = 0; i < list.size(); i++){
+			allPrice += list.get(i).getDang_price();
+		}
+		return allPrice;
+	}
+	
+	/* 保存Order */
+	public boolean insertOrder(Order order){
+		return new OrderDaoImpl().insertOrder(order);
+	}
+	
+	/* 保存Item */
+	public boolean insertItem(List<Item> itemList, int orderId){
+		for(int i = 0; i < itemList.size(); i++){
+			itemList.get(i).setOrder_id(orderId);
+			boolean flag = new OrderDaoImpl().insertItem(itemList.get(i));
+		}
+		return false;
+	}
+	
+	public static void main(String[] args) {
+		Date date = new Date();
+		
+		System.out.println(date);//Date
+		System.out.println(date.getTime());//毫秒
+		System.out.println(new Date(date.getTime()));//毫秒-->时间
+	}
+}

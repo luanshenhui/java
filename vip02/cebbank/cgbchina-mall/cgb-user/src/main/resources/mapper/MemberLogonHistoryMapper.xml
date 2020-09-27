@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberLogonHistory">
+    <resultMap id="MemberLogonHistoryMap" type="MemberLogonHistoryModel">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="ipAddress" column="ip_address"/>
+        <result property="macAddress" column="mac_address"/>
+        <result property="loginTime" column="login_time"/>
+        <result property="logoutTime" column="logout_time"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <sql id="columns">
+        id,cust_id,ip_address,mac_address,login_time,logout_time,status,del_flag
+    </sql>
+
+    <insert id="insert" parameterType="MemberLogonHistoryModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_member_login_history
+        (cust_id
+        ,ip_address
+        ,mac_address
+        ,login_time
+        ,logout_time
+        ,status
+        ,del_flag)
+        values(#{custId}
+        ,#{ipAddress}
+        ,#{macAddress}
+        ,now()
+        ,#{logoutTime}
+        ,#{status}
+        ,#{delFlag})
+    </insert>
+
+    <update id="update" parameterType="MemberLogonHistoryModel">
+        update tbl_member_login_history set
+        cust_id
+        = #{custId},ip_address
+        = #{ipAddress},mac_address
+        = #{macAddress},login_time
+        = #{loginTime},logout_time
+        = #{logoutTime},status
+        = #{status},del_flag
+        = #{delFlag}
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="custId !=null">and cust_id = #{custId}</if>
+            <if test="ipAddress !=null">and ip_address = #{ipAddress}</if>
+            <if test="macAddress !=null">and mac_address = #{macAddress}</if>
+            <if test="loginTime !=null">and login_time = #{loginTime}</if>
+            <if test="logoutTime !=null">and logout_time = #{logoutTime}</if>
+            <if test="status !=null">and status = #{status}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="MemberLogonHistoryMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_member_login_history
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="MemberLogonHistoryMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_member_login_history
+        <include refid="conditions"/>
+    </select>
+
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_member_login_history
+        where 1=1
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="MemberLogonHistoryMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_member_login_history
+        where 1=1 and
+        <![CDATA[DATE_SUB(now(),INTERVAL 3 MONTH) < login_time]]>
+        <![CDATA[order by login_time DESC limit #{offset}, 10 ]]>
+    </select>
+    <delete id="delete" parameterType="MemberLogonHistoryModel">
+        delete from tbl_member_login_history where id = id
+    </delete>
+
+    <select id="findLogonHistory" resultMap="MemberLogonHistoryMap">
+        select
+        <include refid="columns"/>
+        from tbl_member_login_history
+        where 1=1 AND cust_id = #{custId} AND
+        <![CDATA[DATE_SUB(now(),INTERVAL 3 MONTH) < login_time order by login_time DESC limit 10 ]]>
+    </select>
+
+    <!-- 登录时，添加一条记录-->
+    <insert id="insertLogon" parameterType="memberLogonHistoryModel" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        insert into tbl_member_login_history
+        (cust_id
+        ,ip_address
+        ,mac_address
+        ,login_time
+        ,logout_time
+        ,status
+        ,del_flag)
+        values(#{custId}
+        ,#{ipAddress}
+        ,#{macAddress}
+        ,now()
+        ,now()
+        ,#{status}
+        ,0)
+    </insert>
+
+    <!--根据userId查询-->
+    <select id="findByCustId" parameterType="String" resultMap="MemberLogonHistoryMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_member_login_history
+        where cust_id=#{id} and del_flag != '1' ORDER BY login_time DESC limit 1
+    </select>
+
+    <!--根据userId查询-->
+    <select id="findSuccessByCustId" parameterType="String" resultMap="MemberLogonHistoryMap">
+        SELECT
+        <include refid="columns"/>
+        from tbl_member_login_history
+        where cust_id=#{CustId} and del_flag != '1' and status = '0'
+    </select>
+
+    <!--退出商城更新退出时间-->
+    <update id="updateLogoutTime" parameterType="MemberLogonHistoryModel">
+        update tbl_member_login_history set
+        logout_time = now()
+        where id = #{id}
+    </update>
+</mapper>
+
+

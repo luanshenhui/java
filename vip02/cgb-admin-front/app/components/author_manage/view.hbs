@@ -1,0 +1,70 @@
+<div class="author-manage js-comp operation-platform" id="author-mange" data-sites="/admins/author" data-comp-path="author_manage/view"  data-total="{{_DATA_.total}}">
+  <p class="components-title"><strong>用户授权</strong>&nbsp;&nbsp;&nbsp;<span>共（{{#if _DATA_.total}}{{_DATA_.total}}{{else}}0{{/if}}）位会员</span></p>
+  <div class="tab tab-condensed">
+    <ul class="tab-navs clearfix">
+      <li class="active"><a href="{{_HREF_.mainContext}}/admins/author">用户授权</a></li>
+      <li><a href="{{_HREF_.mainContext}}/admins/role_manage">角色管理</a></li>
+    </ul>
+  </div>
+  <p></p>
+  <div class="block">
+    <form id="form-search" class="form">
+      <fieldset>
+        <span class="span3">
+          <label for="shop-ID">会员账号</label>
+          <input type="text" name="userName" class="search-author search-input" placeholder="请输入会员账号" value="{{userName}}">
+        </span>
+        &nbsp;&nbsp;
+        <span class="span3">
+          <label for="shop-ID">会员类型</label>
+          <select type="text" name="type" class="search-author search-input">
+            <option value="" {{#unless type}}selected{{/unless}}>请选择</option>
+            <option value="0" {{#equals type "0"}}selected{{/equals}}>平台管理员</option>
+            <option value="1" {{#equals type "1"}}selected{{/equals}}>买家</option>
+            <option value="2" {{#equals type "2"}}selected{{/equals}}>卖家</option>
+            <option value="3" {{#equals type "3"}}selected{{/equals}}>频道运营</option>
+            <option value="6" {{#equals type "6"}}selected{{/equals}}>品牌商</option>
+            <option value="9" {{#equals type "9"}}selected{{/equals}}>财务</option>
+          </select>
+        </span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="span1">
+          <label for="reauthor">
+            <button type="submit" class="btn btn-success js-author-search">搜索</button>
+            <a href="{{_HREF_.mainContext}}/admins/author" class="js-clear-search" style="margin-left:20px">清除</a>
+          </label>
+        </span>
+      </fieldset>
+    </form>
+  </div>
+  <table class="author-manage-table table table-horizontal">
+    <thead>
+      <tr>
+        <th class="left-text">会员账号</th>
+        <th width="200">会员类型</th>
+        <th width="250">角色</th>
+        <th width="100">状态</th>
+        <th width="100">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each _DATA_.data}}{{#with user}}
+      <tr data-id="{{id}}" data-name="{{name}}" data-type="{{type}}" data-role="{{../role.name}}" data-userroleid="{{../userRoleId}}">
+        <td class="left-text">{{name}}</td>
+        <td>
+          {{#equals type "0"}}平台管理员{{/equals}}
+          {{#equals type "1"}}买家{{/equals}}
+          {{#equals type "2"}}卖家{{/equals}}
+          {{#equals type "3"}}频道运营{{/equals}}
+          {{#equals type "6"}}品牌商{{/equals}}
+          {{#equals type "9"}}财务{{/equals}}
+        </td>
+        <td>{{role.name}}</td>
+        <td><label data-status="{{status}}">{{#equals status "0"}}未启用{{else}}正常{{/equals}}</label></td>
+        <td>{{#equals type "2"}}{{else}}{{#equals type "6"}}{{else}}<button type="" class="btn btn-small js-type-change">修改角色</button>{{/equals}}{{/equals}}</td>
+      </tr>
+      {{/with}}{{/each}}
+    </tbody>
+  </table>
+  <div class="author-pagination"></div>
+</div>

@@ -1,0 +1,314 @@
+{{#component "item-review-detail js-component"}}
+    <div class="main-box-title h1-title">活动复审</div>
+    <div class="main-box col-box main-box-table-detail-t table-infor">
+        <div class="form-information form-information-two createOperType" data-createoper="{{_DATA_.adminPromotionResultDto.createOperType}}">
+            <span class="wh150 text-right">
+                活动发起者 ：
+            </span>
+            <span>{{_DATA_.adminPromotionResultDto.createOperTypeName}}</span>
+        </div>
+        <div class="form-information form-information-two">
+            <span class="wh150 text-right">
+                活动编号 ：
+            </span>
+            <span>{{_DATA_.adminPromotionResultDto.id}}</span>
+        </div>
+        <div class="form-information form-information-two">
+            <span class="wh150 text-right">
+                活动名称 ：
+            </span>
+            <span>{{_DATA_.adminPromotionResultDto.name}}</span>
+        </div>
+        <div class="form-information form-information-two">
+            <span class="wh150 text-right">
+                活动简称 ：
+            </span>
+            <span>{{_DATA_.adminPromotionResultDto.shortName}}</span>
+        </div>
+        <div class="form-information">
+            <span class="wh150 text-right">
+                活动类型 ：
+            </span>
+            <span class="active-type js-prom-type" data-data ="{{_DATA_.adminPromotionResultDto.promType}}" data-value="{{_DATA_.adminPromotionResultDto.promTypeName}}">{{_DATA_.adminPromotionResultDto.promTypeName}}</span>
+         </div>
+        <div class="main-box-title">- 活动基本条件 -</div>
+        <div class="overflow-hidden">
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    渠道 ：
+                </span>
+                <span>{{_DATA_.adminPromotionResultDto.sourceNames}}</span>
+            </div>
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    报名时间 ：
+                </span>
+                <span>
+                    {{#formatDate _DATA_.adminPromotionResultDto.beginEntryDate}}{{/formatDate}}
+                    ～
+                    {{#formatDate _DATA_.adminPromotionResultDto.endEntryDate}}{{/formatDate}}
+                </span>
+            </div>
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    活动时间 ：
+                </span>
+                <span>
+                    {{#formatDate _DATA_.adminPromotionResultDto.beginDate}}{{/formatDate}}
+                    ～
+                    {{#formatDate _DATA_.adminPromotionResultDto.endDate}}{{/formatDate}}
+                </span>
+            </div>
+            <div class="form-information form-information-two">
+                <span class="wh150 text-right">
+                    循环执行 ：
+                </span>
+                <span> {{_DATA_.adminPromotionResultDto.loopJobFormat}}</span>
+            </div>
+        </div>
+        <div class="main-box-title">- 活动优惠规则 -</div>
+        <div class="overflow-hidden">
+            {{#equals _DATA_.adminPromotionResultDto.promType "10"}}
+                <div class="form-information form-information-two">
+                    <span class="wh150 text-right">
+                        折扣比例 ：
+                    </span>
+                    <span class="discountRateSpan">{{_DATA_.adminPromotionResultDto.ruleDiscountRateFormat}}</span>
+                </div>
+                <div class="form-information form-information-two">
+                    <span class="wh150 text-right">
+                        限购 ：
+                    </span>
+                    <span>{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}</span>
+                </div>
+            {{/equals}}
+            {{#equals _DATA_.adminPromotionResultDto.promType "20"}}
+                <p class="filter-name float-left full-cut" data-value="{{json this}}"></p>
+            {{/equals}}
+            {{#equals _DATA_.adminPromotionResultDto.promType "30"}}
+                <div class="form-information form-information-two">
+                    <span class="wh150 text-right">
+                        限购数量：
+                    </span>
+                    <span>{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}</span>
+                </div>
+            {{/equals}}
+            {{#equals _DATA_.adminPromotionResultDto.promType "40"}}
+                <div class="form-information form-information-two">
+                    <span class="wh150 text-right">
+                        限购数量：
+                    </span>
+                    <span>{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}</span>
+                </div>
+            {{/equals}}
+            {{#equals _DATA_.adminPromotionResultDto.promType "50"}}
+                <div class="form-information form-information-two">
+                    <span class="wh150 text-right">
+                        降价频率：
+                    </span>
+                    <span>{{_DATA_.adminPromotionResultDto.ruleFrequency}}秒</span>
+                </div>
+                <div class="form-information form-information-two">
+                    <span class="wh150 text-right">
+                        限购数量：
+                    </span>
+                    <span>{{_DATA_.adminPromotionResultDto.ruleLimitBuyCount}}</span>
+                </div>
+                <div class="form-information form-information-two">
+                    <span class="wh150 text-right">
+                        可拍次数：
+                    </span>
+                    <span>{{_DATA_.adminPromotionResultDto.ruleLimitTicket}}</span>
+                </div>
+                <div class="form-information form-information-two">
+                    <span class="wh150 text-right">
+                        每组商品：
+                    </span>
+                    <span>{{_DATA_.adminPromotionResultDto.ruleGroupCount}}</span>
+                </div>
+            {{/equals}}
+        </div>
+        <div class="main-box-title m-t-10">- 促销内容 -</div>
+        <div class="form-information">
+            {{{_DATA_.adminPromotionResultDto.description}}}
+        </div>
+        {{#equals _DATA_.adminPromotionResultDto.createOperType "1"}}
+        <div class="main-box-title m-t-10">
+            <span>供应商：</span>
+            <span class="vendorName"></span>
+        </div>
+        {{/equals}}
+        <div class="main-box-title m-t-10">- 活动选品 -</div>
+        <div class="col-box column-three">
+            <span class="column-title">商品名称：</span>
+            <input class="form-control form-width-150 item-name" type="text">
+        </div>
+        <div class="col-box column-three">
+            <span class="column-title">供应商名称：</span>
+            <input class="form-control form-width-150 item-vendor-name" type="text">
+        </div>
+        <div class="col-box column-three check-status-select">
+            <span class="column-title">审核状态： </span>
+            <select class="select-width-160 item-check-status">
+                <option value="" {{#equals checkStatus ""}}selected{{/equals}}>请选择</option>
+                <option value="0" {{#equals checkStatus "0"}}selected{{/equals}}>待审核</option>
+                <option value="1" {{#equals checkStatus "1"}}selected{{/equals}}>已通过</option>
+                <option value="2" {{#equals checkStatus "2"}}selected{{/equals}}>已拒绝</option>
+            </select>
+        </div>
+        <div class="col-right-common m-t-10">
+            <input class="btn btn-success btn-small pull-right m-r-10 item-search" type="button" value="查询" />
+        </div>
+        <div class="clear"></div>
+        <table class="list-tabble-con m-t-10 border" width="100%" border="0" cellspacing="0" cellpadding="0">
+           <thead>
+            <tr>
+                <th scope="col" width="25">序号</th>
+                <th scope="col" width="70">分类</th>
+                <th scope="col" width="50">品牌</th>
+                <th scope="col" width="70"> 单品编码</th>
+                <th scope="col" width="90">商品名称</th>
+                <th scope="col" width="70">供应商</th>
+
+                {{#equals _DATA_.adminPromotionResultDto.promType "50"}}
+                    <th scope="col" width="50">起拍价（元）</th>
+                    <th scope="col" width="50">最低价（元）</th>
+                    <th scope="col" width="50">降价金额</th>
+                {{else}}
+                    <th scope="col" width="70">活动价</th>
+                {{/equals}}
+
+                <th scope="col" width="50">活动商品数量</th>
+                <th width="30">费用承担方</th>
+                {{#equals _DATA_.adminPromotionResultDto.promType "40"}}
+                <th scope="col" width="70">团购分类</th>
+                {{/equals}}
+                {{#equals _DATA_.adminPromotionResultDto.promType "30"}}
+                    <th width="30">可以使用优惠券</th>
+                {{/equals}}
+                {{#of _DATA_.adminPromotionResultDto.promType "10,20"}}
+                    {{#equals _DATA_.adminPromotionResultDto.createOperType "0"}}
+                        <th scope="col" width="50" class="checkState-head">审核状态</th>
+                    {{/equals}}
+                {{/of}}
+                <th class="check-status-td" scope="col" width="70"  style="display: none">审核状态</th>
+                <th class="option-td" scope="col" width="60"  style="display: none">操作</th>
+            </tr>
+           </thead>
+            <tbody class="prom-item-dtos" data-data="{{json _DATA_.promItemDtos}}">
+            {{#each _DATA_.promItemDtos}}
+                <tr data-data="{{json this}}">
+                    <td>{{id}}</td>
+
+                    {{#equals backCategoryName "null"}}
+                        <td>{{backCategory1Name}}>{{backCategory2Name}}>{{backCategory3Name}}</td>
+                    {{else}}
+                        <td>{{backCategoryName}}</td>
+                    {{/equals}}
+
+                    <td>{{goodsBrandName}}</td>
+                    <td class="itemCodeTd" data-id="{{itemCode}}">{{itemCode}}</td>
+                    <td>{{goodsName}}</td>
+                    <td>{{vendor}}</td>
+
+                    {{#equals _DATA_.adminPromotionResultDto.promType "50"}}
+                        <td> {{startPrice}}</td>
+                        <td> {{minPrice}}</td>
+                        <td> {{feeRange}}</td>
+                    {{/equals}}
+                    {{#equals _DATA_.adminPromotionResultDto.promType "40"}}
+                        <td> {{levelPrice}}</td>
+                    {{/equals}}
+                    {{#equals _DATA_.adminPromotionResultDto.promType "30"}}
+                        <td> {{price}}</td>
+                    {{/equals}}
+                    {{#equals _DATA_.adminPromotionResultDto.promType "20"}}
+                        <td> {{price}}</td>
+                    {{/equals}}
+                    {{#equals _DATA_.adminPromotionResultDto.promType "10"}}
+                        <td> {{price}}</td>
+                    {{/equals}}
+
+                    <td>{{perStock}}</td>
+                    <td class="activity-state">
+                        {{#equals costBy "1"}}
+                            供应商
+                        {{else}}
+                            行方
+                        {{/equals}}
+                    </td>
+                    {{#equals _DATA_.adminPromotionResultDto.promType "40"}}
+                        <td>{{groupClassifyName}}</td>
+                    {{/equals}}
+                    {{#equals _DATA_.adminPromotionResultDto.promType "30"}}
+                        <td width="30">
+                        {{#equals couponEnable "1"}}
+                            是
+                            {{else}}
+                            否
+                            {{/equals}}
+                        </td>
+                    {{/equals}}
+                    {{#of _DATA_.adminPromotionResultDto.promType "10,20"}}
+                        {{#equals _DATA_.adminPromotionResultDto.createOperType "0"}}
+                            <td class="checkState-body">
+                                {{#equals checkStatus "1"}}
+                                    已通过
+                                {{/equals}}
+                                {{#equals checkStatus "2"}}
+                                    已拒绝
+                                {{/equals}}
+                                {{#equals checkStatus "0"}}
+                                    待审核
+                                {{/equals}}
+                            </td>
+                        {{/equals}}
+                    {{/of}}
+                    <td class="check-status-td-value" data-id="item-check-status-{{id}}" style="display: none">
+                        {{#equals checkStatus "0"}}待审核{{/equals}}
+                        {{#equals checkStatus "1"}}已通过{{/equals}}
+                        {{#equals checkStatus "2"}}已拒绝{{/equals}}
+                    </td>
+                    <td class="option-td-value" data-id="{{id}}" data-auditLog="{{auditLog}}"  style="display: none">
+                        {{#equals checkStatus "0"}}
+                            <a class="margin-right-10 item-passed" href="javascript:void(0);">通过</a>
+                            <a class="item-refused" href="javascript:void(0);">拒绝</a>
+                        {{/equals}}
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <div class="page-navi btn-small itemList-pagination" data-total={{data.data.total}}></div>
+
+        <div class="main-box-title m-t-20">- 审核 -</div>
+        <table class="review-table">
+            <col width="20%"/>
+            <col width="30%"/>
+            <col width="20%"/>
+            <col width="30%"/>
+            <tr class="review-textarea" style="display: none">
+                <th><strong>审核意见：</strong></th>
+                <td colspan="3">
+                    <textarea id="descript" class="form-control order-form col-3 activity-textarea remaining-target" name="textarea2" cols=""
+                              rows=""></textarea>
+                    <p class="remaining-text" style="text-align: left">您还可以输入<i>200</i>字</p>
+                </td>
+            </tr>
+            <tr>
+                <th><strong>审核履历：</strong></th>
+                <td colspan="3">{{{_DATA_.adminPromotionResultDto.auditLog}}}</td>
+            </tr>
+        </table>
+        <div class="clear"></div>
+        <div class="admin-btn">
+            {{#equals isJoined 0}}
+                <button class="btn btn-info btn-medium activity-passed">通 过</button>
+                <button class="btn btn-info btn-medium activity-refused">拒 绝</button>
+            {{/equals}}
+            <a class="btn btn-info btn-medium" href="{{_HREF_.mainContext}}/mall/activity/item-review">返 回</a>
+        </div>
+    </div>
+    <input type="hidden" id="hidden_id" value="{{_DATA_.adminPromotionResultDto.id}}">
+
+{{/component}}

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Schedule</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="sql">select *
+        from contactinfo where del_flg is null or del_flg !=1 order by send_count limit 0,9
+    </string>
+</resources>

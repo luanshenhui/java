@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DealBestRate">
+    <!-- 插入任务状态-->
+    <insert id="createBatchStatus" parameterType="Map">
+        insert into tbl_batch_status
+        (job_name
+        ,job_param1
+        ,job_param2
+        ,is_success)
+        values(#{jobName}
+        ,#{jobParam1}
+        ,#{jobParam2}
+        ,#{isSuccess})
+    </insert>
+    <!-- 查询当月积分池表中的数据-->
+    <select id="findPointsPool" parameterType="String" resultType="cn.com.cgbchina.batch.model.DealBestRateModel">
+        select
+        max_point maxPoint,
+        single_point singlePoint,
+        point_rate pointRate
+        from tbl_point_pool
+        where del_flag = 0
+        and cur_month = #{curMonth}
+    </select>
+    <!-- 获取特殊倍率-->
+    <select id="findSpecialPointScale"  resultType="cn.com.cgbchina.batch.model.DealBestRateModel">
+        select
+            scale,
+            type,
+            type_id typeId
+        from tbl_special_point_scale
+        where del_flag = 0
+    </select>
+    <!--根据供应商id，查出相应的商品和单品信息-->
+    <select id="findGoodsInfCount" resultType="Long">
+        select
+            count(1)
+        from tbl_goods g
+            inner join tbl_item i on g.code = i.goods_code
+            inner join tbl_vendor_user v on g.vendor_id = v.vendor_id and v.del_flag = 0 and v.shop_type = 'YG' and v.is_sub='0'
+        where g.del_flag =0
+    </select>
+    <select id="findGoodsInf" parameterType="Map" resultType="cn.com.cgbchina.batch.model.DealBestRateModel">
+         select
+            i.code itemCode,
+            i.product_point_rate productPointRate,
+            i.price price,
+            g.code code,
+            g.vendor_id vendorId,
+            g.goods_brand_id goodsBrandId,
+            g.product_id spuId
+        from tbl_goods g
+            inner join tbl_item i on g.code = i.goods_code
+            inner join tbl_vendor_user v on g.vendor_id = v.vendor_id and v.del_flag = 0 and v.shop_type = 'YG' and v.is_sub='0'
+        where g.del_flag =0
+        limit #{offset},#{limit}
+    </select>
+    <!--将最佳倍率和最大积分值存入相应的单品信息中-->
+    <update id="updateItemInf" parameterType="Map">
+        update tbl_item
+        set
+        best_rate = #{bestRate},
+        max_point = #{maxPoint},
+        modify_time = now()
+        where
+        code = #{itemCode}
+    </update>
+    <!-- 更新正在处理的任务状态-->
+    <update id="updateStatusByRunning" parameterType="cn.com.cgbchina.batch.model.DealBestRateModel">
+        update tbl_batch_status set
+        is_success =#{paramIsSuccess}
+        where job_name = #{paramJobName} and job_param1 = #{paramJobParam1} and is_success='I'
+    </update>
+</mapper>
+
+

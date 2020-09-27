@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SmspCustModel">
+    <resultMap id="SmspCustMap" type="SmspCustModel">
+        <result property="id" column="id"/>
+        <result property="phone" column="phone"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+    id,phone,card_no,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="SmspCustModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_smsp_cust
+        (id
+        ,phone
+        ,card_no
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{id}
+        ,#{phone}
+        ,#{cardNo}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime})
+    </insert>
+
+    <update id="update" parameterType="SmspCustModel">
+        update tbl_smsp_cust set
+            <if test="cardNo !=null">card_no = #{cardNo}
+                ,</if>
+            <if test="modifyOper !=null">modify_oper = #{modifyOper}
+                ,</if>
+            modify_time = now()
+        where id = #{id} and phone = #{phone}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="phone !=null">and phone = #{phone}</if>
+            <if test="cardNo !=null">and card_no = #{cardNo}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="SmspCustMap">
+       SELECT id,
+        <include refid="columns"/>
+        from tbl_smsp_cust
+       where id=#{id}
+    </select>
+    <select id="findAll" resultMap="SmspCustMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_smsp_cust
+        <include refid="conditions"/>
+    </select>
+    <!--根据短信维护表id查询所有名单-->
+    <select id="findSmspCustById" parameterType="java.lang.Long" resultMap="SmspCustMap">
+        select
+        <include refid="columns"/>
+        from tbl_smsp_cust
+        where id=#{id}
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="SmspCustMap">
+        select
+        <include refid="columns"/>
+        from tbl_smsp_cust
+        <include refid="conditions"/>
+        <![CDATA[ limit #{offset}, #{limit} ]]>
+    </select>
+
+    <!--分页查询 niufw-->
+    <select id="count" resultType="Long">
+        /*select count(1)
+        from tbl_smsp_cust*/
+        select count(1) from (
+            select id
+            from tbl_smsp_cust
+            <include refid="conditions"/>
+            limit 5000
+        ) co
+    </select>
+    <!--审核页面白名单管理批量删除 niufw-->
+    <delete id="delete" parameterType="SmspCustModel">
+        delete from tbl_smsp_cust where id = #{id} and phone = #{phone}
+    </delete>
+    <select id="findAllByPhone"  parameterType="Map" resultMap="SmspCustMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_smsp_cust
+        <include refid="conditions"/>
+    </select>
+
+    <select id="findExistId" parameterType="java.util.List" resultType="java.lang.Long">
+        select id from tbl_smsp_cust
+        where id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY id
+    </select>
+    <!-- 批量操作 add by zhoupeng-->
+    <insert id="insertBatch" parameterType="SmspCustModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_smsp_cust
+        (id
+        ,phone
+        ,card_no
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}
+            ,#{item.phone}
+            ,#{item.cardNo}
+            ,#{item.createOper}
+            ,now()
+            ,#{item.modifyOper}
+            ,#{item.modifyTime})
+        </foreach>
+    </insert>
+    <!-- 批量操作 add by zhoupeng-->
+    <update id="updateBatch" parameterType="SmspCustModel">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update tbl_smsp_cust set
+            <if test="item.cardNo !=null">card_no = #{item.cardNo}
+                ,</if>
+            <if test="item.modifyOper !=null">modify_oper = #{item.modifyOper}
+                ,</if>
+            modify_time = now()
+            where id = #{item.id} and phone = #{item.phone}
+        </foreach>
+    </update>
+</mapper>
+
+

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/view_mm"
+    android:background="@drawable/shape_submit_dialog"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/gutLL"
+        style="@style/view_mo"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialog_titleTv"
+            style="@style/view_ww"
+            android:layout_gravity="center"
+            android:textColor="@color/mainTextColor"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sys_gutTV"
+            style="@style/view_ww"
+            android:layout_gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lines" />
+
+    <LinearLayout
+        android:id="@+id/bottomLL"
+        style="@style/view_mo"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/sys_up_cancelTV"
+            style="@style/view_om"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="@string/string_no"
+            android:textColor="@color/mainTextColor"
+            android:textSize="16sp"
+            tools:ignore="NestedWeights" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/lines" />
+
+        <TextView
+            android:id="@+id/sys_up_sureTV"
+            style="@style/view_om"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="@string/string_yes"
+            android:textColor="@color/mainTextColor"
+            android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BrandAuthorizeModel">
+    <resultMap id="BrandAuthorizeMap" type="BrandAuthorizeModel">
+        <result property="id" column="id"/>
+        <result property="goodsBrandId" column="goods_brand_id"/>
+        <result property="ordertypeId" column="ordertype_id"/>
+        <result property="brandName" column="brand_name"/>
+        <result property="brandImage" column="brand_image"/>
+        <result property="brandAuthorizeImage" column="brand_authorize_image"/>
+        <result property="brandStatus" column="brand_status"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="noauthorizeNotifyTime" column="noauthorize_notify_time"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="approverId" column="approver_id"/>
+        <result property="approveMemo" column="approve_memo"/>
+        <result property="approveState" column="approve_state"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="approveDiff" column="approve_diff"/>
+    </resultMap>
+    <sql id="columns">
+        id,goods_brand_id,ordertype_id,brand_name,brand_image,brand_authorize_image,brand_status,start_time,end_time,noauthorize_notify_time,vendor_id,approver_id,approve_memo,approve_state,del_flag,create_oper,create_time,modify_oper,modify_time,approve_diff
+    </sql>
+
+    <insert id="insert" parameterType="BrandAuthorizeModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_brand_authorize
+        (goods_brand_id
+        ,ordertype_id
+        ,brand_name
+        ,brand_image
+        ,brand_authorize_image
+        ,brand_status
+        ,start_time
+        ,end_time
+        ,noauthorize_notify_time
+        ,vendor_id
+        ,approver_id
+        ,approve_memo
+        ,approve_state
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,approve_diff)
+        values(#{goodsBrandId}
+        ,#{ordertypeId}
+        ,#{brandName}
+        ,#{brandImage}
+        ,#{brandAuthorizeImage}
+        ,#{brandStatus}
+        ,#{startTime}
+        ,#{endTime}
+        ,#{noauthorizeNotifyTime}
+        ,#{vendorId}
+        ,#{approverId}
+        ,#{approveMemo}
+        ,#{approveState}
+        ,#{delFlag}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now()
+        ,#{approveDiff})
+    </insert>
+
+    <update id="update" parameterType="BrandAuthorizeModel">
+        update tbl_brand_authorize set
+        modify_time = now()
+        <if test="goodsBrandId !=null">,goods_brand_id = #{goodsBrandId}</if>
+        <if test="ordertypeId !=null">,ordertype_id = #{ordertypeId}</if>
+        <if test="brandName !=null">,brand_name = #{brandName}</if>
+        <if test="brandImage !=null">,brand_image = #{brandImage}</if>
+        <if test="brandAuthorizeImage !=null">,brand_authorize_image = #{brandAuthorizeImage}</if>
+        <if test="brandStatus !=null">,brand_status = #{brandStatus}</if>
+        <if test="startTime !=null">,start_time = #{startTime}</if>
+        <if test="endTime !=null">,end_time = #{endTime}</if>
+        <if test="noauthorizeNotifyTime !=null">,noauthorize_notify_time = #{noauthorizeNotifyTime}</if>
+        <if test="vendorId !=null">,vendor_id = #{vendorId}</if>
+        <if test="approverId !=null">,approver_id = #{approverId}</if>
+        <if test="approveMemo !=null">,approve_memo = #{approveMemo}</if>
+        <if test="approveState !=null">,approve_state = #{approveState}</if>
+        <if test="delFlag !=null">,del_flag = #{delFlag}</if>
+        <if test="createOper !=null">,create_oper = #{createOper}</if>
+        <if test="createTime !=null">,create_time = #{createTime}</if>
+        <if test="modifyOper !=null">,modify_oper = #{modifyOper}</if>
+        <if test="approveDiff !=null">,approve_diff = #{approveDiff}</if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="goodsBrandId !=null">and goods_brand_id = #{goodsBrandId}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="brandName !=null">and brand_name = #{brandName}</if>
+            <if test="brandImage !=null">and brand_image = #{brandImage}</if>
+            <if test="brandAuthorizeImage !=null">and brand_authorize_image = #{brandAuthorizeImage}</if>
+            <if test="brandStatus !=null">and brand_status = #{brandStatus}</if>
+            <if test="startTime !=null">and start_time = #{startTime}</if>
+            <if test="endTime !=null">and end_time = #{endTime}</if>
+            <if test="noauthorizeNotifyTime !=null">and noauthorize_notify_time = #{noauthorizeNotifyTime}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="approverId !=null">and approver_id = #{approverId}</if>
+            <if test="approveMemo !=null">and approve_memo = #{approveMemo}</if>
+            <if test="approveState !=null">and approve_state = #{approveState}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="approveDiff !=null">and approve_diff = #{approveDiff}</if>
+        </where>
+    </sql>
+    <sql id="conditionsQuery">
+        <where>
+            del_flag = 0
+            <if test="status ==1">and approve_state in ('00','01','02')</if>
+            <if test="status == 2">and approve_state = '00'</if>
+            <if test="status == 3">and date_format(now(),'%Y-%m-%d') &lt;= date_format(end_time,'%Y-%m-%d') and date_format(end_time,'%Y-%m-%d') &lt;= date_format(DATE_SUB(NOW(), INTERVAL -1 MONTH),'%Y-%m-%d')</if>
+            <if test="status == 4">and date_format(end_time,'%Y-%m-%d') &lt;= date_format(now(),'%Y-%m-%d') </if>
+            <if test="status == 5">and approve_state = '02'</if>
+            <if test="orderType == 'JF'">and ordertype_id = 'JF'</if>
+            <if test="orderType == 'YG'">and ordertype_id = 'YG'</if>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="goodsBrandId !=null">and goods_brand_id = #{goodsBrandId}</if>
+            <if test="ordertypeId !=null">and ordertype_id = #{ordertypeId}</if>
+            <if test="brandName !=null">and
+                brand_name LIKE concat(concat('%',#{brandName}),'%')
+            </if>
+            <if test="vendorIds !=null">
+                and vendor_id in
+                <foreach collection="vendorIds" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="brandImage !=null">and brand_image = #{brandImage}</if>
+            <if test="brandAuthorizeImage !=null">and brand_authorize_image = #{brandAuthorizeImage}</if>
+            <if test="brandStatus !=null">and brand_status = #{brandStatus}</if>
+            <if test="startTime !=null">and start_time) = #{startTime}</if>
+            <if test="endTime !=null">and date_format(end_time,'%Y-%m-%d') = date_format(#{endTime},'%Y-%m-%d')</if>
+            <if test="noauthorizeNotifyTime !=null">and noauthorize_notify_time = #{noauthorizeNotifyTime}</if>
+            <if test="approverId !=null">and approver_id = #{approverId}</if>
+            <if test="approveMemo !=null">and approve_memo = #{approveMemo}</if>
+            <if test="approveState !=null">and approve_state = #{approveState}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <!--<if test="createTime !=null">and date_format(create_time,'%Y-%m-%d')-->
+                <!--=date_format(#{createTime},'%Y-%m-%d')-->
+            <!--</if>-->
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+            <if test="brandNames !=null">and brand_name = #{brandNames}</if>
+
+            <!--供应商-->
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="v_startTime !=null">
+                and date_format(end_time,'%Y-%m-%d') &gt;= date_format(#{v_startTime},'%Y-%m-%d')
+            </if>
+            <if test="v_endTime !=null">
+                and date_format(end_time,'%Y-%m-%d') &lt;= date_format(#{v_endTime},'%Y-%m-%d')
+            </if>
+            <if test="v_startModifyTime !=null">
+                and date_format(create_time,'%Y-%m-%d') &gt;= date_format(#{v_startModifyTime},'%Y-%m-%d')
+            </if>
+            <if test="v_endModifyTime !=null">
+                and date_format(create_time,'%Y-%m-%d') &lt;= date_format(#{v_endModifyTime},'%Y-%m-%d')
+            </if>
+
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="BrandAuthorizeMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_brand_authorize
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="BrandAuthorizeMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_brand_authorize
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="BrandAuthorizeMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_brand_authorize
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="BrandAuthorizeModel">
+        delete from tbl_brand_authorize where id = id
+    </delete>
+    <select id="count" resultType="Long">
+        select count(1)
+        from tbl_brand_authorize
+        <include refid="conditionsQuery"/>
+    </select>
+    <!--查找所有品牌信息-->
+    <select id="pagerQuery" parameterType="Map" resultMap="BrandAuthorizeMap">
+        select <include refid="columns"/>
+        from tbl_brand_authorize
+        <include refid="conditionsQuery"/>
+        <choose>
+            <when test="status == 3 or status == 4">
+                <![CDATA[ order by end_time desc limit #{offset}, #{limit} ]]>
+            </when>
+            <otherwise>
+                <![CDATA[ order by modify_time desc limit #{offset}, #{limit} ]]>
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--查询待审核的品牌信息 add by zhangcheng-->
+    <select id="findBrandCount" resultType="java.lang.Integer">
+        select count(*)
+        from tbl_brand_authorize
+        WHERE approve_state = '00'
+        GROUP BY approve_state
+    </select>
+
+    <!--根据供应商id查询供应商可用的品牌信息 add by chenle-->
+    <select id="findBrandListForVendor" parameterType="Map" resultMap="BrandAuthorizeMap">
+        select
+        <include refid="columns"/>
+        from tbl_brand_authorize
+        where vendor_id = #{vendorId}
+        and approve_state='01'
+        and date_format(start_time,'%Y-%m-%d') &lt;= date_format(now(),'%Y-%m-%d')
+        and date_format(end_time,'%Y-%m-%d') &gt;= date_format(now(),'%Y-%m-%d')
+        <if test="brandName !=null">
+            and brand_name LIKE concat(concat('%',#{brandName}),'%')
+        </if>
+        <if test="ordertypeId !=null">
+            and ordertype_id = #{ordertypeId}
+        </if>
+    </select>
+
+    <select id="findIsAuthroizeByName" parameterType="BrandAuthorizeModel" resultMap="BrandAuthorizeMap">
+        select
+        <include refid="columns"/>
+        from tbl_brand_authorize
+        where brand_name = #{brandName}
+        and ordertype_id = #{ordertypeId}
+        and approve_state in ('00','01')
+    </select>
+
+    <select id="findIsAuthroizeById" parameterType="Long" resultMap="BrandAuthorizeMap">
+        select
+        <include refid="columns"/>
+        from tbl_brand_authorize
+        where goods_brand_id = #{brandId}
+        and approve_state in ('00','01')
+    </select>
+
+    <select id="findBrandAuthorizeByVendorId" parameterType="Map"  resultMap="BrandAuthorizeMap">
+        select
+        <include refid="columns"/>
+        from tbl_brand_authorize
+        where brand_name = #{brandName}
+        and vendor_id=#{vendorId}
+        and approve_state='01'
+        and date_format(start_time,'%Y-%m-%d') &lt;= date_format(now(),'%Y-%m-%d')
+        and date_format(end_time,'%Y-%m-%d') &gt;= date_format(now(),'%Y-%m-%d')
+    </select>
+
+    <update id="updateAll" parameterType="BrandAuthorizeModel">
+        update tbl_brand_authorize set
+        modify_time = now()
+        <if test="goodsBrandId !=null">,goods_brand_id = #{goodsBrandId}</if>
+        <if test="ordertypeId !=null">,ordertype_id = #{ordertypeId}</if>
+        <if test="brandName !=null">,brand_name = #{brandName}</if>
+        <if test="brandImage !=null">,brand_image = #{brandImage}</if>
+        <if test="brandAuthorizeImage !=null">,brand_authorize_image = #{brandAuthorizeImage}</if>
+        <if test="brandStatus !=null">,brand_status = #{brandStatus}</if>
+        <if test="startTime !=null">,start_time = #{startTime}</if>
+        <if test="endTime !=null">,end_time = #{endTime}</if>
+        <if test="noauthorizeNotifyTime !=null">,noauthorize_notify_time = #{noauthorizeNotifyTime}</if>
+        <if test="vendorId !=null">,vendor_id = #{vendorId}</if>
+        <if test="approverId !=null">,approver_id = #{approverId}</if>
+        <if test="approveMemo !=null">,approve_memo = #{approveMemo}</if>
+        <if test="approveState !=null">,approve_state = #{approveState}</if>
+        <if test="delFlag !=null">,del_flag = #{delFlag}</if>
+        <if test="createOper !=null">,create_oper = #{createOper}</if>
+        <if test="createTime !=null">,create_time = #{createTime}</if>
+        <if test="modifyOper !=null">,modify_oper = #{modifyOper}</if>
+        <if test="approveDiff !=null">,approve_diff = #{approveDiff}</if>
+        where brand_name = #{brandName}
+    </update>
+
+    <select id="checkAuthroizeCan" parameterType="java.util.List" resultMap="BrandAuthorizeMap">
+        select
+        <include refid="columns"/>
+        from tbl_brand_authorize
+        where brand_name = #{brandName}
+        and ordertype_id = #{ordertypeId}
+        and del_flag = 0
+        and approve_state in ('00','01')
+    </select>
+
+    <select id="findBrandAuthorizeByBrandId" parameterType="java.util.List" resultMap="BrandAuthorizeMap">
+        select
+        <include refid="columns"/>
+        from tbl_brand_authorize
+        where goods_brand_id = #{goodsBrandId}
+    </select>
+</mapper>
+
+

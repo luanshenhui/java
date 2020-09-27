@@ -1,0 +1,12 @@
+{{#partial "realTitle"}}积分兑换报表（录入组赠品代码）{{/partial}}
+{{#partial "realBody"}}
+    <div class="container-components">
+        {{#inject "report_manage" true}}
+            {
+            "reportType":"JF20",
+            "reportCode":"JF20"
+            }
+        {{/inject}}
+    </div>
+{{/partial}}
+{{> views/index_layout}}

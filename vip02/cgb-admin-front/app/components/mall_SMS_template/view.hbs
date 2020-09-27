@@ -1,0 +1,188 @@
+{{#component "sms-template js-component"}}
+    <p class="components-title"><strong>- 短信模板管理 -</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <form class="form item-form-search form-inline">
+                <fieldset>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="vendorId">ID:</label>
+                            <input type="text" name="id" value="{{id}}" class="form-control"/>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="status">当前状态:</label>
+                            <select name="status" id="status">
+                                <option value="">请选择</option>
+                                <option value="0201" {{#equals status "0201" }} selected {{/equals}}>待处理</option>
+                                <option value="0202" {{#equals status "0202" }} selected {{/equals}}>已提交</option>
+                                <option value="0203" {{#equals status "0203" }} selected {{/equals}}>处理中</option>
+                                <option value="0204" {{#equals status "0204" }} selected {{/equals}}>已完成</option>
+                                <option value="0205" {{#equals status "0205" }} selected {{/equals}}>已拒绝</option>
+                                <option value="0206" {{#equals status "0206" }} selected {{/equals}}>白名单发送</option>
+                                <option value="0207" {{#equals status "0207" }} selected {{/equals}}>发送失败</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <input class="btn btn-success btn-small margin-right-0 float-right" type="submit"
+                                   value="查询"/>
+                        </span>
+                    </p>
+                </fieldset>
+            </form>
+
+            <div class="m-b-10">
+                {{#authorial "shortMesMan_add"}}
+                    <button class="btn btn-info btn-small js-sms-template-add">+ 新增</button>
+                {{/authorial}}
+                {{#authorial "shortMesMan_edit"}}
+                    <button class="btn btn-info btn-small js-sms-template-update">编辑</button>
+                {{/authorial}}
+                {{#authorial "shortMesMan_add,shortMesMan_edit"}}
+                    <button id="{{id}}" class="btn btn-small btn-info js-sms-template-submit"
+                            data-toggle="confirm"
+                            data-title="您确定提交吗?" data-content="提交之后无法修改,确定要提交吗？"
+                            data-event="confirm:submit-template">
+                        提交
+                    </button>
+
+                {{/authorial}}
+                {{#authorial "shortMesMan_add"}}
+                        <button class="btn btn-info btn-small js-sms-template-import">批量导入</button>
+                {{/authorial}}
+                {{#authorial "shortMesMan_delete"}}
+                    <button id="{{id}}" class="btn btn-small btn-info js-sms-template-delete"
+                            data-toggle="confirm"
+                            data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                            data-event="confirm:delete-template">
+                        删除
+                    </button>
+                {{/authorial}}
+                <button class="btn btn-info btn-small js-sms-template-name">名单预览</button>
+                <button class="btn btn-info btn-small js-sms-template-preview">短信预览</button>
+                <button class="btn btn-info btn-small js-sms-template-result">导入结果查询</button>
+                </button>
+            </div>
+
+
+            <table class="table" data-url="{{_HREF_.mainContext}}">
+                <thead>
+                <tr>
+                    <th width="2%"></th>
+                    <th width="4%">ID</th>
+                    <th width="6%">短信模板</th>
+                    <th width="6%">单品编码</th>
+                    <th width="11%">单品名称</th>
+                    <th width="12%">有效期</th>
+                    <th width="6%">优惠券金额</th>
+                    <th width="6%">是否使用积分</th>
+                    <th width="8%">当前状态</th>
+                    <th width="8%">导入状态</th>
+                    <th width="9%">提交时间</th>
+                    <th width="9%">审核通过时间</th>
+                    <th width="12%">手工参数</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{id}}" data-data="{{json this}}">
+                        <td>
+                            <input class="js-check-this" name="checkSmsTemplate" type="checkbox" data-id="{{id}}"
+                                   data-data="{{json this}}" data-status="{{status}}" data-loadstatus="{{loadStatus}}" data-enddate="{{endDate}}"
+                                   data-newdate="{{newDate}}"/>
+                        </td>
+                        <td class="id">{{id}}</td>
+                        <td class="smsp-id">{{smspId}}</td>
+                        <td class="item-code">{{itemCode}}</td>
+                        <td class="item-name">{{itemName}}</td>
+                        <td class="time">{{#formatDate beginDate 'day'}}{{/formatDate}}
+                            - {{#formatDate endDate 'day'}}{{/formatDate}}</td>
+                        <td class="voucher-price">{{voucherPrice}}</td>
+                        <!--是否使用积分-->
+                        <td class="ifPoint">
+                            {{#equals "0" ifPoint}}
+                                否
+                            {{else}}
+                                是
+                            {{/equals}}
+                        </td>
+                        <!--当前状态-->
+                        <td class="status">
+                            {{#equals "0201" status}}
+                                待处理
+                            {{else}}
+                                {{#equals "0202" status}}
+                                    已提交
+                                {{else}}
+                                    {{#equals "0203" status}}
+                                        处理中
+                                    {{else}}
+                                        {{#equals "0204" status}}
+                                            已完成
+                                        {{else}}
+                                            {{#equals "0205" status}}
+                                                已拒绝
+                                            {{else}}
+                                                {{#equals "0206" status}}
+                                                    白名单发送
+                                                {{else}}
+                                                    {{#equals "0207" status}}
+                                                        发送失败
+                                                    {{/equals}}
+                                                {{/equals}}
+                                            {{/equals}}
+                                        {{/equals}}
+                                    {{/equals}}
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                        <!--导入状态-->
+                        <td class="loadStatus">
+                            {{#equals "0201" loadStatus}}
+                                导入中
+                            {{else}}
+                                {{#equals "0202" loadStatus}}
+                                    已导入
+                                {{else}}
+                                    {{#equals "0203" loadStatus}}
+                                        导入失败
+                                    {{/equals}}
+                                {{/equals}}
+                            {{/equals}}
+                        </td>
+                        <!--如果状态时待处理则提交时间和审核通过时间不显示-->
+                        <td class="sub-datetime">
+                            {{#equals "0201" status}}
+                            {{else}}
+                                {{#formatDate subDatetime 'day'}}
+                                {{/formatDate}}
+                            {{/equals}}
+                        </td>
+                        <td class="check-datetime">
+                            {{#equals "0201" status}}
+                            {{else}}
+                                {{#formatDate checkDatetime 'day'}}
+                                {{/formatDate}}
+                            {{/equals}}
+                        </td>
+                        <td class="other-mess" title="{{otherMess}}" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{otherMess}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="m-b-10 m-l-10 m-t-10">
+                {{#authorial "shortMesMan_add,shortMesMan_edit"}}
+                    <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                    <a href="javascript:void(0)" class="btn btn-success btn-small js-all-submit font-color-bule" data-type="pass">提交</a>
+                {{/authorial}}
+                {{#authorial "shortMesMan_delete"}}
+                    <a href="javascript:void(0)" class="btn btn-success btn-small js-all-delete font-color-bule" data-type="refuse">删除</a>
+                {{/authorial}}
+            </div>
+            {{#equals _DATA_.total "0"}}
+                <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+                <div class="pagination" data-total="{{_DATA_.total}}"></div>
+            {{/equals}}
+        </div>
+    </div>
+{{/component}}

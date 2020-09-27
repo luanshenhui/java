@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>regist.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<script type="text/javascript" src="js/regist.js"></script>
+  </head>
+  
+  <body>
+  <center>
+    <h2>用户注册</h2><br>
+    <form action="regist.do" method="get">
+    <table>
+    <tr>
+    <td>*请输入账号:</td>
+    <td><input type="text" id="loginId" name="loginid" onblur="checkId();"/>用户名必须为6~18位数字</td>
+    </tr>
+    <tr>
+    <td>*请输入密码:</td>
+    <td><input type="password" id="pwd1" name="pwd1" id="pwd1" onblur="checkPwd();"/>密码必须为6~18位</td>
+    </tr>
+    <tr>
+    <td>*请确认密码:</td>
+    <td><input type="password" id="pwd2" name="pwd2" id="pwd2" onblur="check();"/>必须和密码相同</td>
+    </tr>
+    <tr>
+    <td>*请输入姓名:</td>
+    <td><input type="text" id="name" name="name" onblur="checkName();"/>不能为空</td>
+    </tr>
+    <tr>
+    <td align="right"><input type="submit" value="注册" onclick="return checkSubmit();"/></td>
+    <td align="left"><input type="reset" value="重置"/></td>
+    </tr>
+    </table>
+    </form>
+    <div id="mag"></div>
+    </center>
+  </body>
+</html>

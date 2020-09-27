@@ -1,0 +1,22 @@
+<script src="../realmname/post.js"></script>
+<form id="form" class="form_template">
+<input type="hidden" name="ID" id="ID"/>
+<h1></h1>
+<table>
+	<tr>
+		<td class="label lblCustomerName nowrap"></td>
+		<td><input type="text" id="customerName" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblRealmName nowrap"></td>
+		<td><input type="text" id="realmName" class="textbox"/></td>
+	</tr>
+	<tr>
+		<td class="label lblTitle nowrap"></td>
+		<td><input type="text" id="title" class="textbox"/></td>
+	</tr>
+</table>
+<div class="operation">
+	<a id="btnSaveRealm"/> <a id="btnCancelRealm"/>
+</div>
+</form>

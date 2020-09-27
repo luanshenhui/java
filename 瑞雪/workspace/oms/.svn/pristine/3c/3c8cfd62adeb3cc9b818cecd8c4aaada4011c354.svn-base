@@ -1,0 +1,85 @@
+package cn.rkylin.oms.system.dictionary.dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Repository;
+import cn.rkylin.core.IDataBaseFactory;
+import cn.rkylin.oms.system.dictionary.domain.OMS_DICT;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE;
+import cn.rkylin.oms.system.role.domain.WF_ORG_ROLE_UNIT;
+import cn.rkylin.oms.system.role.domain.WF_ORG_USER_ROLE;
+import cn.rkylin.oms.system.role.vo.RoleVo;
+
+/**
+ * <p>
+ * Module : 角色管理
+ * </p>
+ * <p>
+ * Description: 角色业务对象
+ * </p>
+ * <p>
+ * Remark :
+ * </p>
+ */
+@Repository(value = "dictDAO")
+public class DictDAOImpl implements IDictDAO {
+	
+	/**
+	 * 自定义baseDao 增删改查方法
+	 */
+	@Autowired
+	protected IDataBaseFactory dao;
+	
+	/**
+	 * 自定义baseDao 增删改查方法
+	 */
+	@Autowired
+	private IDataBaseFactory dataBaseFactory;
+
+
+	@Override
+	public void insert(String string, OMS_DICT dict) throws Exception {
+		dao.insert(string, dict);
+	}
+
+
+	@Override
+	public void delete(String stationParam, String string) throws Exception {
+		dao.delete(stationParam, string);
+	}
+
+
+	@Override
+	public void update(String stationParam, OMS_DICT ur) throws Exception {
+		dao.update(stationParam, ur);
+	}
+
+//	/**
+//	 * 方法简要描述信息.
+//	 * <p>
+//	 * 描述: 获取角色
+//	 * </p>
+//	 * <p>
+//	 * 备注: 详见顺序图
+//	 * </p>
+//	 * 
+//	 * @param roleVO
+//	 *            - 角色vo，包含角色下的人员、角色可管理的组织列表
+//	 */
+//	@SuppressWarnings("rawtypes")
+//	@Override
+//	public List getDictByCondition(WF_ORG_ROLE roleVO, int page, int rows) throws Exception {
+//		// List<WF_ORG_ROLE> resultList = new ArrayList();
+//		RoleVo vo = new RoleVo();
+//		BeanUtils.copyProperties(roleVO, vo);
+//		return dataBaseFactory.findPage(page, rows, "getRoleByCondition", vo).getList();
+//	}
+
+	
+
+}

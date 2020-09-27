@@ -1,0 +1,18 @@
+package cn.rkylin.oms.system.messageDefine.dao;
+
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE;
+
+public interface IMessageDefineDao {
+
+	void saveMessage(OMS_MESSAGE message) throws Exception;
+
+<<<<<<< .mine
+	void delete(String stationParam,String string)throws Exception;
+	
+	void doEnable(String msgEnable,String string)throws Exception;
+||||||| .r475
+=======
+	OMS_MESSAGE getMessageInfo(OMS_MESSAGE message) throws Exception;
+
+>>>>>>> .r490
+}

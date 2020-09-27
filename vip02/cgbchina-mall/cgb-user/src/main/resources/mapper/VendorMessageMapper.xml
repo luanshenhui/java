@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VendorMessage">
+    <resultMap id="VendorMessageMap" type="VendorMessageModel">
+        <result property="id" column="id"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="type" column="type"/>
+        <result property="content" column="content"/>
+        <result property="isRead" column="is_read"/>
+        <result property="pushTime" column="push_time"/>
+        <result property="orderId" column="order_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <sql id="columns">
+        id,vendor_id,type,content,is_read,push_time,order_id,del_flag,create_oper,create_time,modify_oper,modify_time
+    </sql>
+
+    <insert id="insert" parameterType="VendorMessageModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_vendor_message
+        (vendor_id
+        ,type
+        ,content
+        ,is_read
+        ,push_time
+        ,order_id
+        ,del_flag
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values(#{vendorId}
+        ,#{type}
+        ,#{content}
+        ,#{isRead}
+        ,now()
+        ,#{orderId}
+        ,0
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,now())
+    </insert>
+
+    <update id="update" parameterType="VendorMessageModel">
+        update tbl_vendor_message set
+        <if test="vendorId !=null">vendor_id = #{vendorId}
+            ,
+        </if>
+        <if test="type !=null">type = #{type}
+            ,
+        </if>
+        <if test="content !=null">content = #{content}
+            ,
+        </if>
+        <if test="isRead !=null">is_read = #{isRead}
+            ,
+        </if>
+        <if test="pushTime !=null">push_time = #{pushTime}
+            ,
+        </if>
+        <if test="orderId !=null">order_id = #{orderId}
+            ,
+        </if>
+        <if test="delFlag !=null">del_flag = #{delFlag}
+            ,
+        </if>
+        <if test="createOper !=null">create_oper = #{createOper}
+            ,
+        </if>
+        <if test="createTime !=null">create_time = #{createTime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        <if test="modifyTime !=null">modify_time = #{modifyTime}
+        </if>
+        where id = #{id}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="id !=null">and id = #{id}</if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="type !=null">and type = #{type}</if>
+            <if test="content !=null">and content = #{content}</if>
+            <if test="isRead !=null">and is_read = #{isRead}</if>
+            <if test="pushTime !=null">and push_time = #{pushTime}</if>
+            <if test="orderId !=null">and order_id = #{orderId}</if>
+            <if test="delFlag !=null">and del_flag = #{delFlag}</if>
+            <if test="createOper !=null">and create_oper = #{createOper}</if>
+            <if test="createTime !=null">and create_time = #{createTime}</if>
+            <if test="modifyOper !=null">and modify_oper = #{modifyOper}</if>
+            <if test="modifyTime !=null">and modify_time = #{modifyTime}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="VendorMessageMap">
+        SELECT id,
+        <include refid="columns"/>
+        from tbl_vendor_message
+        where id=#{id}
+    </select>
+    <select id="findAll" resultMap="VendorMessageMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_message
+        <include refid="conditions"/>
+    </select>
+
+    <sql id="queryConditon">
+        <where>
+            del_flag = 0
+            <if test="pushTime !=null"> and  <![CDATA[ push_time >=  #{pushTime} ]]> </if>
+            <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+            <if test="type !=null and type neq 5">and `type` = #{type}</if>
+            <if test="type !=null and type eq 5">and `type` in ( '0','2','4')</if>
+        </where>
+    </sql>
+
+    <select id="pager" parameterType="Map" resultMap="VendorMessageMap">
+        select id,
+        <include refid="columns"/>
+        from tbl_vendor_message
+        <include refid="queryConditon"/>
+        <![CDATA[ order by push_time desc limit #{offset}, #{limit} ]]>
+    </select>
+
+    <select id="count" resultType="Long" parameterType="Map">
+        select count(1)
+        from tbl_vendor_message
+        <include refid="queryConditon"/>
+    </select>
+
+
+    <delete id="delete" parameterType="VendorMessageModel">
+        delete from tbl_vendor_message where id = id
+    </delete>
+    <select id="findNewCount" resultType="Long">
+        select COUNT(*)
+        from tbl_vendor_message
+        <include refid="conditions"/>
+    </select>
+
+    <update id="readAllMessage" parameterType="Map">
+         update tbl_vendor_message set is_read = "1" where del_flag = 0
+        <if test="typeId !=null and typeId eq 5">and `type` in ('0','2')</if>
+        <if test="typeId !=null and typeId eq 0">and `type` = '0'</if>
+        <if test="typeId !=null and typeId eq 2">and `type` = '2'</if>
+        <if test="vendorId !=null">and vendor_id = #{vendorId}</if>
+    </update>
+
+
+    <update id="readMessage" parameterType="String">
+        update tbl_vendor_message set is_read = "1" where del_flag = 0 and id=#{id}
+    </update>
+
+
+</mapper>
+
+

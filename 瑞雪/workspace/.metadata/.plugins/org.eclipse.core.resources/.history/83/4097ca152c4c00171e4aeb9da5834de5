@@ -1,0 +1,95 @@
+package cn.rkylin.oms.system.messageDefine.vo;
+
+import org.apache.commons.lang.StringUtils;
+
+import cn.rkylin.oms.system.messageDefine.domain.OMS_MESSAGE_SHOP;
+
+public class MessageShopVo extends OMS_MESSAGE_SHOP{
+	
+	/**
+	 * 序列号
+	 */
+	private static final long serialVersionUID = 5803839939171440398L;
+	private static final String OPERATION_BTN_EDIT = "<button onclick=\"operationEdit(this)\" shopid=\"%s\" type=\"button\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-edit\"></i>&nbsp;修改</button>";
+	private static final String STATUS_CHK = "<input id=\"chkItem\" name=\"chkItem\" type=\"checkbox\" mid=\"%s\" /></input>";
+	private String operationShop;
+	
+	private String chk;;
+	private String shopType;
+	
+	private String template;
+	
+	public String getTemplate() {
+		return template;
+	}
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
+	private String shopName;
+	private String shopDeleted;
+	public String getShopDeleted() {
+		return shopDeleted;
+	}
+	public void setShopDeleted(String shopDeleted) {
+		this.shopDeleted = shopDeleted;
+	}
+	
+	private String orderBy;
+	public String getShopName() {
+		return shopName;
+	}
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+	private String enabledShop;
+	
+	private String prjName;
+	
+	
+	
+	public String getShopType() {
+		return shopType;
+	}
+	public void setShopType(String shopType) {
+		this.shopType = shopType;
+	}
+	public String getEnabledShop() {
+		return enabledShop;
+	}
+	public void setEnabledShop(String enabledShop) {
+		this.enabledShop = enabledShop;
+	}
+	public String getPrjName() {
+		return prjName;
+	}
+	public void setPrjName(String prjName) {
+		this.prjName = prjName;
+	}
+	public String getOperationShop() {
+		return operationShop;
+	}
+	public void setOperationShop(String operation) {
+		StringBuffer opButton = new StringBuffer();
+		if (StringUtils.isNotEmpty(getMsgId())) {
+				opButton.append(String.format(OPERATION_BTN_EDIT, getMsId()));
+				opButton.append("&nbsp;");
+		}
+		this.operationShop = opButton.toString();;
+	}
+	public String getOrderBy() {
+		return orderBy;
+	}
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+	public String getChk() {
+		return chk;
+	}
+	public void setChk(String chk) {
+		this.chk = String.format(STATUS_CHK, this.getShopId()).toString();
+	}
+	
+	
+	
+}

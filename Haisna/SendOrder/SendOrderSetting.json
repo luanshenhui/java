@@ -1,0 +1,266 @@
+{
+    "socket": [
+        {
+            "key": "LAINS_PRINTLABEL",
+            "description": "ラベル印刷オーダ（検体検査）",
+            "ipaddress": "127.0.0.1",
+            "portno": 5211,
+            "timeout": 20000
+        },
+        {
+            "key": "RAYPAX_YG",
+            "description": "状態変更オーダ（横河）",
+            "ipaddress": "127.0.0.1",
+            "portno": 3062,
+            "timeout": 20000
+        },
+        {
+            "key": "RAYPAX_TP",
+            "description": "状態変更オーダ（トプコン）",
+            "ipaddress": "127.0.0.1",
+            "portno": 3065,
+            "timeout": 20000
+        },
+        {
+            "key": "RAYPAX_FK",
+            "description": "状態変更オーダ（フクダ電子）",
+            "ipaddress": "127.0.0.1",
+            "portno": 3068,
+            "timeout": 20000
+        }
+    ],
+    "msg": [
+        {
+            "key": "LAINS_PRINTLABEL",
+            "description": "ラベル印刷オーダ（検体検査）",
+            "tag": [
+                {
+                    "index": 1,
+                    "nameja": "連番",
+                    "nameen": "SEQ",
+                    "type": 2,
+                    "startpos": 1,
+                    "length": 5,
+                    "spaceflg": 0,
+                    "values": []
+                },
+                {
+                    "index": 2,
+                    "nameja": "ｼｽﾃﾑｺｰﾄﾞ",
+                    "nameen": "SYS-C",
+                    "type": 1,
+                    "startpos": 6,
+                    "length": 1,
+                    "spaceflg": 0,
+                    "values": [ "H" ]
+                },
+                {
+                    "index": 3,
+                    "nameja": "電文種別",
+                    "nameen": "DENBUN-SYUBETU",
+                    "type": 1,
+                    "startpos": 7,
+                    "length": 2,
+                    "spaceflg": 0,
+                    "values": [ "KJ", "KI", "KK" ]
+                },
+                {
+                    "index": 4,
+                    "nameja": "継続ﾌﾗｸﾞ",
+                    "nameen": "CONT-F",
+                    "type": 1,
+                    "startpos": 9,
+                    "length": 1,
+                    "spaceflg": 0,
+                    "values": [ "C", "E" ]
+                },
+                {
+                    "index": 5,
+                    "nameja": "宛先ｺｰﾄﾞ",
+                    "nameen": "TO-C",
+                    "type": 1,
+                    "startpos": 10,
+                    "length": 1,
+                    "spaceflg": 0,
+                    "values": [ "F", "T" ]
+                },
+                {
+                    "index": 6,
+                    "nameja": "発信元ｺｰﾄﾞ",
+                    "nameen": "FROM-C",
+                    "type": 1,
+                    "startpos": 11,
+                    "length": 1,
+                    "spaceflg": 0,
+                    "values": [ "F", "T" ]
+                },
+                {
+                    "index": 7,
+                    "nameja": "処理日",
+                    "nameen": "SYORI-H",
+                    "type": 2,
+                    "startpos": 12,
+                    "length": 8,
+                    "spaceflg": 0,
+                    "values": []
+                },
+                {
+                    "index": 8,
+                    "nameja": "処理時間",
+                    "nameen": "SYORI-T",
+                    "type": 2,
+                    "startpos": 20,
+                    "length": 6,
+                    "spaceflg": 0,
+                    "values": []
+                },
+                {
+                    "index": 9,
+                    "nameja": "端末名",
+                    "nameen": "WS-MEI",
+                    "type": 1,
+                    "startpos": 26,
+                    "length": 8,
+                    "spaceflg": 0,
+                    "values": []
+                },
+                {
+                    "index": 10,
+                    "nameja": "利用者番号",
+                    "nameen": "RIYOSYA-ID",
+                    "type": 1,
+                    "startpos": 34,
+                    "length": 8,
+                    "spaceflg": 0,
+                    "values": []
+                },
+                {
+                    "index": 11,
+                    "nameja": "処理区分",
+                    "nameen": "SYORI-KBN",
+                    "type": 1,
+                    "startpos": 42,
+                    "length": 2,
+                    "spaceflg": 0,
+                    "values": [ "01", "02", "03" ]
+                },
+                {
+                    "index": 12,
+                    "nameja": "応答種別",
+                    "nameen": "SYUBETU",
+                    "type": 1,
+                    "startpos": 44,
+                    "length": 2,
+                    "spaceflg": 1,
+                    "values": [ "OK", "N1", "N2", "N3", "SP" ]
+                },
+                {
+                    "index": 13,
+                    "nameja": "電文長",
+                    "nameen": "DENBUN-LNG",
+                    "type": 2,
+                    "startpos": 46,
+                    "length": 5,
+                    "spaceflg": 0,
+                    "values": []
+                }
+            ]
+        },
+        {
+            "key": "RAYPAX",
+            "description": "状態変更オーダ",
+            "tag": [
+                {
+                    "index": 1,
+                    "nameja": "システムコード",
+                    "nameen": "SYS-C",
+                    "type": 1,
+                    "startpos": 1,
+                    "length": 1,
+                    "spaceflg": 0,
+                    "values": [ "H" ]
+                },
+                {
+                    "index": 2,
+                    "nameja": "電文種別",
+                    "nameen": "DENBUN-SYUBETU",
+                    "type": 1,
+                    "startpos": 2,
+                    "length": 2,
+                    "spaceflg": 0,
+                    "values": [ "OR" ]
+                },
+                {
+                    "index": 3,
+                    "nameja": "発信元コード",
+                    "nameen": "FROM-C",
+                    "type": 1,
+                    "startpos": 4,
+                    "length": 2,
+                    "spaceflg": 0,
+                    "values": [ "YG", "TP", "FK" ]
+                },
+                {
+                    "index": 4,
+                    "nameja": "送信日時",
+                    "nameen": "SEND-D",
+                    "type": 2,
+                    "startpos": 6,
+                    "length": 14,
+                    "spaceflg": 0,
+                    "values": []
+                },
+                {
+                    "index": 5,
+                    "nameja": "処理区分",
+                    "nameen": "SYORI-KBN",
+                    "type": 1,
+                    "startpos": 20,
+                    "length": 1,
+                    "spaceflg": 1,
+                    "values": [ "SP" ]
+                },
+                {
+                    "index": 6,
+                    "nameja": "継続フラグ",
+                    "nameen": "CONT-F",
+                    "type": 1,
+                    "startpos": 21,
+                    "length": 1,
+                    "spaceflg": 0,
+                    "values": [ "E" ]
+                },
+                {
+                    "index": 7,
+                    "nameja": "応答種別",
+                    "nameen": "SYUBETU",
+                    "type": 1,
+                    "startpos": 22,
+                    "length": 2,
+                    "spaceflg": 0,
+                    "values": [ "00", "10", "20", "30" ]
+                },
+                {
+                    "index": 8,
+                    "nameja": "電文長",
+                    "nameen": "DENBUN-LNG",
+                    "type": 2,
+                    "startpos": 24,
+                    "length": 7,
+                    "spaceflg": 0,
+                    "values": []
+                },
+                {
+                    "index": 9,
+                    "nameja": "空白",
+                    "nameen": "FILLER",
+                    "type": 1,
+                    "startpos": 31,
+                    "length": 20,
+                    "spaceflg": 1,
+                    "values": [ "SP" ]
+                }
+            ]
+        }
+    ]
+}

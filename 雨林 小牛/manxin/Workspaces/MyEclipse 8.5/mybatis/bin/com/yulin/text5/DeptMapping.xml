@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yulin.text5.DeptMapping">
+	<select id="findAll" resultMap="deptMap">
+		select * from dept;
+	</select>
+	<select id="findInfoById" parameterType="int" resultType="com.yulin.text5.Info">
+		select * from info where d_id = #{id}
+	</select>
+	<resultMap type="com.yulin.text5.Dept" id="deptMap">
+		<id property="id" column="id"/>
+		<collection property="infos" column="id" select="findInfoById"/>
+	</resultMap>
+</mapper>

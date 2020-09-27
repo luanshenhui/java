@@ -1,0 +1,353 @@
+一：JavaScript 概述
+getElementById   innerHTML
+	1、JavaScript--js，是一种
+			基于对象和事件驱动的
+			解释性的
+			脚本语言，嵌入到页面上
+	2、特征：html+CSS+js--需要浏览器查看
+			标准的规范代码
+
+	3、如何书写(***)
+		a、事件定义：代码直接写在事件中
+		b、script块：代码写在页面的head里的script里，
+				使用方法封装，事件中调用方法
+				---适用于当前页面的重用
+		c、js文件：代码写在单独的 js 文件里，使用方法封装
+				页面先引入，事件中调用
+				---推荐方式
+
+二、基础语法
+	1、标识符的规范---方法的名称、变量的名称
+			a、字母、数字、下划线、$，不以数字开头
+			b、不能和系统保留关键字重复
+	2、代码书写规范---大小写敏感、以；结束
+	3、变量的声明（***）--js是一种松散类型的语言,弱类型语言，声明变量使用
+			var 关键字，变量的数据类型以赋值为准
+		var a1 = "mary";
+		var a2 = 100;
+		var a3 = true;
+	4、数据类型
+		简单类型：string、number、boolean
+		特殊类型：null、undefined
+		复杂类型：Array等
+	5、数据类型的转换（***）
+		a、各种简单类型
+			string：以一对单引号或者一对双引号
+				    特殊字符：使用转义
+				    中文：\u4e00表示一个汉字，用于那些不允许
+						使用中文的表达式中，比如正则表达式
+			number：var a=1;	var a = 2.3;
+			bool：true、false--1、0
+		b、隐式转换：将不同类型的数据，自动转换
+			string+numer---string
+			string+bool---string(true/false)
+			number+bool---number(1/0)
+			bool+bool ---number(1/0)
+
+		c、显式转换：调用方法实现转换
+			parseInt---成功转换，否则NaN(not a number)
+			parseFloat---经常需要结合 isNaN 方法使用
+			toString
+							
+	6、运算符
+		a、各种运算符
+		b、比较运算符中，特殊(***)
+				a == b：相等---值
+				a === b：严格相等---值和类型
+		c、三目/元运算符
+				xxx?a1:a2;
+
+	7、流程控制：改变其默认的执行顺序
+		a、分支
+			if/else
+			switch/case
+
+		b、循环
+			for----var i=0;
+			while
+
+三、常用内置对象
+	1、js中的对象：内置对象、DOM、BOM对象等
+	2、String 对象
+		a、创建
+				var s = "mary";
+				var s = new String("mary");
+		b、属性
+				s.length
+		c、方法
+				s.charAt/charCodeAt()
+				s.replace("a","*")
+				s.split(",")----字符串的数组
+				s.toUpperCase/toLowerCase()
+				s.indexOf/lastIndexOf("a")
+				s.substring(start,end)
+		d、字符串，需要结合正则表达式实现特殊的功能（***）
+			replace/search/match
+
+			正则表达式：  \d{3}   [a-z]{3,5}--纯文本类型的表达式
+					表示一种匹配，不同的应用
+			js中应用正则表达式
+				/表达式/标识符
+			添加标识符：
+				g---global
+				i---忽略大小写ignource
+				m---multiline
+
+	3、Array 对象
+		a、创建和初始化（***）
+			var a = new Array();
+			a[0] = "mary";
+			a[1] = 100;
+			a[2] = true;
+
+			var a = new Array("mary",100,true);
+
+			var a = ["mary",100,false];
+
+			二维数组：
+				var a = new Array();
+				a[0] = ["1","2"];
+		b、属性
+			a.length
+		c、方法
+			a.toString()----1,2,3
+			a.join("|")----1|2|3
+			a.sort()
+				---默认的比较规则：按照字符串比
+			a.reverse()
+			a.concat();
+			a.slice();
+
+	4、Math 对象
+		a、不需要创建，直接使用
+		b、属性和方法
+			Math.random();---0=<   <1
+			Math.round()
+			Math.floor()
+			Math.ceil()
+
+			3-9之间的整数
+				Math.random() * 6 + 3
+
+	5、number 对象
+		a、创建 var n = 123.456789;
+		b、方法
+				n.toString()
+				n.toFixed(2)---数值的格式化输出，保留小数点后n位
+				
+	6、正则表达式对象
+		a、声明			/表达式/gim
+		b、应用
+			应用一：结合 string 对象的方法，常用于对于字符串的处理
+			应用二：使用正则表达式对象的 test方法
+					用于实现录入的验证
+					var r = /\d{3}/;
+					r.test(string)---true/false
+	
+	7、日期对象
+		a、创建
+				var d = new Date();---当前日期和时间
+				var d = new Date("2013-9-10");
+		b、方法
+			getXXX()：获取
+				getMonth()
+				getDate()
+			setXXX()：修改
+				setMonth()
+				setDate()
+			toXXX()：获取一定格式的字符串，用于显示
+				toString()
+
+	8、方法
+		a、封装代码
+		b、如何定义方法
+				function MethodName(x,y,t,...)
+				{
+					//方法体
+					return value;
+				}
+		c、调用方法
+				M();
+				M(1,34);
+				var r = M(20);
+		d、局部变量和全局变量
+		e、重载（***）：js中没有传统的重载，方法名称相同，后定义
+				方法将覆盖先定义的方法
+			提供了关键字 arguments，表示传入方法中的所有参数--数组
+			可以实现模拟重载
+		f、方法的其他定义方式（*）
+			其他方式一： var f = new Function("参数","方法体");
+						f();
+			其他方式二：(匿名函数/方法)--方法体更好维护
+					var f = function(x,y){
+							alert(x+y);
+						};
+					f();
+
+	9、全局函数
+		a、所有对象均可以使用
+		b、parseInt/parseFloat/isNaN
+		c、encodeURI/decodeURI
+		d、eval
+
+四、DHTML 应用
+	1、什么是 DHTML应用：动态效果
+	2、DHTML 对象
+		window
+			document----html文档，DOM：文档对象模型
+			event
+			history
+			screen
+			location
+			navigator----BOM：浏览器对象模型
+	3、window 对象
+		a、表示浏览器窗口，窗口实现交互的功能
+		b、弹出对话框功能
+			window.alert();--严重错误；帮助实现调试的功能
+			window.confirm();
+		c、弹出窗口：类似于 <a target="_blank" href=""></a>
+			window.open(url,name,"width=500");
+		d、定时器方法
+			周期性定时器
+				var t = window.setInteval(function,1000);
+				window.clearInterval(t);
+			一次性定时器
+				var t = window.setTimeout(function,3000)
+				window.clearTimeout(t)
+				
+obj.style.display = "none";
+
+	4、document对象----DOM 文档对象模型--标准
+		a、将整个文档作为 一颗节点树 结构
+		b、查询节点
+			方式一：document.getElementById("")---单个
+			方式二：根据节点的层次关系
+				obj.parentNode/childNodes/firstChild/lastChild
+			方式三：根据标签的名称查找---节点的数组
+				document.getElementsByTagName("a")
+				---适用于查找某种元素
+
+		c、obj.nodeName---返回节点的名称，全大写方式
+			---适用于节点类型未知
+		
+		d、读取或者修改节点的信息--适用于节点类型已知时
+			方式一：将 html 标签对象化
+				文本框.value   <input value="" />
+				图像. src   <img src="" />
+				链接. href    <a href="">xxxx</a>
+			方式二：得到标签中间的文本
+				obj.innerHTML 
+			方式三：单个样式
+				obj.style.color = "red";
+				obj.style.backgroundColor = "silver";
+				obj.style.fontSize = 30;
+
+				<p style="color:red;">text</p>
+			方式四：样式比较复杂
+				JS：   h1Obj.className = "s1";
+
+				CSS:  h1.s1 {XXXXX}
+				HTML:   <h1>text</h1>
+
+		e、增加新节点
+			创建：	document.createElement("a"); <a></a>
+			设置：	obj.href ="";
+					obj.innerHTML = "";
+			加入：	XXXX.appendChild(obj);---追加
+					XXXX.insertBefore(obj,oldChild);
+
+		f、删除节点
+			xxx.removeChild(obj);--obj必须是xxx的子节点
+			obj.parentNode.removeChild(obj);	--删除obj
+	
+	5、HTML DOM--了解
+		a、标准的js代码，实现上较为复杂---实现第三方封装，Jquery
+		b、HTML DOM：将一些常用的 DOM 操作进行了封装
+		比如：
+			var o = new Option("core java");
+			selObj.add(o);
+		c、标准 DOM 方式：为表格添加一行，行中两个单元格
+				document.createElement("tr");
+				document.createElement("td");
+		d、换为  HTML DOM 中 table 对象
+			table.insertRow(index)
+			table.rows----table.getElementsByTagName("tr")
+			row.insertCell(index)
+			
+	6、screen 对象--屏幕的分辨率相关
+		var r = screen.height;  //ok--read/get
+		screen.height = 500; //error--不能设置
+		screen.availHeight
+
+		window.width = screen.availWidth/2;
+		
+	7、history对象---历史访问记录
+		var n = history.length;--历史记录数
+		history.back();--后退
+		history.forward();--前进
+		history.go(n);
+
+	8、location 对象---浏览器的地址栏
+		var url = location.href;--获取当前页面的url
+		location.href = "a.html";--修改当前访问的url，保留历史访问记录
+		location.replace(url);--去往新url，没有历史
+		-----可以实现页面跳转的方式（客户端）
+			静态方式：
+				<a></a>
+			代码方式：
+				window.open();---一定是在新窗口中
+				history.xxx();	---必须有历史记录
+				location.href		--是否需要保留
+				location.replace();	
+
+	9、navigator---浏览器软件以及操作系统的相关信息
+		只提供了可读的属性
+		a、js中访问对象的属性有两种方式
+				location.href 
+				location["href"]
+		b、遍历某种对象的所有属性
+			for(var pName in navigator)
+			{
+				
+			}
+
+	10、event
+		a、事件：响应机制，某种动作实现对代码的调用
+		b、事件的分类
+			鼠标事件： onclick/ondblclick/onmouseover/onmouseout
+			键盘事件： onkeyup/onkeydown
+			状态事件： onblur/onfocus/onchange/onload/onunload
+		c、定义事件
+			<元素 onxxx="" />---html 静态的
+			 obj.onxxx = function ; ---js代码的方式为元素定义事件
+		d、事件可以被取消
+			onxxxx = "return false;"----取消事件
+		e、事件的冒泡机制
+			当为层次关系的元素定义了相同的事件时，最底层的
+			被触发，层层向上
+			---当大量子节点拥有相同事件时，考虑将事件定义在父元素
+		f、event 对象：当事件发生时，当前事件相关的信息
+			event.x/y----得到事件发生的位置点
+
+			第一个问题：得到event对象
+				其他：js和html中都认识 event
+				firefox：js中不认识event对象，在html页面上认识
+				--解决方案：在html中将event对象传入js
+
+			第二个问题：获取事件的相关信息
+				获取事件源元素对象
+				其他：event.srcElement
+				firefox：event.target
+				--解决方案：二者 || 
+			
+		g、浏览器兼容问题
+			
+五：面向对象基础
+	1、封装：相关的数据和行为打包
+	2、方式一： 使用 Object
+		--实现简单，重用性差，适用于数据的简单封装
+	3、方式二：自定义对象
+		--重用性好，类似于 类 的定义，适用于封装需要重用时
+---可以实现封装，页面及js范围里（客户端）
+	4、如果需要将数据发送到服务器端：xml、JSON
+		方式三：使用 JSON

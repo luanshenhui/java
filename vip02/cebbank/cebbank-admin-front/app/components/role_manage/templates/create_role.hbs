@@ -1,0 +1,35 @@
+<div class="modal role_create">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>{{title}}</h2>
+    </div>
+    <form class="form form-aligned role-form" data-id="{{data.id}}">
+        <div class="role-new modal-body">
+            <div class="control-group">
+                <label for="name"><span class="required">*</span>角色名称:</label>
+                <input id="name" name="name" class="form-control" type="text" required
+                       value="{{data.name}}" {{#if data.id}}disabled{{/if}} maxlength="10"
+                      >
+                {{#if data.id}}
+                {{else}}
+                    <!--<span class="note"><i>&times;</i> 必填 不得为空</span>-->
+                    <span class="note-error"><i>&times;</i> 角色名称包含大写字母、小写字母、数字</span>
+                    <span class="note-error-empty"><i>&times;</i> 必填 不得为空</span>
+                {{/if}}
+
+            </div>
+            <div id="treeResource" class="ztree role-ztree">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            {{#equals add true}}
+                    <input type="submit" class="btn btn-success btn-small js-role-edit js-role-new" value="确定">
+            {{else}}
+                    <input type="submit" class="btn btn-success btn-small js-role-edit js-role-new" value="确定">
+            {{/equals}}
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

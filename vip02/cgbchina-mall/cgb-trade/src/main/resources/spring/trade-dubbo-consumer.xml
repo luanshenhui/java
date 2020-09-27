@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 商品服务 -->
+    <dubbo:reference interface="cn.com.cgbchina.item.service.VendorGoodsService" id="vendorGoodsService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.BrandService" id="brandService" retries="0"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GoodsService" id="goodsService" retries="0"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.ItemService" id="itemService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.CouponScaleService" id="couponScaleService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.FavoriteService" id="favoriteService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.OrderTieinSaleService" id="orderTieinSaleService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GoodsPayWayService" id="goodsPayWayService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GoodsDetailService" id="goodsDetailService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.CfgIntegraltypeService" id="cfgIntegraltypeService"/>
+
+    <!-- 用户服务 -->
+    <dubbo:reference interface="cn.com.cgbchina.user.service.MemberAddressService" id="memberAddressService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.VendorService" id="vendorService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.UserFavoriteService" id="userFavoriteService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.ACardCustToelectronbankService" id="aCardCustToelectronbankService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.UserInfoService" id="userInfoService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.EspCustNewService" id="espCustNewService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.RestItemService" id="restItemService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.OutSysVendorInfoService" id="outSysVendorInfoService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.NewMessageService" id="newMessageService"/>
+
+    <!-- 关联服务 -->
+    <dubbo:reference interface="cn.com.cgbchina.user.service.CustInfoCommonService" id="custInfoCommonService"/>
+
+    <dubbo:reference interface="cn.com.cgbchina.item.service.PointsPoolService" id="pointsPoolService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.MallPromotionService" id="mallPromotionService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.CouPonInfService" id="couPonInfService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.PromotionPayWayService" id="promotionPayWayService"/>
+    <dubbo:reference interface="cn.com.cgbchina.related.service.CfgPriceSystemService" id="cfgPriceSystemService"/>
+
+    <dubbo:reference interface="cn.com.cgbchina.related.service.KeywordSearchService" id="keywordSearchService" timeout="10000"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.PromotionService" id="promotionService"/>
+    <!--行外系统-->
+    <dubbo:reference interface="cn.com.cgbchina.related.service.InfoOutSystemService" id="infoOutSystemService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.EspAreaInfService" id="espAreaInfService"/>
+
+    <dubbo:reference interface="cn.com.cgbchina.user.service.ACustToelectronbankService" id="aCustToelectronbankService"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.LocalCardRelateService" id="localCardRelateService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.XnlpService" id="xnlpService"/>
+
+    <dubbo:reference interface="cn.com.cgbchina.related.service.CfgProCodeService" id="cfgProCodeService"/>
+
+    <dubbo:reference interface="cn.com.cgbchina.related.service.BusinessService" id="businessService"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.SmsTemplateService" id="smsTemplateService" timeout="10000"/>
+    <dubbo:reference interface="cn.com.cgbchina.item.service.GiftPartitionService" id="giftPartitionService" timeout="10000"/>
+    <dubbo:reference interface="cn.com.cgbchina.user.service.CardProService" id="cardProService"/>
+
+</beans>

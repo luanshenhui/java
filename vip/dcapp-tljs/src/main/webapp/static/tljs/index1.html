@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>商砼供应链监控</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/detail.css" />
+<link rel="stylesheet" href="css/three-important1.css"/>
+<link rel="stylesheet" type="text/css" href="css/model.css" />
+<link rel="stylesheet" type="text/css" href="css/risk-level.css" />
+	<script src="js/echarts.min.js"></script>
+	<script src="js/jquery-1.8.3.js"></script>
+	<script src="js/indexBox.js" type="text/javascript"></script>
+
+
+<script src="/static/echarts/echarts.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div class="wrap">
+	<div class="container">
+
+		 <div class="container">
+        <div class="t-box">
+            <div class="t-box-title center" data-id="powerTitle">商砼供应链监控</div>
+			<input type="hidden" id="powerId" value="${powerId}">
+            <!-- <div class="right btn-group">
+                <ul class="btn">
+                    <li class="prev-btn"><span></span><a href="#" ><i class="left-arrow"></i></a></li>
+                    <li class="next-btn"><span></span><a href="#" ><i class="right-arrow"></i></a></li>
+                </ul>
+            </div> -->
+        </div>
+<div class="clear"></div>
+        <div class="detail-box">
+            <div class="left m-r-20 left-box">
+                <div class="xs-box1 option-left-bar-box">
+                        <div class="l-title">
+                            <span>原料入库阶段告警</span>
+                        </div>
+                    <div class="line2"></div>
+                        <div class="l-content m-t-10" id="content1">
+                        <span>原料采购物流资质告警</span><span style="float: right;margin-right: 15px;text-decoration:underline;cursor:pointer">详情</span>
+							<div class="option-left-bar" id="option-left1"></div>
+                        </div>
+                    </div>
+                 <div class="xs-box2 option-left-bar-box">
+                        <div class="l-title">
+                            <span>生产阶段告警</span>
+                        </div>
+                    <div class="line2"></div>
+                        <div class="l-content m-t-10" id="content2">
+                        <span>库存不足告警</span><span style="float: right;margin-right: 15px;text-decoration:underline;cursor:pointer">详情</span>
+							<div class="option-left-bar" id="option-left2"></div>
+                        </div>
+                         <div class="line2"></div>
+                        <div class="l-content m-t-10" id="content3">
+                        <span>生产消耗过高告警</span><span style="float: right;margin-right: 15px;text-decoration:underline;cursor:pointer">详情</span>
+							<div class="option-left-bar" id="option-left3"></div>
+                        </div>
+                    </div>
+                <div class="xs-box1 option-left-bar-box">
+                        <div class="l-title">
+                            <span>销售阶段告警</span>
+                        </div>
+                    <div class="line2"></div>
+                        <div class="l-content m-t-10" id="content4">
+                        <span>回款率过低告警</span><span style="float: right;margin-right: 15px;text-decoration:underline;cursor:pointer">详情</span>
+							<div class="option-left-bar" id="option-left4"></div>
+                        </div>
+                    </div>
+            </div>
+ 						<div class="center-box2 left center-box2bg">
+							<div id="option-center1" class="option-center"></div>
+							<div id="option-center2" class="option-center"></div>
+							<div id="option-center3" class="option-center"></div>
+							<div id="option-center4" class="option-center"></div>
+							<div id="option-center5" class="option-center"></div>
+							<div id="option-center6" class="option-center"></div>
+							<div id="alarmriskstateHidden" class="hiddenDiv">暂无告警风险对比相关数据</div>
+		        </div>
+
+			<div class="right m-l-20">
+				<div class="long-box">
+					<p>系统播报</p>
+					<div id="systemScroll" class="hg-720 overflow-h">
+						<ul id="sp">
+						</ul>
+					</div>
+					<div id="systemScrollHidden" class="hiddenDiv">暂无相关数据</div>
+				</div>
+			</div>
+        </div>
+       <!--  <div class="clear"></div>
+        <div class="footer">截至<span data-id="closingTime"></span></div> -->
+    </div>
+</div>
+</div>
+</body>
+<script>
+	$(document).ready(function(){});
+</script>
+</html>

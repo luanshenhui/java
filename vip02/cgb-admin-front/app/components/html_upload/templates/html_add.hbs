@@ -1,0 +1,68 @@
+<div class="modal modal-html html-add">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>新建</h2>
+    </div>
+    <form class="form form-aligned html-add-form">
+        <div class="html-new modal-body">
+            <div class="control-group">
+                <input name="ordertypeId" value="{{ordertypeId}}" type="hidden"/>
+            </div>
+            <div class="control-group">
+                <label><span class="required">*</span>页面类型: </label>商城预留页
+            </div>
+            <div class="control-group">
+                <label for="actId"><span class="required">*</span>静态页面代码:</label>
+                <input id="actId" class="form-control actId" name="actId" maxlength="8" type="text"
+                       value="" pattern="^([\u4e00-\u9fa5]+|[\u4e00-\u9fa5a-zA-Z_0-9]+)$" readonly>
+                <span class="note-error"><i>&times;</i> 不能输入特殊字符！</span>
+                <span class="note-error-empty"><i>&times;</i> 静态页面代码不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="pageId"><span class="required">*</span>页面代码:</label>
+                <input id="pageId" class="form-control" name="pageId" maxlength="2" type="text" required
+                       value="" pattern="^([\u4e00-\u9fa5]+|[\u4e00-\u9fa5a-zA-Z_0-9]+)$">
+                <span class="note-error"><i>&times;</i> 不能输入特殊字符！</span>
+                <span class="note-error-empty"><i>&times;</i>页面代码不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="actName"><span class="required">*</span>页面名称:</label>
+                <input id="actName" class="form-control" name="actName" maxlength="100" type="text" required
+                       value="" pattern="^([\u4e00-\u9fa5]+|[\u4e00-\u9fa5a-zA-Z_0-9]+)$">
+                <span class="note-error"><i>&times;</i> 不能输入特殊字符！</span>
+                <span class="note-error-empty"><i>&times;</i> 页面名称不得为空</span>
+            </div>
+            <div class="control-group">
+                <label for="startTime"><span class="required">*</span>开始时间:</label>
+                <input type="text" id="js-date-startAdd" class="time-border startTime cursor-pointer" name="startTime">
+                <!--<input class="form-control js-date-start datepicker" name="startTime" type="text" required/>-->
+                <!--<span class="note-error-empty"><i>&times;</i> 开始时间不得为空</span>-->
+            </div>
+            <div class="control-group">
+                <label for="endTime"><span class="required">*</span>结束时间:</label>
+                <input type="text" id="js-date-endAdd" class="time-border endTime cursor-pointer" name="endTime">
+                <!--<input class="form-control js-date-end datepicker" name="endTime" type="text" required/>-->
+                <!--<span class="note-error-empty"><i>&times;</i> 结束时间不得为空</span>-->
+            </div>
+
+            <div class="control-group zip-upload">
+                <label for="file"><span class="required">*</span>文件名称:</label>
+                <!--<input type="text" class="input-width-270 file-input" readonly="true" required/>-->
+                <div class="uploadArea">
+                    <input type="button" class="btn btn-success btn-small upload-btn-sl" value="选择并上传文件"/>
+                    <input type="file" id="fileZipAdd" class="upload-file-sl js-file-upload" name="files" multiple/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>&nbsp;</label><span
+                    class="font-size-12 font-color-gray">说明：上传文件格式必须是.zip结尾的文件，否则文件录入无效。</span><br>
+                <label>&nbsp;</label><span class="font-size-12 font-color-gray">“静态页面代码”将根据上传文件的名称自动生成，无需填写。</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-small btn-success js-submit-btn" value="确定" disabled="disabled">
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

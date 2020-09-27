@@ -1,0 +1,38 @@
+<div class="modal coupon_vendor_modal">
+    <div class="modal-header"><a href="javascript:void(0)" class="close">×</a>
+        <h2>商品选择</h2></div>
+    <div class="modal-body">
+        <table class="table-0 modal-body-table" width="0" border="0">
+            <tr>
+                <td>选择商品：
+                    <input type="text" class="form-control order-form col-3 form-gray-txt js-search-value1"
+                           placeholder="请输入商品编码或名称">
+                    <a href="#" class="btn-upload m-l-10 js-search-btn" data-value="3">搜索</a>
+                    <span>(商品默认显示100条，更多商品请使用搜索)</span>
+                    <div style="margin-top: 5px;"><div style="float: left;"> 已选择:</div><div class="optCodes" title="" data-first="0" data-optnames="" data-optcodes=""></div></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="setting-scrll">
+                        <table class="table-list">
+                            {{#each list}}
+                                <tbody>
+                                <tr>
+                                    <td width="5%"><input class="optCodebox" type="checkbox" name="goodsNames" data-id="{{this.code}}" id="{{this.code}}"
+                                                          value="{{this.name}}"></td>
+                                    <td width="30%">{{this.code}}</td>
+                                    <td width="65%" class="breakWords">{{this.name}}</td>
+                                </tr>
+                                </tbody>
+                            {{/each}}
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="modal-footer">
+            <a class="btn btn-success btn-small js-save-goodsName" href="javascript:void(0)">确定</a>
+        </div>
+    </div>
+</div>

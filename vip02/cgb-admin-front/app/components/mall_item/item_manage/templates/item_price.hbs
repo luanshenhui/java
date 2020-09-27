@@ -1,0 +1,45 @@
+<div class="modal item-modal">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h2>修改价格</h2>
+    </div>
+    <form class="form form-aligned price-form">
+        <div class="modal-body">
+            <p class="main-box-title-popup"><strong>商品信息</strong></p>
+            <div class="control-group pull-left">
+                <strong><label class="label-width" for="goodsCode">商品编码:</label></strong>
+                <span class="break">{{goodsModel.code}}</span>
+                <input class="js-goods-code" type="hidden" name="goodsCode" value="{{goodsModel.code}}"/>
+            </div>
+            <div class="control-group pull-left">
+                <strong><label class="label-width" for="goodsCode">商品名称:</label></strong>
+                <span class="break">{{goodsModel.name}}</span>
+            </div>
+            <p class="main-box-title-popup"><strong>价格信息</strong></p>
+            {{#each itemList}}
+                <div class="clear"></div>
+                <div class="js-item-price-table" data-data="{{json this}}">
+                    <p class="filter-name"><strong>单品编码：</strong><span>{{this.code}}</span></p>
+                    <input class="item-code" type="hidden" name="code" value="{{this.code}}"/>
+                    <div class="control-group pull-left">
+                        <strong><label class="label-width" for="marketPice">参考价(元):</label></strong>
+                        <input   value="{{this.marketPrice}}" type="text" maxlength="9" class="item-market form-control input-width-120">
+                    </div>
+                    <div class="control-group pull-left">
+                        <strong><label class="label-width">售价(元):</label></strong>
+                        <input   value="{{this.price}}" type="text" maxlength="9" class="item-price form-control input-width-120">
+                    </div>
+                    <div class="control-group pull-left margin-bottom-20">
+                        <strong><label class="label-width" for="fixPoint">固定积分:</label></strong>
+                        <input   value="{{this.fixPoint}}" type="text" maxlength="10" class="item-point form-control input-width-120" >
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+        <div class="clear"></div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small js-stock-submit" value="确定">
+            <button class="btn btn-close btn-small close">关闭</button>
+        </div>
+    </form>
+</div>

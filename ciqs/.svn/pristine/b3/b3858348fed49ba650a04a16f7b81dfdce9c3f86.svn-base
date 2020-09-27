@@ -1,0 +1,1871 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+Mybatis Mapper config for QLC_EXP_FOOD_PROD.
+@author xwj
+-->
+<mapper namespace="SQL.GeneralPunishment">
+
+	<select id="findHistoryByStatus" resultType="com.dpn.ciqqlc.standard.model.GeneralPunishmentHistoryDTO">
+		select 
+		    t.*
+		 from QLC_GENERAL_PUNISHMENT_HISTORY t
+		 where t.DELETE_FLAG = '0'
+		<if test="pre_report_no != null and pre_report_no != ''">
+			and t.pre_report_no = #{pre_report_no}
+		</if>
+		<if test="audit_step != null and audit_step != ''">
+			and t.audit_step = #{audit_step}
+		</if>
+		<if test="audit_status != null and audit_status != ''">
+			and t.audit_status = #{audit_status}
+		</if>
+		order by t.audit_date desc
+	</select>
+	
+	<!-- history - 查询列表 -->
+	<select id="findListHistory" resultType="com.dpn.ciqqlc.standard.model.GeneralPunishmentHistoryDTO">
+		select 
+		    t.*
+		 from QLC_GENERAL_PUNISHMENT_HISTORY t
+		 where t.DELETE_FLAG = '0'
+		<if test="pre_report_no != null and pre_report_no != ''">
+			and t.pre_report_no = #{pre_report_no}
+		</if>
+		<if test="audit_step != null and audit_step != ''">
+			and t.audit_step = #{audit_step}
+		</if>
+		<if test="audit_status != null and audit_status != ''">
+			and (t.audit_status = '0' or t.audit_status is null)
+		</if>
+		order by t.audit_date desc
+	</select>
+	<!-- history - 查询 -->
+	<select id="findHistory" resultType="com.dpn.ciqqlc.standard.model.GeneralPunishmentHistoryDTO">
+		select * from (select 
+		    t.*
+		 from QLC_GENERAL_PUNISHMENT_HISTORY t
+		 where t.DELETE_FLAG = '0'
+		<if test="pre_report_no != null and pre_report_no != ''">
+			and t.pre_report_no = #{pre_report_no}
+		</if>
+		<if test="audit_step != null and audit_step != ''">
+			and t.audit_step = #{audit_step}
+		</if>
+		order by t.audit_date desc) a
+		where rownum <![CDATA[ = ]]> 1
+	</select>
+		
+	<select id="findStepByReportNo" resultType="com.dpn.ciqqlc.standard.model.GeneralPunishmentHistoryDTO">
+		SELECT * FROM (select 
+		    t.*
+		 from QLC_GENERAL_PUNISHMENT_HISTORY t
+		 left join QLC_GENERAL_PUNISHMENT t1 on t1.pre_report_no = t.pre_report_no
+		 where t.DELETE_FLAG = '0' 
+		 <if test="audit_status != null and audit_status != ''">
+			and t.AUDIT_STATUS = #{audit_status}		 
+		 </if>
+		<if test="pre_report_no != null and pre_report_no != ''">
+			and t.pre_report_no = #{pre_report_no}
+		</if>
+		<if test="audit_step != null and audit_step != ''">
+			and t.audit_step = #{audit_step}
+		</if>
+		order by t.audit_date desc) t
+		where rownum <![CDATA[ = ]]> 1
+	</select>
+	
+	<!-- 调查报告相关业务sql -->
+	<sql id="dcbg_info">
+		,nvl(gp_file_dcxw.file_name, '') as gp_file_dcxw
+		,gp_file_dcxw.file_location as gp_file_dcxw_location
+		,nvl(gp_file_xcky.file_name, '') as gp_file_xcky
+		,gp_file_xcky.file_location as gp_file_xcky_location
+		,nvl(gp_file_cfky.file_name, '') as gp_file_cfky
+		,gp_file_cfky.file_location as gp_file_cfky_location
+		,nvl(gp_file_qt_dcqz.file_name, '') as gp_file_qt_dcqz
+		,gp_file_qt_dcqz.file_location as gp_file_qt_dcqz_location
+	</sql>
+	<sql id="dcbg_left">
+		left join qlc_file_info gp_file_dcxw on t.main_id = gp_file_dcxw.main_id and gp_file_dcxw.key_name = 'gp_file_dcxw'
+		left join qlc_file_info gp_file_xcky on t.main_id = gp_file_xcky.main_id and gp_file_xcky.key_name = 'gp_file_xcky'
+		left join qlc_file_info gp_file_cfky on t.main_id = gp_file_cfky.main_id and gp_file_cfky.key_name = 'gp_file_cfky'
+		left join qlc_file_info gp_file_qt_dcqz on t.main_id = gp_file_qt_dcqz.main_id and gp_file_qt_dcqz.key_name = 'gp_file_qt'
+	</sql>
+	
+	<!--审理决定相关表  -->
+	<sql id="sljd_info">
+		,nvl(gp_file_ajjzsl.file_name, '') as gp_file_ajjzsl
+		,gp_file_ajjzsl.file_location as gp_file_ajjzsl_location
+		,nvl(gp_file_sdhz.file_name, '') as gp_file_sdhz
+		,gp_file_sdhz.file_location as gp_file_sdhz_location
+		,nvl(gp_file_tzcx.file_name, '') as gp_file_tzcx
+		,gp_file_tzcx.file_location as gp_file_tzcx_location
+	</sql>
+	<sql id="sljd_left">
+		left join qlc_file_info gp_file_ajjzsl on t.main_id = gp_file_ajjzsl.main_id and gp_file_ajjzsl.key_name = 'gp_file_ajjzsl'
+		left join qlc_file_info gp_file_sdhz on t.main_id = gp_file_sdhz.main_id and gp_file_sdhz.key_name = 'gp_file_sdhz'
+		left join qlc_file_info gp_file_tzcx on t.main_id = gp_file_tzcx.main_id and gp_file_tzcx.key_name = 'gp_file_tzcx'
+	</sql>
+	
+	<sql id="findNewList_where">
+
+		<if test="step_org != null and step_org != '' and step != '15'">
+			and sv.step_${step}_org = #{step_org}
+		</if>
+		<if test="org_code != null and org_code != ''">
+			and (t.declare_org = #{org_code})
+		</if>
+		<if test="step_status != null and step_status != ''">
+			and nvl(sv.step_${step}_status, '0')=#{step_status}
+		</if>
+		<if test="step_psn != null and step_psn != ''">
+			and sv.step_${step}_psn=#{step_psn}
+		</if>
+		<if test="step != null and step != '' and step != '15' ">
+			and sv.step_${step}_status is not null
+		</if>
+
+		<if test=" wList != null ">
+			<foreach item="item" index="index" collection="wList">
+				<if test="item.wValue != null and item.wValue != ''">
+					<choose>
+						<when test="item.wName == 't.pre_report_no' or item.wName == 't.psn_name' or item.wName == 't.comp_name'">
+							and ${item.wName} like '%' || #{item.wValue} || '%'
+						</when>
+						<when test="item.key != null and item.key != '' and item.key.indexOf('date_begin') != -1">
+								and	${item.wName} <![CDATA[>=]]> to_date(#{item.wValue}||' 00:00:00', 'yyyy-mm-dd HH24:MI:SS')
+						</when>
+						<when test="item.key != null and item.key != '' and item.key.indexOf('date_end') != -1">
+								and	${item.wName} <![CDATA[<=]]> to_date(#{item.wValue}||' 23:59:59', 'yyyy-mm-dd HH24:MI:SS')
+						</when>
+<!-- 						<when test="item.wOpera != '' and item.wOpera != null">
+							and ${item.wName} ${item.wOpera}  
+						</when> -->
+						<when test="item.wValue != '' and item.wValue != null and item.wValue == 0">
+							and (${item.wName} = #{item.wValue} or ${item.wName} is null)
+						</when>
+						<otherwise>
+							and ${item.wName} = #{item.wValue}
+						</otherwise>
+					</choose>
+				</if>  
+			</foreach> 
+		</if>
+		
+		<if test="submit_status == 1 and (step == 9 or step == 18 or step == 19 or step == 10 or step == 13 or step == 14)">
+			<choose>
+				<when test="step == 10">
+					and (sv.step_${step}_status = null or step_${step}_status = '0' or sv.step_20_status is null or step_20_status = '0')
+				</when>
+				<otherwise>
+					and (sv.step_${step}_status = null or step_${step}_status = '0')
+				</otherwise>
+			</choose>
+		</if>
+		<if test="submit_status == 2 and (step == 9 or step == 18 or step == 19 or step == 10 or step == 13 or step == 14)">
+				<choose>
+				<when test="step == 10">
+					and (sv.step_${step}_status is not null or step_${step}_status != '0' or sv.step_20_status is not null or step_20_status != '0')
+				</when>
+				<otherwise>
+					and (sv.step_${step}_status != null or step_${step}_status != '0')
+				</otherwise>
+			</choose>
+		</if>		
+		<!-- 调查取证：是否提交 -->
+<!--  		<if test="(step == 9 or step == 18 or step == 19) and submit_status == 1">
+			and (sv.step_${step}_status = null or step_${step}_status = '0')
+		</if>
+		<if test="(step == 9 or step == 18 or step == 19) and submit_status == 2">
+			and (sv.step_${step}_status in ('1', '2'))
+		</if> -->
+		<!--初审：是否提交-->
+<!-- 		<if test="(step == 10 or step == 20) and submit_status == 1">
+			and (sv.step_${step}_status = null or step_${step}_status = '0')
+		</if>
+		<if test="(step == 10 or step == 20) and submit_status == 2">
+			and (sv.step_${step}_status in ('1','13','14','15', '2'))
+		</if> -->
+	</sql>
+	<!-- 新的查询列表 -->
+	<select id="findNewList" resultType="Map">
+		select * from (
+			select a.*,rownum rid from 
+			(
+				select 
+				    t.id,
+					t.case_no,
+					t.comp_name,
+					t.psn_name,
+					t.corporate_psn,
+					t.addr,
+					t.tel,
+					t.age,
+					t.per_addr,
+					t.contacts_name,
+					t.main_id,
+					t.forward_step,
+					qll.name declare_org_name,
+					(select count(1) from QLC_CHECK_DOCS_RCD q  where q.proc_main_id=t.main_id and q.doc_type='D_GP_DCBG_XZCFAJ_SPB' and q.doc_id=sv.STEP_9_DOC_ID) as D_GP_DCBG_XZCFAJ_SPB,
+					(select count(1) from QLC_CHECK_DOCS_RCD q  where q.proc_main_id=t.main_id and q.doc_type='D_GP_DCBG' and q.doc_id=sv.STEP_9_DOC_ID) as D_GP_DCBG,
+					(select count(1) from QLC_CHECK_DOCS_RCD q  where q.proc_main_id=t.main_id and q.doc_type='D_GP_DCBG_Y_S_1' and q.doc_id=sv.STEP_9_DOC_ID) as D_GP_DCBG_Y_S_1,
+				    (select count(1) from QLC_CHECK_DOCS_RCD q  where q.proc_main_id=t.main_id and q.doc_type='GP_AJ_SBD') as doc_GP_AJ_SBD,
+					(select count(1) from QLC_CHECK_DOCS_RCD q  where q.proc_main_id=t.main_id and q.doc_type='D_GP_XZCF_JABG') as isExtisJABG,
+					(select count(1) from QLC_CHECK_DOCS_RCD q2  where q2.proc_main_id=t.main_id and q2.doc_type='D_GP_XZCF_AJFKB') as isExtisAJFKB,
+					<!-- 申报号再这里 sv.pre_report_no, -->
+					sv.*
+					<if test="step == 1 or step == 2">
+						,nvl(doc.doc_id, '') as ajfkb_doc_id
+					</if>
+					<if test="step == 7">
+						,nvl(doc.doc_id, '') as ajysh_doc_id
+					</if>
+					<if test="step == 1">
+						,nvl(gp_file_fj.file_name, '') as gp_file_fj
+						,gp_file_fj.file_location as gp_file_fj_location
+					</if>
+					<if test="step == 13">
+						,nvl(gp_file_sdhz_sdzx.file_name, '') as gp_file_sdhz_sdzx
+						,gp_file_sdhz_sdzx.file_location as gp_file_sdhz_sdzx_location
+						,nvl(gp_file_qt_sdzx.file_name, '') as gp_file_qt_sdzx
+						,gp_file_qt_sdzx.file_location as gp_file_qt_sdzx_location
+						,nvl(gp_file_jfsj_sdzx.file_name, '') as gp_file_jfsj_sdzx
+						,gp_file_jfsj_sdzx.file_location as gp_file_jfsj_sdzx_location
+					</if>
+					<if test="step ==  9 or step == 18 or step == 19">
+						<include refid="dcbg_info"/>
+					</if>
+					<if test="step == 10 or step == 20 or step == 11 or step == 12">
+						<include refid="sljd_info"/>
+					</if>
+				from QLC_GENERAL_PUNISHMENT t
+			    left join ORGANIZES_CIQ qll on t.declare_org = qll.org_code
+				left join ybcf_step_view sv on t.pre_report_no = sv.pre_report_no
+				 <if test="step == 1 or step == 2">
+				 	left join QLC_CHECK_DOCS_RCD doc on t.main_id = doc.proc_main_id and doc.doc_type = 'D_GP_XZCF_AJFKB'
+				 </if>
+				 <if test="step == 7">
+				 	left join QLC_CHECK_DOCS_RCD doc on t.main_id = doc.proc_main_id and doc.doc_type = 'D_GP_A_Y_1'
+				 </if>
+				 <if test="step == 1">
+					left join qlc_file_info gp_file_fj on t.main_id = gp_file_fj.main_id and gp_file_fj.key_name = 'gp_file_fj'
+				</if>
+				<if test="step == 13">
+					left join qlc_file_info gp_file_sdhz_sdzx on t.main_id = gp_file_sdhz_sdzx.main_id and gp_file_sdhz_sdzx.key_name = 'gp_file_sdhz_sdzx'
+					left join qlc_file_info gp_file_qt_sdzx on t.main_id = gp_file_qt_sdzx.main_id and gp_file_qt_sdzx.key_name = 'gp_file_qt_sdzx'
+					left join qlc_file_info gp_file_jfsj_sdzx on t.main_id = gp_file_jfsj_sdzx.main_id and gp_file_jfsj_sdzx.key_name = 'gp_file_jfsj_sdzx'
+				</if>
+				
+				<!-- 结案报告已填写  结案报告未填写-->
+				<if test="step == 14 and (submit_status == 1 or submit_status == 2)">
+					left join qlc_check_docs_rcd jabg on t.main_id = jabg.proc_main_id and jabg.doc_type = 'D_GP_XZCF_JABG'
+				</if>
+				<!-- 反馈表已填写 -->
+				<if test="step == 14 and (submit_status == 3 or submit_status == 4)">
+					left join qlc_check_docs_rcd fkb on t.main_id = fkb.proc_main_id and fkb.doc_type = 'D_GP_XZCF_AJFKB'
+				</if>
+				
+				<if test="step ==  9 or step == 18 or step == 19">
+					<include refid="dcbg_left"/>
+				</if>
+				<if test="step == 10 or step == 20 or step == 11 or step == 12">
+					<include refid="sljd_left"/>
+				</if>
+				where t.delete_flag = '0'
+				<include refid="findNewList_where"/>
+				<if test="step == 15">
+					and sv.pre_report_no is not null
+					ORDER BY  sv.step_1_date DESC
+				</if>
+				<if test="step != 15">
+					ORDER BY  t.audit_date DESC
+				</if>
+			) a 
+     		where 
+     			rownum &lt;#{lastRcd}
+     	) where rid>=#{firstRcd}
+	</select>
+	<!-- 新的查询列表count -->
+	<select id="findNewListCount" resultType="java.lang.Integer">
+		select 
+		   count(t.id)
+		from QLC_GENERAL_PUNISHMENT t
+		left join ybcf_step_view sv on t.pre_report_no = sv.pre_report_no
+		<if test="step ==  9 or step == 18 or step == 19">
+			<include refid="dcbg_left"/>
+		</if>
+		<if test="step == 10 or step == 20 or step == 11 or step == 12">
+			<include refid="sljd_left"/>
+		</if>
+		where t.delete_flag = '0'
+		<include refid="findNewList_where"/>
+		ORDER BY  t.audit_date DESC
+	</select>
+	
+	
+	<!-- 分页查询列表 -->
+	<select id="findList" resultType="com.dpn.ciqqlc.standard.model.GeneralPunishmentDTO">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+		    t.id,
+			t.pre_report_no,
+			t.case_no,
+			t.comp_name,
+			t.psn_name,
+			t.corporate_psn,
+			t.addr,
+			t.tel,
+			t.age,
+			t.per_addr,
+			t.contacts_name,
+			t.main_id,
+			t.forward_step,
+			t1.audit_status as step_1_status,
+			t1.audit_date as step_1_date,
+			t01.name as step_1_org,
+			t1.audit_psn as step_1_psn,
+			t2.audit_status as step_2_status,
+			t2.audit_date as step_2_date,
+			t2.audit_org as step_2_org,
+			t2.audit_psn as step_2_psn,
+			t3.audit_status as step_3_status,
+			t3.audit_date as step_3_date,
+			t3.audit_org as step_3_org,
+			t3.audit_psn as step_3_psn,
+			t16.audit_status as step_16_status,
+			t16.audit_date as step_16_date,
+			t16.audit_org as step_16_org,
+			t16.audit_psn as step_16_psn,
+			t17.audit_status as step_17_status,
+			t17.audit_date as step_17_date,
+			t17.audit_org as step_17_org,
+			t17.audit_psn as step_17_psn,
+			t4.audit_status as step_4_status,
+			t4.audit_date as step_4_date,
+			t4.audit_org as step_4_org,
+			t4.audit_psn as step_4_psn,
+			t5.audit_status as step_5_status,
+			t5.audit_date as step_5_date,
+			t5.audit_org as step_5_org,
+			t5.audit_psn as step_5_psn,
+			t6.audit_status as step_6_status,
+			t6.audit_date as step_6_date,
+			t6.audit_org as step_6_org,
+			t6.audit_psn as step_6_psn,
+			t7.audit_status as step_7_status,
+			t7.audit_date as step_7_date,
+			t7.audit_org as step_7_org,
+			t7.audit_psn as step_7_psn,
+			t8.audit_status as step_8_status,
+			t8.audit_date as step_8_date,
+			t8.audit_org as step_8_org,
+			t8.audit_psn as step_8_psn,
+			t9.audit_status as step_9_status,
+			t9.audit_date as step_9_date,
+			t9.audit_org as step_9_org,
+			t9.audit_psn as step_9_psn,
+			t10.audit_status as step_10_status,
+			t10.audit_date as step_10_date,
+			t10.audit_org as step_10_org,
+			t10.audit_psn as step_10_psn,
+			t11.audit_status as step_11_status,
+			t11.audit_date as step_11_date,
+			t11.audit_org as step_11_org,
+			t11.audit_psn as step_11_psn,
+			t12.audit_status as step_12_status,
+			t12.audit_date as step_12_date,
+			t12.audit_org as step_12_org,
+			t12.audit_psn as step_12_psn,
+			t13.audit_status as step_13_status,
+			t13.audit_date as step_13_date,
+			t13.audit_org as step_13_org,
+			t13.audit_psn as step_13_ps,
+			t14.audit_status as step_14_status,
+			t14.audit_date as step_14_date,
+			t14.audit_org as step_14_org,
+			t14.audit_psn as step_14_ps,
+			t20.audit_status as step_20_status,
+			t20.audit_date as step_20_date,
+			t20.audit_org as step_20_org,
+			t20.audit_psn as step_20_ps,
+		    (select count(1) from QLC_CHECK_DOCS_RCD q  where q.proc_main_id=t.main_id and q.doc_type='GP_AJ_SBD') as doc_GP_AJ_SBD,
+			(select count(1) from QLC_CHECK_DOCS_RCD q  where q.proc_main_id=t.main_id and q.doc_type='D_GP_XZCF_JABG') as isExtisJABG,
+			(select count(1) from QLC_CHECK_DOCS_RCD q2  where q2.proc_main_id=t.main_id and q2.doc_type='D_GP_XZCF_AJFKB') as isExtisAJFKB
+			<if test="step == 1 or step == 2">
+				,nvl(doc.doc_id, '') as ajfkb_doc_id
+			</if>
+			<if test="step == 7">
+				,nvl(doc.doc_id, '') as ajysh_doc_id
+			</if>
+			<if test="step == 1">
+				,nvl(gp_file_fj.file_name, '') as gp_file_fj
+				,gp_file_fj.file_location as gp_file_fj_location
+			</if>
+			<if test="step == 9">
+				,nvl(gp_file_dcxw.file_name, '') as gp_file_dcxw
+				,gp_file_dcxw.file_location as gp_file_dcxw_location
+				,nvl(gp_file_xcky.file_name, '') as gp_file_xcky
+				,gp_file_xcky.file_location as gp_file_xcky_location
+				,nvl(gp_file_cfky.file_name, '') as gp_file_cfky
+				,gp_file_cfky.file_location as gp_file_cfky_location
+				,nvl(gp_file_qt_dcqz.file_name, '') as gp_file_qt_dcqz
+				,gp_file_qt_dcqz.file_location as gp_file_qt_dcqz_location
+			</if>
+			<if test="step == 10 or step == 20 or step == 11 or step == 12">
+				,nvl(gp_file_ajjzsl.file_name, '') as gp_file_ajjzsl
+				,gp_file_ajjzsl.file_location as gp_file_ajjzsl_location
+				,nvl(gp_file_sdhz.file_name, '') as gp_file_sdhz
+				,gp_file_sdhz.file_location as gp_file_sdhz_location
+				,nvl(gp_file_tzcx.file_name, '') as gp_file_tzcx
+				,gp_file_tzcx.file_location as gp_file_tzcx_location
+			</if>
+			<if test="step == 13">
+				,nvl(gp_file_sdhz_sdzx.file_name, '') as gp_file_sdhz_sdzx
+				,gp_file_sdhz_sdzx.file_location as gp_file_sdhz_sdzx_location
+				,nvl(gp_file_qt_sdzx.file_name, '') as gp_file_qt_sdzx
+				,gp_file_qt_sdzx.file_location as gp_file_qt_sdzx_location
+				,nvl(gp_file_jfsj_sdzx.file_name, '') as gp_file_jfsj_sdzx
+				,gp_file_jfsj_sdzx.file_location as gp_file_jfsj_sdzx_location
+			</if>
+		 from QLC_GENERAL_PUNISHMENT t
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t1 on t.pre_report_no = t1.pre_report_no and t1.audit_step = '1'      and t1.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t2 on t.pre_report_no = t2.pre_report_no and t2.audit_step = '2'      and t2.DELETE_FLAG = '0'  
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t3 on t.pre_report_no = t3.pre_report_no and t3.audit_step = '3'      and t3.DELETE_FLAG = '0'  
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t4 on t.pre_report_no = t4.pre_report_no and t4.audit_step = '4'      and t4.DELETE_FLAG = '0'  
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t5 on t.pre_report_no = t5.pre_report_no and t5.audit_step = '5'      and t5.DELETE_FLAG = '0'  
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t6 on t.pre_report_no = t6.pre_report_no and t6.audit_step = '6'      and t6.DELETE_FLAG = '0'  
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t7 on t.pre_report_no = t7.pre_report_no and t7.audit_step = '7'      and t7.DELETE_FLAG = '0'  
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t8 on t.pre_report_no = t8.pre_report_no and t8.audit_step = '8'      and t8.DELETE_FLAG = '0'  
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t9 on t.pre_report_no = t9.pre_report_no and t9.audit_step = '9'      and t9.DELETE_FLAG = '0'  
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t10 on t.pre_report_no = t10.pre_report_no and t10.audit_step = '10'  and t10.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t11 on t.pre_report_no = t11.pre_report_no and t11.audit_step = '11'  and t11.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t12 on t.pre_report_no = t12.pre_report_no and t12.audit_step = '12'  and t12.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t13 on t.pre_report_no = t13.pre_report_no and t13.audit_step = '13'  and t13.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t14 on t.pre_report_no = t14.pre_report_no and t14.audit_step = '14'  and t14.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t16 on t.pre_report_no = t16.pre_report_no and t16.audit_step = '16'  and t16.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t17 on t.pre_report_no = t17.pre_report_no and t17.audit_step = '17'  and t17.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t20 on t.pre_report_no = t20.pre_report_no and t20.audit_step = '20'  and t20.DELETE_FLAG = '0'
+		 left join ORGANIZES t01 on t1.audit_org = t01.org_code
+		 <if test="step == 1 or step == 2">
+		 	left join QLC_CHECK_DOCS_RCD doc on t.main_id = doc.proc_main_id and doc.doc_type = 'D_GP_XZCF_AJFKB'
+		 </if>
+		 <if test="step == 7">
+		 	left join QLC_CHECK_DOCS_RCD doc on t.main_id = doc.proc_main_id and doc.doc_type = 'D_GP_A_Y_1'
+		 </if>
+		 <if test="step == 1">
+			left join qlc_file_info gp_file_fj on t.main_id = gp_file_fj.main_id and gp_file_fj.key_name = 'gp_file_fj'
+		</if>
+		 <if test="step == 9 or step == 18 or step == 19">
+			left join qlc_file_info gp_file_dcxw on t.main_id = gp_file_dcxw.main_id and gp_file_dcxw.key_name = 'gp_file_dcxw'
+			left join qlc_file_info gp_file_xcky on t.main_id = gp_file_xcky.main_id and gp_file_xcky.key_name = 'gp_file_xcky'
+			left join qlc_file_info gp_file_cfky on t.main_id = gp_file_cfky.main_id and gp_file_cfky.key_name = 'gp_file_cfky'
+			left join qlc_file_info gp_file_qt_dcqz on t.main_id = gp_file_qt_dcqz.main_id and gp_file_qt_dcqz.key_name = 'gp_file_qt'
+		</if>
+		<if test="step == 10 or step == 20 or step == 11 or step == 12">
+			left join qlc_file_info gp_file_ajjzsl on t.main_id = gp_file_ajjzsl.main_id and gp_file_ajjzsl.key_name = 'gp_file_ajjzsl'
+			left join qlc_file_info gp_file_sdhz on t.main_id = gp_file_sdhz.main_id and gp_file_sdhz.key_name = 'gp_file_sdhz'
+			left join qlc_file_info gp_file_tzcx on t.main_id = gp_file_tzcx.main_id and gp_file_tzcx.key_name = 'gp_file_tzcx'
+		</if>
+		<if test="step == 13">
+			left join qlc_file_info gp_file_sdhz_sdzx on t.main_id = gp_file_sdhz_sdzx.main_id and gp_file_sdhz_sdzx.key_name = 'gp_file_sdhz_sdzx'
+			left join qlc_file_info gp_file_qt_sdzx on t.main_id = gp_file_qt_sdzx.main_id and gp_file_qt_sdzx.key_name = 'gp_file_qt_sdzx'
+			left join qlc_file_info gp_file_jfsj_sdzx on t.main_id = gp_file_jfsj_sdzx.main_id and gp_file_jfsj_sdzx.key_name = 'gp_file_jfsj_sdzx'
+		</if>
+		
+		<!-- 结案报告已填写  结案报告未填写-->
+		<if test="step == 14 and (submit_status == 1 or submit_status == 2)">
+			left join qlc_check_docs_rcd jabg on t.main_id = jabg.proc_main_id and jabg.doc_type = 'D_GP_XZCF_JABG'
+		</if>
+		<!-- 反馈表已填写 -->
+		<if test="step == 14 and (submit_status == 3 or submit_status == 4)">
+			left join qlc_check_docs_rcd fkb on t.main_id = fkb.proc_main_id and fkb.doc_type = 'D_GP_XZCF_AJFKB'
+		</if>
+		
+		 where t.DELETE_FLAG = '0'
+		<include refid="findList_where"/>
+		order by t.audit_date desc) a 
+     	where rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询记录数 -->
+	<select id="findListCount"  resultType="java.lang.Integer">
+		select count(t.id) 
+		 from QLC_GENERAL_PUNISHMENT t
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t1 on t.pre_report_no = t1.pre_report_no and t1.audit_step = '1'       and t1.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t2 on t.pre_report_no = t2.pre_report_no and t2.audit_step = '2'       and t2.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t3 on t.pre_report_no = t3.pre_report_no and t3.audit_step = '3'       and t3.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t4 on t.pre_report_no = t4.pre_report_no and t4.audit_step = '4'       and t4.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t5 on t.pre_report_no = t5.pre_report_no and t5.audit_step = '5'       and t5.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t6 on t.pre_report_no = t6.pre_report_no and t6.audit_step = '6'       and t6.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t7 on t.pre_report_no = t7.pre_report_no and t7.audit_step = '7'       and t7.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t8 on t.pre_report_no = t8.pre_report_no and t8.audit_step = '8'       and t8.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t9 on t.pre_report_no = t9.pre_report_no and t9.audit_step = '9'       and t9.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t10 on t.pre_report_no = t10.pre_report_no and t10.audit_step = '10'   and t10.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t11 on t.pre_report_no = t11.pre_report_no and t11.audit_step = '11'   and t11.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t12 on t.pre_report_no = t12.pre_report_no and t12.audit_step = '12'   and t12.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t13 on t.pre_report_no = t13.pre_report_no and t13.audit_step = '13'   and t13.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t14 on t.pre_report_no = t14.pre_report_no and t14.audit_step = '14'   and t14.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t16 on t.pre_report_no = t16.pre_report_no and t16.audit_step = '16'  and t16.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t17 on t.pre_report_no = t17.pre_report_no and t17.audit_step = '17'  and t17.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t20 on t.pre_report_no = t20.pre_report_no and t20.audit_step = '20'  and t20.DELETE_FLAG = '0'
+		 <!-- 结案报告已填写  结案报告未填写-->
+		<if test="step == 14 and (submit_status == 1 or submit_status == 2)">
+			left join qlc_check_docs_rcd jabg on t.main_id = jabg.proc_main_id and jabg.doc_type = 'D_GP_XZCF_JABG'
+		</if>
+		<!-- 反馈表已填写 -->
+		<if test="step == 14 and (submit_status == 3 or submit_status == 4)">
+			left join qlc_check_docs_rcd fkb on t.main_id = fkb.proc_main_id and fkb.doc_type = 'D_GP_XZCF_AJFKB'
+		</if>
+		where t.DELETE_FLAG = '0'
+		<include refid="findList_where"/>
+	</select>
+	
+	
+	<sql id="findList_where">
+		<if test="case_no != null and case_no != ''">
+			and t.case_no = #{case_no}
+		</if>
+		<if test="pre_report_no != null and pre_report_no != ''">
+			and t.pre_report_no like '%' || #{pre_report_no} || '%'
+		</if>
+		<if test="psn_name != null and psn_name != ''">
+			and t.psn_name like '%' || #{psn_name} || '%'
+		</if>
+		<if test="comp_name != null and comp_name != ''">
+			and t.comp_name like '%' || #{comp_name} || '%'
+		</if>
+		<if test="step_1_org != null and step_1_org != ''">
+			and t1.audit_org = #{step_1_org}
+		</if>
+		<if test="step_2_org != null and step_2_org != ''">
+			and t2.audit_org = #{step_2_org}
+		</if>
+		<if test="step_3_org != null and step_3_org != ''">
+			and t3.audit_org = #{step_3_org}
+		</if>
+		<if test="step_4_org != null and step_4_org != ''">
+			and t4.audit_org = #{step_4_org}
+		</if>
+		<if test="step_5_org != null and step_5_org != ''">
+			and t5.audit_org = #{step_5_org}
+		</if>
+		<if test="step_6_org != null and step_6_org != ''">
+			and t6.audit_org = #{step_6_org}
+		</if>
+		<if test="step_7_org != null and step_7_org != ''">
+			and t7.audit_org = #{step_7_org}
+		</if>
+		<if test="step_8_org != null and step_8_org != ''">
+			and t8.audit_org = #{step_8_org}
+		</if>
+		<if test="step_9_org != null and step_9_org != ''">
+			and t9.audit_org = #{step_9_org}
+		</if>
+		<if test="step_10_org != null and step_10_org != ''">
+			and t10.audit_org = #{step_10_org}
+		</if>
+		<if test="step_11_org != null and step_11_org != ''">
+			and t11.audit_org = #{step_11_org}
+		</if>
+		<if test="step_12_org != null and step_12_org != ''">
+			and t12.audit_org = #{step_12_org}
+		</if>
+		<if test="step_13_org != null and step_13_org != ''">
+			and t13.audit_org = #{step_13_org}
+		</if>
+		<if test="step_14_org != null and step_14_org != ''">
+			and t14.audit_org = #{step_14_org}
+		</if>
+		<if test="step_16_org != null and step_16_org != ''">
+			and t16.audit_org = #{step_16_org}
+		</if>
+		<if test="step_17_org != null and step_17_org != ''">
+			and t17.audit_org = #{step_17_org}
+		</if>
+		<if test="step_20_org != null and step_20_org != ''">
+			and t20.audit_org = #{step_20_org}
+		</if>
+		<if test="step_1_date_begin != null and step_1_date_begin != ''">
+			<![CDATA[ and t1.audit_date >= to_date(#{step_1_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_1_date_end != null and step_1_date_end != ''">
+			<![CDATA[ and t1.audit_date <= to_date(#{step_1_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_2_date_begin != null and step_2_date_begin != ''">
+			<![CDATA[ and t2.audit_date >= to_date(#{step_1_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_2_date_end != null and step_2_date_end != ''">
+			<![CDATA[ and t2.audit_date <= to_date(#{step_2_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_3_date_begin != null and step_3_date_begin != ''">
+			<![CDATA[ and t3.audit_date >= to_date(#{step_3_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_3_date_end != null and step_3_date_end != ''">
+			<![CDATA[ and t3.audit_date <= to_date(#{step_3_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_4_date_begin != null and step_4_date_begin != ''">
+			<![CDATA[ and t4.audit_date >= to_date(#{step_4_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_4_date_end != null and step_4_date_end != ''">
+			<![CDATA[ and t4.audit_date <= to_date(#{step_4_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_5_date_begin != null and step_5_date_begin != ''">
+			<![CDATA[ and t5.audit_date >= to_date(#{step_5_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_5_date_end != null and step_5_date_end != ''">
+			<![CDATA[ and t5.audit_date <= to_date(#{step_5_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_6_date_begin != null and step_6_date_begin != ''">
+			<![CDATA[ and t6.audit_date >= to_date(#{step_6_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_6_date_end != null and step_6_date_end != ''">
+			<![CDATA[ and t6.audit_date <= to_date(#{step_6_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_7_date_begin != null and step_7_date_begin != ''">
+			<![CDATA[ and t7.audit_date >= to_date(#{step_7_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_7_date_end != null and step_7_date_end != ''">
+			<![CDATA[ and t7.audit_date <= to_date(#{step_7_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_8_date_begin != null and step_8_date_begin != ''">
+			<![CDATA[ and t8.audit_date >= to_date(#{step_8_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_8_date_end != null and step_8_date_end != ''">
+			<![CDATA[ and t8.audit_date <= to_date(#{step_8_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_9_date_begin != null and step_9_date_begin != ''">
+			<![CDATA[ and t9.audit_date >= to_date(#{step_9_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_9_date_end != null and step_9_date_end != ''">
+			<![CDATA[ and t9.audit_date <= to_date(#{step_9_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_10_date_begin != null and step_10_date_begin != ''">
+			<![CDATA[ and t10.audit_date >= to_date(#{step_10_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_10_date_end != null and step_10_date_end != ''">
+			<![CDATA[ and t10.audit_date <= to_date(#{step_10_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_11_date_begin != null and step_11_date_begin != ''">
+			<![CDATA[ and t11.audit_date >= to_date(#{step_11_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_11_date_end != null and step_11_date_end != ''">
+			<![CDATA[ and t11.audit_date <= to_date(#{step_11_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_12_date_begin != null and step_12_date_begin != ''">
+			<![CDATA[ and t12.audit_date >= to_date(#{step_12_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_12_date_end != null and step_12_date_end != ''">
+			<![CDATA[ and t12.audit_date <= to_date(#{step_12_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_13_date_begin != null and step_13_date_begin != ''">
+			<![CDATA[ and t13.audit_date >= to_date(#{step_13_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_13_date_end != null and step_13_date_end != ''">
+			<![CDATA[ and t13.audit_date <= to_date(#{step_13_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_14_date_begin != null and step_14_date_begin != ''">
+			<![CDATA[ and t14.audit_date >= to_date(#{step_14_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_14_date_end != null and step_14_date_end != ''">
+			<![CDATA[ and t14.audit_date <= to_date(#{step_14_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_20_date_end != null and step_20_date_end != ''">
+			<![CDATA[ and t20.audit_date <= to_date(#{step_20_date_end}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="step_1_status != null and step_1_status != ''">
+			and nvl(t1.audit_status, '0')=#{step_1_status}
+		</if>
+		<if test="step_2_status != null and step_2_status != ''">
+			and nvl(t2.audit_status, '0')=#{step_2_status}
+		</if>
+		<if test="step_3_status != null and step_3_status != ''">
+			and nvl(t3.audit_status, '0')=#{step_3_status}
+		</if>
+		<if test="step_4_status != null and step_4_status != ''">
+			and nvl(t4.audit_status, '0')=#{step_4_status}
+		</if>
+		<if test="step_5_status != null and step_5_status != ''">
+			and nvl(t5.audit_status, '0')=#{step_5_status}
+		</if>
+		<if test="step_6_status != null and step_6_status != ''">
+			and nvl(t6.audit_status, '0')=#{step_6_status}
+		</if>
+		<if test="step_7_status != null and step_7_status != ''">
+			and nvl(t7.audit_status, '0')=#{step_7_status}
+		</if>
+		<if test="step_8_status != null and step_8_status != ''">
+			and nvl(t8.audit_status, '0')=#{step_8_status}
+		</if>
+		<if test="step_9_status != null and step_9_status != ''">
+			and nvl(t9.audit_status, '0')=#{step_9_status}
+		</if>
+		<if test="step_10_status != null and step_10_status != ''">
+			and nvl(t10.audit_status, '0')=#{step_10_status}
+		</if>
+		<if test="step_11_status != null and step_11_status != ''">
+			and nvl(t11.audit_status, '0')=#{step_11_status}
+		</if>
+		<if test="step_12_status != null and step_12_status != ''">
+			and nvl(t12.audit_statu, '0')s=#{step_12_status}
+		</if>
+		<if test="step_13_status != null and step_13_status != ''">
+			and nvl(t13.audit_status, '0')=#{step_13_status}
+		</if>
+		<if test="step_14_status != null and step_14_status != ''">
+			and nvl(t14.audit_status, '0')=#{step_14_status}
+		</if>
+		<if test="step_20_status != null and step_20_status != ''">
+			and nvl(t20.audit_status, '0')=#{step_20_status}
+		</if>
+		<if test="step_1_psn != null and step_1_psn != ''">
+			and t1.audit_psn=#{step_1_psn}
+		</if>
+		<if test="step_2_psn != null and step_2_psn != ''">
+			and t2.audit_psn=#{step_2_psn}
+		</if>
+		<if test="step_3_psn != null and step_3_psn != ''">
+			and t3.audit_psn=#{step_3_psn}
+		</if>
+		<if test="step_4_psn != null and step_4_psn != ''">
+			and t4.audit_psn=#{step_4_psn}
+		</if>
+		<if test="step_5_psn != null and step_5_psn != ''">
+			and t5.audit_psn=#{step_5_psn}
+		</if>
+		<if test="step_6_psn != null and step_6_psn != ''">
+			and t6.audit_psn=#{step_6_psn}
+		</if>
+		<if test="step_7_psn != null and step_7_psn != ''">
+			and t7.audit_psn=#{step_7_psn}
+		</if>
+		<if test="step_8_psn != null and step_8_psn != ''">
+			and t8.audit_psn=#{step_8_psn}
+		</if>
+		<if test="step_9_psn != null and step_9_psn != ''">
+			and t9.audit_psn=#{step_9_psn}
+		</if>
+		<if test="step_10_psn != null and step_10_psn != ''">
+			and t10.audit_psn=#{step_10_psn}
+		</if>
+		<if test="step_11_psn != null and step_11_psn != ''">
+			and t11.audit_psn=#{step_11_psn}
+		</if>
+		<if test="step_12_psn != null and step_12_psn != ''">
+			and t12.audit_psn=#{step_12_psn}
+		</if>
+		<if test="step_13_psn != null and step_13_psn != ''">
+			and t13.audit_psn=#{step_13_psn}
+		</if>
+		<if test="step_14_psn != null and step_14_psn != ''">
+			and t14.audit_psn=#{step_14_psn}
+		</if>
+		<if test="step_20_psn != null and step_20_psn != ''">
+			and t20.audit_psn=#{step_20_psn}
+		</if>
+		<!-- 调查取证：是否提交 -->
+		<if test="step == 9 and submit_status == 1">
+			and (t9.audit_status = null or t9.audit_status = '0')
+		</if>
+		<if test="step == 9 and submit_status == 2">
+			and (t9.audit_status in ('1', '2'))
+		</if>
+		<!-- 初审：是否提交 -->
+		<if test=" step == 10 and submit_status == 1">
+			and (t10.audit_status = null or t10.audit_status in ('0','1','13','14','15', '2') or t20.audit_status = null or t20.audit_status in ('0','1','13','14','15', '2'))
+		</if>
+		<if test="step == 10 and submit_status == 2">
+			and (t10.audit_status in ('1','13','14','15', '2') or t20.audit_status in ('1','13','14','15', '2'))
+		</if>
+		
+		<!-- 送达执行：是否提交 -->
+		<if test="step == 13 and submit_status == 1">
+			and (t13.audit_status = null or t13.audit_status = '0')
+		</if>
+		<if test="step == 13 and submit_status == 2">
+			and (t13.audit_status in ('1', '2','13','14','15'))
+		</if>
+		
+		<!-- 是否填写结案报告 -->
+		<if test="step == 14 and submit_status == 1">
+			and jabg.doc_id is not null
+		</if>
+		<if test="step == 14 and submit_status == 2">
+			and jabg.doc_id is null
+		</if>
+		
+		<!-- 是否填写反馈表 -->
+		<if test="step == 14 and submit_status == 3">
+			and fkb.doc_id is not null
+		</if>
+		<if test="step == 14 and submit_status == 4">
+			and fkb.doc_id is null
+		</if>
+	</sql>
+
+	<select id="findNewById" resultType="com.dpn.ciqqlc.standard.model.GeneralPunishmentDTO">
+		select * from YBCF_VIEW where id=#{id}
+			 and ROWNUM = 1
+	</select>	
+	<!-- 查询详情 -->
+	<select id="findById" resultType="com.dpn.ciqqlc.standard.model.GeneralPunishmentDTO">
+		select 
+		    t.id,
+			<!-- t.pre_report_no, -->
+			t.case_no,
+			t.comp_name,
+			t.psn_name,
+			t.gender,
+			t.birth,
+			t.nation,
+			t.corporate_psn,
+			t.addr,
+			t.tel,
+			t.age,
+			t.per_addr,
+			t.contacts_name,
+			t.main_id,
+			t.forward_step,
+			qll.name declare_org_name,
+			t01.name as step_1_org
+<!-- 			t1.audit_status as step_1_status,
+			t1.audit_date as step_1_date,
+			t1.audit_psn as step_1_psn,
+			t2.audit_status as step_2_status,
+			t2.audit_date as step_2_date,
+			t2.audit_org as step_2_org,
+			t2.audit_psn as step_2_psn,
+			t3.audit_status as step_3_status,
+			t3.audit_date as step_3_date,
+			t3.audit_org as step_3_org,
+			t3.audit_psn as step_3_psn,
+			t4.audit_status as step_4_status,
+			t4.audit_date as step_4_date,
+			t4.audit_org as step_4_org,
+			t4.audit_psn as step_4_psn,
+			t5.audit_status as step_5_status,
+			t5.audit_date as step_5_date,
+			t5.audit_org as step_5_org,
+			t5.audit_psn as step_5_psn,
+			t6.audit_status as step_6_status,
+			t6.audit_date as step_6_date,
+			t6.audit_org as step_6_org,
+			t6.audit_psn as step_6_psn,
+			t7.audit_status as step_7_status,
+			t7.audit_date as step_7_date,
+			t7.audit_org as step_7_org,
+			t7.audit_psn as step_7_psn,
+			t8.audit_status as step_8_status,
+			t8.audit_date as step_8_date,
+			t8.audit_org as step_8_org,
+			t8.audit_psn as step_8_psn,
+			t9.audit_status as step_9_status,
+			t9.audit_date as step_9_date,
+			t9.audit_org as step_9_org,
+			t9.audit_psn as step_9_psn,
+			t10.audit_status as step_10_status,
+			t10.audit_date as step_10_date,
+			t10.audit_org as step_10_org,
+			t10.audit_psn as step_10_psn,
+			t11.audit_status as step_11_status,
+			t11.audit_date as step_11_date,
+			t11.audit_org as step_11_org,
+			t11.audit_psn as step_11_psn,
+			t12.audit_status as step_12_status,
+			t12.audit_date as step_12_date,
+			t12.audit_org as step_12_org,
+			t12.audit_psn as step_12_psn,
+			t13.audit_status as step_13_status,
+			t13.audit_date as step_13_date,
+			t13.audit_org as step_13_org,
+			t13.audit_psn as step_13_psn,
+			
+			t14.audit_status as step_14_status,
+			t14.audit_date as step_14_date,
+			t14.audit_org as step_14_org,
+			t14.audit_psn as step_14_psn,
+			
+			t16.audit_status as step_16_status,
+			t16.audit_date as step_16_date,
+			t16.audit_org as step_16_org,
+			t16.audit_psn as step_16_psn,
+			
+			t17.audit_status as step_17_status,
+			t17.audit_date as step_17_date,
+			t17.audit_org as step_17_org,
+			t17.audit_psn as step_17_psn,
+			
+			t18.audit_status as step_18_status,
+			t18.audit_date as step_18_date,
+			t18.audit_org as step_18_org,
+			t18.audit_psn as step_18_psn,
+			
+			t19.audit_status as step_19_status,
+			t19.audit_date as step_19_date,
+			t19.audit_org as step_19_org,
+			t19.audit_psn as step_19_psn,
+			
+			t20.audit_status as step_20_status,
+			t20.audit_date as step_20_date,
+			t20.audit_org as step_20_org,
+			t20.audit_psn as step_20_psn -->
+			,sv.*
+			,nvl(gp_file_ajjzsl.file_name, '') as gp_file_ajjzsl
+			,gp_file_ajjzsl.file_location as gp_file_ajjzsl_location
+			,nvl(gp_file_sdhz.file_name, '') as gp_file_sdhz
+			,gp_file_sdhz.file_location as gp_file_sdhz_location
+			,nvl(gp_file_tzcx.file_name, '') as gp_file_tzcx
+			,gp_file_tzcx.file_location as gp_file_tzcx_location
+			
+		 from QLC_GENERAL_PUNISHMENT t
+		 left join ORGANIZES_CIQ qll on t.declare_org = qll.org_code
+		 left join ybcf_step_view sv on t.pre_report_no = sv.pre_report_no
+<!-- 		 left join QLC_GENERAL_PUNISHMENT_HISTORY t1 on t.pre_report_no = t1.pre_report_no and t1.audit_step = '1'     and t1.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t2 on t.pre_report_no = t2.pre_report_no and t2.audit_step = '2'     and t2.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t3 on t.pre_report_no = t3.pre_report_no and t3.audit_step = '3'     and t3.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t4 on t.pre_report_no = t4.pre_report_no and t4.audit_step = '4'     and t4.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t5 on t.pre_report_no = t5.pre_report_no and t5.audit_step = '5'     and t5.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t6 on t.pre_report_no = t6.pre_report_no and t6.audit_step = '6'     and t6.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t7 on t.pre_report_no = t7.pre_report_no and t7.audit_step = '7'     and t7.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t8 on t.pre_report_no = t8.pre_report_no and t8.audit_step = '8'     and t8.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t9 on t.pre_report_no = t9.pre_report_no and t9.audit_step = '9'     and t9.DELETE_FLAG = '0' 
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t10 on t.pre_report_no = t10.pre_report_no and t10.audit_step = '10' and t10.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t11 on t.pre_report_no = t11.pre_report_no and t11.audit_step = '11' and t11.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t12 on t.pre_report_no = t12.pre_report_no and t12.audit_step = '12' and t12.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t13 on t.pre_report_no = t13.pre_report_no and t13.audit_step = '13' and t13.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t14 on t.pre_report_no = t14.pre_report_no and t14.audit_step = '14' and t14.DELETE_FLAG = '0'
+	 	 left join QLC_GENERAL_PUNISHMENT_HISTORY t16 on t.pre_report_no = t16.pre_report_no and t16.audit_step = '16'  and t16.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t17 on t.pre_report_no = t17.pre_report_no and t17.audit_step = '17'  and t17.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t18 on t.pre_report_no = t18.pre_report_no and t18.audit_step = '18'  and t18.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t19 on t.pre_report_no = t19.pre_report_no and t19.audit_step = '19'  and t19.DELETE_FLAG = '0'
+		 left join QLC_GENERAL_PUNISHMENT_HISTORY t20 on t.pre_report_no = t20.pre_report_no and t20.audit_step = '20'  and t20.DELETE_FLAG = '0' -->
+		 left join ORGANIZES t01 on sv.step_1_org = t01.org_code
+		 
+		 left join qlc_file_info gp_file_ajjzsl on t.main_id = gp_file_ajjzsl.main_id and gp_file_ajjzsl.key_name = 'gp_file_ajjzsl'
+	     left join qlc_file_info gp_file_sdhz on t.main_id = gp_file_sdhz.main_id and gp_file_sdhz.key_name = 'gp_file_sdhz'
+		 left join qlc_file_info gp_file_tzcx on t.main_id = gp_file_tzcx.main_id and gp_file_tzcx.key_name = 'gp_file_tzcx'                                                        
+		 where t.id=#{id}
+		 and ROWNUM = 1
+	</select>
+	
+	<select id="getLatestCaseNo" resultType="java.lang.String">
+		select max(t.case_no) 
+		from QLC_GENERAL_PUNISHMENT t
+		where t.case_no like #{curr_year} || '%'
+	</select>
+	
+	<insert id="insert" parameterType="com.dpn.ciqqlc.standard.model.GeneralPunishmentDTO" statementType="CALLABLE" >
+	    <selectKey keyProperty="main_id" order="BEFORE" resultType="String">
+            select CreateGUID() as main_id from DUAL
+        </selectKey>
+		insert into QLC_GENERAL_PUNISHMENT
+			(
+				id
+				<if test="pre_report_no != null and pre_report_no != ''" >
+				,pre_report_no
+				</if>
+				<if test="case_no != null and case_no != ''" >
+				,case_no
+				</if>
+				<if test="comp_name != null and comp_name != ''" >
+				,comp_name
+				</if>
+				<if test="psn_name != null and psn_name != ''" >
+				,psn_name
+				</if>
+				<if test="gender != null and gender != ''" >
+				,gender
+				</if>
+				<if test="birth != null and birth != ''">
+				,birth
+				</if>
+				<if test="nation != null and nation != ''">
+				,nation
+				</if>
+				<if test="corporate_psn != null and corporate_psn != ''">
+				,corporate_psn
+				</if>
+				<if test="addr != null and addr != ''">
+				,addr
+				</if>
+				<if test="tel != null and tel !=''" >
+				,tel
+				</if>
+				<if test="audit_step != null and audit_step !=''" >
+				,audit_step
+				</if>
+				<if test="audit_status != null and audit_status != ''" >
+				,audit_status
+				</if>
+				<if test="audit_date != null" >
+				,audit_date
+				</if>
+				<if test="audit_org != null and audit_org !=''" >
+				,audit_org
+				</if>
+				<if test="audit_psn != null and audit_psn != ''" >
+				,audit_psn
+				</if>
+				<if test="age != null and age != ''">
+				,age
+				</if>
+				<if test="per_addr != null and per_addr != ''">
+				,per_addr
+				</if>
+				<if test="contacts_name != null and contacts_name != ''">
+				,contacts_name
+				</if>
+				,main_id
+				<if test="belong_org != null and belong_org != ''">
+				,belong_org
+				</if>
+				<if test="declare_org != null and declare_org != ''">
+				,declare_org
+				</if>
+				<if test="accept_org != null and accept_org !=''">
+				,accept_org
+				</if>
+			)
+		values 
+			(
+				CreateGUID()
+				<if test="pre_report_no != null and pre_report_no != ''" >
+				,#{pre_report_no}
+				</if>
+				<if test="case_no != null and case_no != ''" >
+				,#{case_no}
+				</if>
+				<if test="comp_name != null and comp_name != ''" >
+				,#{comp_name}
+				</if>
+				<if test="psn_name != null and psn_name != ''" >
+				,#{psn_name}
+				</if>
+				<if test="gender != null and gender != ''" >
+				,#{gender}
+				</if>
+				<if test="birth != null and birth != ''">
+				,#{birth}
+				</if>
+				<if test="nation != null and nation != ''">
+				,#{nation}
+				</if>
+				<if test="corporate_psn != null and corporate_psn != ''">
+				,#{corporate_psn}
+				</if>
+				<if test="addr != null and addr != ''">
+				,#{addr}
+				</if>
+				<if test="tel != null and tel !=''" >
+				,#{tel}
+				</if>
+				<if test="audit_step != null and audit_step !=''" >
+				,#{audit_step}
+				</if>
+				<if test="audit_status != null and audit_status != ''" >
+				,#{audit_status}
+				</if>
+				<if test="audit_date != null" >
+				,#{audit_date}
+				</if>
+				<if test="audit_org != null and audit_org !=''" >
+				,#{audit_org}
+				</if>
+				<if test="audit_psn != null and audit_psn != ''" >
+				,#{audit_psn}
+				</if>
+				<if test="age != null and age != ''">
+				,#{age}
+				</if>
+				<if test="per_addr != null and per_addr != ''">
+				,#{per_addr}
+				</if>
+				<if test="contacts_name != null and contacts_name != ''">
+				,#{contacts_name}
+				</if>
+				<!-- ,CreateGUID() -->
+				,#{main_id}
+				<if test="belong_org != null and belong_org != ''">
+				,#{belong_org}
+				</if>
+				<if test="declare_org != null and declare_org != ''">
+				,#{declare_org}
+				</if>
+				<if test="accept_org != null and accept_org !=''">
+				,#{accept_org}
+				</if>
+			)
+	</insert>
+	
+	<insert id="insertHistory" parameterType="com.dpn.ciqqlc.standard.model.GeneralPunishmentHistoryDTO" statementType="CALLABLE" >
+		insert into QLC_GENERAL_PUNISHMENT_HISTORY
+			(
+				id
+				<if test="pre_report_no != null and pre_report_no != ''" >
+				,pre_report_no
+				</if>
+				<if test="audit_step != null and audit_step !=''" >
+				,audit_step
+				</if>
+				<if test="audit_status != null and audit_status != ''" >
+				,audit_status
+				</if>
+				<if test="audit_date != null" >
+				,audit_date
+				</if>
+				<if test="audit_org != null and audit_org !=''" >
+				,audit_org
+				</if>
+				<if test="audit_psn != null and audit_psn != ''" >
+				,audit_psn
+				</if>
+				<if test="doc_id != null and doc_id !=''" >
+				,doc_id
+				</if>
+				<if test="file_id">
+				,file_id
+				</if>
+				<if test="belong_org != null and belong_org != ''">
+				,belong_org
+				</if>
+				<if test="declare_org != null and declare_org != ''">
+				,declare_org
+				</if>
+				<if test="accept_org != null and accept_org !=''">
+				,accept_org
+				</if>
+			)
+		values 
+			(
+				CreateGUID()
+				<if test="pre_report_no != null and pre_report_no != ''" >
+				,#{pre_report_no}
+				</if>
+				<if test="audit_step != null and audit_step !=''" >
+				,#{audit_step}
+				</if>
+				<if test="audit_status != null and audit_status != ''" >
+				,#{audit_status}
+				</if>
+				<if test="audit_date != null" >
+				,#{audit_date}
+				</if>
+				<if test="audit_org != null and audit_org !=''" >
+				,#{audit_org}
+				</if>
+				<if test="audit_psn != null and audit_psn != ''" >
+				,#{audit_psn}
+				</if>
+				<if test="doc_id != null and doc_id !=''" >
+				,#{doc_id}
+				</if>
+				<if test="file_id">
+				,#{file_id}
+				</if>
+				<if test="belong_org != null and belong_org != ''">
+				,#{belong_org}
+				</if>
+				<if test="declare_org != null and declare_org != ''">
+				,#{declare_org}
+				</if>
+				<if test="accept_org != null and accept_org !=''">
+				,#{accept_org}
+				</if>
+			)
+	</insert>
+	
+	<update id="update" parameterType='com.dpn.ciqqlc.standard.model.GeneralPunishmentDTO' statementType="CALLABLE">
+		update QLC_GENERAL_PUNISHMENT set 
+			id = #{id}
+			<if test="pre_report_no != null and pre_report_no != ''" >
+			,pre_report_no = #{pre_report_no}
+			</if>
+			<if test="case_no != null and case_no != ''" >
+			,case_no = #{case_no}
+			</if>
+			<if test="comp_name != null and comp_name != ''" >
+			,comp_name = #{comp_name}
+			</if>
+			<if test="psn_name != null and psn_name != ''" >
+			,psn_name = #{psn_name}
+			</if>
+			<if test="gender != null and gender != ''" >
+			,gender = #{gender}
+			</if>
+			<if test="birth != null and birth != ''">
+			,birth = #{birth}
+			</if>
+			<if test="nation != null and nation != ''">
+			,nation = #{nation}
+			</if>
+			<if test="corporate_psn != null and corporate_psn != ''">
+			,corporate_psn = #{corporate_psn}
+			</if>
+			<if test="addr != null and addr != ''">
+			,addr = #{addr}
+			</if>
+			<if test="tel != null and tel !=''" >
+			,tel = #{tel}
+			</if>
+			<if test="audit_step != null and audit_step !=''" >
+			,audit_step = #{audit_step}
+			</if>
+			<if test="audit_status != null and audit_status !=''" >
+			,audit_status = #{audit_status}
+			</if>
+			<if test="audit_date != null" >
+			,audit_date = #{audit_date}
+			</if>
+			<if test="audit_org != null and audit_org !=''" >
+			,audit_org = #{audit_org}
+			</if>
+			<if test="audit_psn != null and audit_psn !=''" >
+			,audit_psn = #{audit_psn}
+			</if>
+			<if test="forward_step != null and forward_step !=''" >
+			,forward_step = #{forward_step}
+			</if>
+			<if test="age != null and age != ''">
+			,age = #{age}
+			</if>
+			<if test="per_addr != null and per_addr != ''">
+			,per_addr = #{per_addr}
+			</if>
+			<if test="contacts_name != null and contacts_name != ''">
+			,contacts_name = #{contacts_name}
+			</if>
+			<if test="declare_org != null and declare_org != ''">
+			,declare_org = #{declare_org}
+			</if>
+			<if test="belong_org != null and belong_org != ''">
+			,belong_org = #{belong_org}
+			</if>
+			<if test="accept_org != null and accept_org !=''">
+			,accept_org = #{accept_org}
+			</if>
+			where id = #{id}
+	</update>
+	
+	<update id="updateHistory" parameterType='com.dpn.ciqqlc.standard.model.GeneralPunishmentHistoryDTO' statementType="CALLABLE">
+		update QLC_GENERAL_PUNISHMENT_HISTORY set 
+			pre_report_no = #{pre_report_no}
+			<if test="audit_step != null and audit_step !=''" >
+			,audit_step = #{audit_step}
+			</if>
+			<if test="audit_status != null and audit_status !=''" >
+			,audit_status = #{audit_status}
+			</if>
+			<if test="audit_date != null" >
+			,audit_date = #{audit_date}
+			</if>
+			<if test="audit_org != null and audit_org !=''" >
+			,audit_org = #{audit_org}
+			</if>
+			<if test="audit_psn">
+			,audit_psn = #{audit_psn}
+			</if>
+			<if test="doc_id != null and doc_id !=''" >
+			,doc_id = #{doc_id}
+			</if>
+			<if test="file_id">
+			,file_id = #{file_id}
+			</if>
+			<if test="belong_org != null and belong_org != ''">
+			,belong_org = #{belong_org}
+			</if>
+			<if test="declare_org != null and declare_org != ''">
+			,declare_org = #{declare_org}
+			</if>
+			<if test="accept_org != null and accept_org !=''">
+			,accept_org = #{accpet_org}
+			</if>
+			where pre_report_no = #{pre_report_no} and audit_step = #{audit_step}
+			<if test="id != null and id != ''">
+			 and id = #{id}
+			</if>
+	</update>
+	
+	<delete id="delete" >
+		<!-- delete from QLC_GENERAL_PUNISHMENT t where t.pre_report_no=#{pre_report_no} --> 
+		update QLC_GENERAL_PUNISHMENT set DELETE_FLAG = '0' where pre_report_no=#{pre_report_no}
+	</delete>
+	
+	<delete id="deleteHistory" >
+		<!-- delete from QLC_GENERAL_PUNISHMENT_HISTORY t where t.pre_report_no=#{pre_report_no} and t.audit_step=${audit_step} -->
+		update QLC_GENERAL_PUNISHMENT_HISTORY set DELETE_FLAG = '0' where pre_report_no=#{pre_report_no} and audit_step=#{audit_step}
+	</delete>
+	
+	<delete id="deleteHistoryWhenFinished" >
+		<!-- delete from QLC_GENERAL_PUNISHMENT_HISTORY t where t.pre_report_no=#{pre_report_no} and t.audit_step > #{audit_step} -->
+		update QLC_GENERAL_PUNISHMENT_HISTORY set DELETE_FLAG = '0' where pre_report_no=#{pre_report_no} and audit_step>#{audit_step}
+	</delete>
+	
+	<!-- 查询 1.文档类型 2.业务主键 查询doc -->
+	<select id="findDocByTypeNMainId" resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO">
+		select 
+		    *
+		 from QLC_CHECK_DOCS_RCD t
+		 where 1=1 
+		 and rowNum=1
+		 <if test="proc_main_id != null and proc_main_id != ''" >
+		 	and t.proc_main_id = #{proc_main_id}
+		 </if>
+		 <if test="doc_type != null and doc_type != ''" >
+		 	and t.doc_type = #{doc_type}
+		 </if>
+		 <if test="group_id != null and group_id != ''" >
+		 	and t.group_id = #{group_id}
+		 </if>
+		 <if test="doc_id != null and doc_id != ''">
+		 	and t.doc_id = #{doc_id}
+		 </if>
+ 		<if test="docTypes != null">
+			and t.doc_type in
+			<foreach item="item" index="index" collection="docTypes" open="(" separator="," close=")">  
+          		#{item}  
+			</foreach> 
+		</if>
+ 		<if test="docIds != null">
+			and t.doc_id in
+			<foreach item="item" index="index" collection="docIds" open="(" separator="," close=")">  
+          		#{item}  
+			</foreach> 
+		</if>
+	</select>
+	
+	<select id="findDocCountByTypeMainId" resultType="int">
+		select count(0) from QLC_CHECK_DOCS_RCD t where  t.proc_main_id = #{proc_main_id}
+		<if test="docTypes != null">
+			and t.doc_type in
+			<foreach item="item" index="index" collection="docTypes" open="(" separator="," close=")">  
+          		#{item}  
+			</foreach> 
+		</if>
+		<if test="doc_type != null and doc_type != ''" >
+		    and t.doc_type = #{doc_type}
+		</if>
+		<if test="group_id != null and group_id != ''" >
+		    and t.group_id = #{group_id}
+		</if>
+	</select>
+	
+	<insert id="insertDoc" parameterType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO">
+        <selectKey keyProperty="doc_id" order="BEFORE" resultType="String">
+            select CreateGUID() as doc_id from DUAL
+        </selectKey>
+		insert into qlc_check_docs_rcd
+			(
+				DOC_ID
+				,PROC_MAIN_ID
+				<if test="doc_type != null and doc_type != ''" >
+				,DOC_TYPE
+				</if>
+				<if test="group_id != null and group_id != ''" >
+				,GROUP_ID
+				</if>
+				<if test="option_1 != null and option_1 != ''" >
+				,OPTION_1
+				</if>
+				<if test="option_2 != null and option_2 != ''" >
+				,OPTION_2
+				</if>
+				<if test="option_3 != null and option_3 != ''" >
+				,OPTION_3
+				</if>
+				<if test="option_4 != null and option_4 != ''" >
+				,OPTION_4
+				</if>
+				<if test="option_5 != null and option_5 != ''" >
+				,OPTION_5
+				</if>
+				<if test="option_6 != null and option_6 != ''" >
+				,OPTION_6
+				</if>
+				<if test="option_7 != null and option_7 != ''" >
+				,OPTION_7
+				</if>
+				<if test="option_8 != null and option_8 != ''" >
+				,OPTION_8
+				</if>
+				<if test="option_9 != null and option_9 != ''" >
+				,OPTION_9
+				</if>
+				<if test="option_10 != null and option_10 != ''" >
+				,OPTION_10
+				</if>
+				<if test="option_11 != null and option_11 != ''" >
+				,OPTION_11
+				</if>
+				<if test="option_12 != null and option_12 != ''" >
+				,OPTION_12
+				</if>
+				<if test="option_13 != null and option_13 != ''" >
+				,OPTION_13
+				</if>
+				<if test="option_14 != null and option_14 != ''" >
+				,OPTION_14
+				</if>
+				<if test="option_15 != null and option_15 != ''" >
+				,OPTION_15
+				</if>
+				<if test="option_16 != null and option_16 != ''" >
+				,OPTION_16
+				</if>
+				<if test="option_17 != null and option_17 != ''" >
+				,OPTION_17
+				</if>
+				<if test="option_18 != null and option_18 != ''" >
+				,OPTION_18
+				</if>
+				<if test="option_19 != null and option_19 != ''" >
+				,OPTION_19
+				</if>
+				<if test="option_20 != null and option_20 != ''" >
+				,OPTION_20
+				</if>
+				<if test="option_21 != null and option_21 != ''" >
+				,OPTION_21
+				</if>
+				<if test="option_22 != null and option_22 != ''" >
+				,OPTION_22
+				</if>
+				<if test="option_23 != null and option_23 != ''" >
+				,OPTION_23
+				</if>
+				<if test="option_24 != null and option_24 != ''" >
+				,OPTION_24
+				</if>
+				<if test="option_25 != null and option_25 != ''" >
+				,OPTION_25
+				</if>
+				<if test="option_26 != null and option_26 != ''" >
+				,OPTION_26
+				</if>
+				<if test="option_27 != null and option_27 != ''" >
+				,OPTION_27
+				</if>
+				<if test="option_28 != null and option_28 != ''" >
+				,OPTION_28
+				</if>
+				<if test="option_29 != null and option_29 != ''" >
+				,OPTION_29
+				</if>
+				<if test="option_30 != null and option_30 != ''" >
+				,OPTION_30
+				</if>
+				<if test="option_31 != null and option_31 != ''" >
+				,OPTION_31
+				</if>
+				<if test="option_32 != null and option_32 != ''" >
+				,OPTION_32
+				</if>
+				<if test="option_33 != null and option_33 != ''" >
+				,OPTION_33
+				</if>
+				<if test="option_34 != null and option_34 != ''" >
+				,OPTION_34
+				</if>
+				<if test="option_35 != null and option_35 != ''" >
+				,OPTION_35
+				</if>
+				<if test="option_36 != null and option_36 != ''" >
+				,OPTION_36
+				</if>
+				<if test="option_37 != null and option_37 != ''" >
+				,OPTION_37
+				</if>
+				<if test="dec_user != null and dec_user != ''" >
+				,DEC_USER
+				</if>
+				<if test="dec_date != null " >
+				,DEC_DATE
+				</if>
+			)
+		values 
+			(
+				<choose>
+					<when test="doc_id != null and doc_id != ''">
+						#{doc_id}
+					</when>
+					<otherwise>
+						CreateGUID()
+					</otherwise>
+				</choose>
+				,#{proc_main_id}
+				<if test="group_id != null and group_id != ''" >
+				,#{group_id}
+				</if>
+				<if test="doc_type != null and doc_type != ''" >
+				,#{doc_type}
+				</if>
+				<if test="option_1 != null and option_1 != ''" >
+				,#{option_1}
+				</if>
+				<if test="option_2 != null and option_2 != ''" >
+				,#{option_2}
+				</if>
+				<if test="option_3 != null and option_3 != ''" >
+				,#{option_3}
+				</if>
+				<if test="option_4 != null and option_4 != ''" >
+				,#{option_4}
+				</if>
+				<if test="option_5 != null and option_5 != ''" >
+				,#{option_5}
+				</if>
+				<if test="option_6 != null and option_6 != ''" >
+				,#{option_6}
+				</if>
+				<if test="option_7 != null and option_7 != ''" >
+				,#{option_7}
+				</if>
+				<if test="option_8 != null and option_8 != ''" >
+				,#{option_8}
+				</if>
+				<if test="option_9 != null and option_9 != ''" >
+				,#{option_9}
+				</if>
+				<if test="option_10 != null and option_10 != ''" >
+				,#{option_10}
+				</if>
+				<if test="option_11 != null and option_11 != ''" >
+				,#{option_11}
+				</if>
+				<if test="option_12 != null and option_12 != ''" >
+				,#{option_12}
+				</if>
+				<if test="option_13 != null and option_13 != ''" >
+				,#{option_13}
+				</if>
+				<if test="option_14 != null and option_14 != ''" >
+				,#{option_14}
+				</if>
+				<if test="option_15 != null and option_15 != ''" >
+				,#{option_15}
+				</if>
+				<if test="option_16 != null and option_16 != ''" >
+				,#{option_16}
+				</if>
+				<if test="option_17 != null and option_17 != ''" >
+				,#{option_17}
+				</if>
+				<if test="option_18 != null and option_18 != ''" >
+				,#{option_18}
+				</if>
+				<if test="option_19 != null and option_19 != ''" >
+				,#{option_19}
+				</if>
+				<if test="option_20 != null and option_20 != ''" >
+				,#{option_20}
+				</if>
+				<if test="option_21 != null and option_21 != ''" >
+				,#{option_21}
+				</if>
+				<if test="option_22 != null and option_22 != ''" >
+				,#{option_22}
+				</if>
+				<if test="option_23 != null and option_23 != ''" >
+				,#{option_23}
+				</if>
+				<if test="option_24 != null and option_24 != ''" >
+				,#{option_24}
+				</if>
+				<if test="option_25 != null and option_25 != ''" >
+				,#{option_25}
+				</if>
+				<if test="option_26 != null and option_26 != ''" >
+				,#{option_26}
+				</if>
+				<if test="option_27 != null and option_27 != ''" >
+				,#{option_27}
+				</if>
+				<if test="option_28 != null and option_28 != ''" >
+				,#{option_28}
+				</if>
+				<if test="option_29 != null and option_29 != ''" >
+				,#{option_29}
+				</if>
+				<if test="option_30 != null and option_30 != ''" >
+				,#{option_30}
+				</if>
+				<if test="option_31 != null and option_31 != ''" >
+				,#{option_31}
+				</if>
+				<if test="option_32 != null and option_32 != ''" >
+				,#{option_32}
+				</if>
+				<if test="option_33 != null and option_33 != ''" >
+				,#{option_33}
+				</if>
+				<if test="option_34 != null and option_34 != ''" >
+				,#{option_34}
+				</if>
+				<if test="option_35 != null and option_35 != ''" >
+				,#{option_35}
+				</if>
+				<if test="option_36 != null and option_36 != ''" >
+				,#{option_36}
+				</if>
+				<if test="option_37 != null and option_37 != ''" >
+				,#{option_37}
+				</if>
+				<if test="dec_user != null and dec_user != ''" >
+				,#{dec_user}
+				</if>
+				<if test="dec_date != null " >
+				,#{dec_date}
+				</if>
+			)
+	</insert>
+	
+	<update id="updateDoc" parameterType="com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO">
+		update qlc_check_docs_rcd set 
+			doc_id = #{doc_id}
+			<if test="proc_main_id != null and proc_main_id != ''" >
+			,proc_main_id = #{proc_main_id}
+			</if>
+			<if test="group_id != null and group_id != ''" >
+			,group_id = #{group_id}
+			</if>
+			<if test="option_1 != null and option_1 != ''" >
+			,option_1 = #{option_1}
+			</if>
+			<if test="option_2 != null and option_2 != ''" >
+			,option_2 = #{option_2}
+			</if>
+			<if test="option_3 != null and option_3 != ''" >
+			,option_3 = #{option_3}
+			</if>
+			<if test="option_4 != null and option_4 != ''" >
+			,option_4 = #{option_4}
+			</if>
+			<if test="option_5 != null and option_5 != ''" >
+			,option_5 = #{option_5}
+			</if>
+			<if test="option_6 != null and option_6 != ''" >
+			,option_6 = #{option_6}
+			</if>
+			<if test="option_7 != null and option_7 != ''" >
+			,option_7 = #{option_7}
+			</if>
+			<if test="option_8 != null and option_8 != ''" >
+			,option_8 = #{option_8}
+			</if>
+			<if test="option_9 != null and option_9 != ''" >
+			,option_9 = #{option_9}
+			</if>
+			<if test="option_10 != null and option_10 != ''" >
+			,option_10 = #{option_10}
+			</if>
+			<if test="option_11 != null and option_11 != ''" >
+			,option_11 = #{option_11}
+			</if>
+			<if test="option_12 != null and option_12 != ''" >
+			,option_12 = #{option_12}
+			</if>
+			<if test="option_13 != null and option_13 != ''" >
+			,option_13 = #{option_13}
+			</if>
+			<if test="option_14 != null and option_14 != ''" >
+			,option_14 = #{option_14}
+			</if>
+			<if test="option_15 != null and option_15 != ''" >
+			,option_15 = #{option_15}
+			</if>
+			<if test="option_16 != null and option_16 != ''" >
+			,option_16 = #{option_16}
+			</if>
+			<if test="option_17 != null and option_17 != ''" >
+			,option_17 = #{option_17}
+			</if>
+			<if test="option_18 != null and option_18 != ''" >
+			,option_18 = #{option_18}
+			</if>
+			<if test="option_19 != null and option_19 != ''" >
+			,option_19 = #{option_19}
+			</if>
+			<if test="option_20 != null and option_20 != ''" >
+			,option_20 = #{option_20}
+			</if>
+			<if test="option_21 != null and option_21 != ''" >
+			,option_21 = #{option_21}
+			</if>
+			<if test="option_22 != null and option_22 != ''" >
+			,option_22 = #{option_22}
+			</if>
+			<if test="option_23 != null and option_23 != ''" >
+			,option_23 = #{option_23}
+			</if>
+			<if test="option_24 != null and option_24 != ''" >
+			,option_24 = #{option_24}
+			</if>
+			<if test="option_25 != null and option_25 != ''" >
+			,option_25 = #{option_25}
+			</if>
+			<if test="option_26 != null and option_26 != ''" >
+			,option_26 = #{option_26}
+			</if>
+			<if test="option_27 != null and option_27 != ''" >
+			,option_27 = #{option_27}
+			</if>
+			<if test="option_28 != null and option_28 != ''" >
+			,option_28 = #{option_28}
+			</if>
+			<if test="option_29 != null and option_29 != ''" >
+			,option_29 = #{option_29}
+			</if>
+			<if test="option_30 != null and option_30 != ''" >
+			,option_30 = #{option_30}
+			</if>
+			<if test="option_31 != null and option_31 != ''" >
+			,option_31 = #{option_31}
+			</if>
+			<if test="option_32 != null and option_32 != ''" >
+			,option_32 = #{option_32}
+			</if>
+			<if test="option_33 != null and option_33 != ''" >
+			,option_33 = #{option_33}
+			</if>
+			<if test="option_34 != null and option_34 != ''" >
+			,option_34 = #{option_34}
+			</if>
+			<if test="option_35 != null and option_35 != ''" >
+			,option_35 = #{option_35}
+			</if>
+			<if test="option_36 != null and option_36 != ''" >
+			,option_36 = #{option_36}
+			</if>
+			<if test="option_37 != null and option_37 != ''" >
+			,option_37 = #{option_37}
+			</if>
+			<if test="dec_user != null and dec_user != ''" >
+			,dec_user = #{dec_user}
+			</if>
+			<if test="dec_date != null " >
+			,dec_date = #{DecDate}
+			</if>
+			where doc_id = #{doc_id}
+	</update>
+	
+	<!-- 查询图片视频列表 -->
+	<select id="videoFileEventList"  resultType="com.dpn.ciqqlc.standard.model.VideoFileEventModel">
+		select file_name,create_user,to_char(create_date, 'yyyy-mm-dd hh:mi:ss') create_date_str,proc_type
+		from QLC_VIDEO_FILE_EVENT 
+		where proc_main_id = #{main_id}
+		order by proc_type,create_date desc
+	</select>
+	
+	<!-- 保存附件 -->
+	<insert id="insertFile" parameterType="com.dpn.ciqqlc.standard.model.FileInfoDto" statementType="CALLABLE" >
+        <selectKey keyProperty="id" order="BEFORE" resultType="String">
+            select CreateGUID() as id from DUAL
+        </selectKey>
+		insert into QLC_FILE_INFO
+			(
+				id
+				<if test="main_id != null and main_id != ''" >
+				,main_id
+				</if>
+				<if test="file_name != null and file_name != ''" >
+				,file_name
+				</if>
+				<if test="file_location != null and file_location != ''" >
+				,file_location
+				</if>
+				<if test="create_user != null and create_user != ''" >
+				,create_user
+				</if>
+				<if test="create_date != null and create_date != ''" >
+				,create_date
+				</if>
+				<if test="key_name != null and key_name != ''" >
+				,key_name
+				</if>
+			)
+		values 
+			(
+				#{id}
+				<if test="main_id != null and main_id != ''" >
+				,#{main_id}
+				</if>
+				<if test="file_name != null and file_name != ''" >
+				,#{file_name}
+				</if>
+				<if test="file_location != null and file_location != ''" >
+				,#{file_location}
+				</if>
+				<if test="create_user != null and create_user != ''" >
+				,#{create_user}
+				</if>
+				<if test="create_date != null and create_date != ''" >
+				,#{create_date}
+				</if>
+				<if test="key_name != null and key_name != ''" >
+				,#{key_name}
+				</if>
+			)
+	</insert>
+	
+	<select id="findDocByHisoryDocId" resultType="int" parameterType="Map">
+		SELECT
+			count(0)
+		FROM
+			QLC_CHECK_DOCS_RCD r
+		WHERE
+			r.DOC_ID IN 
+			<foreach item="item" index="index" collection="docIds" open="(" separator="," close=")">  
+          		#{item}  
+			</foreach> 
+		<if test="doc_type != null ">
+			and r.DOC_TYPE = #{doc_type}
+		</if>
+		<if test="doc_types != null ">
+			and r.DOC_TYPE in 
+			<foreach item="item" index="index" collection="docTypes" open="(" separator="," close=")">  
+          		#{item}  
+			</foreach> 
+		</if>
+	</select>
+	<!-- 查询附件 -->
+	<select id="findFile" parameterType='com.dpn.ciqqlc.standard.model.FileInfoDto' resultType="com.dpn.ciqqlc.standard.model.FileInfoDto">
+		select * from QLC_FILE_INFO where main_id = #{main_id} and key_name = #{key_name}
+	</select>
+	
+	<!-- 修改附件 -->
+	<update id="updateFile" parameterType='com.dpn.ciqqlc.standard.model.FileInfoDto' statementType="CALLABLE">
+		update QLC_FILE_INFO set 
+			main_id = #{main_id}
+			<if test="file_name != null and file_name !=''" >
+			,file_name = #{file_name}
+			</if>
+			<if test="file_location != null and file_location !=''" >
+			,file_location = #{file_location}
+			</if>
+			<if test="create_user != null and create_user !=''" >
+			,create_user = #{create_user}
+			</if>
+			<if test="create_date != null and create_date !=''" >
+			,create_date = #{create_date}
+			</if>
+			where main_id = #{main_id} and key_name = #{key_name}
+	</update>
+	
+   <select id="findPunishList" parameterType="com.dpn.ciqqlc.standard.model.LocalePunishDTO" resultType="Map">
+	     select  
+	     	t.ID,t.PUNISH_TYPE,t.CODE,t.ILLEGAL_ACT,t.ILLEGAL_BASIS,t.PUNISH_BASIS
+	     from 
+	     	QLC_LEGAL_PROVISIONS t 
+		 where t.PUNISH_TYPE = '2'
+		 order by to_number(t.code) asc
+    </select>
+    <select id="findOrgList" resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+    	select code,name,type from QLC_CODE_LIBRARY t
+		where t.type = 'QLC_YBCF'
+    </select>
+    <select id="findSBOrgList" resultType="com.dpn.ciqqlc.standard.model.SelectModel">
+		select t.org_code code,t.name name from ORGANIZES_CIQ t
+    	where t.org_code like '2119%'
+      order by t.org_code asc
+    </select>
+</mapper>

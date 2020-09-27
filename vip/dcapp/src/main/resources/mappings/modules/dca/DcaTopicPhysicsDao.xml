@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepowdhc.dcapp.modules.metadata.dao.DcaTopicPhysicsDao">
+
+	<sql id="dcaTopicPhysicsColumns">
+	</sql>
+
+	<sql id="dcaTopicPhysicsJoins">
+	</sql>
+
+	<select id="get" resultType="DcaTopicPhysics">
+	 	SELECT
+			T .TABLE_NAME AS tableName,
+			T .COMMENTS AS tableComment
+		FROM
+			USER_TAB_COMMENTS T
+		<include refid="dcaTopicPhysicsJoins" />
+		WHERE
+			T.TABLE_NAME = #{id}
+	</select>
+
+	<!-- oracle 模糊查询，查找当前数据库表名以dca_开头的表中，含输入的中文名的表,并按更新日期降序排序 -->
+	<select id="findList" resultType="DcaTopicPhysics">
+		SELECT
+			T.TABLE_NAME AS tableName,
+			T.COMMENTS AS tableComment,
+			U.LAST_DDL_TIME
+		FROM
+			USER_TAB_COMMENTS T
+  		LEFT JOIN USER_OBJECTS U ON 
+      		U.OBJECT_NAME = T.TABLE_NAME
+		WHERE
+			T.TABLE_NAME LIKE (SELECT s.VALUE
+			FROM SYS_DICT s
+			WHERE s.TYPE = 'dca_phy_type')||'%'
+			<if test="tableComment != null and tableComment != ''">
+			AND
+				T.COMMENTS LIKE 
+					<if test="dbName == 'oracle'">'%'||#{tableComment}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{tableComment}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%',#{tableComment},'%')</if>
+			</if>
+	
+      ORDER BY LAST_DDL_TIME DESC
+	</select>
+
+	<!-- oralce 查询当前数据库中，当前物理表的字段名、数据类型、长度、是否为空、是否为主键等字段信息 -->
+	<select id="getDetail" resultType="DcaTopicPhysicsFields">
+		SELECT
+			ALLCOLUMN.COLUMN_ID AS rowNumber,
+			ALLCOLUMN.COLUMN_NAME AS columnName,
+	    	ALLCOLUMN.COMMENTS AS columnComment,
+			ALLCOLUMN.DATA_TYPE AS columnType,
+	   	 	ALLCOLUMN.DATA_LENGTH AS dataLength,
+			ALLCOLUMN.DATA_SCALE AS decimalDigits,
+	    	TABLEKEY.CONSTRAINT_TYPE AS columnKey,
+			TABLEUNIQUE.CONSTRAINT_TYPE AS isOnly,
+			ALLCOLUMN.NULLABLE AS isNull,
+			ALLCOLUMN.DATA_DEFAULT AS colDefault
+		FROM
+		(
+			SELECT
+				UTC.COLUMN_ID,
+				UTC.DATA_LENGTH,
+				UTC.COLUMN_NAME,
+				UTC.DATA_TYPE,
+				UTC.NULLABLE,
+				UTC.DATA_DEFAULT,
+			  	UTC.DATA_SCALE,
+				UCC.COMMENTS,
+				UTCM.TABLE_NAME,
+				UTCM.COMMENTS AS TABLE_COMMENTS
+			FROM
+				user_tab_columns UTC,
+				user_col_comments UCC,
+		        USER_TAB_COMMENTS UTCM
+			WHERE
+				UTC.TABLE_NAME = #{id}
+				AND UTC.COLUMN_NAME = UCC.COLUMN_NAME
+				AND UTC.TABLE_NAME = UCC.TABLE_NAME
+				AND UTC.TABLE_NAME = UTCM.TABLE_NAME
+		) ALLCOLUMN
+		LEFT JOIN
+		(
+			SELECT
+				cu.COLUMN_NAME,
+				au.CONSTRAINT_TYPE
+			FROM
+				user_cons_columns cu,
+				user_constraints au
+			WHERE
+				cu.constraint_name = au.constraint_name
+				AND au.constraint_type = 'P'
+				AND au.table_name = #{id}
+		) TABLEKEY ON
+		ALLCOLUMN.COLUMN_NAME = TABLEKEY.COLUMN_NAME
+		LEFT JOIN
+		(
+			SELECT
+				cu.COLUMN_NAME,
+				au.CONSTRAINT_TYPE
+			FROM
+				user_cons_columns cu,
+				user_constraints au
+		WHERE
+			cu.constraint_name = au.constraint_name
+			AND au.constraint_type = 'U'
+			AND au.table_name = #{id}
+		) TABLEUNIQUE ON
+		ALLCOLUMN.COLUMN_NAME = TABLEKEY.COLUMN_NAME
+		ORDER BY
+			COLUMN_ID
+	</select>
+	
+	<!-- oralce 查询当前数据库中，当前物理表的字段名、数据类型、长度、是否为空、是否为主键等字段信息 -->
+	<select id="getCloumn" resultType="DcaTopicPhysicsFields">
+		
+		SELECT
+			ALLCOLUMN.COLUMN_ID AS rowNumber,
+			ALLCOLUMN.COLUMN_NAME AS columnName,
+	    	ALLCOLUMN.COMMENTS AS columnComment,
+			ALLCOLUMN.DATA_TYPE AS columnType,
+	    	DECODE(ALLCOLUMN.CHAR_LENGTH,'0',ALLCOLUMN.DATA_PRECISION, ALLCOLUMN.CHAR_LENGTH) AS dataLength,
+			ALLCOLUMN.DATA_SCALE AS decimalDigits,
+	    	DECODE(TABLEKEY.CONSTRAINT_TYPE,'P','P','') AS columnKey,
+			DECODE(TABLEKEY.CONSTRAINT_TYPE,'U','U','')  AS isOnly,
+			ALLCOLUMN.NULLABLE AS isNull,
+			ALLCOLUMN.DATA_DEFAULT AS colDefault
+		FROM
+		(
+			SELECT
+				UTC.COLUMN_ID,
+				UTC.CHAR_LENGTH,
+		        UTC.DATA_PRECISION,
+				UTC.COLUMN_NAME,
+				UTC.DATA_TYPE,
+				UTC.NULLABLE,
+				UTC.DATA_DEFAULT,
+			  	UTC.DATA_SCALE,
+				UCC.COMMENTS,
+				UTCM.TABLE_NAME,
+				UTCM.COMMENTS AS TABLE_COMMENTS
+			FROM
+				user_tab_columns UTC,
+				user_col_comments UCC,
+	        	USER_TAB_COMMENTS UTCM
+			WHERE
+				UTC.TABLE_NAME = #{id}
+				AND UTC.COLUMN_NAME = UCC.COLUMN_NAME
+				AND UTC.TABLE_NAME = UCC.TABLE_NAME
+				AND UTC.TABLE_NAME = UTCM.TABLE_NAME
+		) ALLCOLUMN
+		LEFT JOIN
+		(
+			SELECT
+				cu.COLUMN_NAME,
+				au.CONSTRAINT_TYPE
+			FROM
+				user_cons_columns cu,
+				user_constraints au
+			WHERE
+				cu.constraint_name = au.constraint_name
+				AND (au.constraint_type = 'P' or au.constraint_type = 'U')
+				AND au.table_name = #{id}
+		) TABLEKEY ON
+		ALLCOLUMN.COLUMN_NAME = TABLEKEY.COLUMN_NAME
+
+		ORDER BY
+		COLUMN_ID
+	
+	</select>
+	<!-- mysql 查询当前数据库中，当前物理表的字段名、数据类型、长度、是否为空、是否为主键等字段信息 -->
+    <select id="getTypeForOracle" resultType="DcaTopicPhysics">
+		SELECT
+			VALUE AS dbType,
+			LABEL AS typeValue
+		FROM SYS_DICT
+		WHERE 
+			TYPE ='oracle_data_type'
+		 AND DEL_FLAG='0'
+	</select>
+	<select id="getTypeForMysql" resultType="DcaTopicPhysics">
+		SELECT
+			VALUE,
+			LABEL
+		FROM SYS_DICT
+		WHERE 
+			TYPE ='mysql_data_type'
+		 AND DEL_FLAG='0'
+	</select>
+
+	<!-- oracle 模糊查询，查找当前数据库表名以dca_开头的表中，含输入的中文名的表,并按更新日期降序排序 -->
+	<!-- 基础数据管理  add by geshuo 20170119 -->
+	<select id="findBasicDataByPage" resultType="DcaTopicPhysics">
+		SELECT
+			T.TABLE_NAME AS tableName,
+			T.COMMENTS AS tableComment,
+			U.LAST_DDL_TIME,
+			R.TOPIC_ID AS topicId,
+			L.TOPIC_NAME AS topicName
+		FROM USER_TAB_COMMENTS T
+		LEFT JOIN USER_OBJECTS U
+			ON U.OBJECT_NAME = T.TABLE_NAME
+		LEFT JOIN DCA_TOPIC_REF_PHYSICS R
+			ON T.TABLE_NAME=R.PHY_NAME_EN
+		LEFT JOIN DCA_TOPIC_LIB L
+			ON R.TOPIC_ID=L.TOPIC_ID
+		WHERE T.TABLE_NAME LIKE (SELECT s.VALUE
+								FROM SYS_DICT s
+								WHERE s.TYPE = 'dca_phy_type')||'%'
+		<if test="tableComment != null and tableComment != ''">
+			AND T.COMMENTS LIKE
+			<if test="dbName == 'oracle'">'%'||#{tableComment}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{tableComment}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%',#{tableComment},'%')</if>
+		</if>
+		<if test="topicId != null and topicId != ''">
+			AND R.TOPIC_ID = #{topicId}
+		</if>
+		ORDER BY LAST_DDL_TIME DESC
+	</select>
+
+	<!-- 获取物理表所有列  add by geshuo 20170119 -->
+	<select id="findBasicDataColumns" resultType="String">
+		SELECT COLUMN_NAME
+		FROM USER_TAB_COLUMNS
+		WHERE TABLE_NAME=#{tableName}
+	</select>
+
+	<!-- 分页查询物理表数据  add by geshuo 20170120 -->
+	<select id="findBasicDataDetailByPage" statementType="STATEMENT" resultType="Map">
+		SELECT *
+		FROM
+		   (SELECT t.*,
+		   		ROWNUM ROW_NUM
+			FROM ${tableName} t) b
+		WHERE b.ROW_NUM BETWEEN ${start} AND ${end}
+	</select>
+
+	<select id="findBasicDataCount" statementType="STATEMENT" resultType="Long">
+		SELECT COUNT(1)
+		FROM ${tableName}
+	</select>
+
+	<!-- 查询单个物理表信息  add by geshuo 20170120 -->
+	<select id="findDcaTopicPhysics" resultType="DcaTopicPhysics">
+		SELECT T.TABLE_NAME AS tableName,
+			T.COMMENTS AS tableComment,
+			R.TOPIC_ID AS topicId,
+			L.TOPIC_NAME AS topicName
+		  FROM USER_TAB_COMMENTS T
+		LEFT JOIN DCA_TOPIC_REF_PHYSICS R
+			ON T.TABLE_NAME=R.PHY_NAME_EN
+		LEFT JOIN DCA_TOPIC_LIB L
+			ON R.TOPIC_ID=L.TOPIC_ID
+		WHERE T.TABLE_NAME=#{tableName}
+	</select>
+</mapper>

@@ -1,0 +1,57 @@
+{{#component "tradeTimeRole js-component"}}
+    <p class="components-title"><strong>交易环节期限规则管理</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals type "0"}}class="active"{{/equals}}><a data-role="nav" href="{{_HREF_.mainContext}}/admins/trade_time_normal">正常交易流程规则</a>
+            </li>
+            <li {{#equals type "2"}}class="active"{{/equals}}><a data-role="nav" href="{{_HREF_.mainContext}}/admins/trade_time_return">退货交易流程规则</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents" data-data="{{json _DATA_}}">
+        <div data-role="content" class="tab-content">
+            <form id="saveRuleForm">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th width="25%">交易状态</th>
+                        <th width="25%">超时条件</th>
+                        <th width="25%">超时规则</th>
+                        <th width="25%">超时提醒</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each _DATA_.data}}
+                        <tr class="trade-time" data-id="{{id}}" data-component="{{_DATA_}}" data-backcategories="{{json this}}">
+                            <td data-id="{{id}}">{{#equals status 0}}等待买家付款 {{/equals}}
+                                {{#equals status 1}}卖家已发货，等待买家确认收货 {{/equals}}
+                                {{#equals status 2}}买家申请退款退货，等待卖家处理退款退货申请 {{/equals}}</td>
+                            <td id="toid">
+                                {{#equals status 0}}
+                                    订单生成后的<input type="text" value="{{end}}" class="input-width waitDay" id="waitDay"
+                                                 name="waitDay">天内，买家未支付
+                                {{/equals}}
+                                {{#equals status 1}}
+                                    卖家提交发货信息之时起<input type="text" id="payDays" name="payDays" value="{{end}}"
+                                                      class="input-width waitDay">天内，买家未确认收货
+                                {{/equals}}
+                                {{#equals status 2}}
+                                    买家申请退款退货之时起，卖家 <input type="text" id="payDays" name="payDays" value="{{end}}"
+                                                          class="input-width waitDay"> 天内未响应此申请
+                                {{/equals}}
+                            </td>
+                            <td>{{rule}}</td>
+                            <td id="towarn">提前<input type="text" value="{{warn}}" class="input-width" id="waitAhead"
+                        {{#equals status 0}}name="waitAhead0"{{/equals}}{{#equals status 1}}name="waitAhead1"{{/equals}}{{#equals status 2}}name="waitAhead2"{{/equals}}>天
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="add-trade-role">
+        <button class="btn btn-success btn-sm js-trade-role-new" style="">保存</button>
+    </div>
+{{/component}}

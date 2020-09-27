@@ -1,0 +1,354 @@
+package com.dpn.ciqqlc.http;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.dpn.ciqqlc.common.util.Constants;
+import com.dpn.ciqqlc.common.util.DateUtil;
+import com.dpn.ciqqlc.common.util.FileUtil;
+import com.dpn.ciqqlc.common.util.PageBean;
+import com.dpn.ciqqlc.http.form.LicenseDecForm;
+import com.dpn.ciqqlc.standard.model.CheckDocsRcdDTO;
+import com.dpn.ciqqlc.standard.model.CheckDocsRcdModel;
+import com.dpn.ciqqlc.standard.model.LicenseDecDTO;
+import com.dpn.ciqqlc.standard.model.LicenseEventDTO;
+import com.dpn.ciqqlc.standard.model.MailObjCheckModel;
+import com.dpn.ciqqlc.standard.model.SelectModel;
+import com.dpn.ciqqlc.standard.service.CompleteProcessDbService;
+import com.dpn.ciqqlc.standard.service.DeclareService;
+import com.dpn.ciqqlc.standard.service.MailObjCheckDbService;
+import com.dpn.ciqqlc.standard.service.OrigPlaceFlowService;
+
+/**
+ * CompleteProcessController.
+ * 
+ * @author wangzhy
+ * @since 1.0.0
+ * @version 1.0.0
+ */
+/* *****************************************************************************
+ * 备忘记录
+ * -> 以"/cp"作为URL前缀的action，全过程查询。
+********************************************************************************
+ * 变更履历
+ * -> 
+***************************************************************************** */
+@Controller
+@RequestMapping(value = "/cp")
+public class CompleteProcessController {
+
+   /**
+    * logger.
+    * 
+    * @since 1.0.0
+    */
+    private final Logger logger_ = LoggerFactory.getLogger(this.getClass());
+    
+    @Autowired
+	@Qualifier("completeProcessDbService")
+	private CompleteProcessDbService completeProcessDbService = null;
+    @Autowired
+   	private OrigPlaceFlowService origPlaceFlowService = null;
+    @Autowired
+	@Qualifier("mailObjCheckServ")
+	private MailObjCheckDbService mailObjCheckServ = null;
+    @Autowired
+	@Qualifier("declareService")
+	private DeclareService declareService = null;
+   /**
+    * 全过程列表查询
+    * @param request
+    * @return
+    */
+    @RequestMapping("/findLists")
+ 	public String findLists(HttpServletRequest request,LicenseDecForm licenseDecForm){
+     	Map<String,String> map = new HashMap<String,String>();
+ 		try{
+ 			/***************************** 分页列表查询部分  ***********************************/
+ 	        int pages = 1;
+ 	        if(request.getParameter("page") != null && !"".equals(request.getParameter("page"))) {
+ 	            pages = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
+ 	        }
+ 	        PageBean page_bean = new PageBean(pages, String.valueOf(Constants.PAGE_NUM));
+ 	        if(!StringUtils.isEmpty(licenseDecForm.getComp_name())){
+ 	        	map.put("comp_name", licenseDecForm.getComp_name());
+ 	        }
+ 	        if(!StringUtils.isEmpty(licenseDecForm.getStartDeclare_date())){
+ 	        	map.put("startDeclare_date", licenseDecForm.getStartDeclare_date());
+ 	        }
+ 			if(!StringUtils.isEmpty(licenseDecForm.getEndDeclare_date())){
+ 				map.put("endDeclare_date", licenseDecForm.getEndDeclare_date());
+ 			}
+ 			if(!StringUtils.isEmpty(licenseDecForm.getPort_org_code())){
+ 				map.put("port_org_code", licenseDecForm.getPort_org_code());
+ 			}
+ 			if(!StringUtils.isEmpty(licenseDecForm.getReview_result())){
+ 				map.put("review_result", licenseDecForm.getReview_result());
+ 			}else{
+ 				map.put("review_result_flag", "1");
+ 			}
+ 			map.put("firstRcd", page_bean.getLow());
+ 			map.put("lastRcd", page_bean.getHigh());
+ 			List<LicenseDecDTO> list = completeProcessDbService.findLists(map);
+ 			int counts = completeProcessDbService.findListsCount(map);
+ 			List<SelectModel> allorgList =mailObjCheckServ.allDepList();
+ 			
+ 			/***************************** 页面el表达式传递数据部分  ***********************************/
+ 			request.setAttribute("list", list);
+ 			request.setAttribute("pages", Integer.toString(pages));// 当前页码
+ 	        request.setAttribute("itemInPage", page_bean.getPageSize());// 每页显示的记录数
+            request.setAttribute("counts",counts);
+ 	        request.setAttribute("allPage", counts % page_bean.getPageSize()==0 ? (counts/page_bean.getPageSize()) : (counts/page_bean.getPageSize())+1);
+ 	        request.setAttribute("comp_name",licenseDecForm.getComp_name());
+ 	        request.setAttribute("review_result",licenseDecForm.getReview_result());
+ 	        request.setAttribute("startDeclare_date", licenseDecForm.getStartDeclare_date());
+ 	        request.setAttribute("endDeclare_date", licenseDecForm.getEndDeclare_date());
+ 	        request.setAttribute("port_org_code", licenseDecForm.getPort_org_code());
+ 	        request.setAttribute("allorgList", allorgList);
+ 		} catch (Exception e) {
+ 			
+ 			logger_.error("***********/cp/findLists************",e);
+ 		}finally{
+ 			map =  null;
+ 		}
+ 		return "cp/completeProcessList";
+ 	}
+    
+    /**
+     * 按Id查询出信息并跳转至详情页面
+     * @param request
+     * @param id
+     * @return
+     */
+    @RequestMapping("/toCompleteProcessDetail")
+    public String toUpdateUsers(HttpServletRequest request,
+    			@RequestParam(value="id", required=true) String id,
+    			@RequestParam(value="license_dno", required=true) String license_dno){
+    	try{
+    		/***************************** 查询数据部分  ***********************************/
+    		Map<String,String> map = new HashMap<String,String>();
+    		map.put("id", id);
+    		LicenseDecDTO dto = completeProcessDbService.findById(map);
+    		// 查询现场审查表信息环节
+    		String fileuploadDate = completeProcessDbService.getDptFileuploadDate(license_dno);
+    		/***************************** 页面el表达式传递数据部分  ***********************************/
+    		request.setAttribute("dto", dto);
+    		if(!StringUtils.isEmpty(fileuploadDate)){
+    			fileuploadDate = fileuploadDate.replace(".0", "");
+    		}
+    		request.setAttribute("fileuploadDate", fileuploadDate);
+    		// 查询变更延续补发
+    		Map<String,String> yxmap = new HashMap<String,String>();
+    		yxmap.put("license_dno", license_dno);
+    		LicenseDecDTO dto2 = completeProcessDbService.getBgYx(yxmap);
+    		if(dto2 !=null && dto2.getStatus() !=null){
+    			if(dto2.getStatus().equals("7") || dto2.getStatus().equals("8")){
+    				request.setAttribute("zztext", "终止");
+    				String result = completeProcessDbService.getzzResult(yxmap);
+    				request.setAttribute("result", result);
+    			}else if(dto2.getStatus().equals("11") || dto2.getStatus().equals("15")){
+    				request.setAttribute("zztext", "撤销");
+    			}else if(dto2.getStatus().equals("12") || dto2.getStatus().equals("16")){
+    				request.setAttribute("zztext", "注销");
+    				String result = completeProcessDbService.getzxResult(yxmap);
+    				request.setAttribute("result", result);
+    			}
+    			request.setAttribute("zzdate", dto2.getOpr_date());
+    			request.setAttribute("psn", dto2.getOpr_psn());
+    		}
+    		// 现场审查表
+    		Map<String,String> map2 = new HashMap<String,String>();
+    		map2.put("license_dno", license_dno);
+    		request.setAttribute("scbList", completeProcessDbService.getScbList(map2));
+    		// 查询是否有补正材料
+    		LicenseEventDTO licenseeventdto = completeProcessDbService.getBzInfo(map2);
+    		request.setAttribute("licenseeventdto", licenseeventdto);
+    		// 补发环节
+    		request.setAttribute("bf_date",declareService.getOprDate("9",license_dno));//补发申请时间
+    		Map<String,Object> map3 = new HashMap<String,Object>();
+    		map3.put("license_dno", license_dno);
+    		map3.put("status", 6);// 补发同意
+			LicenseDecDTO bf_sp_ty_dto  = declareService.gethxzzInfo(map3);
+			map3.put("status", 17);// 补发不同意
+			LicenseDecDTO bf_sp_bty_dto  = declareService.gethxzzInfo(map3);
+    		if(bf_sp_ty_dto ==null && bf_sp_bty_dto == null){
+				request.setAttribute("bf_result", "");//补发申请审批结果
+			}else if(bf_sp_ty_dto ==null && bf_sp_bty_dto != null){
+				request.setAttribute("bf_result", "不同意");//补发申请审批结果
+			}else{
+				request.setAttribute("bf_result", "同意");//补发申请审批结果
+			}
+    		// 提醒与公式
+    		Map<String,String> map5 = new HashMap<String,String>();
+    		map5.put("license_dno", license_dno);
+    		LicenseEventDTO licenseeventdto2 = completeProcessDbService.getBzInfo2(map5);
+    		request.setAttribute("licenseeventdto2", licenseeventdto2);
+		} catch (Exception e) {
+			
+			logger_.error("***********/mail/toMailObjCheckDetail************",e);
+		}
+    	return "cp/completeProcessDetail";
+	}
+    
+    /**
+     * 验证下载文件是否存在
+     * @param request
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/validFile")
+    public Map<String,Object> videoFileEventList(HttpServletRequest request,
+    			@RequestParam(value="license_dno", required=true) String license_dno){
+    	Map<String,String> map = new HashMap<String,String>();
+		Map<String,Object> resultMap = new HashMap<String,Object>();
+    	try{
+	    	map.put("license_dno", license_dno);
+			String path = completeProcessDbService.getFilePath(map);
+    		resultMap.put("path", path);
+		} catch (Exception e) {
+			
+			logger_.error("***********/mail/toMailObjCheckDetail************",e);
+		}
+    	return resultMap;
+	  }
+    
+	/**
+	 * 文件下载
+	 * @param path
+	 * @param request
+	 * @param servletResponse
+	 * @return
+	 */
+	  @RequestMapping("/downloadFile")
+		public void downloadFile(String path,HttpServletRequest request,
+				HttpServletResponse servletResponse){
+			try {
+				FileUtil.downloadFile(Constants.UP_LOAD_P + path,servletResponse,true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	  }
+	  
+	/**
+     * 按Id查询出信息并跳转至申请书页面
+     * @param request
+     * @param id
+     * @return
+     */
+    @RequestMapping("/sqsWinShow")
+    public String toUpdateUsers(HttpServletRequest request,
+    			@RequestParam(value="id", required=true) String id){
+    	try{
+    		/***************************** 查询数据部分  ***********************************/
+    		Map<String,String> map = new HashMap<String,String>();
+    		map.put("id", id);
+    		LicenseDecDTO dto = completeProcessDbService.findById(map);
+    		
+    		/***************************** 页面el表达式传递数据部分  ***********************************/
+    		request.setAttribute("dto", dto);
+		} catch (Exception e) {
+			
+			logger_.error("***********/mail/toMailObjCheckDetail************",e);
+		}
+    	return "cp/printHjkanWs";
+	}
+	  
+    /**
+     * 按license_dno查询出信息并跳转至现场审查表页面
+     * @param request
+     * @param license_dno 业务单号
+     * @return
+     */
+    @RequestMapping("/dfbWinShow")
+    public String dfbWinShow(HttpServletRequest request,
+    			@RequestParam(value="id", required=true) String id,
+    			@RequestParam(value="license_dno", required=true) String license_dno){
+    	try{
+    		/***************************** 查询数据部分  ***********************************/
+    		String doc_type=request.getParameter("doc_type");
+    		Map<String,String> cpMap = new HashMap<String,String>();
+    		cpMap.put("id", id);
+    		LicenseDecDTO cpDto = completeProcessDbService.findById(cpMap);
+    		
+    		Map<String,String> map = new HashMap<String,String>();
+    		map.put("license_dno", license_dno);
+    		map.put("doc_type", doc_type);
+    		CheckDocsRcdDTO dto = completeProcessDbService.dfbWinShow(map);
+    		// 查询视频或图片
+    		List volist = completeProcessDbService.getVolist(map);
+    		/***************************** 页面el表达式传递数据部分  ***********************************/
+    		request.setAttribute("cpDto", cpDto);
+    		request.setAttribute("dto", dto);
+    		request.setAttribute("nowDate", DateUtil.DateToString(new Date(), "yyyy-MM-dd"));
+    		request.setAttribute("doc_type", doc_type);
+    		request.setAttribute("volist", volist);
+    		//ObjectMapper objectMapper = new ObjectMapper();
+			/*String jsonStr = objectMapper.writeValueAsString(dto);//返回字符串，输出
+			request.setAttribute("jsonStr", jsonStr);
+			request.setAttribute("typeCode", typeCode);*/
+    		/*if(null!=typeCode && !"D_PT_H_L_1".equals(typeCode)){
+    			return "cp/printOther";
+    		}*/
+    		if(doc_type.equals("D_PT_H_L_1")){
+    			return "cp/printDfb";
+    		}else if(doc_type.equals("D_PT_H_L_2")){
+    			return "cp/printDfb2";
+    		}else if(doc_type.equals("D_PT_H_L_3")){
+    			return "cp/printDfb3";
+    		}else if(doc_type.equals("D_PT_H_L_4")){
+    			return "cp/printDfb4";
+    		}else if(doc_type.equals("D_PT_H_L_5")){
+    			return "cp/printDfb5";
+    		}else if(doc_type.equals("D_PT_H_L_6")){
+    			return "cp/printDfb6";
+    		}else if(doc_type.equals("D_PT_H_L_7")){
+    			return "cp/printkg";
+    		}else if(doc_type.equals("D_PT_H_L_8")){
+    			return "cp/printxs1";
+    		}else if(doc_type.equals("D_PT_H_L_9")){
+    			return "cp/printxs2";
+    		}else if(doc_type.equals("D_PT_H_L_10")){
+    			return "cp/printgs";
+    		}else if(doc_type.equals("D_PT_H_L_11")){
+    			return "cp/printgg";
+    		}
+    		
+		} catch (Exception e) {
+			logger_.error("***********/cp/dfbWinShow************",e);
+		}
+    	return "cp/printDfb";
+	}
+    
+	
+	@RequestMapping("/lookbook")
+	public String bookShow(HttpServletRequest request,String license_dno){
+		CheckDocsRcdModel model=new CheckDocsRcdModel();
+		model.setProcMainId(license_dno);
+		model.setDocType("D_PT_H_L_12");
+		List<CheckDocsRcdModel> list = origPlaceFlowService.getOptionList(model);
+		if(!list.isEmpty()){
+			request.setAttribute("doc", list.get(0));
+		}
+		request.setAttribute("license_dno", license_dno);
+		return "/cp/lookbook";
+	}
+	
+}

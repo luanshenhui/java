@@ -1,0 +1,20 @@
+package com.dpn.ciqqlc.standard.service;
+
+import java.util.List;
+
+import com.dpn.ciqqlc.standard.model.WarningRuleDto;
+
+public interface WarningService {
+
+	List<WarningRuleDto> findWarningList(WarningRuleDto warningRuleDto);
+
+	int findwarinCount(WarningRuleDto warningRuleDto);
+
+	void insertWarning(WarningRuleDto warningRuleDto);
+
+	void updateWarning(WarningRuleDto warningRuleDto);
+
+	void deleteWarning(WarningRuleDto warningRuleDto);
+	
+}
+

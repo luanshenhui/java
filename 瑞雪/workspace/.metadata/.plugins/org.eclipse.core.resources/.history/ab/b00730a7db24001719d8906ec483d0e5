@@ -1,0 +1,943 @@
+/*
+ * 菜单树
+ * */
+
+var treeid = "d8cea5572a6547698bea532fde9264b6";
+
+var tree;
+$(document).ready(function(){
+	
+	
+//	userPrivAdjustInit(treeid);
+//	
+//	var editDialog = window.top.window.borrowCustomModalDialog($("#userPrivAdjust"));
+//	editDialog.modal({show:true, backdrop:'static'});
+	//初始化menu
+
+	//初始化menu
+//	menu=new dhtmlXMenuObject("menuTree");
+//	menu.setImagePath("/DhtxMenu/");
+//	menu.setIconsPath("/MenuIcon/");
+//	menu.renderAsContextMenu(true);
+//	menu.attachEvent("onClick",rightClick);
+//	//右键点击触发获取详细信息事件
+//	menu.attachEvent("onBeforeContextMenu",function() {
+//    	var itemId = tree.rclk_id;
+//        tree._unselectItems(); //解决右键点击时，被点击节点与新生成两个节点都被选中的问题
+//    	showDetail(itemId);
+//        return true;
+//    });
+//	menu.loadXML("dhtmlxmenu.xml");
+	
+	
+	
+	var orgTree = document.getElementById("orgTree");
+    tree =new dhtmlXTreeObject(document.getElementById("orgTree"),"100%","100%",0);
+    tree.setImagePath("/csh_books/");
+    //tree.enableCheckBoxes(true);
+//    tree.attachEvent("onClick",onClickCheck); //点击节点事件
+    tree.setOnOpenEndHandler(checkSubNodes);  //解决节点请求回来无法展开
+	tree.setOnMouseInHandler(beforeOpenNode);
+    tree.setXMLAutoLoading("/menu/getElementsByMenuItemID.action"); 
+	tree.loadXML("/menu/getMenuTree.action");
+	tree.openAllItems(null);
+//    if(tree.getSelectedItemId() == "RootUnit@UNIT"){
+//		jQuery("#btnDel").attr('disabled',true);
+//	}
+    window.setTimeout(function() {
+		//tree.closeAllItems(0);
+	}, 0);
+//    getUnitTreeManageable(treeid, "user");
+	
+	
+	
+	
+	
+});
+
+
+function getUnitTreeManageable(id, type){	
+	var sURL1 = "/privilege/getPageElementPrivilege.action";
+	$.ajax( {
+		url : sURL1,
+		type : "post",
+		dataType : "json",
+		data : {
+			type : type,
+			id : id,
+			isAdminRole : "false"
+		},
+		success : function(data) {
+			if(data.errorMessage == undefined){
+				//根据资源授权情况，在树上选中结点
+				for(var k in data.authMap) {
+				  tree.setCheck(k,1);
+				}
+				//tree.enableThreeStateCheckboxes(true);
+			} else {
+				if (data.errorMessage == "session timeout")
+					window.location.href = "/login.jsp";
+				else
+					alert(data.errorMessage);
+			}
+		},
+		error : function(XMLHttpRequest,textStatus,errorThrown){
+			alert("操作失败，可能是网络原因");
+			// 通常 textStatus 和 errorThrown 之中 
+		    // 只有一个会包含信息 
+		    //this;  调用本次AJAX请求时传递的options参数
+		}
+	});
+	
+}
+
+
+
+//function userPrivAdjustInit(id){
+//	privilegeUserId=id;
+//	$("#menuTree").children().remove();
+//	$('body').bind('keydown',shieldCommon);
+//	//处理传入的参数
+//	//obj = window.dialogArguments;// 定义一个对象用于接收对话框参数
+//	//处理树
+//	tree =new dhtmlXTreeObject("menuTree","100%","100%",0);
+//	tree.setImagePath("/csh_books/");
+////  tree.setImagePath(webpath+"/view/base/theme/css/redmond/dhtmlxtree/image/DhtxTree/csh_books/");
+//    tree.enableCheckBoxes(true);
+//    //tree.attachEvent("onClick",HandleMClk1);
+//	tree.setOnMouseInHandler(beforeOpenNode);
+//	tree.setOnOpenEndHandler(checkSubNodes);
+////	tree.setOnCheckHandler(nodeCheckHandler);
+//	tree.loadXML("/menu/getMenuTree.action");
+//	tree.setXMLAutoLoading("/menu/getElementsByMenuItemID.action");
+//	//把树全展开
+//	tree.openAllItems(2);
+//	
+//	//根据当前选择的（角色、组织、岗位）来获取它对于资源的访问性
+//	requestPrivilegeAndDrawTree(treeid, "user");
+//	
+//	//初始化addList和delList里的数据。
+//	addList = new ArrayList();
+//	delList = new ArrayList();
+//	// document.getElementById("userName").innerText=userFullName+"权限调整";
+//}
+//
+//
+///**
+// * 根据类型获取权限，并且给权限树打挑
+// * @return
+// */
+//function requestPrivilegeAndDrawTree(id,type){
+//	var sURL1 = "/privilege/getPageElementPrivilege.action";
+//	$.ajax( {
+//		url : sURL1,
+//		type : "post",
+//		dataType : "json",
+//		data : {
+//			type : type,
+//			id : id,
+//			isAdminRole : "false"
+//		},
+//		success : function(data) {
+//			if(data.errorMessage == undefined){
+//				//根据资源授权情况，在树上选中结点
+//				for(var k in data.authMap) {
+//				  tree.setCheck(k,1);
+//				}
+//				//tree.enableThreeStateCheckboxes(true);
+//			} else {
+//				if (data.errorMessage == "session timeout")
+//					window.location.href = "/login.jsp";
+//				else
+//					alert(data.errorMessage);
+//			}
+//		},
+//		error : function(XMLHttpRequest,textStatus,errorThrown){
+//			alert("操作失败，可能是网络原因");
+//			// 通常 textStatus 和 errorThrown 之中 
+//		    // 只有一个会包含信息 
+//		    //this;  调用本次AJAX请求时传递的options参数
+//		}
+//	});
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * 右键菜单事件
+ * */
+function rightClick(menuid,zoom){
+	var itemId = tree.rclk_id; //获取右键点击节点的id
+	showDetail(itemId);
+	var type = itemId.substr(itemId.lastIndexOf("@")+1,itemId.length);
+	// 元素下不能建元素和菜单
+//	if(type =="ELEMENT" && ((menuid=="addMenu")||(menuid=="addElement")||(menuid=="addPage"))){
+//		alert("元素下不能创建元素、菜单或页面");
+//		return;
+//	}
+//	if(type =="PAGE" && ((menuid=="addMenu")||(menuid=="addElement"))){
+//		alert("页面下不能创建元素和菜单");
+//		return;
+//	}
+//	if(type =="MENU" && menuid=="addElement"){
+//		alert("菜单下不能创建元素");
+//		return;
+//	}
+	var level = tree.getLevel(itemId);
+	//新建菜单
+	if(menuid=="addMenu"){
+		if(type =="MENU" || itemId == "RootMenu"){
+		$.ajax({
+			url:webpath + "/MenuAction.do?method=createMenuItem",
+			type:"post",
+			async: false,
+			dataType:"json",
+			data:{itemId:itemId,level:level},
+			success:function(data)
+			        {
+				       //tree.insertNewItem(data.menuDetail.parentMenuCode,data.menuDetail.menuCode,data.menuDetail.menuName);
+				       tree.refreshItem(data.menuDetail.parentMenuCode); //刷新节点就会发送ajax请求，画出新建的节点 。insertNewItem方法有些问题
+				       tree.selectItem(data.menuDetail.parentMenuCode);//先选中父节点，否则无法取消选中
+				       tree.selectItem(data.menuDetail.menuCode);//选新加节点
+				       //document.getElementById("elementDetail").style.display= "none";
+			   		   //document.getElementById("menuDetail").style.display="";
+				       $("#elementDetail").hide(); //隐藏form
+				       $("#pageDetail").hide();  //隐藏form
+				       $("#menuDetail").show();  //显示form
+				       
+				       //解决初始化后，在根节点新建菜单后，虽然可以选中节点，但是按钮不可用的问题
+				       $("#btn_menuReset").attr("disabled",false); 
+				   	   $("#btn_menuSave").attr("disabled",false);
+				       
+			           $("#menuName").val(data.menuDetail.menuName);
+			           $("#menuImg").val(data.menuDetail.menuImgLocation);
+			           $("#menuDes").val(data.menuDetail.menuDesc);
+			           $("#menuLocal").val(data.menuDetail.menuLocation);
+			           $("#menuArea").val(data.menuDetail.menuArea);
+			           $("#menuDis").val(data.menuDetail.menuIsDefault);	
+				       jQuery("#menuDetail").valid();	
+			        }
+		});
+		}else{
+			alert(MENU_MENU_UNDER_MENU);
+			return;
+		}
+		
+	}
+	//新建元素
+	if(menuid=="addElement"){
+		//不能再最外层节点创建元素，"RootMenu"是在java端写死的itemId
+		if(itemId == "RootMenu" ){
+			alert(MENU_ALLOW_ADD_MENU);
+			return;
+		}
+		if(type == "PAGE"){
+			$.ajax({
+				url:webpath + "/MenuAction.do?method=createPageElement",
+				type:"post",
+				async: false,
+				dataType:"json",
+				data:{itemId:itemId,level:level},
+				success:function(data)
+				        {					       
+//					        tree.insertNewItem(data.elementDetail.parentMenuCode,data.elementDetail.menuCode,data.elementDetail.menuName,
+//					        		"","tombs.gif","tombs.gif","tombs.gif");
+					        tree.refreshItem(data.elementDetail.parentMenuCode);
+					        tree.selectItem(data.elementDetail.parentMenuCode);//先选中父节点，否则无法取消选中
+					        tree.selectItem(data.elementDetail.menuCode);//选中新加节点
+							//document.getElementById("menuDetail").style.display= "none";
+					   		//document.getElementById("elementDetail").style.display="";
+						    $("#menuDetail").hide();
+						    $("#pageDetail").hide();
+						    $("#elementDetail").show();
+						    
+					   	    $("#eleId").val(data.elementDetail.menuElementId);
+				            $("#eleName").val(data.elementDetail.menuName);
+				            $("#eleImg").val(data.elementDetail.menuImgLocation);
+				            $("#eleType").val(data.elementDetail.menuElementType);
+				            $("#eleDes").val(data.elementDetail.menuDesc);		
+						    jQuery("#elementDetail").valid();	            
+				        }
+			});	
+		}else{
+			alert(MENU_ELEMENT_MUST_UNDER_PAGE);
+			return;
+		}
+	}
+	
+	//新建页面
+	if(menuid=="addPage"){
+		//不能再最外层节点创建元素，"RootMenu"是在java端写死的itemId
+		if(itemId == "RootMenu" ){
+			alert(MENU_PAGE_MUST_UNDER_MENU);
+			return;
+		}
+		if(type == "MENU"){
+			$.ajax({
+				url:webpath + "/MenuAction.do?method=createPage",
+				type:"post",
+				async: false,
+				dataType:"json",
+				data:{itemId:itemId,level:level},
+				success:function(data)
+				        {
+					        //tree.insertNewItem(data.pageDetail.parentMenuCode,data.pageDetail.menuCode,data.pageDetail.menuName);
+	                        tree.refreshItem(data.pageDetail.parentMenuCode);
+					        tree.selectItem(data.pageDetail.parentMenuCode);//先选中父节点，否则无法取消选中
+					        tree.selectItem(data.pageDetail.menuCode);//选中新加节点
+							//document.getElementById("menuDetail").style.display= "none";
+					   		//document.getElementById("pageDetail").style.display="";
+						    $("#menuDetail").hide(); //隐藏id=menuDetail的form
+						    $("#elementDetail").hide();
+						    $("#pageDetail").show();
+						    
+					   	    $("#pageId").val(data.pageDetail.menuElementId);
+				            $("#pageName").val(data.pageDetail.menuName);
+				            $("#pageImg").val(data.pageDetail.menuImgLocation);
+				            $("#pageLocal").val(data.pageDetail.menuLocation);
+					        $("#pageArea").val(data.pageDetail.menuArea);
+				            $("#pageDis").val(data.pageDetail.menuDesc);	
+						    jQuery("#pageDetail").valid();
+				        }
+			});	
+		}else{
+			alert(MENU_PAGE_MUST_UNDER_MENU);
+			return;
+		}
+	}
+	
+	//删除节点
+	if(menuid=="deleteMenu"){
+		//不能再最外层节点创建元素，"RootMenu"是在java端写死的itemId
+		if(itemId == "RootMenu" ){
+			alert(MENU_CURRENT_NODE_CANT_DELETE);
+			return;
+		}
+		if(itemId ==""){
+			alert(MENU_SELECT_NODE_TO_DELETE);
+			return;
+		}
+		var subItem = tree.getAllSubItems(itemId);
+		if(subItem != ""){
+			alert(MENU_HAVE_SUB_NODES_CANT_DELETE);
+			return;
+		}
+		confirm(ITEM_DELETE_CONFIRM,function(){
+			$.ajax({
+				url:webpath + "/MenuAction.do?method=deleteNode",
+				type:"post",
+				async: false,
+				dataType:"json",
+				data:{itemId:itemId},
+				success:function(data)
+				{   
+					if(data.errorMessage==null || data.errorMessage==undefined){
+						tree.deleteItem(itemId,"");	
+						//清空form中显示的已删除菜单或元素的信息
+						//使用setTimeout的原因：如不使用，有时删除节点后，右侧详细信息无法清空
+						window.setTimeout(function() {
+							var menuType = itemId.substr(itemId.lastIndexOf("@")+1,itemId.length);
+							if(menuType == "MENU"){
+								//$("#menuDetail")[0].reset();
+								//document.getElementById("menuDetail").reset();
+								$("#menuName").val("");
+						        $("#menuImg").val("");
+						        $("#menuDes").val("");
+						        $("#menuLocal").val("");
+						        $("#menuArea").val("");
+						        $("#menuDis").val("");
+								
+							}else if (menuType == "ELEMENT"){
+								//$("#elementDetail")[0].reset();
+								//document.getElementById("elementDetail").reset();
+								$("#eleId").val("");
+					            $("#eleName").val("");
+					            $("#eleImg").val("");
+					            $("#eleType").val("");
+					            $("#eleDes").val("");
+							}
+						}, 0);
+						alert(DELETE_OK);
+					} else {
+						if (data.errorMessage == "session timeout")
+							window.location.href = webpath + "/login.jsp";
+						else
+							alert(data.errorMessage);
+					}
+				}
+			});	
+		});
+	}
+	//上移
+	if(menuid == "up"){
+		moveUp(itemId,menuid);	
+	}
+	//下移
+	if(menuid == "down"){
+		moveDown(itemId,menuid);
+	}
+}
+
+/*
+ *点击查询详细信息 
+ * */
+function showDetail(itemId){
+	if(itemId == undefined){
+	//alert(event.srcElement.parentNode.parentNode.innerHTML);
+		itemId = tree.getSelectedItemId();
+	}
+	tree.selectItem(itemId);//解决初始化后右键第一次选中，焦点消失问题
+	//当点击根节点的时候，不能进行保存，重置操作,表单清空；
+	if(itemId=="RootMenu"){
+		//document.getElementById("menuDetail").reset();
+		//document.getElementById("elementDetail").reset();
+		
+		$("#menuDetail")[0].reset();
+		$("#elementDetail")[0].reset();
+		//document.getElementById("btn_menuReset").disabled=true;
+		//document.getElementById("btn_menuSave").disabled=true;
+		
+		$("#btn_menuReset").attr("disabled",true);//$按钮置灰
+		$("#btn_menuSave").attr("disabled",true);
+		
+		//document.getElementById("btn_eleReset").disabled=true;
+		//document.getElementById("btn_eleSave").disabled=true;
+		
+		$("#btn_eleReset").attr("disabled",true);//$按钮置灰
+		$("#btn_eleSave").attr("disabled",true);
+		
+		$("#btn_pageReset").attr("disabled",true);//$按钮置灰
+		$("#btn_pageSave").attr("disabled",true);
+		
+		return;
+		
+	}else{
+		//document.getElementById("btn_menuReset").disabled=false;
+		//document.getElementById("btn_menuSave").disabled=false;
+		
+		$("#btn_menuReset").attr("disabled",false);//$按钮取消置灰
+		$("#btn_menuSave").attr("disabled",false);
+		
+		//document.getElementById("btn_eleReset").disabled=false;
+		//document.getElementById("btn_eleSave").disabled=false;
+		
+		$("#btn_eleReset").attr("disabled",false);//$按钮取消置灰
+		$("#btn_eleSave").attr("disabled",false);
+		
+		$("#btn_pageReset").attr("disabled",false);//$按钮取消置灰
+		$("#btn_pageSave").attr("disabled",false);
+	}
+	clickItemId = itemId;
+	
+	getType();//获取下拉列表数据；
+
+	$.ajax({
+		url:webpath + "/MenuAction.do?method=getMenuItemDetail",
+		async: false,
+		type:"post",
+		dataType:"json",
+		data:{itemId:itemId},
+		success:function(data)
+		        {  
+			       var itemId = data.menuDetail.menuCode;
+			   	   //通过截去itemId，判断点击的节点类型
+			   	   var type = itemId.substr(itemId.lastIndexOf("@")+1,itemId.length);
+			   	   if(type == "MENU"){
+			   		   //document.getElementById("elementDetail").style.display= "none";
+			   		   //document.getElementById("menuDetail").style.display="";
+			   		   $("#elementDetail").hide();
+			   		   $("#pageDetail").hide();
+			   		   $("#menuDetail").show();
+			           $("#menuName").val(data.menuDetail.menuName);
+			           $("#menuImg").val(data.menuDetail.menuImgLocation);
+			           $("#menuDes").val(data.menuDetail.menuDesc);
+			           $("#menuLocal").val(data.menuDetail.menuLocation);
+			           $("#menuArea").val(data.menuDetail.menuArea);
+			           $("#menuDis").val(data.menuDetail.menuIsDefault);
+			           jQuery("#menuDetail").valid();
+			   	   }else if(type == "ELEMENT"){
+					   	//document.getElementById("menuDetail").style.display= "none";
+				   		//document.getElementById("elementDetail").style.display="";
+				   	   $("#menuDetail").hide();
+				   	   $("#pageDetail").hide();
+				   	   $("#elementDetail").show();
+				   	   $("#eleId").val(data.menuDetail.menuElementId);
+			           $("#eleName").val(data.menuDetail.menuName);
+			           $("#eleImg").val(data.menuDetail.menuImgLocation);
+			           $("#eleType").val(data.menuDetail.menuElementType);
+			           $("#eleDes").val(data.menuDetail.menuDesc);
+			           jQuery("#elementDetail").valid();
+			   	   }else if(type == "PAGE"){
+			   		   $("#elementDetail").hide();
+			   		   $("#menuDetail").hide();
+			   		   $("#pageDetail").show();
+			   		   $("#pageId").val(data.menuDetail.menuElementId);
+			           $("#pageName").val(data.menuDetail.menuName);
+			           $("#pageImg").val(data.menuDetail.menuImgLocation);
+			           $("#pageDes").val(data.menuDetail.menuDesc);
+			           $("#pageLocal").val(data.menuDetail.menuLocation);
+			           $("#pageArea").val(data.menuDetail.menuArea);
+			           $("#pageDis").val(data.menuDetail.menuIsDefault);
+			           jQuery("#pageDetail").valid();
+			   	   }
+		           
+	            }
+	});		
+}
+
+/*
+ * 获取下拉列表数据
+ * */
+function getType(){
+	$.ajax({
+		url:webpath + "/UnitAction.do?method=getUnitType",
+		type:"post",
+		async: false,
+		dataType:"json",
+		data:{type:"element"}, //element在数据库wf_org_dictionary表中写死的字段值
+		success:function(data)
+        {
+           for(i=0;i<data.length;i++){
+	           	document.getElementById("eleType").options[i] = new Option(data[i][1],data[i][0]);
+	           	//$("#eleType").options[i] = new Option(data[i][1],data[i][0]);
+           }
+        }
+	});
+}
+
+var clickItemId; //存放左键点击的节点id
+/*
+ * 修改保存--菜单
+ * */
+function saveMenu(){
+		//校验菜单保存数据
+		if(!checkMenuValidate()){
+			return;
+		}
+		var menuName = $("#menuName").val();
+		var menuImg = $("#menuImg").val();
+		var menuDes = $("#menuDes").val();
+		var menuLocal = $("#menuLocal").val();
+		var menuArea = $("#menuArea").val();
+		var menuDis = $("#menuDis").val(); 		
+		var menuCode = tree.getSelectedItemId(); 
+		$.ajax({
+			url:webpath + "/MenuAction.do?method=saveMenuItem",
+			type:"post",
+			async: false,
+			dataType:"json",
+			data:{menuName:menuName,menuImg:menuImg,menuDes:menuDes,menuLocal:menuLocal,menuArea:menuArea,menuDis:menuDis,menuCode:menuCode}, 
+			success:function(data)
+	        {  
+				if(data.errorMessage==null || data.errorMessage==undefined){
+					alert(SAVE_OK);
+					tree.setItemText(data.menuDetail.menuCode,data.menuDetail.menuName,data.menuDetail.menuName);					
+				} else {
+					if (data.errorMessage == "session timeout")
+						window.location.href = webpath + "/login.jsp";
+					else
+						alert(data.errorMessage);
+				}
+	        }
+		});
+   
+}
+
+/*
+ * 修改保存--元素
+ * */
+function saveEle(){
+	//校验元素保存数据
+	if(!checkEleValidate()){
+		return;
+	}
+	var eleId = $("#eleId").val();
+    var eleName = $("#eleName").val();
+    var eleImg = $("#eleImg").val();
+    var eleType = $("#eleType").val()[0];
+    var eleDes = $("#eleDes").val();
+    var menuCode = tree.getSelectedItemId();
+    $.ajax({
+		url:webpath + "/MenuAction.do?method=savePageElement",
+		type:"post",
+		async: false,
+		dataType:"json",
+		data:{eleId:eleId,eleName:eleName,eleImg:eleImg,eleType:eleType,eleDes:eleDes,menuCode:menuCode}, 
+		success:function(data)
+        {  
+			if(data.errorMessage==null || data.errorMessage==undefined){
+				alert(SAVE_OK);
+				tree.setItemText(data.eleDetail.menuCode,data.eleDetail.menuName,data.eleDetail.menuName);				
+			} else {
+				if (data.errorMessage == "session timeout")
+					window.location.href = webpath + "/login.jsp";
+				else
+					alert(data.errorMessage);
+			}
+        }
+	});
+}
+
+/*
+ * 修改保存--菜单
+ * */
+function savePage(){
+		//校验菜单保存数据
+		if(!checkPageValidate()){
+			return;
+		}
+		var pageId = $("#pageId").val();
+		var pageName = $("#pageName").val();
+		var pageImg = $("#pageImg").val();
+		var pageDes = $("#pageDes").val();
+		var pageLocal = $("#pageLocal").val();
+		var pageArea = $("#pageArea").val();
+		var pageDis = $("#pageDis").val(); 		
+		var menuCode = tree.getSelectedItemId(); 
+		$.ajax({
+			url:webpath + "/MenuAction.do?method=savePageItem",
+			type:"post",
+			async: false,
+			dataType:"json",
+			data:{pageId:pageId,pageName:pageName,pageImg:pageImg,pageDes:pageDes,pageLocal:pageLocal,pageArea:pageArea,pageDis:pageDis,menuCode:menuCode}, 
+			success:function(data)
+	        {  
+				if(data.errorMessage==null || data.errorMessage==undefined){
+					alert(SAVE_OK);
+					tree.setItemText(data.pageDetail.menuCode,data.pageDetail.menuName,data.pageDetail.menuName);					
+				} else {
+					if (data.errorMessage == "session timeout")
+						window.location.href = webpath + "/login.jsp";
+					else
+						alert(data.errorMessage);
+				}
+	        }
+		});
+   
+}
+
+/*
+ * 校验菜单数据
+ * */
+function checkMenuValidate(){
+	if(!jQuery("#menuDetail").valid())return false;
+	
+//	var detailForm;
+//	eval('detailForm = document.menuDetail');
+//	if(!g_check.checkForm(detailForm)){
+//		//alert(g_check.message);
+//		return false;
+//	}
+	
+//	
+//	//校验菜单
+//	if(!tree.getSelectedItemId()){
+//		alert(MENU_PLEASE_SELECT_NODE);
+//		return false;
+//	}	
+//	if($("#menuName").val()=="" || $("#menuName").val()== null){
+//		alert(MENU_NAME_MANDATORY);
+//		$("#menuName").focus();
+//		return false;
+//	}else {
+//		var leng = $("#menuName").val().replace(/[^\x00-\xff]/g,"**").length;
+//		if(leng>32){
+//			alert(MENU_NAME_LONG);
+//			$("#menuName").focus();
+//			return false ;
+//		}
+//	}
+//	if($("#menuImg").val().replace(/[^\x00-\xff]/g,"**").length>255){
+//		alert(MENU_IMG_LONG);
+//		$("#menuImg").focus();
+//		return false ;
+//	}
+////	if($("#menuLocal").val()=="" || $("#menuLocal").val()== null){
+////		alert("请求对象不能为空");
+////		$("#menuLocal").focus();
+////		return false;
+////	}else{
+//		var leng = $("#menuLocal").val().replace(/[^\x00-\xff]/g,"**").length;
+//		if(leng>256){
+//			alert(MENU_URL_LONG);
+//			$("#menuLocal").focus();
+//			return false ;
+//		}
+////	}
+//	if($("#menuArea").val()=="" || $("#menuArea").val()== null){
+//		alert(MENU_LOCATION_MANDATORY);
+//		$("#menuArea").focus();
+//		return false;
+//	}else{
+//		var leng = $("#menuArea").val().replace(/[^\x00-\xff]/g,"**").length;
+//		if(leng>256){
+//			alert(MENU_LOCATION_MANDATORY);
+//			$("#menuArea").focus();
+//			return false ;
+//		}
+//	}
+	return true;
+}
+
+/*
+ * 校验元素数据
+ * */
+function checkEleValidate(){
+	if(!jQuery("#elementDetail").valid())return false;
+	
+//	var detailForm;
+//	eval('detailForm = document.elementDetail');
+//	if(!g_check.checkForm(detailForm)){
+//		//alert(g_check.message);
+//		return false;
+//	}
+	
+//	if(!tree.getSelectedItemId()){
+//		alert(MENU_PLEASE_SELECT_ELEMENT);
+//		return false;
+//	}
+//	
+//    if($("#eleId").val()=="" || $("#eleId").val()== null){
+//		alert(MENU_ELEMENT_ID_MANDATORY);
+//		$("#eleId").focus();
+//		return false;
+//	}else {
+//		var leng = $("#eleId").val().replace(/[^\x00-\xff]/g,"**").length;
+//		if(leng>32){
+//			alert(MENU_ELEMENT_ID_LONG);
+//			$("#eleId").focus();
+//			return false ;
+//		}
+//	}
+//    if($("#eleName").val()=="" || $("#eleName").val()== null){
+//		alert(MENU_ELEMENT_NAME_MANDATORY);
+//		$("#eleId").focus();
+//		return false;
+//	}else {
+//		var leng = $("#eleName").val().replace(/[^\x00-\xff]/g,"**").length;
+//		if(leng>32){
+//			alert(MENU_ELEMENT_NAME_LONG);
+//			$("#eleName").focus();
+//			return false ;
+//		}
+//	}
+//	if($("#eleImg").val().replace(/[^\x00-\xff]/g,"**").length>255){
+//		alert(MENU_IMG_LONG);
+//		$("#eleImg").focus();
+//		return false ;
+//	}
+//    var leng = $("#eleDes").val().replace(/[^\x00-\xff]/g,"**").length;
+//	if(leng>256){
+//		alert(MENU_DESC_LONG);
+//		$("#eleDes").focus();
+//		return false ;
+//	}
+	return true;
+	
+}
+
+function checkPageValidate(){
+	if(!jQuery("#pageDetail").valid())return false;
+	
+//	var detailForm;
+//	eval('detailForm = document.pageDetail');
+//	if(!g_check.checkForm(detailForm)){
+//		//alert(g_check.message);
+//		return false;
+//	}
+
+	
+//	//校验页面
+//	if(!tree.getSelectedItemId()){
+//		alert(MENU_PLEASE_SELECT_NODE);
+//		return false;
+//	}	
+//    if($("#pageId").val()=="" || $("#pageId").val()== null){
+//		alert(MENU_PAGE_ID_MANDATORY);
+//		$("#pageId").focus();
+//		return false;
+//	}else {
+//		var leng = $("#pageId").val().replace(/[^\x00-\xff]/g,"**").length;
+//		if(leng>32){
+//			alert(MENU_PAGE_ID_LONG);
+//			$("#pageId").focus();
+//			return false ;
+//		}
+//	}
+//	if($("#pageName").val()=="" || $("#pageName").val()== null){
+//		alert(MENU_NAME_MANDATORY);
+//		$("#pageName").focus();
+//		return false;
+//	}else {
+//		var leng = $("#pageName").val().replace(/[^\x00-\xff]/g,"**").length;
+//		if(leng>32){
+//			alert(MENU_NAME_LONG);
+//			$("#pageName").focus();
+//			return false ;
+//		}
+//	}
+//	if($("#pageImg").val().replace(/[^\x00-\xff]/g,"**").length>255){
+//		alert(MENU_IMG_LONG);
+//		$("#menuImg").focus();
+//		return false ;
+//	}
+////	if($("#pageLocal").val()=="" || $("#pageLocal").val()== null){
+////		alert("请求对象不能为空");
+////		$("#pageLocal").focus();
+////		return false;
+////	}else{
+//		var leng = $("#pageLocal").val().replace(/[^\x00-\xff]/g,"**").length;
+//		if(leng>256){
+//			alert(MENU_URL_LONG);
+//			$("#pageLocal").focus();
+//			return false ;
+//		}
+////	}
+//	if($("#pageArea").val()=="" || $("#pageArea").val()== null){
+//		alert(MENU_LOCATION_MANDATORY);
+//		$("#pageArea").focus();
+//		return false;
+//	}else{
+//		var leng = $("#pageArea").val().replace(/[^\x00-\xff]/g,"**").length;
+//		if(leng>256){
+//			alert(MENU_LOCATION_LONG);
+//			$("#pageArea").focus();
+//			return false ;
+//		}
+//	}
+	return true;
+}
+
+/*
+ * 设置节点展开
+ * */
+var beforeOpenSubNodes;
+function checkSubNodes(id,state){
+	//alert(beforeOpenSubNodes);
+	//alert(tree.hasChildren(id));
+	//alert(state+":"+beforeOpenSubNodes);
+	if(beforeOpenSubNodes>0)
+		return true;
+	if(beforeOpenSubNodes==0 && state == -1){
+		tree.openItem(id);	
+	}
+    beforeOpenSubNodes = 1;
+	return true;
+}
+//function beforeOpenNode(id,state){
+//	//alert("start="+state);
+//	beforeOpenSubNodes = state;
+//	return true;
+//}
+function beforeOpenNode(id){
+	//alert(id);
+	//alert(state);
+	beforeOpenSubNodes = tree.hasChildren(id);
+	
+	//alert(beforeOpenSubNodes);
+	return true;
+}
+
+/*
+ * 双击设置焦点
+ * */
+function selItem(){
+	var selItemId = tree.getSelectedItemId();
+	tree.selectItem(selItemId);
+}
+
+/*
+ * 上移
+ * */
+function moveUp(itemId,menuid){
+	if(checkMoveNode(itemId,menuid)){
+		var changeItem = tree.moveItem(itemId,"up"); //执行上移，同时返回与其交换位置的itemId;	
+		$.ajax({
+			url:webpath + "/MenuAction.do?method=MoveUpNode",
+			type:"post",
+			dataType:"json",
+			data:{itemId:itemId,changeItemId:changeItem.id},
+			success:function(data)
+			{   
+			}
+		});	
+	}
+}
+/*
+ * 下移
+ * */	
+function moveDown(itemId,menuid){
+	if(checkMoveNode(itemId,menuid))
+	{
+		var parentId = tree.getParentId(itemId);
+		var subitemId = tree.getSubItems(parentId);
+		var array = subitemId.split(",");
+		var length = array.length;
+		if(itemId == array[length-2]){
+			//当下移的节点是倒数第二个的时候，通过指定移动到最后一个节点后面的方法执行，
+			//原因是避开通过下移时，移出当前节点的问题。
+			var changeItem = tree.moveItem(itemId,"item_sibling_next",array[length-1]);
+		}else{
+			var changeItem = tree.moveItem(itemId,"down").id; //执行下移，同时返回与其交换位置的itemId;
+		}
+		$.ajax({
+			url:webpath + "/MenuAction.do?method=MoveDownNode",
+			type:"post",
+			dataType:"json",
+			data:{itemId:itemId,changeItemId:changeItem},
+			success:function(data)
+			{   
+//				if(data.errorMessage==null || data.errorMessage==undefined){
+//					alert("删除成功");
+//				} else {
+//					alert(data.errorMessage);
+//				}
+			}
+		});
+		
+	}
+}
+
+/*
+ * 判断节点所在位置
+ * */
+function checkMoveNode(itemId,menuid){
+	var parentId = tree.getParentId(itemId);
+	var subitemId = tree.getSubItems(parentId);
+	//alert(subitemId);
+	var array = subitemId.split(",");
+	var length = array.length;
+	if(length == 1){
+		alert(MENU_ONE_NODE_CANT_MOVE);
+		return false;
+	}
+	if(array[0] == itemId && menuid == "up"){
+		alert(MENU_FIRST_NODE_CANT_MOVEUP);
+		return false;
+	}
+	if(array[length-1] == itemId && menuid == "down"){
+		alert(MENU_LAST_NODE_CANT_MOVEDOWN);
+		return false;
+	}
+    return true;
+}
+

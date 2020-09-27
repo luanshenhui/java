@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.apollo.mapper.projectSettlePeriodMapper">
+	<sql id="columns">ID,SETTLE_YEAR,SETTLE_PERIOD,DATE_FORMAT(SETTLE_BEGIN_DT,'%Y-%m-%d %T') as
+		SETTLE_BEGIN_DT,DATE_FORMAT(SETTLE_END_DT,'%Y-%m-%d %T') as
+		SETTLE_END_DT,CREATE_DT,UPDATE_DT,CREATE_USER_ID,CREATE_USER_NAME,UPDATE_USER_ID,UPDATE_USER_NAME,PROJECT_ID,STATUS
+	</sql>
+	<sql id="tableName">fm_project_settle_period</sql>
+
+	<select id="findProjectSettlePeriod" resultType="java.util.Map">
+		select
+		<include refid="columns" />
+		from
+		<include refid="tableName" />
+		t
+		where 1=1
+		<if test="null != projectId and '' != projectId">
+			and t.project_id = #{projectId}
+		</if>
+		<if test="null != settleYear and '' != settleYear">
+			and t.settle_year = #{settleYear}
+		</if>
+		<if test="null != settlePeriod and '' != settlePeriod">
+			and t.settle_period = #{settlePeriod}
+		</if>
+		<if test="null != id and '' != id">
+			and t.id = #{id}
+		</if>
+	</select>
+
+	<insert id="inserProjectSettlePeriod" parameterType="cn.rkylin.core.ApolloMap">
+		insert into fm_project_settle_period
+		(SETTLE_YEAR,SETTLE_PERIOD,SETTLE_BEGIN_DT,SETTLE_END_DT,CREATE_DT,CREATE_USER_ID,CREATE_USER_NAME,PROJECT_ID,STATUS,SETTLE_YEAR_PERIOD)
+		VALUES(#{settleYear},#{settlePeriod},#{settleBeginDt},#{settleEndDt},now(),#{createUserId},#{createUserName},#{projectId},#{status},#{settleYearPeriod})
+	</insert>
+
+	<delete id="deleteProjectSettlePeriod" parameterType="cn.rkylin.core.ApolloMap">
+		delete fm_project_settle_period where id= #{id} and
+		create_user_id = #{userId} and project_id = #{projectId}
+	</delete>
+
+	<update id="updateProjectSettlePeriod" parameterType="cn.rkylin.core.ApolloMap">
+		update fm_project_settle_period set SETTLE_YEAR =
+		#{settleYear},SETTLE_PERIOD = #{settlePeriod},
+		SETTLE_BEGIN_DT = #{settleBeginDt},SETTLE_END_DT =
+		#{settleEndDt},UPDATE_USER_ID = #{updateUserId},
+		UPDATE_USER_NAME = #{updateUserName},UPDATE_DT =
+		now(),SETTLE_YEAR_PERIOD = #{settleYearPeriod}
+		where ID = #{id} and PROJECT_ID = #{projectId} and STATUS != 1
+	</update>
+</mapper>

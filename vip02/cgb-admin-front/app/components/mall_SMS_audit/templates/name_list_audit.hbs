@@ -1,0 +1,21 @@
+<div class="modal modal-sms-audit-style" >
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+
+        <h2>查看名单</h2>
+    </div>
+    <div class="js-name-list name-list-style">
+    </div>
+    <div class="addWhiteName">
+        <input type="text" id="phoneNum" class="phoneNum" placeholder="请输入手机号" maxlength="11">
+        <input type="text" id="cardNum" class="cardNum" placeholder="请输入卡号" maxlength="20">
+    </div>
+    <div class="btn-small nameList-pagination" data-total={{data.data.total}}></div>
+    <div class="modal-footer footer-style">
+        <button type="button" class="btn btn-success btn-small js-sms-audit-add">新增</button>
+        <button type="button" class="btn btn-success btn-small js-sms-audit-delete">删除</button>
+        <button type="button" class="btn btn-success btn-small js-sms-audit-submit">保存</button>
+        <button type="button" class="btn btn-close btn-small close">取消</button>
+    </div>
+
+</div>

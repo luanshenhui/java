@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SQL.ORIGPLACE">
+
+
+	<!-- 分页查询列表 -->
+	<select id="findorigList"  parameterType="com.dpn.ciqqlc.standard.model.OrigPlaceDto"  resultType="com.dpn.ciqqlc.standard.model.OrigPlaceDto">
+		select * from (
+		select a.*,rownum rid from 
+		(select 
+			t.id,
+			t.main_id,
+			t.dec_org_name,
+			t.dec_org_ename,
+			t.dec_org_code,
+	t.org_reg_no,
+	(select CNNAME from country c where c.num_code=t.dest_country) as dest_country,
+	t.transfer_country,
+	t.trade_mode,
+	t.shipping_date,
+	t.cag_seq,
+	t.hs_code,
+	t.cag_name,
+	t.cag_imp_comp,
+	t.prod_comp,
+	t.num_weight,
+	t.fob_val,
+	t.consignee_cname,
+	t.cert_no,
+	(select name from qlc_code_library qcl where t.cert_type=qcl.code and qcl.type='QLC_ZSLX') as cert_type,
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.org_code and qcl.type='QLC_ORGANIZES') as org_code,
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.dept_code  and qcl.type='QLC_DEPTMENTS') as dept_code,
+	t.apply_date,
+		t.receipt_no,
+		t.receipt_date,
+		t.mat_no,
+		t.num_cag_disc,
+		t.pric_item,
+		t.cag_pric,
+		t.spec_item,
+		t.exp_comp,
+		t.trans_type,
+		(select ENNAME from country c where c.num_code=t.purpose_country) as purpose_country,
+		t.pack_num,
+		t.orig_place_std,
+		t.m_weight,
+		t.apply_fob_val,
+		t.exp_stat,
+		t.visa_stat,
+		t.rmk,
+	 	t.file_date,
+		t.fiel_psn,
+		t.cert_file,
+		t.fob_sum,
+		t.lc_number,
+		t.contract_number,
+		t.contact_person,
+		(select ENNAME from country c where c.num_code=t.from_country) as from_country,
+		t.purpose_address,
+		t.create_date
+		 from QLC_ORIG_PLACE t
+		 where 1=1
+		<if test="dec_org_name != null and dec_org_name != ''" >
+			and t.dec_org_name like '%'||#{dec_org_name}||'%'
+		</if>
+		<if test="apply_date_begin != null and apply_date_begin != ''">
+			<![CDATA[ and t.apply_date >= to_date(#{apply_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="apply_date_over != null and apply_date_over != ''">
+			<![CDATA[ and t.apply_date <= to_date(#{apply_date_over}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="org_reg_no != null and org_reg_no != ''" >
+			and t.org_reg_no like '%'||#{org_reg_no}||'%'
+		</if>
+		<if test="cert_no != null and cert_no != ''" >
+			and t.cert_no like '%'||#{cert_no}||'%'
+		</if>
+		<if test="cert_type != null and cert_type != ''" >
+			and t.cert_type=#{cert_type}
+		</if>
+		<if test="dest_country != null and dest_country != ''" >
+			and t.dest_country=#{dest_country}
+		</if>
+		<if test="org_code != null and org_code != ''" >
+			and t.org_code=#{org_code}
+		</if>
+		<if test="dept_code != null and dept_code != ''" >
+			and t.dept_code=#{dept_code}
+		</if>
+		order by APPLY_DATE desc
+		 ) a 
+     	where  rownum &lt;#{lastRcd}) where rid>=#{firstRcd}
+	</select>
+	
+	<!-- 查询列表记录数 -->
+	<select id="findOrigCount"  parameterType="com.dpn.ciqqlc.standard.model.OrigPlaceDto"  resultType="java.lang.Integer">
+		select count(t.id) 
+		 	from QLC_ORIG_PLACE t
+		   	where 1=1
+		<if test="dec_org_name != null and dec_org_name != ''" >
+			and t.dec_org_name=#{dec_org_name}
+		</if>
+		<if test="apply_date_begin != null and apply_date_begin != ''">
+			<![CDATA[ and t.apply_date >= to_date(#{apply_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="apply_date_over != null and apply_date_over != ''">
+			<![CDATA[ and t.apply_date <= to_date(#{apply_date_over}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="org_reg_no != null and org_reg_no != ''" >
+			and t.org_reg_no like '%'||#{org_reg_no}||'%'
+		</if>
+		<if test="cert_no != null and cert_no != ''" >
+			and t.cert_no like '%'||#{cert_no}||'%'
+		</if>
+		<if test="cert_type != null and cert_type != ''" >
+			and t.cert_type=#{cert_type}
+		</if>
+		<if test="dest_country != null and dest_country != ''" >
+			and t.dest_country=#{dest_country}
+		</if>
+		<if test="org_code != null and org_code != ''" >
+			and t.org_code=#{org_code}
+		</if>
+		<if test="dept_code != null and dept_code != ''" >
+			and t.dept_code=#{dept_code}
+		</if>
+	</select>
+
+	<select id="findOrigById"  parameterType="com.dpn.ciqqlc.standard.model.OrigPlaceDto"  resultType="com.dpn.ciqqlc.standard.model.OrigPlaceDto">
+		select 
+			t.id,
+			t.main_id,
+			t.dec_org_name,
+			t.dec_org_ename,
+			t.dec_org_code,
+	t.org_reg_no,
+	(select CNNAME from country c where c.num_code=t.dest_country) as dest_country,
+	(select ENNAME from country c where c.num_code=t.transfer_country) as transfer_country,
+	t.trade_mode,
+	t.shipping_date,
+	t.cag_seq,
+	t.hs_code,
+	t.cag_name,
+	t.cag_imp_comp,
+	t.prod_comp,
+	t.num_weight,
+	t.fob_val,
+	t.consignee_cname,
+	t.cert_no,
+	(select name from qlc_code_library qcl where t.cert_type=qcl.code and qcl.type='QLC_ZSLX') as cert_type,
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.org_code and qcl.type='QLC_ORGANIZES') as org_code,
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.dept_code and qcl.type='QLC_DEPTMENTS') as dept_code,
+		t.apply_date,
+		t.receipt_no,
+		t.receipt_date,
+		t.mat_no,
+		t.num_cag_disc,
+		t.pric_item,
+		t.cag_pric,
+		t.spec_item,
+		t.exp_comp,
+		t.trans_type,
+		(select ENNAME from country c where c.num_code=t.purpose_country) as purpose_country,
+		t.pack_num,
+		t.orig_place_std,
+		t.m_weight,
+		t.apply_fob_val,
+		t.exp_stat,
+		t.visa_stat,
+		t.rmk,
+	 	t.file_date,
+		t.fiel_psn,
+		t.cert_file,
+		t.fob_sum,
+		t.lc_number,
+		t.contract_number,
+		t.contact_person,
+		(select ENNAME from country c where c.num_code=t.from_country) as from_country,
+		t.purpose_address,
+		t.create_date
+		 from QLC_ORIG_PLACE t
+		where t.main_id not in(select proc_main_id from qlc_chk_rcd where proj_code='OC_C_M')
+		<if test="id != null and id != ''" >
+			and t.id=#{id}
+		</if>
+		<if test="cag_name != null and cag_name != ''" >
+			and t.cag_name like '%'||#{cag_name}||'%'
+		</if>
+		<if test="dec_org_name != null and dec_org_name != ''" >
+			and t.dec_org_name like '%'||#{dec_org_name}||'%'
+		</if>
+			<if test="apply_date_begin != null and apply_date_begin != ''">
+			<![CDATA[ and t.apply_date >= to_date(#{apply_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="apply_date_over != null and apply_date_over != ''">
+			<![CDATA[ and t.apply_date <= to_date(#{apply_date_over}, 'yyyy-mm-dd') ]]>
+		</if>
+		order by t.apply_date desc
+	</select>
+	
+	<select id="getOrigById"  parameterType="com.dpn.ciqqlc.standard.model.OrigPlaceDto"   resultType="java.util.Map">
+		select 
+			t.id,
+			t.main_id,
+			t.dec_org_name,
+			t.dec_org_ename,
+			t.dec_org_code,
+	t.org_reg_no,
+	(select CNNAME from country c where c.num_code=t.dest_country) as dest_country,
+	(select ENNAME from country c where c.num_code=t.transfer_country) as transfer_country,
+	t.trade_mode,
+	t.shipping_date,
+	t.cag_seq,
+	t.hs_code,
+	t.cag_name,
+	t.cag_imp_comp,
+	t.prod_comp,
+	t.num_weight,
+	t.fob_val,
+	t.consignee_cname,
+	t.cert_no,
+	(select name from qlc_code_library qcl where t.cert_type=qcl.code and qcl.type='QLC_ZSLX') as cert_type,
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.org_code and qcl.type='QLC_ORGANIZES') as org_code,
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.dept_code  and qcl.type='QLC_DEPTMENTS') as dept_code,
+		t.apply_date,
+		t.receipt_no,
+		t.receipt_date,
+		t.mat_no,
+		t.num_cag_disc,
+		t.pric_item,
+		t.cag_pric,
+		t.spec_item,
+		t.exp_comp,
+		t.trans_type,
+		(select ENNAME from country c where c.num_code=t.purpose_country) as purpose_country,
+		t.pack_num,
+		t.orig_place_std,
+		t.m_weight,
+		t.apply_fob_val,
+		t.exp_stat,
+		t.visa_stat,
+		t.rmk,
+	 	t.file_date,
+		t.fiel_psn,
+		t.cert_file,
+		t.fob_sum,
+		t.lc_number,
+		t.contract_number,
+		t.contact_person,
+		(select ENNAME from country c where c.num_code=t.from_country) as from_country,
+		t.purpose_address,
+		t.create_date
+		 from QLC_ORIG_PLACE t
+		 where 1=1
+		<if test="id != null and id != ''" >
+			and t.id=#{id}
+		</if>
+		<if test="cag_name != null and cag_name != ''" >
+			and t.cag_name like '%'||#{cag_name}||'%'
+		</if>
+		<if test="dec_org_name != null and dec_org_name != ''" >
+			and t.dec_org_name like '%'||#{dec_org_name}||'%'
+		</if>
+			<if test="apply_date_begin != null and apply_date_begin != ''">
+			<![CDATA[ and t.apply_date >= to_date(#{apply_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="apply_date_over != null and apply_date_over != ''">
+			<![CDATA[ and t.apply_date <= to_date(#{apply_date_over}, 'yyyy-mm-dd') ]]>
+		</if>
+	</select>
+	
+	<select id="getOrigPlace"  parameterType="com.dpn.ciqqlc.standard.model.OrigPlaceDto"   resultType="com.dpn.ciqqlc.standard.model.OrigPlaceDto">
+		select 
+			t.id,
+			t.main_id,
+			t.dec_org_name,
+			t.dec_org_ename,
+			t.dec_org_code,
+	t.org_reg_no,
+	(select CNNAME from country c where c.num_code=t.dest_country) as dest_country,
+	(select ENNAME from country c where c.num_code=t.transfer_country) as transfer_country,
+	t.trade_mode,
+	t.shipping_date,
+	t.cag_seq,
+	t.hs_code,
+	t.cag_name,
+	t.cag_imp_comp,
+	t.prod_comp,
+	t.num_weight,
+	t.fob_val,
+	t.consignee_cname,
+	t.cert_no,
+	(select name from qlc_code_library qcl where t.cert_type=qcl.code and qcl.type='QLC_ZSLX') as cert_type,
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.org_code and qcl.type='QLC_ORGANIZES') as org_code,
+	(select name from QLC_CODE_LIBRARY qcl where qcl.code=t.dept_code  and qcl.type='QLC_DEPTMENTS') as dept_code,
+		t.apply_date,
+		t.receipt_no,
+		t.receipt_date,
+		t.mat_no,
+		t.num_cag_disc,
+		t.pric_item,
+		t.cag_pric,
+		t.spec_item,
+		t.exp_comp,
+		t.trans_type,
+		(select ENNAME from country c where c.num_code=t.purpose_country) as purpose_country,
+		t.pack_num,
+		t.orig_place_std,
+		t.m_weight,
+		t.apply_fob_val,
+		t.exp_stat,
+		t.visa_stat,
+		t.rmk,
+	 	t.file_date,
+		t.fiel_psn,
+		t.cert_file,
+		t.fob_sum,
+		t.lc_number,
+		t.contract_number,
+		t.contact_person,
+		(select ENNAME from country c where c.num_code=t.from_country) as from_country,
+		t.purpose_address,
+		t.create_date
+		 from QLC_ORIG_PLACE t
+		 where 1=1
+		<if test="id != null and id != ''" >
+			and t.id=#{id}
+		</if>
+		<if test="cag_name != null and cag_name != ''" >
+			and t.cag_name like '%'||#{cag_name}||'%'
+		</if>
+		<if test="dec_org_name != null and dec_org_name != ''" >
+			and t.dec_org_name like '%'||#{dec_org_name}||'%'
+		</if>
+			<if test="apply_date_begin != null and apply_date_begin != ''">
+			<![CDATA[ and t.apply_date >= to_date(#{apply_date_begin}, 'yyyy-mm-dd') ]]>
+		</if>
+		<if test="apply_date_over != null and apply_date_over != ''">
+			<![CDATA[ and t.apply_date <= to_date(#{apply_date_over}, 'yyyy-mm-dd') ]]>
+		</if>
+	</select>
+	
+	<select id="getViewImg"  parameterType="com.dpn.ciqqlc.standard.model.VideoEventModel"  resultType="com.dpn.ciqqlc.standard.model.VideoEventModel">
+	SELECT
+		id,
+		proc_Main_Id as procMainId,
+		proc_Type as procType,
+		file_Type as fileType,
+		file_Name as fileName,
+		port_Dept_Code as portDeptCode,
+		port_Org_Code as portOrgCode,
+		create_User as createUser,
+		name,
+		create_Date as createDate
+		FROM
+		qlc_video_file_event t
+		where 1=1
+		<if test="procMainId != null and procMainId != ''" >
+		and proc_main_id=#{procMainId}
+		</if>
+		<if test="procType != null and procType != ''" >
+		and proc_type=#{procType}
+		</if>
+		<if test="proj_code != null and proj_code != ''" >
+		 AND EXISTS (
+	              SELECT 
+	                        PROC_TYPE
+	              FROM 
+	                        QLC_C_VIDEO_PROC_TYPE
+	              WHERE   
+	                        PROJ_CODE=#{proj_code}
+	              AND 
+	                        PROC_TYPE=t.PROC_TYPE
+    	)   
+    	</if>  
+    	order by  create_Date desc          
+	</select>
+	
+	
+	<select id="getOrigPlaceCargo" resultType="com.dpn.ciqqlc.standard.model.OrigPlaceCargoDto">
+		select * from QLC_ORIG_PLACE_CARGO where org_id=#{org_id}
+	</select>
+	
+	<select id="getOptionList" parameterType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel"  resultType="com.dpn.ciqqlc.standard.model.CheckDocsRcdModel">
+		SELECT
+		DEC_USER as DecUser,
+		DEC_DATE as DecDate,
+		DOC_ID as DocId,
+		PROC_MAIN_ID as ProcMainId,
+		DOC_TYPE as DocType,
+		OPTION_1 as Option1,
+		OPTION_2 as Option2,
+		OPTION_3 as Option3,
+		OPTION_4 as Option4,
+		OPTION_5 as Option5,
+		OPTION_6 as Option6,
+		OPTION_7 as Option7,
+		OPTION_8 as Option8,
+		OPTION_9 as Option9,
+		OPTION_10 as Option10,
+		OPTION_11 as Option11,
+		OPTION_12 as Option12,
+		OPTION_13 as Option13,
+		OPTION_14 as Option14,
+		OPTION_15 as Option15,
+		OPTION_16 as Option16,
+		OPTION_17 as Option17,
+		OPTION_18 as Option18,
+		OPTION_19 as Option19,
+		OPTION_20 as Option20,
+		OPTION_21 as Option21,
+		OPTION_22 as Option22,
+		OPTION_23 as Option23,
+		OPTION_24 as Option24,
+		OPTION_25 as Option25,
+		OPTION_26 as Option26,
+		OPTION_27 as Option27,
+		OPTION_28 as Option28,
+		OPTION_29 as Option29,
+		OPTION_30 as Option30,
+		OPTION_31 as Option31,
+		OPTION_32 as Option32,
+		OPTION_33 as Option33,
+		OPTION_34 as Option34,
+		OPTION_35 as Option35,
+		OPTION_36 as Option36,
+		OPTION_37 as Option37,
+		OPTION_38 as Option38,
+		OPTION_39 as Option39,
+		OPTION_40 as Option40,
+		OPTION_41 as Option41,
+		OPTION_42 as Option42,
+		OPTION_43 as Option43,
+		OPTION_44 as Option44,
+		OPTION_45 as Option45,
+		OPTION_46 as Option46,
+		OPTION_47 as Option47,
+		OPTION_48 as Option48,
+		OPTION_49 as Option49,
+		OPTION_50 as Option50,
+		OPTION_51 as Option51,
+		OPTION_52 as Option52,
+		OPTION_53 as Option53,
+		OPTION_54 as Option54,
+		OPTION_55 as Option55,
+		OPTION_56 as Option56,
+		OPTION_57 as Option57,
+		OPTION_58 as Option58,
+		OPTION_59 as Option59,
+		OPTION_60 as Option60,
+		OPTION_61 as Option61,
+		OPTION_62 as Option62,
+		OPTION_63 as Option63,
+		OPTION_64 as Option64,
+		OPTION_65 as Option65,
+		OPTION_80 as Option80
+		FROM
+		QLC_CHECK_DOCS_RCD
+		WHERE 1=1
+		<if test="DocId != null and DocId != ''" >
+			and DOC_ID = #{DocId}
+		</if>
+		<if test="DocType != null and DocType != ''" >
+			and DOC_TYPE = #{DocType}
+		</if>
+		<if test="ProcMainId != null and ProcMainId != ''" >
+			and PROC_MAIN_ID = #{ProcMainId}
+		</if>
+		order by DEC_DATE desc
+	</select>
+	<!-- **** insert ******************************************************* -->
+	<insert id="insertOrigPlace" parameterType="com.dpn.ciqqlc.standard.model.OrigPlaceDto">
+		insert into QLC_ORIG_PLACE
+		(id
+		<if test="main_id != null and main_id != ''" >
+			,main_id
+		</if>
+		<if test="dec_org_name != null and dec_org_name != ''" >
+			,dec_org_name
+		</if>
+		<if test="dec_org_code != null and dec_org_code != ''" >
+			,dec_org_code
+		</if>
+		<if test="org_reg_no != null and org_reg_no != ''" >
+			,org_reg_no
+		</if>
+		<if test="dest_country != null and dest_country != ''" >
+			,dest_country
+		</if>
+		<if test="transfer_country != null and transfer_country != ''" >
+			,transfer_country
+		</if>
+		
+			<if test="trade_mode != null and trade_mode != ''" >
+			,trade_mode
+		</if>
+			<if test="shipping_date != null and shipping_date != ''" >
+			,shipping_date
+		</if>
+			<if test="cag_seq != null and cag_seq != ''" >
+			,cag_seq
+		</if>
+			<if test="hs_code != null and hs_code != ''" >
+			,hs_code
+		</if>
+			<if test="cag_name != null and cag_name != ''" >
+			,cag_name
+		</if>
+			<if test="cag_imp_comp != null and cag_imp_comp != ''" >
+			,cag_imp_comp
+		</if>
+			<if test="prod_comp != null and prod_comp != ''" >
+			,prod_comp
+		</if>
+			<if test="num_weight != null and num_weight != ''" >
+			,num_weight
+		</if>
+			<if test="fob_val != null and fob_val != ''" >
+			,fob_val
+		</if>
+			<if test="consignee_cname != null and consignee_cname != ''" >
+			,consignee_cname
+		</if>
+			<if test="cert_no != null and cert_no != ''" >
+			,cert_no
+		</if>
+			<if test="receipt_no != null and receipt_no != ''" >
+			,receipt_no
+		</if>
+			<if test="receipt_date != null and receipt_date != ''" >
+			,receipt_date
+		</if>
+			<if test="mat_no != null and mat_no != ''" >
+			,mat_no
+		</if>
+			<if test="num_cag_disc != null and num_cag_disc != ''" >
+			,num_cag_disc
+		</if>
+			<if test="pric_item != null and pric_item != ''" >
+			,pric_item
+		</if>
+			<if test="cag_pric != null and cag_pric != ''" >
+			,cag_pric
+		</if>
+			<if test="spec_item != null and spec_item != ''" >
+			,spec_item
+		</if>
+			<if test="exp_comp != null and exp_comp != ''" >
+			,exp_comp
+		</if>
+			<if test="trans_type != null and trans_type != ''" >
+			,trans_type
+		</if>
+			<if test="purpose_country != null and purpose_country != ''" >
+			,purpose_country
+		</if>
+			<if test="pack_num != null and pack_num != ''" >
+			,pack_num
+		</if>
+			<if test="orig_place_std != null and orig_place_std != ''" >
+			,orig_place_std
+		</if>
+			<if test="m_weight != null and m_weight != ''" >
+			,m_weight
+		</if>
+			<if test="apply_fob_val != null and apply_fob_val != ''" >
+			,apply_fob_val
+		</if>
+			<if test="exp_stat != null and exp_stat != ''" >
+			,exp_stat
+		</if>
+			<if test="visa_stat != null and visa_stat != ''" >
+			,visa_stat
+		</if>
+			<if test="rmk != null and rmk != ''" >
+			,rmk
+		</if>
+			<if test="file_date != null and file_date != ''" >
+			,file_date
+		</if>
+			<if test="fiel_psn != null and fiel_psn != ''" >
+			,fiel_psn
+		</if>
+			<if test="cert_file != null and cert_file != ''" >
+			,cert_file
+		</if>
+			<if test="create_date != null and create_date != ''" >
+			,create_date
+		</if>
+		)
+		values (CreateGUID()
+		<if test="main_id != null and main_id != ''" >
+			,#{main_id}
+		</if>
+		<if test="dec_org_name != null and dec_org_name != ''" >
+			,#{dec_org_name}
+		</if>
+		<if test="dec_org_code != null and dec_org_code != ''" >
+			,#{dec_org_code}
+		</if>
+		<if test="org_reg_no != null and org_reg_no != ''" >
+			,#{org_reg_no}
+		</if>
+		<if test="dest_country != null and dest_country != ''" >
+			,#{dest_country}
+		</if>
+		<if test="transfer_country != null and transfer_country != ''" >
+			,#{transfer_country}
+		</if>
+		
+		<if test="trade_mode != null and trade_mode != ''" >
+			,#{trade_mode}
+		</if>
+		<if test="shipping_date != null and shipping_date != ''" >
+			,#{shipping_date}
+		</if>
+		<if test="cag_seq != null and cag_seq != ''" >
+			,#{cag_seq}
+		</if>
+		<if test="hs_code != null and hs_code != ''" >
+			,#{hs_code}
+		</if>
+		<if test="cag_name != null and cag_name != ''" >
+			,#{cag_name}
+		</if>
+		<if test="cag_imp_comp != null and cag_imp_comp != ''" >
+			,#{cag_imp_comp}
+		</if>
+		<if test="prod_comp != null and prod_comp != ''" >
+			,#{prod_comp}
+		</if>
+		<if test="num_weight != null and num_weight != ''" >
+			,#{num_weight}
+		</if>
+		<if test="fob_val != null and fob_val != ''" >
+			,#{fob_val}
+		</if>
+		<if test="consignee_cname != null and consignee_cname != ''" >
+			,#{consignee_cname}
+		</if>
+		<if test="cert_no != null and cert_no != ''" >
+			,#{cert_no}
+		</if>
+		<if test="receipt_no != null and receipt_no != ''" >
+			,#{receipt_no}
+		</if>
+		<if test="receipt_date != null and receipt_date != ''" >
+			,#{receipt_date}
+		</if>
+		<if test="mat_no != null and mat_no != ''" >
+			,#{mat_no}
+		</if>
+		<if test="num_cag_disc != null and num_cag_disc != ''" >
+			,#{num_cag_disc}
+		</if>
+		<if test="pric_item != null and pric_item != ''" >
+			,#{pric_item}
+		</if>
+		<if test="cag_pric != null and cag_pric != ''" >
+			,#{cag_pric}
+		</if>
+		<if test="spec_item != null and spec_item != ''" >
+			,#{spec_item}
+		</if>
+		<if test="exp_comp != null and exp_comp != ''" >
+			,#{exp_comp}
+		</if>
+		<if test="trans_type != null and trans_type != ''" >
+			,#{trans_type}
+		</if>
+		<if test="purpose_country != null and purpose_country != ''" >
+			,#{purpose_country}
+		</if>
+		<if test="pack_num != null and pack_num != ''" >
+			,#{pack_num}
+		</if>
+		<if test="orig_place_std != null and orig_place_std != ''" >
+			,#{orig_place_std}
+		</if>
+		<if test="m_weight != null and m_weight != ''" >
+			,#{m_weight}
+		</if>
+		<if test="apply_fob_val != null and apply_fob_val != ''" >
+			,#{apply_fob_val}
+		</if>
+		<if test="exp_stat != null and exp_stat != ''" >
+			,#{exp_stat}
+		</if>
+		<if test="visa_stat != null and visa_stat != ''" >
+			,#{visa_stat}
+		</if>
+		<if test="rmk != null and rmk != ''" >
+			,#{rmk}
+		</if>
+		<if test="file_date != null and file_date != ''" >
+			,#{file_date}
+		</if>
+		<if test="fiel_psn != null and fiel_psn != ''" >
+			,#{fiel_psn}
+		</if>
+		<if test="cert_file != null and cert_file != ''" >
+			,#{cert_file}
+		</if>
+		<if test="create_date != null and create_date != ''" >
+			,#{create_date}
+		</if>
+		)
+	</insert>
+	<!-- **** update ******************************************************* -->
+
+	<!-- **** delete ******************************************************* -->
+
+</mapper>

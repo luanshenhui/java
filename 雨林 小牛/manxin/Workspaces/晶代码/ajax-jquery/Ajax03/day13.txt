@@ -1,0 +1,75 @@
+1、ajax技术的优点
+	(1)页面无刷新，不打断用户的操作。
+	(2)浏览器与服务器之间可以按照需要获取数据，不
+	再需要传送一个完整的页面。也就是说，浏览器与
+	服务器之间数据传输量大大减少。
+	(3)是一种标准化的技术，不需要浏览器额外去下
+	载一些插件。
+
+2、发送post请求
+		xhr.open('post','check_username.do',true);
+		//默认情况下,ajax对象(xhr)不会添加
+		//content-type消息头，所以，调用
+		//setRequestHeader方法来添加这个消息头。
+		xhr.setRequestHeader('content-type',
+		'application/x-www-form-urlencoded');
+		xhr.onreadystatechange=f1;
+		xhr.send('username='+ $F('username'));
+3、编码问题 (发post请求)
+	(1)产生乱码问题的原因
+		浏览器内置的ajax对象，对中文参数都使用
+		"utf-8"进行编码。
+		服务器端使用"iso-8859-1"去解码。
+	(2)解决方式
+		request.setCharacterEncoding="utf-8";
+4、json (javascript object notation)
+	www.json.org
+	(1)json是什么?
+		是一种轻量级的数据交换标准。
+		1)什么是数据交换?
+			将数据转换成一种标准的、与平台无关的数据
+		格式发送给另外一方。
+		2)轻量级
+			相对于xml,json解析的速度更快、并且文档的大小
+		也要小一些。
+	(2)json语法
+		1)表示一个对象
+			{属性名称:属性值,属性名称:属性值...}
+			注意:
+				a,属性名称必须使用引号括起来。
+				b,属性值的类型可以是 string,number,
+				boolean,null,object。
+				c,属性值如果是字符串，必须使用引号
+				括起来。
+		2)表示一个对象组成的数组
+			[{},{},...]
+	(3)使用json完成数据交换
+		1)java对象转换成json字符串。
+			可以使用json官方提供的api。需要将
+	相应的jar文件拷贝到WEB-INF\lib下。
+			JSONObject, JSONArray
+		2)json字符串转换成java对象
+			可以使用一些js框架提供的api，比如
+		prototype提供的evalJSON函数。
+		
+	5、ajax应用中的两个问题
+		(1)缓存问题
+			a,什么缓存问题?
+				当ie浏览器提供的那个ajax对象使用
+				get方式发请求时，会检查要访问
+			的地址是否访问过，如果访问过，不再向服务器
+			发请求。
+			b,解决方式
+				在请求地址后面添加一个随机数，比如
+				xhr.open('get','getNumber.do?' 
+				+ Math.random(),true);
+		(2)同步请求(扩展)
+	练习：
+			1、使用ajax方式检查验证码是否正确。
+			2、如果验证码错误，不能提交表单。
+	
+		
+		
+		
+		
+	

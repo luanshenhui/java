@@ -1,0 +1,47 @@
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class VsDemoAction {
+	private String name = "yulin";
+	private String[] citys = {"Beijing","Shanghai"};
+	private List<Emp> emps;
+	private int totalPage = 3;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String[] getCitys() {
+		return citys;
+	}
+	public void setCitys(String[] citys) {
+		this.citys = citys;
+	}
+	public List<Emp> getEmps() {
+		return emps;
+	}
+	public void setEmps(List<Emp> emps) {
+		this.emps = emps;
+	}
+	public int getTotalPage() {
+		return totalPage;
+	}
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
+	}
+	public String execute() {
+		emps = new ArrayList<Emp>();
+		Emp e1 = new Emp();
+		e1.setName("张三");
+		e1.setSalary(8000.00);
+		Emp e2 = new Emp();
+		e2.setName("李四");
+		e2.setSalary(9000.00);
+		emps.add(e1);
+		emps.add(e2);
+		return "success";
+	}
+}

@@ -1,0 +1,5 @@
+#Every word begin with ^,end with a space,separated by | 
+#Make sure the last word end with a space
+KEY_WORD = ^script |^select |^net |^or |^and |^insert |^delete |^from |^count |^drop |^table |^update |^truncate |^mid |^char |^xp_cmdshell |^exec |^master |^netlocalgroup |^administrators |^job 
+#partition with the number 0
+KEY_CHAR = <0>0&0#0$0\'0+0[0]0^0'0|0\\

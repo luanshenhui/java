@@ -1,0 +1,19 @@
+package cn.rkylin.oms.system.messageDefine.controller;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import cn.rkylin.core.controller.ApolloController;
+import cn.rkylin.oms.system.messageDefine.service.IMessageDefineService;
+
+@Controller
+@RequestMapping("/messageDefine")
+public class MessageDefineController extends ApolloController  {
+	private static final Log logger = LogFactory.getLog(MessageDefineController.class);
+
+	@Autowired
+	private IMessageDefineService messageDefineService;
+}

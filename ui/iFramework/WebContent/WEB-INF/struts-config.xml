@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+
+	<global-forwards>
+		<forward name="failure" path="/view/base/error/Error.jsp" redirect="false"/>
+		<forward name="unknown-error" path="/view/base/error/Error.jsp"/>
+		<forward name="unpermitted-character" path="/view/base/error/SecurityError.jsp"/>
+		<forward name="session-invalidate" path="/login.jsp"/>		
+	</global-forwards>
+
+	<message-resources parameter="internationalization/resources/ApplicationResources"/>
+	
+</struts-config>

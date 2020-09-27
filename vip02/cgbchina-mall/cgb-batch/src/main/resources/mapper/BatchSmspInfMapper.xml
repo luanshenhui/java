@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BatchSmspInfModel">
+
+    <update id="update" parameterType="cn.com.cgbchina.batch.model.BatchSmspInfModel">
+        update tbl_smsp_inf set
+        <if test="itemCode !=null">item_code = #{itemCode}
+            ,
+        </if>
+        <if test="itemName !=null">item_name = #{itemName}
+            ,
+        </if>
+        <if test="perStage !=null">per_stage = #{perStage}
+            ,
+        </if>
+        <if test="stagesCode !=null">stages_code = #{stagesCode}
+            ,
+        </if>
+        <if test="goodsPrice !=null">goods_price = #{goodsPrice}
+            ,
+        </if>
+        <if test="smspId !=null">smsp_id = #{smspId}
+            ,
+        </if>
+        <if test="beginDate !=null">begin_date = #{beginDate}
+            ,
+        </if>
+        <if test="endDate !=null">end_date = #{endDate}
+            ,
+        </if>
+        <if test="voucherPrice !=null">voucher_price = #{voucherPrice}
+            ,
+        </if>
+        <if test="couponId !=null">coupon_id = #{couponId}
+            ,
+        </if>
+        <if test="couponNm !=null">coupon_nm = #{couponNm}
+            ,
+        </if>
+        <if test="ifPoint !=null">if_point = #{ifPoint}
+            ,
+        </if>
+        <if test="status !=null">status = #{status}
+            ,
+        </if>
+        <if test="otherMess !=null">other_mess = #{otherMess}
+            ,
+        </if>
+        <if test="subDatetime !=null">sub_datetime = #{subDatetime}
+            ,
+        </if>
+        <if test="checkDatetime !=null">check_datetime = #{checkDatetime}
+            ,
+        </if>
+        <if test="sendDatetime !=null">send_datetime = #{sendDatetime}
+            ,
+        </if>
+        <if test="loadStatus !=null">load_status = #{loadStatus}
+            ,
+        </if>
+        <if test="loadDatetime !=null">load_datetime = #{loadDatetime}
+            ,
+        </if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,
+        </if>
+        modify_time = now()
+        where id = #{id}
+    </update>
+
+    <resultMap id="SmspCustMap" type="cn.com.cgbchina.batch.model.BatchSmspCustModel">
+        <result property="id" column="id"/>
+        <result property="phone" column="phone"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="createOper" column="create_oper"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyOper" column="modify_oper"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <!--根据短信维护表id查询所有名单-->
+    <select id="findSmspCustById" parameterType="Map" resultType="String">
+        select
+        concat(phone, '|', card_no)
+        from tbl_smsp_cust
+        where id=#{id}
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="countSmspCustById" parameterType="java.lang.Long" resultType="int">
+        select
+        count(1)
+        from tbl_smsp_cust
+        where id=#{id}
+    </select>
+    <update id="replaceBatch" parameterType="List">
+        insert into tbl_smsp_cust
+        (id
+        ,phone
+        ,card_no
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}
+            ,#{item.phone}
+            ,#{item.cardNo}
+            ,#{item.createOper}
+            ,now()
+            ,#{item.modifyOper}
+            ,now())
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        card_no = VALUES(card_no),
+        modify_oper = VALUES(modify_oper),
+        modify_time = VALUES(modify_time)
+    </update>
+
+    <insert id="insertBatch" parameterType="cn.com.cgbchina.batch.model.BatchSmspCustModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_smsp_cust
+        (id
+        ,phone
+        ,card_no
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}
+            ,#{item.phone}
+            ,#{item.cardNo}
+            ,#{item.createOper}
+            ,now()
+            ,#{item.modifyOper}
+            ,#{item.modifyTime})
+        </foreach>
+    </insert>
+    <update id="updateBatch" parameterType="List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update tbl_smsp_cust set
+            <if test="item.cardNo !=null">card_no = #{item.cardNo}
+                ,</if>
+            <if test="item.modifyOper !=null">modify_oper = #{item.modifyOper}
+                ,</if>
+            modify_time = now()
+            where id = #{item.id} and phone = #{item.phone}
+        </foreach>
+    </update>
+    <update id="updateSmspCust" parameterType="cn.com.cgbchina.batch.model.BatchSmspInfModel">
+        update tbl_smsp_cust set
+        <if test="cardNo !=null">card_no = #{cardNo}
+            ,</if>
+        <if test="modifyOper !=null">modify_oper = #{modifyOper}
+            ,</if>
+        modify_time = now()
+        where id = #{id} and phone = #{phone}
+    </update>
+
+    <insert id="insert" parameterType="cn.com.cgbchina.batch.model.BatchSmspInfModel" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into tbl_smsp_record
+        (s_id
+        ,total_num
+        ,success_num
+        ,fail_num
+        ,repeat_num
+        ,load_status
+        ,file_path
+        ,create_oper
+        ,create_time)
+        values(#{sId}
+        ,#{totalNum}
+        ,#{successNum}
+        ,#{failNum}
+        ,#{repeatNum}
+        ,#{loadStatus}
+        ,#{filePath}
+        ,#{createOper}
+        ,now())
+    </insert>
+</mapper>
+
+

@@ -1,0 +1,22 @@
+package com.manxin.action;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.manxin.service.Service;
+import com.manxin.service.ServiceImpl;
+
+public class Action {
+	public static void main(String[] args) {
+		//原来实现的方法
+//		Service service = new ServiceImpl();
+//		service.add();
+//		service.update();
+		
+		//Spring框架之后的方法
+		//(1)初始化应用上下文(获取IOC容器的对象)
+		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+		//(2)获取资源
+		
+	}
+}

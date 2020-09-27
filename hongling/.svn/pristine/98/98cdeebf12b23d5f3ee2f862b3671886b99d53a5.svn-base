@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.Customer" table="Customer">
+        <id name="ID" type="string">
+            <column name="ID" length="32" />
+            <generator class="uuid.hex" />
+        </id>
+        <property name="Name" type="string">
+            <column name="Name" />
+        </property>
+        <property name="GenderID" type="integer">
+            <column name="GenderID"  />
+        </property>
+        <property name="Tel" type="string">
+            <column name="Tel" />
+        </property>
+        <property name="Weight" type="double">
+            <column name="Weight" />
+        </property>
+		<property name="WeightUnitID" type="integer">
+            <column name="WeightUnitID"  />
+        </property>
+        <property name="Height" type="double">
+            <column name="Height" />
+        </property>
+		<property name="HeightUnitID" type="integer">
+            <column name="HeightUnitID"  />
+        </property>
+        <property name="Email" type="string">
+            <column name="Email"/>
+        </property>
+        <property name="Address" type="string">
+            <column name="Address" />
+        </property>
+        <property name="PubMemberID" type="string">
+            <column name="PubMemberID"/>
+        </property>
+        <property name="PubDate" type="date">
+            <column name="PubDate" length="7"/>
+        </property>
+        <property name="LtName" type="string">
+            <column name="LtName" />
+        </property>
+        <property name="Memos" type="string">
+            <column name="Memos" />
+        </property>
+    </class>
+</hibernate-mapping>

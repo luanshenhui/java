@@ -1,0 +1,38 @@
+{{#component "points_deposit_rate js-component"}}
+    <p class="components-title"><strong>- 积分优惠折扣比例设置 -</strong></p>
+    <div class="tab-contents main-body">
+        <div data-role="content" class="tab-content">
+            <form class="form form-aligned points-deposit-form">
+                {{#with _DATA_}}
+                    <div class="control-group pull-left">
+                        <label for="commonCard" class ="label-width"><strong class="label-color">普卡/金卡</strong>:</label>
+                        <input id="commonCard" name="commonCard" value="{{commonCard}}" type="text"
+                               class="form-control"/>
+                    </div>
+                    <div class="control-group pull-left">
+                        <label for="platinumCard" class ="label-width"><strong class="label-color">钛金卡/臻享白金卡</strong>:</label>
+                        <input id="platinumCard" name="platinumCard" value="{{platinumCard}}" type="text"
+                               class="form-control"/>
+                    </div>
+                    <div class="control-group pull-left">
+                        <label for="topCard" class ="label-width"><strong class="label-color">顶级/增值白金卡</strong>:</label>
+                        <input id="topCard" name="topCard" value="{{topCard}}" type="text" class="form-control"/>
+                    </div>
+                    <div class="control-group pull-left">
+                        <label for="VIP" class ="label-width"><strong class="label-color">VIP:</strong></label>
+                        <input id="VIP" name="VIP" value="{{VIP}}" type="text" class="form-control"/>
+                    </div>
+                    <div class="control-group pull-left">
+                        <label for="birthday" class ="label-width"><strong class="label-color">生日:</strong></label>
+                        <input id="birthday" name="birthday" value="{{birthday}}" type="text" class="form-control"/>
+                    </div>
+                {{/with}}
+                <div class="control-group submit">
+                    {{#authorial "pointsBenefit_edit"}}
+                        <input class="btn btn-success btn-medium js-update" type="submit" id="submit" value="保存"/>
+                    {{/authorial}}
+                </div>
+            </form>
+        </div>
+    </div>
+{{/component}}

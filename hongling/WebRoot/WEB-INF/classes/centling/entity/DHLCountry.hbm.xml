@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="centling.entity.DHLCountry" table="DHLCountry">
+        <id name="CountryCode" type="string">
+            <column name="CountryCode"/>
+        </id>
+        <property name="CountryName" type="string">
+            <column name="CountryName" />
+        </property>
+        <property name="CurrencyCode" type="string">
+            <column name="CurrencyCode" />
+        </property>
+        <property name="CurrencyName" type="string">
+            <column name="CurrencyName" />
+        </property>
+        <property name="WeightUnit" type="string">
+            <column name="WeightUnit" />
+        </property>
+        <property name="DimensionalUnit" type="string">
+            <column name="DimensionalUnit" />
+        </property>
+        <property name="CountryLocationType" type="string">
+            <column name="CountryLocationType" />
+        </property>
+        <property name="Postcodeformat" type="string">
+            <column name="Postcodeformat" />
+        </property>
+        <property name="CountryDivisionCodeType" type="string">
+            <column name="CountryDivisionCodeType" />
+        </property>
+        <property name="en" type="string">
+            <column name="en" />
+        </property>
+        <property name="de" type="string">
+            <column name="de" />
+        </property>
+        <property name="fr" type="string">
+            <column name="fr" />
+        </property>
+        <property name="ja" type="string">
+            <column name="ja" />
+        </property>
+        <property name="IsShow" type="string">
+            <column name="IsShow" />
+        </property>
+    </class>
+</hibernate-mapping>

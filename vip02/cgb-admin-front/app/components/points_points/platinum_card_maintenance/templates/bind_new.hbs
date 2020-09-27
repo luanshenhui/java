@@ -1,0 +1,55 @@
+<div class="modal modal-bind-new js-bind-card">
+    <form class="form bind-form">
+        <div class="modal-body setting-scroll">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="3%"><input class="js-all-check" name="checkAll" type="checkbox"/></th>
+                    <th width="15%">卡产品名称</th>
+                    <th width="5%">卡等级编码</th>
+                    <th width="5%">卡bin</th>
+                    <th width="5%">分行</th>
+                    <th width="5%">分行号</th>
+                    <th width="10%">联名卡代号</th>
+                    <th width="12%">第三级卡产品编码</th>
+                    <th width="5%">卡类</th>
+                    <th width="30%">推广计划</th>
+                    <th width="5%">积分类型</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {{#each data.data}}
+                        <tr class="js-platinum-card">
+                            <td><input class="js-check-this" {{#if formatId }}name="checkBind"
+                                                  {{else}}disabled="disabled"{{/if}}
+                                                  type="checkbox" data-id="{{formatId}}"/>
+                            </td>
+                            <td  title="{{cardproNm}}">{{cardproNm}}</td>
+                            <td  title="{{cardLevelId}}">{{cardLevelId}}</td>
+                            <td  title="{{cardBin}}">{{cardBin}}</td>
+                            <td  title="{{bankNm}}">{{bankNm}}</td>
+                            <td  title="{{bankNo}}">{{bankNo}}</td>
+                            <td  title="{{relacardNo}}">{{relacardNo}}</td>
+                            <td  title="{{formatId}}">{{formatId}}</td>
+                            <td  title="{{pdtNbr}}">{{pdtNbr}}</td>
+                            <td  title="{{#if plan1}}{{plan1}}/{{/if}}{{#if plan2}}{{plan2}}/{{/if}}
+                                {{#if plan3}}{{plan3}}/{{/if}}{{#if plan4}}{{plan4}}/{{/if}}{{#if plan5}}{{plan5}}/{{/if}}">
+
+                                {{#if plan1}}{{plan1}}/{{/if}}
+                                {{#if plan2}}{{plan2}}/{{/if}}
+                                {{#if plan3}}{{plan3}}/{{/if}}
+                                {{#if plan4}}{{plan4}}/{{/if}}
+                                {{#if plan5}}{{plan5}}/{{/if}}
+                            </td>
+                            <td title="{{bounsType}}">{{bounsType}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-small js-card-confirm" value="确定">
+            <button class="btn btn-info btn-small close">取消</button>
+        </div>
+    </form>
+</div>

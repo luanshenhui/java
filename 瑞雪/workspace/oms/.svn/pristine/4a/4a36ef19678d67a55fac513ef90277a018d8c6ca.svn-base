@@ -1,0 +1,96 @@
+var thisURL =  document.URL;
+var getval = thisURL.split('?')[1];
+var flg =0;
+var ss = getval.substr(getval.length-1,getval.length);
+if(ss != "="){
+    var showvallist = getval.split('=')[1];
+    var valLength = thisURL.split(',').length;
+    flg = 1;
+}
+//var showval = getval.split('=')[1];
+jQuery(document).ready(function(){
+splitRuleItemTable = $('#splituserItemTable').DataTable({
+	    	"processing": true,
+	        "serverSide": true,
+	        "destroy":true,
+//	        "scrollY": '375px', //支持垂直滚动
+	        "autoWidth": false,
+	        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+	        "dom": '<"bottom"rtflp>',
+	        "searching": false,
+	        "pagingType": "full_numbers",
+	        "deferRender": true,
+	        "fnRowCallback":function(nRow,aData,iDisplayIndex, iDisplayIndexFull)
+	        {
+	            
+	            
+	            var chkbox = aData.chk;
+	            var userID = $(chkbox)[0].getAttribute('userid');
+	            if(flg == "1"){
+	                    
+	                    for(var i =0 ; i<valLength;i++){
+	                        var showval = showvallist.split(',')[i];
+	                        if(userID == showval){
+//	                            $("[type='checkbox']").attr("checked",'true');//全选     
+//	                            $($(chkbox)[0]).prop("checked",true)
+	                            $(chkbox)[0].checked=true;
+	                            $(chkbox)[0].setAttribute("checked","checked");
+	                        }
+	                    }
+	            }
+	        },
+	        "ajax": {
+	            "url": "/user/userList.action",
+	            "data": function ( d ) {
+	            	var quickItemSearch = "";
+	            	if (typeof($('#quickItemSearch').val())!='undefined'){
+	            		quickItemSearch = encodeURI($('#quickItemSearch').val());
+	            	} 
+	                d.quickSearch = '';
+	            }
+	        },
+	        "tableTools": {
+	            "sRowSelect": "bootstrap"
+	        },
+	        "columns": [
+	        	{"data": "chk"}, 
+	        	{"data": "userAccount"}, 
+	        	{"data": "userFullname"}, 
+	        	{"data": "userUnits"}
+	        ],
+	        "columnDefs": [{
+                "orderable":false,
+                "targets":[0]
+                }
+	        ],
+	        "order": [[ 1, "asc" ]]
+	    });
+	
+	
+	});
+
+
+
+function userSaveSelect(){
+	var obj = new Object();
+	var idString = "";
+	var userString ="";
+	$("#splituserItemTable tr input[type='checkbox']:checked").each(function(k,v){
+		userString = userString + $(this).parent().parent().find("td").eq(2).text() + ",";
+		
+		if(idString==""){
+			if(this.getAttribute('userid')!=null)
+			idString=this.getAttribute('userid');
+			
+		}else if(idString!=""){
+			if(this.getAttribute('userid')!=null)
+			idString+=","+this.getAttribute('userid');
+		}
+	});
+
+	obj.txtRoleUsers = userString.substr(0,userString.length-1);
+	obj.txtRoleUsersValue = idString;
+   return obj;
+	
+
+}

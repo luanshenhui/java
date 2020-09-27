@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BatchGoodsDown">
+    
+    <select id="findJFGoodsDownList" resultType="cn.com.cgbchina.batch.model.GoodsModel">
+        select
+        code "code",
+        ordertype_id ordertypeId,
+        channel_mall channelMall,
+        channel_cc channelCc,
+        channel_mall_wx channelMallWx,
+        channel_credit_wx channelCreditWx,
+        channel_phone channelPhone,
+        channel_app channelApp,
+        channel_sms channelSms ,
+        channel_points channelPoints,
+        channel_ivr channelIvr,
+        approve_status approveStatus,
+        auto_off_shelf_time autoOffShelfTime
+        from
+        tbl_goods
+        where
+        del_flag = 0
+        and (
+        channel_mall = '02'
+        or channel_cc = '02'
+        or channel_mall_wx = '02'
+        or channel_credit_wx = '02'
+        or channel_phone = '02'
+        or channel_app = '02'
+        or channel_sms = '02'
+        or channel_points = '02'
+        or channel_ivr = '02'
+        )
+        <![CDATA[ and auto_off_shelf_time < now() ]]>
+    </select>
+
+    <update id="updateGoodsDown" parameterType="cn.com.cgbchina.batch.model.GoodsModel">
+        update tbl_goods
+        <set>
+            modify_time=now()
+            <if test="channelMall !=null">,channel_mall = #{channelMall}</if>
+            <if test="channelCc !=null">,channel_cc = #{channelCc}</if>
+            <if test="channelMallWx !=null">,channel_mall_wx = #{channelMallWx}</if>
+            <if test="channelCreditWx !=null">,channel_credit_wx = #{channelCreditWx}</if>
+            <if test="channelPhone !=null">,channel_phone = #{channelPhone}</if>
+            <if test="channelApp !=null">,channel_app = #{channelApp}</if>
+            <if test="channelSms !=null">,channel_sms = #{channelSms}</if>
+            <if test="channelIvr !=null">,channel_ivr = #{channelIvr}</if>
+            <if test="channelPoints !=null">,channel_points = #{channelPoints}</if>
+            <if test="approveStatus !=null">,approve_status = #{approveStatus}</if>
+            <if test="offShelfMallDate !=null">,off_shelf_mall_date = now()</if>
+            <if test="offShelfCcDate !=null">,off_shelf_cc_date = now()</if>
+            <if test="offShelfMallWxDate !=null">,off_shelf_mall_wx_date = now()</if>
+            <if test="offShelfCreditWxDate !=null">,off_shelf_credit_wx_date = now()</if>
+            <if test="offShelfPhoneDate !=null">,off_shelf_phone_date = now()</if>
+            <if test="offShelfAppDate !=null">,off_shelf_app_date = now()</if>
+            <if test="offShelfSmsDate !=null">,off_shelf_sms_date = now()</if>
+        </set>
+        where code = #{code}
+    </update>
+
+</mapper>    

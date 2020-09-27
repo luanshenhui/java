@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rkylin.oms.system.appClient.dao.AppDAOImpl">
+	<resultMap id="BaseResultMap" type="cn.rkylin.oms.system.appClient.vo.AppVo">
+		<id column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="app_key" jdbcType="VARCHAR" property="appKey" />
+		<result column="app_secret" jdbcType="VARCHAR" property="appSecret" />
+		<result column="token" jdbcType="VARCHAR" property="token" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="deleted" jdbcType="VARCHAR" property="deleted" />
+		<result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+		<result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+		<result column="app_type" jdbcType="VARCHAR" property="appType" />
+        <result column="chk" jdbcType="VARCHAR" property="chk" />
+        <result column="operation" jdbcType="VARCHAR" property="operation" />
+	</resultMap>
+
+	<sql id="Base_Column_App">
+	app_id as appId,app_key as appKey,app_secret as appSecret,token,create_time as createTime,update_time as updateTime,deleted,shop_id as shopId,
+	shop_name as shopName,app_type as appType
+	</sql>
+	
+	<select id="selectAppListPage" parameterType="cn.rkylin.oms.system.appClient.vo.AppVo" resultMap="BaseResultMap">
+		select  '' as chk,'' as operation,
+      		<include refid="Base_Column_App" />
+		from oms_app
+		where 1=1
+		<if test="searchCondition != null">
+			and (shop_name like CONCAT('%',#{searchCondition},'%') OR 
+				app_key like CONCAT('%',#{searchCondition},'%') OR
+				app_secret like CONCAT('%',#{searchCondition},'%'))
+		</if>
+		<choose> 
+			<when test="deleted !=null ">
+			</when>
+			<otherwise>
+				and deleted = 'n'
+			</otherwise>  
+		</choose>
+		<if test="shopId != null">
+			and shop_id = #{shopId}
+		</if>
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+	</select>
+
+	<insert id="saveApp_insert" parameterType="cn.rkylin.oms.system.appClient.domain.App">
+	insert into oms_app
+	  (app_id, app_key,app_secret,token,create_time,update_time,shop_id,shop_name,app_type)
+	values
+	  (#{appId}, #{appKey}, #{appSecret}, #{token}, now(), now(), #{shopId}, #{shopName}, #{appType})
+	</insert>
+	
+	<update id="saveApp_delete" parameterType="cn.rkylin.oms.system.appClient.domain.App" >
+	    update oms_app
+	    set deleted = 'y'
+	    where app_id= #{appId}
+	</update>
+	
+	<update id="saveApp_update" parameterType="cn.rkylin.oms.system.appClient.domain.App" >
+	    update oms_app
+	    set app_key = #{appKey},app_secret=#{appSecret},token=#{token},
+	    update_time=now(),shop_id=#{shopId},shop_name=#{shopName},app_type=#{appType}
+	    where app_id= #{appId}
+	</update>
+
+	<select id="getAppDetail" parameterType="cn.rkylin.oms.system.appClient.domain.App" resultType="cn.rkylin.oms.system.appClient.vo.AppVo">
+		SELECT
+			a.app_id AS appId,a.app_key AS appKey,a.app_secret AS
+			appSecret,a.token,a.create_time AS createTime,a.update_time AS
+			updateTime,a.shop_id AS shopId,
+			a.shop_name AS shopName,a.app_type AS
+			appType,s.prj_id AS prjId,p.ent_id AS entId
+		FROM oms_app a LEFT JOIN oms_shop s ON a.shop_id=s.shop_id
+		LEFT JOIN oms_project p ON s.prj_id=p.prj_id
+		where a.app_id= #{appId}
+	</select>
+</mapper>

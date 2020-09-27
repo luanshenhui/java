@@ -1,0 +1,37 @@
+{{#component "pointsVendorUser js-component"}}
+    <p class="components-title"><strong>- 供应商用户账号管理 -</strong></p>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="10%">序号</th>
+                    <th width="10%">账号</th>
+                    <th width="10%">用户名</th>
+                    <th width="10%">手机号</th>
+                    <th width="10%">邮箱</th>
+                    <th width="10%">角色</th>
+                    <th width="10%">状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each _DATA_.data}}
+                    <tr data-component="" data-id="{{code}}" data-status = "{{status}}">
+                        <td class="num">{{add @index 1}}</td>
+                        <td class="code">{{code}}</td>
+                        <td class="name">{{name}}</td>
+                        <td class="mobile">{{mobile}}</td>
+                        <td class="email">{{email}}</td>
+                        <td class="name">{{#each vendorRoleModels}}{{name}} {{/each}}</td>
+                        <td class="status">
+                        <i {{#equals status '0101'}}class="icon-btn-off js-vendor-change2on"{{/equals}}
+                           {{#equals status '0102'}}class="icon-btn-on js-vendor-change2off"{{/equals}} ></i>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="pagination" data-total="{{_DATA_.total}}"></div>
+        </div>
+    </div>
+{{/component}}

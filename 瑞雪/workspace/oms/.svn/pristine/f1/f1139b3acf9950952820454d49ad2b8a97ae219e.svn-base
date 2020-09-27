@@ -1,0 +1,41 @@
+package cn.rkylin.oms.system.appClient.service;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.oms.system.appClient.domain.App;
+import cn.rkylin.oms.system.appClient.vo.AppVo;
+
+public interface IAppService {
+	/**
+	 * 
+	 * @param page 分页
+	 * @param length 一页数
+	 * @param param 传入对象参数
+	 * @return
+	 * @throws Exception
+	 */
+	PageInfo<AppVo> findByWhere(int page, int length, AppVo param) throws Exception;
+
+	/**
+	 * 保存和修改
+	 * @param app
+	 * @throws Exception
+	 */
+	void saveApp(App app) throws Exception;
+
+	/**
+	 * 删除
+	 * @param app
+	 * @throws Exception
+	 */
+	void deleteApp(App app) throws Exception;
+
+	/**
+	 * 详情
+	 * @param app
+	 * @return
+	 * @throws Exception
+	 */
+	AppVo getAppDetail(App app) throws Exception;
+
+}

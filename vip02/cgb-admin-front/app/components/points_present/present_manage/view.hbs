@@ -1,0 +1,651 @@
+{{#component "points-present js-component"}}
+    <p class="components-title"><strong>- 礼品管理 -</strong></p>
+    <div class="tab tab-condensed">
+        <ul class="tab-navs clearfix">
+            <li {{#equals type "1"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/all-present">所有礼品</a>
+            </li>
+            <li {{#equals type "2"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/in-editing">编辑中</a>
+            </li>
+            <li {{#equals type "3"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/pending-first-trail">待初审</a>
+            </li>
+            <li {{#equals type "4"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/pending-review">待复审</a>
+            </li>
+            <li {{#equals type "5"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/pending-grounding">待上架</a>
+            </li>
+            <li {{#equals type "6"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/message-for-sale">在售信息</a>
+            </li>
+            <li {{#equals type "7"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/pull-off-reviewed">下架审核</a>
+            </li>
+            <li {{#equals type "8"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/change-reviewed">变更审核</a>
+            </li>
+            <li {{#equals type "11"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/pending-priced">待定价</a>
+            </li>
+            <li {{#equals type "12"}}class="active"{{/equals}}>
+                <a data-role="nav" href="{{_HREF_.mainContext}}/points/item/pending-priced-reviewed">待定价审核</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-contents">
+        <div data-role="content" class="tab-content">
+            <!--搜索条件-->
+            <form class="form form-inline form-aligned js-form-search">
+                <fieldset>
+                    <input name="type" type="hidden" value="{{type}}"/>
+                    <input name="channel" type="hidden" value="JF"/>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="goodsCode">礼品编码:</label>
+                            <input class="form-control" type="text" id="code" name="code" maxlength="100"
+                                   value="{{code}}"/>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="vendorId">供应商：</label>
+                            <select class="form-control select" id="vendorId" name="vendorId">
+                                <option value="">请选择</option>
+                                {{#each _DATA_.vendors}}
+                                    <option value="{{vendorId}}"
+                                            {{#equals ../vendorId vendorId}}selected{{/equals}}>{{simpleName}}</option>
+                                {{/each}}
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="name">礼品名称:</label>
+                            <input class="form-control" type="text" id="name" name="name" maxlength="40"
+                                   value="{{name}}"/>
+                        </span>
+                    </p>
+
+                    <p class="filter-name">
+                         <span class="span4 span-large">
+                             <label for="approveStatus">品牌: </label>
+                             <input class="form-control" type="text" id="brandName" name="brandName" maxlength="100"
+                                    value="{{brandName}}"/>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="channelMall">审核状态:</label>
+                            <select class="form-control select" id="approveStatus" name="approveStatus">
+                                <option value="">请选择</option>
+                                <option value="00"{{#equals approveStatus "00"}}selected{{/equals}}>编辑中</option>
+                                <option value="01"{{#equals approveStatus "01"}}selected{{/equals}}>待初审</option>
+                                <option value="02"{{#equals approveStatus "02"}}selected{{/equals}}>待复审</option>
+                                <option value="03"{{#equals approveStatus "03"}}selected{{/equals}}>商品变更审核</option>
+                                <option value="04"{{#equals approveStatus "04"}}selected{{/equals}}>价格变更审核</option>
+                                <option value="05"{{#equals approveStatus "05"}}selected{{/equals}}>下架申请审核</option>
+                                <option value="06"{{#equals approveStatus "06"}}selected{{/equals}}>审核通过</option>
+                                <option value="07"{{#equals approveStatus "07"}}selected{{/equals}}>待定价</option>
+                                <option value="08"{{#equals approveStatus "08"}}selected{{/equals}}>定价审核</option>
+                                <option value="70"{{#equals approveStatus "70"}}selected{{/equals}}>初审拒绝</option>
+                                <option value="71"{{#equals approveStatus "71"}}selected{{/equals}}>复审拒绝</option>
+                                <option value="72"{{#equals approveStatus "72"}}selected{{/equals}}>商品变更审核拒绝</option>
+                                <option value="73"{{#equals approveStatus "73"}}selected{{/equals}}>价格变更审核拒绝</option>
+                                <option value="74"{{#equals approveStatus "74"}}selected{{/equals}}>下架申请审核拒绝</option>
+                                <option value="75"{{#equals approveStatus "75"}}selected{{/equals}}>定价审核拒绝 </option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="channelApp">短信状态:</label>
+                            <select class="form-control select" id="channelSms" name="channelSms">
+                                <option value="">请选择</option>
+                                <option value="00"{{#equals channelSms "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01"{{#equals channelSms "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02"{{#equals channelSms "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                        <span class="span4 span-large">
+                            <label for="">积分商城:</label>
+                            <select class="form-control select" id="channelPoints" name="channelPoints">
+                                <option value="">请选择</option>
+                                <option value="00"{{#equals channelPoints "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01"{{#equals channelPoints "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02"{{#equals channelPoints "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="channelMallWx">CC:</label>
+                            <select class="form-control select" id="channelCc" name="channelCc">
+                                <option value="">请选择</option>
+                                <option value="00"{{#equals channelCc "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01"{{#equals channelCc "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02"{{#equals channelCc "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="regionType">礼品分区:</label>
+                            <select class="form-control select js-regionType" id="regionType" name="regionType">
+                                <option value="">请选择</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                         <span class="span4 span-large">
+                            <label for="channelPhone">手机商城:</label>
+                             <select class="form-control select" id="channelPhone" name="channelPhone">
+                                 <option value="">请选择</option>
+                                 <option value="00"{{#equals channelPhone "00"}}selected{{/equals}}>处理中</option>
+                                 <option value="01"{{#equals channelPhone "01"}}selected{{/equals}}>未上架</option>
+                                 <option value="02"{{#equals channelPhone "02"}}selected{{/equals}}>已上架</option>
+                             </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="channelCreditWx">IVR:</label>
+                            <select class="form-control select" id="channelIVR" name="channelIVR">
+                                <option value="">请选择</option>
+                                <option value="00"{{#equals channelIVR "00"}}selected{{/equals}}>处理中</option>
+                                <option value="01"{{#equals channelIVR "01"}}selected{{/equals}}>未上架</option>
+                                <option value="02"{{#equals channelIVR "02"}}selected{{/equals}}>已上架</option>
+                            </select>
+                        </span>
+                        <span class="span4 span-large">
+                            <label for="autoOffShelfTime">自动下架时间:</label>
+                              <input class="form-control js-date-start input-width-80 cursor-pointer" type="text" id="autoStartShelfTime"
+                                     name="autoStartShelfTime" value="{{autoStartShelfTime}}"/>
+                              <em>-</em>
+                              <input class="form-control js-date-end input-width-80 cursor-pointer" type="text" id="autoEndShelfTime"
+                                     name="autoEndShelfTime" value="{{autoEndShelfTime}}"/>
+                        </span>
+                    </p>
+                    <p class="filter-name">
+                        <span class="span5 span-large catgory-select">
+                            <label for="backCategory">后台类目:</label>
+                            <select class="form-control select js-select1 width-120" data-level="1"
+                                    name="backCategory1Id">
+                                <option value="">请选择</option>
+                            </select>
+                            <em> - </em>
+                            <select class="form-control select js-select2 width-120" data-level="2"
+                                    name="backCategory2Id">
+                                <option value="">请选择</option>
+                            </select>
+                            <em> - </em>
+                            <select class="form-control select js-select3 width-120" data-level="3"
+                                    name="backCategory3Id">
+                                <option value="">请选择</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="filter-name margin-top-10">
+                        <a class="btn btn-success btn-small pull-right m-r-10"
+                           href="{{_HREF_.mainContext}}/points/item/all-present">重置</a>
+                        <a class="btn btn-success btn-small pull-right m-r-10 js-item-search"
+                           href="javascript:void(0)"> 查询</a>
+                    </p>
+                </fieldset>
+            </form>
+            <div class="btn-group-add">
+                {{#authorial "giftpresent_add"}}
+                    <a href="{{_HREF_.mainContext}}/points/item/item-category"
+                       class="btn btn-info btn-small margin-left-10">新增礼品</a>
+                {{/authorial}}
+                <a class="btn btn-info btn-small" href="{{_HREF_.mainContext}}/images" target="_blank">图片空间</a>
+                <button class="btn btn-info btn-small js-import">礼品导入</button>
+                <button class="btn btn-info btn-small js-export" data-type="export">礼品导出</button>
+                <span style="font-size: 12px;color: #0610FD;">提示：每次最多导出1000条</span>
+            </div>
+            {{#equals _DATA_.pager.total "0"}}
+                    <span class="search-none">没有符合条件的信息，请尝试其他搜索条件。</span>
+            {{else}}
+            <!--列表-->
+            <div class="main-box-table">
+                <table cellspacing="0" cellpadding="0" border="0" class="table" data-json="{{json _DATA_.pager.data}}">
+                    <tr>
+                        <th width="20%">礼品名称</th>
+                        <th width="35%">上下架状态</th>
+                        <th width="14%">审核状态</th>
+                        <th width="12%">自动下架时间</th>
+                        <th width="12%">操作</th>
+                    </tr>
+                </table>
+                {{#each _DATA_.pager.data}}
+                    <div class="order-tab" data-code="{{goods.code}}" data-name="{{goods.name}}"
+                         data-autooffshelftime="{{goods.autoOffShelfTime}}"
+                         data-goodstype="{{goods.goodsType}}" data-status="{{goods.approveStatus}}">
+                        <div class="list-detail">
+                            <p>礼品编码：{{goods.code}}</p>
+
+                            <p>供应商：{{vendorName}}</p>
+
+                            <p>品牌：{{brandName}}</p>
+
+                        </div>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                               class="list-tabble-con table-list margin-bottom-20">
+                            <tr data-data="{{json this}}">
+                                <!--待初审、待复审、下架审核、变更审核tab页显示复选框-->
+                                <td width="4%">
+                                    {{#of type "3,4,7,8,12"}}<!--【待初审】【待复审】【下架审核】【变更审核】【待定价审核】-->
+                                        <input class="js-check-this" name="checkGoodsItem" type="checkbox"
+                                               data-code="{{goods.code}}" data-status="{{goods.approveStatus}}"/>
+                                    {{/of}}
+
+                                    {{!-- 多件商品一键上架 FROM 追加 多件商品一键上架 陈乐 2016.11.1 2016.11.1  --}}
+                                    {{#of type "5,6"}} {{!-- 【待上架】【在售】 除去正在审核中的数据 --}}
+                                        {{#of goods.approveStatus "06,72,73,74,75"}}
+                                            <input class="js-check-this" name="checkGoodsItem" type="checkbox"
+                                                   data-code="{{goods.code}}" data-status="{{goods.approveStatus}}"
+                                                   data-auto="{{goods.autoOffShelfTime}}"/>
+                                        {{/of}}
+                                    {{/of}}
+                                    {{!-- 多件商品一键上架 TO 追加 多件商品一键上架 陈乐 2016.11.1 2016.11.1  --}}
+
+                                </td>
+                                <td width="16%" class="text-left">
+                                    <a href="/mall/goods/{{goods.code}}?itemCode={{#each goods.itemDtoList}}{{itemDto.itemModel.code}}{{/each}}"
+                                       class="goods-name font-color-bule" target="_blank">{{goods.name}}</a>
+                                </td>
+                                <td class="status" width="35%">
+                                    <table class="table-state" width="0" border="0" data-code="{{goods.code}}"
+                                           data-status="{{goods.approveStatus}}">
+                                        <tr>
+                                            <td class="table-state-table js-chennel-points" data-channel="channelPoints"
+                                                data-state="{{goods.channelPoints}}">积分商城
+
+                                                {{#authorial "giftpresent_onOffSale"}}
+                                                    <i {{#equals goods.channelPoints '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelPoints '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                        {{#equals goods.channelPoints '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                {{else}}
+                                                    <i {{#equals goods.channelPoints '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelPoints '01'}}class="icon-img-down"{{/equals}}
+                                                        {{#equals goods.channelPoints '02'}}class="icon-img-on"{{/equals}}></i>
+                                                {{/authorial}}
+                                            </td>
+                                            <td class="table-state-table js-channel-cc" data-channel="channelCc"
+                                                data-state="{{goods.channelCc}}">CC
+                                                {{#authorial "giftpresent_onOffSale"}}
+                                                    <i {{#equals goods.channelCc '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelCc '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                        {{#equals goods.channelCc '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                {{else}}
+                                                    <i {{#equals goods.channelCc '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelCc '01'}}class="icon-img-down"{{/equals}}
+                                                        {{#equals goods.channelCc '02'}}class="icon-img-on"{{/equals}}></i>
+                                                {{/authorial}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-state-table js-channel-phone" data-channel="channelPhone"
+                                                data-state="{{goods.channelPhone}}">手机商城
+                                                {{#authorial "giftpresent_onOffSale"}}
+                                                    <i {{#equals goods.channelPhone '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelPhone '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                        {{#equals goods.channelPhone '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                {{else}}
+                                                    <i {{#equals goods.channelPhone '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelPhone '01'}}class="icon-img-down"{{/equals}}
+                                                        {{#equals goods.channelPhone '02'}}class="icon-img-on"{{/equals}}></i>
+                                                {{/authorial}}
+                                            </td>
+                                            <td class="table-state-table js-channel-sms" data-channel="channelSms"
+                                                data-state="{{goods.channelSms}}">短信
+                                                {{#authorial "giftpresent_onOffSale"}}
+                                                    <i {{#equals goods.channelSms '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelSms '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                        {{#equals goods.channelSms '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                {{else}}
+                                                    <i {{#equals goods.channelSms '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelSms '01'}}class="icon-img-down"{{/equals}}
+                                                        {{#equals goods.channelSms '02'}}class="icon-img-on"{{/equals}}></i>
+                                                {{/authorial}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-state-table js-channel-ivr" data-channel="channelIVR"
+                                                data-state="{{goods.channelIvr}}">IVR
+                                                {{#authorial "giftpresent_onOffSale"}}
+                                                    <i {{#equals goods.channelIvr '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelIvr '01'}}class="icon-img-down js-put-shelf"{{/equals}}
+                                                        {{#equals goods.channelIvr '02'}}class="icon-img-on js-put-shelf"{{/equals}}></i>
+                                                {{else}}
+                                                    <i {{#equals goods.channelIvr '00'}}class="icon-img-no"{{/equals}}
+                                                        {{#equals goods.channelIvr '01'}}class="icon-img-down"{{/equals}}
+                                                        {{#equals goods.channelIvr '02'}}class="icon-img-on"{{/equals}}></i>
+                                                {{/authorial}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <!--审核状态-->
+                                <td width="14%">
+                                    {{#equals goods.approveStatus '00'}}
+                                        编辑中
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '01'}}
+                                        待初审
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '02'}}
+                                        待复审
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '03'}}
+                                        礼品变更审核
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '04'}}
+                                        价格变更审核
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '05'}}
+                                        下架申请审核
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '06'}}
+                                        审核通过
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '07'}}
+                                        待定价
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '08'}}
+                                        待定价审核
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '70'}}
+                                        初审拒绝
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '71'}}
+                                        复审拒绝
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '72'}}
+                                        礼品变更审核拒绝
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '73'}}
+                                        价格变更审核拒绝
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '74'}}
+                                        下架申请审核拒绝
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '75'}}
+                                        定价审核拒绝
+                                    {{/equals}}
+                                </td>
+                                <td width="12%">{{formatDate goods.autoOffShelfTime "day"}}</td>
+                                <td width="12%">
+                                    {{#equals goods.approveStatus '00'}}<!--00编辑中-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_edit"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/edit-present?goodsCode={{goods.code}}&spuId={{goods.productId}}"
+                                               class="btn btn-info btn-sm">修改</a>
+                                        {{/authorial}}
+                                        {{#authorial "giftpresent_submit"}}
+                                            <button class="btn btn-info btn-sm js-submit-goods"
+                                                    data-code={{goods.code}}>
+                                                提交审核
+                                            </button>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '01'}}<!--01待初审-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_firstTrial"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/exam-first?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">初审</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '02'}}<!--02待复审-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_review"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/exam-second?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">复审</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '03'}}<!--03礼品变更审核-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_audit"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/exam-change?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">审核</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '04'}}<!--04价格变更审核-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_audit"}}
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-info btn-sm js-priced-reviewed"
+                                               data-id="{{goods.code}}">审核</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '05'}}<!--05下架申请审核-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_audit"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/shelf-exam?goodsCode={{goods.code}}"
+                                               class="btn btn-info btn-sm">审核</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '06'}}<!--06审核通过-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_edit"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/edit-present?goodsCode={{goods.code}}&spuId={{goods.productId}}"
+                                               class="btn btn-info btn-sm">修改</a>
+                                        {{/authorial}}
+                                        {{#authorial "giftpresent_storage"}}
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm js-edit-stock"
+                                               data-id="{{goods.code}}">库存</a>
+                                        {{/authorial}}
+                                        {{#authorial "giftpresent_modPrice"}}
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm js-item-price"
+                                               data-id="{{goods.code}}" data-state="02">改价</a>
+                                        {{/authorial}}
+                                    {{#authorial "giftpresent_onOffSale"}}
+                                        <a href="javascript:void(0)" class="btn btn-info btn-sm js-shelfStatus-all"
+                                           data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                           data-status="{{goods.approveStatus}}" data-state="02">一键上架</a>
+                                    {{/authorial}}
+
+                                    {{#authorial "giftpresent_onOffSale"}}
+                                        <a href="javascript:void(0)"
+                                           class="btn btn-info btn-sm js-shelf-down-all m-t-5"
+                                           data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                           data-status="{{goods.approveStatus}}" data-state="01">一键下架</a>
+                                    {{/authorial}}
+
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '07'}}<!--07待定价-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_fixPrice"}}
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-info btn-sm js-pending-priced"
+                                               data-id="{{goods.code}}">定价</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '08'}}<!--08定价审核-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_audit"}}
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-info btn-sm js-priced-reviewed"
+                                               data-id="{{goods.code}}">审核</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '70'}}<!--70初审拒绝-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_edit"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/edit-present?goodsCode={{goods.code}}&spuId={{goods.productId}}"
+                                               class="btn btn-info btn-sm">修改</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '71'}}<!--71复审拒绝-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_edit"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/edit-present?goodsCode={{goods.code}}&spuId={{goods.productId}}"
+                                               class="btn btn-info btn-sm">修改</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '72'}}<!--72礼品变更审核拒绝-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_edit"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/edit-present?goodsCode={{goods.code}}&spuId={{goods.productId}}"
+                                               class="btn btn-info btn-sm">修改</a>
+                                        {{/authorial}}
+                                        {{#authorial "giftpresent_storage"}}
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm js-edit-stock"
+                                               data-id="{{goods.code}}">库存</a>
+                                        {{/authorial}}
+                                        {{#authorial "giftpresent_modPrice"}}
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm js-item-price"
+                                               data-id="{{goods.code}}" data-state="02">改价</a>
+                                        {{/authorial}}
+                                    {{#authorial "giftpresent_onOffSale"}}
+                                        <a href="javascript:void(0)" class="btn btn-info btn-sm js-shelfStatus-all"
+                                           data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                           data-status="{{goods.approveStatus}}" data-state="02">一键上架</a>
+                                    {{/authorial}}
+
+                                    {{#authorial "giftpresent_onOffSale"}}
+                                        <a href="javascript:void(0)"
+                                           class="btn btn-info btn-sm js-shelf-down-all m-t-5"
+                                           data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                           data-status="{{goods.approveStatus}}" data-state="01">一键下架</a>
+                                    {{/authorial}}
+
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '73'}}<!--73 价格变更审核拒绝-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_edit"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/edit-present?goodsCode={{goods.code}}&spuId={{goods.productId}}"
+                                               class="btn btn-info btn-sm">修改</a>
+                                        {{/authorial}}
+                                        {{#authorial "giftpresent_storage"}}
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm js-edit-stock"
+                                               data-id="{{goods.code}}">库存</a>
+                                        {{/authorial}}
+                                        {{#authorial "giftpresent_modPrice"}}
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm js-item-price"
+                                               data-id="{{goods.code}}" data-state="02">改价</a>
+                                        {{/authorial}}
+                                        {{#authorial "giftpresent_onOffSale"}}
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm js-shelfStatus-all"
+                                               data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                               data-status="{{goods.approveStatus}}" data-state="02">一键上架</a>
+                                        {{/authorial}}
+
+                                        {{#authorial "giftpresent_onOffSale"}}
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-info btn-sm js-shelf-down-all m-t-5"
+                                               data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                               data-status="{{goods.approveStatus}}" data-state="01">一键下架</a>
+                                        {{/authorial}}
+
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '74'}}<!--74下架申请审核拒绝-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_edit"}}
+                                            <a href="{{_HREF_.mainContext}}/points/item/edit-present?goodsCode={{goods.code}}&spuId={{goods.productId}}"
+                                               class="btn btn-info btn-sm">修改</a>
+                                        {{/authorial}}
+                                    {{#authorial "giftpresent_onOffSale"}}
+                                        <a href="javascript:void(0)" class="btn btn-info btn-sm js-shelfStatus-all"
+                                           data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                           data-status="{{goods.approveStatus}}" data-state="02">一键上架</a>
+                                    {{/authorial}}
+
+                                    {{#authorial "giftpresent_onOffSale"}}
+                                        <a href="javascript:void(0)"
+                                           class="btn btn-info btn-sm js-shelf-down-all m-t-5"
+                                           data-id="{{goods.code}}" data-auto="{{goods.autoOffShelfTime}}"
+                                           data-status="{{goods.approveStatus}}" data-state="01">一键下架</a>
+                                    {{/authorial}}
+
+                                    {{/equals}}
+                                    {{#equals goods.approveStatus '75'}}<!--75定价审核拒绝-->
+                                        <a href="{{_HREF_.mainContext}}/points/item/view-present?goodsCode={{goods.code}}"
+                                           class="btn btn-info btn-sm">查看</a>
+                                        {{#authorial "giftpresent_fixPrice"}}
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-info btn-sm js-pending-priced"
+                                               data-id="{{goods.code}}">定价</a>
+                                        {{/authorial}}
+                                    {{/equals}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                {{/each}}
+                <!--全选按钮及相关操作-->
+                {{#equals _DATA_.total "0"}}
+                {{else}}
+                        {{#equals type 3}}<!--待初审tab-->
+                            <div class="margin-bottom-10 margin-left-10">
+                            <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                    <a href="javascript:void(0)" class="js-all-pass font-color-bule" data-type="pass"
+                                       data-audit="2">通过</a>
+                                    <a href="javascript:void(0)" class="js-all-refuse font-color-bule" data-type="refuse"
+                                       data-audit="2">拒绝</a>
+                                </div>
+                        {{/equals}}
+                        {{#equals type 4}}<!--待复审tab-->
+                                <div class="margin-bottom-10 margin-left-10">
+                                <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                    <a href="javascript:void(0)" class="js-all-pass font-color-bule" data-type="pass"
+                                       data-audit="3">通过</a>
+                                    <a href="javascript:void(0)" class="js-all-refuse font-color-bule" data-type="refuse"
+                                       data-audit="3">拒绝</a>
+                                </div>
+                        {{/equals}}
+                        {{#equals type 7}}<!--下架审核tab-->
+                            <div class="margin-bottom-10 margin-left-10">
+                            <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                    <a href="javascript:void(0)" class="js-all-pass font-color-bule" data-type="pass"
+                                       data-audit="6">通过</a>
+                                    <a href="javascript:void(0)" class="js-all-refuse font-color-bule" data-type="refuse"
+                                       data-audit="6">拒绝</a>
+                                </div>
+                        {{/equals}}
+                        {{#equals type 8}}<!--变更审核tab-->
+                            <div class="margin-bottom-10 margin-left-10">
+                            <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                    <a href="javascript:void(0)" class="js-all-pass font-color-bule" data-type="pass"
+                                       data-audit="4">通过</a>
+                                    <a href="javascript:void(0)" class="js-all-refuse font-color-bule" data-type="refuse"
+                                       data-audit="4">拒绝</a>
+                                </div>
+                        {{/equals}}
+                        {{#equals type 12}}<!--待定价审核tab-->
+                            <div class="margin-bottom-10 margin-left-10">
+                                <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                <a href="javascript:void(0)" class="js-all-pass font-color-bule" data-type="pass"
+                                   data-audit="8">通过</a>
+                                <a href="javascript:void(0)" class="js-all-refuse font-color-bule" data-type="refuse"
+                                   data-audit="8">拒绝</a>
+                            </div>
+                        {{/equals}}
+                        {{!-- 多件商品一键上架 FROM 追加 多件商品一键上架 陈乐 2016.11.1 2016.11.1  --}}
+                        {{#of type "5,6"}}
+                            {{#authorial "giftpresent_onOffSale"}}
+                                <div class="m-b-10 m-l-10">
+                                    <input type="checkbox" name="checkAll" class="js-all-check"/><span>全选</span>
+                                    <a href="javascript:void(0)" class="js-all-shelf font-color-bule" data-type="{{type}}">
+                                        {{#equals type "5"}}一键上架{{else}}一键下架{{/equals}}</a>
+                                    <span style="margin-left: 50px">渠道：</span>
+                                    <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelPoints" style="margin-left: 5px"/>积分商城
+                                    <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelSms"/>短信
+                                    <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelCc"/>CC
+                                    <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelPhone"/>手机商城
+                                    <input  type="checkbox" name="channel" class="channel-ck"  data-channel="channelIVR"/>IVR
+                                </div>
+                            {{/authorial}}
+                        {{/of}}
+                    {{!-- 多件商品一键上架 TO 追加 多件商品一键上架 陈乐 2016.11.1 2016.11.1  --}}
+
+                {{/equals}}
+                </div>
+            {{/equals}}
+        </div>
+        <div class="pagination" data-total="{{_DATA_.pager.total}}"></div>
+    </div>
+{{/component}}

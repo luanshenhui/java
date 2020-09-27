@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ACardCustToelectronbankModel">
+    <resultMap id="ACardCustToelectronbankMap" type="ACardCustToelectronbankModel">
+        <result property="dataDt" column="data_dt"/>
+        <result property="cardNbr" column="card_nbr"/>
+        <result property="custNbr" column="cust_nbr"/>
+        <result property="bankNbr" column="bank_nbr"/>
+        <result property="cardTpCd" column="card_tp_cd"/>
+        <result property="cardFormatNbr" column="card_format_nbr"/>
+        <result property="cardLevelCd" column="card_level_cd"/>
+        <result property="birthDay" column="birth_day"/>
+        <result property="certNbr" column="cert_nbr"/>
+        <result property="etlSysDttime" column="etl_sys_dttime"/>
+        <result property="incrInd" column="incr_ind"/>
+        <result property="hisAddInd" column="his_add_ind"/>
+        <result property="hisUpdateInd" column="his_update_ind"/>
+        <result property="txDate" column="tx_date"/>
+    </resultMap>
+    <sql id="columns">
+    data_dt,card_nbr,cust_nbr,bank_nbr,card_tp_cd,card_format_nbr,card_level_cd,date_format(birth_day,'%Y-%m-%d') birth_day,cert_nbr,etl_sys_dttime,incr_ind,his_add_ind,his_update_ind,tx_date
+    </sql>
+
+    <insert id="insert" parameterType="ACardCustToelectronbankModel" useGeneratedKeys="true"
+            keyProperty="cardNbr" keyColumn="card_nbr">
+        insert into a_card_cust_toelectronbank
+        (data_dt
+        ,cust_nbr
+        ,bank_nbr
+        ,card_tp_cd
+        ,card_format_nbr
+        ,card_level_cd
+        ,birth_day
+        ,cert_nbr
+        ,etl_sys_dttime
+        ,incr_ind
+        ,his_add_ind
+        ,his_update_ind
+        ,tx_date)
+        values(#{dataDt}
+        ,#{custNbr}
+        ,#{bankNbr}
+        ,#{cardTpCd}
+        ,#{cardFormatNbr}
+        ,#{cardLevelCd}
+        ,#{birthDay}
+        ,#{certNbr}
+        ,#{etlSysDttime}
+        ,#{incrInd}
+        ,#{hisAddInd}
+        ,#{hisUpdateInd}
+        ,#{txDate})
+    </insert>
+
+    <update id="update" parameterType="ACardCustToelectronbankModel">
+        update a_card_cust_toelectronbank set
+        <if test="dataDt !=null">data_dt = #{dataDt}
+            ,
+        </if>
+        <if test="custNbr !=null">cust_nbr = #{custNbr}
+            ,
+        </if>
+        <if test="bankNbr !=null">bank_nbr = #{bankNbr}
+            ,
+        </if>
+        <if test="cardTpCd !=null">card_tp_cd = #{cardTpCd}
+            ,
+        </if>
+        <if test="cardFormatNbr !=null">card_format_nbr = #{cardFormatNbr}
+            ,
+        </if>
+        <if test="cardLevelCd !=null">card_level_cd = #{cardLevelCd}
+            ,
+        </if>
+        <if test="birthDay !=null">birth_day = #{birthDay}
+            ,
+        </if>
+        <if test="certNbr !=null">cert_nbr = #{certNbr}
+            ,
+        </if>
+        <if test="etlSysDttime !=null">etl_sys_dttime = #{etlSysDttime}
+            ,
+        </if>
+        <if test="incrInd !=null">incr_ind = #{incrInd}
+            ,
+        </if>
+        <if test="hisAddInd !=null">his_add_ind = #{hisAddInd}
+            ,
+        </if>
+        <if test="hisUpdateInd !=null">his_update_ind = #{hisUpdateInd}
+            ,
+        </if>
+        <if test="txDate !=null">tx_date = #{txDate}
+            ,
+        </if>
+        <if test="id !=null">id = #{id}
+            ,
+        </if>
+        where card_nbr = #{cardNbr}
+    </update>
+
+    <sql id="conditions">
+        <where>
+            <if test="dataDt !=null">and data_dt = #{dataDt}</if>
+            <if test="cardNbr !=null">and card_nbr = #{cardNbr}</if>
+            <if test="custNbr !=null">and cust_nbr = #{custNbr}</if>
+            <if test="bankNbr !=null">and bank_nbr = #{bankNbr}</if>
+            <if test="cardTpCd !=null">and card_tp_cd = #{cardTpCd}</if>
+            <if test="cardFormatNbr !=null">and card_format_nbr = #{cardFormatNbr}</if>
+            <if test="cardLevelCd !=null">and card_level_cd = #{cardLevelCd}</if>
+            <if test="birthDay !=null">and birth_day = #{birthDay}</if>
+            <if test="certNbr !=null">and cert_nbr = #{certNbr}</if>
+            <if test="etlSysDttime !=null">and etl_sys_dttime = #{etlSysDttime}</if>
+            <if test="incrInd !=null">and incr_ind = #{incrInd}</if>
+            <if test="hisAddInd !=null">and his_add_ind = #{hisAddInd}</if>
+            <if test="hisUpdateInd !=null">and his_update_ind = #{hisUpdateInd}</if>
+            <if test="txDate !=null">and tx_date = #{txDate}</if>
+        </where>
+    </sql>
+    <select id="findById" parameterType="Map" resultMap="ACardCustToelectronbankMap">
+        SELECT id,
+        <include refid="columns"/>
+        from a_card_cust_toelectronbank
+        where id=#{cardNbr}
+    </select>
+    <select id="findAll" resultMap="ACardCustToelectronbankMap">
+        select id,
+        <include refid="columns"/>
+        from a_card_cust_toelectronbank
+        <include refid="conditions"/>
+    </select>
+
+    <select id="pager" parameterType="Map" resultMap="ACardCustToelectronbankMap">
+        select id,
+        <include refid="columns"/>
+        from a_card_cust_toelectronbank
+        <include refid="conditions"/>
+        <![CDATA[ order by id desc limit #{offset}, #{limit} ]]>
+    </select>
+    <delete id="delete" parameterType="ACardCustToelectronbankModel">
+        delete from a_card_cust_toelectronbank where id = cardNbr
+    </delete>
+    <select id="findByCardNbr" parameterType="Map" resultMap="ACardCustToelectronbankMap">
+        select
+        <include refid="columns"/>
+        from a_card_cust_toelectronbank
+        where card_nbr=#{cardNbr}
+        ORDER BY data_dt DESC LIMIT 1
+    </select>
+
+    <select id="findListByCertNbr" resultMap="ACardCustToelectronbankMap" parameterType="String">
+        select
+        <include refid="columns"/>
+        from a_card_cust_toelectronbank
+        where cert_nbr = #{certNbr}
+    </select>
+
+    <select id="findListByCardNbr" resultMap="ACardCustToelectronbankMap" parameterType="String">
+        select
+        <include refid="columns"/>
+        from a_card_cust_toelectronbank
+        where card_nbr = #{cardNbr}
+    </select>
+
+
+    <select id="findCertNbrByCardNbrs" resultType="String" parameterType="List">
+        select cert_nbr
+        from a_card_cust_toelectronbank
+        where
+        card_nbr in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        LIMIT 1
+    </select>
+    <!--查询证件号 add by zhoupeng-->
+    <select id="findCertNbrsByCards" resultMap="ACardCustToelectronbankMap" parameterType="String">
+        select card_nbr,cert_nbr
+        from a_card_cust_toelectronbank
+        where
+        card_nbr in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>
+
+

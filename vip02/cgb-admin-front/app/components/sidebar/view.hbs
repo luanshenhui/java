@@ -1,0 +1,32 @@
+{{#component "js-component sidebar"}}
+    <ul class="sidebar-ul">
+        <div class="side">
+            <ul class="f-link">
+                {{#each _DATA_.children}}
+                <a href="{{#if menu.link}}{{_HREF_.context}}{{menu.link}}{{else}}javascript:void(0){{/if}}" style="">{{menu.name}}</a>
+                    {{#each children}}
+                    <li class="f-menu"><a href="{{#if menu.link}}{{_HREF_.context}}{{menu.link}}{{else}}javascript:void(0){{/if}}"><i class="fa fa-fw fa-minus-square"></i>{{menu.name}}</a>
+                        {{#if children}}
+                            <ul class="t-link">
+                                {{#each children}}
+                                    <li><a class="p-l-30" href="{{#if menu.link}}{{_HREF_.context}}{{menu.link}}{{else}}javascript:void(0){{/if}}"><i class="fa fa-fw fa-plus-square"></i>{{menu.name}}</a>
+                                        {{#if children}}
+                                            <ul class="s-link">
+                                                {{#each children}}
+                                                    <li><a  class="p-l-50" href="{{#if menu.link}}{{_HREF_.context}}{{menu.link}}{{else}}javascript:void(0){{/if}}"  data-paths='{{menu.dataPaths}}'>{{menu.name}}</a></li>
+                                                {{/each}}
+                                            </ul>
+                                        {{/if}}
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        {{/if}}
+                    </li>
+
+                    {{/each}}
+                {{/each}}
+
+            </ul>
+        </div>
+    </ul>
+{{/component}}

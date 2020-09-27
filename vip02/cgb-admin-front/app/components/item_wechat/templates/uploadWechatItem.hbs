@@ -1,0 +1,39 @@
+<div class="modal wechat-import-modal">
+    <div class="modal-header">
+        <a href="javascript:void(0)" class="close">×</a>
+
+        <h2>导入文件</h2>
+    </div>
+    <form class="form form-aligned wechatItemUpload">
+        <fieldset>
+            <table class="modal-body-table">
+                <tbody>
+                <tr>
+                    <th valign="top">导入文件：</th>
+                    <td>
+                        <label>&nbsp;</label>
+                        <div class="uploadArea">
+                            <input type="button" class="btn btn-success btn-small upload-btn-sl" value="选择文件并上传"/>
+                            <input type="file" id="files"  class="upload-file-sl js-file-upload" name="files"/>
+                        </div>
+                        <label>&nbsp;</label>
+                        <a href="{{context}}/api/admin/GoodsWeChat/outWeChatTemplate" class="btn btn-success btn-small">下载导入模板</a>
+                        <p><span class="font-size-12 font-color-gray">说明：上传图片文件格式必须是excel，请按照下载导入模板格式上传，否则文件录入无效。</span></p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="modal-body-tables upload-result">
+                <tbody>
+                <tr>
+                    <th valign="top">&nbsp;</th>
+                    <td class="download-result"></td>
+                </tr>
+                </tbody>
+            </table>
+        </fieldset>
+        <div class="modal-footer">
+            <button class="btn btn-small btn-info close">返 回</button>
+        </div>
+    </form>
+</div>

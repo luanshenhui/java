@@ -1,0 +1,139 @@
+<%@ page language="java" import="com.yulin.web.entity.*"
+	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" import="java.util.*"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>emplist</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<script type="text/javascript">
+			var flag = false;
+			function $(id){
+				return document.getElementById(id);
+			}
+			function sjsj(tid,name,id){
+				if(flag == false){
+					var td = $(tid);
+					var value = td.innerHTML;//取出表格中的值
+					value = value.replace(/(^\s*)|(\s*$)/g,"");//替换空格
+					td.innerHTML = "";
+					var form = document.createElement("form");//创建表单对象
+					form.action = "update.do?id="+id;//给表单添加请求
+					form.id = "f"+tid;//给表单添加id
+					form.method = "post";//post提交
+					
+					var input = document.createElement("input");
+					input.value = value;
+					input.name = name;//根据双击传过来的参数，设置input的name属性
+					input.onblur = function(){
+						flah = false;
+						$("f"+tid).submit();//失去焦点时提交表单
+					};
+					form.appendChild(input);
+					td.appendChild(form);
+					flag = true;
+				}else{
+					alert("你不能再双击了")
+				}
+			}
+			function kong(id){
+				$(id).value="";
+			}
+			function hui(id){
+				if($(id).value == ""){
+					$(id).value = "请输入关键字";
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="top_content">
+				<div id="header">
+					<div id="rightheader">
+						<p>
+							2009/11/20
+							<br />
+						</p>
+					</div>
+					<div id="topheader">
+						<h1 id="title">
+							<a href="#">main</a>
+						</h1>
+					</div>
+					<div id="navigation" align="right">
+					<form action="search.do" method="post">
+						<input name="key" id="key" value="请输入关键字" onclick="kong(id);" onblur="hui(id);"/>
+						<input style="width: 60px" name="min" id="min" value="最低工资" onclick="kong(id);"/>~
+						<input style="width: 60px" value="最高工资"/>
+						<input type="submit" value="搜索"/>
+					</form>
+					</div>
+				</div>
+				<div id="content">
+					<p id="whereami">
+					</p>
+					<h1>
+						Welcome!
+					</h1>
+					<table class="table">
+						<tr class="table_header">
+							<td>
+								ID
+							</td>
+							<td>
+								Name
+							</td>
+							<td>
+								Salary
+							</td>
+							<td>
+								Age
+							</td>
+							<td>
+								Operation
+							</td>
+						</tr>
+				<c:forEach items="${list}" var="list" varStatus="for">
+					<tr class="row${for.index % 2 + 1}">
+						<td>
+
+							${list.u_loginId}
+
+						</td>
+						<td id="name${list.u_loginId}" ondblclick="sjsj('name${list.u_loginId}','name', '${list.u_loginId }');">
+							${list.u_name}
+						
+						</td>
+						<td id="salary${list.u_salary}" ondblclick="sjsj('salary${list.u_salary}','salary', '${list.u_loginId }');">
+							${list.u_salary}
+
+						</td>
+						<td id="age${list.u_age}" ondblclick="sjsj('age${list.u_age}','age', '${list.u_loginId }');">
+							${list.u_age }
+
+						</td>
+						<td>
+							<a href="delete.do?loginId=${list.u_loginId }">delete emp</a>&nbsp;
+							<a href="toUpdate.do?loginId=${list.u_loginId}">update emp</a>
+						</td>
+						</tr>
+						</c:forEach>
+			
+					</table>
+					<p>
+						<input type="button" class="button" value="Add Employee"
+							onclick="location='addEmp.html'" />
+					</p>
+				</div>
+			</div>
+			<div id="footer">
+				<div id="footer_bg">
+					ABC@126.com
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

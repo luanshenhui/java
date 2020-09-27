@@ -1,0 +1,308 @@
+package com.dpn.ciqqlc.common.util;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
+
+import com.dpn.ciqqlc.service.dto.WarningDto;
+import com.dpn.ciqqlc.standard.model.CheckDocsRcdModel;
+import com.dpn.ciqqlc.standard.model.OrigPlaceDto;
+import com.dpn.ciqqlc.standard.model.WarningEventDto;
+import com.dpn.ciqqlc.standard.service.ExpFoodPOFService;
+import com.dpn.ciqqlc.standard.service.OrigPlaceFlowService;
+import com.dpn.ciqqlc.standard.service.WarningEventService;
+
+public class WarningUtils {
+
+	@Autowired
+	@Qualifier("warningEventService")
+	private static WarningEventService warningEventService = null;
+	
+	@Autowired
+	@Qualifier("origPlaceServer")
+	private static OrigPlaceFlowService origPlaceFlowService;
+	
+	@Autowired
+	@Qualifier("expFoodPOFService")
+	private static ExpFoodPOFService expFoodPOFService;
+	
+	static{
+		WebApplicationContext ctx = ContextLoader.getCurrentWebApplicationContext();
+		warningEventService = (WarningEventService)ctx.getBean("warningEventService");
+		origPlaceFlowService = (OrigPlaceFlowService)ctx.getBean("origPlaceServer");
+		expFoodPOFService = (ExpFoodPOFService)ctx.getBean("expFoodPOFService");
+	}
+	
+	/**
+	 * 单个 预警
+	 * @param request
+	 * @param procType
+	 * @param procMainId
+	 * @param warningNo
+	 * @param orgCode
+	 * @param flag 是否设置三级
+	 */
+	@SuppressWarnings("unused")
+	public static void insertWaringEvent(HttpServletRequest request, String procType,String procMainId, String warningNo,String orgCode,boolean flag) {
+		// TODO Auto-generated method stub
+		
+/*		WarningEnum e=WarningEnum.getRuleCode(procType, false);
+		if(e == null) return;
+		
+		WarningDto dto =new WarningDto();
+		dto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+		dto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+		dto.setWarningId(procMainId);
+		dto.setWarningNo(warningNo);
+		dto.setPartnerCode(orgCode);  
+		List<WarningEventDto> eventDtoList=new ArrayList<WarningEventDto>();
+		WarningEventDto warningEventDto=new WarningEventDto();
+		warningEventDto.setWarningId(dto.getWarningId());
+		warningEventDto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+		warningEventDto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+		warningEventDto.setFirstModuleType(e.getWarningLinkRuleForm().getLinkType());
+		warningEventDto.setFirstModuleName(e.getWarningLinkRuleForm().getLinkName());
+		if(flag){
+			
+			warningEventDto.setThirdModuleType(e.getWarningLinkRuleForm().getDicType());
+			warningEventDto.setThirdModuleName(e.getWarningLinkRuleForm().getDicName());
+		}
+		eventDtoList.add(warningEventDto);
+		dto.setEventDtoList(eventDtoList);
+		warningEventService.updateEvent(dto);*/
+	}
+	
+	public static String inserRule_ref(HttpServletRequest request,List<WaringBaseBean> lw) {
+		
+		Map<String , List<WaringBaseBean>> rules = new HashMap<String , List<WaringBaseBean>>();
+		
+		for(WaringBaseBean v:lw){
+			String type="";
+			if(null!=v.getProcType()){
+				if(v.getProcType().contains("V_JC_T_Y_") 
+						|| v.getProcType().contains("V_JC_T_Y")
+						|| v.getProcType().contains("V_MS_E_R")
+						|| v.getProcType().contains("V_MS_OP_ZS_QF")
+						) type = "V_JC_T_Y";//邮轮
+				
+				if(v.getProcType().contains("V_JC_T_T_")) type = "V_JC_T_T";//货轮
+				
+				if(v.getProcType().contains("V_OC_C_M_")) type = "V_OC_C_M";//原产地
+				
+				//行政检查
+				if(v.getProcType().equals("V_BGSC_JD_QT") || v.getProcType().equals("V_BGSC_JD_ZG")) type = "V_BGSC";
+				
+				if(v.getProcType().equals("V_CF_J_Y_1")) type = "V_CF_J_Y";//简易处罚
+				
+				if(v.getProcType().equals("V_KBQ_C_M_1") //邮寄物
+						|| v.getProcType().equals("V_KB_C_M_1") ||  v.getProcType().equals("V_KB_C_M_2") || v.getProcType().equals("V_KB_C_M_4")
+						|| v.getProcType().equals("V_JL_C_M_3") ||  v.getProcType().equals("V_CYSJ_C_M_1") ||  v.getProcType().equals("V_CYSJ_C_M_2")
+						|| v.getProcType().equals("V_TH_C_M_5") ||  v.getProcType().equals("V_XH_C_M_6") ||  v.getProcType().equals("V_XH_C_M_6")
+						){type = "V_KBQ";}
+				
+				if(v.getProcType().contains("V_PT_H_L")
+						||v.getProcType().contains("D_SL_GZ")
+						||v.getProcType().contains("D_BY_GZ")
+						||v.getProcType().contains("D_SQ_BZ")
+						||v.getProcType().contains("D_SDHZ")
+						||v.getProcType().contains("F_CARD")
+						||v.getProcType().contains("D_PT_H_L")) type = "V_PT_H_L";//口岸卫生许可
+				
+				if(v.getProcType().contains("V_XCCY_QD_")
+						||v.getProcType().contains("V_SP_RP_") 
+						||v.getProcType().equals("V_SP_JD_QT") 
+						||v.getProcType().equals("V_SP_CZ_QT")) type = "V_XCCY_QD";//行政检查
+			}
+			
+			if (rules.containsKey(v.getProcMainId())) rules.get(type+"/"+v.getProcMainId()).add(v);
+			else 
+				rules.put(type+"/"+v.getProcMainId(), Collections.singletonList(v));
+		}
+		
+		Iterator it = rules.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry) it.next();
+			String key = (String) entry.getKey();
+			@SuppressWarnings("unchecked")
+			List<WaringBaseBean> value = (List<WaringBaseBean>) entry.getValue();
+			String type = "";
+			if(key.contains("V_OC_C_M")) type = "V_OC_C_M";//原产地业务
+			else if(key.contains("V_CF_J_Y")) type = "V_CF_J_Y";//简易处罚
+			else if(key.contains("V_JC_T_T")) type = "V_JC_T_T";//货轮
+			else if(key.contains("V_JC_T_Y")) type = "V_JC_T_T";//邮轮
+			else if(key.contains("V_PT_H_L")){ 
+				type = "V_PT_H_L";
+			}//口岸卫生许可
+			else if(key.contains("V_KBQ")) type = "V_KBQ";//进境邮寄物检疫
+			else if(key.contains("V_XCCY_QD")) type = "V_XCCY_QD";//行政检查
+			
+			List<OrigPlaceDto> orgList = null;
+
+			WarningEnum we = WarningEnum.getRuleCode(type, true);
+			if(we == null) continue;
+			
+			WarningDto dto =new WarningDto();
+			dto.setBusinessType(we.getWarningLinkRuleForm().getBusinessType());
+			dto.setBusinessName(we.getWarningLinkRuleForm().getBusinessName());
+			dto.setPartnerCode(null!=value && value.size()>0 ? value.get(0).getPortOrgCode():"");                //部门
+			List<WarningEventDto> eventDtoList=new ArrayList<WarningEventDto>();
+			
+			if(key.contains("V_OC_C_M")){//原产地特殊处理
+				OrigPlaceDto org=new OrigPlaceDto();
+				org.setMain_id(key.replace(type+"/", ""));
+				orgList=origPlaceFlowService.findOrigByMainId(org);//根据业务主键查询
+				dto.setWarningId(orgList.isEmpty()?"":orgList.get(0).getId());
+				if(!orgList.isEmpty() && orgList.get(0).getFile_date()!=null){        //证书发放及归档,不是手机上传,从业务表查询
+					WarningEventDto warningEventDto=new WarningEventDto();
+					warningEventDto.setWarningId(dto.getWarningId());
+					warningEventDto.setFirstModuleType("ql0504000");
+					warningEventDto.setThirdModuleType("ql0504001");
+					warningEventDto.setBusinessType("ql0500000");
+					warningEventDto.setBusinessName("原产地证书签发");
+					warningEventDto.setThirdModuleName("证书发放及归档");
+					eventDtoList.add(warningEventDto);
+				}
+			}else{
+				dto.setWarningId(key.replace(type+"/", ""));
+			}
+			for(WaringBaseBean v:value){
+				
+				//口岸许可特殊处理
+				if(v.getProcType().contains("V_PT_H_L")&&!v.getProcType().contains("ZDY")){
+					if("1".equals(v.getFileType())) v.setProcType(v.getProcType()+"_P");
+					if("2".equals(v.getFileType())) v.setProcType(v.getProcType()+"_V");
+				}
+				WarningEnum e = WarningEnum.getRuleCode(v.getProcType(), false);
+				if(e == null) continue;
+				WarningEventDto warningEventDto=new WarningEventDto();
+				warningEventDto.setWarningId(dto.getWarningId());
+				warningEventDto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+				warningEventDto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+				warningEventDto.setFirstModuleType(e.getWarningLinkRuleForm().getLinkType());
+				warningEventDto.setFirstModuleName(e.getWarningLinkRuleForm().getLinkName());
+				warningEventDto.setThirdModuleType(e.getWarningLinkRuleForm().getDicType());
+				warningEventDto.setThirdModuleName(e.getWarningLinkRuleForm().getDicName());
+				eventDtoList.add(warningEventDto);
+			}
+			dto.setEventDtoList(eventDtoList);
+			warningEventService.updateEvent(dto);
+			
+		}
+		
+		return "1";
+	}
+	
+	public static void insertWaringDocList(HttpServletRequest request,List<CheckDocsRcdModel> checkDocsRcdModel) {/*
+		// TODO
+		Map<String, List<CheckDocsRcdModel>> rules = new HashMap<String, List<CheckDocsRcdModel>>();
+		
+		for (CheckDocsRcdModel d : checkDocsRcdModel) {
+			String type = "";
+
+			if (StringUtils.isNotEmpty( d.getDocType())) {
+				// 隔离留验
+				if (d.getDocType().contains("D_DD_T_L")) type = "D_DD_T_L";
+				if (d.getDocType().contains("D_JC_T_T")) type = "D_JC_T_T"; //货轮
+				if (d.getDocType().contains("D_OC_C_M")) type = "D_OC_C_M";
+				if (d.getDocType().contains("D_PT_H_L")) type = "D_PT_H_L"; //口岸卫生许可
+				if (d.getDocType().contains("D_JC_T_Y")) type = "D_JC_T_Y";//邮轮
+			}
+			
+			if (rules.containsKey(d.getProcMainId())) {
+				rules.get(type + "/" + d.getProcMainId()).add(d);
+			} else {
+				List<CheckDocsRcdModel> list = new ArrayList<CheckDocsRcdModel>();
+				list.add(d);
+				rules.put(type + "/" + d.getProcMainId(), list);
+			}
+
+		}
+
+		Iterator it = rules.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry) it.next();
+			String key = (String) entry.getKey();
+			@SuppressWarnings("unchecked")
+			List<CheckDocsRcdModel> value = (List<CheckDocsRcdModel>) entry.getValue();
+			
+			String type = "";
+			// 隔离留验
+			if (key.contains("D_DD_T_L")) type = "D_DD_T_L";
+			if (key.contains("D_JC_T_T")) type = "D_JC_T_T";
+			if (key.contains("D_OC_C_M")) type = "D_OC_C_M";
+			if (key.contains("D_PT_H_L")) type = "D_PT_H_L";
+			
+			WarningEnum we = WarningEnum.getRuleCode(key, true);
+			if(we == null) return;
+			
+			WarningDto dto = new WarningDto();
+			dto.setBusinessType(we.getWarningLinkRuleForm().getBusinessType());
+			dto.setBusinessName(we.getWarningLinkRuleForm().getBusinessName());
+			dto.setWarningId(key.replace(type+"/", ""));
+			UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(Constants.USER_KEY);
+			dto.setPartnerCode(user.getPort_code()); // 部门
+			
+			List<WarningEventDto> eventDtoList = new ArrayList<WarningEventDto>();
+			for (CheckDocsRcdModel d : value) {
+				WarningEnum e = WarningEnum.getRuleCode(d.getDocType(), false);
+				if(e == null) continue;
+				WarningEventDto warningEventDto = new WarningEventDto();
+				warningEventDto.setWarningId(dto.getWarningId());
+				warningEventDto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+				warningEventDto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+				warningEventDto.setFirstModuleType(e.getWarningLinkRuleForm().getLinkType());
+				warningEventDto.setFirstModuleName(e.getWarningLinkRuleForm().getLinkName());
+				warningEventDto.setThirdModuleType(e.getWarningLinkRuleForm().getDicType());
+				warningEventDto.setThirdModuleName(e.getWarningLinkRuleForm().getDicName());
+				eventDtoList.add(warningEventDto);
+			}
+			dto.setEventDtoList(eventDtoList);
+			warningEventService.updateEvent(dto);
+		}
+	*/}
+
+	public static void insertWaringDoc(HttpServletRequest request,CheckDocsRcdModel checkDocsRcdModel) {/*
+		//TODO
+		
+		WarningEnum e = WarningEnum.getRuleCode(checkDocsRcdModel.getDocType(), false);
+		if(e == null) return;
+		
+		UserInfoDTO user = (UserInfoDTO) request.getSession().getAttribute(Constants.USER_KEY);
+		WarningDto dto =new WarningDto();
+		dto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+		dto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+		dto.setWarningId(checkDocsRcdModel.getProcMainId());//口岸卫生许可证核发
+		dto.setPartnerCode(user.getOrg_code());                //部门
+		
+		if(checkDocsRcdModel.getDocType().equals("D_OC_C_M_1")){//原产地业务实地调查记录单
+			OrigPlaceDto org=new OrigPlaceDto();
+			org.setMain_id(checkDocsRcdModel.getProcMainId());
+			List<OrigPlaceDto> orgList=origPlaceFlowService.findOrigByMainId(org);//根据业务主键查询
+			dto.setWarningId(orgList.isEmpty()?"":orgList.get(0).getId());
+		}
+
+		List<WarningEventDto> eventDtoList=new ArrayList<WarningEventDto>();
+		WarningEventDto warningEventDto=new WarningEventDto();
+		warningEventDto.setWarningId(dto.getWarningId());
+		warningEventDto.setBusinessType(e.getWarningLinkRuleForm().getBusinessType());
+		warningEventDto.setBusinessName(e.getWarningLinkRuleForm().getBusinessName());
+		warningEventDto.setFirstModuleType(e.getWarningLinkRuleForm().getLinkType());
+		warningEventDto.setFirstModuleName(e.getWarningLinkRuleForm().getLinkName());
+		warningEventDto.setThirdModuleType(e.getWarningLinkRuleForm().getDicType());
+		warningEventDto.setThirdModuleName(e.getWarningLinkRuleForm().getDicName());
+		eventDtoList.add(warningEventDto);
+		dto.setEventDtoList(eventDtoList);
+		warningEventService.updateEvent(dto);
+		
+	*/}
+}

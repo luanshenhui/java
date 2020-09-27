@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script src="js/echarts.min.js"></script>
+</head>
+<body>
+<a href="" onclick="history.go(-1)" class="back-home">返回</a>
+        <div class="iframe margin-auto">
+                <div class="html">
+                    <div class="body" id="" >
+
+                    <div class="" id="targetElement" style="width:100%;height:100%">
+                    	
+
+                    </div>
+                    </div>
+                    
+                </div>
+        </div>
+<script>
+var myChart = echarts.init(document.getElementById('targetElement'));
+option = {
+    title: {
+        text: '企业上报年月分布图',
+        textStyle:{color:'#fff'}
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:[{name:'旅文投公司',icon:'circle',textStyle:{color:'#fff'}},{name:'铁投',icon:'circle',textStyle:{color:'#fff'}},{name:'阳光产权',icon:'circle',textStyle:{color:'#fff'}},{name:'贵阳银行',icon:'circle',textStyle:{color:'#fff'}},{name:'农商银行',icon:'circle',textStyle:{color:'#fff'}}],
+        
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+        axisLabel:{
+            textStyle:{color:'#fff'}
+        }
+    },
+    yAxis: {
+        type: 'value',
+        axisLabel:{
+            textStyle:{color:'#fff'}
+        }
+    },
+    color:['#f80421','#4612f0','#0bf616','#f6f909','#09f9c9'],
+    series: [
+        {
+            name:'旅文投公司',
+            type:'line',
+            data:[120, 132, 101, 134, 90, 230, 210,150,110,130,160,250],
+            label:{
+            	emphasis:{
+            		show:true,
+            		position:'top',
+            		textStyle:{
+            			color:'#000',
+            			fontsize:10
+            			}
+            		}
+            	}
+        },{
+            name:'铁投',
+            type:'line',
+            data:[220, 182, 191, 234, 290, 330, 310, 301, 334, 390, 330, 320],
+            label:{
+            	emphasis:{
+            		show:true,
+            		position:'top',
+            		textStyle:{
+            			color:'#000',
+            			fontsize:10
+            			}
+            		}
+            	}
+        },{
+            name:'阳光产权',
+            type:'line',
+            data:[150, 232, 201, 154, 190, 330, 410,120, 132, 101, 134, 90],
+            label:{
+            	emphasis:{
+            		show:true,
+            		position:'top',
+            		textStyle:{
+            			color:'#000',
+            			fontsize:10
+            			}
+            		}
+            	}
+        },{
+            name:'贵阳银行',
+            type:'line',
+            data:[320, 332, 301, 334, 390, 330, 320,150,110,130,160,250],
+            label:{
+            	emphasis:{
+            		show:true,
+            		position:'top',
+            		textStyle:{
+            			color:'#000',
+            			fontsize:10
+            			}
+            		}
+            	}
+        },{
+            name:'农商银行',
+            type:'line',
+            data:[410,120, 132, 101, 134, 90, 932, 901, 934, 1290, 1330, 1320],
+            label:{
+            	emphasis:{
+            		show:true,
+            		position:'top',
+            		textStyle:{
+            			color:'#000',
+            			fontsize:10
+            			}
+            		}
+            	}
+        }]
+};
+// 使用刚指定的配置项和数据显示图表。
+myChart.setOption(option);
+</script>
+</body>
+</html>

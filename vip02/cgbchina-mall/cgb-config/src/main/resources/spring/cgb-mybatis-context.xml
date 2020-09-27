@@ -1,0 +1,75 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd ">
+    <!--数据源配置, 使用应用中的DBCP数据库连接池-->
+    <bean id="readDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close" init-method="init" lazy-init="true">
+        <description>只读数据库连接</description>
+        <!-- Connection Info -->
+        <property name="driverClassName" value="#{app.jdbcDriver}"/>
+        <property name="url" value="#{app.readerjdbcUrl}"/>
+        <property name="username" value="#{app.readerjdbcUsername}"/>
+        <property name="password" value="#{app.readerjdbcPassword}"/>
+        <!-- Connection Pooling Info -->
+        <property name="maxActive" value="#{app.dbcpMaxActive}"/>
+        <property name="defaultReadOnly" value="true" />
+        <property name="initialSize" value="3"/>
+        <!-- 连接Idle 30分钟后超时,每10分钟检查一次 -->
+        <property name="timeBetweenEvictionRunsMillis" value="600000"/>
+        <property name="minEvictableIdleTimeMillis" value="1800000"/>
+
+    </bean>
+    <bean id="writeDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close" init-method="init" lazy-init="true">
+        <description>只写数据库连接</description>
+        <property name="driverClassName" value="#{app.jdbcDriver}" />
+        <property name="url" value="#{app.writerjdbcUrl}" />
+        <property name="username" value="#{app.writerjdbcUsername}" />
+        <property name="password" value="#{app.writerjdbcPassword}" />
+        <property name="maxActive" value="#{app.dbcpMaxActive}" />
+        <property name="defaultAutoCommit" value="false"/>
+        <property name="defaultReadOnly" value="false" />
+        <property name="initialSize" value="3"/>
+        <!-- 连接Idle 30分钟后超时,每10分钟检查一次 -->
+        <property name="timeBetweenEvictionRunsMillis" value="600000"/>
+        <property name="minEvictableIdleTimeMillis" value="1800000"/>
+    </bean>
+    <bean id="dataSource" class="cn.com.cgbchina.common.aspect.ChooseDataSource" lazy-init="true">
+        <description>数据源</description>
+        <property name="targetDataSources">
+            <map key-type="java.lang.String" value-type="javax.sql.DataSource">
+                <!-- write -->
+                <entry key="write" value-ref="writeDataSource" />
+                <!-- read -->
+                <entry key="read" value-ref="readDataSource" />
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="readDataSource" />
+    </bean>
+
+    <!-- MyBatis配置 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:spring/mysql-config.xml"/>
+        <property name="mapperLocations" value="classpath*:/mapper/**/*.xml"/>
+    </bean>
+
+    <!-- 事务管理器配置, 使用jdbc事务 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 使用annotation定义事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!-- 嵌套子事务管理器配置, 使用jdbc事务 -->
+    <bean id="transactionManagerSubservice" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+        <qualifier value="subtransaction"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManagerSubservice"/>
+    <!-- 切面 -->
+    <bean class="cn.com.cgbchina.common.aspect.DataSourceAspect" />
+</beans>

@@ -1,0 +1,71 @@
+<process>
+  <activity id="1397530196202" name="汇聚活动1" x="77" y="436" imgUrl="resource/images/toolbar/parallelNode.png" activityType="collectNode"/>
+  <activity id="1397530178783" name="并发活动2" x="37" y="137" imgUrl="resource/images/toolbar/parallelNode.png" activityType="parallelNode"/>
+  <activity id="1397530186600" name="手动活动3" x="325" y="311" imgUrl="resource/images/toolbar/manualNode.png" activityType="manualNode"/>
+  <activity id="1397530188846" name="手动活动4" x="515" y="185" imgUrl="resource/images/toolbar/manualNode.png" activityType="manualNode"/>
+  <activity id="1397530201039" name="汇聚活动3" x="407" y="512" imgUrl="resource/images/toolbar/parallelNode.png" activityType="collectNode"/>
+  <activity id="1397530184672" name="手动活动2" x="126" y="208" imgUrl="resource/images/toolbar/manualNode.png" activityType="manualNode"/>
+  <activity id="1397530181708" name="并发活动3" x="848" y="113" imgUrl="resource/images/toolbar/parallelNode.png" activityType="parallelNode"/>
+  <activity id="1397530193298" name="手动活动6" x="1028" y="270" imgUrl="resource/images/toolbar/manualNode.png" activityType="manualNode"/>
+  <activity id="1397530205336" name="结束活动" x="938" y="525" imgUrl="resource/images/toolbar/finishNode.png" activityType="finishNode"/>
+  <activity id="1397530198444" name="汇聚活动2" x="714" y="466" imgUrl="resource/images/toolbar/parallelNode.png" activityType="collectNode"/>
+  <activity id="1397530191088" name="手动活动5" x="679" y="202" imgUrl="resource/images/toolbar/manualNode.png" activityType="manualNode"/>
+  <activity id="1397530170311" name="开始活动" x="37" y="23" imgUrl="resource/images/toolbar/srartNode.png" activityType="srartNode"/>
+  <activity id="1397530174867" name="并发活动1" x="588" y="75" imgUrl="resource/images/toolbar/parallelNode.png" activityType="parallelNode"/>
+  <activity id="1397530172134" name="手动活动1" x="145" y="9" imgUrl="resource/images/toolbar/manualNode.png" activityType="manualNode"/>
+  <activity id="1397530203476" name="手动活动7" x="701" y="507" imgUrl="resource/images/toolbar/manualNode.png" activityType="manualNode"/>
+  <transition id="1397530241117" fromActivity="1397530196202" toActivity="1397530201039">
+    <segment x="109.5" y="441.5" x2="433" y2="512"/>
+  </transition>
+  <transition id="1397530212226" fromActivity="1397530174867" toActivity="1397530181708">
+    <segment x="620.5" y="80.5" x2="869" y2="113"/>
+  </transition>
+  <transition id="1397530220945" fromActivity="1397530178783" toActivity="1397530184672">
+    <segment x="69.5" y="142.5" x2="173" y2="208"/>
+  </transition>
+  <transition id="1397530225351" fromActivity="1397530184672" toActivity="1397530196202">
+    <segment x="176" y="233" x2="146" y2="442"/>
+  </transition>
+  <transition id="1397530218005" fromActivity="1397530174867" toActivity="1397530193298">
+    <segment x="620.5" y="80.5" x2="1073" y2="270"/>
+  </transition>
+  <transition id="1397530227343" fromActivity="1397530186600" toActivity="1397530196202">
+    <segment x="375" y="336" x2="146" y2="436"/>
+  </transition>
+  <transition id="1397530235141" fromActivity="1397530188846" toActivity="1397530198444">
+    <segment x="565" y="210" x2="714" y2="466"/>
+  </transition>
+  <transition id="1397530209563" fromActivity="1397530172134" toActivity="1397530174867">
+    <segment x="195" y="34" x2="588" y2="75"/>
+  </transition>
+  <transition id="1397530230227" fromActivity="1397530181708" toActivity="1397530188846">
+    <segment x="880.5" y="118.5" x2="619" y2="185"/>
+  </transition>
+  <transition id="1397530207538" fromActivity="1397530170311" toActivity="1397530172134">
+    <segment x="52" y="38" x2="145" y2="38"/>
+  </transition>
+  <transition id="1397530232436" fromActivity="1397530181708" toActivity="1397530191088">
+    <segment x="880.5" y="118.5" x2="743" y2="202"/>
+  </transition>
+  <transition id="1397530244039" fromActivity="1397530198444" toActivity="1397530201039">
+    <segment x="746.5" y="471.5" x2="450" y2="512"/>
+  </transition>
+  <transition id="1397530246962" fromActivity="1397530193298" toActivity="1397530201039">
+    <segment x="1078" y="295" x2="463" y2="512"/>
+  </transition>
+  <transition id="1397530252076" fromActivity="1397530203476" toActivity="1397530205336">
+    <segment x="751" y="532" x2="938" y2="532"/>
+  </transition>
+  <transition id="1397530249647" fromActivity="1397530201039" toActivity="1397530203476">
+    <segment x="439" y="517" x2="701" y2="517"/>
+  </transition>
+  <transition id="1397530223166" fromActivity="1397530178783" toActivity="1397530186600">
+    <segment x="69.5" y="142.5" x2="370" y2="311"/>
+  </transition>
+  <transition id="1397530215229" fromActivity="1397530174867" toActivity="1397530178783">
+    <segment x="620.5" y="80.5" x2="76" y2="137"/>
+  </transition>
+  <transition id="1397530237834" fromActivity="1397530191088" toActivity="1397530198444">
+    <segment x="729" y="227" x2="729" y2="466"/>
+  </transition>
+</process>

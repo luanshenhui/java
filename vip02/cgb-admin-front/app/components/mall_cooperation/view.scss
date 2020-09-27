@@ -1,0 +1,34 @@
+
+.vendor-download{
+  width: 730px;
+  .modal-body{
+    min-height: 100px;
+
+    .upload-btn{
+      width:120px;
+      height:28px;
+      z-index:2;
+    }
+    .upload-file{
+      position:absolute;
+      left:180px;
+      top:75px;
+      height:28px;
+      width:120px;
+      opacity:0;
+      z-index:2;
+      filter: alpha(opacity=0);
+      -moz-opacity: 0;
+    }
+    .font-size-12{
+      font-size: 12px;
+    }
+  }
+}
+
+
+
+
+
+
+

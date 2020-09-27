@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gateway="http://www.agree.com.cn/GDBGateway">
+    <soapenv:Header>
+        <gateway:HeadType>
+            <gateway:versionNo>1</gateway:versionNo>
+            <gateway:toEncrypt/>
+            <gateway:commCode>510001</gateway:commCode>
+            <gateway:commType>0</gateway:commType>
+            <gateway:receiverId>SHOP</gateway:receiverId>
+            <gateway:senderId>BPSN</gateway:senderId>
+            <gateway:senderSN>2016060714133648275450</gateway:senderSN>
+            <gateway:senderDate>20160607</gateway:senderDate>
+            <gateway:senderTime>020826</gateway:senderTime>
+            <gateway:tradeCode>BP0005</gateway:tradeCode>
+            <gateway:gwErrorCode>01</gateway:gwErrorCode>
+            <gateway:gwErrorMessage>BPSCA01</gateway:gwErrorMessage>
+        </gateway:HeadType>
+    </soapenv:Header>
+    <soapenv:Body>
+        <gateway:NoAS400>
+            <gateway:field name="ERRORCODE">6666</gateway:field>
+        </gateway:NoAS400>
+    </soapenv:Body>
+</soapenv:Envelope>

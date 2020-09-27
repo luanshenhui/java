@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="chinsoft.entity.FixedStyle" table="FixedStyle">
+        <id name="FixedID">
+            <column name="FixedID"/>
+            <generator class="assigned" />
+        </id>
+        <property name="Styles" type="string" column="Styles"/>
+        <property name="ProcessNames" type="string" column="ProcessNames"/>
+        <property name="processENNames" type="string" column="processENNames"/>
+        <property name="sequenceNo" type="integer" column="sequenceNo"/>
+    </class>
+</hibernate-mapping>

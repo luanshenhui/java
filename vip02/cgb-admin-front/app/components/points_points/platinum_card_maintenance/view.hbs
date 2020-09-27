@@ -1,0 +1,62 @@
+{{#component "platinum-card-maintenance js-component"}}
+    <p class="components-title"><strong>- 白金卡等级维护 -</strong></p>
+    <div class="tab-condensed m-b-10">
+        {{#authorial "platinumCard_add"}}
+            <button class="btn btn-small btn-info js-card-new">+ 新增</button>
+        {{/authorial}}
+        {{#authorial "platinumCard_edit"}}
+            <button class="btn btn-info btn-small js-card-edit js-btn">编辑</button>
+        {{/authorial}}
+        {{#authorial "platinumCard_delete"}}
+            <button id="{{id}}" class="btn btn-info btn-small js-card-delete js-btn" data-toggle="confirm"
+                    data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                    data-event="confirm:delete-card">删除
+            </button>
+        {{/authorial}}
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="23%">白金卡等级编码</th>
+            <th width="29%">白金卡等级名称</th>
+            <th width="24%">创建人</th>
+            <th width="24%">创建时间</th>
+            <!--<th width="15%">操作</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr data-component="" id="pro" data-id="{{proCode}}" data-type="{{id}}" data-data="{{json this}}"
+                class="js-table-info">
+                <td class="card-code">{{proCode}}</td>
+                <td class="card-name">{{proNm}}</td>
+                <td class="card-create-user">{{createOper}}</td>
+                <td class="card-create-date">{{formatDate createTime}}</td>
+                <!--<td>
+                     <button class="btn btn-info btn-small js-card-edit js-btn">编辑</button>
+                        <button id="{{!id}}" class="btn btn-info btn-small js-card-delete js-btn" data-toggle="confirm"
+                                data-title="您确定删除吗?" data-content="删除之后无法恢复,确定要删除吗？"
+                                data-event="confirm:delete-card">删除</button>
+                </td>-->
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="col-left-common margin-top-10">
+        {{#authorial "platinumCard_binding"}}
+            <button class="btn btn-info btn-small js-bind-Board">绑 定</button>
+        {{/authorial}}
+        {{#authorial "platinumCard_Unbundling"}}
+            <button id="{{id}}" class="btn btn-info btn-small js-card-unbind" data-toggle="confirm"
+                    data-title="您确定解除绑定吗?" data-content="解除绑定之后无法恢复,确定要解除绑定吗？"
+                    data-event="confirm:unbind-card">解除绑定
+            </button>
+        {{/authorial}}
+    </div>
+    <div class="clear"></div>
+    <div class="main-box-table margin-top-10 js-card-pro">
+
+    </div>
+    <div class="pagination" data-total="{{_DATA_.total}}"></div>
+
+{{/component}}

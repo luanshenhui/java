@@ -1,0 +1,186 @@
+/*package cn.rkylin.oms.system.menu.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.dhc.authorization.resource.menu.action.无;
+import com.dhc.authorization.resource.menu.service.MenuService;
+import com.dhc.base.common.util.SecurityUtil;
+import com.dhc.base.exception.ServiceException;
+import com.dhc.base.security.SecurityUser;
+import com.dhc.base.security.SecurityUserHoder;
+
+import cn.rkylin.core.controller.ApolloController;
+@Controller
+@RequestMapping("/menu")
+public class MenuController extends ApolloController{
+	
+	*//**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 根据菜单项id获取菜单项下面的所有页面元素，作为树上的子结点
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 *//*
+	public void getElementsByMenuItemID(HttpServletRequest request,
+			HttpServletResponse response) {
+//		if (SecurityUtil.existUnavailableChar(request, "id,showAllMenu")) {
+//			return mapping.findForward("unpermitted-character");
+//		}
+
+		if (menuCategory == null) {
+			Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+			menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals(""))
+					? null : obj.toString();
+		}
+		String parentMenuCode = request.getParameter("id").toString();
+		parentMenuCode = parentMenuCode.substring(0,
+				(parentMenuCode.lastIndexOf("@") == -1 ? parentMenuCode.length() : parentMenuCode.lastIndexOf("@")));
+
+		// 判断是否需要显示全部的菜单，不考虑权限问题
+		String showAllMenu = request.getParameter("showAllMenu");
+		showAllMenu = (showAllMenu == null ? "" : showAllMenu);
+		if (showAllMenu.toLowerCase().equals("true")) {
+			showAllMenu = "available"; // 显示全部菜单
+		} else {
+			showAllMenu = "assignable"; // 只显示自己能看到的菜单
+		}
+
+		try {
+			String userID = null;
+			if (showAllMenu.equalsIgnoreCase("available")) {
+				userID = "adminUser";
+			} else {
+				SecurityUser securityUser = SecurityUserHoder.getCurrentUser();
+				userID = securityUser.getUserBean().getId();
+			}
+
+			// authorityType为null，默认为可分配(assignable)，不为空则自己指定
+			List subItem = menuService.getFormElementList(userID, parentMenuCode, showAllMenu, menuCategory);
+			String strXml = null;
+			if (subItem.size() != 0) {
+				strXml = this.parseSubMenus2XMLString(subItem, request.getParameter("id").toString());
+				response.setContentType("text/xml");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(strXml);
+			} else {
+				response.setContentType("text/xml");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write("");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	*//**
+	 * 方法简要描述信息.
+	 * <p>
+	 * 描述: 获取菜单树（所有菜单项）
+	 * </p>
+	 * <p>
+	 * 备注: 详见顺序图<br>
+	 * </p>
+	 * 
+	 * @param mapping
+	 *            - Struts的ActionMapping对象，包含了请求映射的基本信息。
+	 * @param form
+	 *            - Struts的ActionForm对象，包含了请求页面要提交的数据(只在配置了FormBean标签时有效)
+	 * @param request
+	 *            - jsp请求对象
+	 * @param response
+	 *            - jsp答复对象
+	 * @throws 无
+	 *//*
+//	public ActionForward getMenuTree(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+//			HttpServletResponse response) {
+//
+//		if (SecurityUtil.existUnavailableChar(request, "showAllMenu,expandAll")) {
+//			return mapping.findForward("unpermitted-character");
+//		}
+//
+//		if (menuCategory == null) {
+//			Object obj = request.getSession().getServletContext().getAttribute("APP_NAME");
+//			menuCategory = (obj == null || obj.toString().equalsIgnoreCase("iFramework") || obj.toString().equals(""))
+//					? null : obj.toString();
+//		}
+//
+//		menuService = (MenuService) getBaseService().getServiceFacade("TP_MenuService");
+//		List list = null;
+//		// // 判断是否需要显示全部的菜单，不考虑权限问题
+//		// String showAllMenu = request.getParameter("showAllMenu");
+//		// showAllMenu = (showAllMenu == null ? "" : showAllMenu);
+//		// if (showAllMenu.toLowerCase().equals("true")) {
+//		// showAllMenu = "true"; // 显示全部菜单
+//		// } else {
+//		// showAllMenu = "false"; // 只显示自己能看到的菜单
+//		// }
+//		String showAllMenu = request.getParameter("showAllMenu");
+//		showAllMenu = (showAllMenu == null ? "" : showAllMenu);
+//		if (showAllMenu.toLowerCase().equals("true")) {
+//			showAllMenu = "available"; // 显示全部菜单
+//		} else {
+//			showAllMenu = "assignable"; // 只显示自己能看到的菜单
+//		}
+//
+//		// 判断tree是否全部查询的参数。1：全部查询；0：部分查询。
+//		String expandAll = request.getParameter("expandAll");
+//		expandAll = (expandAll == null ? "" : expandAll);
+//		if (expandAll.toLowerCase().equals("true")) {
+//			expandAll = "1"; // 全部查询
+//		} else {
+//			expandAll = "0"; // 部分查询
+//		}
+//
+//		try {
+//			String userID = null;
+//			if (showAllMenu.equals("true")) {
+//				userID = "adminUser";
+//			} else {
+//				SecurityUser securityUser = SecurityUserHoder.getCurrentUser();
+//				userID = securityUser.getUserBean().getId();
+//			}
+//			list = menuService.getMenuTreeData(userID, expandAll, null, menuCategory, showAllMenu);
+//			String strStaXml = null;
+//			// if (list.size() != 0) {
+//			if (expandAll.equals("1")) {
+//				strStaXml = this.parseStation2XMLString(list);
+//			} else {
+//				strStaXml = this.parseMenus2XMLString(list);
+//			}
+//			response.setContentType("text/xml");
+//			response.setCharacterEncoding("UTF-8");
+//			response.getWriter().write(strStaXml);
+//			// } else {
+//			// response.getWriter().write("<item/>");
+//			// }
+//		} catch (ServiceException e1) {
+//			e1.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
+}
+*/

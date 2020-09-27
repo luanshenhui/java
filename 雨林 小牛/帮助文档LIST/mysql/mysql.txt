@@ -1,0 +1,36 @@
+默认用户管理员是root
+
+查看当前有哪些数据库
+show databases;
+
+2，创建直接的数据库
+create database lsh;
+
+3,使用数据库
+use lsh;
+
+4,建表
+注意：mysql和oracle的差异
+oracle：varchar定长字符，varchar2是变长字符
+mysql：char定长字符,varchar变长字符
+
+create table person(
+id integer primary key,
+name varchar(20) not null
+);
+
+5,产看当前数据库中有哪些表
+show tables;
+
+set names bg2312;设置国标，修改默认
+
+6，修改
+
+7，删除表
+drop table person;
+
+8删除数据库
+drop database lsh;
+
+
+insert into person values(1,'张三');

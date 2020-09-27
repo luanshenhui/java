@@ -1,0 +1,38 @@
+<div class="js-component template-manage table-components  operation-platform" data-comp-path="template_manage"
+     data-sites="/common/templates">
+    <p class="components-title"><strong>商城模板管理</strong></p>
+    <div class="add-template">
+        <button class="btn btn-success js-template-new">创建模板</button>
+    </div>
+    <table class="shop-template-table table table-horizontal center-text">
+        <thead>
+        <tr>
+            <th width="50%">模板名称</th>
+            <th width="30%">状态</th>
+            <th width="20%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr class="template" data-id="{{id}}" data-template="{{json this}}">
+                <td class="template-info">
+                    <div class="shop-template-name">
+                        <span class="template-name">{{name}}</span>
+                    </div>
+                </td>
+                <td class="shop-template-status {{#if releaseInstanceId}}released{{/if}}">{{#if releaseInstanceId}}
+                    已发布{{else}}未发布{{/if}}</td>
+                <td class="shop-template-operate">
+                    <a class="operate-link js-template-edit" href="javascript:void(0);" gu>修改</a>
+                    <a href="{{_HREF_.main}}/cms/design/templates/{{id}}" target="_blank" class="operate-link">装修</a>
+                    <br>
+                    <button class="btn btn-success js-template-release operate-btn" id="{{id}}"
+                            data-toggle="confirm" data-title="您确定发布吗?" data-content="确认发布？发布后所有应用此模板的店铺都将发生更改！"
+                            data-event="confirm:release-template">发布模板
+                    </button>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>

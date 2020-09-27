@@ -1,0 +1,684 @@
+/**
+ * regonline.
+ * 
+ * @author zhanglin@dpn.com.cn
+ * @since 1.0.0 zhanglin@dpn.com.cn
+ * @version 1.0.0 zhanglin@dpn.com.cn
+ */
+/* *****************************************************************************
+ * 备忘记录
+ * -> 。
+********************************************************************************
+ * 变更履历
+ * -> 1.0.0 2014-09-02 zhanglin@dpn.com.cn : 初建。
+ * -> 1.0.0 2014-09-18 zhanglin@dpn.com.cn : 完善格式。
+***************************************************************************** */
+
+@charset "UTF-8";
+
+/* **** global ************************************************************** */
+
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, iframe, hr, table
+{
+    margin                              : 0;
+    padding                             : 0;
+}
+
+body
+{
+    font-family                         : Verdana;
+    color                               : #4D4D4D;
+}
+
+a
+{
+    color                               : #0036A5;
+    text-decoration                     : underline;
+}
+
+a:hover
+{
+    color                               : #FE3626;
+}
+
+.must_input_sign
+{
+    color                               : #FE3626;
+    font-size                           : 12px;
+}
+
+.input_tip
+{
+    color                               : #999999;
+    font-size                           : 12px;
+}
+
+.font_12px
+{
+    font-size                           : 12px;
+}
+
+.desctextarea
+{
+    border                              : 1px solid #7F9DB9;
+    font-size                           : 12px;
+    padding-top                         : 4px;
+    padding-bottom                      : 2px;
+    padding-left                        : 2px;
+    width                               : 250px;
+    height                              : 100px;
+}
+
+.selectcommon
+{
+    border                              : 1px solid #7F9DB9;
+    width                               : 125px;
+}
+
+.input
+{
+    border                              : 1px solid #7F9DB9;
+    font-size                           : 12px;
+    color                               : #000000;
+    height                              : 14px;
+    padding-top                         : 4px;
+    padding-bottom                      : 2px;
+    padding-left                        : 2px;
+    width                               : 250px;
+}
+
+.input_10px
+{
+    border                              : 1px solid #7F9DB9;
+    font-size                           : 12px;
+    color                               : #000000;
+    height                              : 14px;
+    padding-top                         : 4px;
+    padding-bottom                      : 2px;
+    padding-left                        : 2px;
+    width                               : 28px;
+}
+
+.input_15px
+{
+    border                              : 1px solid #7F9DB9;
+    font-size                           : 12px;
+    color                               : #000000;
+    height                              : 14px;
+    padding-top                         : 4px;
+    padding-bottom                      : 2px;
+    padding-left                        : 2px;
+    width                               : 38px;
+}
+
+.input_17px
+{
+    border                              : 1px solid #7F9DB9;
+    font-size                           : 12px;
+    color                               : #000000;
+    height                              : 14px;
+    padding-top                         : 4px;
+    padding-bottom                      : 2px;
+    padding-left                        : 2px;
+    width                               : 122px;
+}
+
+.input_20px
+{
+    border                              : 1px solid #7F9DB9;
+    font-size                           : 12px;
+    color                               : #000000;
+    height                              : 14px;
+    padding-top                         : 4px;
+    padding-bottom                      : 2px;
+    padding-left                        : 2px;
+    width                               : 152px;
+}
+
+.input_focus
+{
+    background                          : #E7F4FB;
+}
+
+table td div p.error
+{
+    height                              : 15px;
+    text-align                          : left;
+    font-size                           : 12px;
+    margin-right                        : auto;
+    padding-top                         : 8px;
+    padding-left                        : 20px;
+    color                               : #FF0000;
+    background-image                    : url(../images/form.error.gif);
+    background-position                 : 0 8px;
+    background-repeat                   : no-repeat;
+}
+
+#reg_header
+{
+    font-size                           : 12px;
+    height                              : 60px;
+    margin                              : auto;
+    background-repeat                   : repeat-x;
+    background-image                    : url(../images/bg.gif);
+    border-bottom-width                 : 1px;
+    border-bottom-style                 : solid;
+    border-bottom-color                 : #CCCCCC;
+}
+
+#reg_header table
+{
+    margin                              : auto;
+    width                               : 800px;
+    border-collapse                     : collapse;
+    border-spacing                      : 0;
+}
+
+#reg_agree
+{
+    border                              : 1px solid #85BAD8;
+    margin                              : 20px auto 0;
+    voice-family                        : inherit;
+    width                               : 750px;
+    line-height                         : 30px;
+    font-size                           : 12px;
+}
+
+#reg_agree li
+{
+    list-style-type                     : none;
+}
+
+#reg_agree_close
+{
+    font-size                           : 12px;
+    height                              : 80px;
+    margin                              : auto;
+}
+
+#reg_agree_close table
+{
+    margin                              : auto;
+    width                               : 800px;
+    border-collapse                     : collapse;
+    border-spacing                      : 0;
+}
+
+#reg_footer
+{
+    font-size                           : 12px;
+    height                              : 120px;
+    margin                              : auto;
+    border-top-width                    : 1px;
+    border-top-style                    : solid;
+    border-top-color                    : #CCCCCC;
+}
+
+#reg_footer table
+{
+    margin                              : auto;
+    width                               : 800px;
+    border-collapse                     : collapse;
+    border-spacing                      : 0;
+}
+
+#reg_form
+{
+    width                               : 800px;
+    margin                              : auto;
+    margin-top                          : 20px;
+    margin-bottom                       : 20px;
+    height                              : auto;
+}
+
+#reg_form .nav
+{
+    width                               : 710px;
+    margin                              : auto;
+    background-image                    : url(../images/point.gif);
+    background-repeat                   : no-repeat;
+    padding-left                        : 20px;
+    height                              : 15px;
+    font-size                           : 12px;
+}
+
+#reg_form .error_nav
+{
+    width                               : 710px;
+    margin                              : auto;
+    background-image                    : url(../images/error.gif);
+    background-repeat                   : no-repeat;
+    padding-left                        : 20px;
+    height                              : 15px;
+    font-size                           : 12px;
+}
+
+#reg_form .title
+{
+    width                               : 730px;
+    margin                              : auto;
+    height                              : 20px;
+    background-image                    : url(../images/bg.title.gif);
+    background-repeat                   : repeat-x;
+    margin-bottom                       : 20px;
+    margin-top                          : 20px;
+    font-size                           : 14px;
+    font-weight                         : bold;
+    height                              : 20px;
+    background-image                    : url(../images/bg.title.gif);
+    background-repeat                   : repeat-x;
+    margin-bottom                       : 20px;
+    margin-top                          : 20px;
+}
+
+#reg_form table
+{
+    margin                              : auto;
+    width                               : 800px;
+    border-collapse                     : collapse;
+    font-size                           : 14px;
+}
+
+#reg_form table tr td
+{
+    padding                             : 5px;
+}
+
+table.jCalendar
+{
+    background-color                    : #FFFFFF;
+}
+
+table.jCalendar th
+{
+    color                               : #fff;
+    font-family                         : "宋体";
+    font-size                           : 12px;
+    padding-top                         : 3px;
+    height                              : 16px;
+}
+
+table.jCalendar td
+{
+    color                               : #000;
+    text-align                          : center;
+    background-color                    : #FFFFFF;
+    padding-top                         : 5px;
+    padding-right                       : 4px;
+    padding-bottom                      : 5px;
+    padding-left                        : 4px;
+}
+
+table.jCalendar td.other-month
+{
+    color                               : #CCCCCC;
+}
+
+table.jCalendar td.today
+{
+    color                               : #fff;
+    background-color                    : #999999;
+}
+
+table.jCalendar td.selected
+{
+    background                          : #f66;
+    color                               : #fff;
+}
+
+table.jCalendar td.dp-hover, table.jCalendar tr.activeWeekHover td
+{
+    color                               : #FF0000;
+    background-color                    : #CCCCCC;
+}
+
+div.dp-popup
+{
+    position                            : relative;
+    font-size                           : 10px;
+    font-family                         : Verdana, Arial, Helvetica, sans-serif;
+    width                               : 170px;
+    line-height                         : 1.2em;
+    background-color                    : #FFFFFF;
+    padding-top                         : 5px;
+    margin-top                          : 20px;
+    border-top-width                    : 1px;
+    border-right-width                  : 1px;
+    border-bottom-width                 : 1px;
+    border-left-width                   : 1px;
+    border-top-style                    : solid;
+    border-right-style                  : solid;
+    border-bottom-style                 : solid;
+    border-left-style                   : solid;
+}
+
+div#dp-popup
+{
+    position                            : absolute;
+    z-index                             : 199;
+}
+
+div.dp-popup h2
+{
+    font-size                           : 12px;
+    text-align                          : center;
+    margin                              : 2px 0;
+    padding                             : 0;
+}
+
+div.dp-popup a
+{
+    color                               : #000;
+    text-decoration                     : none;
+    padding                             : 3px 2px 0;
+}
+
+div.dp-popup div.dp-nav-prev
+{
+    position                            : absolute;
+    top                                 : 2px;
+    left                                : 4px;
+    width                               : 100px;
+}
+
+div.dp-popup div.dp-nav-prev a
+{
+    float                               : left;
+}
+
+div.dp-popup div.dp-nav-prev a, div.dp-popup div.dp-nav-next a
+{
+    cursor                              : pointer;
+}
+
+div.dp-popup div.dp-nav-prev a.disabled, div.dp-popup div.dp-nav-next a.disabled
+{
+    cursor                              : default;
+}
+
+div.dp-popup div.dp-nav-next
+{
+    position                            : absolute;
+    top                                 : 2px;
+    right                               : 4px;
+    width                               : 100px;
+}
+
+div.dp-popup div.dp-nav-next a
+{
+    float                               : right;
+}
+
+div.dp-popup a.disabled
+{
+    cursor                              : default;
+    color                               : #aaa;
+}
+
+div.dp-popup td
+{
+    cursor                              : pointer;
+}
+
+div.dp-popup td.disabled
+{
+    cursor                              : default;
+}
+
+table.jCalendar th
+{
+    background-color                    : #1B5EA8;
+}
+
+div.dp-popup
+{
+    border-top-color                    : #013978;
+    border-right-color                  : #013978;
+    border-bottom-color                 : #013978;
+    border-left-color                   : #013978;
+}
+
+.ac_results
+{
+    padding                             : 0px;
+    border                              : 1px solid black;
+    background-color                    : white;
+    overflow                            : hidden;
+    z-index                             : 99999;
+}
+
+.ac_results ul
+{
+    width                               : 100%;
+    list-style-position                 : outside;
+    list-style                          : none;
+    padding                             : 0;
+    margin                              : 0;
+}
+
+.ac_results li
+{
+    margin                              : 0px;
+    padding                             : 2px 5px;
+    cursor                              : default;
+    display                             : block;
+    font                                : menu;
+    font-size                           : 12px;
+    line-height                         : 16px;
+    overflow                            : hidden;
+}
+
+.ac_loading
+{
+    background                          : white url('indicator.gif') right center no-repeat;
+}
+
+.ac_odd
+{
+    background-color                    : #eee;
+}
+
+.ac_over
+{
+    background-color                    : #0A246A;
+    color                               : white;
+}
+
+.ZebraDialog
+{
+    font-family                         : Tahoma, Arial, Helvetica, sans-serif;
+    font-size                           : 12px;
+    background                          : #FFF;
+    padding                             : 0px;
+    width                               : 350px;
+    color                               : #222;
+    -webkit-border-radius               : 6px;
+    -moz-border-radius                  : 6px;
+    border-radius                       : 6px;
+    -webkit-box-shadow                  : 0px 0px 4px 2px #222;
+    -moz-box-shadow                     : 0px 0px 4px 2px #222;
+    box-shadow                          : 0px 0px 4px 2px #222;
+    *border                             : 1px solid #666; /* IE6 & 7 */
+    border                              : 1px solid #666\9; /* IE8 */
+}
+
+.ZebraDialog .ZebraDialog_Title
+{
+    margin                              : 0;
+    padding                             : 5px 10px;
+    font-weight                         : bold;
+    font-size                           : 14px;
+    background                          : #222;
+    color                               : #FFF;
+    text-align                          : left;
+    -webkit-border-top-left-radius      : 4px;
+    -webkit-border-top-right-radius     : 4px;
+    -moz-border-radius-topleft          : 4px;
+    -moz-border-radius-topright         : 4px;
+    border-top-left-radius              : 4px;
+    border-top-right-radius             : 4px;
+    *padding                            : 7px 10px; /* IE6 & 7 */
+    padding                             : 7px 10px\9; /* IE8 */
+}
+
+.ZebraDialog .ZebraDialog_Body
+{
+    background-repeat                   : no-repeat;
+    background-position                 : 10px 10px;
+    padding                             : 10px;
+    text-align                          : left
+}
+
+.ZebraDialog .ZebraDialog_Icon
+{
+    padding                             : 10px 10px 10px 68px;
+    min-height                          : 48px;
+    _height                             : 48px
+}
+
+.ZebraDialog .ZebraDialog_Confirmation
+{
+    background-image                    : url('../images/zebra.dialog.confirmation.png')
+}
+
+.ZebraDialog .ZebraDialog_Error
+{
+    background-image                    : url('../images/zebra.dialog.error.png')
+}
+
+.ZebraDialog .ZebraDialog_Information
+{
+    background-image                    : url('../images/zebra.dialog.information.png')
+}
+
+.ZebraDialog .ZebraDialog_Question
+{
+    background-image                    : url('../images/zebra.dialog.question.png')
+}
+
+.ZebraDialog .ZebraDialog_Warning
+{
+    background-image                    : url('../images/zebra.dialog.warning.png')
+}
+
+.ZebraDialog .ZebraDialog_Buttons
+{
+    background                          : #E5E5E5;
+    border-top                          : 1px solid #DADADA;
+    padding                             : 5px 5px 5px 10px;
+    -webkit-border-bottom-left-radius   : 5px;
+    -webkit-border-bottom-right-radius  : 5px;
+    -moz-border-radius-bottomleft       : 5px;
+    -moz-border-radius-bottomright      : 5px;
+    border-bottom-left-radius           : 5px;
+    border-bottom-right-radius          : 5px;
+}
+
+.ZebraDialog .ZebraDialog_Buttons a
+{
+    text-decoration                     : none;
+    font-weight                         : bold;
+    color                               : #000;
+    background                          : transparent;
+    border                              : 1px solid #AAA;
+    padding                             : 4px 10px;
+    float                               : right;
+    margin-right                        : 5px;
+    min-width                           : 60px;
+    _width                              : 60px;
+    text-align                          : center;
+    -webkit-border-radius               : 4px;
+    -moz-border-radius                  : 4px;
+    border-radius                       : 4px;
+}
+
+.ZebraDialog .ZebraDialog_Buttons a:hover
+{
+    background                          : #717366;
+    color                               : #FFF
+}
+
+.ZebraDialogOverlay
+{
+    background                          : #666
+}
+
+.Zebra_Tooltip
+{
+    position                            : absolute;
+    z-index                             : 8000;
+    background                          : transparent;
+    font-family                         : Verdana, sans-serif;
+}
+
+.Zebra_Tooltip .Zebra_Tooltip_Message
+{
+    position                            : relative;
+    padding                             : 10px 12px 10px 10px;
+    font-size                           : 12px;
+    font-weight                         : normal;
+    line-height                         : 1;
+    -webkit-border-radius               : 5px;
+    -moz-border-radius                  : 5px;
+    border-radius                       : 5px;
+    -webkit-box-shadow                  : 2px 2px 6px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow                     : 2px 2px 6px rgba(0, 0, 0, 0.6);
+    box-shadow                          : 2px 2px 6px rgba(0, 0, 0, 0.6);
+    *margin-right                       : 0;
+    max-width                           : 250px;
+    _width                              : expression(document.body.clientWidth > 250 ? '250px' :  'auto');
+}
+
+.Zebra_Tooltip .Zebra_Tooltip_Arrow
+{
+    position                            : absolute;
+    height                              : 10px;
+    width                               : 20px;
+    overflow                            : hidden
+}
+
+.Zebra_Tooltip .Zebra_Tooltip_Arrow_Bottom
+{
+    bottom                              : 0
+}
+
+.Zebra_Tooltip .Zebra_Tooltip_Arrow_Top
+{
+    top                                 : 0
+}
+
+.Zebra_Tooltip .Zebra_Tooltip_Arrow div
+{
+    position                            : absolute;
+    border-style                        : solid;
+    border-width                        : 10px;
+    height                              : 0;
+    width                               : 0;
+    left                                : 0;
+    _border-left-color                  : pink;
+    _border-right-color                 : pink;
+    _filter                             : chroma(color = pink);
+}
+
+.Zebra_Tooltip .Zebra_Tooltip_Arrow_Bottom div
+{
+    top                                 : 0;
+    _border-bottom-color                : pink;
+}
+
+.Zebra_Tooltip .Zebra_Tooltip_Arrow_Top div
+{
+    bottom                              : 0;
+    _border-top-color                   : pink;
+}
+
+.Zebra_Tooltip .Zebra_Tooltip_Close
+{
+    text-decoration                     : none;
+    color                               : #FFF;
+    position                            : absolute;
+    right                               : 4px;
+    top                                 : 1px;
+    font-size                           : 9px;
+    font-weight                         : bold;
+}

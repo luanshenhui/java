@@ -1,0 +1,50 @@
+<div class="sites-config js-component operation-platform" data-comp-path="sites_config_manage"
+     data-sites="/operations/sites" data-domain="{{_HREF_.main}}" data-total="{{_DATA_.total}}"
+     data-user-type="{{_USER_.type}}">
+    <p class="components-title">
+        <strong>- 站点管理 -</strong>&nbsp;&nbsp;&nbsp;<span>共（{{#if _DATA_.total}}{{_DATA_.total}}{{else}}
+        0{{/if}}）个站点</span>
+    </p>
+    <!-- 站点不进行新增操作 -->
+    <div class="add-sites">
+        <button class="btn btn-success btn-small js-sites-new">创建站点</button>
+    </div>
+    <table class="shop-template-table table table-horizontal center-text">
+        <thead>
+        <tr>
+            <th width="20%">站点名称</th>
+            <th width="20%">二级域名</th>
+            <th width="20%">二级目录</th>
+            <th width="10%">创建时间</th>
+            <th width="20%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each _DATA_.data}}
+            <tr class="site" data-sites-config="{{json this}}" data-id="{{id}}">
+                <td class="sites-config-name">{{name}}</td>
+                <td class="sites-config-domain"><a href="{{subdomain}}" data-context="{{context}}"
+                                                   target="_blank">{{subdomain}}</a></td>
+                <td class="sites-config-context">{{context}}</td>
+                <td class="sites-config-createat">{{formatDate createdTime}}</td>
+                <td class="sites-config-operate">
+                    <a href="{{_HREF_.domain}}/cms/design/templates/{{id}}" target="_blank"
+                       class="js-sites-config-decorate">装修</a>
+                    {{#equals _USER_.type "6"}}
+                    {{else}}
+                        <a href="javascript:void(0);" class="js-sites-config-edit">编辑</a>
+                        <a href="javascript:void(0);" id="{{id}}" data-toggle="confirm" data-title="您确定删除吗?"
+                           data-content="删除之后无法恢复,确定删除吗?" data-event="confirm:delete-site">删除</a>
+                        <br>
+                        <button class="btn btn-info btn-sm js-release-site" id="{{id}}" data-toggle="confirm"
+                                data-title="您确定发布吗?" data-content="确认发布？发布后该站点样式都将发生更改！"
+                                data-event="confirm:release-site">发布站点
+                        </button>
+                    {{/equals}}
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="site-pagination"></div>
+</div>

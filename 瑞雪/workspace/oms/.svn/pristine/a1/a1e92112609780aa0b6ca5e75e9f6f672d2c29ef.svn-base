@@ -1,0 +1,41 @@
+package cn.rkylin.core;
+
+import java.util.List;
+import java.util.Map;
+
+import com.github.pagehelper.PageInfo;
+
+import cn.rkylin.core.utils.HttpRequester.MethodEnum;
+import cn.rkylin.core.utils.HttpRespons;
+
+
+/**
+ * 自定义baseDao 增删改查方法
+ */
+public interface IDataBaseFactory {
+	
+	@SuppressWarnings("rawtypes")
+	public PageInfo<ApolloRet> findByPage(int pageNo,int pageSize,String index,Map reqMap) throws Exception;
+	@SuppressWarnings("rawtypes")
+	public <E> List<E> findForList(String index,Map reqMap) throws Exception;
+	@SuppressWarnings("rawtypes")
+	public int delete(String index,Map map) throws Exception;
+	@SuppressWarnings("rawtypes")
+	public int insert(String index,Map map) throws Exception;
+	@SuppressWarnings("rawtypes")
+	public int insertBatch(String index,List paramList)throws Exception;
+	@SuppressWarnings("rawtypes")
+	public int update(String index,Map map) throws Exception;
+	@SuppressWarnings("rawtypes")
+	public int count(String index,Map reqMap) throws Exception;
+	@SuppressWarnings("rawtypes")
+	public HttpRespons callService(String index,Map map, MethodEnum method) throws Exception;
+	public <E> PageInfo<E> findPage(int pageNo,int pageSize,String sqlStatement,E paramObj) throws Exception;
+	public <E> List<E> findList(String pageStatement, String searchCondition) throws Exception;
+	public <E> List<E> findList(String pageStatement, Map reqMap) throws Exception;
+	public <E> List<E> findAllList(String pageStatement, E paramObj) throws Exception;
+	public int insert(String insertStatement, Object entity) throws Exception;
+	public int update(String updateStatement, Object entity) throws Exception;
+	public int delete(String deleteStatement, Object entity) throws Exception;
+    Map findMapList(String statement, Object paramObj, String parm) throws Exception;
+}

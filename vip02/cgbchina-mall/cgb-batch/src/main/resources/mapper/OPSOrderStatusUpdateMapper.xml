@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OPSOrderStatusUpdate">
+    <resultMap id="orderDoDetail" type="cn.com.cgbchina.batch.model.OrderDoDetailModel"></resultMap>
+    <resultMap id="orderCheckModel" type="cn.com.cgbchina.batch.model.OrderCheckModel"></resultMap>
+
+    <update id="updateOPSOrderStatus" parameterType="Map">
+        update tbl_order
+        <set>
+            <if test="curStatusId != null">
+                cur_status_id = #{curStatusId},
+            </if>
+            <if test="curStatusNm != null">
+                cur_status_nm = #{curStatusNm},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime}
+            </if>
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+    <update id="updateTblOrderExtend1" parameterType="Map">
+        update tbl_order_extend1 set ordernbr = #{orderNbr} where order_id = #{orderId}
+    </update>
+
+    <select id="findOrderById" parameterType="String" resultType="cn.com.cgbchina.batch.model.OrderSubModel">
+        select
+            order_id as orderId,
+            ordermain_id as ordermainId,
+            bonus_totalvalue as bonusTotalvalue,
+            act_type as actType,
+            act_id as actId,
+            cust_cart_id as custCartId,
+            create_time as createTime,
+            voucher_no as voucherNo,
+            source_id as sourceId,
+            mer_id as merId,
+            order_id_host as orderIdHost,
+            cardno as "cardno",
+            period_id as periodId,
+            goods_id as goodsId,
+            goods_num as goodsNum,
+            create_oper as createOper,
+            order_succ_time as "order_succ_time"
+        from
+            tbl_order
+        where
+            order_id = #{orderId}
+    </select>
+
+    <update id="updateGoodsStock" parameterType="String">
+        update tbl_item
+        set stock=stock+1
+        where code=#{code}
+    </update>
+
+    <update id="dealPointPool" parameterType="Map">
+        update tbl_point_pool set
+        used_point = used_point-#{usedPoint}
+        where cur_month = #{curMonth} and del_flag ='0'
+    </update>
+
+    <insert id="insertOrderDoDetail" parameterType="cn.com.cgbchina.batch.model.OrderDoDetailModel" >
+        insert into tbl_order_dodetail
+        (order_id
+        ,do_time
+        ,do_userid
+        ,user_type
+        ,status_id
+        ,status_nm
+        ,msg_content
+        ,do_desc
+        ,rule_id
+        ,rule_nm
+        ,create_oper
+        ,create_time
+        ,modify_oper
+        ,modify_time
+        ,del_flag)
+        values(#{orderId}
+        ,now()
+        ,#{doUserid}
+        ,#{userType}
+        ,#{statusId}
+        ,#{statusNm}
+        ,#{msgContent}
+        ,#{doDesc}
+        ,#{ruleId}
+        ,#{ruleNm}
+        ,#{createOper}
+        ,now()
+        ,#{modifyOper}
+        ,#{modifyTime}
+        ,#{delFlag})
+    </insert>
+
+    <insert id="insertOrderCheckModel" parameterType="cn.com.cgbchina.batch.model.OrderCheckModel" >
+        insert into tbl_order_check
+        (order_id
+        ,cur_status_id
+        ,cur_status_nm
+        ,do_date
+        ,do_time
+        ,modify_time
+        ,do_desc
+        ,ischeck
+        ,ispoint
+        ,jf_refund_serialno
+        ,create_oper
+        ,modify_oper
+        ,create_time
+        ,del_flag)
+        values(#{orderId}
+        ,#{curStatusId}
+        ,#{curStatusNm}
+        ,#{doDate}
+        ,#{doTime}
+        ,now()
+        ,#{doDesc}
+        ,#{ischeck}
+        ,#{ispoint}
+        ,#{jfRefundSerialno}
+        ,#{createOper}
+        ,#{modifyOper}
+        ,now()
+        ,#{delFlag})
+    </insert>
+
+    <update id="updateTblEspCustCartByOrderId" parameterType="Map">
+        update tbl_esp_cust_cart c
+        set c.pay_flag = #{payFlag}
+        where c.id in (
+            select o.cust_cart_id from tbl_order o
+                where o.order_id = #{orderId}
+            )
+    </update>
+
+    <update id="updateRecordSucc" parameterType="String">
+        update tbl_auction_record set pay_flag = '1' where id= #{auctionId}
+    </update>
+
+    <update id="updateRecordOrderReleased" parameterType="String">
+        update
+        tbl_auction_record
+        set
+        is_backlock = '0',
+        release_time = NOW()
+        where
+            id = #{id}
+        and order_id is not null
+        and is_backlock = '1'
+    </update>
+
+</mapper>
