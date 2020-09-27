@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SQL.RC">
+	<select id="selectList" parameterType="com.lsh.dlrc.domain.RcDomain" resultType="com.lsh.dlrc.domain.RcDomain">
+		select * from dl_nv t
+		where t.del='1'
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="tel != null and tel != ''" >
+			and t.tel like CONCAT('%', #{tel}, '%')  
+		</if>
+		<if test="address != null and address != ''" >
+			and t.address like CONCAT('%', #{address}, '%')  
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="sex != null and sex != ''" >
+			and t.sex like CONCAT('%', #{sex}, '%')  
+		</if>
+		<if test="sch != null and sch != ''" >
+			and t.sch like CONCAT('%', #{sch}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+		<if test="emil != null and emil != ''" >
+			and t.emil like CONCAT('%', #{emil}, '%')  
+		</if>
+		order by t.borth desc
+		LIMIT 1,1000 
+	</select>
+	
+	<select id="selectCount" parameterType="com.lsh.dlrc.domain.RcDomain" resultType="java.lang.Integer">
+		select count(*) from dl_nv t
+		where t.del='1'
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="tel != null and tel != ''" >
+			and t.tel like CONCAT('%', #{tel}, '%')  
+		</if>
+		<if test="address != null and address != ''" >
+			and t.address like CONCAT('%', #{address}, '%')  
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="sex != null and sex != ''" >
+			and t.sex like CONCAT('%', #{sex}, '%')  
+		</if>
+		<if test="sch != null and sch != ''" >
+			and t.sch like CONCAT('%', #{sch}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+		<if test="emil != null and emil != ''" >
+			and t.emil like CONCAT('%', #{emil}, '%')  
+		</if>
+	</select>
+	
+	<select id="selectListPage" parameterType="com.lsh.dlrc.domain.RcDomain" resultType="com.lsh.dlrc.domain.RcDomain">
+		select * from dl_nv t
+		where t.del='1'
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="tel != null and tel != ''" >
+			and t.tel like CONCAT('%', #{tel}, '%')  
+		</if>
+		<if test="address != null and address != ''" >
+			and t.address like CONCAT('%', #{address}, '%')  
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="sex != null and sex != ''" >
+			and t.sex like CONCAT('%', #{sex}, '%')  
+		</if>
+		<if test="sch != null and sch != ''" >
+			and t.sch like CONCAT('%', #{sch}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+		<if test="emil != null and emil != ''" >
+			and t.emil like CONCAT('%', #{emil}, '%')  
+		</if>
+		order by t.borth desc
+		LIMIT #{beginPage},#{endPage}
+	</select>
+	
+	<select id="selectUserListPage" parameterType="com.lsh.dlrc.domain.User" resultType="com.lsh.dlrc.domain.User">
+		select 
+		  t.id,
+		  (select count(*) from users a where a.midetel=t.midetel) as beginPage,
+		  (TO_DAYS(now())-TO_DAYS(t.updateTime)) as color,
+		  t.phone,
+		  t.midetel,
+		  t.xl,
+		  t.borth,
+		  t.name,
+		  t.personName,
+		  t.age,
+		  t.city,
+		  t.hukou,
+		  t.tel,
+		  t.content,
+		  t.zt
+		from users t where 1=1
+		<if test="midetel != null and midetel != ''" >
+			and t.midetel = #{midetel}
+		</if>
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="phone != null and phone != ''" >
+			and t.phone like CONCAT('%', #{phone}, '%')  
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+		<if test="zt != null and zt != ''" >
+			and t.zt = #{zt}
+		</if>
+		order by t.updateTime desc,t.id desc,t.borth desc
+		LIMIT #{beginPage},#{endPage}
+	</select>
+	
+	<select id="selectUserCount" parameterType="com.lsh.dlrc.domain.User" resultType="java.lang.Integer">
+		select count(*) from users t  where 1=1
+		<if test="midetel != null and midetel != ''" >
+			and t.midetel = #{midetel}
+		</if>
+		<if test="name != null and name != ''" >
+			and t.name like CONCAT('%', #{name}, '%')  
+		</if>
+		<if test="phone != null and phone != ''" >
+			and t.phone like CONCAT('%', #{phone}, '%')  
+		</if>
+		<if test="city != null and city != ''" >
+			and t.city like CONCAT('%', #{city}, '%')  
+		</if>
+		<if test="xl != null and xl != ''" >
+			and t.xl like CONCAT('%', #{xl}, '%')  
+		</if>
+		<if test="borth != null and borth != ''" >
+			and t.borth like CONCAT('%', #{borth}, '%')  
+		</if>
+		<if test="age != null and age != ''" >
+			and t.age like CONCAT('%', #{age}, '%')  
+		</if>
+		<if test="zt != null and zt != ''" >
+			and t.zt = #{zt}
+		</if>
+	</select>
+	
+	<select id="selectOneUser" parameterType="com.lsh.dlrc.domain.User" resultType="com.lsh.dlrc.domain.User">
+		select * from users t where t.id=#{id}
+	</select>
+	
+	<select id="getPordDeptDomain" parameterType="com.lsh.dlrc.domain.PordDeptDomain" resultType="com.lsh.dlrc.domain.PordDeptDomain">
+		select * from pord_dept 
+	</select>
+	
+	<select id="getPhoto" parameterType="com.lsh.dlrc.domain.Photo" resultType="com.lsh.dlrc.domain.Photo">
+		select * from photo where 1=1 
+		<if test="id != null and id != ''" >
+		 and id=#{id}
+		</if>
+		<if test="begin != null and begin != ''" >
+		 and id>=#{begin}
+		</if>
+		<if test="end != null and end != ''" >
+			<![CDATA[ and id<=#{end}]]>
+		</if>
+	</select>
+	
+	<select id="getMobelList" parameterType="com.lsh.dlrc.domain.Mobel" resultType="com.lsh.dlrc.domain.Mobel">
+		select * from mobel where 1=1
+		<if test="id != null and id != ''" >
+		and  id=#{id}
+		</if>
+		<if test="zt != null and zt != ''" >
+		and  zt=#{zt}
+		</if>
+	</select>
+    
+    <update id="updateDomain" parameterType="com.lsh.dlrc.domain.RcDomain">
+    	 UPDATE dl_nv
+       <set>
+       		del = #{del}
+       </set>
+        WHERE tel = #{tel}
+    </update>
+    
+    <update id="updateUser" parameterType="com.lsh.dlrc.domain.User">
+    	 UPDATE users
+       <set>
+       		zt = #{zt}
+       </set>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="updateUserOne" parameterType="com.lsh.dlrc.domain.User">
+    	 UPDATE users
+       <set>
+          <if test="tel != null and tel != ''">tel = #{tel},</if>
+          <if test="xl != null and xl != ''">xl = #{xl},</if>
+          <if test="borth != null and borth != ''">borth = #{borth},</if>
+          <if test="name != null and name != ''">name = #{name},</if>
+          <if test="personName != null and personName != ''">personName = #{personName},</if>
+          <if test="age != null and age != ''">age = #{age},</if>
+          <if test="city != null and city != ''">city = #{city},</if>
+          <if test="midetel != null and midetel != ''">midetel = #{midetel},</if>
+          <if test="hukou != null and hukou != ''">hukou = #{hukou},</if>
+          <if test="phone != null and phone != ''">phone = #{phone},</if>
+          <if test="content != null and content != ''">content = #{content},</if>
+          id = #{id}
+       </set>
+        WHERE id = #{id}
+    </update>
+    
+    <insert id="insertDomain"  useGeneratedKeys="true" keyProperty="name"  parameterType="com.lsh.dlrc.domain.RcDomain">
+<!--     	<selectKey keyProperty="name" order="BEFORE" resultType="String"> -->
+<!--             select CreateGUID() as doc_id from DUAL -->
+<!--         </selectKey> -->
+	    insert into dl_nv
+	    	(
+	    	tel,xl,sch,name,sex,age
+	    	)
+	    values 
+			(
+			#{tel},
+			#{xl},
+			#{sch},
+			<choose>
+				<when test="name != null and name != ''">
+					#{name},
+				</when>
+				<otherwise> 
+ 					'auto',
+ 				</otherwise> 
+			</choose>
+			#{sex},
+			#{age}
+			)
+    
+    </insert>
+    
+       <insert id="insertUser"  useGeneratedKeys="true" keyProperty="name"  parameterType="com.lsh.dlrc.domain.User">
+	    insert into users
+	    	(
+	    	 name, 
+	    	 phone,     
+	    	 tel,      
+	    	 xl,       
+	    	 midetel,  
+	    	 borth,    
+	    	 age,      
+	    	 personName,
+	    	 hukou,     
+	    	 updateTime,
+	    	 content,
+	    	 city      
+	    	)
+	    values 
+			(
+			#{name},
+			#{phone}, 
+			#{tel},
+			#{xl},
+			#{midetel},
+			#{borth},
+			#{age},
+			#{personName},
+			#{hukou},
+			now(),
+			#{content},
+			#{city}
+			)
+    
+    </insert>
+    
+    <select id="getTableList" parameterType="com.lsh.dlrc.domain.LshTable" resultType="com.lsh.dlrc.domain.LshTable">
+   		 select sys_id,name from LshTable
+    </select>
+    
+    
+	<resultMap id="BaseResultMap" type="com.lsh.dlrc.domain.Post" >
+	  <id column="POST_ID" property="postId" jdbcType="DECIMAL" />
+	  <result column="FORUM_ID" property="forumId" jdbcType="DECIMAL" />
+	  <result column="USER_ID" property="userId" jdbcType="DECIMAL" />
+	  <result column="POST_TITLE" property="postTitle" jdbcType="VARCHAR" />
+	  <result column="POST_CONTENT" property="postContent" jdbcType="VARCHAR" />
+	  <result column="POST_TIME" property="postTime" jdbcType="TIMESTAMP" />
+	  <result column="TOTAL_COMMENT_COUNT" property="totalCommentCount" jdbcType="DECIMAL" />
+	</resultMap>
+	
+	<select id="testP" statementType="CALLABLE" >
+  		{call P_TEST(#{userId, mode=IN, jdbcType=DECIMAL},#{v_cursor, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=SQL.RC.BaseResultMap})}
+	</select>
+	<!--
+	create or replace procedure P_TEST(userId in number,v_cursor OUT sys_refcursor)
+	as
+	begin
+	  OPEN v_cursor
+	  FOR select POST_ID, FORUM_ID, USER_ID, POST_TITLE, POST_CONTENT, POST_TIME, TOTAL_COMMENT_COUNT from POST
+	    where USER_ID like '%'||userId||'%';
+	end;
+	-->
+	
+	<!-- 	升级版
+	create or replace procedure P_TEST(userId in number,v_cursor OUT sys_refcursor)
+	as
+	str_sql varchar2(400);
+	begin
+	     str_sql :='select POST_ID, FORUM_ID, USER_ID, POST_TITLE, POST_CONTENT, POST_TIME, TOTAL_COMMENT_COUNT from POST where 1=1';
+	     if userId is not null then
+	       str_sql := str_sql || ' and USER_ID like '||chr(39)||'%'||userId||'%'||chr(39);
+	     end if;
+	     dbms_output.put_line(str_sql);
+	    // EXECUTE sp_executesql str_sql
+	     OPEN v_cursor FOR str_sql;
+	end; 
+	-->
+	
+	<!-- 	
+	declare 升级版 调试（错误）
+	  employeeid POST.POST_TITLE%TYPE; 
+	  emp_salary SYS_REFCURSOR; 
+	begin
+	  P_TEST(2,emp_salary);
+	  LOOP
+	   FETCH emp_salary INTO employeeid; 
+	   EXIT WHEN emp_salary %NOTFOUND; 
+	   dbms_output.put_line(employeeid);
+	  END LOOP;
+	end;
+	 -->
+	 
+	 <!-- 
+	 declare   升级版 调试（正确）
+	    post_id POST.POST_ID%TYPE; 
+	    forum_id POST.FORUM_ID%TYPE; 
+	    user_id POST.USER_ID%TYPE; 
+	    post_title POST.POST_TITLE%TYPE; 
+	    post_content POST.POST_CONTENT%TYPE; 
+	    post_time POST.POST_TIME%TYPE; 
+	    total_comment_count POST.TOTAL_COMMENT_COUNT%TYPE; 
+	    emp_salary SYS_REFCURSOR; 
+	begin
+	  P_TEST(2,emp_salary);
+	  LOOP
+	   FETCH emp_salary INTO post_id,forum_id,user_id,post_title,post_content,post_time,total_comment_count; 
+	   EXIT WHEN emp_salary %NOTFOUND; 
+	   dbms_output.put_line(total_comment_count);
+	  END LOOP;
+	end;
+	  -->
+	
+	<!--
+	create or replace procedure emp_demo5(empsalary out sys_refcursor) AS 
+	begin
+	  OPEN empsalary FOR
+	  SELECT s.employeeid,s.salaryvalue from salary s;
+	end emp_demo5;
+	-->
+	
+	
+<!-- 	DECLARE -->
+<!-- 	  employeeid salary.employeeid%TYPE; -->
+<!-- 	  salaryvalue salary.salaryvalue%TYPE;  -->
+<!-- 	  emp_salary SYS_REFCURSOR; -->
+<!-- 	BEGIN -->
+<!-- 	  emp_demo5(emp_salary); -->
+<!-- 	  LOOP -->
+<!-- 	    FETCH emp_salary INTO employeeid,salaryvalue; -->
+<!-- 	    EXIT WHEN emp_salary %NOTFOUND; -->
+<!-- 	    dbms_output.put_line(employeeid||' '||salaryvalue); -->
+<!-- 	  END LOOP; -->
+<!-- 	  CLOSE emp_salary; -->
+<!-- 	END; -->
+
+	<!--
+	create or replace procedure PROC_SENT_MID_FEEVALUELOG is
+	cursor cur_tmp  is
+	   select g.sys_id,g.name from  lshTable g
+	   where g.sys_id = 1;
+	begin
+	   for cur_row in cur_tmp loop
+	       begin
+	           exit when cur_tmp%notfound;
+	             update t_mid_sent_feevalue_log t set t.f_name='u3' ;
+	             dbms_output.put_line(cur_row.sys_id);
+	            // where t.f_fee_id = cur_row.sys_id;
+	           commit;
+	       end;
+	   end loop;
+	   exception when others then
+	      begin
+	        rollback;
+	      end;
+	end PROC_SENT_MID_FEEVALUELOG;
+	-->
+	
+	<!--
+	create or replace procedure Demo(data out sys_refcursor) is
+	begin
+	  open data for select * from lshTable;
+	   dbms_output.put_line('hello world'); 
+	end Demo;
+	-->
+	
+</mapper>

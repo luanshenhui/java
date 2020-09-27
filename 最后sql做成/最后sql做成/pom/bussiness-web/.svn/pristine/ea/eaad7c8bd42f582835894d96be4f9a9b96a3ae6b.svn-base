@@ -1,0 +1,26 @@
+package cn.lsh.web.controller.login.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.springframework.scheduling.quartz.QuartzJobBean;
+
+import cn.lsh.web.mapper.login.domain.RolePersonDomain;
+import cn.lsh.web.service.service.LoginService;
+
+public class MySchedulerController extends QuartzJobBean{
+	@Resource
+	private LoginService loginService;
+	
+	@Override
+	protected void executeInternal(JobExecutionContext context)
+			throws JobExecutionException {
+		List<RolePersonDomain> vo=loginService.getAllList(new RolePersonDomain());
+		System.out.println("sssssssssssssssssss"+vo.toString());
+		
+	}
+
+}

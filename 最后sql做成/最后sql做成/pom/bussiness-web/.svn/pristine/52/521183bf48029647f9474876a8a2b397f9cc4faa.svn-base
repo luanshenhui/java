@@ -1,0 +1,294 @@
+package cn.lsh.web.controller.login.com;
+
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.baidu.yun.core.log.YunLogEvent;
+import com.baidu.yun.core.log.YunLogHandler;
+import com.baidu.yun.push.auth.PushKeyPair;
+import com.baidu.yun.push.client.BaiduPushClient;
+import com.baidu.yun.push.constants.BaiduPushConstants;
+import com.baidu.yun.push.exception.PushClientException;
+import com.baidu.yun.push.exception.PushServerException;
+import com.baidu.yun.push.model.PushMsgToSingleDeviceRequest;
+import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
+import com.taobao.api.DefaultTaobaoClient;
+import com.taobao.api.TaobaoClient;
+import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
+import com.alibaba.fastjson.JSONObject;
+
+/**
+ * 推送单播通知
+ * 
+ * App ID: 9787766
+
+API Key: m1PnLt0anrj75AsMF5AZMvAb
+
+Secret Key: f4c6d866dfd21e2ff956111816c753e5
+ * 
+ * @author
+ * @Date 2017年3月2日
+ * @Desc
+ */
+public class BaiduPush {
+	public static String fileName;
+
+	public String[] pushNotificationByUser(String channelId,
+			Integer deviceType, String message, Map<String, Object> map) {
+		String[] results = new String[3];
+		String retCode = "1";
+		String retMsg = "";
+		try {
+			// 1. 设置developer平台的ApiKey/SecretKey，需到百度推送注册
+			String apiKey = "";
+			String secretKey = "";
+			if (deviceType != null && deviceType.intValue() == 4) {// ios
+			// apiKey = Constants.baiduIOSApiKey;
+			// secretKey = Constants.baiduIOSSecretKey;
+			} else if (deviceType == 3) {// Android
+			// apiKey = Constants.baiduAndroidApiKey;
+			// secretKey = Constants.baiduAndroidSecretKey;
+			}
+			// 2. 创建PushKeyPair
+			PushKeyPair pair = new PushKeyPair(apiKey, secretKey);
+			// 创建BaiduPushClient，访问SDK接口
+			BaiduPushClient pushClient = new BaiduPushClient(pair,
+					BaiduPushConstants.CHANNEL_REST_URL);
+
+			// 3. 注册YunLogHandler，获取本次请求的交互信息
+			pushClient.setChannelLogHandler(new YunLogHandler() {
+				@Override
+				public void onHandle(YunLogEvent event) {
+					System.out.println(event.getMessage());
+				}
+			});
+			JSONObject notification = new JSONObject();
+			if (deviceType == 4) {
+				JSONObject jsonAPS = new JSONObject();
+				jsonAPS.put("alert", message);
+				jsonAPS.put("sound", "ttt");
+				notification.put("aps", jsonAPS);
+				notification.put("title", "XXX");
+				// notification.put("key2", "value2");这里用于用户自定义
+
+				if (map != null && !map.isEmpty()) {
+					Set<String> customContentMapKeys = map.keySet();
+					Iterator<String> irt = customContentMapKeys.iterator();
+					while (irt.hasNext()) {
+						String key = (String) irt.next();
+						String value = (String) map.get(key);
+						notification.put(key, value);
+					}
+				}
+			} else if (deviceType == 3) {
+				notification.put("title", "XXX");
+				notification.put("description", message);
+				notification.put("notification_builder_id", 0);
+				notification.put("notification_basic_style", 4);
+				notification.put("open_type", 1);
+				notification.put("url", "http://push.baidu.com");// app上点开推送之后跳转的链接
+				JSONObject jsonCustormCont = new JSONObject();
+				jsonCustormCont.put("name", "test"); // 自定义内容，key-value
+				notification.put("custom_content", jsonCustormCont);
+				if (map != null && !map.isEmpty()) {// map中放的是用户自定义内容
+					Set<String> customContentMapKeys = map.keySet();
+					Iterator<String> irt = customContentMapKeys.iterator();
+					while (irt.hasNext()) {
+						String key = (String) irt.next();
+						String value = (String) map.get(key);
+						notification.put(key, value);
+					}
+				}
+			}
+			// 4. 创建请求类对象
+			PushMsgToSingleDeviceRequest request = new PushMsgToSingleDeviceRequest()
+					.addChannelId(channelId).addTopicId(apiKey)
+					.addMsgExpires(new Integer(3600))
+					. // message有效时间
+					addMessageType(1)
+					.// 1：通知,0:透传消息. 默认为0 注：IOS只有通知.
+					addMessage(notification.toString())
+					.addDeviceType(deviceType);// deviceType => 3:android, 4:ios
+
+			// 5. 调用pushMessage接口
+			PushMsgToSingleDeviceResponse response = pushClient
+					.pushMsgToSingleDevice(request);
+
+			// 6. 认证推送成功
+			System.out.println("msgId: " + response.getMsgId() + ",sendTime: "
+					+ response.getSendTime());
+		} catch (PushClientException e) {
+			// ERROROPTTYPE 用于设置异常的处理方式 -- 抛出异常和捕获异常,
+			// 'true' 表示抛出, 'false' 表示捕获。
+			if (BaiduPushConstants.ERROROPTTYPE) {
+				try {
+					throw e;
+				} catch (PushClientException e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				e.printStackTrace();
+			}
+		} catch (PushServerException e) {
+			if (BaiduPushConstants.ERROROPTTYPE) {
+				try {
+					throw e;
+				} catch (PushServerException e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				System.out.println(String.format(
+						"requestId: %d, errorCode: %d, errorMsg: %s",
+						e.getRequestId(), e.getErrorCode(), e.getErrorMsg()));
+			}
+		} finally {
+			results[0] = retCode;
+			results[1] = retMsg;
+		}
+
+		return results;
+	}
+	
+    public static String getFourRandom(){
+        Random random = new Random();
+        String fourRandom = random.nextInt(10000) + "";
+        int randLength = fourRandom.length();
+        if(randLength<4){
+          for(int i=1; i<=4-randLength; i++)
+              fourRandom = "0" + fourRandom  ;
+      }
+        return fourRandom;
+    }
+	
+	public void sendMobileCode() {
+	    String rusult = null;
+	    // 官网的URL
+	    String url = "http://gw.api.taobao.com/router/rest";
+	    // 成为开发者，创建应用后系统自动生成
+	    String appkey = "23566780";
+	    String secret = "自己的App Secret";
+	    String code = "520";
+	    String product = "cool_moon";
+	    TaobaoClient client = new DefaultTaobaoClient(url, appkey, secret);
+	    AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+	    req.setExtend("1234");
+	    req.setSmsType("normal");
+	    req.setSmsFreeSignName("验证提醒");
+	    req.setSmsParamString("{\"code\":\""+code+"\",\"product\":\""+product+"\"}");
+	    req.setRecNum("13130496439");
+	    req.setSmsTemplateCode("SMS_34530098");
+	    try {
+	        AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+	        System.out.println(rsp.getBody());  
+	        rusult = rsp.getSubMsg();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    System.out.println(rusult);
+	}
+
+	public static String getSysTime(String str){
+		Date d = new Date();  
+		SimpleDateFormat sdf = new SimpleDateFormat(str);  
+		return sdf.format(d); 
+		
+	}
+	
+	public static String getLeveTime(String brithday) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
+		Date bdate = sdf.parse(brithday); 
+		Calendar aCalendar = Calendar.getInstance();
+		aCalendar.setTime(bdate);
+		aCalendar.add(Calendar.YEAR, 18);
+		Date fDate=aCalendar.getTime();
+		return String.valueOf(daysBetween(new Date(),fDate));
+	}
+	
+	/**  
+     * 计算两个日期之间相差的天数  
+     * @param smdate 较小的时间 
+     * @param bdate  较大的时间 
+     * @return 相差天数 
+     * @throws ParseException  
+     */    
+    public static int daysBetween(Date smdate,Date bdate) throws ParseException    
+    {    
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
+        smdate=sdf.parse(sdf.format(smdate));  
+        bdate=sdf.parse(sdf.format(bdate));  
+        Calendar cal = Calendar.getInstance();    
+        cal.setTime(smdate);    
+        long time1 = cal.getTimeInMillis();                 
+        cal.setTime(bdate);    
+        long time2 = cal.getTimeInMillis();         
+        long between_days=(time2-time1)/(1000*3600*24);  
+             
+       return Integer.parseInt(String.valueOf(between_days));           
+    }    
+	
+	public static void main(String[] args) throws ParseException {
+		BaiduPush baiduPush = new BaiduPush();
+		Map<String, Object> map = new HashMap<>();
+		baiduPush.pushNotificationByUser("clientChannelId", 3, "今天天气不错", map);
+		
+//		BaiduPush b=new BaiduPush();
+//		String s=b.getLeveTime("1999-06-31");
+//		System.out.println(s);
+	}
+	
+	public static String dayToString(Date day ,String format){
+		SimpleDateFormat sdf=new SimpleDateFormat(format);  
+		return sdf.format(day);
+	}
+
+	   public static boolean YzImgType(MultipartFile user_img) {
+	    	if(user_img.getOriginalFilename().equals("jpg") || user_img.getOriginalFilename().equals("jpeg") || user_img.getOriginalFilename().equals("png")){
+	    		return true;
+	    	}
+	        String type = user_img.getOriginalFilename().indexOf(".") != -1?user_img.getOriginalFilename().substring(user_img.getOriginalFilename().lastIndexOf("."), user_img.getOriginalFilename().length()):null;
+	        type = type.toLowerCase();
+	        return type.equals(".jpg") || type.equals(".jpeg") || type.equals(".png");
+	    }
+	   
+	    public static String saveFile(MultipartFile file, String filePath, String user_id) {
+	        if(!file.isEmpty()) {
+	            try {
+	                String fileName1 = user_id + ".png";
+	                File f = new File(filePath, fileName1);
+	                if(f.exists()) {
+	                    f.delete();
+	                }
+	                file.transferTo(f);
+	            } catch (Exception var6) {
+	                var6.printStackTrace();
+	            }
+	        }
+	        return "ok";
+	    }
+}
